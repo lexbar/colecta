@@ -12,7 +12,7 @@ Those pieces of information are called "Items", and they are composed of:
   - author
   - other people with permission to modify it
   
-From this schema grows many types of items extending its information.
+From this schema grows many types of items performing different forms of information.
 
 The reason the amount of text is so limited on the item basis is for efficiency on the searching process. So all relevant information must be placed on "title", "summary" and "tagwords" fields.
 
