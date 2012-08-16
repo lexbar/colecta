@@ -1,0 +1,7 @@
+parameters:
+#    colecta_activity.example.class: Colecta\ActivityBundle\Example
+
+services:
+#    colecta_activity.example:
+#        class: %colecta_activity.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

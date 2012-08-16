@@ -1,0 +1,7 @@
+parameters:
+#    colecta_colective.example.class: Colecta\ColectiveBundle\Example
+
+services:
+#    colecta_colective.example:
+#        class: %colecta_colective.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

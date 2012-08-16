@@ -1,0 +1,7 @@
+parameters:
+#    colecta_files.example.class: Colecta\FilesBundle\Example
+
+services:
+#    colecta_files.example:
+#        class: %colecta_files.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
