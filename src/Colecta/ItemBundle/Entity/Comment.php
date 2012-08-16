@@ -36,16 +36,14 @@ class Comment
     private $date;
 
     /**
-     * @var string $item
-     *
-     * @ORM\Column(name="item", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Item") 
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
     private $item;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User") 
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Event
+class Event extends \Colecta\ItemBundle\Entity\Item
 {
     /**
      * @var integer $id
@@ -85,16 +85,13 @@ class Event
     private $status;
 
     /**
-     * @var string $activity
-     *
-     * @ORM\Column(name="activity", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Activity")
+    * @ORM\JoinColumn(name="activity_id", referencedColumnName="id") 
+    */
     private $activity;
 
     /**
-     * @var string $assistances
-     *
-     * @ORM\Column(name="assistances", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="EventAssistance", mappedBy="event")
      */
     private $assistances;
 
@@ -327,5 +324,19 @@ class Event
     public function getAssistances()
     {
         return $this->assistances;
+    }
+    public function __construct()
+    {
+        $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add assistances
+     *
+     * @param Colecta\ActivityBundle\Entity\EventAssistance $assistances
+     */
+    public function addEventAssistance(\Colecta\ActivityBundle\Entity\EventAssistance $assistances)
+    {
+        $this->assistances[] = $assistances;
     }
 }

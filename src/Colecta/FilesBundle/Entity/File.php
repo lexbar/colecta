@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class File
+class File extends \Colecta\ItemBundle\Entity\Item
 {
     /**
      * @var integer $id
@@ -43,10 +43,9 @@ class File
     private $description;
 
     /**
-     * @var string $folder
-     *
-     * @ORM\Column(name="folder", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Folder")
+    * @ORM\JoinColumn(name="folder_id", referencedColumnName="id") 
+    */
     private $folder;
 
 

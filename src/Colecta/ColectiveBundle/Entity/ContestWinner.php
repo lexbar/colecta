@@ -36,24 +36,21 @@ class ContestWinner
     private $text;
 
     /**
-     * @var string $contest
-     *
-     * @ORM\Column(name="contest", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Contest")
+    * @ORM\JoinColumn(name="contest_id", referencedColumnName="id") 
+    */
     private $contest;
 
     /**
-     * @var string $item
-     *
-     * @ORM\Column(name="item", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\ItemBundle\Entity\Item")
+    * @ORM\JoinColumn(name="item_id", referencedColumnName="id") 
+    */
     private $item;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Ciclubs\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
 

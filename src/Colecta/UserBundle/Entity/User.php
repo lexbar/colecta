@@ -71,60 +71,49 @@ class User
     private $lastAccess;
 
     /**
-     * @var string $role
-     *
-     * @ORM\Column(name="role", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Role")
+    * @ORM\JoinColumn(name="role_id", referencedColumnName="id") 
+    */
     private $role;
 
     /**
-     * @var string $sentMessages
-     *
-     * @ORM\Column(name="sentMessages", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="origin")
      */
     private $sentMessages;
 
     /**
-     * @var string $receivedMessages
-     *
-     * @ORM\Column(name="receivedMessages", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Ciclubs\ItemBundle\Entity\Relation", mappedBy="destination")
      */
     private $receivedMessages;
 
     /**
-     * @var string $notifications
-     *
-     * @ORM\Column(name="notifications", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
      */
     private $notifications;
 
     /**
-     * @var string $relations
-     *
-     * @ORM\Column(name="relations", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Relation", mappedBy="user")
      */
     private $relations;
 
     /**
-     * @var string $items
-     *
-     * @ORM\Column(name="items", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Item", mappedBy="user")
      */
     private $items;
 
     /**
-     * @var string $editableItems
-     *
-     * @ORM\Column(name="editableItems", type="string", length=255)
+     * @ORM\ManyToMany(targetEntity="Colecta\ItemBundle\Entity\Item", inversedBy="editors", cascade={"persist"})
+     * @ORM\JoinTable(name="editableItems",
+     * joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     * inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")}
+     * )
      */
     private $editableItems;
 
     /**
-     * @var string $comments
-     *
-     * @ORM\Column(name="comments", type="string", length=255)
-     */
-    private $comments;
+     * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Comment", mappedBy="user")
+     */    
+     private $comments;
 
 
     /**
@@ -435,5 +424,64 @@ class User
     public function getComments()
     {
         return $this->comments;
+    }
+    public function __construct()
+    {
+        $this->sentMessages = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->receivedMessages = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->relations = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->editableItems = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add sentMessages
+     *
+     * @param Colecta\UserBundle\Entity\Message $sentMessages
+     */
+    public function addMessage(\Colecta\UserBundle\Entity\Message $sentMessages)
+    {
+        $this->sentMessages[] = $sentMessages;
+    }
+
+    /**
+     * Add receivedMessages
+     *
+     * @param Ciclubs\ItemBundle\Entity\Relation $receivedMessages
+     */
+    public function addRelation(\Ciclubs\ItemBundle\Entity\Relation $receivedMessages)
+    {
+        $this->receivedMessages[] = $receivedMessages;
+    }
+
+    /**
+     * Add items
+     *
+     * @param Colecta\ItemBundle\Entity\Item $items
+     */
+    public function addItem(\Colecta\ItemBundle\Entity\Item $items)
+    {
+        $this->items[] = $items;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param Colecta\ItemBundle\Entity\Comment $comments
+     */
+    public function addComment(\Colecta\ItemBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+    }
+
+    /**
+     * Add notifications
+     *
+     * @param Colecta\UserBundle\Entity\Notification $notifications
+     */
+    public function addNotification(\Colecta\UserBundle\Entity\Notification $notifications)
+    {
+        $this->notifications[] = $notifications;
     }
 }

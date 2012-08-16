@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Contest
+class Contest extends \Colecta\ItemBundle\Entity\Item
 {
     /**
      * @var integer $id
@@ -50,9 +50,7 @@ class Contest
     private $itemTypes;
 
     /**
-     * @var string $winners
-     *
-     * @ORM\Column(name="winners", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="ContestWinner", mappedBy="contest")
      */
     private $winners;
 
@@ -165,5 +163,19 @@ class Contest
     public function getWinners()
     {
         return $this->winners;
+    }
+    public function __construct()
+    {
+        $this->winners = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add winners
+     *
+     * @param Colecta\ColectiveBundle\Entity\ContestWinner $winners
+     */
+    public function addContestWinner(\Colecta\ColectiveBundle\Entity\ContestWinner $winners)
+    {
+        $this->winners[] = $winners;
     }
 }

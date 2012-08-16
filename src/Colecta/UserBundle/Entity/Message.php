@@ -43,24 +43,21 @@ class Message
     private $text;
 
     /**
-     * @var string $responseto
-     *
-     * @ORM\Column(name="responseto", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Message")
+    * @ORM\JoinColumn(name="responseto_id", referencedColumnName="id") 
+    */
     private $responseto;
 
     /**
-     * @var string $origin
-     *
-     * @ORM\Column(name="origin", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="User")
+    * @ORM\JoinColumn(name="user_origin_id", referencedColumnName="id") 
+    */
     private $origin;
 
     /**
-     * @var string $destination
-     *
-     * @ORM\Column(name="destination", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="User")
+    * @ORM\JoinColumn(name="user_destination_id", referencedColumnName="id") 
+    */
     private $destination;
 
 

@@ -34,6 +34,11 @@ class Notification
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="User")
+    */
+    private $user;
 
 
     /**
@@ -84,5 +89,25 @@ class Notification
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set user
+     *
+     * @param Colecta\UserBundle\Entity\User $user
+     */
+    public function setUser(\Colecta\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * Get user
+     *
+     * @return Colecta\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

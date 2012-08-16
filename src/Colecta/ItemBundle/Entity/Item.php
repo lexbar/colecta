@@ -2,6 +2,7 @@
 
 namespace Colecta\ItemBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,8 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"item" = "Item", "post" = "Post", "poll" = "Colecta\ColectiveBundle\Entity\Poll", "route" = "Colecta\ActivityBundle\Entity\Route", "place" = "Colecta\ActivityBundle\Entity\Place", "file" = "Colecta\FilesBundle\Entity\File", "contest" = "Colecta\ColectiveBundle\Entity\Contest", "event" = "Colecta\ActivityBundle\Entity\Event", "folder" = "Colecta\FilesBundle\Entity\Folder"})
  */
-class Item
+abstract class Item
 {
     /**
      * @var integer $id
@@ -20,13 +25,6 @@ class Item
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var string $type
-     *
-     * @ORM\Column(name="type", type="string", length=25)
-     */
-    private $type;
 
     /**
      * @var string $name
@@ -78,44 +76,34 @@ class Item
     private $draft;
 
     /**
-     * @var string $category
-     *
-     * @ORM\Column(name="category", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Category")
+    * @ORM\JoinColumn(name="category_id", referencedColumnName="id") 
+    */
     private $category;
 
     /**
-     * @var string $relatedto
-     *
-     * @ORM\Column(name="relatedto", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Relation", mappedBy="itemto")
      */
     private $relatedto;
 
     /**
-     * @var string $relatedfrom
-     *
-     * @ORM\Column(name="relatedfrom", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Relation", mappedBy="itemfrom")
      */
     private $relatedfrom;
 
     /**
-     * @var string $author
-     *
-     * @ORM\Column(name="author", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $author;
 
     /**
-     * @var string $canedit
-     *
-     * @ORM\Column(name="canedit", type="string", length=255)
+     * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User", mappedBy="editableItems", cascade={"persist"})
      */
-    private $canedit;
+    private $editors;
 
     /**
-     * @var string $comments
-     *
-     * @ORM\Column(name="comments", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="item")
      */
     private $comments;
 
@@ -371,23 +359,23 @@ class Item
     }
 
     /**
-     * Set canedit
+     * Set editors
      *
-     * @param string $canedit
+     * @param string $editors
      */
-    public function setCanedit($canedit)
+    public function setEditors($editors)
     {
-        $this->canedit = $canedit;
+        $this->editors = $editors;
     }
 
     /**
-     * Get canedit
+     * Get editors
      *
      * @return string 
      */
-    public function getCanedit()
+    public function getEditors()
     {
-        return $this->canedit;
+        return $this->editors;
     }
 
     /**
@@ -408,5 +396,42 @@ class Item
     public function getComments()
     {
         return $this->comments;
+    }
+    public function __construct()
+    {
+        $this->relatedto = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->relatedfrom = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->editors = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add relatedto
+     *
+     * @param Colecta\ItemBundle\Entity\Relation $relatedto
+     */
+    public function addRelation(\Colecta\ItemBundle\Entity\Relation $relatedto)
+    {
+        $this->relatedto[] = $relatedto;
+    }
+
+    /**
+     * Add editors
+     *
+     * @param Colecta\UserBundle\Entity\User $editors
+     */
+    public function addUser(\Colecta\UserBundle\Entity\User $editors)
+    {
+        $this->editors[] = $editors;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param Colecta\ItemBundle\Entity\Comment $comments
+     */
+    public function addComment(\Colecta\ItemBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
     }
 }

@@ -29,16 +29,12 @@ class Activity
     private $name;
 
     /**
-     * @var string $routes
-     *
-     * @ORM\Column(name="routes", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Route", mappedBy="activity")
      */
     private $routes;
 
     /**
-     * @var string $events
-     *
-     * @ORM\Column(name="events", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="activity")
      */
     private $events;
 
@@ -111,5 +107,30 @@ class Activity
     public function getEvents()
     {
         return $this->events;
+    }
+    public function __construct()
+    {
+        $this->routes = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->events = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add routes
+     *
+     * @param Colecta\ActivityBundle\Entity\Route $routes
+     */
+    public function addRoute(\Colecta\ActivityBundle\Entity\Route $routes)
+    {
+        $this->routes[] = $routes;
+    }
+
+    /**
+     * Add events
+     *
+     * @param Colecta\ActivityBundle\Entity\Event $events
+     */
+    public function addEvent(\Colecta\ActivityBundle\Entity\Event $events)
+    {
+        $this->events[] = $events;
     }
 }

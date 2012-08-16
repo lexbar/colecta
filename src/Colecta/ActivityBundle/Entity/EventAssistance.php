@@ -29,17 +29,15 @@ class EventAssistance
     private $status;
 
     /**
-     * @var string $event
-     *
-     * @ORM\Column(name="event", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Event")
+    * @ORM\JoinColumn(name="event_id", referencedColumnName="id") 
+    */
     private $event;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
 

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Folder
+class Folder extends \Colecta\ItemBundle\Entity\Item
 {
     /**
      * @var integer $id
@@ -36,9 +36,7 @@ class Folder
     private $personal;
 
     /**
-     * @var string $files
-     *
-     * @ORM\Column(name="files", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="File", mappedBy="folder")
      */
     private $files;
 
@@ -111,5 +109,19 @@ class Folder
     public function getFiles()
     {
         return $this->files;
+    }
+    public function __construct()
+    {
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add files
+     *
+     * @param Colecta\FilesBundle\Entity\File $files
+     */
+    public function addFile(\Colecta\FilesBundle\Entity\File $files)
+    {
+        $this->files[] = $files;
     }
 }

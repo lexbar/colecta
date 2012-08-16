@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Route
+class Route extends \Colecta\ItemBundle\Entity\Item
 {
     /**
      * @var integer $id
@@ -113,16 +113,13 @@ class Route
     private $sourcefile;
 
     /**
-     * @var string $activity
-     *
-     * @ORM\Column(name="activity", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Activity")
+    * @ORM\JoinColumn(name="activity_id", referencedColumnName="id") 
+    */
     private $activity;
 
     /**
-     * @var string $trackpoints
-     *
-     * @ORM\Column(name="trackpoints", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="RouteTrackpoint", mappedBy="route")
      */
     private $trackpoints;
 
@@ -435,5 +432,19 @@ class Route
     public function getTrackpoints()
     {
         return $this->trackpoints;
+    }
+    public function __construct()
+    {
+        $this->trackpoints = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add trackpoints
+     *
+     * @param Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints
+     */
+    public function addRouteTrackpoint(\Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints)
+    {
+        $this->trackpoints[] = $trackpoints;
     }
 }

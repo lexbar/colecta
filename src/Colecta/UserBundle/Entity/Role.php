@@ -372,9 +372,7 @@ class Role
     private $message_send;
 
     /**
-     * @var string $users
-     *
-     * @ORM\Column(name="users", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="User", mappedBy="role")
      */
     private $users;
 
@@ -1407,5 +1405,19 @@ class Role
     public function getUsers()
     {
         return $this->users;
+    }
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add users
+     *
+     * @param Colecta\UserBundle\Entity\User $users
+     */
+    public function addUser(\Colecta\UserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
     }
 }

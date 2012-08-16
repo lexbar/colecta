@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Poll
+class Poll extends \Colecta\ItemBundle\Entity\Item
 {
     /**
      * @var integer $id
@@ -36,9 +36,7 @@ class Poll
     private $endDate;
 
     /**
-     * @var string $options
-     *
-     * @ORM\Column(name="options", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="PollOption", mappedBy="poll")
      */
     private $options;
 
@@ -111,5 +109,19 @@ class Poll
     public function getOptions()
     {
         return $this->options;
+    }
+    public function __construct()
+    {
+        $this->options = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add options
+     *
+     * @param Colecta\ColectiveBundle\Entity\PollOption $options
+     */
+    public function addPollOption(\Colecta\ColectiveBundle\Entity\PollOption $options)
+    {
+        $this->options[] = $options;
     }
 }

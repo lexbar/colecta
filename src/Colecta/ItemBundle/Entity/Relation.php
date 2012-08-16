@@ -29,24 +29,21 @@ class Relation
     private $text;
 
     /**
-     * @var string $itemto
-     *
-     * @ORM\Column(name="itemto", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Item")
+    * @ORM\JoinColumn(name="itemto_id", referencedColumnName="id") 
+    */
     private $itemto;
 
     /**
-     * @var string $itemfrom
-     *
-     * @ORM\Column(name="itemfrom", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Item")
+    * @ORM\JoinColumn(name="$itemfrom_id", referencedColumnName="id") 
+    */
     private $itemfrom;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
 

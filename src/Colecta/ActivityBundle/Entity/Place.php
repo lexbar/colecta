@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Place
+class Place extends \Colecta\ItemBundle\Entity\Item
 {
     /**
      * @var integer $id

@@ -50,10 +50,9 @@ class RouteTrackpoint
     private $date;
 
     /**
-     * @var string $route
-     *
-     * @ORM\Column(name="route", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Route")
+    * @ORM\JoinColumn(name="route_id", referencedColumnName="id") 
+    */
     private $route;
 
 

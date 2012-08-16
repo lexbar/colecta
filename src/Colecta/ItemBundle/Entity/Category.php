@@ -50,9 +50,7 @@ class Category
     private $lastchange;
 
     /**
-     * @var string $items
-     *
-     * @ORM\Column(name="items", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Item", mappedBy="category")
      */
     private $items;
 
@@ -165,5 +163,19 @@ class Category
     public function getItems()
     {
         return $this->items;
+    }
+    public function __construct()
+    {
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add items
+     *
+     * @param Colecta\ItemBundle\Entity\Item $items
+     */
+    public function addItem(\Colecta\ItemBundle\Entity\Item $items)
+    {
+        $this->items[] = $items;
     }
 }

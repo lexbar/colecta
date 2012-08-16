@@ -29,18 +29,15 @@ class PollOption
     private $text;
 
     /**
-     * @var string $poll
-     *
-     * @ORM\Column(name="poll", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Poll")
+    * @ORM\JoinColumn(name="poll_id", referencedColumnName="id") 
+    */
     private $poll;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
+     * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User")
      */
-    private $user;
+    private $votes;
 
 
     /**
@@ -111,5 +108,29 @@ class PollOption
     public function getUser()
     {
         return $this->user;
+    }
+    public function __construct()
+    {
+        $this->votes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add votes
+     *
+     * @param Colecta\UserBundle\Entity\User $votes
+     */
+    public function addUser(\Colecta\UserBundle\Entity\User $votes)
+    {
+        $this->votes[] = $votes;
+    }
+
+    /**
+     * Get votes
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 }
