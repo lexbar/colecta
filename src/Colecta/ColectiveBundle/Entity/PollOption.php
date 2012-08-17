@@ -36,6 +36,10 @@ class PollOption
 
     /**
      * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User")
+     * @ORM\JoinTable(name="votes",
+     * joinColumns={@ORM\JoinColumn(name="polloption_id", referencedColumnName="id")},
+     * inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     * )
      */
     private $votes;
 

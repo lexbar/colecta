@@ -82,7 +82,7 @@ class User
     private $sentMessages;
 
     /**
-     * @ORM\OneToMany(targetEntity="Ciclubs\ItemBundle\Entity\Relation", mappedBy="destination")
+     * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Relation", mappedBy="destination")
      */
     private $receivedMessages;
 
@@ -448,9 +448,9 @@ class User
     /**
      * Add receivedMessages
      *
-     * @param Ciclubs\ItemBundle\Entity\Relation $receivedMessages
+     * @param Colecta\ItemBundle\Entity\Relation $receivedMessages
      */
-    public function addRelation(\Ciclubs\ItemBundle\Entity\Relation $receivedMessages)
+    public function addRelation(\Colecta\ItemBundle\Entity\Relation $receivedMessages)
     {
         $this->receivedMessages[] = $receivedMessages;
     }

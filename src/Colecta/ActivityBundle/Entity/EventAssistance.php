@@ -35,7 +35,7 @@ class EventAssistance
     private $event;
 
     /**
-    * @ORM\ManyToOne(targetEntity="User")
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
     */
     private $user;

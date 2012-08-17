@@ -29,11 +29,11 @@ class File extends \Colecta\ItemBundle\Entity\Item
     private $url;
 
     /**
-     * @var string $type
+     * @var string $filetype
      *
-     * @ORM\Column(name="type", type="string", length=4)
+     * @ORM\Column(name="filetype", type="string", length=4)
      */
-    private $type;
+    private $filetype;
 
     /**
      * @var text $description
@@ -80,23 +80,23 @@ class File extends \Colecta\ItemBundle\Entity\Item
     }
 
     /**
-     * Set type
+     * Set filetype
      *
-     * @param string $type
+     * @param string $filetype
      */
-    public function setType($type)
+    public function setFiletype($filetype)
     {
-        $this->type = $type;
+        $this->filetype = $filetype;
     }
 
     /**
-     * Get type
+     * Get filetype
      *
      * @return string 
      */
-    public function getType()
+    public function getFiletype()
     {
-        return $this->type;
+        return $this->filetype;
     }
 
     /**
