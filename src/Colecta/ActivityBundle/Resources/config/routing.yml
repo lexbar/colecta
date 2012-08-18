@@ -1,3 +1,7 @@
-ColectaActivityBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ColectaActivityBundle:Default:index }
+ColectaPlaceView:
+    pattern:  /place/{slug}
+    defaults: { _controller: ColectaActivityBundle:Place:view }
+
+ColectaEventView:
+    pattern:  /event/{slug}
+    defaults: { _controller: ColectaActivityBundle:Event:view }

@@ -1,0 +1,23 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}{% endblock %}
+{% block javascripts %}{% endblock %}
+
+{% block body %}
+<header>
+<h1><a href="{{ path('portada') }}">CUPON</a></h1> 
+
+<nav>
+<ul> 
+<li><a href="{{ path('portada') }}">Oferta del día</a></li> 
+<li><a href="#">Ofertas recientes</a></li> 
+<li><a href="#">Mis ofertas</a></li>
+</ul> 
+</nav>
+
+</header>
+
+<article> {% block article %}{% endblock %}</article>
+
+<aside> {% block aside %}{% endblock %}
+</aside> {% endblock %}

@@ -1,3 +1,6 @@
-ColectaItemBundle_homepage:
-    pattern:  /test
-    defaults: { _controller: ColectaItemBundle:Default:index }
+ColectaDashboard:
+    pattern:  /
+    defaults: { _controller: ColectaItemBundle:Default:dashboard }
+ColectaPostView:
+    pattern:  /post/{slug}
+    defaults: { _controller: ColectaItemBundle:Post:view }

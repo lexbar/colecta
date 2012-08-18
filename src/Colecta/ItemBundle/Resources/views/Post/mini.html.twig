@@ -1,2 +1,2 @@
-<h2>{{ item.name }}</h2>
+<h2><a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
 <p>{{ item.summary }}</p>
