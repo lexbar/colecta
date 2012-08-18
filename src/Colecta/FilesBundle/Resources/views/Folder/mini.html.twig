@@ -1,0 +1,19 @@
+<h2>Folder:</h2>
+<ul>
+    <li>Tipo: {{ item.type }}</li>
+    <li>Nombre: {{ item.name }}</li>
+    <li>Slug: {{ item.slug }}</li>
+    <li>Resumen: {{ item.summary }}</li>
+    <li>Palabras clave: {{ item.tagwords }}</li>
+    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
+    <li>Permite comentarios: {{ item.allowComments | replace({'1':'SI','0':'NO'}) }}</li>
+    <li>Boceto: {{ item.draft | replace({true:'SI','':'NO'}) }}</li>
+    <li>Público: {{ item.public | replace({'1':'SI','0':'NO'}) }}</li>
+    <li>Personal: {{ item.personal | replace({'1':'SI','0':'NO'}) }}</li>
+    <li>Numero de archivos: {{ item.files | length }}</li>
+    <ul>
+        {% for file in item.files %}
+            <li>{{ file.name }}</li>
+        {% endfor %}
+    </ul>
+</ul>

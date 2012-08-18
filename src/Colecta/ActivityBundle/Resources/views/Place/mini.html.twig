@@ -1,0 +1,3 @@
+<h2>{{ item.name }}</h2>
+<img src="http://maps.google.com/maps/api/staticmap?center={{ item.latitude ~ ',' ~ item.longitude }}&zoom=13&size=200x120&maptype=roadmap&markers=color:blue%7C{{ item.latitude ~ ',' ~ item.longitude }}&sensor=false" width="200" height="120">
+<p>{{ item.summary }}</p>

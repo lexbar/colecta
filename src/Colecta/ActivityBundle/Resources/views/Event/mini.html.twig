@@ -1,0 +1,10 @@
+<h2>{{ item.dateini | date('d/m/Y H:i:s') }} {{ item.name }}</h2>
+<p>{{ item.summary }}</p>
+
+<ul>
+    <li>Distancia: {{ item.distance }}</li>
+    <li>Subida: {{ item.uphill }}</li>
+    <li>Bajada: {{ item.downhill }}</li>
+    <li>Tiempo: ?</li>
+    <li>Dificultad: {{ item.difficulty }}</li>
+</ul>

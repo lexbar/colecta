@@ -3,13 +3,17 @@
 namespace Colecta\ItemBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Colecta\ItemBundle\Entity\Post;
 
 class PostController extends Controller
 {
     
-    public function showAction($name)
+    public function viewAction($slug)
     {
-        return $this->render('ColectaItemBundle:Default:index.html.twig', array('name' => $name));
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
+        
+        return $this->render('ColectaItemBundle:Post:full.html.twig', array('item' => $item));
     }
 }

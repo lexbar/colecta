@@ -1,4 +1,6 @@
-/app
+/app/config/parameters.ini
+/app/cache/*
+/app/logs/*
 /bin
 /vendor
 /web

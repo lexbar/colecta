@@ -1,0 +1,28 @@
+ColectaBackendBundle:
+    resource: "@ColectaBackendBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ColectaActivityBundle:
+    resource: "@ColectaActivityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ColectaColectiveBundle:
+    resource: "@ColectaColectiveBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ColectaFilesBundle:
+    resource: "@ColectaFilesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ColectaItemBundle:
+    resource: "@ColectaItemBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ColectaUserBundle:
+    resource: "@ColectaUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+# Internal routing configuration to handle ESI
+#_internal:
+#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#   prefix:   /_internal

@@ -1,8 +1,7 @@
 <h1>Listado de Items:</h1>
 
 {% for item in items %}
-    {% set path = 'Colecta' ~ item.type ~ 'View.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:Default:'}) %}
+    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
-    {{ path }}<br>
 {% endfor %}
