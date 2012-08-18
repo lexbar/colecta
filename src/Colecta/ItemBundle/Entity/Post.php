@@ -58,4 +58,9 @@ class Post extends Item
     {
         return $this->text;
     }
+    
+    public function getType()
+    {
+        return 'Item/Post';
+    }
 }

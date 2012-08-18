@@ -1,0 +1,24 @@
+<h2>Route:</h2>
+<ul>
+    <li>Tipo: {{ item.type }}</li>
+    <li>Nombre: {{ item.name }}</li>
+    <li>Slug: {{ item.slug }}</li>
+    <li>Resumen: {{ item.summary }}</li>
+    <li>Palabras clave: {{ item.tagwords }}</li>
+    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
+    <li>Permite comentarios: {{ item.allowComments }}</li>
+    <li>Boceto: {{ item.draft }}</li>
+    <li>Descripción: {{ item.description }}</li>
+    <li>Distancia: {{ item.distance }}</li>
+    <li>Subida: {{ item.uphill }}</li>
+    <li>Bajada: {{ item.downhill }}</li>
+    <li>Tiempo: {{ item.time }}</li>
+    <li>Velocidad media: {{ item.avgspeed }}</li>
+    <li>Velocidad máxima: {{ item.maxspeed }}</li>
+    <li>Cota baja: {{ item.minheight }}</li>
+    <li>Cota alta: {{ item.maxheight }}</li>
+    <li>Circular: {{ item.isloop }}</li>
+    <li>Dificultad: {{ item.difficulty }}</li>
+    <li>IBP: {{ item.IBP }}</li>
+    <li>Archivo fuente: {{ item.sourcefile }}</li>
+</ul>

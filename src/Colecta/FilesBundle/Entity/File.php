@@ -138,4 +138,9 @@ class File extends \Colecta\ItemBundle\Entity\Item
     {
         return $this->folder;
     }
+    
+    public function getType()
+    {
+        return 'Files/File';
+    }
 }

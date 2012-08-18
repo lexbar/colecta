@@ -447,4 +447,9 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     {
         $this->trackpoints[] = $trackpoints;
     }
+    
+    public function getType()
+    {
+        return 'Activity/Route';
+    }
 }

@@ -1,0 +1,14 @@
+<h2>Place:</h2>
+<ul>
+    <li>Tipo: {{ item.type }}</li>
+    <li>Nombre: {{ item.name }}</li>
+    <li>Slug: {{ item.slug }}</li>
+    <li>Resumen: {{ item.summary }}</li>
+    <li>Palabras clave: {{ item.tagwords }}</li>
+    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
+    <li>Permite comentarios: {{ item.allowComments }}</li>
+    <li>Boceto: {{ item.draft }}</li>
+    <li>Descripción: {{ item.description }}</li>
+    <li>Latitud: {{ item.latitude }}</li>
+    <li>Longitud: {{ item.longitude }}</li>
+</ul>

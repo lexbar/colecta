@@ -178,4 +178,9 @@ class Contest extends \Colecta\ItemBundle\Entity\Item
     {
         $this->winners[] = $winners;
     }
+    
+    public function getType()
+    {
+        return 'Colective/Contest';
+    }
 }

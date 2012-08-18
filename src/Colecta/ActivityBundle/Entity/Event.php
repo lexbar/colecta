@@ -339,4 +339,9 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     {
         $this->assistances[] = $assistances;
     }
+    
+    public function getType()
+    {
+        return 'Activity/Event';
+    }
 }

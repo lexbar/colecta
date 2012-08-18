@@ -112,4 +112,9 @@ class Place extends \Colecta\ItemBundle\Entity\Item
     {
         return $this->longitude;
     }
+    
+    public function getType()
+    {
+        return 'Activity/Place';
+    }
 }

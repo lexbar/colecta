@@ -1,0 +1,20 @@
+<h2>Event:</h2>
+<ul>
+    <li>Tipo: {{ item.type }}</li>
+    <li>Nombre: {{ item.name }}</li>
+    <li>Slug: {{ item.slug }}</li>
+    <li>Resumen: {{ item.summary }}</li>
+    <li>Palabras clave: {{ item.tagwords }}</li>
+    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
+    <li>Permite comentarios: {{ item.allowComments }}</li>
+    <li>Boceto: {{ item.draft }}</li>
+    <li>Fecha de Inicio: {{ item.dateini | date('d/m/Y H:i:s') }}</li>
+    <li>Fecha de Fin: {{ item.dateend | date('d/m/Y H:i:s') }}</li>
+    <li>Mostrar horas: {{ item.showHours }}</li>
+    <li>Descripcion: {{ item.description }}</li>
+    <li>Distancia: {{ item.distance }}</li>
+    <li>Subida: {{ item.uphill }}</li>
+    <li>Bajada: {{ item.downhill }}</li>
+    <li>Dificultad: {{ item.difficulty }}</li>
+    <li>Estatus: {{ item.status }}</li>
+</ul>

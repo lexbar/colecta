@@ -124,4 +124,9 @@ class Poll extends \Colecta\ItemBundle\Entity\Item
     {
         $this->options[] = $options;
     }
+    
+    public function getType()
+    {
+        return 'Colective/Poll';
+    }
 }

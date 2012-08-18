@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({"item" = "Item", "post" = "Post", "poll" = "Colecta\ColectiveBundle\Entity\Poll", "route" = "Colecta\ActivityBundle\Entity\Route", "place" = "Colecta\ActivityBundle\Entity\Place", "file" = "Colecta\FilesBundle\Entity\File", "contest" = "Colecta\ColectiveBundle\Entity\Contest", "event" = "Colecta\ActivityBundle\Entity\Event", "folder" = "Colecta\FilesBundle\Entity\Folder"})
+ * @ORM\DiscriminatorMap({"Item/Item" = "Item", "Item/Post" = "Post", "Colective/Poll" = "Colecta\ColectiveBundle\Entity\Poll", "Activity/Route" = "Colecta\ActivityBundle\Entity\Route", "Activity/Place" = "Colecta\ActivityBundle\Entity\Place", "Files/File" = "Colecta\FilesBundle\Entity\File", "Colective/Contest" = "Colecta\ColectiveBundle\Entity\Contest", "Activity/Event" = "Colecta\ActivityBundle\Entity\Event", "Files/Folder" = "Colecta\FilesBundle\Entity\Folder"})
  */
 abstract class Item
 {

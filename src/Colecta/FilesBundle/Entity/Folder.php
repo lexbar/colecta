@@ -124,4 +124,9 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
     {
         $this->files[] = $files;
     }
+    
+    public function getType()
+    {
+        return 'Files/Folder';
+    }
 }
