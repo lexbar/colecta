@@ -1,15 +1,15 @@
-<h2>File:</h2>
-<ul>
-    <li>Tipo: {{ item.type }}</li>
-    <li>Nombre: {{ item.name }}</li>
-    <li>Slug: {{ item.slug }}</li>
-    <li>Resumen: {{ item.summary }}</li>
-    <li>Palabras clave: {{ item.tagwords }}</li>
-    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
-    <li>Permite comentarios: {{ item.allowComments }}</li>
-    <li>Boceto: {{ item.draft }}</li>
-    <li>URL: {{ item.url }}</li>
-    <li>Tipo de archivo: {{ item.filetype }}</li>
-    <li>Descripcion: {{ item.description }}</li>
-    {% if item.folder %}<li>Pertenece a la carpeta:: {{ item.folder.name }}</li>{% endif %}
-</ul>
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+<h2>{{ item.name }}</h2>
+
+{% if item.filetype in ['jpg','gif','png'] %} 
+    <img src="{{ item.url }}"> 
+{% else %}
+    <a href="{{ item.url }}">Enlace</a>
+{% endif %}
+
+<p>{{ item.description }}</p>
+{% if item.folder %}<p>Pertenece a la carpeta:: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
+
+{% endblock %}

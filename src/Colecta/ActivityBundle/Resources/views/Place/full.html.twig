@@ -1,14 +1,8 @@
-<h2>Place:</h2>
-<ul>
-    <li>Tipo: {{ item.type }}</li>
-    <li>Nombre: {{ item.name }}</li>
-    <li>Slug: {{ item.slug }}</li>
-    <li>Resumen: {{ item.summary }}</li>
-    <li>Palabras clave: {{ item.tagwords }}</li>
-    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
-    <li>Permite comentarios: {{ item.allowComments }}</li>
-    <li>Boceto: {{ item.draft }}</li>
-    <li>Descripción: {{ item.description }}</li>
-    <li>Latitud: {{ item.latitude }}</li>
-    <li>Longitud: {{ item.longitude }}</li>
-</ul>
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+    <h2>{{ item.name }}</h2>
+    <img src="http://maps.google.com/maps/api/staticmap?center={{ item.latitude ~ ',' ~ item.longitude }}&zoom=13&size=500x330&maptype=roadmap&markers=color:blue%7C{{ item.latitude ~ ',' ~ item.longitude }}&sensor=false" width="500" height="330">
+
+    <p>{{ item.description }}</p>
+{% endblock %}

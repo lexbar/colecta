@@ -4,20 +4,38 @@
 {% block javascripts %}{% endblock %}
 
 {% block body %}
-<header>
-<h1><a href="{{ path('portada') }}">CUPON</a></h1> 
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <h1><a class="brand" href="/">Colecta</a></h1>
+            
+            <form class="form-search pull-left">
+                <input type="text" class="input-medium search-query">
+                <button type="submit" class="btn">Buscar</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-<nav>
-<ul> 
-<li><a href="{{ path('portada') }}">Oferta del día</a></li> 
-<li><a href="#">Ofertas recientes</a></li> 
-<li><a href="#">Mis ofertas</a></li>
-</ul> 
-</nav>
+<div class="container">
+<div class="row">
+<aside class="span2">
+    <nav>
+        <ul> 
+            <li>Hola {{ app.user.name }}</li>
+        </ul> 
+    </nav>
+</aside>
 
-</header>
+<article class="span8"> {% block article %}{% endblock %}</article>
 
-<article> {% block article %}{% endblock %}</article>
-
-<aside> {% block aside %}{% endblock %}
-</aside> {% endblock %}
+<aside class="span2">
+    <nav>
+        <ul> 
+            <li>Adios</li>
+        </ul> 
+    </nav>
+</aside>
+</div>
+</div>
+{% endblock %}

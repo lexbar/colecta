@@ -3,13 +3,25 @@
 namespace Colecta\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\SecurityContext;
 
 
 class DefaultController extends Controller
 {
     
-    public function indexAction($name)
+    public function loginAction()
     {
-        return $this->render('ColectaUserBundle:Default:index.html.twig', array('name' => $name));
+        $request = $this->getRequest(); 
+        $session = $request->getSession();
+        
+        $error = $request->attributes->get( 
+            SecurityContext::AUTHENTICATION_ERROR, 
+            $session->get(SecurityContext::AUTHENTICATION_ERROR)
+        );
+        
+        return $this->render('ColectaUserBundle:Default:login.html.twig', array( 
+            'last_username' => $session->get(SecurityContext::LAST_USERNAME), 
+            'error'	=>$error)
+        );
     }
 }

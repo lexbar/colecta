@@ -1,2 +1,6 @@
-<h2>{{ item.name }}</h2>
-<p>Texto: {{ item.text }}</p>
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+    <h2>{{ item.name }}</h2>
+    <p>Texto: {{ item.text }}</p>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace Colecta\UserBundle\Entity;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var integer $id
@@ -483,5 +484,30 @@ class User
     public function addNotification(\Colecta\UserBundle\Entity\Notification $notifications)
     {
         $this->notifications[] = $notifications;
+    }
+    
+    public function equals(\Symfony\Component\Security\Core\User\UserInterface $user)
+    {
+        return $this->getMail() == $user->getMail();
+    }
+    
+    public function eraseCredentials()
+    {
+    
+    }
+    
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+    
+    public function getUsername()
+    {
+        return $this->getMail();
+    }
+    
+    public function getPassword()
+    {
+        return $this->getPass();
     }
 }

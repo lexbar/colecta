@@ -1,0 +1,20 @@
+{% extends '::frontend.html.twig' %}
+{% block title %}Acceso de usuario{% endblock%}
+
+{% block article %}
+    {% if error %}
+        <div class="alert alert-error">{{ error.message }}</div> 
+    {% endif %}
+    
+    <form class="well form-inline" action="{{ path('userLoginCheck') }}" method="post">
+        <input type="text" class="input-small" id="username" name="_username" placeholder="Email" value="{{ last_username }}">
+        
+        <input type="password" id="password" name="_password" class="input-small" placeholder="Password">
+        
+        <label for="remember_me" class="checkbox">
+            <input id="remember_me" name="_remember_me" type="checkbox" checked /> Recuerdame
+        </label>
+        
+        <button type="submit" name="login" class="btn">Acceder</button>
+    </form>
+{% endblock %}

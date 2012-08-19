@@ -1,3 +1,9 @@
-ColectaUserBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ColectaUserBundle:Default:index }
+userLogin:
+    pattern:  /login
+    defaults: { _controller: ColectaUserBundle:Default:login }
+
+userLoginCheck:
+    pattern:  /login_check
+
+userLogout:
+    pattern:  /logout

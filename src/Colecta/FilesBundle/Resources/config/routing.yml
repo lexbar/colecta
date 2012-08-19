@@ -1,3 +1,6 @@
-ColectaFilesBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ColectaFilesBundle:Default:index }
+ColectaFolderView:
+    pattern:  /folder/{slug}
+    defaults: { _controller: ColectaFilesBundle:Folder:view }
+ColectaFileView:
+    pattern:  /file/{slug}
+    defaults: { _controller: ColectaFilesBundle:File:view }
