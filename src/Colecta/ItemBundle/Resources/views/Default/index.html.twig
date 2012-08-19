@@ -1,11 +1,53 @@
 {% extends '::frontend.html.twig' %}
 
 {% block article %}
-<h1>Listado de Items:</h1>
 
 {% for item in items %}
+<div class="item">
+    <div class="profile mini">
+        <a class="username" href="/"><img width="40" height="40" src="{{item.author.avatar}}">
+        {{item.author.name}}</a><br> 
+        
+        {% set itemtimestamp = item.date | date('U') %}
+        {% set nowtimestamp =  'now' | date('U') %}
+        {% set secondsago = nowtimestamp - itemtimestamp %}
+        
+        {% if secondsago < 60 %}
+            Hace {{ secondsago }} segundos
+        {% elseif secondsago/60 < 60 %}
+            Hace {{ secondsago // 60 }} minutos
+        {% else %}
+            {% set hoursago = secondsago / 60 // 60 %}
+            {% if hoursago < 24 %}
+                Hace {{ hoursago }} horas
+            {% elseif hoursago < 48 %}
+                Ayer a las {{ item.date | date('H:i')  }}
+            {% else %}
+                {{ item.date | date('j')  }} de 
+                {{ item.date | date('n') | replace({
+                    '1':'enero',
+                    '2':'febrero',
+                    '3':'marzo',
+                    '4':'abril',
+                    '5':'mayo',
+                    '6':'junio',
+                    '7':'julio',
+                    '8':'agosto',
+                    '9':'septiembre',
+                    '10':'octubre',
+                    '11':'noviembre',
+                    '12':'diciembre'
+                }) }}
+                 a las {{ item.date | date('H:i')  }}
+            {% endif %}
+        {% endif %}
+        
+         en <a class="category" href="/">Categoria</a>
+    </div>
+    
     {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
     {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
+</div>
 {% endfor %}
 {% endblock %}

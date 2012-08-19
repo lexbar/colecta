@@ -9,7 +9,7 @@
         <div class="container">
             <h1><a class="brand" href="/">Colecta</a></h1>
             
-            <form class="form-search pull-left">
+            <form class="form-search pull-right">
                 <input type="text" class="input-medium search-query">
                 <button type="submit" class="btn">Buscar</button>
             </form>
@@ -19,22 +19,26 @@
 
 <div class="container">
 <div class="row">
-<aside class="span2">
+<aside class="span2" id="sidebar">
     <nav>
         <ul> 
-            <li>Hola {{ app.user.name }}</li>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/">Publicaciones</a></li>
+            <li><a href="/">Eventos</a></li>  
+            <li><a href="/">Rutas</a></li>
+            <li><a href="/">Lugares</a></li>
+            <li><a href="/">Archivos</a></li>
+            <li><a href="/">Encuestas</a></li>
+            <li><a href="/">Concursos</a></li>
+            <li><a href="/">Personas</a></li>
         </ul> 
     </nav>
 </aside>
 
-<article class="span8"> {% block article %}{% endblock %}</article>
+<article class="span7" id="stream"> {% block article %}{% endblock %}</article>
 
-<aside class="span2">
-    <nav>
-        <ul> 
-            <li>Adios</li>
-        </ul> 
-    </nav>
+<aside class="span3">
+    <p>Hola {% if app.user %} {{ app.user.name }} <a href="{{ path('userLogout') }}">Salir</a> {% endif %}</p>
 </aside>
 </div>
 </div>

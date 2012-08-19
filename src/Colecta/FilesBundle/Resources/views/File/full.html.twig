@@ -10,6 +10,6 @@
 {% endif %}
 
 <p>{{ item.description }}</p>
-{% if item.folder %}<p>Pertenece a la carpeta:: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
+{% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
 
 {% endblock %}

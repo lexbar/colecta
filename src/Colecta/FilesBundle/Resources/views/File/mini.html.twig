@@ -1,5 +1,6 @@
-<div class="item file mini">
+<div class="file mini">
     <h2><a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     <p>{{ item.summary }}</p>
-    {% if item.folder %}<p>Pertenece a la carpeta:: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
+    {% if item.filetype in ['jpg','gif','png'] %}<a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}" class="thumbnail"><img src="{{ item.url }}"></a>{% endif %}
+    {% if item.folder %}<p style="clear:both">Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
 </div>
