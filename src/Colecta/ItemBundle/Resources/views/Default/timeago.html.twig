@@ -1,0 +1,33 @@
+{% set itemtimestamp = date | date('U') %}
+{% set nowtimestamp =  'now' | date('U') %}
+{% set secondsago = nowtimestamp - itemtimestamp %}
+
+{% if secondsago < 60 %}
+    Hace {{ secondsago }} segundos
+{% elseif secondsago/60 < 60 %}
+    Hace {{ secondsago // 60 }} minutos
+{% else %}
+    {% set hoursago = secondsago / 60 // 60 %}
+    {% if hoursago < 24 %}
+        Hace {{ hoursago }} horas
+    {% elseif itemtimestamp > 'yesterday' | date('U') %}
+        Ayer a las {{ date | date('H:i')  }}
+    {% else %}
+        {{ date | date('j')  }} de 
+        {{ date | date('n') | replace({
+            '1':'enero',
+            '2':'febrero',
+            '3':'marzo',
+            '4':'abril',
+            '5':'mayo',
+            '6':'junio',
+            '7':'julio',
+            '8':'agosto',
+            '9':'septiembre',
+            '10':'octubre',
+            '11':'noviembre',
+            '12':'diciembre'
+        }) }}
+         a las {{ date | date('H:i')  }}
+    {% endif %}
+{% endif %}

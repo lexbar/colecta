@@ -1,9 +1,13 @@
 userLogin:
     pattern:  /login
     defaults: { _controller: ColectaUserBundle:Default:login }
-
+    
 userLoginCheck:
     pattern:  /login_check
-
+    
 userLogout:
     pattern:  /logout
+    
+userProfile:
+    pattern:  /user/{id}
+    defaults: { _controller: ColectaUserBundle:User:profile }

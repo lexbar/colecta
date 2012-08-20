@@ -7,7 +7,14 @@ use Colecta\ItemBundle\Entity\Post;
 
 class PostController extends Controller
 {
-    
+    public function indexAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('date'=>'DESC'),10,0);
+        
+        return $this->render('ColectaItemBundle:Post:index.html.twig', array('items' => $items));
+    }
     public function viewAction($slug)
     {
         $em = $this->getDoctrine()->getEntityManager();

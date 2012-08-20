@@ -23,13 +23,13 @@
     <nav>
         <ul> 
             <li><a href="/">Inicio</a></li>
-            <li><a href="/">Publicaciones</a></li>
-            <li><a href="/">Eventos</a></li>  
-            <li><a href="/">Rutas</a></li>
-            <li><a href="/">Lugares</a></li>
-            <li><a href="/">Archivos</a></li>
-            <li><a href="/">Encuestas</a></li>
-            <li><a href="/">Concursos</a></li>
+            <li><a href="/post/">Publicaciones</a></li>
+            <li><a href="/event/">Eventos</a></li>  
+            <li><a href="/route/">Rutas</a></li>
+            <li><a href="/place/">Lugares</a></li>
+            <li><a href="/file/">Archivos</a></li>
+            <li><a href="/poll/">Encuestas</a></li>
+            <li><a href="/contest/">Concursos</a></li>
             <li><a href="/">Personas</a></li>
         </ul> 
     </nav>
@@ -38,7 +38,8 @@
 <article class="span7" id="stream"> {% block article %}{% endblock %}</article>
 
 <aside class="span3">
-    <p>Hola {% if app.user %} {{ app.user.name }} <a href="{{ path('userLogout') }}">Salir</a> {% endif %}</p>
+    <p class="myself">{% if app.user %}<img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="{{ path('userLogout') }}">Salir</a>{% else %}Haz <a href="{{ path('userLogin') }}">login</a>{% endif %}</p>
+    <p class="alert alert-block">Esta es una alerta bla bla</p>
 </aside>
 </div>
 </div>

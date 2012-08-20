@@ -1,6 +1,12 @@
+ColectaFolderIndex:
+    pattern:  /folder/
+    defaults: { _controller: ColectaFilesBundle:Folder:index }
 ColectaFolderView:
     pattern:  /folder/{slug}
     defaults: { _controller: ColectaFilesBundle:Folder:view }
+ColectaFileIndex:
+    pattern:  /file/
+    defaults: { _controller: ColectaFilesBundle:File:index }
 ColectaFileView:
     pattern:  /file/{slug}
     defaults: { _controller: ColectaFilesBundle:File:view }

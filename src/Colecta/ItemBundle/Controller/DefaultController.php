@@ -4,14 +4,6 @@ namespace Colecta\ItemBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Colecta\ItemBundle\Entity\Post;
-use Colecta\FilesBundle\Entity\File;
-use Colecta\FilesBundle\Entity\Folder;
-use Colecta\ActivityBundle\Entity\Activity;
-use Colecta\ActivityBundle\Entity\Place;
-use Colecta\ActivityBundle\Entity\Event;
-use Colecta\ActivityBundle\Entity\Route;
-
 class DefaultController extends Controller
 {
     

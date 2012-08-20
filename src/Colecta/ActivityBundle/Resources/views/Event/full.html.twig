@@ -1,20 +1,45 @@
-<h2>Event:</h2>
-<ul>
-    <li>Tipo: {{ item.type }}</li>
-    <li>Nombre: {{ item.name }}</li>
-    <li>Slug: {{ item.slug }}</li>
-    <li>Resumen: {{ item.summary }}</li>
-    <li>Palabras clave: {{ item.tagwords }}</li>
-    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
-    <li>Permite comentarios: {{ item.allowComments }}</li>
-    <li>Boceto: {{ item.draft }}</li>
-    <li>Fecha de Inicio: {{ item.dateini | date('d/m/Y H:i:s') }}</li>
-    <li>Fecha de Fin: {{ item.dateend | date('d/m/Y H:i:s') }}</li>
-    <li>Mostrar horas: {{ item.showHours }}</li>
-    <li>Descripcion: {{ item.description }}</li>
-    <li>Distancia: {{ item.distance }}</li>
-    <li>Subida: {{ item.uphill }}</li>
-    <li>Bajada: {{ item.downhill }}</li>
-    <li>Dificultad: {{ item.difficulty }}</li>
-    <li>Estatus: {{ item.status }}</li>
-</ul>
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+<div class="event full">
+
+    <div class="date">
+        <span class="weekday">{{ item.dateini | date('l') | replace ({
+            'Monday':'Lunes',
+            'Tuesday':'Martes',
+            'Wednesday':'Miércoles',
+            'Thursday':'Jueves',
+            'Friday':'Viernes',
+            'Saturday':'Sábado',
+            'Sunday':'Domingo'
+        }) }}</span>
+        <span class="monthday">{{ item.dateini | date('d') }}</span> 
+        <span class="month">{{ item.dateini | date('n') | replace({
+            '1':'Enero',
+            '2':'Febrero',
+            '3':'Marzo',
+            '4':'Abril',
+            '5':'Mayo',
+            '6':'Junio',
+            '7':'Julio',
+            '8':'Agosto',
+            '9':'Septiembre',
+            '10':'Octubre',
+            '11':'Noviembre',
+            '12':'Diciembre'
+        }) }}</span>
+        <span class="hour">{{ item.dateini | date('H:i') }}</span>
+    </div>
+    
+    <h2>{{ item.name }}</h2>
+    <p>{{ item.description | nl2br }}</p>
+    
+    <ul class="properties">
+        <li><strong>{{ item.distance }} km</strong> Distancia</li>
+        <li><strong>{{ item.uphill }} m</strong> Subida</li>
+        <li><strong>{{ item.downhill }} m</strong> Bajada</li>
+        <li><strong>?</strong> Tiempo</li>
+        <li><strong>{{ item.difficulty }}</strong> Dificultad</li>
+    </ul>
+</div>
+{% endblock %}

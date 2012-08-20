@@ -1,7 +1,12 @@
+ColectaPlaceIndex:
+    pattern:  /place/
+    defaults: { _controller: ColectaActivityBundle:Place:index }
 ColectaPlaceView:
     pattern:  /place/{slug}
     defaults: { _controller: ColectaActivityBundle:Place:view }
-
+ColectaEventIndex:
+    pattern:  /event/
+    defaults: { _controller: ColectaActivityBundle:Event:index }
 ColectaEventView:
     pattern:  /event/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }
