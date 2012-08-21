@@ -3,13 +3,13 @@
 {% set secondsago = nowtimestamp - itemtimestamp %}
 
 {% if secondsago < 60 %}
-    Hace {{ secondsago }} segundos
+    Hace {{ secondsago }} segundo{% if secondsago != 1 %}s{% endif %}
 {% elseif secondsago/60 < 60 %}
-    Hace {{ secondsago // 60 }} minutos
+    Hace {{ secondsago // 60 }} minuto{% if secondsago // 60 != 1 %}s{% endif %}
 {% else %}
     {% set hoursago = secondsago / 60 // 60 %}
     {% if hoursago < 24 %}
-        Hace {{ hoursago }} horas
+        Hace {{ hoursago }} hora{% if hoursago != 1 %}s{% endif %}
     {% elseif itemtimestamp > 'yesterday' | date('U') %}
         Ayer a las {{ date | date('H:i')  }}
     {% else %}

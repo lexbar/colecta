@@ -9,7 +9,7 @@
     <a href="{{ item.url }}">Enlace</a>
 {% endif %}
 
-<p>{{ item.description }}</p>
+<p>{{ item.description | nl2br }}</p>
 {% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
 
 {% endblock %}

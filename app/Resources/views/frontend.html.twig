@@ -35,7 +35,15 @@
     </nav>
 </aside>
 
-<article class="span7" id="stream"> {% block article %}{% endblock %}</article>
+<article class="span7" id="stream">
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+        {{ app.session.flash('error') }}
+    </div>
+{% endif %}
+
+{% block article %}{% endblock %}
+</article>
 
 <aside class="span3">
     <p class="myself">{% if app.user %}<img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="{{ path('userLogout') }}">Salir</a>{% else %}Haz <a href="{{ path('userLogin') }}">login</a>{% endif %}</p>

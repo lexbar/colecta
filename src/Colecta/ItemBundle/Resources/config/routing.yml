@@ -7,6 +7,9 @@ ColectaComment:
 ColectaPostIndex:
     pattern:  /post/
     defaults: { _controller: ColectaItemBundle:Post:index }
+ColectaPostCreate:
+    pattern:  /new/post/
+    defaults: { _controller: ColectaItemBundle:Post:create }
 ColectaPostView:
     pattern:  /post/{slug}
     defaults: { _controller: ColectaItemBundle:Post:view }

@@ -2,5 +2,5 @@
 
 {% block article %}
     <h2>{{ item.name }}</h2>
-    <p>Texto: {{ item.text }}</p>
+    <p>{{ item.text | nl2br }}</p>
 {% endblock %}

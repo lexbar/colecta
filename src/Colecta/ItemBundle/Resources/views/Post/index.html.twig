@@ -2,6 +2,40 @@
 
 {% block article %}
 
+{% if app.user %}
+<form action="{{ path('ColectaPostCreate') }}" method="POST" class="form-horizontal well hidden" onclick="this.className='form-horizontal well'">
+<h2>Crear una nueva Publicación</h2>
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="PostName">Título</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="PostName" name="name">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostText">Texto</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="PostText" name="text" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostCategory">Categoría</label>
+        <div class="controls">
+          <select id="PostCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn">Guardar como borrador</button>
+        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+      </div>
+    </fieldset>
+</form>
+{% endif %}
+
 {% for item in items %}
 <div class="item">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
