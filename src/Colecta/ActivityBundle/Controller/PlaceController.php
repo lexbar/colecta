@@ -52,7 +52,24 @@ class PlaceController extends Controller
             $place->setCategory($category);
             $place->setAuthor($user);
             $place->setName($request->get('name'));
-            $place->setSlug(str_replace(' ', '_', strtolower($request->get('name'))));
+            
+            //Slug generate
+            $slug = $place->generateSlug();
+            $n = 2;
+            
+            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+            {
+                if($n > 2)
+                {
+                    $slug = substr($slug,-2,2);
+                }
+                
+                $slug .= '_'.$n;
+                
+                $n++;
+            }
+            $place->setSlug($slug);
+            
             $place->setSummary( substr($request->get('description'),0,255) );
             $place->setTagwords( substr($request->get('description'),255,255) );
             $place->setDate(new \DateTime('now'));

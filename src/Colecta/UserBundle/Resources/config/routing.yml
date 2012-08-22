@@ -11,3 +11,11 @@ userLogout:
 userProfile:
     pattern:  /user/{id}
     defaults: { _controller: ColectaUserBundle:User:profile }
+
+userNotifications:
+    pattern:  /notifications/
+    defaults: { _controller: ColectaUserBundle:Notification:index }
+    
+userNotificationDismiss:
+    pattern:  /notification/dismiss/{id}
+    defaults: { _controller: ColectaUserBundle:Notification:dismiss }

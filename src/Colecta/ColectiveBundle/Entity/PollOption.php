@@ -93,26 +93,6 @@ class PollOption
     {
         return $this->poll;
     }
-
-    /**
-     * Set user
-     *
-     * @param string $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Get user
-     *
-     * @return string 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
     public function __construct()
     {
         $this->votes = new \Doctrine\Common\Collections\ArrayCollection();

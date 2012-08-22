@@ -51,7 +51,24 @@ class PostController extends Controller
             $post->setCategory($category);
             $post->setAuthor($user);
             $post->setName($request->get('name'));
-            $post->setSlug(str_replace(' ', '_', strtolower($request->get('name'))));
+            
+            //Slug generate
+            $slug = $post->generateSlug();
+            $n = 2;
+            
+            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+            {
+                if($n > 2)
+                {
+                    $slug = substr($slug,-2,2);
+                }
+                
+                $slug .= '_'.$n;
+                
+                $n++;
+            }
+            $post->setSlug($slug);
+            
             $post->setSummary( substr($request->get('text'),0,255) );
             $post->setTagwords( substr($request->get('text'),255,255) );
             $post->setDate(new \DateTime('now'));

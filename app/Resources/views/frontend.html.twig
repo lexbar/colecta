@@ -9,9 +9,17 @@
         <div class="container">
             <h1><a class="brand" href="/">Colecta</a></h1>
             
-            <form class="form-search pull-right">
-                <input type="text" class="input-medium search-query">
-                <button type="submit" class="btn">Buscar</button>
+            <ul class="nav">
+              <li class="active"><a href="/">Web</a></li>
+              <li><a href="#">El Club</a></li>
+              <li><a href="#">Administración</a></li>
+            </ul>
+            
+            <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
+                <div class="input-append">
+                    <input type="text" class="input-medium search-query" name="search" value="{{ app.request.get('search') }}">
+                    <button type="submit" class="btn">Buscar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -22,15 +30,15 @@
 <aside class="span2" id="sidebar">
     <nav>
         <ul> 
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/post/">Publicaciones</a></li>
-            <li><a href="/event/">Eventos</a></li>  
-            <li><a href="/route/">Rutas</a></li>
-            <li><a href="/place/">Lugares</a></li>
-            <li><a href="/file/">Archivos</a></li>
-            <li><a href="/poll/">Encuestas</a></li>
-            <li><a href="/contest/">Concursos</a></li>
-            <li><a href="/">Personas</a></li>
+            <li><a class="{% block home '' %}" href="/"><i class="icon-home"></i> Inicio</a></li>
+            <li><a class="{% block posts '' %}" href="/post/"><i class="icon-file"></i> Publicaciones</a></li>
+            <li><a class="{% block events '' %}" href="/event/"><i class="icon-calendar"></i> Eventos</a></li>  
+            <li><a class="{% block routes '' %}" href="/route/"><i class="icon-globe"></i> Rutas</a></li>
+            <li><a class="{% block places '' %}" href="/place/"><i class="icon-map-marker"></i> Lugares</a></li>
+            <li><a class="{% block files '' %}" href="/file/"><i class="icon-folder-open"></i> Archivos</a></li>
+            <li><a class="{% block polls '' %}" href="/poll/"><i class="icon-tasks"></i> Encuestas</a></li>
+            <li><a class="{% block contests '' %}" href="/contest/"><i class="icon-gift"></i> Concursos</a></li>
+            <li><a class="{% block people '' %}" href="/"><i class="icon-user"></i> Personas</a></li>
         </ul> 
     </nav>
 </aside>
@@ -45,9 +53,15 @@
 {% block article %}{% endblock %}
 </article>
 
-<aside class="span3">
-    <p class="myself">{% if app.user %}<img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="{{ path('userLogout') }}">Salir</a>{% else %}Haz <a href="{{ path('userLogin') }}">login</a>{% endif %}</p>
-    <p class="alert alert-block">Esta es una alerta bla bla</p>
+<aside class="span3" id="userbar">
+    <p class="myself">{% if app.user %}<img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}">Salir</a>{% else %}Haz <a href="{{ path('userLogin') }}">login</a>{% endif %}</p>
+    {% if app.user %}
+        {% for notification in colectauser.notDismissedNotifications %}
+            <p class="alert alert-block"><a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{{ notification.text | raw }}</p>
+        {% endfor %}
+        
+        <p><a class="btn btn-large btn-block btn-mini" href="{{ path('userNotifications') }}">Ver todas mis notificaciones &raquo;</a></p>
+    {% endif %}
 </aside>
 </div>
 </div>

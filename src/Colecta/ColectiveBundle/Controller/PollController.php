@@ -53,7 +53,24 @@ class PollController extends Controller
             $poll->setCategory($category);
             $poll->setAuthor($user);
             $poll->setName($request->get('name'));
-            $poll->setSlug(str_replace(' ', '_', strtolower($request->get('name'))));
+            
+            //Slug generate
+            $slug = $poll->generateSlug();
+            $n = 2;
+            
+            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+            {
+                if($n > 2)
+                {
+                    $slug = substr($slug,-2,2);
+                }
+                
+                $slug .= '_'.$n;
+                
+                $n++;
+            }
+            $poll->setSlug($slug);
+            
             $poll->setSummary( substr($request->get('description'),0,255) );
             $poll->setTagwords( substr($request->get('description'),255,255) );
             $poll->setDate(new \DateTime('now'));
@@ -86,6 +103,74 @@ class PollController extends Controller
         {
             $referer = $this->generateUrl('ColectaPollIndex');
         }
+        
+        return new RedirectResponse($referer);
+    }
+    public function voteAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->get('request')->request;
+        
+        $poll = $em->getRepository('ColectaColectiveBundle:Poll')->findOneBySlug($slug);
+        $pollOption = $em->getRepository('ColectaColectiveBundle:PollOption')->find($request->get('option'));
+        
+        if(!$user) 
+        {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+        }
+        elseif(!$request->get('option'))
+        {
+            $this->get('session')->setFlash('error', 'No has seleccionado una opción');
+        }
+        elseif(!$poll || !$pollOption)
+        {
+            $this->get('session')->setFlash('error', 'No existe la encuesta que quieres votar');
+        }
+        else
+        {
+            //Check if the user has voted
+            $hasVoted = false;
+            
+            $options = $poll->getOptions();
+            if(count($options))
+            {
+                foreach($options as $option) {
+                    $votes = $option->getVotes();
+                    
+                    if(count($votes))
+                    {
+                        foreach($votes as $vote) 
+                        {
+                            if($vote == $user) 
+                            {
+                                $hasVoted = true;
+                                break;
+                            }
+                        }
+                        
+                        if($hasVoted)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            
+            if($hasVoted)
+            {
+                $this->get('session')->setFlash('error', 'Ya has votado en esta encuesta');
+            }
+            else
+            {
+                $pollOption->addUser($user);
+                $em->persist($pollOption); 
+                $em->flush();
+            }
+        }
+        
+        $referer = $this->generateUrl('ColectaPollView',array( 'slug' => $poll->getSlug() ));
         
         return new RedirectResponse($referer);
     }

@@ -1,13 +1,43 @@
-<h2>Poll:</h2>
-<ul>
-    <li>Tipo: {{ item.type }}</li>
-    <li>Nombre: {{ item.name }}</li>
-    <li>Slug: {{ item.slug }}</li>
-    <li>Resumen: {{ item.summary }}</li>
-    <li>Palabras clave: {{ item.tagwords }}</li>
-    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
-    <li>Permite comentarios: {{ item.allowComments }}</li>
-    <li>Boceto: {{ item.draft }}</li>
-    <li>Descripcion: {{ item.description }}</li>
-    <li>Fecha limite: {{ item.endDate | date('d/m/Y H:i:s') }}</li>
-</ul>
+{% extends '::frontend.html.twig' %}
+
+{% block article %}    
+    {% set totalvotes = 0 %}
+    {% set hasvoted = false %}
+    {% set votedoption = {'Text':''} %}
+    
+    {% for option in item.options %}
+        {% set votes = option.votes | length %}
+        {% set totalvotes = totalvotes + votes %}
+        {% for vote in option.votes %}
+            {% if vote == app.user %}
+                {% set hasvoted = true %}
+                {% set votedoption = option %}
+            {% endif  %}
+        {% endfor %}
+    {% endfor %}
+        
+    <div class="poll">
+        <h2>{{ item.name }}</h2>
+        <p>{{ item.description | nl2br }}</p>
+        {% if item.options %}
+        <form action="{{ path('ColectaPollVote', { 'slug' : item.slug }) }}" method="POST">
+        <ul class="unstyled">
+        
+        {% for option in item.options %}
+            <li>{% if not hasvoted %}<input onClick="document.getElementById('Poll_{{ item.slug }}_Button').className = 'btn btn-large btn-block btn-primary'" type="radio" name="option" value="{{ option.id }}" id="Poll{{ item.id }}Option{{ option.id }}">{% endif %}<label for="Poll{{ item.id }}Option{{ option.id }}">{{ option.text }}</label>
+            <div class="progress">
+                {% set votes = option.votes | length %}
+                <div class="bar" style="width: {% if totalvotes > 0 %}{{ votes / totalvotes * 100 }}{% else %}0{% endif %}%;"></div>
+            </div>
+            </li>
+        {% endfor %}
+        </ul>
+        
+        <p class="totalvotes">Total votos: {{ totalvotes }} {% if hasvoted %}<small>(Has votado {{ votedoption.text }})</small>{% endif %}</p>
+        
+        {% if not hasvoted %}<p><button id="Poll_{{ item.slug }}_Button" class="btn btn-large btn-block" type="submit">Votar!</button></p>{% endif %}
+        
+        </form>
+        {% endif %}
+    </div>
+{% endblock %}

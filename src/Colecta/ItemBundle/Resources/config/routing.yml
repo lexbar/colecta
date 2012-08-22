@@ -1,6 +1,9 @@
 ColectaDashboard:
     pattern:  /
     defaults: { _controller: ColectaItemBundle:Default:dashboard }
+ColectaSearch:
+    pattern:  /search/
+    defaults: { _controller: ColectaItemBundle:Default:search }
 ColectaComment:
     pattern:  /comment/{slug}
     defaults: { _controller: ColectaItemBundle:Comment:comment }

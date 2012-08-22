@@ -52,7 +52,24 @@ class EventController extends Controller
             $event->setCategory($category);
             $event->setAuthor($user);
             $event->setName($request->get('name'));
-            $event->setSlug(str_replace(' ', '_', strtolower($request->get('name'))));
+            
+            //Slug generate
+            $slug = $event->generateSlug();
+            $n = 2;
+            
+            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+            {
+                if($n > 2)
+                {
+                    $slug = substr($slug,-2,2);
+                }
+                
+                $slug .= '_'.$n;
+                
+                $n++;
+            }
+            $event->setSlug($slug);
+            
             $event->setSummary( substr($request->get('text'),0,255) );
             $event->setTagwords( substr($request->get('text'),255,255) );
             $event->setDate(new \DateTime('now'));

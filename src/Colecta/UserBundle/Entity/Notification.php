@@ -36,6 +36,13 @@ class Notification
     private $date;
     
     /**
+     * @var boolean $dismiss
+     *
+     * @ORM\Column(name="dismiss", type="boolean")
+     */
+    private $dismiss;
+    
+    /**
     * @ORM\ManyToOne(targetEntity="User")
     */
     private $user;
@@ -109,5 +116,25 @@ class Notification
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set dismiss
+     *
+     * @param boolean $dismiss
+     */
+    public function setDismiss($dismiss)
+    {
+        $this->dismiss = $dismiss;
+    }
+
+    /**
+     * Get dismiss
+     *
+     * @return boolean 
+     */
+    public function getDismiss()
+    {
+        return $this->dismiss;
     }
 }

@@ -400,9 +400,9 @@ abstract class Item
     public function __construct()
     {
         $this->relatedto = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->relatedfrom = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->editors = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->relatedfrom = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->editors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -433,5 +433,20 @@ abstract class Item
     public function addComment(\Colecta\ItemBundle\Entity\Comment $comments)
     {
         $this->comments[] = $comments;
+    }
+    
+    public function generateSlug($string = false, $separator = '-') {
+        
+        if(!$string) 
+        {
+            $string = $this->getName();
+        }
+        
+        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $string); 
+        $slug = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $slug); 
+        $slug = strtolower(trim($slug, $separator)); 
+        $slug = preg_replace("/[\/_|+ -]+/", $separator, $slug);
+        
+        return $slug;
     }
 }

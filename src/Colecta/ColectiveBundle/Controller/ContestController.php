@@ -53,7 +53,24 @@ class ContestController extends Controller
             $contest->setCategory($category);
             $contest->setAuthor($user);
             $contest->setName($request->get('name'));
-            $contest->setSlug(str_replace(' ', '_', strtolower($request->get('name'))));
+            
+            //Slug generate
+            $slug = $contest->generateSlug();
+            $n = 2;
+            
+            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+            {
+                if($n > 2)
+                {
+                    $slug = substr($slug,-2,2);
+                }
+                
+                $slug .= '_'.$n;
+                
+                $n++;
+            }
+            $contest->setSlug($slug);
+            
             $contest->setSummary( substr($request->get('description'),0,255) );
             $contest->setTagwords( substr($request->get('description'),255,255) );
             $contest->setDate(new \DateTime('now'));
