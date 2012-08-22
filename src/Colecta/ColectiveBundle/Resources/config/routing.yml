@@ -1,3 +1,18 @@
-ColectaColectiveBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ColectaColectiveBundle:Default:index }
+ColectaPollCreate:
+    pattern:  /new/poll/
+    defaults: { _controller: ColectaColectiveBundle:Poll:create }
+ColectaPolleIndex:
+    pattern:  /poll/
+    defaults: { _controller: ColectaColectiveBundle:Poll:index }
+ColectaPollView:
+    pattern:  /poll/{slug}
+    defaults: { _controller: ColectaColectiveBundle:Poll:view }
+ColectaContestCreate:
+    pattern:  /new/contest/
+    defaults: { _controller: ColectaColectiveBundle:Contest:create }
+ColectaContestIndex:
+    pattern:  /contest/
+    defaults: { _controller: ColectaColectiveBundle:Contest:index }
+ColectaContestView:
+    pattern:  /contest/{slug}
+    defaults: { _controller: ColectaColectiveBundle:Contest:view }

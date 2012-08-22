@@ -1,7 +1,7 @@
 {% extends '::frontend.html.twig' %}
 
 {% block article %}
-
+<h2>El historial de {{ user.name }}:</h2>
 {% for item in items %}
 <div class="item">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}

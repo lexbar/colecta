@@ -1,15 +1,10 @@
-<h2>Contest:</h2>
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+    <h2>{{ item.name }}</h2>
+    <p>{{ item.description | nl2br }}</p>
 <ul>
-    <li>Tipo: {{ item.type }}</li>
-    <li>Nombre: {{ item.name }}</li>
-    <li>Slug: {{ item.slug }}</li>
-    <li>Resumen: {{ item.summary }}</li>
-    <li>Palabras clave: {{ item.tagwords }}</li>
-    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
-    <li>Permite comentarios: {{ item.allowComments }}</li>
-    <li>Boceto: {{ item.draft }}</li>
-    <li>Descripcion: {{ item.description }}</li>
     <li>Fecha inicio: {{ item.iniDate | date('d/m/Y H:i:s') }}</li>
     <li>Fecha limite: {{ item.endDate | date('d/m/Y H:i:s') }}</li>
-    <li>Tipos de Item: {{ item.itemTypes | date('d/m/Y H:i:s') }}</li>
 </ul>
+{% endblock %}
