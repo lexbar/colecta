@@ -1,0 +1,111 @@
+{% extends '::frontend.html.twig' %}
+
+{% block javascripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>
+    var options = ['',''];
+    
+    function addOption(){
+        $.each(options, function(index, value) { 
+            options[index] = $('#PollOption'+index+'Text').val() ;
+        });
+        
+        options[options.length] = '';
+        
+        redrawOptions();
+    }
+    
+    function deleteOption(position) {
+        $.each(options, function(index, value) { 
+            options[index] = $('#PollOption'+index+'Text').val() ;
+        });
+        
+        options.splice(position,1);
+        
+        redrawOptions();
+    }
+    
+    function redrawOptions() {
+        $('#options').html('');
+        
+        $.each(options, function(index, value) { 
+            var closebutton = '';
+            if(options.length > 2) {
+                closebutton = '<button onClick="deleteOption('+index+'); return false;" class="close pull-right">&times;</button>';
+            }
+            $('#options').append('<div id="Option'+index+'" class="control-group">'+closebutton+'<label class="control-label" for="PollOption'+index+'">Opción '+(index + 1)+'</label><div class="controls"><input type="text" class="input-xlarge" id="PollOption'+index+'Text" name="option'+index+'" value="'+value+'"></div></div>');
+        });
+        
+    }
+</script>
+{% endblock %}
+{% block article %}
+
+{% if app.user %}
+<form onSubmit="" action="{{ path('ColectaPollCreate') }}" method="POST" class="form-horizontal well hidden" onclick="this.className='form-horizontal well'">
+<h2>Crear una nueva Encuesta</h2>
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="PollName">Título de la encuesta</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="PollName" name="name">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PollDescription">Descripción</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="PollDescription" name="description" rows="3"></textarea>
+        </div>
+      </div>
+      <div id="options">
+          <div id="Option0" class="control-group"><label class="control-label" for="PollOption0">Opción 1</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="PollOption0Text" name="option0">
+            </div>
+          </div>
+          <div id="Option1" class="control-group"><label class="control-label" for="PollOption1">Opción 2</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="PollOption1Text" name="option1">
+            </div>
+          </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PollOptions">Opciones</label>
+        <div class="controls">
+          <button class="btn btn-success" onClick="addOption(); return false;">Agregar opción</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PollCategory">Categoría</label>
+        <div class="controls">
+          <select id="PollCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <input type="hidden" name="latitude" id="PlaceLatitude">
+        <input type="hidden" name="longitude" id="PlaceLongitude">
+        <button class="btn">Guardar como borrador</button>
+        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+      </div>
+    </fieldset>
+</form>
+{% endif %}
+
+{% for item in items %}
+<div class="item">
+    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    
+    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': item } only %}
+    
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
+</div>
+{% else %}
+<h2>No hay ninguna encuesta :(</h2>
+{% endfor %}
+{% endblock %}
