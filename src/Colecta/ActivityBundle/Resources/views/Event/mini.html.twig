@@ -36,6 +36,6 @@
         <li><strong>{{ item.uphill }} m</strong> Subida</li>
         <li><strong>{{ item.downhill }} m</strong> Bajada</li>
         <li><strong>?</strong> Tiempo</li>
-        <li><strong>{{ item.difficulty }}</strong> Dificultad</li>
+        <li><strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" alt="{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}"></strong> Dificultad</li>
     </ul>
 </div>
