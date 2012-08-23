@@ -449,4 +449,58 @@ abstract class Item
         
         return $slug;
     }
+    
+    public function summarize($text)
+    {
+        //Fill the Summary field, first 255 characters
+        if(strlen($text) > 255)
+        {
+            $summary = '';
+            for($i = 0; $i < 255; $i++)
+            {
+                if($text[$i] == ' ')
+                {
+                    $summary = substr($text, 0, $i);
+                }
+            }
+            
+            //And now the tagwords if the text was longer than 255
+            
+            $words = explode(' ', str_replace(array(',','.',':',';','=','(',')','?','!'), ' ', $text));
+            $summarywords = explode(' ', str_replace(array(',','.',':',';','=','(',')','?','!'), ' ', $summary));
+            
+            $tags = array();
+            
+            foreach($words as $w)
+            {
+                if(
+                    !empty($w) //is not empty
+                    && !in_array($w,$summarywords) //not already in the summary
+                    && strlen($w) > 2 //at least 3 letters
+                    )
+                {
+                    $tags[] = $w;
+                }
+            }
+            
+            $tagwords = $tagwords = substr(implode(' ',$tags), 0, 255);
+        }
+        else
+        {
+            $summary = $text;
+            $tagwords = '';
+        }
+        
+        
+        $this->setSummary($summary);
+        $this->setTagwords($tagwords);
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->setDate(new \DateTime('now'));
+    }
 }

@@ -7,6 +7,9 @@ ColectaFolderView:
 ColectaFileIndex:
     pattern:  /file/
     defaults: { _controller: ColectaFilesBundle:File:index }
+ColectaFileUpload:
+    pattern:  /fileupload/
+    defaults: { _controller: ColectaFilesBundle:File:upload }
 ColectaFileView:
     pattern:  /file/{slug}
     defaults: { _controller: ColectaFilesBundle:File:view }

@@ -73,7 +73,7 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     /**
      * @var string $difficulty
      *
-     * @ORM\Column(name="difficulty", type="string", length=10)
+     * @ORM\Column(name="difficulty", type="string", length=12)
      */
     private $difficulty;
 

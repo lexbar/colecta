@@ -38,7 +38,7 @@ class EventController extends Controller
         {
             $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
         }
-        elseif(!$request->get('text'))
+        elseif(!$request->get('description'))
         {
             $this->get('session')->setFlash('error', 'No has escrito ningun texto');
         }
@@ -61,7 +61,7 @@ class EventController extends Controller
             {
                 if($n > 2)
                 {
-                    $slug = substr($slug,-2,2);
+                    $slug = substr($slug,0,-2);
                 }
                 
                 $slug .= '_'.$n;
@@ -70,9 +70,7 @@ class EventController extends Controller
             }
             $event->setSlug($slug);
             
-            $event->setSummary( substr($request->get('text'),0,255) );
-            $event->setTagwords( substr($request->get('text'),255,255) );
-            $event->setDate(new \DateTime('now'));
+            $event->summarize($request->get('description'));
             $event->setAllowComments(true);
             $event->setDraft(false);
             $event->setActivity(null);

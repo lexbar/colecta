@@ -4,12 +4,15 @@ namespace Colecta\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Colecta\UserBundle\Entity\User
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface
 {
@@ -49,11 +52,16 @@ class User implements UserInterface
      * @ORM\Column(name="salt", type="string", length=255)
      */
     private $salt;
+    
+    /**
+     * @Assert\Image(maxSize="6000000")
+     */
+    private $file;
 
     /**
      * @var string $avatar
      *
-     * @ORM\Column(name="avatar", type="string", length=255)
+     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
     private $avatar;
 
@@ -205,26 +213,6 @@ class User implements UserInterface
     public function getSalt()
     {
         return $this->salt;
-    }
-
-    /**
-     * Set avatar
-     *
-     * @param string $avatar
-     */
-    public function setAvatar($avatar)
-    {
-        $this->avatar = $avatar;
-    }
-
-    /**
-     * Get avatar
-     *
-     * @return string 
-     */
-    public function getAvatar()
-    {
-        return $this->avatar;
     }
 
     /**
@@ -429,11 +417,11 @@ class User implements UserInterface
     public function __construct()
     {
         $this->sentMessages = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->receivedMessages = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->relations = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->editableItems = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->receivedMessages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->relations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->editableItems = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -509,5 +497,93 @@ class User implements UserInterface
     public function getPassword()
     {
         return $this->getPass();
+    }
+    
+    // File upload
+    
+    /**
+     * Virtual getter that returns logo web path
+     * @return string
+     */
+    public function getAvatarPath() 
+    {
+        return $this->getWebPath();
+    }
+    
+    private function getUploadDir() 
+    {
+        return 'uploads/avatars';
+    }
+    
+    public function getFile() 
+    {
+        return $this->file;
+    }
+    
+    public function setFile($file) 
+    {
+        $this->file = $file;
+    }
+    
+    public function getAvatar() 
+    {
+        return $this->avatar;
+    }
+    
+    public function setAvatar($avatar) 
+    {
+        $this->avatar = $avatar;
+    }
+    
+    public function getAbsolutePath() 
+    {
+        return null === $this->avatar ? null : $this->getUploadRootDir() . '/' . $this->avatar;
+    }
+    
+    public function getWebPath() 
+    {
+        return null === $this->avatar ? null : $this->getUploadDir() . '/' . $this->avatar;
+    }
+    
+    private function getUploadRootDir() 
+    {
+        // the absolute directory path where uploaded documents should be saved
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
+    }
+    
+    public function upload() 
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->file) {
+            return;
+        }
+        
+        $hashName = sha1($this->file->getClientOriginalName() . $this->getId() . mt_rand(0, 99999));
+        
+        $this->avatar = $hashName . '.' . $this->file->guessExtension();
+        
+        $this->file->move($this->getUploadRootDir(), $this->getAvatar());
+        
+        unset($this->file);
+    }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->setRegistered(new \DateTime('now'));
+        $this->setLastAccess(new \DateTime('now'));
+        $this->setSalt('');
     }
 }

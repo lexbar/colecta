@@ -8,7 +8,7 @@
         {% block stylesheets %}{% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
+    <body onload="{% block onload '' %}">
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

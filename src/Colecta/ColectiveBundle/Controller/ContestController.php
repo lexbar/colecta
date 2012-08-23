@@ -62,7 +62,7 @@ class ContestController extends Controller
             {
                 if($n > 2)
                 {
-                    $slug = substr($slug,-2,2);
+                    $slug = substr($slug,0,-2);
                 }
                 
                 $slug .= '_'.$n;
@@ -71,9 +71,7 @@ class ContestController extends Controller
             }
             $contest->setSlug($slug);
             
-            $contest->setSummary( substr($request->get('description'),0,255) );
-            $contest->setTagwords( substr($request->get('description'),255,255) );
-            $contest->setDate(new \DateTime('now'));
+            $contest->summarize($request->get('description'));
             $contest->setAllowComments(true);
             $contest->setDraft(false);
             $contest->setDescription($request->get('description'));

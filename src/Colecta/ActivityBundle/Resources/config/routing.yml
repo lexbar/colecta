@@ -16,3 +16,15 @@ ColectaEventIndex:
 ColectaEventView:
     pattern:  /event/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }
+ColectaRouteUpload:
+    pattern:  /upload/route/
+    defaults: { _controller: ColectaActivityBundle:Route:upload }
+ColectaRouteCreate:
+    pattern:  /new/route/
+    defaults: { _controller: ColectaActivityBundle:Route:create }
+ColectaRouuteIndex:
+    pattern:  /route/
+    defaults: { _controller: ColectaActivityBundle:Route:index }
+ColectaRouteView:
+    pattern:  /route/{slug}
+    defaults: { _controller: ColectaActivityBundle:Route:view }

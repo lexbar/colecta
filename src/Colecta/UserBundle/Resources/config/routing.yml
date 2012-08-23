@@ -11,6 +11,10 @@ userLogout:
 userProfile:
     pattern:  /user/{id}
     defaults: { _controller: ColectaUserBundle:User:profile }
+    
+userEditProfile:
+    pattern:  /editprofile/
+    defaults: { _controller: ColectaUserBundle:User:editProfile }
 
 userNotifications:
     pattern:  /notifications/

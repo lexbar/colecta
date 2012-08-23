@@ -3,4 +3,7 @@
 /app/logs/*
 /bin
 /vendor
+/web/uploads/files/*
+/web/uploads/avatars/*
+/web/uploads/routes/*
 *~

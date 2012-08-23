@@ -3,12 +3,15 @@
 namespace Colecta\FilesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Colecta\FilesBundle\Entity\File
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class File extends \Colecta\ItemBundle\Entity\Item
 {
@@ -22,12 +25,17 @@ class File extends \Colecta\ItemBundle\Entity\Item
     private $id;
 
     /**
-     * @var string $url
+     * @var string $filename
      *
-     * @ORM\Column(name="url", type="string", length=255)
+     * @ORM\Column(name="filename", type="string", length=255)
      */
-    private $url;
-
+    private $filename;
+    
+    /**
+     * @Assert\Image(maxSize="10000000")
+     */
+    private $file;
+    
     /**
      * @var string $filetype
      *
@@ -60,23 +68,23 @@ class File extends \Colecta\ItemBundle\Entity\Item
     }
 
     /**
-     * Set url
+     * Set filename
      *
-     * @param string $url
+     * @param string $filename
      */
-    public function setUrl($url)
+    public function setFilename($filename)
     {
-        $this->url = $url;
+        $this->filename = $filename;
     }
 
     /**
-     * Get url
+     * Get filename
      *
      * @return string 
      */
-    public function getUrl()
+    public function getFilename()
     {
-        return $this->url;
+        return $this->filename;
     }
 
     /**
@@ -142,5 +150,69 @@ class File extends \Colecta\ItemBundle\Entity\Item
     public function getType()
     {
         return 'Files/File';
+    }
+    // File upload
+    public function getURLPath() 
+    {
+        return '/'.$this->getWebPath();
+    }
+    
+    private function getUploadDir() 
+    {
+        return 'uploads/files';
+    }
+    
+    public function getFile() 
+    {
+        return $this->file;
+    }
+    
+    public function setFile($file) 
+    {
+        $this->file = $file;
+    }
+    
+    public function getAbsolutePath() 
+    {
+        return null === $this->filename ? null : $this->getUploadRootDir() . '/' . $this->filename;
+    }
+    
+    public function getWebPath() 
+    {
+        return null === $this->filename ? null : $this->getUploadDir() . '/' . $this->filename;
+    }
+    
+    private function getUploadRootDir() 
+    {
+        // the absolute directory path where uploaded documents should be saved
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
+    }
+    
+    public function upload() 
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->file) {
+            return;
+        }
+        
+        $hashName = sha1($this->file->getClientOriginalName() . $this->getId() . mt_rand(0, 99999));
+        
+        $this->filename = $hashName . '.' . $this->file->guessExtension();
+        
+        $this->setFiletype($this->file->guessExtension());
+        
+        $this->file->move($this->getUploadRootDir(), $this->getFilename());
+        
+        unset($this->file);
+    }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
     }
 }

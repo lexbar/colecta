@@ -61,7 +61,7 @@ class PlaceController extends Controller
             {
                 if($n > 2)
                 {
-                    $slug = substr($slug,-2,2);
+                    $slug = substr($slug,0,-2);
                 }
                 
                 $slug .= '_'.$n;
@@ -70,9 +70,7 @@ class PlaceController extends Controller
             }
             $place->setSlug($slug);
             
-            $place->setSummary( substr($request->get('description'),0,255) );
-            $place->setTagwords( substr($request->get('description'),255,255) );
-            $place->setDate(new \DateTime('now'));
+            $place->summarize($request->get('description'));
             $place->setAllowComments(true);
             $place->setDraft(false);
             $place->setDescription($request->get('description'));

@@ -60,7 +60,7 @@ class PostController extends Controller
             {
                 if($n > 2)
                 {
-                    $slug = substr($slug,-2,2);
+                    $slug = substr($slug,0,-2);
                 }
                 
                 $slug .= '_'.$n;
@@ -69,9 +69,7 @@ class PostController extends Controller
             }
             $post->setSlug($slug);
             
-            $post->setSummary( substr($request->get('text'),0,255) );
-            $post->setTagwords( substr($request->get('text'),255,255) );
-            $post->setDate(new \DateTime('now'));
+            $post->summarize($request->get('text'));
             $post->setAllowComments(true);
             $post->setDraft(false);
             $post->setText($request->get('text'));

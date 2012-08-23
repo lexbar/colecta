@@ -62,7 +62,7 @@ class PollController extends Controller
             {
                 if($n > 2)
                 {
-                    $slug = substr($slug,-2,2);
+                    $slug = substr($slug,0,-2);
                 }
                 
                 $slug .= '_'.$n;
@@ -71,9 +71,7 @@ class PollController extends Controller
             }
             $poll->setSlug($slug);
             
-            $poll->setSummary( substr($request->get('description'),0,255) );
-            $poll->setTagwords( substr($request->get('description'),255,255) );
-            $poll->setDate(new \DateTime('now'));
+            $poll->summarize($request->get('description'));
             $poll->setAllowComments(true);
             $poll->setDraft(false);
             $poll->setDescription($request->get('description'));

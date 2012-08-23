@@ -1,0 +1,12 @@
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+<h1>Upload File</h1>
+
+<form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+
+    <input type="submit" value="Upload Document" />
+</form>
+{% endblock %}
+
