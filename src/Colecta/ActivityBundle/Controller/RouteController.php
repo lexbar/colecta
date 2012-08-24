@@ -5,6 +5,7 @@ namespace Colecta\ActivityBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Colecta\ActivityBundle\Form\Frontend\RouteType;
 use Colecta\ActivityBundle\Entity\Route;
 
 
@@ -59,9 +60,22 @@ class RouteController extends Controller
                 $file->move($rootdir, $filename);
                 unset($file);
                 
-                $track = $this->extractTrack($rootdir.'/'.$filename, 500);
-                
-                return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'uploaddir' => $uploaddir, 'track' => $track));
+                $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
+                                
+                if(!$track)
+                {
+                    $this->get('session')->setFlash('error', 'No se ha podido leer correctamente el archivo.');
+                }
+                else
+                {
+                    $route = new Route();
+                    $form = $this->createForm(new RouteType(), $route);
+                    
+                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
+                    $routedata = $this->getRouteData($fulltrack);
+                    
+                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'uploaddir' => $uploaddir, 'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView()));
+                }
             }
         }
         
@@ -267,12 +281,12 @@ class RouteController extends Controller
 				
 				$trackpoint = array();
 				
-				if($latitude !== null) { $trackpoint['latitude'] = $l[$latitude];}
-				if($longitude !== null) { $trackpoint['longitude'] = $l[$longitude];}
+				$trackpoint['latitude'] = $l[$latitude];
+				$trackpoint['longitude'] = $l[$longitude];
 				if($altitude !== null) { $trackpoint['altitude'] = $l[$altitude];}
 				if($name !== null) { $trackpoint['name'] = $l[$name];}
-				if($date !== null) { $trackpoint['date'] = $l[$date];}
-				if($time !== null) { $trackpoint['time'] = $l[$time];}
+				if($date !== null) { $trackpoint['datetime'] = safeDateTime($l[$date],$l[$time]); }
+				else { $trackpoint['datetime'] = new \DateTime('today'); }
 				
 				$track[] = $trackpoint;
 			}
@@ -282,4 +296,113 @@ class RouteController extends Controller
 		
 		return null;
     }
+    
+    public function getRouteData($track)
+    {
+        $distance = $upHill = $downHill = 0;
+        $amount = count($track);
+        
+        for($i = 1; $i < $amount; $i++)
+        {
+            $j = $i - 1;
+            
+            // Distance
+            $distance += distance(
+                $track[$i]['latitude'], $track[$i]['longitude'], $track[$i]['altitude'],
+                $track[$j]['latitude'], $track[$j]['longitude'], $track[$j]['altitude']
+            );
+            
+            // Uphill and Downhill 
+            if($i >= 8 && $i % 4 == 0) //Every four points
+            { 
+                $alt1 = median( $track[$i - 1]['altitude'] , $track[$i - 2]['altitude'], $track[$i - 3]['altitude'] , $track[$i - 4]['altitude'] );
+	 		    $alt2 = median( $track[$i - 5]['altitude'] , $track[$i - 6]['altitude'], $track[$i - 7]['altitude'] , $track[$i - 8]['altitude'] );
+	 		
+                if($alt1 > $alt2 ) 
+                {
+                    $upHill += $alt1 - $alt2;
+                }
+                else
+                {
+                    $downHill += $alt2 - $alt1;
+                }
+            }
+        }
+        
+        $time = intval($track[$amount - 1]['datetime']->format('U')) - intval($track[0]['datetime']->format('U'));
+		
+		return array(
+            'distance' => round( $distance / 1000, 1),
+			'upHill' => round($upHill),
+			'downHill' => round($downHill),
+			'time' => $time
+        );
+    }
+}
+
+
+function median()
+{
+    $args = func_get_args();
+
+    switch(func_num_args())
+    {
+        case 0:
+            trigger_error('median() requires at least one parameter',E_USER_WARNING);
+            return false;
+            break;
+
+        case 1:
+            $args = array_pop($args);
+            // fallthrough
+
+        default:
+            if(!is_array($args)) {
+                trigger_error('median() requires a list of numbers to operate on or an array of numbers',E_USER_NOTICE);
+                return false;
+            }
+
+            sort($args);
+           
+            $n = count( $args );
+            $h = intval( $n / 2 );
+
+            if($n % 2 == 0) {
+                $median = ( $args[$h] + $args[$h-1] ) / 2;
+            } else {
+                $median = $args[$h];
+            }
+
+            break;
+    }
+   
+    return $median;
+}
+
+// distance in metres between two points
+function distance($lat1, $lng1, $alt1, $lat2, $lng2, $alt2) 
+{ 
+    $lat1 = floatval($lat1);
+    $lat2 = floatval($lat2);
+    $lng1 = floatval($lng1);
+    $lng2 = floatval($lng2);
+    $alt1 = floatval($alt1);
+    $alt2 = floatval($alt2);
+    
+	$distKM = 6371000 * 2 * asin( sqrt( pow( sin( deg2rad( $lat1  - $lat2 ) / 2 ), 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * pow( sin( deg2rad($lng1-$lng2) / 2 ), 2) )); //harvesinus formula
+	
+	if($lat1 > 60 OR $lat2 > 60)
+	{
+	   $distKM *= 0.9966;
+    }
+    
+	$dist = sqrt( pow( $distKM, 2 ) + pow( ( $alt1 - $alt2 ), 2 ) );
+	
+	return floatval($dist);
+}
+
+function safeDateTime($date, $time) {
+	if(!$date) return new \DateTime('today');
+	
+	return new \DateTime($date.' '.$time);
 }

@@ -60,19 +60,76 @@
 
 <div id="map" class="full"></div>
 
-<form action="{{ path('ColectaRouteUpload') }}" method="POST" class="form-horizontal well">
+<form action="{{ path('ColectaRouteCreate') }}" method="POST" class="form-horizontal well">
 <h2>Datos de la Ruta</h2>
     <fieldset>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Archivo</label>
+        <label class="control-label" for="RouteFile">Nombre</label>
         <div class="controls">
-          <input type="file" id="RouteFile" name="file">
+          {{ form_widget(form.name) }}
         </div>
       </div>
-      {{ filename }}
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Descripción</label>
+        <div class="controls">
+          {{ form_widget(form.description) }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Distancia</label>
+        <div class="controls">
+          {{ form_widget(form.distance) }} {{ trackdata.distance }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Subida</label>
+        <div class="controls">
+          {{ form_widget(form.uphill) }} {{ trackdata.upHill }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Bajada</label>
+        <div class="controls">
+          {{ form_widget(form.downhill) }} {{ trackdata.downHill }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Tiempo</label>
+        <div class="controls">
+          {{ trackdata.time }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Velocidad media</label>
+        <div class="controls">
+          
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Velocidad máxima</label>
+        <div class="controls">
+          
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Cota inferior</label>
+        <div class="controls">
+          {{ form_widget(form.minheight) }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Cota superior</label>
+        <div class="controls">
+          {{ form_widget(form.maxheight) }}
+        </div>
+      </div>
+      
+      {{ form_rest(form) }}
+      <input type="hidden" value="{{ filename }}" name="filename">
     
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Subir e introducir datos</button>
+        <button class="btn">Guardar como borrador</button>
+        <button type="submit" class="btn btn-primary">Publicar ahora</button>
       </div>
     </fieldset>
 </form>
