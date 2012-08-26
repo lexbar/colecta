@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Poll extends \Colecta\ItemBundle\Entity\Item
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var text $description
      *
      * @ORM\Column(name="description", type="text")
@@ -39,18 +30,7 @@ class Poll extends \Colecta\ItemBundle\Entity\Item
      * @ORM\OneToMany(targetEntity="PollOption", mappedBy="poll")
      */
     private $options;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
+    
     /**
      * Set description
      *

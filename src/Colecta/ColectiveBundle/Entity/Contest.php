@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Contest extends \Colecta\ItemBundle\Entity\Item
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var text $description
      *
      * @ORM\Column(name="description", type="text")
@@ -53,17 +44,6 @@ class Contest extends \Colecta\ItemBundle\Entity\Item
      * @ORM\OneToMany(targetEntity="ContestWinner", mappedBy="contest")
      */
     private $winners;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set description

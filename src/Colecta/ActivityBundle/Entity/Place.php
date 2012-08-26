@@ -12,14 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Place extends \Colecta\ItemBundle\Entity\Item
 {
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @var text $description
@@ -41,17 +33,6 @@ class Place extends \Colecta\ItemBundle\Entity\Item
      * @ORM\Column(name="longitude", type="float")
      */
     private $longitude;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set description

@@ -12,14 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Route extends \Colecta\ItemBundle\Entity\Item
 {
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @var text $description
@@ -119,20 +111,9 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     private $activity;
 
     /**
-     * @ORM\OneToMany(targetEntity="RouteTrackpoint", mappedBy="route")
+     * @ORM\OneToMany(targetEntity="RouteTrackpoint", mappedBy="route", cascade={"persist", "remove"})
      */
     private $trackpoints;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set description
@@ -446,6 +427,10 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     public function addRouteTrackpoint(\Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints)
     {
         $this->trackpoints[] = $trackpoints;
+    }
+    public function __toString() 
+    {
+        return $this->getName();
     }
     
     public function getType()

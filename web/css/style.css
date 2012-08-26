@@ -107,6 +107,9 @@ article form.form-horizontal .controls textarea {
     right: -4px;
 }
 
+.spanhalf {
+    width: 30px;
+}
 #map.active {
     height: 220px;
     width: 350px;
@@ -177,6 +180,12 @@ ul.properties li strong {
     text-transform: none;
     color: #444;
     margin-bottom: 3px;
+}
+ul.properties li.small {
+    margin: 2px 12px;
+}
+ul.properties li.small strong  {
+    font-size: 16px;
 }
 .event .date {
     float: left;

@@ -1,24 +1,33 @@
-<h2>Route:</h2>
-<ul>
-    <li>Tipo: {{ item.type }}</li>
-    <li>Nombre: {{ item.name }}</li>
-    <li>Slug: {{ item.slug }}</li>
-    <li>Resumen: {{ item.summary }}</li>
-    <li>Palabras clave: {{ item.tagwords }}</li>
-    <li>Fecha: {{ item.date | date('d/m/Y H:i:s') }}</li>
-    <li>Permite comentarios: {{ item.allowComments }}</li>
-    <li>Boceto: {{ item.draft }}</li>
-    <li>Descripción: {{ item.description }}</li>
-    <li>Distancia: {{ item.distance }}</li>
-    <li>Subida: {{ item.uphill }}</li>
-    <li>Bajada: {{ item.downhill }}</li>
-    <li>Tiempo: {{ item.time }}</li>
-    <li>Velocidad media: {{ item.avgspeed }}</li>
-    <li>Velocidad máxima: {{ item.maxspeed }}</li>
-    <li>Cota baja: {{ item.minheight }}</li>
-    <li>Cota alta: {{ item.maxheight }}</li>
-    <li>Circular: {{ item.isloop }}</li>
-    <li>Dificultad: {{ item.difficulty }}</li>
-    <li>IBP: {{ item.IBP }}</li>
-    <li>Archivo fuente: {{ item.sourcefile }}</li>
-</ul>
+{% set mapwidth = 490 %}
+{% set mapheight = 240 %}
+{% set pointsStep = item.trackpoints | length // 60 %}
+
+<div class="place mini">
+    <h2><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="thumbnail"><img class="" src="http://maps.google.com/maps/api/staticmap?size={{ mapwidth }}x{{ mapheight }}&maptype=roadmap&markers=color:blue%7C{{ item.trackpoints[0].latitude ~ ',' ~ item.trackpoints[0].longitude }}&path=color:0x0000ff|weight:5{% for point in item.trackpoints %}{% if loop.index % pointsStep == 0 %}|{{ point.latitude }},{{ point.longitude }}{% endif %}{% endfor %}&sensor=false" width="{{ mapwidth }}" height="{{ mapheight }}"></a>
+    <p>{{ item.summary | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
+    <ul class="properties">
+        <li{% if item.distance > 999 %} class="small"{% endif %}><strong>{{ item.distance }} km</strong> Distancia</li>
+        <li{% if item.uphill > 999 %} class="small"{% endif %}><strong>{{ item.uphill }} m</strong> Subida</li>
+        <li{% if item.downhill > 999 %} class="small"{% endif %}><strong>{{ item.downhill }} m</strong> Bajada</li>
+        {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
+        {% if item.time < 60 %}
+            {% set secconds = item.time %}
+        {% else %}
+            {% set minutes = item.time // 60 %}
+            {% set secconds = item.time - minutes * 60 %}
+            
+            {% if minutes >= 60 %}
+                {% set hours = minutes // 60 %}
+                {% set minutes = minutes - hours * 60 %}
+                
+                {% if hours >= 24 %}
+                    {% set days = hours // 24 %}
+                    {% set hours = hours - days * 24 %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        <li{% if item.time >= 86400 %} class="small"{% endif %}><strong>{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m</strong> Tiempo</li>
+        <li><strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" alt="{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}"></strong> Dificultad</li>
+    </ul>
+</div>

@@ -14,6 +14,8 @@ class RouteType extends AbstractType
             ->add('distance')
             ->add('uphill')
             ->add('downhill')
+            ->add('maxspeed', 'hidden', array('required' => false))
+            ->add('avgspeed', 'hidden', array('required' => false))
             ->add('minheight')
             ->add('maxheight');
     }

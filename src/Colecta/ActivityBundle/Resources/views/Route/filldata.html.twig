@@ -60,7 +60,7 @@
 
 <div id="map" class="full"></div>
 
-<form action="{{ path('ColectaRouteCreate') }}" method="POST" class="form-horizontal well">
+<form action="{{ path('ColectaRouteCreate') }}" method="POST" class="form-horizontal well" onSubmit="var submit = document.getElementById('RouteSubmit'); submit.disabled = 'disabled'; submit.innerHTML = 'Subiendo...';">
 <h2>Datos de la Ruta</h2>
     <fieldset>
       <div class="control-group">
@@ -76,60 +76,147 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Distancia</label>
+        <label class="control-label" for="EventName">Distancia</label>
         <div class="controls">
-          {{ form_widget(form.distance) }} {{ trackdata.distance }}
+          <div class="input-append">
+            {{ form_widget(form.distance, {'attr':{'class':'input-small','value': trackdata.distance}}) }}<span class="add-on"> km</span>
+          </div>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Subida</label>
         <div class="controls">
-          {{ form_widget(form.uphill) }} {{ trackdata.upHill }}
+          <div class="input-append">
+            {{ form_widget(form.uphill, {'attr':{'class':'input-small','value': trackdata.uphill}}) }}<span class="add-on"> metros</span>
+          </div>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Bajada</label>
         <div class="controls">
-          {{ form_widget(form.downhill) }} {{ trackdata.downHill }}
+          <div class="input-append">
+            {{ form_widget(form.downhill, {'attr':{'class':'input-small','value': trackdata.downhill}}) }}<span class="add-on"> metros</span>
+          </div>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Tiempo</label>
         <div class="controls">
-          {{ trackdata.time }}
+          {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
+          {% if trackdata.time < 60 %}
+            {% set secconds = trackdata.time %}
+          {% else %}
+            {% set minutes = trackdata.time // 60 %}
+            {% set secconds = trackdata.time - minutes * 60 %}
+            
+            {% if minutes >= 60 %}
+                {% set hours = minutes // 60 %}
+                {% set minutes = minutes - hours * 60 %}
+                
+                {% if hours >= 24 %}
+                    {% set days = hours // 24 %}
+                    {% set hours = hours - days * 24 %}
+                {% endif %}
+            {% endif %}
+          {% endif %}
+            <input type="text" class="spanhalf" name="days" value="{{ days }}"> dias,  
+            
+            <select name="hours" style="width:auto">
+            {% for hour in 0..23 %}
+                <option value="{{ hour }}"{% if hour == hours %}selected="selected"{% endif%}>{{ hour }}</option>
+            {% endfor %}
+            </select>            
+             horas y 
+            
+            <select name="minutes" style="width:auto">
+            {% for minute in 0..59 %}
+                <option value="{{ minute }}"{% if minute == minutes %}selected="selected"{% endif%}>{{ minute }}</option>
+            {% endfor %}
+            </select>
+             minutos 
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Velocidad media</label>
         <div class="controls">
-          
+          <div class="input-append">
+            {{ form_widget(form.avgspeed, {'attr':{'value': trackdata.avgspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.avgspeed }}</span><span class="add-on"> km/h</span>
+          </div>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Velocidad máxima</label>
         <div class="controls">
-          
+          <div class="input-append">
+            {{ form_widget(form.maxspeed, {'attr':{'value': trackdata.maxspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.maxspeed }}</span><span class="add-on"> km/h</span>
+          </div>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Cota inferior</label>
         <div class="controls">
-          {{ form_widget(form.minheight) }}
+          <div class="input-append">
+            {{ form_widget(form.minheight, {'attr':{'class':'input-small','value': trackdata.minheight}}) }}<span class="add-on"> metros</span>
+          </div>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Cota superior</label>
         <div class="controls">
-          {{ form_widget(form.maxheight) }}
+          <div class="input-append">
+            {{ form_widget(form.maxheight, {'attr':{'class':'input-small','value': trackdata.maxheight}}) }}<span class="add-on"> metros</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="EventName">Dificultad</label>
+        <div class="controls">
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy" checked>
+                <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                Fácil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate">
+                <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                Moderado
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard">
+                <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                Difícil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard">
+                <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                Muy difícil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only">
+                <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                Sólo expertos
+            </label>
         </div>
       </div>
       
       {{ form_rest(form) }}
+      
       <input type="hidden" value="{{ filename }}" name="filename">
-    
+      
+      <div class="control-group">
+        <label class="control-label" for="EventCategory">Categoría</label>
+        <div class="controls">
+          <select id="EventCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      
       <div class="form-actions">
         <button class="btn">Guardar como borrador</button>
-        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+        <button type="submit" class="btn btn-primary" id="RouteSubmit">Publicar ahora</button>
       </div>
     </fieldset>
 </form>

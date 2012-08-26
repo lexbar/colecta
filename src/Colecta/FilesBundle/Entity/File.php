@@ -16,15 +16,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class File extends \Colecta\ItemBundle\Entity\Item
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var string $filename
      *
      * @ORM\Column(name="filename", type="string", length=255)
@@ -55,17 +46,6 @@ class File extends \Colecta\ItemBundle\Entity\Item
     * @ORM\JoinColumn(name="folder_id", referencedColumnName="id") 
     */
     private $folder;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set filename

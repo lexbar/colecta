@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Colecta\ActivityBundle\Form\Frontend\RouteType;
 use Colecta\ActivityBundle\Entity\Route;
+use Colecta\ActivityBundle\Entity\RouteTrackpoint;
 
 
 class RouteController extends Controller
@@ -16,9 +17,8 @@ class RouteController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         $items = $em->getRepository('ColectaActivityBundle:Route')->findBy(array('draft'=>0), array('date'=>'DESC'),10,0);
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
-        return $this->render('ColectaActivityBundle:Route:index.html.twig', array('items' => $items, 'categories' => $categories));
+        return $this->render('ColectaActivityBundle:Route:index.html.twig', array('items' => $items));
     }
     public function viewAction($slug)
     {
@@ -31,18 +31,18 @@ class RouteController extends Controller
     public function uploadAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name']);
         
         if(!$user) 
         {
             $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
         }
-        elseif (null === $file) 
-        {
-            $this->get('session')->setFlash('error', 'Ha ocurrido un error al subir el archivo.');
-        }
         else
         {
+            if (!$_FILES['file'] || ($file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'])) === null) 
+            {
+                $this->get('session')->setFlash('error', 'Ha ocurrido un error al subir el archivo.');
+            }
+            
             $extension = $this->extension($file->getClientOriginalName());
             
             if(!$extension) //Extension not accepted
@@ -54,8 +54,7 @@ class RouteController extends Controller
                 $hashName = sha1($file->getClientOriginalName() . $user->getId() . mt_rand(0, 99999));
                 $filename = $hashName . '.' . $extension;
                 
-                $uploaddir = 'uploads/routes';
-                $rootdir = __DIR__ . '/../../../../web/' . $uploaddir;
+                $rootdir = $this->getUploadDir();
                 
                 $file->move($rootdir, $filename);
                 unset($file);
@@ -74,7 +73,9 @@ class RouteController extends Controller
                     $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
                     $routedata = $this->getRouteData($fulltrack);
                     
-                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'uploaddir' => $uploaddir, 'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView()));
+                    $categories = $this->getDoctrine()->getEntityManager()->getRepository('ColectaItemBundle:Category')->findAll();
+                    
+                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView(), 'categories' => $categories));
                 }
             }
         }
@@ -93,64 +94,106 @@ class RouteController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->get('request')->request;
+        $request = $this->get('request');
+        $post = $request->request;
         
-        $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
-    
-        if(!$user) 
+        if($this->get('request')->getMethod() == 'POST')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
-        }
-        elseif(!$request->get('description'))
-        {
-            $this->get('session')->setFlash('error', 'No has escrito ningun texto');
-        }
-        elseif(!$category)
-        {
-            $this->get('session')->setFlash('error', 'No existe la categoria');
-        }
-        else
-        {
-            $route = new Route();
-            $route->setCategory($category);
-            $route->setAuthor($user);
-            $route->setName($request->get('name'));
-            
-            //Slug generate
-            $slug = $route->generateSlug();
-            $n = 2;
-            
-            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
+        
+            if(!$user) 
             {
-                if($n > 2)
-                {
-                    $slug = substr($slug,0,-2);
-                }
-                
-                $slug .= '_'.$n;
-                
-                $n++;
+                $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
             }
-            $route->setSlug($slug);
-            
-            $route->summarize($request->get('description'));
-            $route->setAllowComments(true);
-            $route->setDraft(false);
-            $route->setActivity(null);
-            $route->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
-            $route->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
-            $route->setShowhours(false);
-            $route->setDescription($request->get('description'));
-            $route->setDistance($request->get('distance'));
-            $route->setUphill($request->get('uphill'));
-            $route->setDownhill($request->get('downhill'));
-            $route->setDifficulty($request->get('difficulty'));
-            $route->setStatus('');
-            
-            $em->persist($route); 
-            $em->flush();
+            elseif(!$category)
+            {
+                $this->get('session')->setFlash('error', 'No existe la categoria');
+            }
+            else
+            {
+                $route = new Route();
+                $form = $this->createForm(new RouteType(), $route);
+                $form->bindRequest($request);
+                
+                if ($form->isValid()) 
+                {
+                    $route->setCategory($category);
+                    $route->setAuthor($user);
+                    
+                    //Slug generate
+                    $slug = $route->generateSlug();
+                    $n = 2;
+                    
+                    while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+                    {
+                        if($n > 2)
+                        {
+                            $slug = substr($slug,0,-2);
+                        }
+                        
+                        $slug .= '_'.$n;
+                        
+                        $n++;
+                    }
+                    $route->setSlug($slug);
+                    
+                    $route->summarize($route->getDescription());
+                    $route->setAllowComments(true);
+                    $route->setDraft(false);
+                    $route->setActivity(null);
+                    $route->setDifficulty($post->get('difficulty'));
+                    
+                    $time = intval($post->get('days')) * 24 * 60 * 60 + intval($post->get('hours')) * 60 * 60 + intval($post->get('minutes')) * 60;
+                    $route->setTime($time);
+                    
+                    $route->setIsloop(false);
+                    $route->setIBP('');
+                    $route->setSourcefile($post->get('filename'));
+                    
+                    $em->persist($route); 
+                    
+                    //Now retrieve and save RouteTrackpooints
+                    $filename = $post->get('filename');
+                    $rootdir = $this->getUploadDir();
+                    
+                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename, 2000); //the track, limited to 2000 points for performance reasons
+                    
+                    foreach($fulltrack as $point)
+                    {
+                        $trackpoint = new RouteTrackpoint();
+                        $trackpoint->setLatitude($point['latitude']);
+                        $trackpoint->setLongitude($point['longitude']);
+                        $trackpoint->setAltitude($point['altitude']);
+                        $trackpoint->setDate($point['datetime']);
+                        $trackpoint->setRoute($route);
+                        
+                        
+                        $em->persist($trackpoint); 
+                        unset($trackpoint);
+                    }
+                    
+                    $em->flush();
+                    
+                    return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug' => $slug)));
+                }
+                else
+                {
+                    $this->get('session')->setFlash('error', 'Revisa los campos');
+                    
+                    $filename = $post->get('filename');
+                    $rootdir = $this->getUploadDir();
+                    
+                    $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
+                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
+                    $routedata = $this->getRouteData($fulltrack);
+                    
+                    $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+                    
+                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView(), 'categories' => $categories));
+                }
+            }
         }
-        
+                
         $referer = $this->get('request')->headers->get('referer');
         
         if(empty($referer))
@@ -160,7 +203,19 @@ class RouteController extends Controller
         
         return new RedirectResponse($referer);
     }
-    
+    public function getUploadDir($absolute = true)
+    {
+        $uploaddir = 'uploads/routes';
+        if($absolute)
+        {
+            return __DIR__ . '/../../../../web/' . $uploaddir;
+        }
+        else
+        {
+            return $uploaddir;
+        }
+        
+    }
     public function acceptedExtensions($extension = false)
     {
         $ae = array(
@@ -284,7 +339,7 @@ class RouteController extends Controller
 				$trackpoint['latitude'] = $l[$latitude];
 				$trackpoint['longitude'] = $l[$longitude];
 				if($altitude !== null) { $trackpoint['altitude'] = $l[$altitude];}
-				if($name !== null) { $trackpoint['name'] = $l[$name];}
+				else { $trackpoint['altitude'] = 0; }
 				if($date !== null) { $trackpoint['datetime'] = safeDateTime($l[$date],$l[$time]); }
 				else { $trackpoint['datetime'] = new \DateTime('today'); }
 				
@@ -299,8 +354,13 @@ class RouteController extends Controller
     
     public function getRouteData($track)
     {
-        $distance = $upHill = $downHill = 0;
+        $distance = $upHill = $downHill = $maxSpeed = 0;
+        $speeds = array();
+                
         $amount = count($track);
+        
+        $minheight = $track[0]['altitude'];
+        $maxheight = $track[0]['altitude'];
         
         for($i = 1; $i < $amount; $i++)
         {
@@ -312,9 +372,9 @@ class RouteController extends Controller
                 $track[$j]['latitude'], $track[$j]['longitude'], $track[$j]['altitude']
             );
             
-            // Uphill and Downhill 
             if($i >= 8 && $i % 4 == 0) //Every four points
             { 
+                // Uphill and Downhill 
                 $alt1 = median( $track[$i - 1]['altitude'] , $track[$i - 2]['altitude'], $track[$i - 3]['altitude'] , $track[$i - 4]['altitude'] );
 	 		    $alt2 = median( $track[$i - 5]['altitude'] , $track[$i - 6]['altitude'], $track[$i - 7]['altitude'] , $track[$i - 8]['altitude'] );
 	 		
@@ -326,15 +386,52 @@ class RouteController extends Controller
                 {
                     $downHill += $alt2 - $alt1;
                 }
+                
+                // Velocity
+                $lapseTime = $track[$i]['datetime']->format('U') - $track[$i - 4]['datetime']->format('U');
+                if($lapseTime)
+                {
+                    $lapseDistance = distance(
+                        $track[$i]['latitude'], $track[$i]['longitude'], $track[$i]['altitude'],
+                        $track[$i - 4]['latitude'], $track[$i - 4]['longitude'], $track[$i - 4]['altitude']);
+                    
+                    $speed = ( $lapseDistance / 1000 ) / ( ( $lapseTime ) / 60 / 60 );
+                    
+                    //For avg Speed
+                    if($speed >= 1) {
+                        $speeds[] = $speed;
+                    }
+                    
+                    //Max Speed
+                    $maxSpeed = max($maxSpeed, $speed);
+                }
             }
+            
+            // Min and max height
+            $minheight = min($minheight, $track[$i]['altitude']);
+            $maxheight = max($maxheight, $track[$i]['altitude']);
+        }
+        
+        //Avg Speed
+        if(count($speeds) > 2)
+        {
+            $avgSpeed = floatval(median($speeds));
+        }
+        else
+        {
+            $avgSpeed = 0;
         }
         
         $time = intval($track[$amount - 1]['datetime']->format('U')) - intval($track[0]['datetime']->format('U'));
 		
 		return array(
-            'distance' => round( $distance / 1000, 1),
-			'upHill' => round($upHill),
-			'downHill' => round($downHill),
+            'distance' => round( $distance / 1000, 2),
+			'uphill' => round($upHill),
+			'downhill' => round($downHill),
+			'minheight' => round($minheight),
+			'maxheight' => round($maxheight),
+			'avgspeed' => round($avgSpeed, 2),
+			'maxspeed' => round($maxSpeed, 2),
 			'time' => $time
         );
     }
@@ -401,7 +498,8 @@ function distance($lat1, $lng1, $alt1, $lat2, $lng2, $alt2)
 	return floatval($dist);
 }
 
-function safeDateTime($date, $time) {
+function safeDateTime($date, $time) 
+{
 	if(!$date) return new \DateTime('today');
 	
 	return new \DateTime($date.' '.$time);

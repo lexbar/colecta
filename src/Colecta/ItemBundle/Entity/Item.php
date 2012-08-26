@@ -466,7 +466,7 @@ abstract class Item
             
             //And now the tagwords if the text was longer than 255
             
-            $words = explode(' ', str_replace(array(',','.',':',';','=','(',')','?','!'), ' ', $text));
+            $words = explode(' ', str_replace(array(',',';','=','(',')','?','!'), ' ', $text));
             $summarywords = explode(' ', str_replace(array(',','.',':',';','=','(',')','?','!'), ' ', $summary));
             
             $tags = array();

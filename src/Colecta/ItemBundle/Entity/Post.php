@@ -12,14 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Post extends Item
 {
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @var text $text
@@ -27,17 +19,6 @@ class Post extends Item
      * @ORM\Column(name="text", type="text")
      */
     private $text;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set text
@@ -62,5 +43,10 @@ class Post extends Item
     public function getType()
     {
         return 'Item/Post';
+    }
+    
+    public function __toString()
+    {
+        return $this->name;
     }
 }

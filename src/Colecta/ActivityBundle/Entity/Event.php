@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Event extends \Colecta\ItemBundle\Entity\Item
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var datetime $dateini
      *
      * @ORM\Column(name="dateini", type="datetime")
@@ -94,17 +85,6 @@ class Event extends \Colecta\ItemBundle\Entity\Item
      * @ORM\OneToMany(targetEntity="EventAssistance", mappedBy="event")
      */
     private $assistances;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set dateini
