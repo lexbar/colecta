@@ -1,5 +1,0 @@
-services:
-    twig.extension.route:
-        class: Colecta\ActivityBundle\Twig\RouteExtension
-        tags:
-            - { name: twig.extension }

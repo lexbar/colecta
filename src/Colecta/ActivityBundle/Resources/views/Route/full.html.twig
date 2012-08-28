@@ -23,8 +23,12 @@
     {% endfor %}
     
     var map;
+    var positionMarker;
     var isFullScreen = false;
     var polyline = [];
+    var chart = null;
+    var chartData = [];
+    var chartDistance = 0;
     var points = [{{ points }}];
     var bounds = new google.maps.LatLngBounds(new google.maps.LatLng({{ boundsswlat }}, {{ boundsswlng }}), new google.maps.LatLng({{ boundsnelat }}, {{ boundsnelng }}));
     
@@ -40,9 +44,29 @@
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
         map.fitBounds(bounds);
         
-        $.each(points, function(index, value) { 
-            polyline.push(new google.maps.LatLng(value[0], value[1]));
+        positionMarker = new google.maps.Marker({
+            position: new google.maps.LatLng(points[0][0], points[0][1]),
+            map: map
         });
+        
+        $.each(points, function(i, value) { 
+            //maps
+            polyline.push(new google.maps.LatLng(value[0], value[1]));
+            //highchart
+            if(i) {
+                chartDistance += distance(points[(i-1)][0],points[(i-1)][1],points[(i-1)][2],value[0],value[1],value[2]);
+            }
+            
+            chartData.push([chartDistance, value[2]]);
+        });
+        
+        if(chartDistance && Math.abs(chartDistance - {{ item.distance * 1000 }}) > 100) {
+            //multiplier so that the distance values match the item distance on the chart
+            var diff = {{ item.distance * 1000 }} / chartDistance;
+            for(var i = 0; i < chartData.length; i++) {
+                chartData[i][0] *= diff;
+            }
+        }
         
         var path = new google.maps.Polyline({
             path: polyline,
@@ -55,13 +79,14 @@
         
         //CHART
         
-        var chart = new Highcharts.Chart({
+        chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'chart',
                 zoomType: 'x',
                 spacingRight: 0,
                 spacingLeft: 0, 
-                spacingTop: 6
+                spacingTop: 6,
+                type: 'area'
             },
             credits: {
                 enabled : false
@@ -73,23 +98,39 @@
                 text: null
             },
             xAxis: {
-                type: 'datetime',
-                maxZoom: 5 * 60000, // 5 minutes
-                title: {
-                    text: null
-                }
-            },
-            yAxis: {
-                id: 'y-axis',
                 title: {
                     text: null
                 },
-                startOnTick: false,
-                showFirstLabel: false
+                labels: {
+                    formatter: function() {
+                        return Highcharts.numberFormat(this.value / 1000,0) +'km';
+                    }
+                }
             },
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    formatter: function() {
+                        return Highcharts.numberFormat(this.value,0) +'m';
+                    }
+                },
+                min: 0
+            },
+            series : [{
+                data: chartData
+            }],
             tooltip: {
-                xDateFormat: '%H:%M',
-                shared : true
+                formatter: function() {
+                    var i = this.series.data.indexOf( this.point );
+                    var loc = new google.maps.LatLng(points[i][0],points[i][1])
+                    positionMarker.setPosition(loc);
+                    if(!map.getBounds().contains(loc)) {
+                        map.panTo(loc);
+                    }
+                    return '<b>Kilómetro:</b> '+ Highcharts.numberFormat((this.x / 1000 ),1) + '<br/><b>Altitud:</b> '+ Highcharts.numberFormat(this.y, 0) + ' m';
+                }
             },
             legend: {
                 enabled: false
@@ -119,7 +160,7 @@
                 }
             }
         });
-    }
+    };
     
     function distance(lat1, lng1, alt1, lat2, lng2, alt2) 
     {         
@@ -145,6 +186,7 @@
             $('#map').removeClass('fullscreen').addClass('full'); 
             $('#map').css('position','relative');
             $('#submap').removeClass('fullscreen');
+            $('#chart').removeClass('fullscreen');
             $('#fullscreen').html('Ver en pantalla completa <i class="icon-fullscreen"></i>').removeClass('btn-danger') ;
         }
         else
@@ -152,10 +194,12 @@
             $('#map').removeClass('full').addClass('fullscreen'); 
             $('#map').css('position','absolute');
             $('#submap').addClass('fullscreen');
+            $('#chart').addClass('fullscreen');
             $('#fullscreen').html('Salir de pantalla completa <i class="icon-resize-small icon-white"></i>').addClass('btn-danger');
         }
         isFullScreen = !isFullScreen;
         
+        chart.setSize($('#chart').width(),180);
         google.maps.event.trigger(map, 'resize');
         map.setCenter(center);
     }
@@ -196,9 +240,11 @@
     </div>
     
     <h2>{{ item.name }}</h2>
+    
     <div id="map" class="full"></div>
     <div id="submap">{% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%} <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-mini pull-right" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></div>
     <div id="chart"></div>
+    
     <ul class="properties" style="margin: 10px 0;padding-left: 25px;">
         <li{% if item.distance > 999 %} class="small"{% endif %}><strong>{{ item.distance }} km</strong> Distancia</li>
         <li{% if item.uphill > 999 %} class="small"{% endif %}><strong>{{ item.uphill }} m</strong> Subida</li>

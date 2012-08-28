@@ -111,6 +111,9 @@ article form.form-horizontal .controls textarea {
 .spanhalf {
     width: 30px;
 }
+.fullscreen {
+    z-index: 10001;
+}
 #map.active {
     height: 220px;
     width: 350px;
@@ -124,10 +127,10 @@ article form.form-horizontal .controls textarea {
 #map.fullscreen {
     width: auto;
     height: auto;
-    top: 64px;
+    top: 24px;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 180px;
     margin: 0;
 }
 #submap {
@@ -146,8 +149,17 @@ article form.form-horizontal .controls textarea {
     left: 0;
     border: 0;
     right: 0;
-    top: 40px;
+    top: 0;
     margin: 0;
+}
+#chart {
+    height: 180px;
+}
+#chart.fullscreen {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 .btn-mini i {
     margin: 0;
