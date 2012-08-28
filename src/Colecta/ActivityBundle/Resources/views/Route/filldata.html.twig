@@ -60,7 +60,7 @@
 
 <div id="map" class="full"></div>
 
-<form action="{{ path('ColectaRouteCreate') }}" method="POST" class="form-horizontal well" onSubmit="var submit = document.getElementById('RouteSubmit'); submit.disabled = 'disabled'; submit.innerHTML = 'Subiendo...';">
+<form action="{{ path('ColectaRouteCreate') }}" method="POST" class="form-horizontal well" onSubmit="var submit = document.getElementById('RouteSubmit'); submit.disabled = 'disabled'; submit.innerHTML = 'Procesando...';">
 <h2>Datos de la Ruta</h2>
     <fieldset>
       <div class="control-group">
@@ -202,6 +202,7 @@
       {{ form_rest(form) }}
       
       <input type="hidden" value="{{ filename }}" name="filename">
+      <input type="hidden" value="{% if trackdata.isloop %}1{% else %}0{% endif %}" name="isloop">
       
       <div class="control-group">
         <label class="control-label" for="EventCategory">Categoría</label>

@@ -148,6 +148,7 @@ class RouteController extends Controller
                     
                     $route->setIsloop(false);
                     $route->setIBP('');
+                    $route->setIsloop(intval($post->get('isloop')));
                     $route->setSourcefile($post->get('filename'));
                     
                     $em->persist($route); 
@@ -156,7 +157,7 @@ class RouteController extends Controller
                     $filename = $post->get('filename');
                     $rootdir = $this->getUploadDir();
                     
-                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename, 2000); //the track, limited to 2000 points for performance reasons
+                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
                     
                     foreach($fulltrack as $point)
                     {
@@ -423,6 +424,11 @@ class RouteController extends Controller
         }
         
         $time = intval($track[$amount - 1]['datetime']->format('U')) - intval($track[0]['datetime']->format('U'));
+        
+        $distanceIniEnd = distance(
+                        $track[0]['latitude'], $track[0]['longitude'], 0,
+                        $track[($amount-1)]['latitude'], $track[($amount-1)]['longitude'], 0);
+        $isLoop = $distanceIniEnd > 700 ? false : true;
 		
 		return array(
             'distance' => round( $distance / 1000, 2),
@@ -430,9 +436,10 @@ class RouteController extends Controller
 			'downhill' => round($downHill),
 			'minheight' => round($minheight),
 			'maxheight' => round($maxheight),
-			'avgspeed' => round($avgSpeed, 2),
-			'maxspeed' => round($maxSpeed, 2),
-			'time' => $time
+			'avgspeed' => round($avgSpeed, 1),
+			'maxspeed' => round($maxSpeed, 1),
+			'time' => $time,
+			'isloop' => $isLoop
         );
     }
 }

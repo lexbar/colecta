@@ -2,15 +2,19 @@
 
 {% block routes 'active' %}
 {% block onload 'initialize()' %}
-{% block javascripts %}
-    
+{% block javascripts %}    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="/js/highcharts.js"></script>
+    <script>
+     
     {% set boundsswlat, boundsswlng = item.trackpoints[0].latitude, item.trackpoints[0].longitude %}
     {% set boundsnelat, boundsnelng = item.trackpoints[0].latitude, item.trackpoints[0].longitude %} 
-    {% set points = '[' ~ item.trackpoints[0].latitude ~ ',' ~ item.trackpoints[0].longitude ~ ']' %}
+    {% set points = '[' ~ item.trackpoints[0].latitude ~ ',' ~ item.trackpoints[0].longitude ~ ',' ~ item.trackpoints[0].altitude ~ ']' %}
     
     {% for tp in item.trackpoints %}
         {% if not loop.first %}
-            {% set points = points ~ ',[' ~ tp.latitude ~ ',' ~ tp.longitude ~ ']' %}
+            {% set points = points ~ ',[' ~ tp.latitude ~ ',' ~ tp.longitude ~ ',' ~ tp.altitude ~ ']' %}
             {% if tp.latitude < boundsswlat %}{% set boundsswlat = tp.latitude %}{% endif %}
             {% if tp.longitude < boundsswlng %}{% set boundsswlng = tp.longitude %}{% endif %}
             {% if tp.latitude > boundsnelat %}{% set boundsnelat = tp.latitude %}{% endif %}
@@ -18,11 +22,8 @@
         {% endif %}
     {% endfor %}
     
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-    <script>
-    
     var map;
+    var isFullScreen = false;
     var polyline = [];
     var points = [{{ points }}];
     var bounds = new google.maps.LatLngBounds(new google.maps.LatLng({{ boundsswlat }}, {{ boundsswlng }}), new google.maps.LatLng({{ boundsnelat }}, {{ boundsnelng }}));
@@ -51,6 +52,122 @@
         });
         
         path.setMap(map);
+        
+        //CHART
+        
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart',
+                zoomType: 'x',
+                spacingRight: 0,
+                spacingLeft: 0, 
+                spacingTop: 6
+            },
+            credits: {
+                enabled : false
+            },
+            title: {
+                text: null
+            },
+            subtitle: {
+                text: null
+            },
+            xAxis: {
+                type: 'datetime',
+                maxZoom: 5 * 60000, // 5 minutes
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                id: 'y-axis',
+                title: {
+                    text: null
+                },
+                startOnTick: false,
+                showFirstLabel: false
+            },
+            tooltip: {
+                xDateFormat: '%H:%M',
+                shared : true
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                area: {
+                    fillColor: {
+                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                        stops: [[0, Highcharts.getOptions().colors[0]],[1, 'rgba(255,255,255,0)']]
+                    },
+                    lineWidth: 2,
+                    marker: {
+                        enabled: false,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                radius: 5
+                            }
+                        }
+                    },
+                    shadow: false,
+                    states: {
+                        hover: {
+                            lineWidth: 2
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function distance(lat1, lng1, alt1, lat2, lng2, alt2) 
+    {         
+    	var distproj = 6371000 * 2 * Math.asin( Math.sqrt( Math.pow( Math.sin( deg2rad( lat1  - lat2 ) / 2 ), 2) + Math.cos(deg2rad( lat1 )) * Math.cos( deg2rad( lat2 ) ) * Math.pow( Math.sin( deg2rad( lng1 - lng2 ) / 2 ), 2) )); //harvesinus formula
+    	
+    	if(lat1 > 60 || lat2 > 60)
+    	{
+    	   distproj *= 0.9966;
+        }
+        
+    	dist = Math.sqrt( Math.pow( distproj, 2 ) + Math.pow( ( alt1 - alt2 ), 2 ) );
+    	
+    	return dist;
+    }
+    function deg2rad (angle) {
+        return (angle / 180) * Math.PI;
+    }
+    
+    function toggleFullScreen() {
+        var center = map.getCenter();
+        if(isFullScreen)
+        {
+            $('#map').removeClass('fullscreen').addClass('full'); 
+            $('#map').css('position','relative');
+            $('#submap').removeClass('fullscreen');
+            $('#fullscreen').html('Ver en pantalla completa <i class="icon-fullscreen"></i>').removeClass('btn-danger') ;
+        }
+        else
+        {
+            $('#map').removeClass('full').addClass('fullscreen'); 
+            $('#map').css('position','absolute');
+            $('#submap').addClass('fullscreen');
+            $('#fullscreen').html('Salir de pantalla completa <i class="icon-resize-small icon-white"></i>').addClass('btn-danger');
+        }
+        isFullScreen = !isFullScreen;
+        
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter(center);
+    }
+    
+    function toggleDropdown() {
+        if($('#dropdown').css('display') == 'block'){
+            $('#dropdown').css('display','none'); 
+            $('#ddarrow').removeClass('icon-chevron-up').addClass('icon-chevron-down');
+        } else {
+            $('#dropdown').css('display','block');
+            $('#ddarrow').removeClass('icon-chevron-down').addClass('icon-chevron-up');
+        }
     }
     
     </script>
@@ -58,10 +175,30 @@
 {% endblock %}
 
 {% block article %}
-    <button style="margin-top:10px" class="btn btn-small btn-primary pull-right" type="button">Descargar <i class="icon-chevron-down icon-white"></i></button>
-    <h2>{{ item.name }}</h2>
-    <div id="map" style="width:100%;height:300px;"></div>
+    <div class="dropdown pull-right">
+        <button style="margin-top:10px" class="btn btn-small btn-primary pull-right" type="button" onClick="toggleDropdown()">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
+            <li><a tabindex="-1" href="#">GPX</a></li>
+            <li><a tabindex="-1" href="#">KML</a></li>
+            <li><a tabindex="-1" href="#">PLT</a></li>
+            <li><a tabindex="-1" href="#">GDB</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Limitado a 500 puntos</a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="#">GPX</a></li>
+                    <li><a tabindex="-1" href="#">KML</a></li>
+                    <li><a tabindex="-1" href="#">PLT</a></li>
+                    <li><a tabindex="-1" href="#">GDB</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
     
+    <h2>{{ item.name }}</h2>
+    <div id="map" class="full"></div>
+    <div id="submap">{% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%} <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-mini pull-right" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></div>
+    <div id="chart"></div>
     <ul class="properties" style="margin: 10px 0;padding-left: 25px;">
         <li{% if item.distance > 999 %} class="small"{% endif %}><strong>{{ item.distance }} km</strong> Distancia</li>
         <li{% if item.uphill > 999 %} class="small"{% endif %}><strong>{{ item.uphill }} m</strong> Subida</li>
@@ -87,16 +224,16 @@
         <li><strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" alt="{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}"></strong> Dificultad</li>
     </ul>
     
-    <p>{{ item.description | nl2br }}</p>
-    
-    <ul>
-        <li>Velocidad media: {{ item.avgspeed }}</li>
-        <li>Velocidad máxima: {{ item.maxspeed }}</li>
-        <li>Cota baja: {{ item.minheight }}</li>
-        <li>Cota alta: {{ item.maxheight }}</li>
-        <li>Circular: {{ item.isloop }}</li>
-        <li>IBP: {{ item.IBP }}</li>
+    <ul class="moreproperties">
+        {% if item.avgspeed > 0 %}<li><strong>Velocidad media:</strong> {{ item.avgspeed }} km/h</li>{% endif %}
+        {% if item.maxspeed > 0 %}<li><strong>Velocidad máxima:</strong> {{ item.maxspeed }} km/h</li>{% endif %}
+        {% if item.minheight > 0 %}<li><strong>Cota inferior:</strong> {{ item.minheight }} m</li>{% endif %}
+        {% if item.maxheight > 0 %}<li><strong>Cota superior:</strong> {{ item.maxheight }} m</li>{% endif %}
+        <li><strong>Circular:</strong> {% if item.isloop %}Sí{% else %}No{% endif %}</li>
+        {% if item.IBP %}<li><strong>IBP:</strong> {{ item.IBP }}</li>{% endif %}
     </ul>
+    
+    <p>{{ item.description | nl2br }}</p>
 
     
 {% endblock %}
