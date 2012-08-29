@@ -337,6 +337,39 @@ abstract class Item
     {
         return $this->relatedfrom;
     }
+    
+    /**
+     * Get related
+     *
+     * @return string 
+     */
+    public function getRelated()
+    {
+        $from = $this->getRelatedfrom();
+        $to = $this->getRelatedto();
+        
+        $all = array();
+        
+        if(count($from))
+        {
+            foreach($from as $i)
+            {
+                $all[intval($i->getDate()->format('U'))] = $i;
+            }
+        }
+        
+        if(count($to))
+        {
+            foreach($to as $i)
+            {
+                $all[intval($i->getDate()->format('U'))] = $i;
+            }
+        }
+        
+        ksort($all);
+        
+        return array_values($all);
+    }
 
     /**
      * Set author
