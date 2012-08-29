@@ -125,6 +125,13 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     {
         return $this->dateend;
     }
+    
+    public function getTime()
+    {
+        //Number of secconds between both dates
+        if($this->getDateend() < $this->getDateini()) return 0;
+        return $this->getDateend()->format('U') - $this->getDateini()->format('U');
+    }
 
     /**
      * Set showhours

@@ -291,6 +291,10 @@ ul.moreproperties li {
     float: left;
     margin: 0 10px 10px 25px;
 }
+.route.full ul.properties {
+    margin: 10px 0;
+    padding-left: 25px;
+}
 ul.comments {
     clear: both;
     margin-top: 10px;
