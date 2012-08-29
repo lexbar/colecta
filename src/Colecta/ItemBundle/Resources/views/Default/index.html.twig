@@ -18,4 +18,13 @@
 <h2>No hay ningun item</h2>
 {% endfor %}
 
+<ul class="pager">
+  <li class="previous{% if page == 1 %} disabled{% endif %}">
+    <a href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+  </li>
+  <li class="next{% if not thereAreMore %} disabled{% endif %}">
+    <a href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+  </li>
+</ul>
+
 {% endblock %}

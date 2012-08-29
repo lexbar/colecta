@@ -11,7 +11,7 @@ class FileType extends AbstractType
         $builder
             ->add('file')
             ->add('name')
-            ->add('description')
+            ->add('description','textarea',array('required'=>false))
             ->add('folder');
     }
     

@@ -9,16 +9,37 @@ use Colecta\FilesBundle\Entity\File;
 
 class FileController extends Controller
 {
+    private $ipp = 10; //Items per page
+    
     public function indexAction()
     {
+        return $this->pageAction(1);
+    }
+    
+    public function pageAction($page)
+    {
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
         $em = $this->getDoctrine()->getEntityManager();
         
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaFilesBundle:File')->findBy(array('draft'=>0), array('date'=>'DESC'),10,0);
+        $items = $em->getRepository('ColectaFilesBundle:File')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        //Pagination
+        if(count($items) > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
+        
         $form = $this->uploadAction();
         
-        return $this->render('ColectaFilesBundle:File:index.html.twig', array('items' => $items, 'categories'=> $categories,'form' => $form));
+        return $this->render('ColectaFilesBundle:File:index.html.twig', array('items' => $items, 'categories' => $categories,'form' => $form, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function viewAction($slug)
     {

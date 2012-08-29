@@ -1,6 +1,11 @@
 {% extends '::frontend.html.twig' %}
 
+{% block files 'active' %}
+
 {% block article %}
+
+{% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+
 <h2>{{ item.name }}</h2>
 
 {% if item.filetype in ['jpg','gif','png'] %} 
@@ -11,5 +16,7 @@
 
 <p>{{ item.description | nl2br }}</p>
 {% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
+
+{% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
 
 {% endblock %}

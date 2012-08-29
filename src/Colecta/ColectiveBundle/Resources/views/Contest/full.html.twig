@@ -1,10 +1,19 @@
 {% extends '::frontend.html.twig' %}
 
+{% block contests 'active' %}
+
 {% block article %}
+    
+    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    
     <h2>{{ item.name }}</h2>
     <p>{{ item.description | nl2br }}</p>
-<ul>
-    <li>Fecha inicio: {{ item.iniDate | date('d/m/Y H:i:s') }}</li>
-    <li>Fecha limite: {{ item.endDate | date('d/m/Y H:i:s') }}</li>
-</ul>
+
+    <ul>
+        <li>Fecha inicio: {{ item.iniDate | date('d/m/Y H:i:s') }}</li>
+        <li>Fecha limite: {{ item.endDate | date('d/m/Y H:i:s') }}</li>
+    </ul>
+
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
+
 {% endblock %}

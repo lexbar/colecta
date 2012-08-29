@@ -3,6 +3,7 @@
 namespace Colecta\ActivityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Colecta\ActivityBundle\Form\Frontend\RouteType;
@@ -12,13 +13,35 @@ use Colecta\ActivityBundle\Entity\RouteTrackpoint;
 
 class RouteController extends Controller
 {
+    private $ipp = 10; //Items per page
+    
     public function indexAction()
     {
+        return $this->pageAction(1);
+    }
+    
+    public function pageAction($page)
+    {
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
         $em = $this->getDoctrine()->getEntityManager();
         
-        $items = $em->getRepository('ColectaActivityBundle:Route')->findBy(array('draft'=>0), array('date'=>'DESC'),10,0);
+        //Get ALL the items that are not drafts
+        $items = $em->getRepository('ColectaActivityBundle:Route')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
-        return $this->render('ColectaActivityBundle:Route:index.html.twig', array('items' => $items));
+        //Pagination
+        if(count($items) > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
+        
+        return $this->render('ColectaActivityBundle:Route:index.html.twig', array('items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function viewAction($slug)
     {
@@ -27,6 +50,46 @@ class RouteController extends Controller
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         
         return $this->render('ColectaActivityBundle:Route:full.html.twig', array('item' => $item));
+    }
+    public function mapAction($id)
+    {
+        $cachePath = __DIR__ . '/../../../../web/uploads/maps/' . $id ;
+        
+        if(file_exists($cachePath))
+        {
+            $image = file_get_contents($cachePath);
+        }
+        else
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            
+            
+            $route = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
+            $routetrack = $route->getTrackpoints();
+            
+            $n = count($routetrack);
+            if($n > 0) 
+            {
+                $url = "http://maps.google.com/maps/api/staticmap?size=490x240&maptype=terrain&markers=color:red%7C".$routetrack[0]->getLatitude().",".$routetrack[0]->getLongitude()."&sensor=false&path=color:0xff0000|weight:3";
+                $step = floor($n / 60);
+                for($i = 0; $i < $n; $i += $step)
+                {
+                    $url .= '|'. $routetrack[$i]->getLatitude() .','. $routetrack[$i]->getLongitude();
+                }
+                
+                $image = getContent($url);
+                
+                file_put_contents($cachePath, $image);
+            }
+            else 
+            {
+                return new Response('Page not found.', 404);
+            }
+        }
+        
+        $response = new Response($image);
+        $response->headers->set('Content-Type', 'image/png');
+        return $response;
     }
     public function uploadAction()
     {
@@ -510,4 +573,30 @@ function safeDateTime($date, $time)
 	if(!$date) return new \DateTime('today');
 	
 	return new \DateTime($date.' '.$time);
+}
+
+function getContent($url) 
+{
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url );
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); //Needed because redirection is used on the app
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 7);
+	$content = curl_exec($ch); //return result 
+	
+	if(curl_getinfo($ch, CURLINFO_HTTP_CODE) === 403) 
+	{
+		return null;
+	}
+	
+	if (curl_errno($ch)) 
+	{
+		return false; //this stops the execution under a Curl failure
+	}
+	
+	curl_close($ch); //close connection_aborted()
+	
+	return $content;
 }

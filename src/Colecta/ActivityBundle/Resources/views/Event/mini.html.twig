@@ -32,10 +32,28 @@
     <p>{{ item.summary }}</p>
     
     <ul class="properties">
-        <li><strong>{{ item.distance }} km</strong> Distancia</li>
-        <li><strong>{{ item.uphill }} m</strong> Subida</li>
-        <li><strong>{{ item.downhill }} m</strong> Bajada</li>
-        <li><strong>?</strong> Tiempo</li>
+        <li{% if item.distance > 999 %} class="small"{% endif %}><strong>{{ item.distance }} km</strong> Distancia</li>
+        <li{% if item.uphill > 999 %} class="small"{% endif %}><strong>{{ item.uphill }} m</strong> Subida</li>
+        <li{% if item.downhill > 999 %} class="small"{% endif %}><strong>{{ item.downhill }} m</strong> Bajada</li>
+        {% set itemtime = item.dateend|date('U') - item.dateini|date('U') %}
+        {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
+        {% if itemtime < 60 %}
+            {% set secconds = itemtime %}
+        {% else %}
+            {% set minutes = itemtime // 60 %}
+            {% set secconds = itemtime - minutes * 60 %}
+            
+            {% if minutes >= 60 %}
+                {% set hours = minutes // 60 %}
+                {% set minutes = minutes - hours * 60 %}
+                
+                {% if hours >= 24 %}
+                    {% set days = hours // 24 %}
+                    {% set hours = hours - days * 24 %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        <li{% if itemtime >= 86400 %} class="small"{% endif %}><strong>{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m</strong> Tiempo</li>
         <li><strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" alt="{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}"></strong> Dificultad</li>
     </ul>
 </div>

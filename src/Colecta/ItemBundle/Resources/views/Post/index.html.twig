@@ -49,4 +49,14 @@
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
 </div>
 {% endfor %}
+
+<ul class="pager">
+  <li class="previous{% if page == 1 %} disabled{% endif %}">
+    <a href="{% if page > 1 %}{{ path('ColectaPostPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+  </li>
+  <li class="next{% if not thereAreMore %} disabled{% endif %}">
+    <a href="{% if thereAreMore %}{{ path('ColectaPostPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+  </li>
+</ul>
+
 {% endblock %}

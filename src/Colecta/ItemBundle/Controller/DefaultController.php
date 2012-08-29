@@ -6,15 +6,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
+    private $ipp = 10; //Items per page
     
     public function dashboardAction()
     {
+        return $this->dashboardPageAction(1);
+    }
+    
+    public function dashboardPageAction($page)
+    {
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
         $em = $this->getDoctrine()->getEntityManager();
         
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),10,0);
+        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
-        return $this->render('ColectaItemBundle:Default:index.html.twig', array('items' => $items));
+        //Pagination
+        if(count($items) > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
+        
+        return $this->render('ColectaItemBundle:Default:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     
     public function searchAction()

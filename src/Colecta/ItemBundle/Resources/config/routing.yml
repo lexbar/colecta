@@ -1,6 +1,9 @@
 ColectaDashboard:
     pattern:  /
     defaults: { _controller: ColectaItemBundle:Default:dashboard }
+ColectaDashboardPage:
+    pattern:  /page/{page}
+    defaults: { _controller: ColectaItemBundle:Default:dashboardPage }
 ColectaSearch:
     pattern:  /search/
     defaults: { _controller: ColectaItemBundle:Default:search }
@@ -10,12 +13,18 @@ ColectaComment:
 ColectaPostIndex:
     pattern:  /post/
     defaults: { _controller: ColectaItemBundle:Post:index }
+ColectaPostPage:
+    pattern:  /post/page/{page}
+    defaults: { _controller: ColectaItemBundle:Post:page }
 ColectaPostCreate:
     pattern:  /new/post/
     defaults: { _controller: ColectaItemBundle:Post:create }
 ColectaPostView:
     pattern:  /post/{slug}
     defaults: { _controller: ColectaItemBundle:Post:view }
+ColectaCategoryPage:
+    pattern:  /category/{slug}/page/{page}
+    defaults: { _controller: ColectaItemBundle:Category:page }
 ColectaCategoryView:
     pattern:  /category/{slug}
     defaults: { _controller: ColectaItemBundle:Category:view }

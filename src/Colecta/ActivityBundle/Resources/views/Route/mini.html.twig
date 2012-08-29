@@ -1,10 +1,7 @@
-{% set mapwidth = 490 %}
-{% set mapheight = 240 %}
-{% set pointsStep = item.trackpoints | length // 60 %}
 
 <div class="place mini">
     <h2><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
-    <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="thumbnail"><img class="" src="http://maps.google.com/maps/api/staticmap?size={{ mapwidth }}x{{ mapheight }}&maptype=roadmap&markers=color:blue%7C{{ item.trackpoints[0].latitude ~ ',' ~ item.trackpoints[0].longitude }}&path=color:0x0000ff|weight:5{% for point in item.trackpoints %}{% if loop.index % pointsStep == 0 or loop.last%}|{{ point.latitude }},{{ point.longitude }}{% endif %}{% endfor %}&sensor=false" width="{{ mapwidth }}" height="{{ mapheight }}"></a>
+    <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="thumbnail"><img class="" src="{{ path('ColectaRouteMap',{id : item.id}) }}" width="490" height="240"></a>
     
     <p>{{ item.summary | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
     

@@ -86,6 +86,7 @@
                 spacingRight: 0,
                 spacingLeft: 0, 
                 spacingTop: 6,
+                spacingBottom: 4,
                 type: 'area'
             },
             credits: {
@@ -218,9 +219,11 @@
     
 {% endblock %}
 
-{% block article %}
+{% block article %}    
+    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    
     <div class="dropdown pull-right">
-        <button style="margin-top:10px" class="btn btn-small btn-primary pull-right" type="button" onClick="toggleDropdown()">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
+        <button class="btn btn-small btn-primary pull-right" type="button" onClick="toggleDropdown()">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
             <li><a tabindex="-1" href="#">GPX</a></li>
             <li><a tabindex="-1" href="#">KML</a></li>
@@ -280,6 +283,7 @@
     </ul>
     
     <p>{{ item.description | nl2br }}</p>
-
+    
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
     
 {% endblock %}

@@ -4,6 +4,9 @@ ColectaPlaceCreate:
 ColectaPlaceIndex:
     pattern:  /place/
     defaults: { _controller: ColectaActivityBundle:Place:index }
+ColectaPlacePage:
+    pattern:  /place/page/{page}
+    defaults: { _controller: ColectaActivityBundle:Place:page }
 ColectaPlaceView:
     pattern:  /place/{slug}
     defaults: { _controller: ColectaActivityBundle:Place:view }
@@ -13,6 +16,9 @@ ColectaEventCreate:
 ColectaEventIndex:
     pattern:  /event/
     defaults: { _controller: ColectaActivityBundle:Event:index }
+ColectaEventPage:
+    pattern:  /event/page/{page}
+    defaults: { _controller: ColectaActivityBundle:Event:page }
 ColectaEventView:
     pattern:  /event/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }
@@ -22,9 +28,15 @@ ColectaRouteUpload:
 ColectaRouteCreate:
     pattern:  /new/route/
     defaults: { _controller: ColectaActivityBundle:Route:create }
-ColectaRouuteIndex:
+ColectaRouteIndex:
     pattern:  /route/
     defaults: { _controller: ColectaActivityBundle:Route:index }
+ColectaRoutePage:
+    pattern:  /route/page/{page}
+    defaults: { _controller: ColectaActivityBundle:Route:page }
 ColectaRouteView:
     pattern:  /route/{slug}
     defaults: { _controller: ColectaActivityBundle:Route:view }
+ColectaRouteMap:
+    pattern:  /routemap/{id}
+    defaults: { _controller: ColectaActivityBundle:Route:map }
