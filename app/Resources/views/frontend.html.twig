@@ -27,7 +27,7 @@
 
 <div class="container">
 <div class="row">
-<aside class="span2" id="sidebar">
+<div class="span2" id="sidebar">
     <nav>
         <ul> 
             <li><a class="{% block home '' %}" href="/"><i class="icon-home"></i> Inicio</a></li>
@@ -41,9 +41,9 @@
             <li><a class="{% block people '' %}" href="/"><i class="icon-user"></i> Personas</a></li>
         </ul> 
     </nav>
-</aside>
+</div>
 
-<article class="span7" id="stream">
+<div class="span7" id="stream">
 {% if app.session.hasFlash('error') %}
     <div class="alert alert-error">
         {{ app.session.flash('error') }}
@@ -51,9 +51,9 @@
 {% endif %}
 
 {% block article %}{% endblock %}
-</article>
+</div>
 
-<aside class="span3" id="userbar">
+<div class="span3" id="userbar">
     <p class="myself">{% if app.user %}<img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}">Salir</a>{% else %}Haz <a href="{{ path('userLogin') }}">login</a>{% endif %}</p>
     {% if app.user %}
         {% for notification in colectauser.notDismissedNotifications %}
@@ -65,7 +65,7 @@
     
     <div class="ads"><img src="//www.google.com/help/hc/images/adsense_185666_adformat-display_200x200_en.jpg" style="border:1px solid black" alt="200 x 200"><br></div>
     
-</aside>
+</div>
 </div>
 </div>
 {% endblock %}
