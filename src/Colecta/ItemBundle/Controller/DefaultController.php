@@ -46,13 +46,29 @@ class DefaultController extends Controller
         //SEARCH ENGINE
         $search = trim($this->get('request')->query->get('search'));
         
-        if(!empty($search))
+        //I split all the words
+        $words = explode(' ',$search);
+        
+        if(count($words))
+        {
+            $i = 0;
+            foreach($words as $w)
+            {
+                if(strlen($w) < 3 || in_array($w,array('ante','bajo','cabe','con','contra','desde','entre','hacia','hasta','para','por','segun','sin','sobre','tras')))
+                {
+                    unset($words[$i]);
+                }
+                $i++;
+            }
+            sort($words);
+        }
+        
+            
+        if(count($words))
         {
             $em = $this->getDoctrine()->getEntityManager();
             
             $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE ';
-            //I split all the words
-            $words = explode(' ',$search);
             
             //Initialice the parameters
             $parameters = array();
