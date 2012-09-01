@@ -72,6 +72,9 @@ article form.form-horizontal .controls textarea {
 .myself img {
     float:right;
 }
+.well.login {
+    padding: 10px 20px;
+}
 
 #sidebar ul {
     margin-left: -20px;
