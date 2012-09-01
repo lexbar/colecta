@@ -97,6 +97,13 @@ article form.form-horizontal .controls textarea {
     width: 230px;
 }
 
+.ads {
+    text-align: center;
+    margin: 15px 0;
+    border: 1px solid #F0F0F0;
+    padding: 15px 0;
+    background-color: #FAFAFA;
+}
 #stream{
     border-left: 1px solid #ddd;
     margin-left: 0;
@@ -113,6 +120,10 @@ article form.form-horizontal .controls textarea {
 }
 .fullscreen {
     z-index: 10001;
+}
+.dropdown:hover .download {
+    display: block;
+    margin: 0;
 }
 #map.active {
     height: 220px;
@@ -201,6 +212,12 @@ article form.form-horizontal .controls textarea {
 }
 .event.mini h2{
     margin-left: 0;
+}
+.maplink {
+    border: 1px solid #CCC;
+    margin-bottom: 10px;
+    padding: 3px;
+    float: right;
 }
 ul.properties {
     overflow: hidden;
@@ -298,6 +315,12 @@ ul.moreproperties li {
 ul.comments {
     clear: both;
     margin-top: 10px;
+}
+.full ul.comments {
+    margin-left: 0;
+}
+.full ul.comments li {
+    padding-left: 25px;
 }
 ul.comments li {
     list-style: none;

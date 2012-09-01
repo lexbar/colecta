@@ -53,7 +53,7 @@ class RouteController extends Controller
     }
     public function mapAction($id)
     {
-        $cachePath = __DIR__ . '/../../../../web/uploads/maps/' . $id ;
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id ;
         
         if(file_exists($cachePath))
         {
@@ -70,7 +70,7 @@ class RouteController extends Controller
             $n = count($routetrack);
             if($n > 0) 
             {
-                $url = "http://maps.google.com/maps/api/staticmap?size=490x240&maptype=terrain&markers=color:red%7C".$routetrack[0]->getLatitude().",".$routetrack[0]->getLongitude()."&sensor=false&path=color:0xff0000|weight:3";
+                $url = "http://maps.google.com/maps/api/staticmap?size=500x240&maptype=terrain&markers=color:red%7C".$routetrack[0]->getLatitude().",".$routetrack[0]->getLongitude()."&sensor=false&path=color:0xff0000|weight:3";
                 $step = floor($n / 60);
                 for($i = 0; $i < $n; $i += $step)
                 {

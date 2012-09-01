@@ -3,7 +3,7 @@
 {% block posts 'active' %}
 
 {% block article %}
-
+<div class="post full">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
 
     <h2>{{ item.name }}</h2>
@@ -11,5 +11,5 @@
     <p>{{ item.text | nl2br }}</p>
 
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
-
+</div>
 {% endblock %}

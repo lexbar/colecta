@@ -35,6 +35,8 @@
         <span class="hour">{{ item.dateini | date('H:i') }}</span>
     </div>
     
+    <button class="btn btn-small pull-right" type="button">{% if item.dateini | date('U') > 'now' | date('U') %}Voy a asistir{% else %}He asistido{% endif %}</button>
+    
     <h2>{{ item.name }}</h2>
     <p>{{ item.description | nl2br }}</p>
     

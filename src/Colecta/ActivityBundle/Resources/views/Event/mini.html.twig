@@ -1,4 +1,7 @@
 <div class="event mini">
+    
+    <button class="btn btn-small pull-right" type="button">{% if item.dateini | date('U') > 'now' | date('U') %}Voy a asistir{% else %}He asistido{% endif %}</button>
+    
     <h2><a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
     <div class="date">
         <span class="weekday">{{ item.dateini | date('l') | replace ({

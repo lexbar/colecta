@@ -205,16 +205,6 @@
         map.setCenter(center);
     }
     
-    function toggleDropdown() {
-        if($('#dropdown').css('display') == 'block'){
-            $('#dropdown').css('display','none'); 
-            $('#ddarrow').removeClass('icon-chevron-up').addClass('icon-chevron-down');
-        } else {
-            $('#dropdown').css('display','block');
-            $('#ddarrow').removeClass('icon-chevron-down').addClass('icon-chevron-up');
-        }
-    }
-    
     </script>
     
 {% endblock %}
@@ -224,8 +214,8 @@
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
     
     <div class="dropdown pull-right">
-        <button class="btn btn-small btn-primary pull-right" type="button" onClick="toggleDropdown()">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
+        <button class="btn btn-small btn-primary pull-right" type="button" onClick="return false;">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
+        <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
             <li><a tabindex="-1" href="#">GPX</a></li>
             <li><a tabindex="-1" href="#">KML</a></li>
             <li><a tabindex="-1" href="#">PLT</a></li>

@@ -3,6 +3,7 @@
 {% block polls 'active' %}
 
 {% block article %}    
+<div class="poll full">
     {% set totalvotes = 0 %}
     {% set hasvoted = false %}
     {% set votedoption = {'Text':''} %}
@@ -49,4 +50,5 @@
         {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
         
     </div>
+</div>
 {% endblock %}
