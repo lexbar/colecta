@@ -261,6 +261,8 @@ ul.moreproperties li {
 .event .date {
     float: left;
     margin: 0 20px 15px 25px;
+    padding-bottom: 6px;
+    cursor: default;
     text-align: center;
     color: #000;
     background-color: #f7f7f7;
