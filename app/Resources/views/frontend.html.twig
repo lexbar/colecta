@@ -54,13 +54,32 @@
 </div>
 
 <div class="span3" id="userbar">
-    <p class="myself">{% if app.user %}<img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}">Salir</a>{% else %}Haz <a href="{{ path('userLogin') }}">login</a>{% endif %}</p>
     {% if app.user %}
-        {% for notification in colectauser.notDismissedNotifications %}
+    
+    <p class="myself"><img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}">Salir</a></p>
+    
+    {% for notification in colectauser.notDismissedNotifications %}
             <p class="alert alert-block"><a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{{ notification.text | raw }}</p>
         {% endfor %}
         
         <p><a class="btn btn-large btn-block btn-mini" href="{{ path('userNotifications') }}">Ver todas mis notificaciones &raquo;</a></p>
+    
+    {% else %}    
+    
+    <form class="well" action="{{ path('userLoginCheck') }}" method="post">
+        <strong>Iniciar sesión</strong>
+        
+        <p><input type="text" class="input-medium" id="username" name="_username" placeholder="Email" value=""></p>
+        
+        <p><input type="password" id="password" name="_password" class="input-medium" placeholder="Contraseña"></p>
+        
+        <p><label for="remember_me" class="checkbox">
+            <input id="remember_me" name="_remember_me" type="checkbox" checked /> Recuerdame
+        </label></p>
+        
+        <p><button type="submit" name="login" class="btn">Acceder</button></p>
+    </form>
+    
     {% endif %}
     
     <div class="ads"><img src="//www.google.com/help/hc/images/adsense_185666_adformat-display_200x200_en.jpg" style="border:1px solid black" alt="200 x 200"><br></div>
