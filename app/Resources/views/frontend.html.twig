@@ -56,13 +56,17 @@
 <div class="span3" id="userbar">
     {% if app.user %}
     
-    <p class="myself"><img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}">Salir</a></p>
-    
-    {% for notification in colectauser.notDismissedNotifications %}
+        <p class="myself"><img src="{{ app.user.avatar }}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}">Salir</a></p>
+        
+        {% set notifications = colectauser.notDismissedNotifications | length %}
+        <p>
+            <a class="btn btn-mini" href="/notifications/"><i class="icon-envelope"></i> <span class="label label-important" style="font-size: 10px;">3</span> Mensajes</a> 
+            <a class="btn btn-mini" href="/notifications/"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a>
+        </p>
+        
+        {% for notification in colectauser.notDismissedNotifications %}
             <p class="alert alert-block"><a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{{ notification.text | raw }}</p>
         {% endfor %}
-        
-        <p><a class="btn btn-large btn-block btn-mini" href="{{ path('userNotifications') }}">Ver todas mis notificaciones &raquo;</a></p>
     
     {% else %}    
     
