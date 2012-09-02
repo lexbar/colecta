@@ -1,5 +1,5 @@
-ColectaBackendBundle:
-    resource: "@ColectaBackendBundle/Resources/config/routing.yml"
+ColectaIntranetBundle:
+    resource: "@ColectaIntranetBundle/Resources/config/routing.yml"
     prefix:   /
 
 ColectaActivityBundle:

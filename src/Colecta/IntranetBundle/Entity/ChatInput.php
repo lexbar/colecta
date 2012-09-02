@@ -1,11 +1,11 @@
 <?php
 
-namespace Colecta\BackendBundle\Entity;
+namespace Colecta\IntranetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Colecta\BackendBundle\Entity\ChatInput
+ * Colecta\IntranetBundle\Entity\ChatInput
  *
  * @ORM\Table()
  * @ORM\Entity

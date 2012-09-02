@@ -1,11 +1,11 @@
 <?php
 
-namespace Colecta\BackendBundle\Entity;
+namespace Colecta\IntranetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Colecta\BackendBundle\Entity\Vehicle
+ * Colecta\IntranetBundle\Entity\Vehicle
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -144,9 +144,9 @@ class Vehicle
     /**
      * Add vehicleTrips
      *
-     * @param Colecta\BackendBundle\Entity\VehicleTrip $vehicleTrips
+     * @param Colecta\IntranetBundle\Entity\VehicleTrip $vehicleTrips
      */
-    public function addVehicleTrip(\Colecta\BackendBundle\Entity\VehicleTrip $vehicleTrips)
+    public function addVehicleTrip(\Colecta\IntranetBundle\Entity\VehicleTrip $vehicleTrips)
     {
         $this->vehicleTrips[] = $vehicleTrips;
     }

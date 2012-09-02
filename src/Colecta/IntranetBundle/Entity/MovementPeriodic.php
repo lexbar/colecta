@@ -1,16 +1,16 @@
 <?php
 
-namespace Colecta\BackendBundle\Entity;
+namespace Colecta\IntranetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Colecta\BackendBundle\Entity\Movement
+ * Colecta\IntranetBundle\Entity\MovementPeriodic
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Movement
+class MovementPeriodic
 {
     /**
      * @var integer $id
@@ -29,18 +29,25 @@ class Movement
     private $amount;
 
     /**
-     * @var float $balance
+     * @var string $monthdayrepeat
      *
-     * @ORM\Column(name="balance", type="float")
+     * @ORM\Column(name="monthdayrepeat", type="string", length=255)
      */
-    private $balance;
+    private $monthdayrepeat;
 
     /**
-     * @var datetime $date
+     * @var string $weekdayrepeat
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="weekdayrepeat", type="string", length=255)
      */
-    private $date;
+    private $weekdayrepeat;
+
+    /**
+     * @var string $monthrepeat
+     *
+     * @ORM\Column(name="monthrepeat", type="string", length=255)
+     */
+    private $monthrepeat;
 
     /**
      * @var string $concept
@@ -54,12 +61,6 @@ class Movement
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
     */
     private $user;
-
-    /**
-    * @ORM\ManyToOne(targetEntity="Colecta\BackendBundle\Entity\MovementCategory")
-    * @ORM\JoinColumn(name="category", referencedColumnName="id") 
-    */
-    private $movementCategory;
 
 
     /**
@@ -93,43 +94,63 @@ class Movement
     }
 
     /**
-     * Set balance
+     * Set monthdayrepeat
      *
-     * @param float $balance
+     * @param string $monthdayrepeat
      */
-    public function setBalance($balance)
+    public function setMonthdayrepeat($monthdayrepeat)
     {
-        $this->balance = $balance;
+        $this->monthdayrepeat = $monthdayrepeat;
     }
 
     /**
-     * Get balance
+     * Get monthdayrepeat
      *
-     * @return float 
+     * @return string 
      */
-    public function getBalance()
+    public function getMonthdayrepeat()
     {
-        return $this->balance;
+        return $this->monthdayrepeat;
     }
 
     /**
-     * Set date
+     * Set weekdayrepeat
      *
-     * @param datetime $date
+     * @param string $weekdayrepeat
      */
-    public function setDate($date)
+    public function setWeekdayrepeat($weekdayrepeat)
     {
-        $this->date = $date;
+        $this->weekdayrepeat = $weekdayrepeat;
     }
 
     /**
-     * Get date
+     * Get weekdayrepeat
      *
-     * @return datetime 
+     * @return string 
      */
-    public function getDate()
+    public function getWeekdayrepeat()
     {
-        return $this->date;
+        return $this->weekdayrepeat;
+    }
+
+    /**
+     * Set monthrepeat
+     *
+     * @param string $monthrepeat
+     */
+    public function setMonthrepeat($monthrepeat)
+    {
+        $this->monthrepeat = $monthrepeat;
+    }
+
+    /**
+     * Get monthrepeat
+     *
+     * @return string 
+     */
+    public function getMonthrepeat()
+    {
+        return $this->monthrepeat;
     }
 
     /**
@@ -170,25 +191,5 @@ class Movement
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * Set movementCategory
-     *
-     * @param string $movementCategory
-     */
-    public function setMovementCategory($movementCategory)
-    {
-        $this->movementCategory = $movementCategory;
-    }
-
-    /**
-     * Get movementCategory
-     *
-     * @return string 
-     */
-    public function getMovementCategory()
-    {
-        return $this->movementCategory;
     }
 }

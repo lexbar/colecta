@@ -1,11 +1,11 @@
 <?php
 
-namespace Colecta\BackendBundle\Entity;
+namespace Colecta\IntranetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Colecta\BackendBundle\Entity\LotteryCampaign
+ * Colecta\IntranetBundle\Entity\LotteryCampaign
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -118,9 +118,9 @@ class LotteryCampaign
     /**
      * Add lotteryShreds
      *
-     * @param Colecta\BackendBundle\Entity\LotteryShred $lotteryShreds
+     * @param Colecta\IntranetBundle\Entity\LotteryShred $lotteryShreds
      */
-    public function addLotteryShred(\Colecta\BackendBundle\Entity\LotteryShred $lotteryShreds)
+    public function addLotteryShred(\Colecta\IntranetBundle\Entity\LotteryShred $lotteryShreds)
     {
         $this->lotteryShreds[] = $lotteryShreds;
     }

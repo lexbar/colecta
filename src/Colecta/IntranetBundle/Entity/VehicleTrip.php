@@ -1,11 +1,11 @@
 <?php
 
-namespace Colecta\BackendBundle\Entity;
+namespace Colecta\IntranetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Colecta\BackendBundle\Entity\VehicleTrip
+ * Colecta\IntranetBundle\Entity\VehicleTrip
  *
  * @ORM\Table()
  * @ORM\Entity

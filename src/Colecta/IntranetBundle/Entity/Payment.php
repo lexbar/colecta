@@ -1,11 +1,11 @@
 <?php
 
-namespace Colecta\BackendBundle\Entity;
+namespace Colecta\IntranetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Colecta\BackendBundle\Entity\Payment
+ * Colecta\IntranetBundle\Entity\Payment
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -170,9 +170,9 @@ class Payment
     /**
      * Add paymentRequests
      *
-     * @param Colecta\BackendBundle\Entity\PaymentRequest $paymentRequests
+     * @param Colecta\IntranetBundle\Entity\PaymentRequest $paymentRequests
      */
-    public function addPaymentRequest(\Colecta\BackendBundle\Entity\PaymentRequest $paymentRequests)
+    public function addPaymentRequest(\Colecta\IntranetBundle\Entity\PaymentRequest $paymentRequests)
     {
         $this->paymentRequests[] = $paymentRequests;
     }

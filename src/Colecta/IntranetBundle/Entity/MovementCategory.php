@@ -1,11 +1,11 @@
 <?php
 
-namespace Colecta\BackendBundle\Entity;
+namespace Colecta\IntranetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Colecta\BackendBundle\Entity\MovementCategory
+ * Colecta\IntranetBundle\Entity\MovementCategory
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -118,9 +118,9 @@ class MovementCategory
     /**
      * Add movements
      *
-     * @param Colecta\BackendBundle\Entity\Movement $movements
+     * @param Colecta\IntranetBundle\Entity\Movement $movements
      */
-    public function addMovement(\Colecta\BackendBundle\Entity\Movement $movements)
+    public function addMovement(\Colecta\IntranetBundle\Entity\Movement $movements)
     {
         $this->movements[] = $movements;
     }
