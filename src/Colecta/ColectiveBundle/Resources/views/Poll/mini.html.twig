@@ -14,7 +14,9 @@
     
 <div class="poll mini">
     <h2><a href="{{ path('ColectaPollView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
-    <p>{{ item.summary }}</p>
+    
+    <p>{{ item.summary | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
+    
     {% if item.options %}
     <form action="{{ path('ColectaPollVote', { 'slug' : item.slug }) }}" method="POST">
     <ul class="unstyled">
