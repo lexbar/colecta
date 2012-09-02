@@ -1,0 +1,37 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <h1><a class="brand" href="/">Colecta</a></h1>
+            
+            <ul class="nav">
+              <li><a href="/">Web</a></li>
+              <li class="active"><a href="#">El Club</a></li>
+              <li><a href="#">Administración</a></li>
+            </ul>
+            
+            <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
+                <div class="input-append">
+                    <input type="text" class="input-medium search-query" name="search" value="{{ app.request.get('search') }}">
+                    <button type="submit" class="btn">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <ul class="nav nav-tabs"> 
+        <li><a class="{% block home '' %}" href="">Chat</a></li>
+        <li><a class="{% block posts '' %}" href="">Actividades</a></li>
+        <li><a class="{% block events '' %}" href="">Pagos</li>  
+        <li><a class="{% block routes '' %}" href="">Lotería</li>
+        <li><a class="{% block places '' %}" href="">Vehículos</li>
+        <li><a class="{% block files '' %}" href="">Contabilidad</li>
+    </ul> 
+        
+{% block content %}{% endblock %}
+</div>
+{% endblock %}

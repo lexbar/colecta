@@ -67,7 +67,7 @@ h2 {
     float:right;
 }
 .well.login {
-    padding: 7px 14px 2px;
+    padding: 7px 0 2px 14px;
 }
 .well.login input {
     margin: 4px 0 0;
