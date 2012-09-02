@@ -26,7 +26,6 @@
             '12':'Diciembre'
         }) }}</span>
         <span class="hour">{{ item.dateini | date('H:i') }}</span>
-        <button class="btn btn-small" type="button">{% if item.dateini | date('U') > 'now' | date('U') %}Voy a asistir{% else %}He asistido{% endif %}</button>
     </div>
     
     <h2><a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>

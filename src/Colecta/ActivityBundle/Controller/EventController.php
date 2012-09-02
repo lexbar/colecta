@@ -5,6 +5,7 @@ namespace Colecta\ActivityBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ActivityBundle\Entity\Event;
+use Colecta\ActivityBundle\Entity\EventAssistance;
 
 
 class EventController extends Controller
@@ -106,6 +107,41 @@ class EventController extends Controller
             $event->setStatus('');
             
             $em->persist($event); 
+            $em->flush();
+        }
+        
+        $referer = $this->get('request')->headers->get('referer');
+        
+        if(empty($referer))
+        {
+            $referer = $this->generateUrl('ColectaEventIndex');
+        }
+        
+        return new RedirectResponse($referer);
+    }
+    public function assistanceAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+        
+        if(!$user) 
+        {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+        }
+        elseif(!$item)
+        {
+            $this->get('session')->setFlash('error', 'No existe el evento');
+        }
+        else
+        {
+            $assistance = new EventAssistance();
+            $assistance->setStatus('');
+            $assistance->setUser($user);
+            $assistance->setEvent($item);
+            
+            $em->persist($assistance); 
             $em->flush();
         }
         

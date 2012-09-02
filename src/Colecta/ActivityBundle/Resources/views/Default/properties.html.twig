@@ -7,7 +7,7 @@
     <li{% if item.uphill > 999 %} class="small"{% endif %}><strong>{{ item.uphill }} m</strong> Subida</li>
     {% endif %}
     
-    {% if item.uphill > 0%}
+    {% if item.type != 'Activity/Event' and item.downhill > 0%}
     <li{% if item.downhill > 999 %} class="small"{% endif %}><strong>{{ item.downhill }} m</strong> Bajada</li>
     {% endif %}
     
@@ -34,4 +34,14 @@
     {% if item.difficulty != '' %}
     <li><strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" title="{% set difficulty = item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) %}{{ difficulty }}" alt="{{ difficulty }}"></strong> Dificultad</li>
     {% endif%}
+    {% if app.user and item.type == 'Activity/Event' %}
+        {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
+        {% set assists = false %}
+        {% for a in item.assistances %}
+            {% if a.user == app.user %}
+                {% set assists = true %}
+            {% endif %}
+        {% endfor %}
+        <li class="assistance"><button onClick="window.location='{{ path('ColectaEventAsist',{'slug':item.slug}) }}'" class="btn btn-medium{%if assists %} btn-success{% elseif not haspassed %} btn-primary{% endif %}" type="button">{% if not haspassed %}{% if assists %}Vas{% else %}Voy{% endif %} a asistir{% else %}{% if assists %}Has{% else %}He{% endif %} asistido{% endif %}</button></li>
+    {% endif %}
 </ul>

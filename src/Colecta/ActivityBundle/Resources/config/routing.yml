@@ -22,6 +22,9 @@ ColectaEventPage:
 ColectaEventView:
     pattern:  /event/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }
+ColectaEventAsist:
+    pattern:  /event/{slug}/asist/
+    defaults: { _controller: ColectaActivityBundle:Event:assistance }
 ColectaRouteUpload:
     pattern:  /upload/route/
     defaults: { _controller: ColectaActivityBundle:Route:upload }
