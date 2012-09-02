@@ -60,7 +60,7 @@
         
         {% set notifications = colectauser.notDismissedNotifications | length %}
         <p>
-            <a class="btn btn-mini" href="/notifications/"><i class="icon-envelope"></i> <span class="label label-important" style="font-size: 10px;">3</span> Mensajes</a> 
+            <a class="btn btn-mini" href="/notifications/"><i class="icon-envelope"></i>{% if 0 %} <span class="label label-important" style="font-size: 10px;">3</span>{% endif %} Mensajes</a> 
             <a class="btn btn-mini" href="/notifications/"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a>
         </p>
         

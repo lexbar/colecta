@@ -36,10 +36,9 @@ class ChatInput
     private $date;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
 

@@ -36,9 +36,7 @@ class LotteryCampaign
     private $date;
 
     /**
-     * @var string $lotteryShreds
-     *
-     * @ORM\Column(name="lotteryShreds", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="LotteryShred", mappedBy="lotteryCampaign_id")
      */
     private $lotteryShreds;
 
@@ -111,5 +109,19 @@ class LotteryCampaign
     public function getLotteryShreds()
     {
         return $this->lotteryShreds;
+    }
+    public function __construct()
+    {
+        $this->lotteryShreds = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add lotteryShreds
+     *
+     * @param Colecta\BackendBundle\Entity\LotteryShred $lotteryShreds
+     */
+    public function addLotteryShred(\Colecta\BackendBundle\Entity\LotteryShred $lotteryShreds)
+    {
+        $this->lotteryShreds[] = $lotteryShreds;
     }
 }

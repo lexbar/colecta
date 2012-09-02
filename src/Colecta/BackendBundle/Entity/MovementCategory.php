@@ -36,9 +36,7 @@ class MovementCategory
     private $date;
 
     /**
-     * @var string $movements
-     *
-     * @ORM\Column(name="movements", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Movement", mappedBy="category")
      */
     private $movements;
 
@@ -111,5 +109,19 @@ class MovementCategory
     public function getMovements()
     {
         return $this->movements;
+    }
+    public function __construct()
+    {
+        $this->movements = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add movements
+     *
+     * @param Colecta\BackendBundle\Entity\Movement $movements
+     */
+    public function addMovement(\Colecta\BackendBundle\Entity\Movement $movements)
+    {
+        $this->movements[] = $movements;
     }
 }

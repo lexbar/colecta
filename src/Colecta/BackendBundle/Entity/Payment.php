@@ -36,24 +36,20 @@ class Payment
     private $amount;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
     /**
-     * @var string $paymentRequests
-     *
-     * @ORM\Column(name="paymentRequests", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="PaymentRequest", mappedBy="payment_id")
      */
     private $paymentRequests;
 
     /**
-     * @var string $event
-     *
-     * @ORM\Column(name="event", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\ActivityBundle\Entity\Event")
+    * @ORM\JoinColumn(name="event_id", referencedColumnName="id") 
+    */
     private $event;
 
 
@@ -165,5 +161,19 @@ class Payment
     public function getEvent()
     {
         return $this->event;
+    }
+    public function __construct()
+    {
+        $this->paymentRequests = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add paymentRequests
+     *
+     * @param Colecta\BackendBundle\Entity\PaymentRequest $paymentRequests
+     */
+    public function addPaymentRequest(\Colecta\BackendBundle\Entity\PaymentRequest $paymentRequests)
+    {
+        $this->paymentRequests[] = $paymentRequests;
     }
 }

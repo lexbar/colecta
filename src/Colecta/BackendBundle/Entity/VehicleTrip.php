@@ -36,24 +36,21 @@ class VehicleTrip
     private $event;
 
     /**
-     * @var string $confirmed
-     *
-     * @ORM\Column(name="confirmed", type="string", length=255)
+     * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinTable(name="confirmed")
      */
     private $confirmed;
 
     /**
-     * @var string $requested
-     *
-     * @ORM\Column(name="requested", type="string", length=255)
+     * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinTable(name="requested")
      */
     private $requested;
 
     /**
-     * @var string $vehicle
-     *
-     * @ORM\Column(name="vehicle", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Vehicle")
+    * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id") 
+    */
     private $vehicle;
 
 
@@ -165,5 +162,20 @@ class VehicleTrip
     public function getVehicle()
     {
         return $this->vehicle;
+    }
+    public function __construct()
+    {
+        $this->confirmed = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->requested = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add confirmed
+     *
+     * @param Colecta\UserBundle\Entity\User $confirmed
+     */
+    public function addUser(\Colecta\UserBundle\Entity\User $confirmed)
+    {
+        $this->confirmed[] = $confirmed;
     }
 }

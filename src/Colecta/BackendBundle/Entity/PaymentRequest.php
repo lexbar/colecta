@@ -36,17 +36,15 @@ class PaymentRequest
     private $paymentdate;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
     /**
-     * @var string $payment
-     *
-     * @ORM\Column(name="payment", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Payment")
+    * @ORM\JoinColumn(name="payment_id", referencedColumnName="id") 
+    */
     private $payment;
 
 

@@ -50,17 +50,15 @@ class Movement
     private $concept;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
     /**
-     * @var string $movementCategory
-     *
-     * @ORM\Column(name="movementCategory", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\BackendBundle\Entity\MovementCategory")
+    * @ORM\JoinColumn(name="category", referencedColumnName="id") 
+    */
     private $movementCategory;
 
 

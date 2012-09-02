@@ -36,16 +36,13 @@ class Vehicle
     private $seats;
 
     /**
-     * @var string $user
-     *
-     * @ORM\Column(name="user", type="string", length=255)
-     */
+    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    */
     private $user;
 
     /**
-     * @var string $vehicleTrips
-     *
-     * @ORM\Column(name="vehicleTrips", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="VehicleTrip", mappedBy="vehicle_id")
      */
     private $vehicleTrips;
 
@@ -138,5 +135,19 @@ class Vehicle
     public function getVehicleTrips()
     {
         return $this->vehicleTrips;
+    }
+    public function __construct()
+    {
+        $this->vehicleTrips = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add vehicleTrips
+     *
+     * @param Colecta\BackendBundle\Entity\VehicleTrip $vehicleTrips
+     */
+    public function addVehicleTrip(\Colecta\BackendBundle\Entity\VehicleTrip $vehicleTrips)
+    {
+        $this->vehicleTrips[] = $vehicleTrips;
     }
 }
