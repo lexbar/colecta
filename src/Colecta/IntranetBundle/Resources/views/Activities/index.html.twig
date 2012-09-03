@@ -95,12 +95,13 @@
     </script>
 {% endblock %}
 
-{% block content %}
+{% block submenu %}
     <ul class="sub nav nav-pills">
       <li class="active"><a href="{{ path('ColectaActivitiesIndex') }}">Mis actividades</a></li>
       <li><a href="{{ path('ColectaActivitiesRank') }}">Ranking</a></li>
     </ul>
-    
+{% endblock %}
+{% block content %}    
     <div class="row">
         <div class="span8">
             <div id="chart"></div>

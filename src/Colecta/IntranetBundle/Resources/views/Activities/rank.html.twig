@@ -2,11 +2,13 @@
 
 {% block activities 'active' %}
 
-{% block content %}
+{% block submenu %}
     <ul class="sub nav nav-pills">
       <li><a href="{{ path('ColectaActivitiesIndex') }}">Mis actividades</a></li>
       <li class="active"><a href="{{ path('ColectaActivitiesRank') }}">Ranking</a></li>
     </ul>
+{% endblock %}
+{% block content %}  
 
 
     <table class="table table-condensed table-hover">

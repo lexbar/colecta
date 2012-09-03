@@ -2,26 +2,107 @@
 
 {% block movement 'active' %}
 
+{% block javascripts %}    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script src="/js/highcharts.js"></script>
+    <script>
+    
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart',
+                spacingRight: 0,
+                spacingLeft: 0, 
+                spacingTop: 6,
+                spacingBottom: 4,
+                type: 'spline'
+            },
+            credits: {
+                enabled : false
+            },
+            legend: {
+                enabled: false
+            },
+            title: {
+                text: null
+            },
+            subtitle: {
+                text: null
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Balance (€)'
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>Balance:</b><br/>'+ this.y +' €';
+                }
+            },
+            plotOptions: {
+            },
+            
+            series: [{data: [{% set i = 1 %}{% for movement in movements %}{% if loop.last or movements[i].date | date('Ymd') != movement.date | date('Ymd') %}{% if not loop.first %},{% endif %}[Date.UTC({{ movement.date | date('Y,m,d') }}), {{ movement.balance }}]{% endif %}{% set i = i + 1 %}{% endfor %}] }]
+        });
+    });
+    </script>
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="span9">
             <div id="chart"></div>
             
             <table class="table table-condensed table-hover">
-                <thead style="text-align:left;"><tr><th class="span2">Fecha</th><th class="span2">Movimiento</th><th class="span2">Balance</th><th class="span3">Concepto</th></tr></thead>
+                <thead style="text-align:left;"><tr><th class="span2">Fecha</th><th class="span3">Concepto</th><th class="span2">Movimiento</th><th class="span2">Balance</th></tr></thead>
+                {% for movement in movements %}
                 <tr>
-                    <td>2012-08-12</td>
-                    <td><strong style="color:darkred">-12€</strong></td>
-                    <td>450€</td>
-                    <td>Comprar comida para la fiesta de fin de año</td>
+                    <td>{{ movement.date | date('Y-m-d') }}</td>
+                    <td>{{ movement.concept }}</td>
+                    <td><strong style="color:{% if movement.amount < 0 %}darkred{% else %}darkgreen{% endif %}">{{ movement.amount }} €</strong></td>
+                    <td>{{ movement.balance }} €</td>
                 </tr>
+                {% endfor %}
             </table>
         </div>
         
         <div class="span3">
             <div class="well">
-                <h2>Balance: 2304,22€</h2>
+                <h2>Balance: {{ movements[movements|length - 1].balance }}€</h2>
             </div>
+            {% if app.user %}
+            <form method="post" action="{{ path('ColectaMovementAdd') }}">
+              <legend>Nuevo movimiento</legend>
+              
+              <label for="movementCategory">Categoría:</label>
+              <select id="movementCategory" name="category">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+              </select>
+              
+              <label for="movementConcept">Concepto:</label>
+              <input id="movementConcept" type="text" name="concept">
+              
+              <label for="movementDate">Fecha:</label>
+              <input id="movementConcept" type="text" name="date" class="span2" value="{{ 'today' | date('Y/m/d') }}">
+              
+              <label for="movementConcept">Importe:</label>
+              <div class="input-append">
+                <input id="movementConcept" type="text" name="amount" class="span1"><span class="add-on"> €</span>
+              </div>
+              <span class="help-block">Introduzca un importe negativo para gastos.</span>
+              
+              <label class="checkbox">
+                <input type="checkbox"> Hacer periódico
+              </label>
+              <button type="submit" class="btn">Submit</button>
+            </form>
+            {% endif %}
         </div>
     </div>
 {% endblock%}

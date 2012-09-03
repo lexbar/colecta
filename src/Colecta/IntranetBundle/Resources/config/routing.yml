@@ -22,3 +22,6 @@ ColectaVehicleIndex:
 ColectaMovementIndex:
     pattern:  /contabilidad/
     defaults: { _controller: ColectaIntranetBundle:Movement:index }
+ColectaMovementAdd:
+    pattern:  /contabilidad/add/
+    defaults: { _controller: ColectaIntranetBundle:Movement:add }

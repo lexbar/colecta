@@ -8,8 +8,8 @@
             
             <ul class="nav">
               <li class="divider-vertical"></li>
-              <li><a href="{{ path('ColectaChatIndex') }}">El Club</a></li>
-              <li><a href="#">Administración</a></li>
+              {% if app.user %}<li><a href="{{ path('ColectaChatIndex') }}">El Club</a></li>
+              <li><a href="#">Administración</a></li>{% endif %}
             </ul>
             
             <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
