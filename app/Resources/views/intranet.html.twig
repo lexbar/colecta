@@ -6,11 +6,13 @@
         <div class="container">
             <h1><a class="brand" href="/">Colecta</a></h1>
             
+            {% if app.user %}
             <ul class="nav">
               <li class="divider-vertical"></li>
-              {% if app.user %}<li class="active"><a href="{{ path('ColectaChatIndex') }}">El Club</a></li>
-              <li><a href="#">Administración</a></li>{% endif %}
+              <li class="active"><a href="{{ path('ColectaChatIndex') }}">El Club</a></li>
+              <li><a href="#">Administración</a></li>
             </ul>
+            {% endif %}
             
             <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
                 <div class="input-append">
