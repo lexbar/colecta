@@ -1,0 +1,128 @@
+{% extends '::intranet.html.twig' %}
+
+{% block activities 'active' %}
+
+{% block javascripts %}    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script src="/js/highcharts.js"></script>
+    <script>
+    
+    {% set last = events | length - 1 %}
+    {% if last > 0 and events[0].dateini | date('Y') != events[last].dateini | date('Y') %}
+        {% set printyear = true %}
+    {% else %}
+        {% set printyear = false %}
+    {% endif %}
+    
+    {% set categories = '' %}
+    {% set data = '' %}
+    {% set lastMonthName, thisMonthName = '', '' %}
+    {% set lastMonthValue = 0 %}
+    
+    {% for event in events %}
+    
+        {# NOMBRE DEL MES #}
+        {% set thisMonthName = event.dateini | date('m') | replace({'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'}) %}
+        {% if printyear %}
+            {% set thisMonthName = thisMonthName ~ ' ' ~ event.dateini | date('Y') %}
+        {% endif %}
+        
+        {% if lastMonthName != thisMonthName %}
+            {% if not loop.first %}
+                {% if categories != '' %}{% set categories = categories ~ ',' %}{% endif %}
+                {% if data != '' %}{% set data = data ~ ',' %}{% endif %}
+                
+                {% set categories = categories ~ "'" ~ lastMonthName ~ "'" %}
+                {% set data = data ~ lastMonthValue  %}
+            {% endif %}
+            {% set lastMonthName = thisMonthName %}
+            {% set lastMonthValue = 0 %}
+        {% endif %}
+        
+        {% set lastMonthValue = lastMonthValue + event.distance %}
+    {% endfor %}
+    
+    {# LAST CHANCE #}
+    {% if lastMonthValue > 0 %}
+        {% if categories != '' %}{% set categories = categories ~ ',' %}{% endif %}
+        {% if data != '' %}{% set data = data ~ ',' %}{% endif %}
+        
+        {% set categories = categories ~ "'" ~ lastMonthName ~ "'" %}
+        {% set data = data ~ lastMonthValue  %}
+    {% endif %}
+    
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart',
+                
+                spacingRight: 0,
+                spacingLeft: 0, 
+                spacingTop: 6,
+                spacingBottom: 4,
+                type: 'column'
+            },
+            credits: {
+                enabled : false
+            },
+            legend: {
+                enabled: false
+            },
+            title: {
+                text: null
+            },
+            subtitle: {
+                text: null
+            },
+            xAxis: {
+                categories: [{{ categories | raw }}]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Distancia (km)'
+                }
+            },
+            tooltip: {
+            },
+            plotOptions: {
+            },
+            
+            series: [{data: [{{ data }}] }]
+        });
+    });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <ul class="sub nav nav-pills">
+      <li class="active"><a href="{{ path('ColectaActivitiesIndex') }}">Mis actividades</a></li>
+      <li><a href="{{ path('ColectaActivitiesRank') }}">Ranking</a></li>
+    </ul>
+    
+    <div class="row">
+        <div class="span8">
+            <div id="chart"></div>
+            
+            <table class="table table-condensed table-hover">
+            <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distania</th></tr></thead>
+            {% set accumulated = 0%}
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.dateini | date('Y/m/d') }}</td>
+                    <td><a href="{{ path('ColectaEventView', { 'slug': event.slug }) }}">{{ event.name }}</a></td>
+                    <td>{{ event.distance | number_format }} km</td>
+                </tr>
+                {% set accumulated = accumulated + event.distance %}
+            {% endfor %}
+            </table>
+        </div>
+        
+        <div class="span4">
+            <div class="well">
+                <h2>Acumulado: {{ accumulated }} km</h2>
+            </div>
+        </div>
+    </div>
+{% endblock%}

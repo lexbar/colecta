@@ -24,7 +24,7 @@ class ChatInput
     /**
      * @var string $text
      *
-     * @ORM\Column(name="text", type="string", length=250)
+     * @ORM\Column(name="text", type="text")
      */
     private $text;
 

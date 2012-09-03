@@ -100,7 +100,7 @@ class EventController extends Controller
             $event->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
             $event->setShowhours(false);
             $event->setDescription($request->get('description'));
-            $event->setDistance($request->get('distance'));
+            $event->setDistance(str_replace(',','.', $request->get('distance')));
             $event->setUphill($request->get('uphill'));
             $event->setDownhill($request->get('downhill'));
             $event->setDifficulty($request->get('difficulty'));

@@ -1,0 +1,27 @@
+{% extends '::intranet.html.twig' %}
+
+{% block movement 'active' %}
+
+{% block content %}
+    <div class="row">
+        <div class="span9">
+            <div id="chart"></div>
+            
+            <table class="table table-condensed table-hover">
+                <thead style="text-align:left;"><tr><th class="span2">Fecha</th><th class="span2">Movimiento</th><th class="span2">Balance</th><th class="span3">Concepto</th></tr></thead>
+                <tr>
+                    <td>2012-08-12</td>
+                    <td><strong style="color:darkred">-12€</strong></td>
+                    <td>450€</td>
+                    <td>Comprar comida para la fiesta de fin de año</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="span3">
+            <div class="well">
+                <h2>Balance: 2304,22€</h2>
+            </div>
+        </div>
+    </div>
+{% endblock%}

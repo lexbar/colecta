@@ -7,8 +7,8 @@
             <h1><a class="brand" href="/">Colecta</a></h1>
             
             <ul class="nav">
-              <li><a href="/">Web</a></li>
-              <li class="active"><a href="#">El Club</a></li>
+              <li class="divider-vertical"></li>
+              <li class="active"><a href="{{ path('ColectaChatIndex') }}">El Club</a></li>
               <li><a href="#">Administración</a></li>
             </ul>
             
@@ -24,12 +24,12 @@
 
 <div class="container">
     <ul class="nav nav-tabs"> 
-        <li><a class="{% block home '' %}" href="">Chat</a></li>
-        <li><a class="{% block posts '' %}" href="">Actividades</a></li>
-        <li><a class="{% block events '' %}" href="">Pagos</li>  
-        <li><a class="{% block routes '' %}" href="">Lotería</li>
-        <li><a class="{% block places '' %}" href="">Vehículos</li>
-        <li><a class="{% block files '' %}" href="">Contabilidad</li>
+        <li class="{% block chat '' %}"><a href="{{ path('ColectaChatIndex') }}">Chat</a></li>
+        <li class="{% block activities '' %}"><a href="{{ path('ColectaActivitiesIndex') }}">Actividades</a></a></li>
+        <li class="{% block payment '' %}"><a href="{{ path('ColectaPaymentIndex') }}">Pagos</a></li>
+        <li class="{% block lottery '' %}"><a href="{{ path('ColectaLotteryIndex') }}">Lotería</a></li>
+        <li class="{% block vehicle '' %}"><a href="{{ path('ColectaVehicleIndex') }}">Vehículos</a></li>
+        <li class="{% block movement '' %}"><a href="{{ path('ColectaMovementIndex') }}">Contabilidad</a></li>
     </ul> 
         
 {% block content %}{% endblock %}

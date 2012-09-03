@@ -1,0 +1,23 @@
+{% extends '::intranet.html.twig' %}
+
+{% block activities 'active' %}
+
+{% block content %}
+    <ul class="sub nav nav-pills">
+      <li><a href="{{ path('ColectaActivitiesIndex') }}">Mis actividades</a></li>
+      <li class="active"><a href="{{ path('ColectaActivitiesRank') }}">Ranking</a></li>
+    </ul>
+
+
+    <table class="table table-condensed table-hover">
+    <thead><tr><th style="width: 100px;">Total</th><th>Nombre</th><th class="span7">Porcentaje</th></tr></thead>
+    {% set maxkm = kms[users[0].id] %}
+    {% for user in users %}
+        <tr>
+            <td>{{ kms[user.id] | number_format }} km</td>
+            <td><a href="">{{ user.name }}</a></td>
+            <td><div class="progress"><div class="bar" style="width: {{ (kms[user.id] / maxkm * 100) | number_format(1,'.',',') }}%;"></div></div></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock%}

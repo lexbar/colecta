@@ -1,6 +1,6 @@
 ColectaIntranetBundle:
     resource: "@ColectaIntranetBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /intranet/
 
 ColectaActivityBundle:
     resource: "@ColectaActivityBundle/Resources/config/routing.yml"

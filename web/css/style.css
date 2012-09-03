@@ -58,6 +58,9 @@ h2 {
 .navbar form input, .navbar form button.btn {
     margin-top: 4px;
 }
+.sub.nav {
+    margin-top: -15px;
+}
 .myself {
     overflow: hidden;
     border-bottom: 1px solid #CCC;
@@ -360,4 +363,28 @@ ul.comments span {
 }
 ul.comments form {
     margin: 0;
+}
+
+#chatform {
+    overflow: hidden;
+    margin: 15px 0 10px 20px;
+}
+#chatform img, #chatform input, #chatform button {
+    float:left;
+}
+#chatform input {
+    margin: 0 5px;
+}
+#chatstream .span1 {
+    text-align: right;
+}
+#chatstream .span7 {
+    margin-left: 7px;
+    border-bottom: 1px solid #eee;
+}
+#chatstream .row {
+    margin-bottom: 5px;
+}
+#chatstream small {
+    color: #777;
 }

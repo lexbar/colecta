@@ -1,3 +1,24 @@
-ColectaBackendBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ColectaBackendBundle:Default:index }
+ColectaChatIndex:
+    pattern:  /chat/
+    defaults: { _controller: ColectaIntranetBundle:Chat:index }
+ColectaChatPost:
+    pattern:  /chat/post/
+    defaults: { _controller: ColectaIntranetBundle:Chat:post }
+ColectaActivitiesIndex:
+    pattern:  /actividades/
+    defaults: { _controller: ColectaIntranetBundle:Activities:index }
+ColectaActivitiesRank:
+    pattern:  /actividades/rank/
+    defaults: { _controller: ColectaIntranetBundle:Activities:rank }
+ColectaPaymentIndex:
+    pattern:  /pagos/
+    defaults: { _controller: ColectaIntranetBundle:Payment:index }
+ColectaLotteryIndex:
+    pattern:  /loteria/
+    defaults: { _controller: ColectaIntranetBundle:Lottery:index }
+ColectaVehicleIndex:
+    pattern:  /vehiculos/
+    defaults: { _controller: ColectaIntranetBundle:Vehicle:index }
+ColectaMovementIndex:
+    pattern:  /contabilidad/
+    defaults: { _controller: ColectaIntranetBundle:Movement:index }

@@ -123,6 +123,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Comment", mappedBy="user")
      */    
      private $comments;
+     
+     /**
+     * @ORM\OneToMany(targetEntity="Colecta\ActivityBundle\Entity\EventAssistance", mappedBy="user")
+     */    
+     private $assistances;
 
 
     /**
@@ -585,5 +590,25 @@ class User implements UserInterface
         $this->setRegistered(new \DateTime('now'));
         $this->setLastAccess(new \DateTime('now'));
         $this->setSalt('');
+    }
+
+    /**
+     * Add assistances
+     *
+     * @param Colecta\ActivityBundle\Entity\EventAssistance $assistances
+     */
+    public function addEventAssistance(\Colecta\ActivityBundle\Entity\EventAssistance $assistances)
+    {
+        $this->assistances[] = $assistances;
+    }
+
+    /**
+     * Get assistances
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getAssistances()
+    {
+        return $this->assistances;
     }
 }

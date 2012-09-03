@@ -1,0 +1,29 @@
+{% extends '::intranet.html.twig' %}
+
+{% block chat 'active' %}
+
+{% block content %}
+<div class="row">
+    <div class="span8">
+        
+        {% if app.user %}
+        <form method="post" action="{{ path('ColectaChatPost') }}" id="chatform">
+            <img src="{{ app.user.avatar }}" width="30" height="30"> <input type="text" class="span6" name="text"> <button class="btn btn-primary">Enviar</button>
+        </form>
+        {% endif %}
+        
+        <div id="chatstream">
+        {% for m in messages %}
+            <div class="row"><div class="span1"><img src="{{m.user.avatar}}" width="40" height="40"></div><div class="span7"><strong>{{ m.user.name }}:</strong> {{ m.text }}<br><small>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div>
+        {% endfor %}
+        </div>
+        
+    </div>
+    
+    <div class="span4">
+        <div class="well">
+            <h2>Usuarios conectados:</h2>
+        </div>
+    </div>
+</div>
+{% endblock%}

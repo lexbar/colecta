@@ -18,7 +18,7 @@
             'Sunday':'Domingo'
         }) }}</span>
         <span class="monthday">{{ item.dateini | date('d') }}</span> 
-        <span class="month">{{ item.dateini | date('n') | replace({
+        <span class="month">{% set month = item.dateini | date('n') | replace({
             '1':'Enero',
             '2':'Febrero',
             '3':'Marzo',
@@ -31,7 +31,7 @@
             '10':'Octubre',
             '11':'Noviembre',
             '12':'Diciembre'
-        }) }}</span>
+        }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month | slice(0,3) ~ ' ' ~ item.dateini | date('Y') }}{% endif %}</span>
         <span class="hour">{{ item.dateini | date('H:i') }}</span>
     </div>
     
