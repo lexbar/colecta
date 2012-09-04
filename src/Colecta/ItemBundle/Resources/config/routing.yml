@@ -7,6 +7,12 @@ ColectaDashboardPage:
 ColectaSearch:
     pattern:  /search/
     defaults: { _controller: ColectaItemBundle:Default:search }
+ColectaAjaxSearch:
+    pattern:  /ajaxsearch/
+    defaults: { _controller: ColectaItemBundle:Default:ajaxsearch }
+ColectaItemRelate:
+    pattern:  /item/{id}/relate
+    defaults: { _controller: ColectaItemBundle:Default:relate }
 ColectaComment:
     pattern:  /comment/{slug}
     defaults: { _controller: ColectaItemBundle:Comment:comment }
@@ -22,9 +28,13 @@ ColectaPostCreate:
 ColectaPostView:
     pattern:  /post/{slug}
     defaults: { _controller: ColectaItemBundle:Post:view }
+ColectaPostEdit:
+    pattern:  /post/{slug}/edit
+    defaults: { _controller: ColectaItemBundle:Post:edit }
 ColectaCategoryPage:
     pattern:  /category/{slug}/page/{page}
     defaults: { _controller: ColectaItemBundle:Category:page }
 ColectaCategoryView:
     pattern:  /category/{slug}
     defaults: { _controller: ColectaItemBundle:Category:view }
+

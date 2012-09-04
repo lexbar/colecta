@@ -354,7 +354,8 @@ abstract class Item
         {
             foreach($from as $i)
             {
-                $all[intval($i->getDate()->format('U'))] = $i;
+                $item = $i->getItemto();
+                $all[intval($item->getDate()->format('U'))] = $item;
             }
         }
         
@@ -362,7 +363,8 @@ abstract class Item
         {
             foreach($to as $i)
             {
-                $all[intval($i->getDate()->format('U'))] = $i;
+                $item = $i->getItemfrom();
+                $all[intval($item->getDate()->format('U'))] = $item;
             }
         }
         

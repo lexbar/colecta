@@ -4,6 +4,9 @@ ColectaFolderIndex:
 ColectaFolderView:
     pattern:  /folder/{slug}
     defaults: { _controller: ColectaFilesBundle:Folder:view }
+ColectaFolderEdit:
+    pattern:  /folder/{slug}/edit
+    defaults: { _controller: ColectaFilesBundle:Folder:edit }
 ColectaFileIndex:
     pattern:  /file/
     defaults: { _controller: ColectaFilesBundle:File:index }
@@ -15,4 +18,7 @@ ColectaFileUpload:
     defaults: { _controller: ColectaFilesBundle:File:upload }
 ColectaFileView:
     pattern:  /file/{slug}
+    defaults: { _controller: ColectaFilesBundle:File:view }
+ColectaFileEdit:
+    pattern:  /file/{slug}/edit/
     defaults: { _controller: ColectaFilesBundle:File:view }

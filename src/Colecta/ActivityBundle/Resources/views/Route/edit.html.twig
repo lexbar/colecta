@@ -1,8 +1,8 @@
 {% extends '::frontend.html.twig' %}
 
-{% block routes 'active' %}
-{% block onload 'initialize()' %}
-{% block javascripts %}
+{% block posts 'active' %}
+
+{% block javascripts %}    
     
     {% set boundsswlat, boundsswlng = track[0].latitude, track[0].longitude %}
     {% set boundsnelat, boundsnelng = track[0].latitude, track[0].longitude %} 
@@ -52,15 +52,99 @@
         
         path.setMap(map);
     }
+
+    var relations = [{% for related in item.related %}{"name":"{{ related.name }}","type":"{{ related.type }}","id":"{{ related.id }}","author":"{{ related.author.id }}"}{% if not loop.last %},{% endif %}{% endfor%}];
+    var xhr;
+    var searchagain = false;
+    
+    function showResults()
+    {
+        if($('#searchItem').val().length < 3) {
+            $('#itemResults').html('');
+            $('#itemResults').css('display','none');
+            return;
+        }
+        
+        $('#searchButton').attr("disabled", "disabled");
+        
+        if(xhr && xhr.readyState != 4) {
+            searchagain = true;
+        } else {        
+            var excludeIds = '';
+            
+            for(var i = 0; i < relations.length; i++){ excludeIds += relations[i].id + ','; }
+            
+            xhr = $.ajax({
+                url: '{{ path('ColectaAjaxSearch') }}?search='+$('#searchItem').val()+'&exclude='+excludeIds,
+                success: function(json) {
+                    $('#itemResults').html('');
+                    $('#itemResults').css('display','none');
+                    for(var i = 0; i < json.length; i++) {
+                        $('#itemResults').append('<li><a tabindex="-1" href="#'+json[i].id+'" onClick="addRelation('+encodeItem(json[i])+');return false;"><strong>('+typeName(json[i].type)+')</strong> '+json[i].name+'</a></li>');
+                    } 
+                    if(json.length) { $('#itemResults').css('display','block'); }
+                    $('#searchButton').removeAttr("disabled"); 
+                },
+                cache: false
+            }).done(function() { 
+                if(searchagain) {
+                    searchagain = false;
+                    showResults();
+                }
+            });
+        }
+    }
+    
+    function addRelation(item) {
+        relations.push(item);
+        redrawRelateds();
+        
+        $('#itemResults').html('');
+        $('#itemResults').css('display','none');
+    }
+    
+    function removeRelation(id) {
+        for(var i = 0; i < relations.length; i++){
+            if(relations[i].id == id) {
+                relations.splice(i,1);
+            }
+        }
+        redrawRelateds();
+    }
+    
+    function redrawRelateds() {
+        $('#showRelateds').html('');
+        $('#relateds').val('');
+        for(var i = 0; i < relations.length; i++){
+            $('#showRelateds').append('<p><button type="button" onClick="removeRelation('+relations[i].id+')" class="btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button> <strong> '+relations[i].name+'</strong></p>');
+            $('#relateds').val($('#relateds').val() + relations[i].id + ',');
+        }
+    }
+    
+    function typeName(type) {
+        switch(type) {
+            case 'Item/Post': return 'Publicación'; break;
+            case 'Files/File': return 'Archivo'; break;
+            case 'Files/Folder': return 'Carpeta'; break;
+            case 'Colective/Poll': return 'Encuesta'; break;
+            case 'Colective/Contest': return 'Concurso'; break;
+            case 'Activity/Place': return 'Lugar'; break;
+            case 'Activity/Route': return 'Ruta'; break;
+            case 'Activity/Route': return 'Routeo'; break;
+        }
+        return type;
+    }
+    
+    function encodeItem(item) {
+        return '{\'name\':\''+item.name+'\',\'type\':\''+item.type+'\',\'id\':\''+item.id+'\',\'author\':\''+item.author+'\'}';
+    }
     
     </script>
-    
 {% endblock %}
 {% block article %}
 
-<div id="map" class="full"></div>
-
-<form action="{{ path('ColectaRouteCreate') }}" method="POST" class="form-horizontal well" onSubmit="var submit = document.getElementById('RouteSubmit'); submit.disabled = 'disabled'; submit.innerHTML = 'Procesando...';">
+{% if item.author == app.user %}
+<form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal well">
 <h2>Datos de la Ruta</h2>
     <fieldset>
       <div class="control-group">
@@ -172,27 +256,27 @@
         <label class="control-label" for="RouteName">Dificultad</label>
         <div class="controls">
             <label class="radio">
-                <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy" checked>
+                <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
                 <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
                 Fácil
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="RouteDifficultyModerate" value="moderate">
+                <input type="radio" name="difficulty" id="RouteDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
                 <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
                 Moderado
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="RouteDifficultyHard" value="hard">
+                <input type="radio" name="difficulty" id="RouteDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
                 <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
                 Difícil
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="RouteDifficultyVeryhard" value="very hard">
+                <input type="radio" name="difficulty" id="RouteDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
                 <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
                 Muy difícil
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="RouteDifficultyExpertsonly" value="experts only">
+                <input type="radio" name="difficulty" id="RouteDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
                 <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
                 Sólo expertos
             </label>
@@ -201,7 +285,6 @@
       
       {{ form_rest(form) }}
       
-      <input type="hidden" value="{{ filename }}" name="filename">
       <input type="hidden" value="{% if trackdata.isloop %}1{% else %}0{% endif %}" name="isloop">
       
       <div class="control-group">
@@ -209,7 +292,7 @@
         <div class="controls">
           <select id="RouteCategory" name="category">
             {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
+                <option value="{{ category.id }}"{% if item.category.id == category.id %}selected="selected"{% endif %}>{{ category.name }}</option>
             {% endfor %}
           </select>
         </div>
@@ -221,5 +304,9 @@
       </div>
     </fieldset>
 </form>
+
+{% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
+
+{% endif %}
 
 {% endblock %}

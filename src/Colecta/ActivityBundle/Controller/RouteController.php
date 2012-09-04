@@ -267,6 +267,64 @@ class RouteController extends Controller
         
         return new RedirectResponse($referer);
     }
+    public function editAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->get('request')->request;
+        
+        $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
+        
+        if(!$user || $user != $item->getAuthor()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug'=>$slug)));
+        }
+        
+        if ($this->get('request')->getMethod() == 'POST') {
+            $persist = true;
+            
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
+        
+            if(!$category)
+            {
+                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $persist = false;
+            }
+            else
+            {
+                $item->setCategory($category);
+            }
+            
+            if(!$request->get('name'))
+            {
+                $this->get('session')->setFlash('error', 'No puedes dejar vacío el nombre');
+                $persist = false;
+            }
+            
+            $item->setName($request->get('name'));
+            $item->setText($request->get('text'));
+            $item->summarize($request->get('text'));
+            
+            if($persist)
+            {
+                $em->persist($item); 
+                $em->flush();
+                $this->get('session')->setFlash('success', 'Modificado con éxito.');
+            }
+        }
+        
+        $filename = $item->getSourcefile();
+        $rootdir = $this->getUploadDir();
+        
+        $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
+        $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
+        $routedata = $this->getRouteData($fulltrack);
+        
+        $form = $this->createForm(new RouteType(), $item);
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaActivityBundle:Route:edit.html.twig', array('item' => $item,'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView(), 'categories'=>$categories, ));
+    }
     public function getUploadDir($absolute = true)
     {
         $uploaddir = 'uploads/routes';

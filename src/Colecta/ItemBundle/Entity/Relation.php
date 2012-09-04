@@ -36,7 +36,7 @@ class Relation
 
     /**
     * @ORM\ManyToOne(targetEntity="Item")
-    * @ORM\JoinColumn(name="$itemfrom_id", referencedColumnName="id") 
+    * @ORM\JoinColumn(name="itemfrom_id", referencedColumnName="id") 
     */
     private $itemfrom;
 

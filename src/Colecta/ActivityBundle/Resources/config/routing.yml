@@ -10,6 +10,9 @@ ColectaPlacePage:
 ColectaPlaceView:
     pattern:  /place/{slug}
     defaults: { _controller: ColectaActivityBundle:Place:view }
+ColectaPlaceEdit:
+    pattern:  /place/{slug}/edit/
+    defaults: { _controller: ColectaActivityBundle:Place:edit }
 ColectaEventCreate:
     pattern:  /new/event/
     defaults: { _controller: ColectaActivityBundle:Event:create }
@@ -22,6 +25,9 @@ ColectaEventPage:
 ColectaEventView:
     pattern:  /event/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }
+ColectaEventEdit:
+    pattern:  /event/{slug}/edit/
+    defaults: { _controller: ColectaActivityBundle:Event:edit }
 ColectaEventAsist:
     pattern:  /event/{slug}/asist/
     defaults: { _controller: ColectaActivityBundle:Event:assistance }
@@ -40,6 +46,9 @@ ColectaRoutePage:
 ColectaRouteView:
     pattern:  /route/{slug}
     defaults: { _controller: ColectaActivityBundle:Route:view }
+ColectaRouteEdit:
+    pattern:  /route/{slug}/edit/
+    defaults: { _controller: ColectaActivityBundle:Route:edit }
 ColectaRouteMap:
     pattern:  /routemap/{id}
     defaults: { _controller: ColectaActivityBundle:Route:map }

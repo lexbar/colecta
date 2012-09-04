@@ -5,11 +5,14 @@ ColectaPollIndex:
     pattern:  /poll/
     defaults: { _controller: ColectaColectiveBundle:Poll:index }
 ColectaPollPage:
-    pattern:  /poll/page/{page}
+    pattern:  /poll/page/{page}/
     defaults: { _controller: ColectaColectiveBundle:Poll:page }
 ColectaPollView:
-    pattern:  /poll/{slug}
+    pattern:  /poll/{slug}/
     defaults: { _controller: ColectaColectiveBundle:Poll:view }
+ColectaPollEdit:
+    pattern:  /poll/{slug}/edit/
+    defaults: { _controller: ColectaColectiveBundle:Poll:edit }
 ColectaPollVote:
     pattern:  /vote/{slug}/
     defaults: { _controller: ColectaColectiveBundle:Poll:vote }
@@ -20,8 +23,8 @@ ColectaContestIndex:
     pattern:  /contest/
     defaults: { _controller: ColectaColectiveBundle:Contest:index }
 ColectaContestPage:
-    pattern:  /contest/page/{page}
+    pattern:  /contest/page/{page}/
     defaults: { _controller: ColectaColectiveBundle:Contest:page }
 ColectaContestView:
-    pattern:  /contest/{slug}
+    pattern:  /contest/{slug}/
     defaults: { _controller: ColectaColectiveBundle:Contest:view }

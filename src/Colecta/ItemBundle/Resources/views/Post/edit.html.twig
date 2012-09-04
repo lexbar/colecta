@@ -1,0 +1,135 @@
+{% extends '::frontend.html.twig' %}
+
+{% block posts 'active' %}
+
+{% block javascripts %}    
+    <script src="/js/jquery.min.js"></script>
+    <script>
+    var relations = [{% for related in item.related %}{"name":"{{ related.name }}","type":"{{ related.type }}","id":"{{ related.id }}","author":"{{ related.author.id }}"}{% if not loop.last %},{% endif %}{% endfor%}];
+    var xhr;
+    var searchagain = false;
+    
+    function showResults()
+    {
+        if($('#searchItem').val().length < 3) {
+            $('#itemResults').html('');
+            $('#itemResults').css('display','none');
+            return;
+        }
+        
+        $('#searchButton').attr("disabled", "disabled");
+        
+        if(xhr && xhr.readyState != 4) {
+            searchagain = true;
+        } else {        
+            var excludeIds = '';
+            
+            for(var i = 0; i < relations.length; i++){ excludeIds += relations[i].id + ','; }
+            
+            xhr = $.ajax({
+                url: '{{ path('ColectaAjaxSearch') }}?search='+$('#searchItem').val()+'&exclude='+excludeIds,
+                success: function(json) {
+                    $('#itemResults').html('');
+                    $('#itemResults').css('display','none');
+                    for(var i = 0; i < json.length; i++) {
+                        $('#itemResults').append('<li><a tabindex="-1" href="#'+json[i].id+'" onClick="addRelation('+encodeItem(json[i])+');return false;"><strong>('+typeName(json[i].type)+')</strong> '+json[i].name+'</a></li>');
+                    } 
+                    if(json.length) { $('#itemResults').css('display','block'); }
+                    $('#searchButton').removeAttr("disabled"); 
+                },
+                cache: false
+            }).done(function() { 
+                if(searchagain) {
+                    searchagain = false;
+                    showResults();
+                }
+            });
+        }
+    }
+    
+    function addRelation(item) {
+        relations.push(item);
+        redrawRelateds();
+        
+        $('#itemResults').html('');
+        $('#itemResults').css('display','none');
+    }
+    
+    function removeRelation(id) {
+        for(var i = 0; i < relations.length; i++){
+            if(relations[i].id == id) {
+                relations.splice(i,1);
+            }
+        }
+        redrawRelateds();
+    }
+    
+    function redrawRelateds() {
+        $('#showRelateds').html('');
+        $('#relateds').val('');
+        for(var i = 0; i < relations.length; i++){
+            $('#showRelateds').append('<p><button type="button" onClick="removeRelation('+relations[i].id+')" class="btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button> <strong> '+relations[i].name+'</strong></p>');
+            $('#relateds').val($('#relateds').val() + relations[i].id + ',');
+        }
+    }
+    
+    function typeName(type) {
+        switch(type) {
+            case 'Item/Post': return 'Publicación'; break;
+            case 'Files/File': return 'Archivo'; break;
+            case 'Files/Folder': return 'Carpeta'; break;
+            case 'Colective/Poll': return 'Encuesta'; break;
+            case 'Colective/Contest': return 'Concurso'; break;
+            case 'Activity/Place': return 'Lugar'; break;
+            case 'Activity/Route': return 'Ruta'; break;
+            case 'Activity/Event': return 'Evento'; break;
+        }
+        return type;
+    }
+    
+    function encodeItem(item) {
+        return '{\'name\':\''+item.name+'\',\'type\':\''+item.type+'\',\'id\':\''+item.id+'\',\'author\':\''+item.author+'\'}';
+    }
+    
+    </script>
+{% endblock %}
+{% block article %}
+
+{% if item.author == app.user %}
+<form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal well">
+<h2>Crear una nueva Publicación</h2>
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="PostName">Título</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="PostName" name="name" value="{{item.name}}">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostText">Texto</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="PostText" name="text" rows="3">{{ item.text }}</textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostCategory">Categoría</label>
+        <div class="controls">
+          <select id="PostCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}"{% if item.category.id == category.id %}selected="selected"{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        {% if item.draft %}<button class="btn">Guardar como borrador</button>{% endif %}
+        <button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button>
+      </div>
+    </fieldset>
+</form>
+
+{% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
+
+{% endif %}
+
+{% endblock %}

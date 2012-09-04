@@ -1,0 +1,21 @@
+<form action="{{ path('ColectaItemRelate', {id: item.id }) }}" method="POST" class="form-horizontal well">
+<h2>Relacionar con otros contenidos</h2>
+    {% set relateds = '' %}
+    <div id="showRelateds">
+    {% for related in item.related%}
+        <p><button type="button" onClick="removeRelation({{ related.id }})" class="btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button> <strong>{{ related.name }}</strong></p>
+        {% set relateds = relateds ~ related.id ~ ',' %}
+    {% endfor%}
+    </div>
+    <input type="hidden" id="relateds" name="relateds" value="{{relateds}}">
+    
+    <label for="searchItem">Buscar otro contenido para relacionar</label>
+    <div class="input-append">
+        <input type="text" name="search" id="searchItem" class="input-xlarge" onKeyUp="showResults();"><button id="searchButton" class="btn" type="button" onclick="showResults();">Buscar <i class="icon-search"></i></button>
+    </div>
+    <ul id="itemResults" class="dropdown-menu" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu">
+    </ul>
+    
+    <hr>
+    <p><button type="submit" class="btn btn-primary">Guardar cambios</button></p>
+</form>

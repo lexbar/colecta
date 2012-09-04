@@ -48,6 +48,11 @@
         {{ app.session.flash('error') }}
     </div>
 {% endif %}
+{% if app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+        {{ app.session.flash('success') }}
+    </div>
+{% endif %}
 
 {% block article %}{% endblock %}
 </div>
