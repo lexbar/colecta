@@ -325,6 +325,40 @@ class RouteController extends Controller
         
         return $this->render('ColectaActivityBundle:Route:edit.html.twig', array('item' => $item,'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView(), 'categories'=>$categories, ));
     }
+    public function downloadAction($slug, $extension)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
+        
+        $oformat = $this->acceptedExtensions($extension);
+        
+        if($item && $oformat)
+        {
+            $filepath = $this->getUploadDir() . '/' . $item->getSourcefile();
+            $iformat = $this->acceptedExtensions($this->extension($item->getSourcefile()));
+            $simplified = $this->get('request')->query->get('simplified');
+            
+            if($simplified && is_numeric($simplified))
+            {
+                $out = shell_exec("gpsbabel -t -i $iformat -f $filepath -x simplify,count=$simplified -o $oformat -F -");
+            }
+            else
+            {
+                $out = shell_exec("gpsbabel -t -i $iformat -f $filepath -o $oformat -F -");
+            }
+        
+            $response = new Response($out);
+            $response->headers->set('Content-Type', 'application/octet-stream');
+            $response->headers->set('Content-Disposition', 'attachment; filename=' . $item->getSlug() . '.' .$extension );
+            $response->headers->set('Content-Transfer-Encoding', 'binary');
+            
+            return $response;
+        }
+        else
+        {
+            throw $this->createNotFoundException('El formato '.$formato.' no existe.');
+        }
+    }
     public function getUploadDir($absolute = true)
     {
         $uploaddir = 'uploads/routes';

@@ -154,4 +154,24 @@ class EventController extends Controller
         
         return new RedirectResponse($referer);
     }
+    
+    public function calendaraction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.date >= \''.date('Y-m-1 00:00:00').'\' ORDER BY e.date ASC')->getResult();
+        
+        $ev = array();
+        for($i = 0; $i < 31; $i++){$ev[$i] = array();}
+        
+        if(count($events))
+        {
+            foreach($events as $event)
+            {
+                $day = intval($event->getDate()->format('j'));
+                $ev[$day][] = $event;
+            }
+        }
+        
+        return $this->render('ColectaActivityBundle:Event:calendar.html.twig', array('events' => $ev));
+    }
 }

@@ -390,3 +390,24 @@ ul.comments form {
 #chatstream small {
     color: #777;
 }
+.calendar {
+    font-size: 12px;
+}
+.calendartitle {
+    display: block;
+    background-color: #EEE;
+    border-top: 1px solid #ccc;
+    padding: 3px 5px;
+    font-size: 12px;
+}
+.calendar th {
+    text-align: center;
+    color: #777;
+}
+.calendar td {
+    text-align: center;
+}
+.calendar td.today {
+    background-color: #3B5998;
+    color: #FFF;
+}

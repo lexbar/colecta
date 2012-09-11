@@ -43,6 +43,9 @@ ColectaRouteIndex:
 ColectaRoutePage:
     pattern:  /route/page/{page}
     defaults: { _controller: ColectaActivityBundle:Route:page }
+ColectaRouteDownload:
+    pattern:  /route/download/{slug}.{extension}
+    defaults: { _controller: ColectaActivityBundle:Route:download }
 ColectaRouteView:
     pattern:  /route/{slug}
     defaults: { _controller: ColectaActivityBundle:Route:view }

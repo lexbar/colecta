@@ -24,4 +24,10 @@ class DefaultController extends Controller
             'error'	=>$error)
         );
     }
+    
+    public function resetPasswordAction()
+    {
+        $error = '';
+        return $this->render('ColectaUserBundle:Default:resetPassword.html.twig', array('error'=>$error));
+    }
 }

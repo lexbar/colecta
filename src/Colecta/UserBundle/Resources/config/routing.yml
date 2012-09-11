@@ -8,6 +8,10 @@ userLoginCheck:
 userLogout:
     pattern:  /logout
     
+userResetPassword:
+    pattern:  /reset-password
+    defaults: { _controller: ColectaUserBundle:Default:resetPassword }
+    
 userProfile:
     pattern:  /user/{id}
     defaults: { _controller: ColectaUserBundle:User:profile }

@@ -1,10 +1,12 @@
 {% extends '::base.html.twig' %}
 
+{% block title 'Club Mountain Bike Turyciclo' %}
+
 {% block body %}
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <h1><a class="brand" href="/">Colecta</a></h1>
+            <h1><a class="brand" href="/">Club Mountain Bike Turyciclo</a></h1>
             
             {% if app.user %}
             <ul class="nav">
@@ -85,12 +87,14 @@
             <input id="remember_me" name="_remember_me" type="checkbox" checked /> Recuérdame
         </label></p>
         
-        <p><button type="submit" name="login" class="btn btn-success">Acceder</button> <a href="" class="btn btn-link btn-mini">Olvidé mi contraseña</a></p>
+        <p><button type="submit" name="login" class="btn btn-success">Acceder</button> <a href="{{ path('userResetPassword') }}" class="btn btn-link btn-mini">Olvidé mi contraseña</a></p>
     </form>
     
     {% endif %}
     
     <div class="ads"><img src="//www.google.com/help/hc/images/adsense_185666_adformat-display_200x200_en.jpg" style="border:1px solid black" alt="200 x 200"><br></div>
+    
+    {% render "ColectaActivityBundle:Event:calendar" %}
     
 </div>
 </div>
