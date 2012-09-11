@@ -158,7 +158,7 @@ class EventController extends Controller
     public function calendaraction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.date('Y-m-1 00:00:00').'\' ORDER BY e.date ASC')->getResult();
+        $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.date('Y-m-1 00:00:00').'\' AND e.dateini < \''.date('Y-').(intval(date('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();
         
         $ev = array();
         for($i = 0; $i < 31; $i++){$ev[$i] = array();}
@@ -167,7 +167,7 @@ class EventController extends Controller
         {
             foreach($events as $event)
             {
-                $day = intval($event->getDate()->format('j'));
+                $day = intval($event->getDateini()->format('j'));
                 $ev[$day][] = $event;
             }
         }
