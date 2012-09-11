@@ -269,6 +269,9 @@ ul.properties .assistance {
     padding: 5px 0;
     margin: 2px 6px 0;
 }
+ul.properties .assistance .btn {
+    text-transform: none;
+}
 ul.moreproperties {
     float: right;
     background-color: #f7f7f7;
