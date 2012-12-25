@@ -48,6 +48,25 @@ class EventController extends Controller
         
         return $this->render('ColectaActivityBundle:Event:full.html.twig', array('item' => $item));
     }
+    public function dateAction($date)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $myDate= strtotime($date);
+        
+        if($myDate)
+        {
+            $query = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".date('Y:m:d 00:00:00',$myDate)."' AND e.dateini <= '".date('Y:m:d 23:59:59',$myDate)."' ORDER BY e.dateini ASC");
+    
+            $items = $query->getResult();      
+        }
+        else
+        {
+            $items = array();
+        }
+        
+        return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items));
+    }
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
@@ -102,7 +121,7 @@ class EventController extends Controller
             $event->setDescription($request->get('description'));
             $event->setDistance(str_replace(',','.', $request->get('distance')));
             $event->setUphill($request->get('uphill'));
-            $event->setDownhill(0); // $event->setDownhill($request->get('downhill'));
+            $event->setDownhill($request->get('downhill'));
             $event->setDifficulty($request->get('difficulty'));
             $event->setStatus('');
             
@@ -161,7 +180,7 @@ class EventController extends Controller
         $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.date('Y-m-1 00:00:00').'\' AND e.dateini < \''.date('Y-').(intval(date('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();
         
         $ev = array();
-        for($i = 0; $i < 31; $i++){$ev[$i] = array();}
+        for($i = 1; $i <= 31; $i++){$ev[$i] = array();}
         
         if(count($events))
         {

@@ -22,6 +22,9 @@ ColectaEventIndex:
 ColectaEventPage:
     pattern:  /event/page/{page}
     defaults: { _controller: ColectaActivityBundle:Event:page }
+ColectaEventDate:
+    pattern:  /event/date/{date}
+    defaults: { _controller: ColectaActivityBundle:Event:date }
 ColectaEventView:
     pattern:  /event/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }

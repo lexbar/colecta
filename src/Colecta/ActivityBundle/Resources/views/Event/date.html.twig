@@ -1,0 +1,19 @@
+{% extends '::frontend.html.twig' %}
+
+{% block events 'active' %}
+
+{% block article %}
+
+{% for item in items %}
+<div class="item">
+    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    
+    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': item } only %}
+    
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
+</div>
+{% endfor %}
+
+{% endblock %}

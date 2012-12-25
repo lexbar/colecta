@@ -410,7 +410,13 @@ ul.comments form {
 .calendar td {
     text-align: center;
 }
+.calendar td a {
+    text-decoration: underline;
+}
 .calendar td.today {
     background-color: #3B5998;
     color: #FFF;
+}
+.calendar td.today a {
+    color: #fff;
 }
