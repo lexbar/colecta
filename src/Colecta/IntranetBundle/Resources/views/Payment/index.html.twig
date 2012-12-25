@@ -3,5 +3,59 @@
 {% block payment 'active' %}
 
 {% block content %}
-    Pagos
+<div class="row">
+    <div class="span6">
+        <h2>Pendientes</h2>
+        <table class="table">
+            <thead style="font-weight:bold;">
+                <tr>
+                    <td>Cantidad</td>
+                    <td>Motivo</td>
+                    <td>Pagado</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>12€</td>
+                    <td>Camiseta del club</td>
+                    <td><input type="button" value="He pagado" class="btn"></td>
+                </tr>
+                <tr>
+                    <td>183€</td>
+                    <td>Curso de reparación de bicicletas</td>
+                    <td><input type="button" value="He pagado" class="btn"></td>
+                </tr>
+                <tr>
+                    <td>6€</td>
+                    <td>Revista de ciclismo</td>
+                    <td><input type="button" value="He pagado" class="btn"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <h2>Pagados</h2>
+        <table class="table">
+            <thead style="font-weight:bold;">
+                <tr>
+                    <td>Cantidad</td>
+                    <td>Motivo</td>
+                    <td>Pagado</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>32€</td>
+                    <td>Inscripción a la carrera de Javalambre</td>
+                    <td><i class="icon-ok"></i></td>
+                </tr>
+                <tr>
+                    <td>40€</td>
+                    <td>Curso de reparación de bicicletas</td>
+                    <td><i class="icon-ok"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock%}

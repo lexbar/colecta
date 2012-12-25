@@ -7,3 +7,4 @@
 /web/uploads/avatars/*
 /web/uploads/routes/*
 *~
+*.DS_Store

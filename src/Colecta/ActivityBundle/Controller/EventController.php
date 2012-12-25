@@ -102,7 +102,7 @@ class EventController extends Controller
             $event->setDescription($request->get('description'));
             $event->setDistance(str_replace(',','.', $request->get('distance')));
             $event->setUphill($request->get('uphill'));
-            $event->setDownhill($request->get('downhill'));
+            $event->setDownhill(0); // $event->setDownhill($request->get('downhill'));
             $event->setDifficulty($request->get('difficulty'));
             $event->setStatus('');
             
