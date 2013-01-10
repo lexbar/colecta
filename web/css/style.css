@@ -94,7 +94,7 @@ h2 {
     color: #000;
     padding: 2px 0 2px 15px;
     margin: 1px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 24px;
     border-bottom: 1px solid #f2f2f2;
 }
@@ -281,6 +281,30 @@ ul.moreproperties {
 ul.moreproperties li {
     list-style: none;
 }
+div.assistances {
+    clear: both;
+    margin: 0 0 10px 25px;
+}
+div.assistances h2 {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 4px;
+}
+div.assistances ul {
+    border: 1px solid #eee;
+    border-bottom: 0;
+}
+div.assistances ul li {
+    padding: 2px;
+    background-color: #fcfeff;
+    color: #888;
+    border-bottom: 1px solid #eee;
+}
+div.assistances ul li.odd {
+    background-color: #f0fbff;
+}
+div.assistances ul li a {
+    color: #000;
+}
 .event .date {
     float: left;
     margin: 0 20px 15px 25px;
@@ -395,6 +419,7 @@ ul.comments form {
 }
 .calendar {
     font-size: 12px;
+    background-color: #fff;
 }
 .calendartitle {
     display: block;

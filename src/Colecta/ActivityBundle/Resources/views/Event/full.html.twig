@@ -40,6 +40,24 @@
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
+    {# ASSISTANCES #}
+    <div class="assistances">
+    <h2>Van a asistir</h2>
+    
+    <ul class="unstyled">    
+    {% for assistance in item.assistances %}
+        <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}"><a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}"><img width="20" height="20" src="{{assistance.user.avatar}}"> {{assistance.user.name}}</a> va a asistir</li>
+    {% else %}
+        <li><em>Ninguna asistencia confirmada</em></li>
+    {% endfor %}
+    
+    </ul>
+    
+    {% if item.author == app.user %}<p><a class="btn btn-small" href="/event/inventado/edit/">Gestionar asistencias</a></p>{% endif %}
+    
+    </div>
+    
+    
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
     
 </div>

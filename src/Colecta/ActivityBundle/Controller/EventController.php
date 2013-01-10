@@ -52,11 +52,18 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        $myDate= strtotime($date);
+        try 
+        {
+            $myDate = new \DateTime($date);
+        }
+        catch(Exception $e)
+        {
+            $myDate = false;
+        }
         
         if($myDate)
         {
-            $query = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".date('Y:m:d 00:00:00',$myDate)."' AND e.dateini <= '".date('Y:m:d 23:59:59',$myDate)."' ORDER BY e.dateini ASC");
+            $query = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".$myDate->format('Y:m:d 00:00:00')."' AND e.dateini <= '".$myDate->format('Y:m:d 23:59:59')."' ORDER BY e.dateini ASC");
     
             $items = $query->getResult();      
         }
@@ -65,7 +72,7 @@ class EventController extends Controller
             $items = array();
         }
         
-        return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items));
+        return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items, 'date' => $myDate));
     }
     public function createAction()
     {
@@ -121,7 +128,7 @@ class EventController extends Controller
             $event->setDescription($request->get('description'));
             $event->setDistance(str_replace(',','.', $request->get('distance')));
             $event->setUphill($request->get('uphill'));
-            $event->setDownhill($request->get('downhill'));
+            $event->setDownhill(0);
             $event->setDifficulty($request->get('difficulty'));
             $event->setStatus('');
             

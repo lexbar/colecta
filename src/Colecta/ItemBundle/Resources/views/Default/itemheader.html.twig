@@ -1,5 +1,5 @@
 <div class="profile mini">
-    {% if item.author == app.user %}<a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" class="btn btn-mini pull-right">Editar</a>{% endif %}
+    {% if item.author == app.user %}<a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" class="btn btn-mini pull-right" title="Editar"><i class="icon-pencil"></i></a>{% endif %}
     <a class="username" href="{{ path('userProfile', { 'id': item.author.id }) }}"><img width="40" height="40" src="{{item.author.avatar}}">
     {{item.author.name}}</a><br> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>
 </div>
