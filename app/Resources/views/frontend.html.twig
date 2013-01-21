@@ -26,22 +26,20 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" id="main">
 <div class="row">
 <div class="span2" id="sidebar">
-    <nav>
-        <ul> 
-            <li><a class="{% block home '' %}" href="{{ path('ColectaDashboard')}}"><i class="icon-home"></i> Inicio</a></li>
-            <li><a class="{% block posts '' %}" href="{{ path('ColectaPostIndex') }}"><i class="icon-file"></i> Publicaciones</a></li>
-            <li><a class="{% block events '' %}" href="{{ path('ColectaEventIndex') }}"><i class="icon-calendar"></i> Eventos</a></li>  
-            <li><a class="{% block routes '' %}" href="{{ path('ColectaRouteIndex') }}"><i class="icon-globe"></i> Rutas</a></li>
-            <li><a class="{% block places '' %}" href="{{ path('ColectaPlaceIndex') }}"><i class="icon-map-marker"></i> Lugares</a></li>
-            <li><a class="{% block files '' %}" href="{{ path('ColectaFileIndex') }}"><i class="icon-folder-open"></i> Archivos</a></li>
-            <li><a class="{% block polls '' %}" href="{{ path('ColectaPollIndex') }}"><i class="icon-tasks"></i> Encuestas</a></li>
-            {#<li><a class="{% block contests '' %}" href="{{ path('') }}"><i class="icon-gift"></i> Concursos</a></li>#}
-            <li><a class="{% block people '' %}" href="/"><i class="icon-user"></i> Personas</a></li>
-        </ul> 
-    </nav>
+    <ul> 
+        <li><a class="{% block home '' %}" id="homeButton" href="{{ path('ColectaDashboard')}}"><i class="icon-home icon-white"></i> Inicio</a></li>
+        <li><a class="{% block posts '' %}" href="{{ path('ColectaPostIndex') }}"><i class="icon-file"></i> Publicaciones</a></li>
+        <li><a class="{% block events '' %}" href="{{ path('ColectaEventIndex') }}"><i class="icon-calendar"></i> Eventos</a></li>  
+        <li><a class="{% block routes '' %}" href="{{ path('ColectaRouteIndex') }}"><i class="icon-globe"></i> Rutas</a></li>
+        <li><a class="{% block places '' %}" href="{{ path('ColectaPlaceIndex') }}"><i class="icon-map-marker"></i> Lugares</a></li>
+        <li><a class="{% block files '' %}" href="{{ path('ColectaFileIndex') }}"><i class="icon-folder-open"></i> Archivos</a></li>
+        <li><a class="{% block polls '' %}" href="{{ path('ColectaPollIndex') }}"><i class="icon-tasks"></i> Encuestas</a></li>
+        {#<li><a class="{% block contests '' %}" href="{{ path('') }}"><i class="icon-gift"></i> Concursos</a></li>#}
+        <li><a class="{% block people '' %}" href="/"><i class="icon-user"></i> Personas</a></li>
+    </ul> 
 </div>
 
 <div class="span7" id="stream">

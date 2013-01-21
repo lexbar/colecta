@@ -4,6 +4,8 @@
 
 {% block article %}
 
+<div class="title-block">
+
 {% if date %}
 <h2>Eventos el {{ date | date('j')  }} de 
         {{ date | date('n') | replace({
@@ -21,6 +23,8 @@
             '12':'diciembre'
         }) }} </h2>
 {% endif %}
+
+</div>
 
 {% for item in items %}
 

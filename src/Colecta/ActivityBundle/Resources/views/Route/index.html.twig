@@ -4,7 +4,12 @@
 
 {% block article %}
 
-{% if app.user %}
+<div class="title-block">
+    {% if app.user %} <button type="button" class="btn btn-small pull-right">Crear ruta <i class="icon-plus"></i></button> {% endif %}
+    <h2>Rutas</h2>
+</div>
+
+{# if app.user %}
 <form onSubmit="var submit = document.getElementById('RouteSubmit'); submit.disabled = 'disabled'; submit.innerHTML = 'Subiendo...';" action="{{ path('ColectaRouteUpload') }}" method="POST" class="form-horizontal well hidden" onclick="this.className='form-horizontal well'" enctype="multipart/form-data">
 <h2>Crear una nueva Ruta</h2>
     <fieldset>
@@ -20,7 +25,7 @@
       </div>
     </fieldset>
 </form>
-{% endif %}
+{% endif #}
 
 {% for item in items %}
 <div class="item">

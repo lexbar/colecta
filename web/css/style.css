@@ -1,6 +1,9 @@
 body {
-    padding-top: 60px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+div#main {
+    padding-top: 50px;
+    background-color: #fff;
 }
 h1 {
     margin: 0;
@@ -11,6 +14,16 @@ h2 {
     line-height: 24px;
     font-weight: normal;
     font-family: 'Proxima Nova', 'proxima-nova', 'Helvetica Neue', Helvetica, sans-serif;
+}
+.title-block {
+    padding: 15px;
+    background-color: #2F7ED4;
+}
+.title-block h2 {
+    font-size: 26px;
+    color: #fff;
+    line-height: 26px;
+    margin: 0;
 }
 .alert-block {
     padding: 5px 8px;
@@ -84,7 +97,8 @@ h2 {
 }
 
 #sidebar ul {
-    margin-left: -20px;
+    margin: 0;
+    padding: 0;
 }
 #sidebar li {
     list-style: none;
@@ -92,11 +106,16 @@ h2 {
 #sidebar li a {
     display: block;
     color: #000;
-    padding: 2px 0 2px 15px;
-    margin: 1px;
+    padding: 5px 0 5px 12px;
     font-size: 14px;
     line-height: 24px;
     border-bottom: 1px solid #f2f2f2;
+}
+#sidebar li a#homeButton {
+    background-color: #2f7ed4;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
 }
 #sidebar li a i {
     margin: 2px;
@@ -118,7 +137,7 @@ h2 {
     background-color: #FAFAFA;
 }
 #stream{
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #2F7ED4;
     margin-left: 0;
     padding-left: 12px;
 }
@@ -222,9 +241,6 @@ h2 {
     padding: 15px 4px;
     border-bottom: 1px solid #ddd;
 }
-.mini p, .mini h2 {
-    margin-left: 25px;
-}
 .event.mini h2{
     margin-left: 0;
 }
@@ -237,7 +253,7 @@ h2 {
 ul.properties {
     overflow: hidden;
     clear: both;
-    margin: 10px 0 0 25px;
+    margin: 10px 0 0 0;
     background-color: #f7f7f7;
     border-top: 6px solid #595959;
 }
@@ -267,7 +283,7 @@ ul.properties li.small strong  {
 ul.properties .assistance {
     float:right;
     padding: 5px 0;
-    margin: 2px 6px 0;
+    margin: 2px 4px 0;
 }
 ul.properties .assistance .btn {
     text-transform: none;
@@ -307,7 +323,7 @@ div.assistances ul li a {
 }
 .event .date {
     float: left;
-    margin: 0 20px 15px 25px;
+    margin: 0 20px 15px 0px;
     padding-bottom: 6px;
     cursor: default;
     text-align: center;
@@ -329,7 +345,7 @@ div.assistances ul li a {
     font-size: 40px;
     line-height: 40px;
     color: #FFF;
-    background-color: #069;
+    background-color: #444;
 }
 .event .date .month {
     text-transform: uppercase;
@@ -355,7 +371,7 @@ div.assistances ul li a {
 
 .place.mini .thumbnail, .file.mini .thumbnail {
     float: left;
-    margin: 0 10px 10px 25px;
+    margin: 0 10px 10px 0;
 }
 .route.full ul.properties {
     margin: 10px 0;
@@ -363,7 +379,7 @@ div.assistances ul li a {
 }
 ul.comments {
     clear: both;
-    margin-top: 10px;
+    margin: 10px 0 0 0;
 }
 .full ul.comments {
     margin-left: 0;
@@ -374,7 +390,7 @@ ul.comments {
 ul.comments li {
     list-style: none;
     padding: 4px;
-    background-color: #eef5f9;
+    background-color: #e4eefa;
     margin: 0 0 1px 0;
     overflow: hidden;
 }
@@ -439,7 +455,7 @@ ul.comments form {
     text-decoration: underline;
 }
 .calendar td.today {
-    background-color: #3B5998;
+    background-color: #2F7ED4;
     color: #FFF;
 }
 .calendar td.today a {
