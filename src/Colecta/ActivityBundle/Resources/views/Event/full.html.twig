@@ -46,7 +46,7 @@
     
     <ul class="unstyled">    
     {% for assistance in item.assistances %}
-        <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}"><a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}"><img width="20" height="20" src="{{assistance.user.avatar}}"> {{assistance.user.name}}</a> va a asistir</li>
+        <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}"><a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}"><img width="20" height="20" src="{% if assistance.user.avatar %}{{assistance.user.avatar}}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}</a> va a asistir</li>
     {% else %}
         <li><em>Ninguna asistencia confirmada</em></li>
     {% endfor %}
