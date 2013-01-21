@@ -5,7 +5,7 @@
 {% block article %}
 
 <div class="title-block">
-    {% if app.user %} <button type="button" class="btn btn-small pull-right">Crear evento <i class="icon-plus"></i></button> {% endif %}
+    {% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right">Crear evento <i class="icon-plus"></i></a> {% endif %}
     <h2>Eventos</h2>
 </div>
 

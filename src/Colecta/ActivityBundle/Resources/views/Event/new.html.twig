@@ -1,0 +1,13 @@
+{% extends '::frontend.html.twig' %}
+
+{% block events 'active' %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Crear Evento</h2>
+</div>
+
+{% include 'ColectaActivityBundle:Event:form.html.twig' with { 'categories': categories} %}
+
+{% endblock %}

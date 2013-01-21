@@ -19,6 +19,9 @@ ColectaEventCreate:
 ColectaEventIndex:
     pattern:  /event/
     defaults: { _controller: ColectaActivityBundle:Event:index }
+ColectaEventNew:
+    pattern:  /event/new/
+    defaults: { _controller: ColectaActivityBundle:Event:new }
 ColectaEventPage:
     pattern:  /event/page/{page}
     defaults: { _controller: ColectaActivityBundle:Event:page }

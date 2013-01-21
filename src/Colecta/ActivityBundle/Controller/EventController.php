@@ -48,6 +48,13 @@ class EventController extends Controller
         
         return $this->render('ColectaActivityBundle:Event:full.html.twig', array('item' => $item));
     }
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaActivityBundle:Event:new.html.twig', array('categories' => $categories));
+    }
     public function dateAction($date)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -136,14 +143,7 @@ class EventController extends Controller
             $em->flush();
         }
         
-        $referer = $this->get('request')->headers->get('referer');
-        
-        if(empty($referer))
-        {
-            $referer = $this->generateUrl('ColectaEventIndex');
-        }
-        
-        return new RedirectResponse($referer);
+        return new RedirectResponse($this->generateUrl('ColectaEventView',array('slug'=>$event->getSlug())));
     }
     public function assistanceAction($slug)
     {
