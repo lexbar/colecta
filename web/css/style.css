@@ -299,7 +299,7 @@ ul.moreproperties li {
 }
 div.assistances {
     clear: both;
-    margin: 0 0 10px 25px;
+    margin: 0 0 10px 0;
 }
 div.assistances h2 {
     border-bottom: 1px solid #ccc;
@@ -310,10 +310,19 @@ div.assistances ul {
     border-bottom: 0;
 }
 div.assistances ul li {
-    padding: 2px;
+    padding: 5px;
+    overflow: hidden;
     background-color: #fcfeff;
     color: #888;
     border-bottom: 1px solid #eee;
+}
+div.assistances ul li input {
+    margin: 0;
+    padding: 2px;
+}
+div.assistances ul li label {
+    display: inline;
+    font-weight: bold;
 }
 div.assistances ul li.odd {
     background-color: #f0fbff;

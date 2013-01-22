@@ -162,13 +162,23 @@ class EventController extends Controller
         }
         else
         {
-            $assistance = new EventAssistance();
-            $assistance->setStatus('');
-            $assistance->setUser($user);
-            $assistance->setEvent($item);
+            $assistance = $em->getRepository('ColectaActivityBundle:EventAssistance')->findOneBy(array('event'=>$item->getId(),'user'=>$user->getId()));
             
-            $em->persist($assistance); 
-            $em->flush();
+            if($assistance)
+            {
+                $this->get('session')->setFlash('error', 'Ya has marcado tu asistencia');
+            }
+            else
+            {
+                $assistance = new EventAssistance();
+                $assistance->setConfirmed(0);
+                $assistance->setKm(0);
+                $assistance->setUser($user);
+                $assistance->setEvent($item);
+                
+                $em->persist($assistance); 
+                $em->flush();
+            }
         }
         
         $referer = $this->get('request')->headers->get('referer');
@@ -181,7 +191,92 @@ class EventController extends Controller
         return new RedirectResponse($referer);
     }
     
-    public function calendaraction()
+    public function updateAssistancesAction($slug)
+    {
+        $request = $this->get('request')->request;
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+        
+        if(!$user) 
+        {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+        }
+        elseif(!$item)
+        {
+            $this->get('session')->setFlash('error', 'No existe el evento');
+        }
+        elseif($item->getAuthor() != $user)
+        {
+            $this->get('session')->setFlash('error', 'No tienes permiso para gestionar las asistencias de este evento');
+        }
+        else
+        {
+            if($item->hasAssistances())
+            {
+                $assistances = $item->getAssistances();
+                foreach($assistances as $ass)
+                {
+                    $id = $ass->getUser()->getId().'';
+                    if($request->get('user'.$id.'confirmed'))
+                    {
+                        $ass->setConfirmed(true);
+                    }
+                    else
+                    {
+                        $ass->setConfirmed(false);
+                    }
+                    
+                    $ass->setKm(str_replace(',','.', $request->get('user'.$id.'km')));
+                    
+                    $em->persist($ass); 
+                    $em->flush();
+                }
+            }
+            if($request->get('targetUser'))
+            {
+                //Check if Target User exists
+                $targetUser = $em->getRepository('ColectaUserBundle:User')->findOneByName($request->get('targetUser'));
+                if(! $targetUser)
+                {
+                    $this->get('session')->setFlash('error', 'No hemos encontrado al usuario que indicas');
+                }
+                else
+                {
+                    //Check if assistance already exists for this user
+                    $assistance = $em->getRepository('ColectaActivityBundle:EventAssistance')->findOneBy(array('event'=>$item->getId(),'user'=>$targetUser->getId()));
+                    
+                    if($assistance)
+                    {
+                        $this->get('session')->setFlash('error', 'El usuario ya ha marcado su asistencia');
+                    }
+                    else
+                    {
+                        $assistance = new EventAssistance();
+                        $assistance->setConfirmed(0);
+                        $assistance->setKm(0);
+                        $assistance->setUser($targetUser);
+                        $assistance->setEvent($item);
+                        
+                        $em->persist($assistance); 
+                        $em->flush();
+                    }                
+                }
+            }
+        }
+        
+        $referer = $this->get('request')->headers->get('referer');
+        
+        if(empty($referer))
+        {
+            $referer = $this->generateUrl('ColectaEventIndex');
+        }
+        
+        return new RedirectResponse($referer);
+    }
+    
+    public function calendarAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
         $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.date('Y-m-1 00:00:00').'\' AND e.dateini < \''.date('Y-').(intval(date('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();

@@ -22,11 +22,18 @@ class EventAssistance
     private $id;
 
     /**
-     * @var string $status
+     * @var string $confirmed
      *
-     * @ORM\Column(name="status", type="string", length=15)
+     * @ORM\Column(name="confirmed", type="boolean")
      */
-    private $status;
+    private $confirmed;
+    
+    /**
+     * @var float $km
+     *
+     * @ORM\Column(name="km", type="float")
+     */
+    private $km;
 
     /**
     * @ORM\ManyToOne(targetEntity="Event")
@@ -49,26 +56,6 @@ class EventAssistance
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set status
-     *
-     * @param string $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * Get status
-     *
-     * @return string 
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**
@@ -109,5 +96,45 @@ class EventAssistance
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set confirmed
+     *
+     * @param boolean $confirmed
+     */
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+    }
+
+    /**
+     * Get confirmed
+     *
+     * @return boolean 
+     */
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * Set km
+     *
+     * @param float $km
+     */
+    public function setKm($km)
+    {
+        $this->km = $km;
+    }
+
+    /**
+     * Get km
+     *
+     * @return float 
+     */
+    public function getKm()
+    {
+        return $this->km;
     }
 }

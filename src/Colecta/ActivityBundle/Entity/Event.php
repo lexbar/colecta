@@ -312,6 +312,17 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     {
         return $this->assistances;
     }
+    
+    /**
+     * Has assistances
+     *
+     * @return boolean 
+     */
+    public function hasAssistances()
+    {
+        return count($this->assistances) > 0;
+    }
+    
     public function __construct()
     {
         $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();

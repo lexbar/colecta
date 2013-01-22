@@ -2,6 +2,55 @@
 
 {% block events 'active' %}
 
+{% block javascripts %}    
+    <script src="/js/jquery.min.js"></script>
+    <script>
+    var xhr;
+    var searchagain = false;
+    
+    function showResults()
+    {
+        if($('#userSearch').val().length < 3) {
+            hideResults();
+            return;
+        }
+        
+        //$('#searchButton').attr("disabled", "disabled");
+        
+        if(xhr && xhr.readyState != 4) {
+            searchagain = true;
+        } else {        
+            
+            xhr = $.ajax({
+                url: '{{ path('ColectaAjaxUserSearch') }}?search='+$('#userSearch').val(),
+                success: function(json) {
+                    $('#userResults').html('');
+                    $('#userResults').css('display','none');
+                    for(var i = 0; i < json.length; i++) {
+                        $('#userResults').append('<li><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();return false;"> '+json[i].name+'</a></li>');
+                    } 
+                    if(json.length) { $('#userResults').css('display','block'); }
+                    //$('#searchButton').removeAttr("disabled"); 
+                },
+                cache: false
+            }).done(function() { 
+                if(searchagain) {
+                    searchagain = false;
+                    showResults();
+                }
+            });
+        }
+    }
+    
+    function hideResults() 
+    {
+        $('#userResults').html('');
+        $('#userResults').css('display','none');
+    }
+    
+    </script>
+{% endblock %}
+
 {% block article %}
 <div class="event full">
     
@@ -40,23 +89,62 @@
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
-    {# ASSISTANCES #}
+    
+    
+    {######## ASSISTANCES ########}
+    
+    {% set canedit = item.author == app.user %}
+    {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
+    
+    {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST">{% endif %}
+    
     <div class="assistances">
-    <h2>Van a asistir</h2>
+    <h2>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}</h2>
+    
+    {% if canedit and item.assistances | length > 9%}<p style="text-align:right"><input type="submit" class="btn btn-primary" value="Actualizar" /></p>{% endif %}
     
     <ul class="unstyled">    
     {% for assistance in item.assistances %}
-        <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}"><a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}"><img width="20" height="20" src="{% if assistance.user.avatar %}{{assistance.user.avatar}}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}</a> va a asistir</li>
+    
+        <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}">
+            <a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}">
+            <img width="20" height="20" src="{% if assistance.user.avatar %}{{assistance.user.avatar}}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}
+            </a> 
+        
+            {% if haspassed %}
+                {% if canedit %}
+                    <span class="pull-right">
+                        <input type="text" class="span1" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}"> km | 
+                        <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
+                    </span>
+                {% elseif assistance.confirmed %}
+                    <span class="pull-right">{{ assistance.km }} km <i class="icon-ok"></i></span>
+                {% endif %}
+            {% endif %}
+        </li>
+        
     {% else %}
         <li><em>Ninguna asistencia confirmada</em></li>
     {% endfor %}
     
+    {% if canedit %}
+        <li>Añadir un usuario:<br><input id="userSearch" type="text" name="targetUser" onKeyUp="showResults();">
+            <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
+        </li>
+    {% endif %}
+    
     </ul>
     
-    {% if item.author == app.user %}<p><a class="btn btn-small" href="/event/inventado/edit/">Gestionar asistencias</a></p>{% endif %}
+    {% if canedit %}<p style="text-align:right"><input type="submit" class="btn btn-primary" value="Actualizar" /></p>{% endif %}
     
     </div>
     
+    {% if canedit %}</form>{% endif %}
+    
+    
+    
+    
+    {######## COMMENTS ########}
     
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
     

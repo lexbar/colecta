@@ -27,3 +27,7 @@ userNotifications:
 userNotificationDismiss:
     pattern:  /notification/dismiss/{id}
     defaults: { _controller: ColectaUserBundle:Notification:dismiss }
+    
+ColectaAjaxUserSearch:
+    pattern:  /ajaxusersearch/
+    defaults: { _controller: ColectaUserBundle:User:ajaxsearch }

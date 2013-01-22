@@ -37,6 +37,9 @@ ColectaEventEdit:
 ColectaEventAsist:
     pattern:  /event/{slug}/asist/
     defaults: { _controller: ColectaActivityBundle:Event:assistance }
+ColectaEventUpdateAsist:
+    pattern:  /event/{slug}/updateasist/
+    defaults: { _controller: ColectaActivityBundle:Event:updateAssistances }
 ColectaRouteUpload:
     pattern:  /upload/route/
     defaults: { _controller: ColectaActivityBundle:Route:upload }
