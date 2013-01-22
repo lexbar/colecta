@@ -71,6 +71,10 @@ h2 {
 .navbar form input, .navbar form button.btn {
     margin-top: 4px;
 }
+.headimg {
+    background-size: 100% auto;
+    margin: -10px 0 5px 0;
+}
 .intranet-menu {
     margin-top: 60px;
 }
