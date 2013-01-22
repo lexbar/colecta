@@ -7,8 +7,8 @@
     <script src="/js/highcharts.js"></script>
     <script>
     
-    {% set last = events | length - 1 %}
-    {% if last > 0 and events[0].dateini | date('Y') != events[last].dateini | date('Y') %}
+    {% set last = asssistances | length - 1 %}
+    {% if last > 0 and asssistances[0].event.dateini | date('Y') != asssistances[last].event.dateini | date('Y') %}
         {% set printyear = true %}
     {% else %}
         {% set printyear = false %}
@@ -19,12 +19,12 @@
     {% set lastMonthName, thisMonthName = '', '' %}
     {% set lastMonthValue = 0 %}
     
-    {% for event in events %}
+    {% for asssistance in asssistances %}
     
         {# NOMBRE DEL MES #}
-        {% set thisMonthName = event.dateini | date('m') | replace({'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'}) %}
+        {% set thisMonthName = asssistance.event.dateini | date('m') | replace({'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'}) %}
         {% if printyear %}
-            {% set thisMonthName = thisMonthName ~ ' ' ~ event.dateini | date('Y') %}
+            {% set thisMonthName = thisMonthName ~ ' ' ~ asssistance.event.dateini | date('Y') %}
         {% endif %}
         
         {% if lastMonthName != thisMonthName %}
@@ -39,7 +39,7 @@
             {% set lastMonthValue = 0 %}
         {% endif %}
         
-        {% set lastMonthValue = lastMonthValue + event.distance %}
+        {% set lastMonthValue = lastMonthValue + asssistance.km %}
     {% endfor %}
     
     {# LAST CHANCE #}
@@ -109,20 +109,20 @@
             <table class="table table-condensed table-hover">
             <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distania</th></tr></thead>
             {% set accumulated = 0%}
-            {% for event in events %}
+            {% for asssistance in asssistances %}
                 <tr>
-                    <td>{{ event.dateini | date('Y/m/d') }}</td>
-                    <td><a href="{{ path('ColectaEventView', { 'slug': event.slug }) }}">{{ event.name }}</a></td>
-                    <td>{{ event.distance | number_format }} km</td>
+                    <td>{{ asssistance.event.dateini | date('Y/m/d') }}</td>
+                    <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
+                    <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
                 </tr>
-                {% set accumulated = accumulated + event.distance %}
+                {% set accumulated = accumulated + asssistance.km %}
             {% endfor %}
             </table>
         </div>
         
         <div class="span4">
             <div class="well">
-                <h2>Acumulado: {{ accumulated }} km</h2>
+                <h2>Acumulado: {{ accumulated | number_format(1,'.',',')}} km</h2>
             </div>
         </div>
     </div>

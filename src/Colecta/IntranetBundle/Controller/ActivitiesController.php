@@ -13,9 +13,9 @@ class ActivitiesController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
-        $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user ORDER BY e.dateini ASC')->setParameter('user', $user)->getResult();
+        $asssistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 ORDER BY e.dateini ASC')->setParameter('user', $user)->getResult();
         
-        return $this->render('ColectaIntranetBundle:Activities:index.html.twig', array('events'=>$events));
+        return $this->render('ColectaIntranetBundle:Activities:index.html.twig', array('asssistances'=>$asssistances));
     }
     public function rankAction()
     {
@@ -31,13 +31,13 @@ class ActivitiesController extends Controller
             {
                 $k = 0;
                 
-                $assistances = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user ORDER BY e.dateini ASC')->setParameter('user', $u)->getResult();
+                $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 ORDER BY e.dateini ASC')->setParameter('user', $u)->getResult();
                 
                 if(count($assistances))
                 {
                     foreach($assistances as $as)
                     {
-                        $k += $as->getDistance();
+                        $k += $as->getKm();
                     }
                 }
                 

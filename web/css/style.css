@@ -71,6 +71,9 @@ h2 {
 .navbar form input, .navbar form button.btn {
     margin-top: 4px;
 }
+.intranet-menu {
+    margin-top: 60px;
+}
 .sub.nav {
     margin-top: -15px;
 }
