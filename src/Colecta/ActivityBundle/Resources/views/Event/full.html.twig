@@ -27,7 +27,7 @@
                     $('#userResults').html('');
                     $('#userResults').css('display','none');
                     for(var i = 0; i < json.length; i++) {
-                        $('#userResults').append('<li><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();return false;"> '+json[i].name+'</a></li>');
+                        $('#userResults').append('<li><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
                     } 
                     if(json.length) { $('#userResults').css('display','block'); }
                     //$('#searchButton').removeAttr("disabled"); 
@@ -46,6 +46,11 @@
     {
         $('#userResults').html('');
         $('#userResults').css('display','none');
+    }
+    
+    function highlightUpdateBtn() 
+    {
+        $('#updateBtn').addClass('btn-primary');
     }
     
     </script>
@@ -114,8 +119,8 @@
             {% if haspassed %}
                 {% if canedit %}
                     <span class="pull-right">
-                        <input type="text" class="span1" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}"> km | 
-                        <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
+                        <input type="text" class="span1" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()"> km | 
+                        <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
                     </span>
                 {% elseif assistance.confirmed %}
                     <span class="pull-right">{{ assistance.km }} km <i class="icon-ok"></i></span>
@@ -135,7 +140,7 @@
     
     </ul>
     
-    {% if canedit %}<p style="text-align:right"><input type="submit" class="btn btn-primary" value="Actualizar" /></p>{% endif %}
+    {% if canedit %}<p style="text-align:right"><input type="submit" id="updateBtn" class="btn" value="Actualizar" /></p>{% endif %}
     
     </div>
     
