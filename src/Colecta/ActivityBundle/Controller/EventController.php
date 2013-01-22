@@ -191,6 +191,15 @@ class EventController extends Controller
         return new RedirectResponse($referer);
     }
     
+    
+    /*
+        Update Assistances
+        
+        From the menu-list of assistances.
+        
+        First checks for changes on the list.
+        Finally checks for user asssistance by username
+    */
     public function updateAssistancesAction($slug)
     {
         $request = $this->get('request')->request;
@@ -254,7 +263,7 @@ class EventController extends Controller
                     else
                     {
                         $assistance = new EventAssistance();
-                        $assistance->setConfirmed(0);
+                        $assistance->setConfirmed(1);
                         $assistance->setKm(0);
                         $assistance->setUser($targetUser);
                         $assistance->setEvent($item);
