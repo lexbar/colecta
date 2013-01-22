@@ -61,12 +61,12 @@
 <div class="span3" id="userbar">
     {% if app.user %}
     
-        <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatar}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}">Salir</a></p>
+        <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatar}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}" style="color:darkred">Salir</a></p>
         
         {% set notifications = colectauser.notDismissedNotifications | length %}
         <p>
             <a class="btn btn-mini" href="/notifications/"><i class="icon-envelope"></i>{% if 0 %} <span class="label label-important" style="font-size: 10px;">3</span>{% endif %} Mensajes</a> 
-            <a class="btn btn-mini" href="/notifications/"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a>
+            <a class="btn btn-mini pull-right" href="/notifications/"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a>
         </p>
         
         {% for notification in colectauser.notDismissedNotifications %}
@@ -91,7 +91,7 @@
     
     {% endif %}
     
-    <div class="ads"><img src="//www.google.com/help/hc/images/adsense_185666_adformat-display_200x200_en.jpg" style="border:1px solid black" alt="200 x 200"><br></div>
+    {#<div class="ads"><img src="//www.google.com/help/hc/images/adsense_185666_adformat-display_200x200_en.jpg" style="border:1px solid black" alt="200 x 200"><br></div>#}
     
     {% render "ColectaActivityBundle:Event:calendar" %}
     

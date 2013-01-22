@@ -105,9 +105,7 @@
     
     <div class="assistances">
     <h2>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}</h2>
-    
-    {% if canedit and item.assistances | length > 9%}<p style="text-align:right"><input type="submit" class="btn btn-primary" value="Actualizar" /></p>{% endif %}
-    
+        
     <ul class="unstyled">    
     {% for assistance in item.assistances %}
     

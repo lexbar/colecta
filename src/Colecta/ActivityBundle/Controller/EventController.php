@@ -181,12 +181,20 @@ class EventController extends Controller
             }
         }
         
-        $referer = $this->get('request')->headers->get('referer');
-        
-        if(empty($referer))
+        if($item)
         {
-            $referer = $this->generateUrl('ColectaEventIndex');
+            $referer = $this->generateUrl('ColectaEventView', array('slug'=>$item->getSlug()));
         }
+        else
+        {
+            $referer = $this->get('request')->headers->get('referer');
+            
+            if(empty($referer))
+            {
+                $referer = $this->generateUrl('ColectaEventView');
+            }
+        }
+        
         
         return new RedirectResponse($referer);
     }
