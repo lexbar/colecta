@@ -5,8 +5,9 @@
 
 <form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
-
-    <input type="submit" value="Upload Document" />
+    
+    <hr>
+    <p><input class="btn btn-primary" type="submit" value="Guardar cambios" /></p>
 </form>
 {% endblock %}
 

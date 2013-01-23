@@ -122,7 +122,7 @@
     
         <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}">
             <a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}">
-            <img width="20" height="20" src="{% if assistance.user.avatar %}{{assistance.user.avatar}}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}
+            <img width="20" height="20" src="{% if assistance.user.avatar %}{{assistance.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}
             </a> 
         
             {% if haspassed %}

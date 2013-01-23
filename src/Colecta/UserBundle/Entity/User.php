@@ -512,12 +512,12 @@ class User implements UserInterface
      */
     public function getAvatarPath() 
     {
-        return $this->getWebPath();
+        return $this->getAvatarWebPath();
     }
     
     private function getUploadDir() 
     {
-        return 'uploads/avatars';
+        return '/uploads/avatars';
     }
     
     public function getFile() 
@@ -540,12 +540,12 @@ class User implements UserInterface
         $this->avatar = $avatar;
     }
     
-    public function getAbsolutePath() 
+    public function getAvatarAbsolutePath() 
     {
         return null === $this->avatar ? null : $this->getUploadRootDir() . '/' . $this->avatar;
     }
     
-    public function getWebPath() 
+    public function getAvatarWebPath() 
     {
         return null === $this->avatar ? null : $this->getUploadDir() . '/' . $this->avatar;
     }
@@ -553,7 +553,7 @@ class User implements UserInterface
     private function getUploadRootDir() 
     {
         // the absolute directory path where uploaded documents should be saved
-        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
+        return __DIR__ . '/../../../../web' . $this->getUploadDir();
     }
     
     public function upload() 
@@ -577,7 +577,7 @@ class User implements UserInterface
      */
     public function removeUpload()
     {
-        if ($file = $this->getAbsolutePath()) {
+        if ($file = $this->getAvatarAbsolutePath()) {
             unlink($file);
         }
     }

@@ -61,7 +61,7 @@
 <div class="span3" id="userbar">
     {% if app.user %}
     
-        <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatar}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="">Editar perfil</a> | <a href="{{ path('userLogout') }}" style="color:darkred">Salir</a></p>
+        <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong>{{ app.user.name }}</strong><br><a href="{{ path('userEditProfile') }}">Editar perfil</a> | <a href="{{ path('userLogout') }}" style="color:darkred">Salir</a></p>
         
         {% set notifications = colectauser.notDismissedNotifications | length %}
         <p>

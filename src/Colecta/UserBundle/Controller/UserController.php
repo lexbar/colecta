@@ -10,7 +10,9 @@ use Colecta\UserBundle\Entity\User;
 
 class UserController extends Controller
 {
-    
+    /*
+        View the public profile
+    */
     public function profileAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -25,11 +27,23 @@ class UserController extends Controller
     public function editProfileAction() 
     {
         $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
         $form = $this->createFormBuilder($user)
-            ->add('name')
-            ->add('mail')
-            ->add('pass')
-            ->add('file')
+            ->add('name',   'text',     array('label'=>'Nombre:',       'required'=>true))
+            ->add('mail',   'email',    array('label'=>'Email:',        'required'=>true))
+            //->add('pass',   'password', array('label'=>'Contraseña:',   'required'=>false))
+            ->add('pass', 'repeated', array(
+                                                    'type' => 'password',
+                                                    'invalid_message' => 'Las contraseñas deben coincidir.',
+                                                    'required' => false,
+                                                    'first_options'  => array('label' => 'Nueva Contraseña'),
+                                                    'second_options' => array('label' => 'Repite Contraseña')))
+            ->add('file',   'file',     array('label'=>'Avatar:',       'required'=>false))
             ->getForm()
         ;
     

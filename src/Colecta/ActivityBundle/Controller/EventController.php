@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ActivityBundle\Entity\Event;
 use Colecta\ActivityBundle\Entity\EventAssistance;
+use Colecta\UserBundle\Entity\Notification;
 
 
 class EventController extends Controller
@@ -89,9 +90,10 @@ class EventController extends Controller
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
     
-        if(!$user) 
+        if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
         }
         elseif(!$request->get('description'))
         {
@@ -145,6 +147,13 @@ class EventController extends Controller
         
         return new RedirectResponse($this->generateUrl('ColectaEventView',array('slug'=>$event->getSlug())));
     }
+    
+    /*
+        Mark Assistance of logged User to an Event
+        
+        From the Event node
+    */
+    
     public function assistanceAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
@@ -152,9 +161,10 @@ class EventController extends Controller
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
-        if(!$user) 
+        if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
         }
         elseif(!$item)
         {
@@ -175,6 +185,19 @@ class EventController extends Controller
                 $assistance->setKm(0);
                 $assistance->setUser($user);
                 $assistance->setEvent($item);
+                
+                /* Notification to owner */
+                if(1 || $user != $item->getAuthor())
+                {
+                    $notification = new Notification();
+                    // text date dismiss user
+                    $notification->setUser($item->getAuthor());
+                    $notification->setDismiss(0);
+                    $notification->setDate(new \DateTime('now'));
+                    $notification->setText($user->getName().' va a asistir a '.$item->getName());
+                    
+                    $em->persist($notification); 
+                }
                 
                 $em->persist($assistance); 
                 $em->flush();
@@ -216,9 +239,10 @@ class EventController extends Controller
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
-        if(!$user) 
+        if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
         }
         elseif(!$item)
         {

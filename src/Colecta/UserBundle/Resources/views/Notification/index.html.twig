@@ -3,7 +3,7 @@
 {% block article %}
 
 {% for notification in notifications %}
-    <p class="alert alert-block">{% if not notification.dismiss %}<a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{% endif %}{{ notification.text | raw }}<br><small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small></p>
+    <p class="{% if not notification.dismiss %}alert{% endif %} alert-block">{% if not notification.dismiss %}<a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{% endif %}{{ notification.text | raw }}<br><small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small></p>
 {% else %}
 <h2>No tienes ninguna notificación</h2>
 {% endfor %}
