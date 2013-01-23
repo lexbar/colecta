@@ -10,12 +10,12 @@
     
     function showResults()
     {
-        if($('#userSearch').val().length < 3) {
+        if($('#userSearch').val().length < 2) {
             hideResults();
             return;
         }
         
-        //$('#searchButton').attr("disabled", "disabled");
+        $('#userSearch').css('background','url("/img/loading.gif") no-repeat scroll right center #fff')
         
         if(xhr && xhr.readyState != 4) {
             searchagain = true;
@@ -34,9 +34,14 @@
                 },
                 cache: false
             }).done(function() { 
-                if(searchagain) {
+                if(searchagain) 
+                {
                     searchagain = false;
                     showResults();
+                }
+                else
+                {
+                    $('#userSearch').css('background','#fff');
                 }
             });
         }
@@ -51,6 +56,12 @@
     function highlightUpdateBtn() 
     {
         $('#updateBtn').addClass('btn-primary');
+    }
+    
+    function blockSubmit()
+    {
+        $('#updateBtn').html('Espere <img src="/img/loading_white.gif">').addClass('disabled');
+        
     }
     
     </script>
@@ -101,7 +112,7 @@
     {% set canedit = item.author == app.user %}
     {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
     
-    {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST">{% endif %}
+    {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="blockSubmit()">{% endif %}
     
     <div class="assistances">
     <h2>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}</h2>
@@ -138,7 +149,7 @@
     
     </ul>
     
-    {% if canedit %}<p style="text-align:right"><input type="submit" id="updateBtn" class="btn" value="Actualizar" /></p>{% endif %}
+    {% if canedit %}<p style="text-align:right"><button id="updateBtn" class="btn" type="submit">Actualizar</button></p>{% endif %}
     
     </div>
     

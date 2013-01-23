@@ -3,6 +3,7 @@
 namespace Colecta\IntranetBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 class ActivitiesController extends Controller
@@ -13,6 +14,12 @@ class ActivitiesController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
+        if($user == 'anon.')
+        {
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
+        }
+        
         $asssistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 ORDER BY e.dateini ASC')->setParameter('user', $user)->getResult();
         
         return $this->render('ColectaIntranetBundle:Activities:index.html.twig', array('asssistances'=>$asssistances));
@@ -20,6 +27,13 @@ class ActivitiesController extends Controller
     public function rankAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
+        }
         
         $users = $em->getRepository('ColectaUserBundle:User')->findAll();
         

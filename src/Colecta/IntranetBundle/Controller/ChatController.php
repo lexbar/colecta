@@ -11,6 +11,13 @@ class ChatController extends Controller
     
     public function indexAction()
     {
+        $user = $this->get('security.context')->getToken()->getUser();
+        if($user == 'anon.')
+        {
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
+        }
+        
         $em = $this->getDoctrine()->getEntityManager();
         
         $messages = $em->createQuery('SELECT i FROM ColectaIntranetBundle:ChatInput i ORDER BY i.date DESC')->setFirstResult(0)->setMaxResults(15)->getResult();
@@ -23,9 +30,10 @@ class ChatController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->get('request')->request;
     
-        if(!$user) 
+        if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
         }
         elseif(!$request->get('text'))
         {
