@@ -32,7 +32,7 @@
     
     <p>{{ item.summary | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
     
-    <p><strong>{% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Hasta ahora nadie se ha apuntado{% endif %}</strong></p>
+    <p><strong><a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Hasta ahora nadie se ha apuntado{% endif %}</a></strong></p>
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
