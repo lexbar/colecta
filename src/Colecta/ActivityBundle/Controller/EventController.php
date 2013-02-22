@@ -182,7 +182,7 @@ class EventController extends Controller
             {
                 $assistance = new EventAssistance();
                 $assistance->setConfirmed(0);
-                $assistance->setKm(0);
+                $assistance->setKm($item->getKm());
                 $assistance->setUser($user);
                 $assistance->setEvent($item);
                 
