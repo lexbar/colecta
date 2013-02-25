@@ -1,12 +1,30 @@
-{% set firstWeekDay = (('today' | date('Y-m-1')) | date('N')) - 1 %}
-{% set daysOfMonth = 'today' | date('t') %}
-{% set today = 'today' | date('j') %}
+{% set firstWeekDay = ((targetdate | date('Y-m-1')) | date('N')) - 1 %}
+{% set daysOfMonth = targetdate | date('t') %}
+{% set today = targetdate | date('j') %}
 {% set rows = (firstWeekDay + daysOfMonth) // 7 %}
 {% if ((firstWeekDay + daysOfMonth) / 7) > rows %}{% set rows = rows + 1 %}{% endif %}
 {% set dayOfMonth = 1 %}
 
 
-<strong class="calendartitle">{{ 'today' | date('n') | replace({
+<strong class="calendartitle">
+    <a href="{{ path('ColectaEventDate', {'date': targetdateob.modify('-1 month').format('Y-m') }) }}" class="pull-left">⟨ {{ targetdateob.format('n') | replace({
+        0:'Dic',
+        1:'Ene',
+        2:'Feb',
+        3:'Mar',
+        4:'Abr',
+        5:'May',
+        6:'Jun',
+        7:'Jul',
+        8:'Ago',
+        9:'Sep',
+        10:'Oct',
+        11:'Nov',
+        12:'Dic',
+        13:'Ene'
+    }) }}</a> 
+    
+    {{ targetdate | date('n') | replace({
         '1':'Enero',
         '2':'Febrero',
         '3':'Marzo',
@@ -19,7 +37,25 @@
         '10':'Octubre',
         '11':'Noviembre',
         '12':'Diciembre'
-    }) }} de {{ 'today' | date('Y') }}</strong>
+    }) }} de {{ targetdate | date('Y') }}
+    
+    <a href="{{ path('ColectaEventDate', {'date': targetdateob.modify('+2 month').format('Y-m') }) }}" class="pull-right">{{ targetdateob.format('n') | replace({
+        0:'Dic',
+        1:'Ene',
+        2:'Feb',
+        3:'Mar',
+        4:'Abr',
+        5:'May',
+        6:'Jun',
+        7:'Jul',
+        8:'Ago',
+        9:'Sep',
+        10:'Oct',
+        11:'Nov',
+        12:'Dic',
+        13:'Ene'
+    }) }} ⟩</a>     
+</strong>
     
 <table class="table table-condensed calendar">
     <thead><tr><th>lun</th><th>mar</th><th>mie</th><th>jue</th><th>vie</th><th>sáb</th><th>dom</th></tr></thead>

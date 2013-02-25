@@ -2,6 +2,44 @@
 
 {% block events 'active' %}
 
+{% block javascripts %}  
+    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
+    <script>
+        jQuery(function($){
+        	$.datepicker.regional['es'] = {
+        		closeText: 'Cerrar',
+        		prevText: 'Anterior',
+        		nextText: 'Siguiente',
+        		currentText: 'Hoy',
+        		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+        		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        		monthNamesShort: ['Ene','Feb.','Mar','Abr','May','Jun',
+        		'Jul.','Ago','Sep','Oct','Nov','Dic'],
+        		dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
+        		dayNamesShort: ['Dom.','Lun.','Mar.','Mie.','Jue.','Vie.','Sáb.'],
+        		dayNamesMin: ['D','L','M','X','J','V','S'],
+        		weekHeader: 'Sem.',
+        		dateFormat: 'yy-mm-dd',
+        		firstDay: 1,
+        		isRTL: false,
+        		showMonthAfterYear: false,
+        		yearSuffix: ''};
+        	$.datepicker.setDefaults($.datepicker.regional['es']);
+        });
+
+        $(function() {
+            $( "#EventDateini" ).datepicker({onSelect : function(text,obj){
+                        $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
+            }});
+            $( "#EventDateend" ).datepicker();
+            
+            $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
+        });
+    </script>
+{% endblock %}
+
 {% block article %}
 
 <div class="title-block">

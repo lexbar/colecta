@@ -317,10 +317,11 @@ class EventController extends Controller
         return new RedirectResponse($referer);
     }
     
-    public function calendarAction()
+    public function calendarAction($date)
     {
+        $dateOb = new \DateTime($date);
         $em = $this->getDoctrine()->getEntityManager();
-        $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.date('Y-m-1 00:00:00').'\' AND e.dateini < \''.date('Y-').(intval(date('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();
+        $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.$dateOb->format('Y-m-1 00:00:00').'\' AND e.dateini < \''.$dateOb->format('Y-').(intval($dateOb->format('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();
         
         $ev = array();
         for($i = 1; $i <= 31; $i++){$ev[$i] = array();}
@@ -334,6 +335,6 @@ class EventController extends Controller
             }
         }
         
-        return $this->render('ColectaActivityBundle:Event:calendar.html.twig', array('events' => $ev));
+        return $this->render('ColectaActivityBundle:Event:calendar.html.twig', array('events' => $ev, 'targetdate'=>$date, 'targetdateob'=>$dateOb));
     }
 }

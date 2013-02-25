@@ -12,7 +12,7 @@ h1 {
 h2 {
     font-size: 20px;
     line-height: 24px;
-    font-weight: normal;
+    font-weight: bold;
     font-family: 'Proxima Nova', 'proxima-nova', 'Helvetica Neue', Helvetica, sans-serif;
 }
 .title-block {
@@ -84,12 +84,22 @@ h2 {
 .myself {
     overflow: hidden;
     border-bottom: 1px solid #CCC;
-    padding: 10px 0 10px 10px;
-    text-align: right;
+    padding: 0 0 5px;
 }
 .myself img {
-    float:right;
-    margin-left: 6px;
+    float: left;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.myself .name {
+    font-size: 22px;
+    line-height: 22px;
+}
+#userbar .nav {
+    margin-bottom: 10px;
+}
+#userbar .nav a {
+    color: #222;
 }
 .well.login {
     padding: 7px 0 2px 14px;
@@ -103,6 +113,7 @@ h2 {
 
 #stream {
     min-height: 400px;
+    margin-bottom: 200px;
 }
 
 #sidebar ul {
@@ -461,6 +472,7 @@ ul.comments form {
     border-top: 1px solid #ccc;
     padding: 3px 5px;
     font-size: 12px;
+    text-align: center;
 }
 .calendar th {
     text-align: center;

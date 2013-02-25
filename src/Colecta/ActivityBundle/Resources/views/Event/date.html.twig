@@ -46,4 +46,6 @@
 
 {% endfor %}
 
+{% render "ColectaActivityBundle:Event:calendar" with {'date':date | date('Y/n/j')} %}
+
 {% endblock %}
