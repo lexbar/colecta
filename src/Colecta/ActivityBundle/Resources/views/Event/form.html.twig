@@ -95,6 +95,7 @@
             </label>
         </div>
       </div>
+      
       <div class="control-group">
         <label class="control-label" for="EventCategory">Categoría</label>
         <div class="controls">
@@ -103,9 +104,10 @@
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
           </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
-          <button class="btn btn-link" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton" class="newcategory">Crear una nueva categoría</button>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
         </div>
       </div>
+      
       <div class="form-actions">
         <button class="btn">Guardar como borrador</button>
         <button type="submit" class="btn btn-primary">Publicar ahora</button>

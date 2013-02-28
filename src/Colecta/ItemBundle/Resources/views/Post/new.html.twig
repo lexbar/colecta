@@ -1,0 +1,33 @@
+{% extends '::frontend.html.twig' %}
+
+{% block posts 'active' %}
+
+{% block javascripts %}  
+    <script src="/js/jquery.min.js"></script>
+    <script>        
+        function toggleCategoryCreate() {
+            var button = $('#categoryCreateButton');
+            if(button.hasClass('newcategory')) {
+                button.removeClass('newcategory').addClass('selectcategory');
+                button.html('Seleccionar una categoría existente');
+                $('#EventCategory').hide();
+                $('#EventNewCategory').show().focus();
+            } else {
+                button.removeClass('selectcategory').addClass('newcategory');
+                button.html('Crear una nueva categoría');
+                $('#EventCategory').show();
+                $('#EventNewCategory').hide().attr('value','');
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Crear Publicación</h2>
+</div>
+
+{% include 'ColectaItemBundle:Post:form.html.twig' with { 'categories': categories} %}
+
+{% endblock %}

@@ -5,6 +5,7 @@ namespace Colecta\ItemBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ItemBundle\Entity\Post;
+use Colecta\ItemBundle\Entity\Category;
 
 class PostController extends Controller
 {
@@ -46,6 +47,13 @@ class PostController extends Controller
         
         return $this->render('ColectaItemBundle:Post:full.html.twig', array('item' => $item));
     }
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaItemBundle:Post:new.html.twig', array('categories' => $categories));
+    }
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
@@ -69,6 +77,37 @@ class PostController extends Controller
         else
         {
             $post = new Post();
+            
+            if($request->get('newCategory'))
+            {
+                $category = new Category();
+                $category->setName($request->get('newCategory'));
+                
+                //Category Slug generate
+                $catSlug = $post->generateSlug($request->get('newCategory'));
+                $n = 2;
+                
+                while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                {
+                    if($n > 2)
+                    {
+                        $catSlug = substr($catSlug,0,-2);
+                    }
+                    
+                    $catSlug .= '_'.$n;
+                    
+                    $n++;
+                }
+            
+                $category->setSlug($catSlug);
+                $category->setDescription('');
+                $category->setLastchange(new \DateTime('now'));
+                
+                $em->persist($category); 
+                
+                $post->setCategory($category);
+            }
+            
             $post->setCategory($category);
             $post->setAuthor($user);
             $post->setName($request->get('name'));
@@ -100,14 +139,7 @@ class PostController extends Controller
             $em->flush();
         }
         
-        $referer = $this->get('request')->headers->get('referer');
-        
-        if(empty($referer))
-        {
-            $referer = $this->generateUrl('ColectaPostIndex');
-        }
-        
-        return new RedirectResponse($referer);
+        return new RedirectResponse($this->generateUrl('ColectaPostView',array('slug'=>$post->getSlug())));
     }
     public function editAction($slug)
     {

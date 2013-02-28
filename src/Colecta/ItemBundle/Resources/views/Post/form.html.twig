@@ -1,0 +1,35 @@
+{% if app.user %}
+<form action="{{ path('ColectaPostCreate') }}" method="POST" class="form-horizontal well">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="PostName">Título</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="PostName" name="name">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostText">Texto</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="PostText" name="text" rows="3"></textarea>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="EventCategory">Categoría</label>
+        <div class="controls">
+          <select id="EventCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn">Guardar como borrador</button>
+        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+      </div>
+    </fieldset>
+</form>
+{% endif %}

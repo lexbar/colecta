@@ -22,6 +22,9 @@ ColectaPostIndex:
 ColectaPostPage:
     pattern:  /post/page/{page}
     defaults: { _controller: ColectaItemBundle:Post:page }
+ColectaPostNew:
+    pattern:  /post/new/
+    defaults: { _controller: ColectaItemBundle:Post:new }
 ColectaPostCreate:
     pattern:  /new/post/
     defaults: { _controller: ColectaItemBundle:Post:create }
