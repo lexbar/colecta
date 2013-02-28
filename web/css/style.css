@@ -88,8 +88,7 @@ h2 {
 }
 .myself img {
     float: left;
-    margin-bottom: 10px;
-    margin-right: 10px;
+    margin: 0 15px 5px 15px;
 }
 .myself .name {
     font-size: 22px;

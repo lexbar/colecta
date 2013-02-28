@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ActivityBundle\Entity\Event;
 use Colecta\ActivityBundle\Entity\EventAssistance;
+use Colecta\ItemBundle\Entity\Category;
 use Colecta\UserBundle\Entity\Notification;
 
 
@@ -106,6 +107,20 @@ class EventController extends Controller
         else
         {
             $event = new Event();
+            
+            if($request->get('newCategory'))
+            {
+                $category = new Category();
+                $category->setName($request->get('newCategory'));
+                $category->setSlug($event->generateSlug($request->get('newCategory')));
+                $category->setDescription('');
+                $category->setLastchange(new \DateTime('now'));
+                
+                $em->persist($category); 
+                
+                $event->setCategory($category);
+            }
+            
             $event->setCategory($category);
             $event->setAuthor($user);
             $event->setName($request->get('name'));

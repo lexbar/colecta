@@ -102,7 +102,8 @@
             {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
-          </select>
+          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton" class="newcategory">Crear una nueva categoría</button>
         </div>
       </div>
       <div class="form-actions">
@@ -111,4 +112,6 @@
       </div>
     </fieldset>
 </form>
+{% else %}
+<div class="alert">Tienes que iniciar sesión</div>
 {% endif %}
