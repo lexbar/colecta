@@ -1,5 +1,5 @@
 <div class="event mini">
-
+    <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
     <div class="date">
         <span class="weekday">{{ item.dateini | date('l') | replace ({
             'Monday':'Lunes',
@@ -28,7 +28,9 @@
         <span class="hour">{{ item.dateini | date('H:i') }}</span>
     </div>
     
-    <h2><a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    <h2>{{ item.name }}</h2>
+    
+    </a>
     
     <p>{{ item.summary | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
     

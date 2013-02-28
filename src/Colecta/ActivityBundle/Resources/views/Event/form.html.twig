@@ -4,7 +4,7 @@
       <div class="control-group">
         <label class="control-label" for="EventName">Fecha Inicio</label>
         <div class="controls">
-          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{{ 'tomorrow' | date('Y-m-d') }}"> a las 
+          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{% if app.session.hasFlash('EventDateini') %}{{ app.session.flash('EventDateini') }}{% else %}{{ 'tomorrow' | date('Y-m-d') }}{% endif %}"> a las 
           <select id="EventDifficulty" id="EventDateiniHour" name="dateinihour" style="width:auto">
               {% for hour in 0..23 %}
                 <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == 8 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
@@ -20,7 +20,7 @@
       <div class="control-group">
         <label class="control-label" for="medium">Fecha Fin</label>
         <div class="controls">
-          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{{ 'tomorrow' | date('Y-m-d') }}"> a las 
+          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{% if app.session.hasFlash('EventDateend') %}{{ app.session.flash('EventDateend') }}{% else %}{{ 'tomorrow' | date('Y-m-d') }}{% endif %}"> a las 
           <select id="EventDifficulty" id="EventDateendHour" name="dateendhour" style="width:auto">
               {% for hour in 0..23 %}
                 <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == 14 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
@@ -36,13 +36,13 @@
       <div class="control-group">
         <label class="control-label" for="EventName">Título</label>
         <div class="controls">
-          <input type="text" class="input-xlarge" id="EventName" name="name">
+          <input type="text" class="input-xlarge" id="EventName" name="name" value="{{ app.session.flash('EventName') }}">
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="EventDescription">Descripción</label>
         <div class="controls">
-          <textarea class="input-xlarge" id="EventDescription" name="description" rows="3"></textarea>
+          <textarea class="input-xlarge" id="EventDescription" name="description" rows="3">{{ app.session.flash('EventDescription') }}</textarea>
         </div>
       </div>
       <div class="control-group">

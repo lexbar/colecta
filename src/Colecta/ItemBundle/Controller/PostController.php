@@ -113,7 +113,14 @@ class PostController extends Controller
             $post->setName($request->get('name'));
             
             //Slug generate
-            $slug = $post->generateSlug();
+            if(strlen($request->get('name')) == 0)
+            {
+                $slug = 'untitled';
+            }
+            else
+            {
+                $slug = $post->generateSlug();
+            }
             $n = 2;
             
             while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
@@ -139,7 +146,16 @@ class PostController extends Controller
             $em->flush();
         }
         
-        return new RedirectResponse($this->generateUrl('ColectaPostView',array('slug'=>$post->getSlug())));
+        if(isset($post))
+        {
+            return new RedirectResponse($this->generateUrl('ColectaPostView',array('slug'=>$post->getSlug())));
+        }
+        else
+        {
+            $this->get('session')->setFlash('PostName', $request->get('name'));
+            $this->get('session')->setFlash('PostText', $request->get('text'));
+            return new RedirectResponse($this->generateUrl('ColectaPostNew'));
+        }
     }
     public function editAction($slug)
     {

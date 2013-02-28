@@ -126,7 +126,14 @@ class EventController extends Controller
             $event->setName($request->get('name'));
             
             //Slug generate
-            $slug = $event->generateSlug();
+            if(strlen($request->get('name')) == 0)
+            {
+                $slug = 'untitled';
+            }
+            else
+            {
+                $slug = $event->generateSlug();
+            }
             $n = 2;
             
             while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
@@ -160,7 +167,18 @@ class EventController extends Controller
             $em->flush();
         }
         
-        return new RedirectResponse($this->generateUrl('ColectaEventView',array('slug'=>$event->getSlug())));
+        if(isset($event))
+        {
+            return new RedirectResponse($this->generateUrl('ColectaEventView',array('slug'=>$event->getSlug())));
+        }
+        else
+        {
+            $this->get('session')->setFlash('EventName', $request->get('name'));
+            $this->get('session')->setFlash('EventDescription', $request->get('description'));
+            $this->get('session')->setFlash('EventDateini', $request->get('dateini'));
+            $this->get('session')->setFlash('EventDateend', $request->get('dateend'));
+            return new RedirectResponse($this->generateUrl('ColectaEventNew'));
+        }
     }
     
     /*
