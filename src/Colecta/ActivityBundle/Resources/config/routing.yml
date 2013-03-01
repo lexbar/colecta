@@ -46,6 +46,9 @@ ColectaRouteUpload:
 ColectaRouteCreate:
     pattern:  /new/route/
     defaults: { _controller: ColectaActivityBundle:Route:create }
+ColectaRouteNew:
+    pattern:  /route/new/
+    defaults: { _controller: ColectaActivityBundle:Route:new }
 ColectaRouteIndex:
     pattern:  /route/
     defaults: { _controller: ColectaActivityBundle:Route:index }

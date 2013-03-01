@@ -91,6 +91,13 @@ class RouteController extends Controller
         $response->headers->set('Content-Type', 'image/png');
         return $response;
     }
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaActivityBundle:Route:new.html.twig');
+    }
     public function uploadAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();

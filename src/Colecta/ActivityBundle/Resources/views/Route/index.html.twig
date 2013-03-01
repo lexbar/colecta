@@ -5,27 +5,9 @@
 {% block article %}
 
 <div class="title-block">
-    {% if app.user %} <button type="button" class="btn btn-small pull-right">Crear ruta <i class="icon-plus"></i></button> {% endif %}
+    {% if app.user %} <a href="{{ path('ColectaRouteNew')}}" class="btn btn-small pull-right">Crear ruta <i class="icon-plus"></i></a> {% endif %}
     <h2>Rutas</h2>
 </div>
-
-{# if app.user %}
-<form onSubmit="var submit = document.getElementById('RouteSubmit'); submit.disabled = 'disabled'; submit.innerHTML = 'Subiendo...';" action="{{ path('ColectaRouteUpload') }}" method="POST" class="form-horizontal well hidden" onclick="this.className='form-horizontal well'" enctype="multipart/form-data">
-<h2>Crear una nueva Ruta</h2>
-    <fieldset>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Archivo</label>
-        <div class="controls">
-          <input type="file" id="RouteFile" name="file">
-        </div>
-      </div>
-      
-      <div class="form-actions">
-        <button id="RouteSubmit" type="submit" class="btn btn-primary">Subir e introducir datos</button>
-      </div>
-    </fieldset>
-</form>
-{% endif #}
 
 {% for item in items %}
 <div class="item">

@@ -1,0 +1,16 @@
+{% if app.user %}
+<form onSubmit="var submit = document.getElementById('RouteSubmit'); submit.disabled = 'disabled'; submit.innerHTML = 'Subiendo...';" action="{{ path('ColectaRouteUpload') }}" method="POST" class="form-horizontal well" enctype="multipart/form-data">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Archivo</label>
+        <div class="controls">
+          <input type="file" id="RouteFile" name="file">
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button id="RouteSubmit" type="submit" class="btn btn-primary">Subir e introducir datos</button>
+      </div>
+    </fieldset>
+</form>
+{% endif %}
