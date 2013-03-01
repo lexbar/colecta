@@ -1,11 +1,14 @@
 {% extends '::frontend.html.twig' %}
 
 {% block article %}
-<h1>Upload File</h1>
+<div class="title-block">
+    <h2>Editar Perfil</h2>
+</div>
 
 <form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
-    
+    <br>
+    <img class="thumbnail" width="50" height="50" src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}">
     <hr>
     <p><input class="btn btn-primary" type="submit" value="Guardar cambios" /></p>
 </form>
