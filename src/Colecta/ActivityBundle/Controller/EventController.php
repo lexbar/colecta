@@ -106,24 +106,39 @@ class EventController extends Controller
         }
         else
         {
-            $event = new Event();
+            $item = new Event();
             
             if($request->get('newCategory'))
             {
                 $category = new Category();
                 $category->setName($request->get('newCategory'));
-                $category->setSlug($event->generateSlug($request->get('newCategory')));
+                
+                //Category Slug generate
+                $catSlug = $item->generateSlug($request->get('newCategory'));
+                $n = 2;
+                
+                while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                {
+                    if($n > 2)
+                    {
+                        $catSlug = substr($catSlug,0,-2);
+                    }
+                    
+                    $catSlug .= '_'.$n;
+                    
+                    $n++;
+                }
+            
+                $category->setSlug($catSlug);
                 $category->setDescription('');
                 $category->setLastchange(new \DateTime('now'));
                 
                 $em->persist($category); 
-                
-                $event->setCategory($category);
             }
             
-            $event->setCategory($category);
-            $event->setAuthor($user);
-            $event->setName($request->get('name'));
+            $item->setCategory($category);
+            $item->setAuthor($user);
+            $item->setName($request->get('name'));
             
             //Slug generate
             if(strlen($request->get('name')) == 0)
@@ -132,7 +147,7 @@ class EventController extends Controller
             }
             else
             {
-                $slug = $event->generateSlug();
+                $slug = $item->generateSlug();
             }
             $n = 2;
             
@@ -147,29 +162,29 @@ class EventController extends Controller
                 
                 $n++;
             }
-            $event->setSlug($slug);
+            $item->setSlug($slug);
             
-            $event->summarize($request->get('description'));
-            $event->setAllowComments(true);
-            $event->setDraft(false);
-            $event->setActivity(null);
-            $event->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
-            $event->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
-            $event->setShowhours(false);
-            $event->setDescription($request->get('description'));
-            $event->setDistance(str_replace(',','.', $request->get('distance')));
-            $event->setUphill($request->get('uphill'));
-            $event->setDownhill(0);
-            $event->setDifficulty($request->get('difficulty'));
-            $event->setStatus('');
+            $item->summarize($request->get('description'));
+            $item->setAllowComments(true);
+            $item->setDraft(false);
+            $item->setActivity(null);
+            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
+            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
+            $item->setShowhours(false);
+            $item->setDescription($request->get('description'));
+            $item->setDistance(str_replace(',','.', $request->get('distance')));
+            $item->setUphill($request->get('uphill'));
+            $item->setDownhill(0);
+            $item->setDifficulty($request->get('difficulty'));
+            $item->setStatus('');
             
-            $em->persist($event); 
+            $em->persist($item); 
             $em->flush();
         }
         
-        if(isset($event))
+        if(isset($item))
         {
-            return new RedirectResponse($this->generateUrl('ColectaEventView',array('slug'=>$event->getSlug())));
+            return new RedirectResponse($this->generateUrl('ColectaEventView',array('slug'=>$item->getSlug())));
         }
         else
         {
@@ -181,13 +196,101 @@ class EventController extends Controller
         }
     }
     
+    public function editAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->get('request')->request;
+        
+        $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+        
+        if(!$user || $user != $item->getAuthor()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
+        }
+        
+        if ($this->get('request')->getMethod() == 'POST') {
+            $persist = true;
+            
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
+        
+            if(!$category)
+            {
+                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $persist = false;
+            }
+            else
+            {
+                if($request->get('newCategory'))
+                {
+                    $category = new Category();
+                    $category->setName($request->get('newCategory'));
+                    
+                    //Category Slug generate
+                    $catSlug = $item->generateSlug($request->get('newCategory'));
+                    $n = 2;
+                    
+                    while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                    {
+                        if($n > 2)
+                        {
+                            $catSlug = substr($catSlug,0,-2);
+                        }
+                        
+                        $catSlug .= '_'.$n;
+                        
+                        $n++;
+                    }
+                
+                    $category->setSlug($catSlug);
+                    $category->setDescription('');
+                    $category->setLastchange(new \DateTime('now'));
+                    
+                    $em->persist($category); 
+                }
+                
+                $item->setCategory($category);
+            }
+            
+            if(!$request->get('description'))
+            {
+                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
+                $persist = false;
+            }
+            
+            $item->summarize($request->get('description'));
+            $item->setAllowComments(true);
+            $item->setDraft(false);
+            $item->setActivity(null);
+            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
+            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
+            $item->setShowhours(false);
+            $item->setDescription($request->get('description'));
+            $item->setDistance(str_replace(',','.', $request->get('distance')));
+            $item->setUphill($request->get('uphill'));
+            $item->setDownhill(0);
+            $item->setDifficulty($request->get('difficulty'));
+            $item->setStatus('');
+            
+            if($persist)
+            {
+                $em->persist($item); 
+                $em->flush();
+                $this->get('session')->setFlash('success', 'Modificado con éxito.');
+            }
+        }
+        
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        return $this->render('ColectaActivityBundle:Event:edit.html.twig', array('item' => $item, 'categories'=>$categories));
+    }
+    
+    
+    public function assistanceAction($slug)
     /*
         Mark Assistance of logged User to an Event
         
         From the Event node
     */
-    
-    public function assistanceAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
@@ -354,17 +457,17 @@ class EventController extends Controller
     {
         $dateOb = new \DateTime($date);
         $em = $this->getDoctrine()->getEntityManager();
-        $events = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.$dateOb->format('Y-m-1 00:00:00').'\' AND e.dateini < \''.$dateOb->format('Y-').(intval($dateOb->format('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();
+        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.$dateOb->format('Y-m-1 00:00:00').'\' AND e.dateini < \''.$dateOb->format('Y-').(intval($dateOb->format('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();
         
         $ev = array();
         for($i = 1; $i <= 31; $i++){$ev[$i] = array();}
         
-        if(count($events))
+        if(count($items))
         {
-            foreach($events as $event)
+            foreach($items as $item)
             {
-                $day = intval($event->getDateini()->format('j'));
-                $ev[$day][] = $event;
+                $day = intval($item->getDateini()->format('j'));
+                $ev[$day][] = $item;
             }
         }
         

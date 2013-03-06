@@ -76,7 +76,7 @@ class PostController extends Controller
         }
         else
         {
-            $post = new Post();
+            $item = new Post();
             
             if($request->get('newCategory'))
             {
@@ -84,7 +84,7 @@ class PostController extends Controller
                 $category->setName($request->get('newCategory'));
                 
                 //Category Slug generate
-                $catSlug = $post->generateSlug($request->get('newCategory'));
+                $catSlug = $item->generateSlug($request->get('newCategory'));
                 $n = 2;
                 
                 while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
@@ -104,13 +104,11 @@ class PostController extends Controller
                 $category->setLastchange(new \DateTime('now'));
                 
                 $em->persist($category); 
-                
-                $post->setCategory($category);
             }
             
-            $post->setCategory($category);
-            $post->setAuthor($user);
-            $post->setName($request->get('name'));
+            $item->setCategory($category);
+            $item->setAuthor($user);
+            $item->setName($request->get('name'));
             
             //Slug generate
             if(strlen($request->get('name')) == 0)
@@ -119,7 +117,7 @@ class PostController extends Controller
             }
             else
             {
-                $slug = $post->generateSlug();
+                $slug = $item->generateSlug();
             }
             $n = 2;
             
@@ -134,21 +132,21 @@ class PostController extends Controller
                 
                 $n++;
             }
-            $post->setSlug($slug);
+            $item->setSlug($slug);
             
-            $post->summarize($request->get('text'));
-            $post->setAllowComments(true);
-            $post->setDraft(false);
-            $post->setText($request->get('text'));
+            $item->summarize($request->get('text'));
+            $item->setAllowComments(true);
+            $item->setDraft(false);
+            $item->setText($request->get('text'));
             
             
-            $em->persist($post); 
+            $em->persist($item); 
             $em->flush();
         }
         
-        if(isset($post))
+        if(isset($item))
         {
-            return new RedirectResponse($this->generateUrl('ColectaPostView',array('slug'=>$post->getSlug())));
+            return new RedirectResponse($this->generateUrl('ColectaPostView',array('slug'=>$item->getSlug())));
         }
         else
         {
@@ -182,12 +180,40 @@ class PostController extends Controller
             }
             else
             {
+                if($request->get('newCategory'))
+                {
+                    $category = new Category();
+                    $category->setName($request->get('newCategory'));
+                    
+                    //Category Slug generate
+                    $catSlug = $item->generateSlug($request->get('newCategory'));
+                    $n = 2;
+                    
+                    while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                    {
+                        if($n > 2)
+                        {
+                            $catSlug = substr($catSlug,0,-2);
+                        }
+                        
+                        $catSlug .= '_'.$n;
+                        
+                        $n++;
+                    }
+                
+                    $category->setSlug($catSlug);
+                    $category->setDescription('');
+                    $category->setLastchange(new \DateTime('now'));
+                    
+                    $em->persist($category); 
+                }
+                
                 $item->setCategory($category);
             }
             
-            if(!$request->get('name'))
+            if(!$request->get('text'))
             {
-                $this->get('session')->setFlash('error', 'No puedes dejar vacío el nombre');
+                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             

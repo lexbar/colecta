@@ -88,7 +88,22 @@
     }
     
     function encodeItem(item) {
-        return '{\'name\':\''+item.name+'\',\'type\':\''+item.type+'\',\'id\':\''+item.id+'\',\'author\':\''+item.author+'\'}';
+        return '{\'name\':\''+item.name.replace(/&#039;/g,'\\\'')+'\',\'type\':\''+item.type+'\',\'id\':\''+item.id+'\',\'author\':\''+item.author.replace(/&#039;/g,'\\\'')+'\'}';
+    }
+    
+    function toggleCategoryCreate() {
+        var button = $('#categoryCreateButton');
+        if(button.hasClass('newcategory')) {
+            button.removeClass('newcategory').addClass('selectcategory');
+            button.html('Seleccionar una categoría existente');
+            $('#EventCategory').hide();
+            $('#EventNewCategory').show().focus();
+        } else {
+            button.removeClass('selectcategory').addClass('newcategory');
+            button.html('Crear una nueva categoría');
+            $('#EventCategory').show();
+            $('#EventNewCategory').hide().attr('value','');
+        }
     }
     
     </script>
@@ -96,8 +111,10 @@
 {% block article %}
 
 {% if item.author == app.user %}
+<div class="title-block">
+    <h2>Editar Publicación</h2>
+</div>
 <form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal well">
-<h2>Crear una nueva Publicación</h2>
     <fieldset>
       <div class="control-group">
         <label class="control-label" for="PostName">Título</label>
@@ -111,16 +128,19 @@
           <textarea class="input-xlarge" id="PostText" name="text" rows="3">{{ item.text }}</textarea>
         </div>
       </div>
+      
       <div class="control-group">
-        <label class="control-label" for="PostCategory">Categoría</label>
+        <label class="control-label" for="EventCategory">Categoría</label>
         <div class="controls">
-          <select id="PostCategory" name="category">
+          <select id="EventCategory" name="category">
             {% for category in categories %}
-                <option value="{{ category.id }}"{% if item.category.id == category.id %}selected="selected"{% endif %}>{{ category.name }}</option>
+                <option value="{{ category.id }}"{% if item.category.slug == category.slug %} selected{% endif %}>{{ category.name }}</option>
             {% endfor %}
-          </select>
+          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
         </div>
       </div>
+      
       <div class="form-actions">
         {% if item.draft %}<button class="btn">Guardar como borrador</button>{% endif %}
         <button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button>

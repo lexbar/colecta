@@ -1,0 +1,283 @@
+{% extends '::frontend.html.twig' %}
+
+{% block events 'active' %}
+
+{% block javascripts %}    
+    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
+    <script>
+        jQuery(function($){
+        	$.datepicker.regional['es'] = {
+        		closeText: 'Cerrar',
+        		prevText: 'Anterior',
+        		nextText: 'Siguiente',
+        		currentText: 'Hoy',
+        		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+        		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        		monthNamesShort: ['Ene','Feb.','Mar','Abr','May','Jun',
+        		'Jul.','Ago','Sep','Oct','Nov','Dic'],
+        		dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
+        		dayNamesShort: ['Dom.','Lun.','Mar.','Mie.','Jue.','Vie.','Sáb.'],
+        		dayNamesMin: ['D','L','M','X','J','V','S'],
+        		weekHeader: 'Sem.',
+        		dateFormat: 'yy-mm-dd',
+        		firstDay: 1,
+        		isRTL: false,
+        		showMonthAfterYear: false,
+        		yearSuffix: ''};
+        	$.datepicker.setDefaults($.datepicker.regional['es']);
+        });
+
+        $(function() {
+            $( "#EventDateini" ).datepicker({onSelect : function(text,obj){
+                        $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
+            }});
+            $( "#EventDateend" ).datepicker();
+            
+            $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
+        });
+        
+        function toggleCategoryCreate() {
+            var button = $('#categoryCreateButton');
+            if(button.hasClass('newcategory')) {
+                button.removeClass('newcategory').addClass('selectcategory');
+                button.html('Seleccionar una categoría existente');
+                $('#EventCategory').hide();
+                $('#EventNewCategory').show().focus();
+            } else {
+                button.removeClass('selectcategory').addClass('newcategory');
+                button.html('Crear una nueva categoría');
+                $('#EventCategory').show();
+                $('#EventNewCategory').hide().attr('value','');
+            }
+        }
+    var relations = [{% for related in item.related %}{"name":"{{ related.name }}","type":"{{ related.type }}","id":"{{ related.id }}","author":"{{ related.author.id }}"}{% if not loop.last %},{% endif %}{% endfor%}];
+    var xhr;
+    var searchagain = false;
+    
+    function showResults()
+    {
+        if($('#searchItem').val().length < 3) {
+            $('#itemResults').html('');
+            $('#itemResults').css('display','none');
+            return;
+        }
+        
+        $('#searchButton').attr("disabled", "disabled");
+        
+        if(xhr && xhr.readyState != 4) {
+            searchagain = true;
+        } else {        
+            var excludeIds = '';
+            
+            for(var i = 0; i < relations.length; i++){ excludeIds += relations[i].id + ','; }
+            
+            xhr = $.ajax({
+                url: '{{ path('ColectaAjaxSearch') }}?search='+$('#searchItem').val()+'&exclude='+excludeIds,
+                success: function(json) {
+                    $('#itemResults').html('');
+                    $('#itemResults').css('display','none');
+                    for(var i = 0; i < json.length; i++) {
+                        $('#itemResults').append('<li><a tabindex="-1" href="#'+json[i].id+'" onClick="addRelation('+encodeItem(json[i])+');return false;"><strong>('+typeName(json[i].type)+')</strong> '+json[i].name+'</a></li>');
+                    } 
+                    if(json.length) { $('#itemResults').css('display','block'); }
+                    $('#searchButton').removeAttr("disabled"); 
+                },
+                cache: false
+            }).done(function() { 
+                if(searchagain) {
+                    searchagain = false;
+                    showResults();
+                }
+            });
+        }
+    }
+    
+    function addRelation(item) {
+        relations.push(item);
+        redrawRelateds();
+        
+        $('#itemResults').html('');
+        $('#itemResults').css('display','none');
+    }
+    
+    function removeRelation(id) {
+        for(var i = 0; i < relations.length; i++){
+            if(relations[i].id == id) {
+                relations.splice(i,1);
+            }
+        }
+        redrawRelateds();
+    }
+    
+    function redrawRelateds() {
+        $('#showRelateds').html('');
+        $('#relateds').val('');
+        for(var i = 0; i < relations.length; i++){
+            $('#showRelateds').append('<p><button type="button" onClick="removeRelation('+relations[i].id+')" class="btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button> <strong> '+relations[i].name+'</strong></p>');
+            $('#relateds').val($('#relateds').val() + relations[i].id + ',');
+        }
+    }
+    
+    function typeName(type) {
+        switch(type) {
+            case 'Item/Post': return 'Publicación'; break;
+            case 'Files/File': return 'Archivo'; break;
+            case 'Files/Folder': return 'Carpeta'; break;
+            case 'Colective/Poll': return 'Encuesta'; break;
+            case 'Colective/Contest': return 'Concurso'; break;
+            case 'Activity/Place': return 'Lugar'; break;
+            case 'Activity/Route': return 'Ruta'; break;
+            case 'Activity/Event': return 'Evento'; break;
+        }
+        return type;
+    }
+    
+    function encodeItem(item) {
+        return '{\'name\':\''+item.name.replace(/&#039;/g,'\\\'')+'\',\'type\':\''+item.type+'\',\'id\':\''+item.id+'\',\'author\':\''+item.author.replace(/&#039;/g,'\\\'')+'\'}';
+    }
+    
+    function toggleCategoryCreate() {
+        var button = $('#categoryCreateButton');
+        if(button.hasClass('newcategory')) {
+            button.removeClass('newcategory').addClass('selectcategory');
+            button.html('Seleccionar una categoría existente');
+            $('#EventCategory').hide();
+            $('#EventNewCategory').show().focus();
+        } else {
+            button.removeClass('selectcategory').addClass('newcategory');
+            button.html('Crear una nueva categoría');
+            $('#EventCategory').show();
+            $('#EventNewCategory').hide().attr('value','');
+        }
+    }
+    
+    </script>
+{% endblock %}
+{% block article %}
+
+{% if item.author == app.user %}
+<div class="title-block">
+    <h2>Editar Evento</h2>
+</div>
+<form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal well">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="EventName">Fecha Inicio</label>
+        <div class="controls">
+          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{{ item.dateini | date('Y-m-d') }}"> a las 
+          <select id="EventDifficulty" id="EventDateiniHour" name="dateinihour" style="width:auto">
+              {% for hour in 0..23 %}
+                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateini | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+              {% endfor %}
+          </select> :
+          <select id="EventDifficulty" id="EventDateiniMinute" name="dateiniminute" style="width:auto">
+              {% for minute in ['00','10','20','30','40','50'] %}
+                <option value="{{ minute }}"{% if minute == item.dateini | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
+              {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="medium">Fecha Fin</label>
+        <div class="controls">
+          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{{ item.dateend | date('Y-m-d') }}"> a las 
+          <select id="EventDifficulty" id="EventDateendHour" name="dateendhour" style="width:auto">
+              {% for hour in 0..23 %}
+                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateend | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+              {% endfor %}
+          </select> :
+          <select id="EventDifficulty" id="EventDateendMinute" name="dateendminute" style="width:auto">
+              {% for minute in ['00','10','20','30','40','50'] %}
+                <option value="{{ minute }}"{% if minute == item.dateend | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
+              {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="EventName">Título</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="EventName" name="name" value="{{ item.name }}">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="EventDescription">Descripción</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="EventDescription" name="description" rows="3">{{ item.description }}</textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="EventName">Distancia</label>
+        <div class="controls">
+          <div class="input-append">
+            <input type="text" class="input-small" id="EventDistance" name="distance" value="{{ item.distance }}"><span class="add-on"> km</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="EventName">Desnivel subida</label>
+        <div class="controls">
+          <div class="input-append">
+            <input type="text" class="input-small" id="EventUphill" name="uphill" value="{{ item.uphill }}"><span class="add-on"> metros</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="EventName">Dificultad</label>
+        <div class="controls">
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item.difficulty == '' %} checked{% endif %}>
+                No indicar
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
+                <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                Fácil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
+                <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                Moderado
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
+                <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                Difícil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
+                <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                Muy difícil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
+                <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                Sólo expertos
+            </label>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="EventCategory">Categoría</label>
+        <div class="controls">
+          <select id="EventCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}"{% if item.category.slug == category.slug %} selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+      </div>
+    </fieldset>
+</form>
+
+{% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
+
+{% endif %}
+
+{% endblock %}

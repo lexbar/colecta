@@ -15,6 +15,9 @@ h2 {
     font-weight: bold;
     font-family: 'Proxima Nova', 'proxima-nova', 'Helvetica Neue', Helvetica, sans-serif;
 }
+form.well {
+    border-radius: 0 0 4px 4px;
+}
 .title-block {
     padding: 15px;
     background-color: #2F7ED4;
@@ -398,7 +401,6 @@ div.assistances ul li a {
 }
 
 .place.mini .thumbnail, .file.mini .thumbnail {
-    float: left;
     margin: 0 10px 10px 0;
 }
 .route.full ul.properties {

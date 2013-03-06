@@ -8,10 +8,10 @@
     
     <h2>{{ item.name }}</h2>
     
-    {% if item.filetype in ['jpg','gif','png'] %} 
+    {% if item.filetype in ['jpg','jpeg','gif','png'] %} 
         <img style="width:100%;" src="{{ item.URLPath }}"> 
     {% else %}
-        <a href="/{{ item.URLPath }}">Enlace</a>
+        <a href="{{ item.URLPath }}">Enlace</a>
     {% endif %}
     
     <p>{{ item.description | nl2br }}</p>
