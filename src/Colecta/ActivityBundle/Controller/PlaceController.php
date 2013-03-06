@@ -5,6 +5,8 @@ namespace Colecta\ActivityBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ActivityBundle\Entity\Place;
+use Colecta\ItemBundle\Entity\Category;
+use Colecta\UserBundle\Entity\Notification;
 
 class PlaceController extends Controller
 {
@@ -46,6 +48,13 @@ class PlaceController extends Controller
         
         return $this->render('ColectaActivityBundle:Place:full.html.twig', array('item' => $item));
     }
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaActivityBundle:Place:new.html.twig', array('categories' => $categories));
+    }
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
@@ -54,13 +63,14 @@ class PlaceController extends Controller
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
     
-        if(!$user) 
+        if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
         }
-        elseif(!$request->get('name'))
+        elseif(!$request->get('description'))
         {
-            $this->get('session')->setFlash('error', 'No has escrito ningun nombre');
+            $this->get('session')->setFlash('error', 'No has escrito ningun texto');
         }
         elseif(!$category)
         {
@@ -68,13 +78,50 @@ class PlaceController extends Controller
         }
         else
         {
-            $place= new Place();
-            $place->setCategory($category);
-            $place->setAuthor($user);
-            $place->setName($request->get('name'));
+            $item = new Place();
+            
+            if($request->get('newCategory'))
+            {
+                $category = new Category();
+                $category->setName($request->get('newCategory'));
+                
+                //Category Slug generate
+                $catSlug = $item->generateSlug($request->get('newCategory'));
+                $n = 2;
+                
+                while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                {
+                    if($n > 2)
+                    {
+                        $catSlug = substr($catSlug,0,-2);
+                    }
+                    
+                    $catSlug .= '_'.$n;
+                    
+                    $n++;
+                }
+            
+                $category->setSlug($catSlug);
+                $category->setDescription('');
+                $category->setLastchange(new \DateTime('now'));
+                
+                $em->persist($category); 
+            }
+            
+            $item->setCategory($category);
+            $item->setAuthor($user);
+            $item->setName($request->get('name'));
             
             //Slug generate
-            $slug = $place->generateSlug();
+            if(strlen($request->get('name')) == 0)
+            {
+                $slug = 'untitled';
+            }
+            else
+            {
+                $slug = $item->generateSlug();
+            }
+            
             $n = 2;
             
             while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
@@ -88,27 +135,109 @@ class PlaceController extends Controller
                 
                 $n++;
             }
-            $place->setSlug($slug);
+            $item->setSlug($slug);
             
-            $place->summarize($request->get('description'));
-            $place->setAllowComments(true);
-            $place->setDraft(false);
-            $place->setDescription($request->get('description'));
-            $place->setLatitude($request->get('latitude'));
-            $place->setLongitude($request->get('longitude'));
+            $item->summarize($request->get('description'));
+            $item->setAllowComments(true);
+            $item->setDraft(false);
+            $item->setDescription($request->get('description'));
+            $item->setLatitude($request->get('latitude'));
+            $item->setLongitude($request->get('longitude'));
             
-            $em->persist($place); 
+            $em->persist($item); 
             $em->flush();
         }
         
-        $referer = $this->get('request')->headers->get('referer');
-        
-        if(empty($referer))
+        if(isset($item))
         {
-            $referer = $this->generateUrl('ColectaPlaceIndex');
+            return new RedirectResponse($this->generateUrl('ColectaPlaceView',array('slug'=>$item->getSlug())));
+        }
+        else
+        {
+            $this->get('session')->setFlash('PlaceName', $request->get('name'));
+            $this->get('session')->setFlash('PlaceDescription', $request->get('description'));
+            $this->get('session')->setFlash('PlaceLatitude', $request->get('latitude'));
+            $this->get('session')->setFlash('PlaceLongitude', $request->get('longitude'));
+            return new RedirectResponse($this->generateUrl('ColectaPlaceNew'));
+        }
+    }
+    public function editAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->get('request')->request;
+        
+        $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
+        
+        if(!$user || $user != $item->getAuthor()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaPlaceView', array('slug'=>$slug)));
         }
         
-        return new RedirectResponse($referer);
+        if ($this->get('request')->getMethod() == 'POST') {
+            $persist = true;
+            
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
+        
+            if(!$category)
+            {
+                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $persist = false;
+            }
+            else
+            {
+                if($request->get('newCategory'))
+                {
+                    $category = new Category();
+                    $category->setName($request->get('newCategory'));
+                    
+                    //Category Slug generate
+                    $catSlug = $item->generateSlug($request->get('newCategory'));
+                    $n = 2;
+                    
+                    while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                    {
+                        if($n > 2)
+                        {
+                            $catSlug = substr($catSlug,0,-2);
+                        }
+                        
+                        $catSlug .= '_'.$n;
+                        
+                        $n++;
+                    }
+                
+                    $category->setSlug($catSlug);
+                    $category->setDescription('');
+                    $category->setLastchange(new \DateTime('now'));
+                    
+                    $em->persist($category); 
+                }
+                
+                $item->setCategory($category);
+            }
+            
+            if(!$request->get('description'))
+            {
+                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
+                $persist = false;
+            }
+            
+            $item->summarize($request->get('description'));
+            $item->setDescription($request->get('description'));
+            $item->setLatitude($request->get('latitude'));
+            $item->setLongitude($request->get('longitude'));
+            
+            if($persist)
+            {
+                $em->persist($item); 
+                $em->flush();
+                $this->get('session')->setFlash('success', 'Modificado con éxito.');
+            }
+        }
+        
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        return $this->render('ColectaActivityBundle:Place:edit.html.twig', array('item' => $item, 'categories'=>$categories));
     }
 
 }

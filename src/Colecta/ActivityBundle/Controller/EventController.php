@@ -195,7 +195,6 @@ class EventController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaEventNew'));
         }
     }
-    
     public function editAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
@@ -206,7 +205,7 @@ class EventController extends Controller
         
         if(!$user || $user != $item->getAuthor()) 
         {
-            return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
+            return new RedirectResponse($this->generateUrl('ColectaEventView', array('slug'=>$slug)));
         }
         
         if ($this->get('request')->getMethod() == 'POST') {

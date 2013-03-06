@@ -1,0 +1,82 @@
+{% extends '::frontend.html.twig' %}
+
+{% block places 'active' %}
+
+{% block javascripts %}  
+    <script src="/js/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+        var geocoder;
+        var map;
+        var marker;
+        
+        function searchLocation() {
+        if(!geocoder) {
+            geocoder = new google.maps.Geocoder();
+        }
+        var address = document.getElementById('PlaceMapSearch').value;
+        if(document.getElementById('PlaceName').value == '') {
+            document.getElementById('PlaceName').value = address;
+        }
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if(document.getElementById('map').className != 'active') {
+                document.getElementById('map').className = 'active';
+                map = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:results[0].geometry.location, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
+                google.maps.event.addListener(map, 'click', function(event) {
+                    map.panTo(event.latLng);
+                    marker.setPosition(event.latLng);
+                    document.getElementById('PlaceLatitude').value = event.latLng.lat();
+                    document.getElementById('PlaceLongitude').value = event.latLng.lng();
+                });
+            } else {
+                map.setCenter(results[0].geometry.location);
+            }
+            
+            if(!marker) {
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                marker.setPosition(results[0].geometry.location);
+            }
+            
+            document.getElementById('PlaceLatitude').value = results[0].geometry.location.lat();
+            document.getElementById('PlaceLongitude').value = results[0].geometry.location.lng();
+          } else {
+            if(status == 'ZERO_RESULTS') {
+                alert('No hemos encontrado ningun sitio con esas palabras. \nPrueba de nuevo');
+            } else {
+                alert('Ha ocurrido un error: ' + status);
+            }
+          }
+        });
+        }
+        
+        function toggleCategoryCreate() {
+            var button = $('#categoryCreateButton');
+            if(button.hasClass('newcategory')) {
+                button.removeClass('newcategory').addClass('selectcategory');
+                button.html('Seleccionar una categoría existente');
+                $('#EventCategory').hide();
+                $('#EventNewCategory').show().focus();
+            } else {
+                button.removeClass('selectcategory').addClass('newcategory');
+                button.html('Crear una nueva categoría');
+                $('#EventCategory').show();
+                $('#EventNewCategory').hide().attr('value','');
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Crear Lugar</h2>
+</div>
+
+{% include 'ColectaActivityBundle:Place:form.html.twig' with { 'categories': categories} %}
+
+{% endblock %}

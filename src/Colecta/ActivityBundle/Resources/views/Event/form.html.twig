@@ -115,5 +115,5 @@
     </fieldset>
 </form>
 {% else %}
-<div class="alert">Tienes que iniciar sesión</div>
+<div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
 {% endif %}

@@ -4,6 +4,9 @@ ColectaPlaceCreate:
 ColectaPlaceIndex:
     pattern:  /place/
     defaults: { _controller: ColectaActivityBundle:Place:index }
+ColectaPlaceNew:
+    pattern:  /place/new/
+    defaults: { _controller: ColectaActivityBundle:Place:new }
 ColectaPlacePage:
     pattern:  /place/page/{page}
     defaults: { _controller: ColectaActivityBundle:Place:page }

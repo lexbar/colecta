@@ -1,0 +1,55 @@
+{% if app.user %}
+<form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceCreate') }}" method="POST" class="form-horizontal well">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="PlaceMapSearch">Localización</label>
+        <div class="controls">
+          <div class="input-append">
+            <input class="span2" id="PlaceMapSearch" size="16" type="text"><button class="btn" type="button" onClick="searchLocation()">Buscar en el mapa <i class="icon-search"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <div class="input-append">
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="control-group">
+        <label class="control-label" for="PlaceName">Nombre del lugar</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="PlaceName" name="name">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PlaceDescription">Descripción</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="PlaceDescription" name="description" rows="3"></textarea>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="EventCategory">Categoría</label>
+        <div class="controls">
+          <select id="EventCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <input type="hidden" name="latitude" id="PlaceLatitude">
+        <input type="hidden" name="longitude" id="PlaceLongitude">
+        <button class="btn">Guardar como borrador</button>
+        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+      </div>
+    </fieldset>
+</form>
+{% else %}
+<div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
+{% endif %}
