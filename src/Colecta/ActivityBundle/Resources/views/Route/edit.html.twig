@@ -1,6 +1,6 @@
 {% extends '::frontend.html.twig' %}
 
-{% block posts 'active' %}
+{% block routes 'active' %}
 
 {% block javascripts %}    
     
@@ -144,8 +144,10 @@
 {% block article %}
 
 {% if item.author == app.user %}
-<form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal well">
-<h2>Datos de la Ruta</h2>
+<div class="title-block">
+    <h2>Editar Ruta</h2>
+</div>
+<form action="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal well">
     <fieldset>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Nombre</label>
@@ -299,8 +301,7 @@
       </div>
       
       <div class="form-actions">
-        <button class="btn">Guardar como borrador</button>
-        <button type="submit" class="btn btn-primary" id="RouteSubmit">Publicar ahora</button>
+        <button type="submit" class="btn btn-primary" id="RouteSubmit">Actualizar</button>
       </div>
     </fieldset>
 </form>

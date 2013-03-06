@@ -299,18 +299,56 @@ class RouteController extends Controller
             }
             else
             {
+                if($request->get('newCategory'))
+                {
+                    $category = new Category();
+                    $category->setName($request->get('newCategory'));
+                    
+                    //Category Slug generate
+                    $catSlug = $item->generateSlug($request->get('newCategory'));
+                    $n = 2;
+                    
+                    while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                    {
+                        if($n > 2)
+                        {
+                            $catSlug = substr($catSlug,0,-2);
+                        }
+                        
+                        $catSlug .= '_'.$n;
+                        
+                        $n++;
+                    }
+                
+                    $category->setSlug($catSlug);
+                    $category->setDescription('');
+                    $category->setLastchange(new \DateTime('now'));
+                    
+                    $em->persist($category); 
+                }
+                
                 $item->setCategory($category);
             }
             
-            if(!$request->get('name'))
+            if(!$request->get('description'))
             {
-                $this->get('session')->setFlash('error', 'No puedes dejar vacío el nombre');
+                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             
-            $item->setName($request->get('name'));
-            $item->setText($request->get('text'));
-            $item->summarize($request->get('text'));
+            $item->summarize($request->get('description'));
+            $item->setAllowComments(true);
+            $item->setDraft(false);
+            $item->setActivity(null);
+            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
+            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
+            $item->setShowhours(false);
+            $item->setDescription($request->get('description'));
+            $item->setDistance(str_replace(',','.', $request->get('distance')));
+            $item->setUphill($request->get('uphill'));
+            $item->setDownhill(0);
+            $item->setDifficulty($request->get('difficulty'));
+            $item->setStatus('');
             
             if($persist)
             {
@@ -320,17 +358,8 @@ class RouteController extends Controller
             }
         }
         
-        $filename = $item->getSourcefile();
-        $rootdir = $this->getUploadDir();
-        
-        $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
-        $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
-        $routedata = $this->getRouteData($fulltrack);
-        
-        $form = $this->createForm(new RouteType(), $item);
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
-        
-        return $this->render('ColectaActivityBundle:Route:edit.html.twig', array('item' => $item,'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView(), 'categories'=>$categories, ));
+        return $this->render('ColectaActivityBundle:Route:edit.html.twig', array('item' => $item, 'categories'=>$categories));
     }
     public function downloadAction($slug, $extension)
     {

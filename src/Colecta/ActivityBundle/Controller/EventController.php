@@ -322,14 +322,14 @@ class EventController extends Controller
                 $assistance->setEvent($item);
                 
                 /* Notification to owner */
-                if(1 || $user != $item->getAuthor())
+                if($user != $item->getAuthor())
                 {
                     $notification = new Notification();
                     // text date dismiss user
                     $notification->setUser($item->getAuthor());
                     $notification->setDismiss(0);
                     $notification->setDate(new \DateTime('now'));
-                    $notification->setText($user->getName().' va a asistir a '.$item->getName());
+                    $notification->setText($user->getName().' va a asistir a <a href="'.$this->generateUrl('ColectaEventView', array('slug'=>$item->getSlug())).'">'.$item->getName().'</a>');
                     
                     $em->persist($notification); 
                 }
@@ -357,7 +357,7 @@ class EventController extends Controller
         return new RedirectResponse($referer);
     }
     
-    
+    public function updateAssistancesAction($slug)
     /*
         Update Assistances
         
@@ -366,7 +366,6 @@ class EventController extends Controller
         First checks for changes on the list.
         Finally checks for user asssistance by username
     */
-    public function updateAssistancesAction($slug)
     {
         $request = $this->get('request')->request;
         $user = $this->get('security.context')->getToken()->getUser();
