@@ -12,8 +12,7 @@
         map = new google.maps.Map(document.getElementById('map'), {zoom: 13,center:new google.maps.LatLng({{ item.latitude }},{{ item.longitude }}), mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
         marker = new google.maps.Marker({
                         map: map,
-                        position: new google.maps.LatLng({{ item.latitude }},{{ item.longitude }}),
-                        animation: google.maps.Animation.DROP
+                        position: new google.maps.LatLng({{ item.latitude }},{{ item.longitude }})
                     });
         
     </script>
