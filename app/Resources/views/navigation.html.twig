@@ -1,0 +1,28 @@
+{% set notifications = colectauser.notDismissedNotifications | length %}
+
+<ul class="nav nav-list well">
+    <li class="nav-header">Navegación</li>
+    
+    <li{% if navigation == 'extranet' %} class="active"{% endif %}>
+        <a href="/"><i class="icon-circle-blank"></i> Extranet</a>
+    </li>
+    <li{% if navigation == 'intranet' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaChatIndex') }}"><i class="icon-circle"></i> Intranet</a>
+    </li>
+    
+    <li class="divider"></li>
+    
+    <li{% if navigation == 'messages' %} class="active"{% endif %}>
+        <a href="/notifications/"><i class="icon-envelope"></i>{% if 0 %} <span class="label label-important" style="font-size: 10px;">3</span>{% endif %} Mensajes</a>
+    </li>
+    <li{% if navigation == 'notifications' %} class="active"{% endif %}>
+        <a href="/notifications/"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a>
+        </li>
+    <li>
+        <a href="{{ path('userLogout') }}" style="color:darkred"><i class="icon-off"></i> Salir</a>
+    </li>
+</ul>
+
+{% for notification in colectauser.notDismissedNotifications %}
+    <p class="alert alert-block"><a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{{ notification.text | raw }}</p>
+{% endfor %}

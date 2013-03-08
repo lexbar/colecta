@@ -118,6 +118,15 @@ class User implements UserInterface
      * )
      */
     private $editableItems;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Colecta\ItemBundle\Entity\Item", inversedBy="likers", cascade={"persist"})
+     * @ORM\JoinTable(name="likedItems",
+     * joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     * inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")}
+     * )
+     */
+    private $likedItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Comment", mappedBy="user")
@@ -610,5 +619,170 @@ class User implements UserInterface
     public function getAssistances()
     {
         return $this->assistances;
+    }
+
+    /**
+     * Add sentMessages
+     *
+     * @param \Colecta\UserBundle\Entity\Message $sentMessages
+     * @return User
+     */
+    public function addSentMessage(\Colecta\UserBundle\Entity\Message $sentMessages)
+    {
+        $this->sentMessages[] = $sentMessages;
+    
+        return $this;
+    }
+
+    /**
+     * Remove sentMessages
+     *
+     * @param \Colecta\UserBundle\Entity\Message $sentMessages
+     */
+    public function removeSentMessage(\Colecta\UserBundle\Entity\Message $sentMessages)
+    {
+        $this->sentMessages->removeElement($sentMessages);
+    }
+
+    /**
+     * Add receivedMessages
+     *
+     * @param \Colecta\ItemBundle\Entity\Relation $receivedMessages
+     * @return User
+     */
+    public function addReceivedMessage(\Colecta\ItemBundle\Entity\Relation $receivedMessages)
+    {
+        $this->receivedMessages[] = $receivedMessages;
+    
+        return $this;
+    }
+
+    /**
+     * Remove receivedMessages
+     *
+     * @param \Colecta\ItemBundle\Entity\Relation $receivedMessages
+     */
+    public function removeReceivedMessage(\Colecta\ItemBundle\Entity\Relation $receivedMessages)
+    {
+        $this->receivedMessages->removeElement($receivedMessages);
+    }
+
+    /**
+     * Remove notifications
+     *
+     * @param \Colecta\UserBundle\Entity\Notification $notifications
+     */
+    public function removeNotification(\Colecta\UserBundle\Entity\Notification $notifications)
+    {
+        $this->notifications->removeElement($notifications);
+    }
+
+    /**
+     * Remove relations
+     *
+     * @param \Colecta\ItemBundle\Entity\Relation $relations
+     */
+    public function removeRelation(\Colecta\ItemBundle\Entity\Relation $relations)
+    {
+        $this->relations->removeElement($relations);
+    }
+
+    /**
+     * Remove items
+     *
+     * @param \Colecta\ItemBundle\Entity\Item $items
+     */
+    public function removeItem(\Colecta\ItemBundle\Entity\Item $items)
+    {
+        $this->items->removeElement($items);
+    }
+
+    /**
+     * Add editableItems
+     *
+     * @param \Colecta\ItemBundle\Entity\Item $editableItems
+     * @return User
+     */
+    public function addEditableItem(\Colecta\ItemBundle\Entity\Item $editableItems)
+    {
+        $this->editableItems[] = $editableItems;
+    
+        return $this;
+    }
+
+    /**
+     * Remove editableItems
+     *
+     * @param \Colecta\ItemBundle\Entity\Item $editableItems
+     */
+    public function removeEditableItem(\Colecta\ItemBundle\Entity\Item $editableItems)
+    {
+        $this->editableItems->removeElement($editableItems);
+    }
+
+    /**
+     * Add likedItems
+     *
+     * @param \Colecta\ItemBundle\Entity\Item $likedItems
+     * @return User
+     */
+    public function addLikedItem(\Colecta\ItemBundle\Entity\Item $likedItems)
+    {
+        $this->likedItems[] = $likedItems;
+    
+        return $this;
+    }
+
+    /**
+     * Remove likedItems
+     *
+     * @param \Colecta\ItemBundle\Entity\Item $likedItems
+     */
+    public function removeLikedItem(\Colecta\ItemBundle\Entity\Item $likedItems)
+    {
+        $this->likedItems->removeElement($likedItems);
+    }
+
+    /**
+     * Get likedItems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLikedItems()
+    {
+        return $this->likedItems;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \Colecta\ItemBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Colecta\ItemBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Add assistances
+     *
+     * @param \Colecta\ActivityBundle\Entity\EventAssistance $assistances
+     * @return User
+     */
+    public function addAssistance(\Colecta\ActivityBundle\Entity\EventAssistance $assistances)
+    {
+        $this->assistances[] = $assistances;
+    
+        return $this;
+    }
+
+    /**
+     * Remove assistances
+     *
+     * @param \Colecta\ActivityBundle\Entity\EventAssistance $assistances
+     */
+    public function removeAssistance(\Colecta\ActivityBundle\Entity\EventAssistance $assistances)
+    {
+        $this->assistances->removeElement($assistances);
     }
 }

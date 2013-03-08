@@ -13,3 +13,7 @@
 {% endfor %}
 
 {% endblock %}
+
+{% block navigation %}
+    {% include '::navigation.html.twig' with {'navigation': 'notifications'} %}
+{% endblock %}

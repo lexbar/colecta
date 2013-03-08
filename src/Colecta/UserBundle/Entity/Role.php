@@ -1420,4 +1420,14 @@ class Role
     {
         $this->users[] = $users;
     }
+
+    /**
+     * Remove users
+     *
+     * @param \Colecta\UserBundle\Entity\User $users
+     */
+    public function removeUser(\Colecta\UserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
 }

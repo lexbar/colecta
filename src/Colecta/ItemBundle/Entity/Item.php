@@ -101,6 +101,11 @@ abstract class Item
      * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User", mappedBy="editableItems", cascade={"persist"})
      */
     private $editors;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User", mappedBy="likedItems", cascade={"persist"})
+     */
+    private $likers;
 
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="item")
@@ -537,5 +542,117 @@ abstract class Item
     public function prePersist()
     {
         $this->setDate(new \DateTime('now'));
+    }
+
+    /**
+     * Add relatedto
+     *
+     * @param \Colecta\ItemBundle\Entity\Relation $relatedto
+     * @return Item
+     */
+    public function addRelatedto(\Colecta\ItemBundle\Entity\Relation $relatedto)
+    {
+        $this->relatedto[] = $relatedto;
+    
+        return $this;
+    }
+
+    /**
+     * Remove relatedto
+     *
+     * @param \Colecta\ItemBundle\Entity\Relation $relatedto
+     */
+    public function removeRelatedto(\Colecta\ItemBundle\Entity\Relation $relatedto)
+    {
+        $this->relatedto->removeElement($relatedto);
+    }
+
+    /**
+     * Add relatedfrom
+     *
+     * @param \Colecta\ItemBundle\Entity\Relation $relatedfrom
+     * @return Item
+     */
+    public function addRelatedfrom(\Colecta\ItemBundle\Entity\Relation $relatedfrom)
+    {
+        $this->relatedfrom[] = $relatedfrom;
+    
+        return $this;
+    }
+
+    /**
+     * Remove relatedfrom
+     *
+     * @param \Colecta\ItemBundle\Entity\Relation $relatedfrom
+     */
+    public function removeRelatedfrom(\Colecta\ItemBundle\Entity\Relation $relatedfrom)
+    {
+        $this->relatedfrom->removeElement($relatedfrom);
+    }
+
+    /**
+     * Add editors
+     *
+     * @param \Colecta\UserBundle\Entity\User $editors
+     * @return Item
+     */
+    public function addEditor(\Colecta\UserBundle\Entity\User $editors)
+    {
+        $this->editors[] = $editors;
+    
+        return $this;
+    }
+
+    /**
+     * Remove editors
+     *
+     * @param \Colecta\UserBundle\Entity\User $editors
+     */
+    public function removeEditor(\Colecta\UserBundle\Entity\User $editors)
+    {
+        $this->editors->removeElement($editors);
+    }
+
+    /**
+     * Add likers
+     *
+     * @param \Colecta\UserBundle\Entity\User $likers
+     * @return Item
+     */
+    public function addLiker(\Colecta\UserBundle\Entity\User $likers)
+    {
+        $this->likers[] = $likers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove likers
+     *
+     * @param \Colecta\UserBundle\Entity\User $likers
+     */
+    public function removeLiker(\Colecta\UserBundle\Entity\User $likers)
+    {
+        $this->likers->removeElement($likers);
+    }
+
+    /**
+     * Get likers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLikers()
+    {
+        return $this->likers;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \Colecta\ItemBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Colecta\ItemBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
     }
 }

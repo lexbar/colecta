@@ -105,9 +105,13 @@ a i {
 }
 #userbar .nav {
     margin-bottom: 10px;
+    padding: 10px 15px;
 }
 #userbar .nav a {
     color: #222;
+}
+#userbar .nav li.active a {
+    color: #fff;
 }
 .well.login {
     padding: 7px 0 2px 14px;

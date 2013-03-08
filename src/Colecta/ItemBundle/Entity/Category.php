@@ -178,4 +178,14 @@ class Category
     {
         $this->items[] = $items;
     }
+
+    /**
+     * Remove items
+     *
+     * @param \Colecta\ItemBundle\Entity\Item $items
+     */
+    public function removeItem(\Colecta\ItemBundle\Entity\Item $items)
+    {
+        $this->items->removeElement($items);
+    }
 }

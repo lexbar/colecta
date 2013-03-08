@@ -1,4 +1,4 @@
-<form action="{{ path('ColectaItemRelate', {id: item.id }) }}" method="POST" class="form-horizontal well">
+<form action="{{ path('ColectaItemRelate', {id: item.id }) }}" method="POST" class="form-horizontal well" onSubmit="if($('#itemResults .active a').length) return false;">
 <h2>Relacionar con otros contenidos</h2>
     {% set relateds = '' %}
     <div id="showRelateds">
@@ -11,7 +11,7 @@
     
     <label for="searchItem">Buscar otro contenido para relacionar</label>
     <div class="input-append">
-        <input type="text" name="search" id="searchItem" class="input-xlarge" onKeyUp="showResults();"><button id="searchButton" class="btn" type="button" onclick="showResults();">Buscar <i class="icon-search"></i></button>
+        <input type="text" name="search" id="searchItem" class="input-xlarge" autocomplete="off"><button id="searchButton" class="btn" type="button" onclick="showResults();"><i id="searchButtonLoading"></i> Buscar <i class="icon-search"></i></button>
     </div>
     <ul id="itemResults" class="dropdown-menu" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu">
     </ul>

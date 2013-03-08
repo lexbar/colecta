@@ -8,14 +8,6 @@
         <div class="container">
             <h1><a class="brand" href="/">Club Mountain Bike Turyciclo</a></h1>
             
-            {% if app.user %}
-            <ul class="nav">
-              <li class="divider-vertical"></li>
-              <li><a href="{{ path('ColectaChatIndex') }}">El Club</a></li>
-              {#<li><a href="#">Administración</a></li>#}
-            </ul>
-            {% endif %}
-            
             <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
                 <div class="input-append">
                     <input type="text" class="input-medium search-query" name="search" value="{{ app.request.get('search') }}">
@@ -63,18 +55,10 @@
     
         <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong class="name">{{ app.user.name }}</strong><br><a href="{{ path('userEditProfile') }}">Editar perfil</a></p>
         
-        {% set notifications = colectauser.notDismissedNotifications | length %}
+        {% block navigation %}
+            {% include '::navigation.html.twig' with {'navigation': 'extranet'} %}
+        {% endblock %}
         
-        <ul class="nav nav-list">
-            <li class="nav-header">Navegación</li>
-            <li><a href="/notifications/"><i class="icon-envelope"></i>{% if 0 %} <span class="label label-important" style="font-size: 10px;">3</span>{% endif %} Mensajes</a></li>
-            <li><a href="/notifications/"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a></li>
-            <li><a href="{{ path('userLogout') }}" style="color:darkred"><i class="icon-off"></i> Salir</a></li>
-        </ul>
-        
-        {% for notification in colectauser.notDismissedNotifications %}
-            <p class="alert alert-block"><a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{{ notification.text | raw }}</p>
-        {% endfor %}
     
     {% else %}    
     
