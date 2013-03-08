@@ -1,0 +1,50 @@
+{% if app.user %}
+<form action="{{ path('ColectaFileUpload') }}" method="POST" class="form-horizontal well" {{ form_enctype(form) }}>
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="PostFile">Archivo</label>
+        <div class="controls">
+          {{ form_widget(form.file) }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostName">Título</label>
+        <div class="controls">
+          {{ form_widget(form.name) }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostText">Texto</label>
+        <div class="controls">
+          {{ form_widget(form.description) }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="PostText">Carpeta</label>
+        <div class="controls">
+          {{ form_widget(form.folder) }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="EventCategory">Categoría</label>
+        <div class="controls">
+          <select id="EventCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
+        </div>
+      </div>
+      
+      {{ form_rest(form) }}
+      
+      <div class="form-actions">
+        <button class="btn">Guardar como borrador</button>
+        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+      </div>
+    </fieldset>
+</form>
+{% else %}
+<div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
+{% endif %}

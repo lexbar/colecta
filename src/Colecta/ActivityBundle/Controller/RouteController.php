@@ -281,14 +281,17 @@ class RouteController extends Controller
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
+        $form = $this->createForm(new RouteType(), $item);
         
-        if(!$user || $user != $item->getAuthor()) 
+        if($user == 'anon.' || $user != $item->getAuthor()) 
         {
             return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug'=>$slug)));
         }
         
         if ($this->get('request')->getMethod() == 'POST') {
             $persist = true;
+            
+            $form->bindRequest($request);
             
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
         
@@ -336,19 +339,11 @@ class RouteController extends Controller
                 $persist = false;
             }
             
-            $item->summarize($request->get('description'));
-            $item->setAllowComments(true);
-            $item->setDraft(false);
-            $item->setActivity(null);
-            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
-            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
-            $item->setShowhours(false);
-            $item->setDescription($request->get('description'));
-            $item->setDistance(str_replace(',','.', $request->get('distance')));
-            $item->setUphill($request->get('uphill'));
-            $item->setDownhill(0);
-            $item->setDifficulty($request->get('difficulty'));
-            $item->setStatus('');
+            $route->summarize($route->getDescription());
+            $route->setDifficulty($post->get('difficulty'));
+            
+            $time = intval($post->get('days')) * 24 * 60 * 60 + intval($post->get('hours')) * 60 * 60 + intval($post->get('minutes')) * 60;
+            $route->setTime($time);
             
             if($persist)
             {
@@ -359,7 +354,7 @@ class RouteController extends Controller
         }
         
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
-        return $this->render('ColectaActivityBundle:Route:edit.html.twig', array('item' => $item, 'categories'=>$categories));
+        return $this->render('ColectaActivityBundle:Route:edit.html.twig', array('item' => $item, 'categories'=>$categories, 'form' => $form->createView()));
     }
     public function downloadAction($slug, $extension)
     {

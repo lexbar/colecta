@@ -257,6 +257,7 @@ class EventController extends Controller
                 $persist = false;
             }
             
+            $item->setName($request->get('name'));
             $item->summarize($request->get('description'));
             $item->setAllowComments(true);
             $item->setDraft(false);

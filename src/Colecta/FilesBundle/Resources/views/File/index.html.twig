@@ -4,74 +4,30 @@
 
 {% block article %}
 
-{% if app.user %}
-<form action="{{ path('ColectaFileUpload') }}" method="POST" class="form-horizontal well hidden" onclick="this.className='form-horizontal well'" {{ form_enctype(form) }}>
-<h2>Crear un nuevo Archivo</h2>
-    <fieldset>
-      <div class="control-group">
-        <label class="control-label" for="PostFile">Archivo</label>
-        <div class="controls">
-          {{ form_widget(form.file) }}
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="PostName">Título</label>
-        <div class="controls">
-          {{ form_widget(form.name) }}
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="PostText">Texto</label>
-        <div class="controls">
-          {{ form_widget(form.description) }}
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="PostText">Carpeta</label>
-        <div class="controls">
-          {{ form_widget(form.folder) }}
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="PostCategory">Categoría</label>
-        <div class="controls">
-          <select id="PostCategory" name="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-      
-      {{ form_rest(form) }}
-      
-      <div class="form-actions">
-        <button class="btn">Guardar como borrador</button>
-        <button type="submit" class="btn btn-primary">Publicar ahora</button>
-      </div>
-    </fieldset>
-</form>
-{% endif %}
+    <div class="title-block">
+        {% if app.user %} <a href="{{ path('ColectaFileNew') }}" class="btn btn-small pull-right">Subir archivo <i class="icon-plus"></i></a> {% endif %}
+        <h2><i class="icon-folder-open"></i> Archivos{% if page > 1 %} (página {{page}}){% endif %}</h2>
+    </div>
 
-{% for item in items %}
-<div class="item">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    {% for item in items %}
+    <div class="item">
+        {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+        
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
+    </div>
+    {% endfor %}
     
-    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
-    
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
-</div>
-{% endfor %}
-
-<ul class="pager">
-  <li class="previous{% if page == 1 %} disabled{% endif %}">
-    <a href="{% if page > 1 %}{{ path('ColectaFilePage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-  </li>
-  <li class="next{% if not thereAreMore %} disabled{% endif %}">
-    <a href="{% if thereAreMore %}{{ path('ColectaFilePage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-  </li>
-</ul>
+    <ul class="pager">
+      <li class="previous{% if page == 1 %} disabled{% endif %}">
+        <a href="{% if page > 1 %}{{ path('ColectaFilePage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+      </li>
+      <li class="next{% if not thereAreMore %} disabled{% endif %}">
+        <a href="{% if thereAreMore %}{{ path('ColectaFilePage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+      </li>
+    </ul>
 
 {% endblock %}

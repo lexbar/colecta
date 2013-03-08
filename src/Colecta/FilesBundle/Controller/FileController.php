@@ -49,6 +49,15 @@ class FileController extends Controller
         
         return $this->render('ColectaFilesBundle:File:full.html.twig', array('item' => $item));
     }
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        $form = $this->uploadAction();
+        
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'form' => $form));
+    }
     public function uploadAction()
     {
         $request = $this->getRequest();

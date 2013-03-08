@@ -3,55 +3,8 @@
 {% block routes 'active' %}
 
 {% block javascripts %}    
-    
-    {% set boundsswlat, boundsswlng = track[0].latitude, track[0].longitude %}
-    {% set boundsnelat, boundsnelng = track[0].latitude, track[0].longitude %} 
-    {% set points = '[' ~ track[0].latitude ~ ',' ~ track[0].longitude ~ ']' %}
-    
-    {% for tp in track %}
-        {% if not loop.first %}
-            {% set points = points ~ ',[' ~ tp.latitude ~ ',' ~ tp.longitude ~ ']' %}
-            {% if tp.latitude < boundsswlat %}{% set boundsswlat = tp.latitude %}{% endif %}
-            {% if tp.longitude < boundsswlng %}{% set boundsswlng = tp.longitude %}{% endif %}
-            {% if tp.latitude > boundsnelat %}{% set boundsnelat = tp.latitude %}{% endif %}
-            {% if tp.longitude > boundsnelng %}{% set boundsnelng = tp.longitude %}{% endif %}
-        {% endif %}
-    {% endfor %}
-    
     <script src="/js/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
-    
-    var map;
-    var polyline = [];
-    var points = [{{ points }}];
-    var bounds = new google.maps.LatLngBounds(new google.maps.LatLng({{ boundsswlat }}, {{ boundsswlng }}), new google.maps.LatLng({{ boundsnelat }}, {{ boundsnelng }}));
-    
-    function initialize() {   
-        
-        var mapOptions = {
-            zoom: 3,
-            center: bounds.getCenter(),
-            mapTypeId: google.maps.MapTypeId.TERRAIN, 
-            streetViewControl: false
-        };
-        
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        map.fitBounds(bounds);
-        
-        $.each(points, function(index, value) { 
-            polyline.push(new google.maps.LatLng(value[0], value[1]));
-        });
-        
-        var path = new google.maps.Polyline({
-            path: polyline,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-        });
-        
-        path.setMap(map);
-    }
 
     var relations = [{% for related in item.related %}{"name":"{{ related.name }}","type":"{{ related.type }}","id":"{{ related.id }}","author":"{{ related.author.id }}"}{% if not loop.last %},{% endif %}{% endfor%}];
     var xhr;
@@ -139,6 +92,21 @@
         return '{\'name\':\''+item.name+'\',\'type\':\''+item.type+'\',\'id\':\''+item.id+'\',\'author\':\''+item.author+'\'}';
     }
     
+    function toggleCategoryCreate() {
+            var button = $('#categoryCreateButton');
+            if(button.hasClass('newcategory')) {
+                button.removeClass('newcategory').addClass('selectcategory');
+                button.html('Seleccionar una categoría existente');
+                $('#EventCategory').hide();
+                $('#EventNewCategory').show().focus();
+            } else {
+                button.removeClass('selectcategory').addClass('newcategory');
+                button.html('Crear una nueva categoría');
+                $('#EventCategory').show();
+                $('#EventNewCategory').hide().attr('value','');
+            }
+        }
+    
     </script>
 {% endblock %}
 {% block article %}
@@ -165,7 +133,7 @@
         <label class="control-label" for="RouteName">Distancia</label>
         <div class="controls">
           <div class="input-append">
-            {{ form_widget(form.distance, {'attr':{'class':'input-small','value': trackdata.distance}}) }}<span class="add-on"> km</span>
+            {{ form_widget(form.distance, {'attr':{'class':'input-small','value': item.distance}}) }}<span class="add-on"> km</span>
           </div>
         </div>
       </div>
@@ -173,7 +141,7 @@
         <label class="control-label" for="RouteFile">Subida</label>
         <div class="controls">
           <div class="input-append">
-            {{ form_widget(form.uphill, {'attr':{'class':'input-small','value': trackdata.uphill}}) }}<span class="add-on"> metros</span>
+            {{ form_widget(form.uphill, {'attr':{'class':'input-small','value': item.uphill}}) }}<span class="add-on"> metros</span>
           </div>
         </div>
       </div>
@@ -181,7 +149,7 @@
         <label class="control-label" for="RouteFile">Bajada</label>
         <div class="controls">
           <div class="input-append">
-            {{ form_widget(form.downhill, {'attr':{'class':'input-small','value': trackdata.downhill}}) }}<span class="add-on"> metros</span>
+            {{ form_widget(form.downhill, {'attr':{'class':'input-small','value': item.downhill}}) }}<span class="add-on"> metros</span>
           </div>
         </div>
       </div>
@@ -189,11 +157,11 @@
         <label class="control-label" for="RouteFile">Tiempo</label>
         <div class="controls">
           {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
-          {% if trackdata.time < 60 %}
-            {% set secconds = trackdata.time %}
+          {% if item.time < 60 %}
+            {% set secconds = item.time %}
           {% else %}
-            {% set minutes = trackdata.time // 60 %}
-            {% set secconds = trackdata.time - minutes * 60 %}
+            {% set minutes = item.time // 60 %}
+            {% set secconds = item.time - minutes * 60 %}
             
             {% if minutes >= 60 %}
                 {% set hours = minutes // 60 %}
@@ -226,7 +194,7 @@
         <label class="control-label" for="RouteFile">Velocidad media</label>
         <div class="controls">
           <div class="input-append">
-            {{ form_widget(form.avgspeed, {'attr':{'value': trackdata.avgspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.avgspeed }}</span><span class="add-on"> km/h</span>
+            {{ form_widget(form.avgspeed, {'attr':{'value': item.avgspeed}}) }}<span class="input-small uneditable-input">{{ item.avgspeed }}</span><span class="add-on"> km/h</span>
           </div>
         </div>
       </div>
@@ -234,7 +202,7 @@
         <label class="control-label" for="RouteFile">Velocidad máxima</label>
         <div class="controls">
           <div class="input-append">
-            {{ form_widget(form.maxspeed, {'attr':{'value': trackdata.maxspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.maxspeed }}</span><span class="add-on"> km/h</span>
+            {{ form_widget(form.maxspeed, {'attr':{'value': item.maxspeed}}) }}<span class="input-small uneditable-input">{{ item.maxspeed }}</span><span class="add-on"> km/h</span>
           </div>
         </div>
       </div>
@@ -242,7 +210,7 @@
         <label class="control-label" for="RouteFile">Cota inferior</label>
         <div class="controls">
           <div class="input-append">
-            {{ form_widget(form.minheight, {'attr':{'class':'input-small','value': trackdata.minheight}}) }}<span class="add-on"> metros</span>
+            {{ form_widget(form.minheight, {'attr':{'class':'input-small','value': item.minheight}}) }}<span class="add-on"> metros</span>
           </div>
         </div>
       </div>
@@ -250,7 +218,7 @@
         <label class="control-label" for="RouteFile">Cota superior</label>
         <div class="controls">
           <div class="input-append">
-            {{ form_widget(form.maxheight, {'attr':{'class':'input-small','value': trackdata.maxheight}}) }}<span class="add-on"> metros</span>
+            {{ form_widget(form.maxheight, {'attr':{'class':'input-small','value': item.maxheight}}) }}<span class="add-on"> metros</span>
           </div>
         </div>
       </div>
@@ -287,16 +255,15 @@
       
       {{ form_rest(form) }}
       
-      <input type="hidden" value="{% if trackdata.isloop %}1{% else %}0{% endif %}" name="isloop">
-      
       <div class="control-group">
-        <label class="control-label" for="RouteCategory">Categoría</label>
+        <label class="control-label" for="EventCategory">Categoría</label>
         <div class="controls">
-          <select id="RouteCategory" name="category">
+          <select id="EventCategory" name="category">
             {% for category in categories %}
-                <option value="{{ category.id }}"{% if item.category.id == category.id %}selected="selected"{% endif %}>{{ category.name }}</option>
+                <option value="{{ category.id }}"{% if item.category.slug == category.slug %} selected{% endif %}>{{ category.name }}</option>
             {% endfor %}
-          </select>
+          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
         </div>
       </div>
       

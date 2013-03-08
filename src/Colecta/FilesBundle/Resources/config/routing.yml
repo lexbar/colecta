@@ -13,6 +13,9 @@ ColectaFileIndex:
 ColectaFilePage:
     pattern:  /file/page/{page}
     defaults: { _controller: ColectaFilesBundle:File:page }
+ColectaFileNew:
+    pattern:  /file/new/
+    defaults: { _controller: ColectaFilesBundle:File:new }
 ColectaFileUpload:
     pattern:  /fileupload/
     defaults: { _controller: ColectaFilesBundle:File:upload }
