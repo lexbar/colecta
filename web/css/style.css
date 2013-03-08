@@ -18,6 +18,9 @@ h2 {
 form.well {
     border-radius: 0 0 4px 4px;
 }
+a i {
+    text-decoration: none !important;
+}
 .title-block {
     padding: 15px;
     background-color: #2F7ED4;
@@ -88,14 +91,17 @@ form.well {
     overflow: hidden;
     border-bottom: 1px solid #CCC;
     padding: 0 0 5px;
+    line-height: 14px;
 }
 .myself img {
     float: left;
     margin: 0 15px 5px 15px;
 }
 .myself .name {
-    font-size: 22px;
-    line-height: 22px;
+    padding-bottom: 4px;
+}
+.myself a {
+    line-height: 20px;
 }
 #userbar .nav {
     margin-bottom: 10px;
@@ -134,16 +140,19 @@ form.well {
     border-bottom: 1px solid #f2f2f2;
 }
 #sidebar li a#homeButton {
-    background-color: #2f7ed4;
-    color: #fff;
+    color: #2F7ED4;
     font-size: 16px;
     font-weight: bold;
 }
 #sidebar li a i {
     margin: 2px;
 }
-#sidebar li a:hover, #sidebar li a.active {
+#sidebar li a:hover {
     background-color: #f7f7f7;
+}
+#sidebar li a.active {
+    background-color: #2F7ED4;
+    color: #fff !important;
 }
 
 #userbar {

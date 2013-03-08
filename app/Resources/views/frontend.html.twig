@@ -61,13 +61,12 @@
 <div class="span3" id="userbar">
     {% if app.user %}
     
-        <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong class="name">{{ app.user.name }}</strong></p>
+        <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong class="name">{{ app.user.name }}</strong><br><a href="{{ path('userEditProfile') }}">Editar perfil</a></p>
         
         {% set notifications = colectauser.notDismissedNotifications | length %}
         
         <ul class="nav nav-list">
-            <li class="nav-header">Opciones</li>
-            <li><a href="{{ path('userEditProfile') }}"><i class="icon-user"></i> Editar perfil</a></li>
+            <li class="nav-header">Navegación</li>
             <li><a href="/notifications/"><i class="icon-envelope"></i>{% if 0 %} <span class="label label-important" style="font-size: 10px;">3</span>{% endif %} Mensajes</a></li>
             <li><a href="/notifications/"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a></li>
             <li><a href="{{ path('userLogout') }}" style="color:darkred"><i class="icon-off"></i> Salir</a></li>

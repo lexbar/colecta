@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Colecta\ActivityBundle\Form\Frontend\RouteType;
 use Colecta\ActivityBundle\Entity\Route;
 use Colecta\ActivityBundle\Entity\RouteTrackpoint;
+use Colecta\ItemBundle\Entity\Category;
+use Colecta\UserBundle\Entity\Notification;
 
 
 class RouteController extends Controller
@@ -64,17 +66,17 @@ class RouteController extends Controller
             $em = $this->getDoctrine()->getEntityManager();
             
             
-            $route = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
-            $routetrack = $route->getTrackpoints();
+            $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
+            $itemtrack = $item->getTrackpoints();
             
-            $n = count($routetrack);
+            $n = count($itemtrack);
             if($n > 0) 
             {
-                $url = "http://maps.google.com/maps/api/staticmap?size=500x240&maptype=terrain&markers=color:red%7C".$routetrack[0]->getLatitude().",".$routetrack[0]->getLongitude()."&sensor=false&path=color:0xff0000|weight:3";
+                $url = "http://maps.google.com/maps/api/staticmap?size=500x240&maptype=terrain&markers=color:red%7C".$itemtrack[0]->getLatitude().",".$itemtrack[0]->getLongitude()."&sensor=false&path=color:0xff0000|weight:3";
                 $step = floor($n / 60);
                 for($i = 0; $i < $n; $i += $step)
                 {
-                    $url .= '|'. $routetrack[$i]->getLatitude() .','. $routetrack[$i]->getLongitude();
+                    $url .= '|'. $itemtrack[$i]->getLatitude() .','. $itemtrack[$i]->getLongitude();
                 }
                 
                 $image = getContent($url);
@@ -137,15 +139,15 @@ class RouteController extends Controller
                 }
                 else
                 {
-                    $route = new Route();
-                    $form = $this->createForm(new RouteType(), $route);
+                    $item = new Route();
+                    $form = $this->createForm(new RouteType(), $item);
                     
                     $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
-                    $routedata = $this->getRouteData($fulltrack);
+                    $itemdata = $this->getRouteData($fulltrack);
                     
                     $categories = $this->getDoctrine()->getEntityManager()->getRepository('ColectaItemBundle:Category')->findAll();
                     
-                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView(), 'categories' => $categories));
+                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView(), 'categories' => $categories));
                 }
             }
         }
@@ -181,17 +183,44 @@ class RouteController extends Controller
             }
             else
             {
-                $route = new Route();
-                $form = $this->createForm(new RouteType(), $route);
+                $item = new Route();
+                $form = $this->createForm(new RouteType(), $item);
                 $form->bindRequest($request);
                 
                 if ($form->isValid()) 
                 {
-                    $route->setCategory($category);
-                    $route->setAuthor($user);
+                    if($request->get('newCategory'))
+                    {
+                        $category = new Category();
+                        $category->setName($request->get('newCategory'));
+                        
+                        //Category Slug generate
+                        $catSlug = $item->generateSlug($request->get('newCategory'));
+                        $n = 2;
+                        
+                        while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                        {
+                            if($n > 2)
+                            {
+                                $catSlug = substr($catSlug,0,-2);
+                            }
+                            
+                            $catSlug .= '_'.$n;
+                            
+                            $n++;
+                        }
+                    
+                        $category->setSlug($catSlug);
+                        $category->setDescription('');
+                        $category->setLastchange(new \DateTime('now'));
+                        
+                        $em->persist($category); 
+                    }
+                    $item->setCategory($category);
+                    $item->setAuthor($user);
                     
                     //Slug generate
-                    $slug = $route->generateSlug();
+                    $slug = $item->generateSlug();
                     $n = 2;
                     
                     while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
@@ -205,23 +234,23 @@ class RouteController extends Controller
                         
                         $n++;
                     }
-                    $route->setSlug($slug);
+                    $item->setSlug($slug);
                     
-                    $route->summarize($route->getDescription());
-                    $route->setAllowComments(true);
-                    $route->setDraft(false);
-                    $route->setActivity(null);
-                    $route->setDifficulty($post->get('difficulty'));
+                    $item->summarize($item->getDescription());
+                    $item->setAllowComments(true);
+                    $item->setDraft(false);
+                    $item->setActivity(null);
+                    $item->setDifficulty($post->get('difficulty'));
                     
                     $time = intval($post->get('days')) * 24 * 60 * 60 + intval($post->get('hours')) * 60 * 60 + intval($post->get('minutes')) * 60;
-                    $route->setTime($time);
+                    $item->setTime($time);
                     
-                    $route->setIsloop(false);
-                    $route->setIBP('');
-                    $route->setIsloop(intval($post->get('isloop')));
-                    $route->setSourcefile($post->get('filename'));
+                    $item->setIsloop(false);
+                    $item->setIBP('');
+                    $item->setIsloop(intval($post->get('isloop')));
+                    $item->setSourcefile($post->get('filename'));
                     
-                    $em->persist($route); 
+                    $em->persist($item); 
                     
                     //Now retrieve and save RouteTrackpooints
                     $filename = $post->get('filename');
@@ -236,7 +265,7 @@ class RouteController extends Controller
                         $trackpoint->setLongitude($point['longitude']);
                         $trackpoint->setAltitude($point['altitude']);
                         $trackpoint->setDate($point['datetime']);
-                        $trackpoint->setRoute($route);
+                        $trackpoint->setRoute($item);
                         
                         
                         $em->persist($trackpoint); 
@@ -256,11 +285,11 @@ class RouteController extends Controller
                     
                     $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
                     $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
-                    $routedata = $this->getRouteData($fulltrack);
+                    $itemdata = $this->getRouteData($fulltrack);
                     
                     $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
                     
-                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $routedata, 'form' => $form->createView(), 'categories' => $categories));
+                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView(), 'categories' => $categories));
                 }
             }
         }
@@ -278,7 +307,8 @@ class RouteController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->get('request')->request;
+        $request = $this->get('request');
+        $post = $request->request;
         
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         $form = $this->createForm(new RouteType(), $item);
@@ -291,10 +321,8 @@ class RouteController extends Controller
         if ($this->get('request')->getMethod() == 'POST') {
             $persist = true;
             
-            $form->bindRequest($request);
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($post->get('category'));
             
-            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
-        
             if(!$category)
             {
                 $this->get('session')->setFlash('error', 'No existe la categoria');
@@ -302,13 +330,13 @@ class RouteController extends Controller
             }
             else
             {
-                if($request->get('newCategory'))
+                if($post->get('newCategory'))
                 {
                     $category = new Category();
-                    $category->setName($request->get('newCategory'));
+                    $category->setName($post->get('newCategory'));
                     
                     //Category Slug generate
-                    $catSlug = $item->generateSlug($request->get('newCategory'));
+                    $catSlug = $item->generateSlug($post->get('newCategory'));
                     $n = 2;
                     
                     while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
@@ -333,17 +361,18 @@ class RouteController extends Controller
                 $item->setCategory($category);
             }
             
-            if(!$request->get('description'))
+            $form->bindRequest($request);
+            
+            if(!$item->getDescription())
             {
                 $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             
-            $route->summarize($route->getDescription());
-            $route->setDifficulty($post->get('difficulty'));
-            
+            $item->summarize($item->getDescription());
+            $item->setDifficulty($post->get('difficulty'));
             $time = intval($post->get('days')) * 24 * 60 * 60 + intval($post->get('hours')) * 60 * 60 + intval($post->get('minutes')) * 60;
-            $route->setTime($time);
+            $item->setTime($time);
             
             if($persist)
             {

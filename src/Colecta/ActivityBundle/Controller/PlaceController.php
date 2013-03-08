@@ -223,6 +223,7 @@ class PlaceController extends Controller
                 $persist = false;
             }
             
+            $item->setName($request->get('name'));
             $item->summarize($request->get('description'));
             $item->setDescription($request->get('description'));
             $item->setLatitude($request->get('latitude'));
