@@ -1,5 +1,7 @@
 {% extends '::frontend.html.twig' %}
 
+{% block title %}Inicio - {{ parent() }}{% endblock %}
+
 {% block home 'active' %}
 
 {% block article %}
@@ -19,7 +21,8 @@
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
 </div>
 {% else %}
-<h2>No hay ningun item</h2>
+<h3>Bienvenido a Ciclubs.</h3>
+<p>Navega por el menú de la izquierda para compartir nuevos contenidos.</p>
 {% endfor %}
 
 <ul class="pager">
