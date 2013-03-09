@@ -31,6 +31,12 @@ a i {
     line-height: 26px;
     margin: 0;
 }
+.title-block a.btn-primary {
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 5px 25px;
+    font-size: 11px;
+}
 .alert-block {
     padding: 5px 8px;
     margin-bottom: 12px;
@@ -151,6 +157,24 @@ a i {
 #sidebar li a i {
     margin: 2px;
 }
+/* G+ */
+#sidebar {
+    width: 100px;
+}
+#stream {
+    width: 580px;
+}
+#sidebar li a {
+    text-align: center;
+    color: #555555;
+    padding: 5px;
+}
+#sidebar li a i {
+    font-size: 40px;
+    display: block;
+    margin: 0 auto;
+}
+/* G+ */
 #sidebar li a:hover {
     background-color: #f7f7f7;
 }

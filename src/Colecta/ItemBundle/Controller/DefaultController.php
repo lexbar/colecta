@@ -285,10 +285,6 @@ class DefaultController extends Controller
         }
         
         $user->addLikedItem($item);
-        //$item->addLiker($user);
-        $item->setName($item->getName().'+');
-        //$em->persist($user);
-        //$em->persist($item);
         $em->flush();
     
         
