@@ -19,39 +19,39 @@ class ContestWinner
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var smallint $position
      *
      * @ORM\Column(name="position", type="smallint")
      */
-    private $position;
+    protected $position;
 
     /**
      * @var string $text
      *
      * @ORM\Column(name="text", type="string", length=255)
      */
-    private $text;
+    protected $text;
 
     /**
     * @ORM\ManyToOne(targetEntity="Contest")
     * @ORM\JoinColumn(name="contest_id", referencedColumnName="id") 
     */
-    private $contest;
+    protected $contest;
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\ItemBundle\Entity\Item")
     * @ORM\JoinColumn(name="item_id", referencedColumnName="id") 
     */
-    private $item;
+    protected $item;
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
     */
-    private $user;
+    protected $user;
 
 
     /**

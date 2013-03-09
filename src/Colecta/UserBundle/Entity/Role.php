@@ -19,362 +19,362 @@ class Role
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string $description
      *
      * @ORM\Column(name="description", type="string", length=255)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var boolean $site_access
      *
      * @ORM\Column(name="site_access", type="boolean")
      */
-    private $site_access;
+    protected $site_access;
 
     /**
      * @var boolean $site_config
      *
      * @ORM\Column(name="site_config", type="boolean")
      */
-    private $site_config;
+    protected $site_config;
 
     /**
      * @var boolean $item_post_create
      *
      * @ORM\Column(name="item_post_create", type="boolean")
      */
-    private $item_post_create;
+    protected $item_post_create;
 
     /**
      * @var boolean $item_event_create
      *
      * @ORM\Column(name="item_event_create", type="boolean")
      */
-    private $item_event_create;
+    protected $item_event_create;
 
     /**
      * @var boolean $item_route_create
      *
      * @ORM\Column(name="item_route_create", type="boolean")
      */
-    private $item_route_create;
+    protected $item_route_create;
 
     /**
      * @var boolean $item_place_create
      *
      * @ORM\Column(name="item_place_create", type="boolean")
      */
-    private $item_place_create;
+    protected $item_place_create;
 
     /**
      * @var boolean $item_file_create
      *
      * @ORM\Column(name="item_file_create", type="boolean")
      */
-    private $item_file_create;
+    protected $item_file_create;
 
     /**
      * @var boolean $item_contest_create
      *
      * @ORM\Column(name="item_contest_create", type="boolean")
      */
-    private $item_contest_create;
+    protected $item_contest_create;
 
     /**
      * @var boolean $item_poll_create
      *
      * @ORM\Column(name="item_poll_create", type="boolean")
      */
-    private $item_poll_create;
+    protected $item_poll_create;
 
     /**
      * @var boolean $item_post_view
      *
      * @ORM\Column(name="item_post_view", type="boolean")
      */
-    private $item_post_view;
+    protected $item_post_view;
 
     /**
      * @var boolean $item_event_view
      *
      * @ORM\Column(name="item_event_view", type="boolean")
      */
-    private $item_event_view;
+    protected $item_event_view;
 
     /**
      * @var boolean $item_route_view
      *
      * @ORM\Column(name="item_route_view", type="boolean")
      */
-    private $item_route_view;
+    protected $item_route_view;
 
     /**
      * @var boolean $item_place_view
      *
      * @ORM\Column(name="item_place_view", type="boolean")
      */
-    private $item_place_view;
+    protected $item_place_view;
 
     /**
      * @var boolean $item_file_view
      *
      * @ORM\Column(name="item_file_view", type="boolean")
      */
-    private $item_file_view;
+    protected $item_file_view;
 
     /**
      * @var boolean $item_contest_view
      *
      * @ORM\Column(name="item_contest_view", type="boolean")
      */
-    private $item_contest_view;
+    protected $item_contest_view;
 
     /**
      * @var boolean $item_poll_view
      *
      * @ORM\Column(name="item_poll_view", type="boolean")
      */
-    private $item_poll_view;
+    protected $item_poll_view;
 
     /**
      * @var boolean $item_post_edit
      *
      * @ORM\Column(name="item_post_edit", type="boolean")
      */
-    private $item_post_edit;
+    protected $item_post_edit;
 
     /**
      * @var boolean $item_event_edit
      *
      * @ORM\Column(name="item_event_edit", type="boolean")
      */
-    private $item_event_edit;
+    protected $item_event_edit;
 
     /**
      * @var boolean $item_route_edit
      *
      * @ORM\Column(name="item_route_edit", type="boolean")
      */
-    private $item_route_edit;
+    protected $item_route_edit;
 
     /**
      * @var boolean $item_place_edit
      *
      * @ORM\Column(name="item_place_edit", type="boolean")
      */
-    private $item_place_edit;
+    protected $item_place_edit;
 
     /**
      * @var boolean $item_file_edit
      *
      * @ORM\Column(name="item_file_edit", type="boolean")
      */
-    private $item_file_edit;
+    protected $item_file_edit;
 
     /**
      * @var boolean $item_contest_edit
      *
      * @ORM\Column(name="item_contest_edit", type="boolean")
      */
-    private $item_contest_edit;
+    protected $item_contest_edit;
 
     /**
      * @var boolean $item_poll_edit
      *
      * @ORM\Column(name="item_poll_edit", type="boolean")
      */
-    private $item_poll_edit;
+    protected $item_poll_edit;
 
     /**
      * @var boolean $item_post_edit_any
      *
      * @ORM\Column(name="item_post_edit_any", type="boolean")
      */
-    private $item_post_edit_any;
+    protected $item_post_edit_any;
 
     /**
      * @var boolean $item_event_edit_any
      *
      * @ORM\Column(name="item_event_edit_any", type="boolean")
      */
-    private $item_event_edit_any;
+    protected $item_event_edit_any;
 
     /**
      * @var boolean $item_route_edit_any
      *
      * @ORM\Column(name="item_route_edit_any", type="boolean")
      */
-    private $item_route_edit_any;
+    protected $item_route_edit_any;
 
     /**
      * @var boolean $item_place_edit_any
      *
      * @ORM\Column(name="item_place_edit_any", type="boolean")
      */
-    private $item_place_edit_any;
+    protected $item_place_edit_any;
 
     /**
      * @var boolean $item_file_edit_any
      *
      * @ORM\Column(name="item_file_edit_any", type="boolean")
      */
-    private $item_file_edit_any;
+    protected $item_file_edit_any;
 
     /**
      * @var boolean $item_contest_edit_any
      *
      * @ORM\Column(name="item_contest_edit_any", type="boolean")
      */
-    private $item_contest_edit_any;
+    protected $item_contest_edit_any;
 
     /**
      * @var boolean $item_poll_edit_any
      *
      * @ORM\Column(name="item_poll_edit_any", type="boolean")
      */
-    private $item_poll_edit_any;
+    protected $item_poll_edit_any;
 
     /**
      * @var boolean $item_relate_own
      *
      * @ORM\Column(name="item_relate_own", type="boolean")
      */
-    private $item_relate_own;
+    protected $item_relate_own;
 
     /**
      * @var boolean $item_relate_any
      *
      * @ORM\Column(name="item_relate_any", type="boolean")
      */
-    private $item_relate_any;
+    protected $item_relate_any;
 
     /**
      * @var boolean $item_post_comment
      *
      * @ORM\Column(name="item_post_comment", type="boolean")
      */
-    private $item_post_comment;
+    protected $item_post_comment;
 
     /**
      * @var boolean $item_event_comment
      *
      * @ORM\Column(name="item_event_comment", type="boolean")
      */
-    private $item_event_comment;
+    protected $item_event_comment;
 
     /**
      * @var boolean $item_route_comment
      *
      * @ORM\Column(name="item_route_comment", type="boolean")
      */
-    private $item_route_comment;
+    protected $item_route_comment;
 
     /**
      * @var boolean $item_place_comment
      *
      * @ORM\Column(name="item_place_comment", type="boolean")
      */
-    private $item_place_comment;
+    protected $item_place_comment;
 
     /**
      * @var boolean $item_file_comment
      *
      * @ORM\Column(name="item_file_comment", type="boolean")
      */
-    private $item_file_comment;
+    protected $item_file_comment;
 
     /**
      * @var boolean $item_contest_comment
      *
      * @ORM\Column(name="item_contest_comment", type="boolean")
      */
-    private $item_contest_comment;
+    protected $item_contest_comment;
 
     /**
      * @var boolean $item_poll_comment
      *
      * @ORM\Column(name="item_poll_comment", type="boolean")
      */
-    private $item_poll_comment;
+    protected $item_poll_comment;
 
     /**
      * @var boolean $item_poll_vote
      *
      * @ORM\Column(name="item_poll_vote", type="boolean")
      */
-    private $item_poll_vote;
+    protected $item_poll_vote;
 
     /**
      * @var boolean $category_create
      *
      * @ORM\Column(name="category_create", type="boolean")
      */
-    private $category_create;
+    protected $category_create;
 
     /**
      * @var boolean $category_edit
      *
      * @ORM\Column(name="category_edit", type="boolean")
      */
-    private $category_edit;
+    protected $category_edit;
 
     /**
      * @var boolean $activity_create
      *
      * @ORM\Column(name="activity_create", type="boolean")
      */
-    private $activity_create;
+    protected $activity_create;
 
     /**
      * @var boolean $activity_edit
      *
      * @ORM\Column(name="activity_edit", type="boolean")
      */
-    private $activity_edit;
+    protected $activity_edit;
 
     /**
      * @var boolean $user_create
      *
      * @ORM\Column(name="user_create", type="boolean")
      */
-    private $user_create;
+    protected $user_create;
 
     /**
      * @var boolean $user_edit
      *
      * @ORM\Column(name="user_edit", type="boolean")
      */
-    private $user_edit;
+    protected $user_edit;
 
     /**
      * @var boolean $user_view
      *
      * @ORM\Column(name="user_view", type="boolean")
      */
-    private $user_view;
+    protected $user_view;
 
     /**
      * @var boolean $message_send
      *
      * @ORM\Column(name="message_send", type="boolean")
      */
-    private $message_send;
+    protected $message_send;
 
     /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="role")
      */
-    private $users;
+    protected $users;
 
 
     /**

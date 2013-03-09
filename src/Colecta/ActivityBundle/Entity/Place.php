@@ -18,21 +18,21 @@ class Place extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var float $latitude
      *
      * @ORM\Column(name="latitude", type="float")
      */
-    private $latitude;
+    protected $latitude;
 
     /**
      * @var float $longitude
      *
      * @ORM\Column(name="longitude", type="float")
      */
-    private $longitude;
+    protected $longitude;
 
     /**
      * Set description

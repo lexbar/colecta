@@ -19,33 +19,33 @@ class Notification
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $text
      *
      * @ORM\Column(name="text", type="string", length=255)
      */
-    private $text;
+    protected $text;
 
     /**
      * @var datetime $date
      *
      * @ORM\Column(name="date", type="datetime")
      */
-    private $date;
+    protected $date;
     
     /**
      * @var boolean $dismiss
      *
      * @ORM\Column(name="dismiss", type="boolean")
      */
-    private $dismiss;
+    protected $dismiss;
     
     /**
     * @ORM\ManyToOne(targetEntity="User")
     */
-    private $user;
+    protected $user;
 
 
     /**

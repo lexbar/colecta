@@ -19,41 +19,41 @@ class RouteTrackpoint
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var float $latitude
      *
      * @ORM\Column(name="latitude", type="float")
      */
-    private $latitude;
+    protected $latitude;
 
     /**
      * @var float $longitude
      *
      * @ORM\Column(name="longitude", type="float")
      */
-    private $longitude;
+    protected $longitude;
 
     /**
      * @var smallint $altitude
      *
      * @ORM\Column(name="altitude", type="smallint")
      */
-    private $altitude;
+    protected $altitude;
 
     /**
      * @var datetime $date
      *
      * @ORM\Column(name="date", type="datetime")
      */
-    private $date;
+    protected $date;
 
     /**
     * @ORM\ManyToOne(targetEntity="Route")
     * @ORM\JoinColumn(name="route_id", referencedColumnName="id") 
     */
-    private $route;
+    protected $route;
 
 
     /**

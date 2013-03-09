@@ -19,20 +19,20 @@ class PollOption
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $text
      *
      * @ORM\Column(name="text", type="string", length=255)
      */
-    private $text;
+    protected $text;
 
     /**
     * @ORM\ManyToOne(targetEntity="Poll")
     * @ORM\JoinColumn(name="poll_id", referencedColumnName="id") 
     */
-    private $poll;
+    protected $poll;
 
     /**
      * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User")
@@ -41,7 +41,7 @@ class PollOption
      * inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      * )
      */
-    private $votes;
+    protected $votes;
 
 
     /**

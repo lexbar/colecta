@@ -18,102 +18,102 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var float $distance
      *
      * @ORM\Column(name="distance", type="float")
      */
-    private $distance;
+    protected $distance;
 
     /**
      * @var integer $uphill
      *
      * @ORM\Column(name="uphill", type="integer")
      */
-    private $uphill;
+    protected $uphill;
 
     /**
      * @var integer $downhill
      *
      * @ORM\Column(name="downhill", type="integer")
      */
-    private $downhill;
+    protected $downhill;
 
     /**
      * @var integer $time
      *
      * @ORM\Column(name="time", type="integer")
      */
-    private $time;
+    protected $time;
 
     /**
      * @var float $avgspeed
      *
      * @ORM\Column(name="avgspeed", type="float")
      */
-    private $avgspeed;
+    protected $avgspeed;
 
     /**
      * @var float $maxspeed
      *
      * @ORM\Column(name="maxspeed", type="float")
      */
-    private $maxspeed;
+    protected $maxspeed;
 
     /**
      * @var smallint $minheight
      *
      * @ORM\Column(name="minheight", type="smallint")
      */
-    private $minheight;
+    protected $minheight;
 
     /**
      * @var smallint $maxheight
      *
      * @ORM\Column(name="maxheight", type="smallint")
      */
-    private $maxheight;
+    protected $maxheight;
 
     /**
      * @var boolean $isloop
      *
      * @ORM\Column(name="isloop", type="boolean")
      */
-    private $isloop;
+    protected $isloop;
 
     /**
      * @var string $difficulty
      *
      * @ORM\Column(name="difficulty", type="string", length=12)
      */
-    private $difficulty;
+    protected $difficulty;
 
     /**
      * @var string $IBP
      *
      * @ORM\Column(name="IBP", type="string", length=10)
      */
-    private $IBP;
+    protected $IBP;
 
     /**
      * @var string $sourcefile
      *
      * @ORM\Column(name="sourcefile", type="string", length=255)
      */
-    private $sourcefile;
+    protected $sourcefile;
 
     /**
     * @ORM\ManyToOne(targetEntity="Activity")
     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id") 
     */
-    private $activity;
+    protected $activity;
 
     /**
      * @ORM\OneToMany(targetEntity="RouteTrackpoint", mappedBy="route", cascade={"persist", "remove"})
      */
-    private $trackpoints;
+    protected $trackpoints;
 
     /**
      * Set description

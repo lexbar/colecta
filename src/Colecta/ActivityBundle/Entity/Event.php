@@ -17,74 +17,74 @@ class Event extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="dateini", type="datetime")
      */
-    private $dateini;
+    protected $dateini;
 
     /**
      * @var datetime $dateend
      *
      * @ORM\Column(name="dateend", type="datetime")
      */
-    private $dateend;
+    protected $dateend;
 
     /**
      * @var boolean $showhours
      *
      * @ORM\Column(name="showhours", type="boolean")
      */
-    private $showhours;
+    protected $showhours;
 
     /**
      * @var text $description
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var float $distance
      *
      * @ORM\Column(name="distance", type="float")
      */
-    private $distance;
+    protected $distance;
 
     /**
      * @var integer $uphill
      *
      * @ORM\Column(name="uphill", type="integer")
      */
-    private $uphill;
+    protected $uphill;
 
     /**
      * @var integer $downhill
      *
      * @ORM\Column(name="downhill", type="integer")
      */
-    private $downhill;
+    protected $downhill;
 
     /**
      * @var string $difficulty
      *
      * @ORM\Column(name="difficulty", type="string", length=12)
      */
-    private $difficulty;
+    protected $difficulty;
 
     /**
      * @var string $status
      *
      * @ORM\Column(name="status", type="string", length=20)
      */
-    private $status;
+    protected $status;
 
     /**
     * @ORM\ManyToOne(targetEntity="Activity")
     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id") 
     */
-    private $activity;
+    protected $activity;
 
     /**
      * @ORM\OneToMany(targetEntity="EventAssistance", mappedBy="event")
      */
-    private $assistances;
+    protected $assistances;
 
     /**
      * Set dateini

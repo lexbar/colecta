@@ -19,24 +19,24 @@ class Activity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=25)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\OneToMany(targetEntity="Route", mappedBy="activity")
      */
-    private $routes;
+    protected $routes;
 
     /**
      * @ORM\OneToMany(targetEntity="Event", mappedBy="activity")
      */
-    private $events;
+    protected $events;
 
 
     /**

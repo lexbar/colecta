@@ -252,4 +252,53 @@ class DefaultController extends Controller
         
         return new RedirectResponse($referer);
     }
+    public function likeAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if($user == 'anon.')
+        {
+            //User must log in
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
+        $item = $em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug);
+        
+        if(!$item) 
+        {
+            //The item doesn't exist
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $likers = $item->getLikers();
+        if(count($likers))
+        {
+            foreach($likers as $l)
+            {
+                if($l == $user)
+                {
+                    //You already like this item
+                    return new RedirectResponse($this->get('request')->headers->get('referer'));
+                }
+            }
+        }
+        
+        $user->addLikedItem($item);
+        //$item->addLiker($user);
+        $item->setName($item->getName().'+');
+        //$em->persist($user);
+        //$em->persist($item);
+        $em->flush();
+    
+        
+        $referer = $this->get('request')->headers->get('referer');
+        
+        if(empty($referer))
+        {
+            $referer = $this->generateUrl('ColectaDashboard');
+        }
+        
+        return new RedirectResponse($referer);
+    }
 }

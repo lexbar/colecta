@@ -19,33 +19,33 @@ class EventAssistance
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $confirmed
      *
      * @ORM\Column(name="confirmed", type="boolean")
      */
-    private $confirmed;
+    protected $confirmed;
     
     /**
      * @var float $km
      *
      * @ORM\Column(name="km", type="float")
      */
-    private $km;
+    protected $km;
 
     /**
     * @ORM\ManyToOne(targetEntity="Event")
     * @ORM\JoinColumn(name="event_id", referencedColumnName="id") 
     */
-    private $event;
+    protected $event;
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
     */
-    private $user;
+    protected $user;
 
 
     /**

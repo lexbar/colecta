@@ -18,7 +18,7 @@ class Post extends Item
      *
      * @ORM\Column(name="text", type="text")
      */
-    private $text;
+    protected $text;
 
     /**
      * Set text

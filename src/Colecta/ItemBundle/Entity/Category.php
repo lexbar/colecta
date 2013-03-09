@@ -19,40 +19,40 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string $slug
      *
      * @ORM\Column(name="slug", type="string", length=255)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var text $description
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var datetime $lastchange
      *
      * @ORM\Column(name="lastchange", type="datetime")
      */
-    private $lastchange;
+    protected $lastchange;
 
     /**
      * @ORM\OneToMany(targetEntity="Item", mappedBy="category")
      */
-    private $items;
+    protected $items;
 
 
     /**

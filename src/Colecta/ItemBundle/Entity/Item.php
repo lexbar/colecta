@@ -24,93 +24,93 @@ abstract class Item
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string $slug
      *
      * @ORM\Column(name="slug", type="string", length=255)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var string $summary
      *
      * @ORM\Column(name="summary", type="string", length=255)
      */
-    private $summary;
+    protected $summary;
 
     /**
      * @var string $tagwords
      *
      * @ORM\Column(name="tagwords", type="string", length=255)
      */
-    private $tagwords;
+    protected $tagwords;
 
     /**
      * @var datetime $date
      *
      * @ORM\Column(name="date", type="datetime")
      */
-    private $date;
+    protected $date;
 
     /**
      * @var boolean $allowComments
      *
      * @ORM\Column(name="allowComments", type="boolean")
      */
-    private $allowComments;
+    protected $allowComments;
 
     /**
      * @var boolean $draft
      *
      * @ORM\Column(name="draft", type="boolean")
      */
-    private $draft;
+    protected $draft;
 
     /**
     * @ORM\ManyToOne(targetEntity="Category")
     * @ORM\JoinColumn(name="category_id", referencedColumnName="id") 
     */
-    private $category;
+    protected $category;
 
     /**
      * @ORM\OneToMany(targetEntity="Relation", mappedBy="itemto")
      */
-    private $relatedto;
+    protected $relatedto;
 
     /**
      * @ORM\OneToMany(targetEntity="Relation", mappedBy="itemfrom")
      */
-    private $relatedfrom;
+    protected $relatedfrom;
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
     */
-    private $author;
+    protected $author;
 
     /**
      * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User", mappedBy="editableItems", cascade={"persist"})
      */
-    private $editors;
+    protected $editors;
     
     /**
      * @ORM\ManyToMany(targetEntity="Colecta\UserBundle\Entity\User", mappedBy="likedItems", cascade={"persist"})
      */
-    private $likers;
+    protected $likers;
 
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="item")
      */
-    private $comments;
+    protected $comments;
 
 
     /**
@@ -644,6 +644,19 @@ abstract class Item
     public function getLikers()
     {
         return $this->likers;
+    }
+    
+    public function userLikes(\Colecta\UserBundle\Entity\User $user)
+    {
+        $likers = $this->getLikers();
+        if(count($likers) < 1) return false;
+        
+        foreach($likers as $l) 
+        {
+            if($l == $user) return true;
+        }
+        
+        return false;
     }
 
     /**

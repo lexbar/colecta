@@ -17,33 +17,33 @@ class Contest extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var datetime $iniDate
      *
      * @ORM\Column(name="iniDate", type="datetime")
      */
-    private $iniDate;
+    protected $iniDate;
 
     /**
      * @var datetime $endDate
      *
      * @ORM\Column(name="endDate", type="datetime")
      */
-    private $endDate;
+    protected $endDate;
 
     /**
      * @var string $itemTypes
      *
      * @ORM\Column(name="itemTypes", type="string", length=255)
      */
-    private $itemTypes;
+    protected $itemTypes;
 
     /**
      * @ORM\OneToMany(targetEntity="ContestWinner", mappedBy="contest")
      */
-    private $winners;
+    protected $winners;
 
     /**
      * Set description

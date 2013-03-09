@@ -17,19 +17,19 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="public", type="boolean")
      */
-    private $public;
+    protected $public;
 
     /**
      * @var boolean $personal
      *
      * @ORM\Column(name="personal", type="boolean")
      */
-    private $personal;
+    protected $personal;
 
     /**
      * @ORM\OneToMany(targetEntity="File", mappedBy="folder")
      */
-    private $files;
+    protected $files;
 
     /**
      * Set public

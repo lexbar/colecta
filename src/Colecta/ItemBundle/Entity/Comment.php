@@ -19,33 +19,33 @@ class Comment
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var text $text
      *
      * @ORM\Column(name="text", type="text")
      */
-    private $text;
+    protected $text;
 
     /**
      * @var datetime $date
      *
      * @ORM\Column(name="date", type="datetime")
      */
-    private $date;
+    protected $date;
 
     /**
      * @ORM\ManyToOne(targetEntity="Item") 
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
-    private $item;
+    protected $item;
 
     /**
      * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User") 
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user;
+    protected $user;
 
 
     /**

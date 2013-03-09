@@ -19,46 +19,46 @@ class Message
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var datetime $date
      *
      * @ORM\Column(name="date", type="datetime")
      */
-    private $date;
+    protected $date;
 
     /**
      * @var string $subject
      *
      * @ORM\Column(name="subject", type="string", length=255)
      */
-    private $subject;
+    protected $subject;
 
     /**
      * @var text $text
      *
      * @ORM\Column(name="text", type="text")
      */
-    private $text;
+    protected $text;
 
     /**
     * @ORM\ManyToOne(targetEntity="Message")
     * @ORM\JoinColumn(name="responseto_id", referencedColumnName="id") 
     */
-    private $responseto;
+    protected $responseto;
 
     /**
-    * @ORM\ManyToOne(targetEntity="User")
+    * @ORM\ManyToOne(targetEntity="User", inversedBy="sentMessages")
     * @ORM\JoinColumn(name="user_origin_id", referencedColumnName="id") 
     */
-    private $origin;
+    protected $origin;
 
     /**
-    * @ORM\ManyToOne(targetEntity="User")
+    * @ORM\ManyToOne(targetEntity="User", inversedBy="receivedMessages")
     * @ORM\JoinColumn(name="user_destination_id", referencedColumnName="id") 
     */
-    private $destination;
+    protected $destination;
 
 
     /**

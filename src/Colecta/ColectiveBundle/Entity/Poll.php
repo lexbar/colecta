@@ -17,19 +17,19 @@ class Poll extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var datetime $endDate
      *
      * @ORM\Column(name="endDate", type="datetime")
      */
-    private $endDate;
+    protected $endDate;
 
     /**
      * @ORM\OneToMany(targetEntity="PollOption", mappedBy="poll")
      */
-    private $options;
+    protected $options;
     
     /**
      * Set description

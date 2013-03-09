@@ -19,32 +19,32 @@ class Relation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $text
      *
      * @ORM\Column(name="text", type="string", length=255)
      */
-    private $text;
+    protected $text;
 
     /**
     * @ORM\ManyToOne(targetEntity="Item")
     * @ORM\JoinColumn(name="itemto_id", referencedColumnName="id") 
     */
-    private $itemto;
+    protected $itemto;
 
     /**
     * @ORM\ManyToOne(targetEntity="Item")
     * @ORM\JoinColumn(name="itemfrom_id", referencedColumnName="id") 
     */
-    private $itemfrom;
+    protected $itemfrom;
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
     */
-    private $user;
+    protected $user;
 
 
     /**

@@ -20,32 +20,32 @@ class File extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="filename", type="string", length=255)
      */
-    private $filename;
+    protected $filename;
     
     /**
      * @Assert\Image(maxSize="10000000")
      */
-    private $file;
+    protected $file;
     
     /**
      * @var string $filetype
      *
      * @ORM\Column(name="filetype", type="string", length=4)
      */
-    private $filetype;
+    protected $filetype;
 
     /**
      * @var text $description
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
     * @ORM\ManyToOne(targetEntity="Folder")
     * @ORM\JoinColumn(name="folder_id", referencedColumnName="id") 
     */
-    private $folder;
+    protected $folder;
 
     /**
      * Set filename
@@ -137,7 +137,7 @@ class File extends \Colecta\ItemBundle\Entity\Item
         return '/'.$this->getWebPath();
     }
     
-    private function getUploadDir() 
+    protected function getUploadDir() 
     {
         return 'uploads/files';
     }
@@ -162,7 +162,7 @@ class File extends \Colecta\ItemBundle\Entity\Item
         return null === $this->filename ? null : $this->getUploadDir() . '/' . $this->filename;
     }
     
-    private function getUploadRootDir() 
+    protected function getUploadRootDir() 
     {
         // the absolute directory path where uploaded documents should be saved
         return __DIR__ . '/../../../../web/' . $this->getUploadDir();

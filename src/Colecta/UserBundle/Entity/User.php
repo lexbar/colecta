@@ -23,92 +23,92 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=100)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string $mail
      *
      * @ORM\Column(name="mail", type="string", length=180)
      */
-    private $mail;
+    protected $mail;
 
     /**
      * @var string $pass
      *
      * @ORM\Column(name="pass", type="string", length=255)
      */
-    private $pass;
+    protected $pass;
 
     /**
      * @var string $salt
      *
      * @ORM\Column(name="salt", type="string", length=255)
      */
-    private $salt;
+    protected $salt;
     
     /**
      * @Assert\Image(maxSize="6000000")
      */
-    private $file;
+    protected $file;
 
     /**
      * @var string $avatar
      *
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
-    private $avatar;
+    protected $avatar;
 
     /**
      * @var datetime $registered
      *
      * @ORM\Column(name="registered", type="datetime")
      */
-    private $registered;
+    protected $registered;
 
     /**
      * @var datetime $lastAccess
      *
      * @ORM\Column(name="lastAccess", type="datetime")
      */
-    private $lastAccess;
+    protected $lastAccess;
 
     /**
     * @ORM\ManyToOne(targetEntity="Role")
     * @ORM\JoinColumn(name="role_id", referencedColumnName="id") 
     */
-    private $role;
+    protected $role;
 
     /**
      * @ORM\OneToMany(targetEntity="Message", mappedBy="origin")
      */
-    private $sentMessages;
+    protected $sentMessages;
 
     /**
      * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Relation", mappedBy="destination")
      */
-    private $receivedMessages;
+    protected $receivedMessages;
 
     /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
      */
-    private $notifications;
+    protected $notifications;
 
     /**
      * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Relation", mappedBy="user")
      */
-    private $relations;
+    protected $relations;
 
     /**
      * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Item", mappedBy="user")
      */
-    private $items;
+    protected $items;
 
     /**
      * @ORM\ManyToMany(targetEntity="Colecta\ItemBundle\Entity\Item", inversedBy="editors", cascade={"persist"})
@@ -117,7 +117,7 @@ class User implements UserInterface
      * inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")}
      * )
      */
-    private $editableItems;
+    protected $editableItems;
     
     /**
      * @ORM\ManyToMany(targetEntity="Colecta\ItemBundle\Entity\Item", inversedBy="likers", cascade={"persist"})
@@ -126,17 +126,17 @@ class User implements UserInterface
      * inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")}
      * )
      */
-    private $likedItems;
+    protected $likedItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Colecta\ItemBundle\Entity\Comment", mappedBy="user")
      */    
-     private $comments;
+     protected $comments;
      
      /**
      * @ORM\OneToMany(targetEntity="Colecta\ActivityBundle\Entity\EventAssistance", mappedBy="user")
      */    
-     private $assistances;
+     protected $assistances;
 
 
     /**
@@ -524,7 +524,7 @@ class User implements UserInterface
         return $this->getAvatarWebPath();
     }
     
-    private function getUploadDir() 
+    protected function getUploadDir() 
     {
         return '/uploads/avatars';
     }
@@ -559,7 +559,7 @@ class User implements UserInterface
         return null === $this->avatar ? null : $this->getUploadDir() . '/' . $this->avatar;
     }
     
-    private function getUploadRootDir() 
+    protected function getUploadRootDir() 
     {
         // the absolute directory path where uploaded documents should be saved
         return __DIR__ . '/../../../../web' . $this->getUploadDir();
@@ -598,7 +598,6 @@ class User implements UserInterface
     {
         $this->setRegistered(new \DateTime('now'));
         $this->setLastAccess(new \DateTime('now'));
-        $this->setSalt('');
     }
 
     /**
@@ -784,5 +783,21 @@ class User implements UserInterface
     public function removeAssistance(\Colecta\ActivityBundle\Entity\EventAssistance $assistances)
     {
         $this->assistances->removeElement($assistances);
+    }
+    
+    /**
+     * @return string
+     */
+    public function serialize()
+    {
+      return serialize($this->id);
+    }
+
+    /**
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+      $this->id = unserialize($data);
     }
 }
