@@ -53,6 +53,21 @@
         path.setMap(map);
     }
     
+    function toggleCategoryCreate() {
+            var button = $('#categoryCreateButton');
+            if(button.hasClass('newcategory')) {
+                button.removeClass('newcategory').addClass('selectcategory');
+                button.html('Seleccionar una categoría existente');
+                $('#RouteCategory').hide();
+                $('#RouteNewCategory').show().focus();
+            } else {
+                button.removeClass('selectcategory').addClass('newcategory');
+                button.html('Crear una nueva categoría');
+                $('#RouteCategory').show();
+                $('#RouteNewCategory').hide().attr('value','');
+            }
+        }
+    
     </script>
     
 {% endblock %}
@@ -214,7 +229,8 @@
             {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
-          </select>
+          </select><input type="text" id="RouteNewCategory" name="newCategory" style="display:none"><br>
+          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
         </div>
       </div>
       

@@ -283,7 +283,7 @@ a i {
     border: 1px solid #CCC;
     margin-bottom: 10px;
     padding: 3px;
-    float: right;
+    display: block;
 }
 ul.properties {
     overflow: hidden;
