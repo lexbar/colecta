@@ -27,7 +27,7 @@
                     $('#userResults').html('');
                     $('#userResults').css('display','none');
                     for(var i = 0; i < json.length; i++) {
-                        $('#userResults').append('<li><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
+                        $('#userResults').append('<li id="userResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
                     } 
                     if(json.length) { $('#userResults').css('display','block'); }
                     //$('#searchButton').removeAttr("disabled"); 
@@ -47,6 +47,41 @@
         }
     }
     
+    //Key up
+    $('#userSearch').keyup(function(e){
+        if($('#userResults li').length) {
+            var current = $('#userResults li.active');
+            var currentN = 0;
+            if(current.length) {
+                currentN = parseInt(current.attr('id').substring(10));
+            } 
+            
+            if(e.keyCode == 40){
+                if($('#userResult'+(currentN + 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN + 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 38){
+                if($('#userResult'+(currentN - 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN - 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 13){
+                if($('#userResult'+(currentN)).length) {
+                    $('#userResult'+(currentN)+' a').click();
+                    return;
+                }
+                return;
+            }
+        }
+        
+        showResults();
+    });
+    
     function hideResults() 
     {
         $('#userResults').html('');
@@ -56,12 +91,6 @@
     function highlightUpdateBtn() 
     {
         $('#updateBtn').addClass('btn-primary');
-    }
-    
-    function blockSubmit()
-    {
-        $('#updateBtn').html('Espere <img src="/img/loading_white.gif">').addClass('disabled');
-        
     }
     
     </script>
@@ -112,7 +141,7 @@
     {% set canedit = item.author == app.user %}
     {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
     
-    {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="blockSubmit()">{% endif %}
+    {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('icon-refresh icon-spin')">{% endif %}
     
     <div class="assistances">
     <h2>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}</h2>
@@ -142,14 +171,14 @@
     {% endfor %}
     
     {% if canedit %}
-        <li>Añadir un usuario:<br><input id="userSearch" type="text" name="targetUser" onKeyUp="showResults();">
+        <li>Añadir un usuario:<br><input id="userSearch" type="text" name="targetUser" autocomplete="off">
             <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
         </li>
     {% endif %}
     
     </ul>
     
-    {% if canedit %}<p style="text-align:right"><button id="updateBtn" class="btn" type="submit">Actualizar</button></p>{% endif %}
+    {% if canedit %}<p style="text-align:right"><button id="updateBtn" class="btn" type="submit"><i id="updateBtnLoading"></i> Actualizar</button></p>{% endif %}
     
     </div>
     
