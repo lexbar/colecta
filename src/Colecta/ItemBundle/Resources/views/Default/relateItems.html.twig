@@ -3,7 +3,7 @@
     {% set relateds = '' %}
     <div id="showRelateds">
     {% for related in item.related%}
-        <p><button type="button" onClick="removeRelation({{ related.id }})" class="btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button> <strong>{{ related.name }}</strong></p>
+        <p><button type="button" onClick="removeRelation({{ related.id }})" class="btn btn-mini"><i class="icon-remove" style="color:darkred;"></i> Eliminar</button> <strong>{{ related.name }}</strong></p>
         {% set relateds = relateds ~ related.id ~ ',' %}
     {% endfor%}
     </div>

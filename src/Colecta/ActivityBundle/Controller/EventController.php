@@ -334,6 +334,14 @@ class EventController extends Controller
                     
                     $em->persist($notification); 
                 }
+                else
+                {
+                    if($item->getDateini() < new \DateTime('now'))
+                    {
+                        $assistance->setConfirmed(1);
+                    }
+                    
+                }
                 
                 $em->persist($assistance); 
                 $em->flush();

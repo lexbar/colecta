@@ -16,7 +16,7 @@
         if(xhr && xhr.readyState != 4) {
             searchagain = true;
         } else {        
-            var excludeIds = '{{ item.id }}';
+            var excludeIds = '{{ item.id }},';
             
             for(var i = 0; i < relations.length; i++){ excludeIds += relations[i].id + ','; }
             
@@ -52,22 +52,22 @@
             } 
             
             if(e.keyCode == 40){
-                if($('#itemResult'+(currentN + 1))) {
+                if($('#itemResult'+(currentN + 1)).length) {
                     $('#itemResult'+(currentN)).removeClass('active');
                     $('#itemResult'+(currentN + 1)).addClass('active');
-                    return;
                 }
+                return;
             } else if(e.keyCode == 38){
-                if($('#itemResult'+(currentN - 1))) {
+                if($('#itemResult'+(currentN - 1)).length) {
                     $('#itemResult'+(currentN)).removeClass('active');
                     $('#itemResult'+(currentN - 1)).addClass('active');
-                    return;
                 }
+                return;
             } else if(e.keyCode == 13){
-                if($('#itemResult'+(currentN))) {
+                if($('#itemResult'+(currentN)).length) {
                     $('#itemResult'+(currentN)+' a').click();
-                    return;
                 }
+                return;
             }
         }
         
@@ -95,7 +95,7 @@
         $('#showRelateds').html('');
         $('#relateds').val('');
         for(var i = 0; i < relations.length; i++){
-            $('#showRelateds').append('<p><button type="button" onClick="removeRelation('+relations[i].id+')" class="btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button> <strong> '+relations[i].name+'</strong></p>');
+            $('#showRelateds').append('<p><button type="button" onClick="removeRelation('+relations[i].id+')" class="btn btn-mini"><i class="icon-remove" style="color:darkred;"></i> Eliminar</button> <strong> '+relations[i].name+'</strong></p>');
             $('#relateds').val($('#relateds').val() + relations[i].id + ',');
         }
     }
