@@ -1,16 +1,12 @@
 {% extends '::intranet.html.twig' %}
 
-{% block activities 'active' %}
+{% block rank 'active' %}
 
-{% block submenu %}
-    <ul class="sub nav nav-pills">
-      <li><a href="{{ path('ColectaActivitiesIndex') }}">Mis actividades</a></li>
-      <li class="active"><a href="{{ path('ColectaActivitiesRank') }}">Ranking</a></li>
-    </ul>
-{% endblock %}
 {% block content %}  
-
-
+    <div class="title-block">
+        <h2>Ranking</h2>
+    </div>
+    
     <table class="table table-condensed table-hover">
     <thead><tr><th style="width: 100px;">Total</th><th>Nombre</th><th class="span7">Ranking</th></tr></thead>
     {% set maxkm = kms[users[0].id] %}
@@ -22,4 +18,5 @@
         </tr>
     {% endfor %}
     </table>
+
 {% endblock%}

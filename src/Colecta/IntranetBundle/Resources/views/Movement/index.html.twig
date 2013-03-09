@@ -53,56 +53,56 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="span9">
-            <div id="chart"></div>
-            
-            <table class="table table-condensed table-hover">
-                <thead style="text-align:left;"><tr><th class="span2">Fecha</th><th class="span3">Concepto</th><th class="span2">Movimiento</th><th class="span2">Balance</th></tr></thead>
-                {% for movement in movements %}
-                <tr>
-                    <td>{{ movement.date | date('Y-m-d') }}</td>
-                    <td>{{ movement.concept }}</td>
-                    <td><strong style="color:{% if movement.amount < 0 %}darkred{% else %}darkgreen{% endif %}">{{ movement.amount }} €</strong></td>
-                    <td>{{ movement.balance }} €</td>
-                </tr>
-                {% endfor %}
-            </table>
+    <div class="title-block">
+        <h2>Contabilidad</h2>
+    </div>
+    
+    <div id="chart"></div>
+    
+    <table class="table table-condensed table-hover">
+        <thead style="text-align:left;"><tr><th class="span2">Fecha</th><th class="span3">Concepto</th><th class="span2">Movimiento</th><th class="span2">Balance</th></tr></thead>
+        {% for movement in movements %}
+        <tr>
+            <td>{{ movement.date | date('Y-m-d') }}</td>
+            <td>{{ movement.concept }}</td>
+            <td><strong style="color:{% if movement.amount < 0 %}darkred{% else %}darkgreen{% endif %}">{{ movement.amount }} €</strong></td>
+            <td>{{ movement.balance }} €</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <div class="span3">
+        <div class="well">
+            <h2>Balance: {{ movements[movements|length - 1].balance }}€</h2>
         </div>
-        
-        <div class="span3">
-            <div class="well">
-                <h2>Balance: {{ movements[movements|length - 1].balance }}€</h2>
-            </div>
-            {% if app.user %}
-            <form method="post" action="{{ path('ColectaMovementAdd') }}">
-              <legend>Nuevo movimiento</legend>
-              
-              <label for="movementCategory">Categoría:</label>
-              <select id="movementCategory" name="category">
-                {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
-                {% endfor %}
-              </select>
-              
-              <label for="movementConcept">Concepto:</label>
-              <input id="movementConcept" type="text" name="concept">
-              
-              <label for="movementDate">Fecha:</label>
-              <input id="movementConcept" type="text" name="date" class="span2" value="{{ 'today' | date('Y/m/d') }}">
-              
-              <label for="movementConcept">Importe:</label>
-              <div class="input-append">
-                <input id="movementConcept" type="text" name="amount" class="span1"><span class="add-on"> €</span>
-              </div>
-              <span class="help-block">Introduzca un importe negativo para gastos.</span>
-              
-              <label class="checkbox">
-                <input type="checkbox"> Hacer periódico
-              </label>
-              <button type="submit" class="btn">Submit</button>
-            </form>
-            {% endif %}
-        </div>
+        {% if app.user %}
+        <form method="post" action="{{ path('ColectaMovementAdd') }}">
+          <legend>Nuevo movimiento</legend>
+          
+          <label for="movementCategory">Categoría:</label>
+          <select id="movementCategory" name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+          
+          <label for="movementConcept">Concepto:</label>
+          <input id="movementConcept" type="text" name="concept">
+          
+          <label for="movementDate">Fecha:</label>
+          <input id="movementConcept" type="text" name="date" class="span2" value="{{ 'today' | date('Y/m/d') }}">
+          
+          <label for="movementConcept">Importe:</label>
+          <div class="input-append">
+            <input id="movementConcept" type="text" name="amount" class="span1"><span class="add-on"> €</span>
+          </div>
+          <span class="help-block">Introduzca un importe negativo para gastos.</span>
+          
+          <label class="checkbox">
+            <input type="checkbox"> Hacer periódico
+          </label>
+          <button type="submit" class="btn">Submit</button>
+        </form>
+        {% endif %}
     </div>
 {% endblock%}

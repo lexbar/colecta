@@ -10,7 +10,7 @@
             
             <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
                 <div class="input-append">
-                    <input type="text" class="input-medium search-query" name="search" value="{{ app.request.get('search') }}">
+                    <input type="text" class="input-medium search-query" name="q" value="{{ app.request.get('search') }}">
                     <button type="submit" class="btn">Buscar</button>
                 </div>
             </form>
@@ -63,11 +63,18 @@
     {% else %}    
     
     <form class="well login" action="{{ path('userLoginCheck') }}" method="post">
-        <strong>Iniciar sesión</strong>
+        <p><strong>Iniciar sesión</strong></p>
         
-        <p><input type="text" class="input-medium" id="username" name="_username" placeholder="Email" value=""></p>
         
-        <p><input type="password" id="password" name="_password" class="input-medium" placeholder="Contraseña"></p>
+        <div class="input-prepend">
+              <span class="add-on"><i class="icon-envelope"></i></span>
+              <input type="text" class="span2" id="username" name="_username" placeholder="Email" value="">
+        </div>
+        
+        <div class="input-prepend">
+              <span class="add-on"><i class="icon-key"></i></span>
+              <input type="password" class="span2" id="password" name="_password" class="input-medium" placeholder="Contraseña">
+        </div>
         
         <p><label for="remember_me" class="checkbox">
             <input id="remember_me" name="_remember_me" type="checkbox" checked /> Recuérdame

@@ -3,27 +3,21 @@
 {% block chat 'active' %}
 
 {% block content %}
-<div class="row">
-    <div class="span8">
-        
-        {% if app.user %}
-        <form method="post" action="{{ path('ColectaChatPost') }}" id="chatform">
-            <img src="{{ app.user.avatar }}" width="30" height="30"> <input type="text" class="span6" name="text"> <button class="btn btn-primary">Enviar</button>
-        </form>
-        {% endif %}
-        
-        <div id="chatstream">
-        {% for m in messages %}
-            <div class="row"><div class="span1"><img src="{{m.user.avatar}}" width="40" height="40"></div><div class="span7"><strong>{{ m.user.name }}:</strong> {{ m.text }}<br><small>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div>
-        {% endfor %}
-        </div>
-        
+    <div class="title-block">
+        <h2>Chat</h2>
     </div>
     
-    <div class="span4">
-        <div class="well">
-            <h2>Usuarios conectados:</h2>
-        </div>
+    <div class="row">
+    <form method="post" action="{{ path('ColectaChatPost') }}" id="chatform">
+        <div class="span6"><textarea name="text"></textarea></div>
+        <button class="btn btn-primary span1">Enviar</button>
+    </form>
     </div>
-</div>
+    
+    <div id="chatstream">
+    {% for m in messages %}
+        <div class="row"><div class="span1"><img width="40" height="40" src="{% if m.user.avatar %}{{m.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}"></div><div class="span6"><strong>{{ m.user.name }}:</strong> {{ m.text }}<br><small>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div>
+    {% endfor %}
+    </div>
+        
 {% endblock%}

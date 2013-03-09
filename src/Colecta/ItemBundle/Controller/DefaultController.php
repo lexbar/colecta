@@ -44,7 +44,9 @@ class DefaultController extends Controller
     }
     public function searchPageAction($page)
     {
-        $search = trim($this->get('request')->query->get('search'));
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
+        $search = trim($this->get('request')->query->get('q'));
         
         $items = $this->search($search, $page);
             
@@ -73,8 +75,6 @@ class DefaultController extends Controller
     }
     public function search($query, $page)
     {
-        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
-        
         //SEARCH ENGINE
         
         

@@ -95,35 +95,26 @@
     </script>
 {% endblock %}
 
-{% block submenu %}
-    <ul class="sub nav nav-pills">
-      <li class="active"><a href="{{ path('ColectaActivitiesIndex') }}">Mis actividades</a></li>
-      <li><a href="{{ path('ColectaActivitiesRank') }}">Ranking</a></li>
-    </ul>
-{% endblock %}
 {% block content %}    
-    <div class="row">
-        <div class="span8">
-            <div id="chart"></div>
-            
-            <table class="table table-condensed table-hover">
-            <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distania</th></tr></thead>
-            {% set accumulated = 0%}
-            {% for asssistance in asssistances %}
-                <tr>
-                    <td>{{ asssistance.event.dateini | date('Y/m/d') }}</td>
-                    <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
-                    <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
-                </tr>
-                {% set accumulated = accumulated + asssistance.km %}
-            {% endfor %}
-            </table>
-        </div>
-        
-        <div class="span4">
-            <div class="well">
-                <h2>Acumulado: {{ accumulated | number_format(1,'.',',')}} km</h2>
-            </div>
-        </div>
+    <div class="title-block">
+        <h2>Rendimiento</h2>
     </div>
+    <div id="chart"></div>
+    
+    <table class="table table-condensed table-hover">
+    <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distania</th></tr></thead>
+    {% set accumulated = 0%}
+    {% for asssistance in asssistances %}
+        <tr>
+            <td>{{ asssistance.event.dateini | date('Y/m/d') }}</td>
+            <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
+            <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
+        </tr>
+        {% set accumulated = accumulated + asssistance.km %}
+    {% endfor %}
+    
+    <tr><td></td><td style="text-align:right"><strong>TOTAL</strong></td><td>{{ accumulated | number_format(1,'.',',')}} km</td></tr>
+    
+    </table>
+    
 {% endblock%}
