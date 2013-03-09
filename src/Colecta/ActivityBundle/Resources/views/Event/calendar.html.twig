@@ -7,7 +7,7 @@
 
 
 <strong class="calendartitle">
-    <a href="{{ path('ColectaEventDate', {'date': targetdateob.modify('-1 month').format('Y-m') }) }}" class="pull-left">⟨ {{ targetdateob.format('n') | replace({
+    <a href="{{ path('ColectaEventDate', {'date': targetdateob.modify('-1 month').format('Y-m') }) }}" class="pull-left"><i class="icon-caret-left"></i> {{ targetdateob.format('n') | replace({
         0:'Dic',
         1:'Ene',
         2:'Feb',
@@ -54,7 +54,7 @@
         11:'Nov',
         12:'Dic',
         13:'Ene'
-    }) }} ⟩</a>     
+    }) }} <i class="icon-caret-right"></i></a>     
 </strong>
     
 <table class="table table-condensed calendar">
