@@ -6,7 +6,7 @@
 
     <div class="title-block">
         {% if app.user %} <a href="{{ path('ColectaFileNew') }}" class="btn btn-small btn-primary pull-right">Subir archivo <i class="icon-plus"></i></a> {% endif %}
-        <h2><i class="icon-folder-open"></i> Archivos{% if page > 1 %} (página {{page}}){% endif %}</h2>
+        <h2>Archivos{% if page > 1 %} (página {{page}}){% endif %}</h2>
     </div>
 
     {% for item in items %}
