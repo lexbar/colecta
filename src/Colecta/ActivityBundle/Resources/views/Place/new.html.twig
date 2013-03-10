@@ -25,7 +25,7 @@
                     if(results.length > 1) {
                         $('#mapResults').html('');
                         for(var i = 0; i < results.length; i++) {
-                            $('#mapResults').append('<li id="mapResult'+(i + 1)+'"><a tabindex="-1" href="#result'+i+'" onClick="mapPosition(new google.maps.LatLng('+results[i].geometry.location.lat()+', '+results[i].geometry.location.lng()+'));$(\'#PlaceName\').val(\''+results[i].formatted_address+'\');return false;"> '+results[i].formatted_address+'</a></li>');
+                            $('#mapResults').append('<li id="mapResult'+(i + 1)+'"><a tabindex="-1" href="#result'+i+'" onClick="mapPosition(new google.maps.LatLng('+results[i].geometry.location.lat()+', '+results[i].geometry.location.lng()+'));$(\'#PlaceName\').val(\''+results[i].formatted_address+'\');$(\'#mapResults\').addClass(\'hidden\');return false;"> '+results[i].formatted_address+'</a></li>');
                         }
                         
                         $('#mapResults').removeClass('hidden');

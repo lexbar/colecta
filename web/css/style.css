@@ -302,7 +302,7 @@ form.form-horizontal .controls textarea {
 ul.properties {
     overflow: hidden;
     clear: both;
-    margin: 10px 0 0 0;
+    margin: 0;
     background-color: #f7f7f7;
 }
 ul.properties li {
