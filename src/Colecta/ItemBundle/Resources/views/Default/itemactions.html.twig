@@ -8,11 +8,11 @@
             <span><i class="icon-thumbs-up icon-large"></i> Te gusta</span>
         {% endif %}
     {% elseif app.user %}
-        {% if item.likers | length > 0 %}
-            <span>Le gusta a {{ item.likers | length }} personas</span> 
-        {% endif %}
-        
         <a href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="icon-thumbs-up"></i> Me gusta</a>
+        
+        {% if item.likers | length > 0 %}
+            <span>(Le gusta a {{ item.likers | length }} personas)</span> 
+        {% endif %}
     {% else %}
         
     {% endif%}

@@ -2,8 +2,7 @@
 
 {% block routes 'active' %}
 {% block onload 'initialize()' %}
-{% block javascripts %}    
-    <script src="/js/jquery.min.js"></script>
+{% block javascripts %}
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="/js/highcharts.js"></script>
     <script>
@@ -161,7 +160,9 @@
                 }
             }
         });
-    };
+        
+        $(document).keyup(function(e){ if(e.keyCode == '27'){if(isFullScreen){ toggleFullScreen(); }}});
+    }
     
     function distance(lat1, lng1, alt1, lat2, lng2, alt2) 
     {         
