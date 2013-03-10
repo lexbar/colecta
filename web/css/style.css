@@ -290,6 +290,13 @@ form.form-horizontal .controls textarea {
     overflow: hidden;
     padding: 10px 4px 30px;
 }
+.itemActions {
+    margin: 10px 0 0 3px;
+    font-size: 12px;    
+}
+.itemActions span, .itemActions a {
+    padding: 0 10px 0 0;
+}
 .event.mini h2{
     margin-left: 0;
 }
