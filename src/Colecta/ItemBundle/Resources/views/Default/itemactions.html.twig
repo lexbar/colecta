@@ -17,6 +17,10 @@
         
     {% endif%}
     
+    {% if item.type == 'Activity/Event' %}
+        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Hasta ahora nadie se ha apuntado{% endif %}</a>
+    {% endif %}
+    
     {# EDIT #}
     {% if item.author == app.user %}
         <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="icon-pencil icon-large"></i> Editar</a>
