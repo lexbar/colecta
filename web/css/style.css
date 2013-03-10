@@ -18,8 +18,14 @@ h2 {
 form.well {
     border-radius: 0 0 4px 4px;
 }
+.well form {
+    
+}
 a i {
     text-decoration: none !important;
+}
+.hidden {
+    display: none !important;
 }
 .title-block {
     padding: 15px;
@@ -41,34 +47,20 @@ a i {
     padding: 5px 8px;
     margin-bottom: 12px;
 }
-.span7 form.well.hidden {
-    overflow: hidden;
-    height: 24px;
-    cursor: pointer;
-}
-.span7 form.well.hidden:hover {
-    background-color: #DDD;
-}
-.span7 form.well {
-    padding: 6px 10px;
-}
-.span7 form h2{
-    margin: 0 0 10px;
-}
-.span7 form.form-horizontal label.control-label {
+form.form-horizontal label.control-label {
     width: 110px;
 }
-.span7 form.form-horizontal .controls {
+form.form-horizontal .controls {
     margin-left: 130px;
 }
-.span7 form.form-horizontal .control-group {
+form.form-horizontal .control-group {
     margin-bottom: 10px;
 }
-.span7 form.form-horizontal .form-actions {
+form.form-horizontal .form-actions {
     margin: 0px;
     padding: 10px 0 3px 130px;
 }
-.span7 form.form-horizontal .controls textarea {
+form.form-horizontal .controls textarea {
     width: 350px;
     height: 130px;
 }
@@ -100,8 +92,10 @@ a i {
     line-height: 14px;
 }
 .myself img {
+    border: 1px solid #EEE;
     float: left;
-    margin: 0 15px 5px 15px;
+    margin: 0 10px 5px 0;
+    padding: 2px;
 }
 .myself .name {
     padding-bottom: 4px;
@@ -127,7 +121,7 @@ a i {
 }
 
 #stream {
-    min-height: 400px;
+    min-height: 470px;
     margin-bottom: 200px;
 }
 
@@ -215,7 +209,6 @@ a i {
 }
 #map.active {
     height: 220px;
-    width: 350px;
 }
 #map.full {
     height: 300px;
@@ -293,9 +286,9 @@ a i {
 }
 /* ITEMS */
 .item {
+    border-bottom: 1px solid #DDD;
     overflow: hidden;
-    padding: 15px 4px;
-    border-bottom: 1px solid #ddd;
+    padding: 10px 4px 30px;
 }
 .event.mini h2{
     margin-left: 0;
@@ -311,7 +304,6 @@ ul.properties {
     clear: both;
     margin: 10px 0 0 0;
     background-color: #f7f7f7;
-    border-top: 6px solid #595959;
 }
 ul.properties li {
     float: left;
@@ -394,7 +386,6 @@ div.assistances ul li a {
     text-align: center;
     color: #000;
     background-color: #f7f7f7;
-    border-bottom: 1px solid #595959;
     font-size: 20px;
     line-height: 24px;
 }

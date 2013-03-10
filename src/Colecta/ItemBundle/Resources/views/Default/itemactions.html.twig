@@ -1,0 +1,11 @@
+{# LIKE #}
+{% if app.user and item.userLikes(app.user) %}
+    <span class="btn btn-small pull-right btn-link" title="Me gusta"><i class="icon-thumbs-up icon-large"></i> Te gusta</span>
+{% elseif app.user %}
+    <a href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" class="btn btn-small pull-right btn-link" title="Me gusta"><i class="icon-thumbs-up icon-large"></i> Me gusta</a>
+{% endif%}
+
+{# EDIT #}
+{% if item.author == app.user %}
+    <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" class="btn btn-small pull-right btn-link" title="Editar"><i class="icon-pencil icon-large"></i> Editar</a>
+{% endif %}

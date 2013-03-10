@@ -96,17 +96,7 @@
         </div>
       </div>
       
-      <div class="control-group">
-        <label class="control-label" for="EventCategory">Categoría</label>
-        <div class="controls">
-          <select id="EventCategory" name="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
-          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
-        </div>
-      </div>
+      {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
       
       <div class="form-actions">
         <button class="btn">Guardar como borrador</button>

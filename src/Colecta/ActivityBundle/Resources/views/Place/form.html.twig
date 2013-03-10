@@ -1,55 +1,53 @@
 {% if app.user %}
-<form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceCreate') }}" method="POST" class="form-horizontal well">
-    <fieldset>
-      <div class="control-group">
-        <label class="control-label" for="PlaceMapSearch">Localización</label>
-        <div class="controls">
-          <div class="input-append">
-            <input class="span2" id="PlaceMapSearch" size="16" type="text"><button class="btn" type="button" onClick="searchLocation()">Buscar en el mapa <i class="icon-search"></i></button>
+<div class="well">
+    <form action="" method="get" onSubmit="searchLocation(); return false;">
+        <div class="alert alert-info" id="PlaceInfo1">
+            <i class="icon-info-sign"></i> <strong>Información: </strong> Escribe el nombre del lugar y pulsa para buscar en el mapa.
+        </div>
+        
+        <div class="input-append">
+            <input class="span4" id="PlaceMapSearch" size="16" type="text">
+            <button class="btn" type="button" onClick="searchLocation();"><i class="icon-search"></i> Buscar en el mapa</button>
+        </div>
+    </form>
+    
+    <ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;" class="dropdown-menu hidden" id="mapResults"></ul>
+    
+    <div id="map"></div>
+    
+    <div class="alert alert-info hidden" id="PlaceInfo2">
+        <i class="icon-info-sign"></i> <strong>Información: </strong> Haz click en el mapa para cambiar la localización.
+    </div>
+          
+    <form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceCreate') }}" method="POST" class="form-horizontal hidden" id="PlaceForm">
+        <hr>
+        
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="PlaceName">Nombre del lugar</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="PlaceName" name="name">
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <div class="input-append">
-            <div id="map"></div>
+          <div class="control-group">
+            <label class="control-label" for="PlaceDescription">Descripción</label>
+            <div class="controls">
+              <textarea class="input-xlarge" id="PlaceDescription" name="description" rows="3"></textarea>
+            </div>
           </div>
-        </div>
-      </div>
-      <hr>
-      <div class="control-group">
-        <label class="control-label" for="PlaceName">Nombre del lugar</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge" id="PlaceName" name="name">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="PlaceDescription">Descripción</label>
-        <div class="controls">
-          <textarea class="input-xlarge" id="PlaceDescription" name="description" rows="3"></textarea>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label" for="EventCategory">Categoría</label>
-        <div class="controls">
-          <select id="EventCategory" name="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
-          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
-        </div>
-      </div>
-      
-      <div class="form-actions">
-        <input type="hidden" name="latitude" id="PlaceLatitude">
-        <input type="hidden" name="longitude" id="PlaceLongitude">
-        <button class="btn">Guardar como borrador</button>
-        <button type="submit" class="btn btn-primary">Publicar ahora</button>
-      </div>
-    </fieldset>
-</form>
+          
+          {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
+          
+          <div class="form-actions">
+            <input type="hidden" name="latitude" id="PlaceLatitude">
+            <input type="hidden" name="longitude" id="PlaceLongitude">
+            <button class="btn">Guardar como borrador</button>
+            <button type="submit" class="btn btn-primary">Publicar ahora</button>
+          </div>
+        </fieldset>
+    </form>
+</div>
+
 {% else %}
 <div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
 {% endif %}

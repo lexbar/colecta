@@ -1,0 +1,14 @@
+function toggleCategoryCreate() {
+    var button = $('#categoryCreateButton');
+    if(button.hasClass('newcategory')) {
+        button.removeClass('newcategory').addClass('selectcategory');
+        button.html('<i class="icon-th-list"></i> Seleccionar');
+        $('#Category').hide();
+        $('#NewCategory').show().focus();
+    } else {
+        button.removeClass('selectcategory').addClass('newcategory');
+        button.html('<i class="icon-plus-sign"></i> Nueva categoría');
+        $('#Category').show();
+        $('#NewCategory').hide().attr('value','');
+    }
+}

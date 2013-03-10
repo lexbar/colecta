@@ -3,7 +3,6 @@
 {% block places 'active' %}
 
 {% block javascripts %}  
-    <script src="/js/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
         var geocoder;
@@ -11,63 +10,71 @@
         var marker;
         
         function searchLocation() {
-        if(!geocoder) {
-            geocoder = new google.maps.Geocoder();
+            if(!geocoder) {
+                geocoder = new google.maps.Geocoder();
+            }
+            
+            var address = $('#PlaceMapSearch').val();
+            
+            $('#mapResults').addClass('hidden');
+            
+            geocoder.geocode( { 'address': address}, function(results, status) {
+            
+                if (status == google.maps.GeocoderStatus.OK) {
+                    
+                    if(results.length > 1) {
+                        $('#mapResults').html('');
+                        for(var i = 0; i < results.length; i++) {
+                            $('#mapResults').append('<li id="mapResult'+(i + 1)+'"><a tabindex="-1" href="#result'+i+'" onClick="mapPosition(new google.maps.LatLng('+results[i].geometry.location.lat()+', '+results[i].geometry.location.lng()+'));$(\'#PlaceName\').val(\''+results[i].formatted_address+'\');return false;"> '+results[i].formatted_address+'</a></li>');
+                        }
+                        
+                        $('#mapResults').removeClass('hidden');
+                    } else {
+                        mapPosition(results[0].geometry.location);
+                        $('#PlaceName').val(results[0].formatted_address);
+                    }
+                    
+                } else {
+                    if(status == 'ZERO_RESULTS') {
+                        alert('No hemos encontrado ningun sitio con esas palabras. \nPrueba de nuevo');
+                    } else {
+                        alert('Ha ocurrido un error: ' + status);
+                    }
+                }
+                
+            });
         }
-        var address = document.getElementById('PlaceMapSearch').value;
-        if(document.getElementById('PlaceName').value == '') {
-            document.getElementById('PlaceName').value = address;
-        }
-        geocoder.geocode( { 'address': address}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            if(document.getElementById('map').className != 'active') {
-                document.getElementById('map').className = 'active';
-                map = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:results[0].geometry.location, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
+        
+        function mapPosition(position) { //google maps latlng object
+            //If not active, create map
+            if(! $('#map').hasClass('active')) {
+                $('#map').addClass('active');
+                map = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:position, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
                 google.maps.event.addListener(map, 'click', function(event) {
-                    map.panTo(event.latLng);
-                    marker.setPosition(event.latLng);
-                    document.getElementById('PlaceLatitude').value = event.latLng.lat();
-                    document.getElementById('PlaceLongitude').value = event.latLng.lng();
+                    mapPosition(event.latLng);
                 });
+                
+                $('#PlaceInfo1').addClass('hidden');
+                $('#PlaceInfo2').removeClass('hidden');
+                $('#PlaceForm').removeClass('hidden');
             } else {
-                map.setCenter(results[0].geometry.location);
+                map.panTo(position);
+                $('#PlaceLatitude').val(position.lat());
+                $('#PlaceLongitude').val(position.lng());
             }
             
             if(!marker) {
                 marker = new google.maps.Marker({
                     map: map,
-                    position: results[0].geometry.location
+                    position:position
                 });
             } else {
-                marker.setPosition(results[0].geometry.location);
+                marker.setPosition(position);
             }
-            
-            document.getElementById('PlaceLatitude').value = results[0].geometry.location.lat();
-            document.getElementById('PlaceLongitude').value = results[0].geometry.location.lng();
-          } else {
-            if(status == 'ZERO_RESULTS') {
-                alert('No hemos encontrado ningun sitio con esas palabras. \nPrueba de nuevo');
-            } else {
-                alert('Ha ocurrido un error: ' + status);
-            }
-          }
-        });
         }
         
-        function toggleCategoryCreate() {
-            var button = $('#categoryCreateButton');
-            if(button.hasClass('newcategory')) {
-                button.removeClass('newcategory').addClass('selectcategory');
-                button.html('Seleccionar una categoría existente');
-                $('#EventCategory').hide();
-                $('#EventNewCategory').show().focus();
-            } else {
-                button.removeClass('selectcategory').addClass('newcategory');
-                button.html('Crear una nueva categoría');
-                $('#EventCategory').show();
-                $('#EventNewCategory').hide().attr('value','');
-            }
-        }
+    {% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
+
     </script>
 {% endblock %}
 

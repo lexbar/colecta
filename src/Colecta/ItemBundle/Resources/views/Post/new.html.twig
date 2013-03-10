@@ -3,22 +3,8 @@
 {% block posts 'active' %}
 
 {% block javascripts %}  
-    <script src="/js/jquery.min.js"></script>
     <script>        
-        function toggleCategoryCreate() {
-            var button = $('#categoryCreateButton');
-            if(button.hasClass('newcategory')) {
-                button.removeClass('newcategory').addClass('selectcategory');
-                button.html('Seleccionar una categoría existente');
-                $('#EventCategory').hide();
-                $('#EventNewCategory').show().focus();
-            } else {
-                button.removeClass('selectcategory').addClass('newcategory');
-                button.html('Crear una nueva categoría');
-                $('#EventCategory').show();
-                $('#EventNewCategory').hide().attr('value','');
-            }
-        }
+        {% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
     </script>
 {% endblock %}
 

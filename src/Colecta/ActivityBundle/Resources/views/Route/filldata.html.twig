@@ -18,7 +18,6 @@
         {% endif %}
     {% endfor %}
     
-    <script src="/js/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
     
@@ -53,20 +52,7 @@
         path.setMap(map);
     }
     
-    function toggleCategoryCreate() {
-            var button = $('#categoryCreateButton');
-            if(button.hasClass('newcategory')) {
-                button.removeClass('newcategory').addClass('selectcategory');
-                button.html('Seleccionar una categoría existente');
-                $('#RouteCategory').hide();
-                $('#RouteNewCategory').show().focus();
-            } else {
-                button.removeClass('selectcategory').addClass('newcategory');
-                button.html('Crear una nueva categoría');
-                $('#RouteCategory').show();
-                $('#RouteNewCategory').hide().attr('value','');
-            }
-        }
+    {% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
     
     </script>
     
@@ -222,17 +208,7 @@
       <input type="hidden" value="{{ filename }}" name="filename">
       <input type="hidden" value="{% if trackdata.isloop %}1{% else %}0{% endif %}" name="isloop">
       
-      <div class="control-group">
-        <label class="control-label" for="RouteCategory">Categoría</label>
-        <div class="controls">
-          <select id="RouteCategory" name="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-          </select><input type="text" id="RouteNewCategory" name="newCategory" style="display:none"><br>
-          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
-        </div>
-      </div>
+      {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
       
       <div class="form-actions">
         <button class="btn">Guardar como borrador</button>

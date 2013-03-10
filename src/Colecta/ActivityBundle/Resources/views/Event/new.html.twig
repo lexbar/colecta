@@ -2,9 +2,11 @@
 
 {% block events 'active' %}
 
-{% block javascripts %}  
+{% block stylesheets %}
     <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
-    <script src="/js/jquery.min.js"></script>
+{% endblock%}
+
+{% block javascripts %}  
     <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
     <script>
         jQuery(function($){
@@ -38,20 +40,8 @@
             $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
         });
         
-        function toggleCategoryCreate() {
-            var button = $('#categoryCreateButton');
-            if(button.hasClass('newcategory')) {
-                button.removeClass('newcategory').addClass('selectcategory');
-                button.html('Seleccionar una categoría existente');
-                $('#EventCategory').hide();
-                $('#EventNewCategory').show().focus();
-            } else {
-                button.removeClass('selectcategory').addClass('newcategory');
-                button.html('Crear una nueva categoría');
-                $('#EventCategory').show();
-                $('#EventNewCategory').hide().attr('value','');
-            }
-        }
+{% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
+
     </script>
 {% endblock %}
 
