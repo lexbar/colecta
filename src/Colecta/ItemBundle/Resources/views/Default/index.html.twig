@@ -23,8 +23,8 @@
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
 </div>
 {% else %}
-<h3>Bienvenido a Ciclubs.</h3>
-<p>Navega por el menú de la izquierda para compartir nuevos contenidos.</p>
+    <h3>Nadie ha escrito nada... por ahora.</h3>
+    <p>Navega por el menú de la izquierda para crear nuevos contenidos.</p>
 {% endfor %}
 
 <ul class="pager">
