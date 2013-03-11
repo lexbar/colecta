@@ -2,7 +2,7 @@
     <h2><a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     
     <ul class="thumbnails">
-        {% for file in item.files %}
+        {% for file in item.files | reverse %}
             {% if file.filetype in ['jpeg','gif','png'] %}
                 <li><a class="thumbnail" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ file.URLPath }}" style="height:180px"></a></li>
             {% endif %}

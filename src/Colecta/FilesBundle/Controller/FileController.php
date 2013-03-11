@@ -161,6 +161,7 @@ class FileController extends Controller
                         
                         $item->setFolder($folder);
                     }
+                    $item->getFolder()->setDate(new \DateTime('now'));
                     
                     $category->setLastchange(new \DateTime('now'));
                     $em->persist($category);                     

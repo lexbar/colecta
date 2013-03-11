@@ -54,6 +54,9 @@
                     mapPosition(event.latLng);
                 });
                 
+                $('#PlaceLatitude').val(position.lat());
+                $('#PlaceLongitude').val(position.lng());
+                
                 $('#PlaceInfo1').addClass('hidden');
                 $('#PlaceInfo2').removeClass('hidden');
                 $('#PlaceForm').removeClass('hidden');
