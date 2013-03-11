@@ -206,6 +206,29 @@ class FileController extends Controller
         
         return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'form' => $form->createView()));
     }
+    public function thumbnailAction($slug, $width, $height)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            throw $this->createNotFoundException('El archivo no existe');
+        }
+        
+        $image = new Imagick($item->getAbsolutePath());
+        $image->cropThumbnailImage($width, $height);
+        $image->setImagePage(0, 0, 0, 0);
+        
+        $response = new Response();
+        
+        $response->setStatusCode(200);
+        $response->setContent($image);
+        $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
+        
+        return $response;
+    }
     public function downloadAction($slug,$type)
     {
         $em = $this->getDoctrine()->getEntityManager();

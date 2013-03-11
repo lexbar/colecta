@@ -28,3 +28,6 @@ ColectaFileEdit:
 ColectaFileDownload:
     pattern:  /file/download/{slug}.{type}
     defaults: { _controller: ColectaFilesBundle:File:download }
+ColectaFileThumbnail:
+    pattern:  /file/thumbnail/{slug}/{width}/{height}/
+    defaults: { _controller: ColectaFilesBundle:File:thumbnail }
