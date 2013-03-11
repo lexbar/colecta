@@ -1,0 +1,26 @@
+<div class="event micro">
+
+    <div class="date">
+        <span class="weekday">{{ item.dateini | date('l') | replace ({
+            'Monday':'Lunes',
+            'Tuesday':'Martes',
+            'Wednesday':'Miércoles',
+            'Thursday':'Jueves',
+            'Friday':'Viernes',
+            'Saturday':'Sábado',
+            'Sunday':'Domingo'
+        }) }}</span>
+        <span class="monthday">{{ item.dateini | date('d') }}</span> 
+        <span class="month">{% include '::month.html.twig' with{'date':item.dateini,'short':1} %}{% if item.dateini | date('Y') != 'today' | date('Y') %} '{{ item.dateini | date('y') }}{% endif %}</span>
+        <span class="hour">{{ item.dateini | date('H:i') }}</span>
+    </div>
+    
+    <div class="datum">
+        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
+            <h2>{{ item.name }}</h2>
+        </a>
+        
+        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+    </div>
+    
+</div>

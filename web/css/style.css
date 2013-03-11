@@ -314,7 +314,7 @@ form.form-horizontal .controls textarea {
 }
 /* ITEMS */
 .item {
-    border-bottom: 1px solid #DDD;
+    border-bottom: 1px solid #EEE;
     overflow: hidden;
     padding: 10px 4px 30px;
 }
@@ -414,6 +414,10 @@ div.assistances ul li.odd {
 div.assistances ul li a {
     color: #000;
 }
+.event.micro {
+    margin-bottom: -35px;
+    overflow: hidden;
+}
 .event .date {
     float: left;
     margin: 0 20px 15px 0px;
@@ -425,13 +429,28 @@ div.assistances ul li a {
     font-size: 20px;
     line-height: 24px;
 }
+.event.micro .date {
+    font-size: 14px;
+    line-height: 14px;
+}
+.event.micro .date {
+    width: 60px;
+}
 .event .date span {
     display: block;
     width: 120px;
 }
+.event.micro .date span {
+    width: auto;
+    color: #333;
+    padding: 1px 0;
+}
 .event .date .weekday {
     text-transform: lowercase;
     font-size: 16px;
+}
+.event.micro .date .weekday {
+    font-size: 12px;
 }
 .event .date .monthday {
     font-size: 40px;
@@ -439,9 +458,30 @@ div.assistances ul li a {
     color: #FFF;
     background-color: #444;
 }
+.event.micro .date .monthday {
+    font-size: 20px;
+    line-height: 20px;
+    color: #FFF;
+}
 .event .date .month {
     text-transform: uppercase;
     font-size: 14px;
+}
+.event.micro .date .month {
+    font-size: 14px;
+    padding-bottom: 2px;
+}    
+.event.micro .datum {
+    float: left;
+    width: 490px;
+}
+.event.micro .datum h2 {
+    margin: 0 0 2px;
+}
+.event.micro .datum .assistance .btn {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 6px;
 }
 .poll ul {
     margin-left: 25px;

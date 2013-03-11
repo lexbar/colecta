@@ -3,31 +3,17 @@
 {% set secondsago = nowtimestamp - itemtimestamp %}
 
 {% if secondsago < 60 %}
-    Hace {{ secondsago }} segundo{% if secondsago != 1 %}s{% endif %}
+    Hace {{ secondsago }} s<span>egundo{% if secondsago != 1 %}s{% endif %}</span>
 {% elseif secondsago/60 < 60 %}
-    Hace {{ secondsago // 60 }} minuto{% if secondsago // 60 != 1 %}s{% endif %}
+    Hace {{ secondsago // 60 }} m<span>inuto{% if secondsago // 60 != 1 %}s{% endif %}</span>
 {% else %}
     {% set hoursago = secondsago / 60 // 60 %}
     {% if hoursago < 24 %}
-        Hace {{ hoursago }} hora{% if hoursago != 1 %}s{% endif %}
+        Hace {{ hoursago }} h<span>ora{% if hoursago != 1 %}s{% endif %}</span>
     {% elseif itemtimestamp > 'yesterday' | date('U') %}
-        Ayer a las {{ date | date('H:i')  }}
+        Ayer<span> a las {{ date | date('H:i')  }}</span>
     {% else %}
-        {{ date | date('j')  }} de 
-        {{ date | date('n') | replace({
-            '1':'enero',
-            '2':'febrero',
-            '3':'marzo',
-            '4':'abril',
-            '5':'mayo',
-            '6':'junio',
-            '7':'julio',
-            '8':'agosto',
-            '9':'septiembre',
-            '10':'octubre',
-            '11':'noviembre',
-            '12':'diciembre'
-        }) }}
-         a las {{ date | date('H:i')  }}
+        {{ date | date('j')  }} {% include '::month.html.twig' with{'date':date,'short':1} %}
+        <span> a las {{ date | date('H:i')  }}</span>
     {% endif %}
 {% endif %}
