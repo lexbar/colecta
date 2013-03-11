@@ -103,14 +103,18 @@
     
     <table class="table table-condensed table-hover">
     <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distania</th></tr></thead>
-    {% set accumulated = 0%}
+    
+    {% set accumulated = 0 %}
+    {% set lastyearmonth = '' %}
+    
     {% for asssistance in asssistances %}
-        <tr>
+        <tr{% if lastyearmonth != '' and lastyearmonth != asssistance.event.dateini | date('Ym') %} style="border-top: 2px solid #0088CC;"{% endif %}>
             <td>{{ asssistance.event.dateini | date('Y/m/d') }}</td>
             <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
             <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
         </tr>
         {% set accumulated = accumulated + asssistance.km %}
+        {% set lastyearmonth = asssistance.event.dateini | date('Ym') %}
     {% endfor %}
     
     <tr><td></td><td style="text-align:right"><strong>TOTAL</strong></td><td>{{ accumulated | number_format(1,'.',',')}} km</td></tr>
