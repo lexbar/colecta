@@ -7,10 +7,7 @@ body {
 }
 #body {
     background-color: #FFFFFF;
-    margin-top: 130px;
     padding-top: 10px;
-    position: relative;
-    z-index: 2;
 }
 h1 {
     margin: 0;
@@ -98,9 +95,7 @@ form.form-horizontal .controls textarea {
     background-size: 100% auto;
     margin: -10px 0 0;
     height: 140px; 
-    position: fixed; 
     width: 940px; 
-    z-index: 0;
     line-height: 160px;
     text-align: center;
     color: #EEEEEE;
@@ -478,10 +473,14 @@ div.assistances ul li a {
 .event.micro .datum h2 {
     margin: 0 0 2px;
 }
-.event.micro .datum .assistance .btn {
-    font-size: 11px;
-    line-height: 16px;
-    padding: 6px;
+.event.micro ul.properties li {
+    font-weight: normal;
+}
+.event.micro ul.properties li strong {
+    font-size: 16px;
+}
+.event.micro ul.properties li.small strong {
+    font-size: 14px;
 }
 .poll ul {
     margin-left: 25px;
