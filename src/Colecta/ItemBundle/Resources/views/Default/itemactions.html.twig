@@ -14,7 +14,9 @@
             <span>(Le gusta a {{ item.likers | length }} personas)</span> 
         {% endif %}
     {% else %}
-        
+        {% if item.likers | length > 0 %}
+            <span><i class="icon-thumbs-up"></i> Le gusta a {{ item.likers | length }} personas</span> 
+        {% endif %}
     {% endif%}
     
     {% if item.type == 'Activity/Event' %}

@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\FilesBundle\Form\Frontend\FileType;
 use Colecta\FilesBundle\Entity\File;
+use Colecta\FilesBundle\Entity\Folder;
+use Colecta\ItemBundle\Entity\Category;
 
 class FileController extends Controller
 {
@@ -61,9 +63,9 @@ class FileController extends Controller
     public function uploadAction()
     {
         $request = $this->getRequest();
-        $file = new File();
+        $item = new File();
         
-        $form = $this->createForm(new FileType(), $file);
+        $form = $this->createForm(new FileType(), $item);
         
         if ($request->getMethod() == 'POST') {
             $user = $this->get('security.context')->getToken()->getUser();
@@ -71,11 +73,11 @@ class FileController extends Controller
             
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
         
-            if(!$user) 
+            if($user == 'anon.') 
             {
                 $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
             }
-            elseif(!$category)
+            elseif(!$request->get('newCategory') && !$category)
             {
                 $this->get('session')->setFlash('error', 'No existe la categoria');
             }
@@ -85,13 +87,83 @@ class FileController extends Controller
                 
                 if ($form->isValid()) 
                 {            
-                    $file->upload();
+                    $item->upload();
                     
-                    $file->setCategory($category);
-                    $file->setAuthor($user);
+                    //New Category
+                    if($request->get('newCategory'))
+                    {
+                        $category = new Category();
+                        $category->setName($request->get('newCategory'));
+                        
+                        //Category Slug generate
+                        $catSlug = $item->generateSlug($request->get('newCategory'));
+                        $n = 2;
+                        
+                        while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                        {
+                            if($n > 2)
+                            {
+                                $catSlug = substr($catSlug,0,-2);
+                            }
+                            
+                            $catSlug .= '_'.$n;
+                            
+                            $n++;
+                        }
                     
-                    //Slug generate
-                    $slug = $file->generateSlug();
+                        $category->setSlug($catSlug);
+                        $category->setDescription('');
+                    }
+                    
+                    $category->setLastchange(new \DateTime('now'));
+                    $em->persist($category); 
+                    $item->setCategory($category);
+                    
+                    //New Folder
+                    if($request->get('newFolder'))
+                    {
+                        $folder = new Folder();
+                        $folder->setName($request->get('newFolder'));
+                        
+                        //Slug generation
+                        $slug = $folder->generateSlug();
+                        $n = 2;
+                        
+                        while($em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug)) 
+                        {
+                            if($n > 2)
+                            {
+                                $slug = substr($slug,0,-2);
+                            }
+                            
+                            $slug .= '_'.$n;
+                            
+                            $n++;
+                        }
+                        $folder->setSlug($slug);
+                        // End slug generation
+                        $folder->setSummary('');
+                        $folder->setTagwords('');
+                        $folder->setAllowComments(1);
+                        $folder->setDraft(0);
+                        $folder->setPublic(1);
+                        $folder->setPersonal(0);
+                        
+                        $folder->setCategory($category);
+                        $folder->setAuthor($user);
+                        
+                        
+                        $em->persist($folder);
+                        
+                        $item->setFolder($folder);
+                    }
+                    
+                    $category->setLastchange(new \DateTime('now'));
+                    $em->persist($category);                     
+                    
+                    
+                    //Slug generation
+                    $slug = $item->generateSlug();
                     $n = 2;
                     
                     while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
@@ -105,16 +177,17 @@ class FileController extends Controller
                         
                         $n++;
                     }
-                    $file->setSlug($slug);
+                    $item->setSlug($slug);
                     
-                    $file->summarize($file->getDescription());
-                    $file->setAllowComments(true);
-                    $file->setDraft(false);
+                    $item->setAuthor($user);
+                    $item->summarize($item->getDescription());
+                    $item->setAllowComments(true);
+                    $item->setDraft(false);
             
-                    $em->persist($file);
+                    $em->persist($item);
                     $em->flush();
                 
-                    return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $file->getSlug())));
+                    return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
                 }
             }
             

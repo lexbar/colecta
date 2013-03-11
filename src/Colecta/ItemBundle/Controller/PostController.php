@@ -62,7 +62,7 @@ class PostController extends Controller
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
     
-        if(!$user) 
+        if($user == 'anon.') 
         {
             $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
         }
@@ -70,7 +70,7 @@ class PostController extends Controller
         {
             $this->get('session')->setFlash('error', 'No has escrito ningun texto');
         }
-        elseif(!$category)
+        elseif(!$request->get('newCategory') && !$category)
         {
             $this->get('session')->setFlash('error', 'No existe la categoria');
         }
@@ -100,11 +100,11 @@ class PostController extends Controller
                 }
             
                 $category->setSlug($catSlug);
-                $category->setDescription('');
-                $category->setLastchange(new \DateTime('now'));
-                
-                $em->persist($category); 
+                $category->setDescription('');    
             }
+            
+            $category->setLastchange(new \DateTime('now'));
+            $em->persist($category); 
             
             $item->setCategory($category);
             $item->setAuthor($user);

@@ -3,20 +3,21 @@
 {% block files 'active' %}
 
 {% block javascripts %}  
-    <script src="/js/jquery.min.js"></script>
-    <script>
-        function toggleCategoryCreate() {
-            var button = $('#categoryCreateButton');
-            if(button.hasClass('newcategory')) {
-                button.removeClass('newcategory').addClass('selectcategory');
-                button.html('Seleccionar una categoría existente');
-                $('#EventCategory').hide();
-                $('#EventNewCategory').show().focus();
+    <script>        
+        {% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
+        
+        function toggleFolderCreate() {
+            var button = $('#folderCreateButton');
+            if(button.hasClass('newfolder')) {
+                button.removeClass('newfolder').addClass('selectfolder');
+                button.html('<i class="icon-th-list"></i> Seleccionar');
+                $('#PostFolder').hide();
+                $('#NewFolder').show().focus();
             } else {
-                button.removeClass('selectcategory').addClass('newcategory');
-                button.html('Crear una nueva categoría');
-                $('#EventCategory').show();
-                $('#EventNewCategory').hide().attr('value','');
+                button.removeClass('selectfolder').addClass('newfolder');
+                button.html('<i class="icon-plus-sign"></i> Nueva carpeta');
+                $('#PostFolder').show();
+                $('#NewFolder').hide().attr('value','');
             }
         }
     </script>
