@@ -4,6 +4,7 @@ namespace Colecta\FilesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Colecta\FilesBundle\Form\Frontend\FileType;
 use Colecta\FilesBundle\Entity\File;
 use Colecta\FilesBundle\Entity\Folder;
@@ -56,28 +57,31 @@ class FileController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
-        $form = $this->uploadAction();
+        $item = new File();
+        $form = $this->createForm(new FileType(), $item);
         
-        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'form' => $form));
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'form' => $form->createView()));
     }
     public function uploadAction()
     {
-        $request = $this->getRequest();
-        $item = new File();
+        $user = $this->get('security.context')->getToken()->getUser();
         
+        if($user == 'anon.') 
+        {
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+        
+        $item = new File();
         $form = $this->createForm(new FileType(), $item);
         
-        if ($request->getMethod() == 'POST') {
-            $user = $this->get('security.context')->getToken()->getUser();
-            $em = $this->getDoctrine()->getEntityManager();
+        if ($request->getMethod() == 'POST') 
+        {
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
             
-            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
-        
-            if($user == 'anon.') 
-            {
-                $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
-            }
-            elseif(!$request->get('newCategory') && !$category)
+            if(!$request->get('newCategory') && !$category)
             {
                 $this->get('session')->setFlash('error', 'No existe la categoria');
             }
@@ -86,17 +90,17 @@ class FileController extends Controller
                 $form->bindRequest($request);
                 
                 if ($form->isValid()) 
-                {            
+                {
                     $item->upload();
                     
                     //New Category
-                    if($request->get('newCategory'))
+                    if($request->request->get('newCategory'))
                     {
                         $category = new Category();
-                        $category->setName($request->get('newCategory'));
+                        $category->setName($request->request->get('newCategory'));
                         
                         //Category Slug generate
-                        $catSlug = $item->generateSlug($request->get('newCategory'));
+                        $catSlug = $item->generateSlug($request->request->get('newCategory'));
                         $n = 2;
                         
                         while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
@@ -120,10 +124,10 @@ class FileController extends Controller
                     $item->setCategory($category);
                     
                     //New Folder
-                    if($request->get('newFolder'))
+                    if($request->request->get('newFolder'))
                     {
                         $folder = new Folder();
-                        $folder->setName($request->get('newFolder'));
+                        $folder->setName($request->request->get('newFolder'));
                         
                         //Slug generation
                         $slug = $folder->generateSlug();
@@ -189,18 +193,40 @@ class FileController extends Controller
                 
                     return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
                 }
+                else
+                {
+                    $uplmaxsize = ini_get('upload_max_filesize');
+                    $this->get('session')->setFlash('error', 'El tamaño del archivo debe ser inferior a '.$uplmaxsize);
+                }
             }
-            
-            $referer = $request->headers->get('referer');
-        
-            if(empty($referer))
-            {
-                $referer = $this->generateUrl('ColectaFileIndex');
-            }
-            
-            return new RedirectResponse($referer);
         }
         
-        return $form->createView();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'form' => $form->createView()));
+    }
+    public function downloadAction($slug,$type)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            throw $this->createNotFoundException('El archivo no existe');
+        }
+
+        $response = new Response();
+        
+        $response->setStatusCode(200);
+        $response->setContent(file_get_contents($item->getAbsolutePath()));
+        $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
+        $response->headers->set('Content-Description', 'Descarga de '.$item->getName());
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$item->getSlug().'.'.$type);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+        
+        return $response;
     }
 }

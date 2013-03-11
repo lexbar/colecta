@@ -23,7 +23,7 @@ class File extends \Colecta\ItemBundle\Entity\Item
     protected $filename;
     
     /**
-     * @Assert\Image(maxSize="10000000")
+     * @Assert\File(maxSize="32M",maxSizeMessage="Allowed maximum size is {{ limit }}")
      */
     protected $file;
     
@@ -179,7 +179,14 @@ class File extends \Colecta\ItemBundle\Entity\Item
         
         $this->filename = $hashName . '.' . $this->file->guessExtension();
         
-        $this->setFiletype($this->file->guessExtension());
+        $extension = str_replace('jpg', 'jpeg', $this->file->guessExtension() );
+        
+        if(empty($extension)) 
+        {
+            $extension = strtolower(pathinfo($this->file->getClientOriginalName(), PATHINFO_EXTENSION));
+        }
+        
+        $this->setFiletype($extension);
         
         $this->file->move($this->getUploadRootDir(), $this->getFilename());
         

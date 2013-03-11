@@ -1,4 +1,5 @@
 {% if app.user %}
+{{ form_errors(form) }}
 <form action="{{ path('ColectaFileUpload') }}" method="POST" class="form-horizontal well" {{ form_enctype(form) }}>
     <fieldset>
         

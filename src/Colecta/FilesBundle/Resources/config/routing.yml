@@ -25,3 +25,6 @@ ColectaFileView:
 ColectaFileEdit:
     pattern:  /file/{slug}/edit/
     defaults: { _controller: ColectaFilesBundle:File:view }
+ColectaFileDownload:
+    pattern:  /file/download/{slug}.{type}
+    defaults: { _controller: ColectaFilesBundle:File:download }

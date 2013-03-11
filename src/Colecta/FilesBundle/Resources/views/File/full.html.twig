@@ -8,10 +8,10 @@
     
     <h2>{{ item.name }}</h2>
     
-    {% if item.filetype in ['jpg','jpeg','gif','png'] %} 
-        <img style="width:100%;" src="{{ item.URLPath }}"> 
+    {% if item.filetype in ['jpeg','gif','png'] %}
+        <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}" class=""><img src="{{ item.URLPath }}"></a>
     {% else %}
-        <a href="{{ item.URLPath }}">Enlace</a>
+        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
     
     <p>{{ item.description | nl2br }}</p>
