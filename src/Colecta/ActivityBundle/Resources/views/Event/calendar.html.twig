@@ -7,54 +7,17 @@
 
 
 <strong class="calendartitle">
-    <a href="{{ path('ColectaEventDate', {'date': targetdateob.modify('-1 month').format('Y-m') }) }}" class="pull-left"><i class="icon-caret-left"></i> {{ targetdateob.format('n') | replace({
-        0:'Dic',
-        1:'Ene',
-        2:'Feb',
-        3:'Mar',
-        4:'Abr',
-        5:'May',
-        6:'Jun',
-        7:'Jul',
-        8:'Ago',
-        9:'Sep',
-        10:'Oct',
-        11:'Nov',
-        12:'Dic',
-        13:'Ene'
-    }) }}</a> 
+    {% set targetdateob = targetdateob.modify('-1 month') %} {# decrease 1 month #}
     
-    {{ targetdate | date('n') | replace({
-        '1':'Enero',
-        '2':'Febrero',
-        '3':'Marzo',
-        '4':'Abril',
-        '5':'Mayo',
-        '6':'Junio',
-        '7':'Julio',
-        '8':'Agosto',
-        '9':'Septiembre',
-        '10':'Octubre',
-        '11':'Noviembre',
-        '12':'Diciembre'
-    }) }} de {{ targetdate | date('Y') }}
+    <a href="{{ path('ColectaEventDate', {'date': targetdateob.format('Y-m') }) }}" class="pull-left"><i class="icon-caret-left"></i> {% include '::month.html.twig' with {'date':targetdateob, 'short':1} %}</a> 
     
-    <a href="{{ path('ColectaEventDate', {'date': targetdateob.modify('+2 month').format('Y-m') }) }}" class="pull-right">{{ targetdateob.format('n') | replace({
-        0:'Dic',
-        1:'Ene',
-        2:'Feb',
-        3:'Mar',
-        4:'Abr',
-        5:'May',
-        6:'Jun',
-        7:'Jul',
-        8:'Ago',
-        9:'Sep',
-        10:'Oct',
-        11:'Nov',
-        12:'Dic',
-        13:'Ene'
-    }) }} <i class="icon-caret-right"></i></a>     
+    {% set targetdateob = targetdateob.modify('+1 month') %} {# increase 1 month #}
+    
+    {% include '::month.html.twig' with {'date':targetdateob, 'short':0} %} de {{ targetdate | date('Y') }}
+    
+    {% set targetdateob = targetdateob.modify('+1 month') %} {# increase 1 month #}
+    
+    <a href="{{ path('ColectaEventDate', {'date': targetdateob.format('Y-m') }) }}" class="pull-right">{% include '::month.html.twig' with {'date':targetdateob, 'short':1} %} <i class="icon-caret-right"></i></a>     
 </strong>
     
 <table class="table table-condensed calendar">

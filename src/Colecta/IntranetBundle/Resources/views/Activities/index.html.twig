@@ -109,7 +109,7 @@
     
     {% for asssistance in asssistances %}
         <tr{% if lastyearmonth != '' and lastyearmonth != asssistance.event.dateini | date('Ym') %} style="border-top: 2px solid #0088CC;"{% endif %}>
-            <td>{{ asssistance.event.dateini | date('Y/m/d') }}</td>
+            <td>{{ asssistance.event.dateini | date('d') }} {% include '::month.html.twig' with {'date':asssistance.event.dateini, 'short':1} %} {{ asssistance.event.dateini | date('Y') }}</td>
             <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
             <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
         </tr>
