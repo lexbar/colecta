@@ -23,7 +23,13 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        //$items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        
+        $query = $em->createQuery(
+            'SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 AND NOT (i INSTANCE OF \'Colecta\FilesBundle\Entity\File\') ORDER BY i.date DESC'
+        )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
+        
+        $items = $query->getResult();
         
         //Pagination
         if(count($items) > $this->ipp) 

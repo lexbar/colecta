@@ -25,6 +25,8 @@ abstract class Item
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    protected $type;
 
     /**
      * @var string $name
