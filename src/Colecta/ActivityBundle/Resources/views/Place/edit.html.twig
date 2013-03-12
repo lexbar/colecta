@@ -3,7 +3,6 @@
 {% block places 'active' %}
 
 {% block javascripts %}    
-    <script src="/js/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
         var geocoder;
@@ -11,78 +10,79 @@
         var marker;
         
         function searchLocation() {
+            $('#mapSearchIcon').removeClass('icon-search').addClass('icon-refresh icon-spin');
+            
             if(!geocoder) {
                 geocoder = new google.maps.Geocoder();
             }
-            var address = document.getElementById('PlaceMapSearch').value;
-            if(document.getElementById('PlaceName').value == '') {
-                document.getElementById('PlaceName').value = address;
-            }
+            
+            var address = $('#PlaceMapSearch').val();
+            
+            $('#mapResults').addClass('hidden');
+            
             geocoder.geocode( { 'address': address}, function(results, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-                if(document.getElementById('map').className != 'active') {
-                    document.getElementById('map').className = 'active';
-                    map = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:results[0].geometry.location, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
-                    google.maps.event.addListener(map, 'click', function(event) {
-                        map.panTo(event.latLng);
-                        marker.setPosition(event.latLng);
-                        document.getElementById('PlaceLatitude').value = event.latLng.lat();
-                        document.getElementById('PlaceLongitude').value = event.latLng.lng();
-                    });
+            
+                if (status == google.maps.GeocoderStatus.OK) {
+                    
+                    if(results.length > 1) {
+                        $('#mapResults').html('');
+                        for(var i = 0; i < results.length; i++) {
+                            $('#mapResults').append('<li id="mapResult'+(i + 1)+'"><a tabindex="-1" href="#result'+i+'" onClick="mapPosition(new google.maps.LatLng('+results[i].geometry.location.lat()+', '+results[i].geometry.location.lng()+'));$(\'#PlaceName\').val(\''+results[i].formatted_address+'\');$(\'#mapResults\').addClass(\'hidden\');return false;"> '+results[i].formatted_address+'</a></li>');
+                        }
+                        
+                        $('#mapResults').removeClass('hidden');
+                    } else {
+                        mapPosition(results[0].geometry.location);
+                        $('#PlaceName').val(results[0].formatted_address);
+                    }
+                    
                 } else {
-                    map.setCenter(results[0].geometry.location);
+                    if(status == 'ZERO_RESULTS') {
+                        alert('No hemos encontrado ningun sitio con esas palabras. \nPrueba de nuevo');
+                    } else {
+                        alert('Ha ocurrido un error: ' + status);
+                    }
                 }
                 
-                if(!marker) {
-                    marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location
-                    });
-                } else {
-                    marker.setPosition(results[0].geometry.location);
-                }
-                
-                document.getElementById('PlaceLatitude').value = results[0].geometry.location.lat();
-                document.getElementById('PlaceLongitude').value = results[0].geometry.location.lng();
-              } else {
-                if(status == 'ZERO_RESULTS') {
-                    alert('No hemos encontrado ningun sitio con esas palabras. \nPrueba de nuevo');
-                } else {
-                    alert('Ha ocurrido un error: ' + status);
-                }
-              }
+                $('#mapSearchIcon').addClass('icon-search').removeClass('icon-refresh icon-spin');
             });
         }
         
-        map = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:new google.maps.LatLng({{ item.latitude }},{{ item.longitude }}), mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
-        marker = new google.maps.Marker({
-                        map: map,
-                        position: new google.maps.LatLng({{ item.latitude }},{{ item.longitude }})
-                    });
-        google.maps.event.addListener(map, 'click', function(event) {
-            map.panTo(event.latLng);
-            marker.setPosition(event.latLng);
-            document.getElementById('PlaceLatitude').value = event.latLng.lat();
-            document.getElementById('PlaceLongitude').value = event.latLng.lng();
-        });
-
-{% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
-    
-    function toggleCategoryCreate() {
-        var button = $('#categoryCreateButton');
-        if(button.hasClass('newcategory')) {
-            button.removeClass('newcategory').addClass('selectcategory');
-            button.html('Seleccionar una categoría existente');
-            $('#EventCategory').hide();
-            $('#EventNewCategory').show().focus();
-        } else {
-            button.removeClass('selectcategory').addClass('newcategory');
-            button.html('Crear una nueva categoría');
-            $('#EventCategory').show();
-            $('#EventNewCategory').hide().attr('value','');
+        function mapPosition(position) { //google maps latlng object
+            //If not active, create map
+            if(! $('#map').hasClass('active')) {
+                $('#map').addClass('active');
+                map = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:position, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
+                google.maps.event.addListener(map, 'click', function(event) {
+                    mapPosition(event.latLng);
+                });
+                
+                $('#PlaceLatitude').val(position.lat());
+                $('#PlaceLongitude').val(position.lng());
+                
+            } else {
+                map.panTo(position);
+                $('#PlaceLatitude').val(position.lat());
+                $('#PlaceLongitude').val(position.lng());
+            }
+            
+            if(!marker) {
+                marker = new google.maps.Marker({
+                    map: map,
+                    position:position
+                });
+            } else {
+                marker.setPosition(position);
+            }
         }
-    }
+        
+    {% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
     
+    {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}    
+    
+    $(function() {
+        mapPosition(new google.maps.LatLng( {{ item.latitude }}, {{ item.longitude }} ));
+    });
     </script>
 {% endblock %}
 {% block article %}
@@ -93,56 +93,49 @@
     <h2>Editar Lugar</h2>
 </div>
 
-<form action="{{ path('ColectaPlaceEdit', {slug: item.slug}) }}" method="POST" class="form-horizontal well">
-    <fieldset>
-      <div class="control-group">
-        <label class="control-label" for="PlaceMapSearch">Localización</label>
-        <div class="controls">
-          <div class="input-append">
-            <input class="span2" id="PlaceMapSearch" size="16" type="text"><button class="btn" type="button" onClick="searchLocation()">Buscar en el mapa <i class="icon-search"></i></button>
+<div class="well">
+    <form action="" method="get" onSubmit="searchLocation(); return false;">        
+        <div class="input-append">
+            <input class="span4" id="PlaceMapSearch" size="16" type="text">
+            <button class="btn" type="button" onClick="searchLocation();"><i class="icon-search" id="mapSearchIcon"></i> Buscar en el mapa</button>
+        </div>
+    </form>
+    
+    <ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;" class="dropdown-menu hidden" id="mapResults"></ul>
+    
+    <div id="map"></div>
+    
+    <div class="alert alert-info" id="PlaceInfo2">
+        <i class="icon-info-sign"></i> <strong>Información: </strong> Haz click en el mapa para cambiar la localización.
+    </div>
+          
+    <form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceCreate') }}" method="POST" class="form-horizontal" id="PlaceForm">
+        <hr>
+        
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="PlaceName">Nombre del lugar</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="PlaceName" name="name" value="{{ item.name }}">
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <div class="input-append">
-            <div id="map" class="active"></div>
+          <div class="control-group">
+            <label class="control-label" for="PlaceDescription">Descripción</label>
+            <div class="controls">
+              <textarea class="input-xlarge" id="PlaceDescription" name="description" rows="3">{{ item.description }}</textarea>
+            </div>
           </div>
-        </div>
-      </div>
-      <hr>
-      <div class="control-group">
-        <label class="control-label" for="PlaceName">Nombre del lugar</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge" id="PlaceName" name="name" value="{{ item.name }}">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="PlaceDescription">Descripción</label>
-        <div class="controls">
-          <textarea class="input-xlarge" id="PlaceDescription" name="description" rows="3">{{ item.description }}</textarea>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label" for="EventCategory">Categoría</label>
-        <div class="controls">
-          <select id="EventCategory" name="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}"{% if item.category.slug == category.slug %} selected{% endif %}>{{ category.name }}</option>
-            {% endfor %}
-          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
-          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
-        </div>
-      </div>
-      
-      <div class="form-actions">
-        <input type="hidden" name="latitude" id="PlaceLatitude" value="{{ item.latitude }}">
-        <input type="hidden" name="longitude" id="PlaceLongitude" value="{{ item.longitude }}">
-        <button type="submit" class="btn btn-primary">Actualizar</button>
-      </div>
-    </fieldset>
-</form>
+          
+          {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
+          
+          <div class="form-actions">
+            <input type="hidden" name="latitude" id="PlaceLatitude" value="{{ item.latitude }}">
+            <input type="hidden" name="longitude" id="PlaceLongitude" value="{{ item.longitude }}">
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+          </div>
+        </fieldset>
+    </form>
+</div>
 
 {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
 

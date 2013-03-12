@@ -208,26 +208,45 @@ class FileController extends Controller
     }
     public function thumbnailAction($slug, $width, $height)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' . $slug ;
         
-        $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
-        
-        if(!$item)
+        if(file_exists($cachePath))
         {
-            throw $this->createNotFoundException('El archivo no existe');
+            $image = file_get_contents($cachePath);
+            
+            $response = new Response($image);
+            
+            $response->headers->set('Content-Type', mime_content_type($cachePath) );
+            
+            return $response;
         }
-        
-        $image = new \Imagick($item->getAbsolutePath());
-        $image->cropThumbnailImage($width, $height);
-        $image->setImagePage(0, 0, 0, 0);
-        
-        $response = new Response();
-        
-        $response->setStatusCode(200);
-        $response->setContent($image);
-        $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
-        
-        return $response;
+        else
+        {   
+            
+            $em = $this->getDoctrine()->getEntityManager();
+            
+            $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
+            
+            if(!$item)
+            {
+                throw $this->createNotFoundException('El archivo no existe');
+            }
+            
+            $image = new \Imagick($item->getAbsolutePath());
+            $image->cropThumbnailImage($width, $height);
+            $image->setImagePage(0, 0, 0, 0);
+            
+            //fill out the cache
+            file_put_contents($cachePath, $image);
+            
+            $response = new Response();
+            
+            $response->setStatusCode(200);
+            $response->setContent($image);
+            $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
+            
+            return $response;
+        }
     }
     public function downloadAction($slug,$type)
     {
