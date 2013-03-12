@@ -10,6 +10,8 @@
         var marker;
         
         function searchLocation() {
+            $('#mapSearchIcon').removeClass('icon-search').addClass('icon-refresh icon-spin');
+            
             if(!geocoder) {
                 geocoder = new google.maps.Geocoder();
             }
@@ -41,7 +43,8 @@
                         alert('Ha ocurrido un error: ' + status);
                     }
                 }
-                
+
+                $('#mapSearchIcon').addClass('icon-search').removeClass('icon-refresh icon-spin');
             });
         }
         

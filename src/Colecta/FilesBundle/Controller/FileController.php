@@ -161,7 +161,11 @@ class FileController extends Controller
                         
                         $item->setFolder($folder);
                     }
-                    $item->getFolder()->setDate(new \DateTime('now'));
+                    if($item->getFolder())
+                    {
+                        $item->getFolder()->setDate(new \DateTime('now'));
+                    }
+                    
                     
                     $category->setLastchange(new \DateTime('now'));
                     $em->persist($category);                     
@@ -208,7 +212,7 @@ class FileController extends Controller
     }
     public function thumbnailAction($slug, $width, $height)
     {
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' . $slug ;
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' . $slug . '_' . $width . 'x' . $height ;
         
         if(file_exists($cachePath))
         {
@@ -235,6 +239,7 @@ class FileController extends Controller
             $image = new \Imagick($item->getAbsolutePath());
             $image->cropThumbnailImage($width, $height);
             $image->setImagePage(0, 0, 0, 0);
+            $image->normalizeImage();
             
             //fill out the cache
             file_put_contents($cachePath, $image);
