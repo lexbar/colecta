@@ -1,6 +1,5 @@
 {% set firstWeekDay = ((targetdate | date('Y-m-1')) | date('w')) - 1 %}
 {% set daysOfMonth = targetdate | date('t') %}
-{% set today = targetdate | date('j') %}
 {% set rows = (firstWeekDay + daysOfMonth) // 7 %}
 {% if ((firstWeekDay + daysOfMonth) / 7) > rows %}{% set rows = rows + 1 %}{% endif %}
 {% set dayOfMonth = 1 %}
@@ -28,9 +27,9 @@
             {% if firstWeekDay > 0 %}
                 {% for i in 0..(firstWeekDay - 1) %}<td></td>{% endfor %}{# columnas vacias antes de que empiece el mes #}
             {% endif %}
-            {% for i in firstWeekDay..6 %}<td{% if today == dayOfMonth %} class="today"{% endif %}>{% if events[dayOfMonth] | length > 0 %}<a href="{{ path('ColectaEventDate', {'date':events[dayOfMonth][0].dateini | date('Y-m-d') }) }}">{% endif %}{{ dayOfMonth }}{% if events[dayOfMonth] | length > 0 %}</a>{% endif %}{% set dayOfMonth = dayOfMonth + 1 %}</td>{% endfor %}
+            {% for i in firstWeekDay..6 %}<td{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %} class="today"{% endif %}>{% if events[dayOfMonth] | length > 0 %}<a href="{{ path('ColectaEventDate', {'date':events[dayOfMonth][0].dateini | date('Y-m-d') }) }}">{% endif %}{{ dayOfMonth }}{% if events[dayOfMonth] | length > 0 %}</a>{% endif %}{% set dayOfMonth = dayOfMonth + 1 %}</td>{% endfor %}
         {% else %}
-            {% for i in 0..6 %}<td{% if today == dayOfMonth %} class="today"{% endif %}>{% if dayOfMonth <= daysOfMonth %}{% if events[dayOfMonth] | length > 0 %}<a href="{{ path('ColectaEventDate', {'date':events[dayOfMonth][0].dateini | date('Y-m-d') }) }}">{% endif %}{{ dayOfMonth }}{% if events[dayOfMonth] | length > 0 %}</a>{% endif %}{% set dayOfMonth = dayOfMonth + 1 %}{% endif %}</td>{% endfor %}
+            {% for i in 0..6 %}<td{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %} class="today"{% endif %}>{% if dayOfMonth <= daysOfMonth %}{% if events[dayOfMonth] | length > 0 %}<a href="{{ path('ColectaEventDate', {'date':events[dayOfMonth][0].dateini | date('Y-m-d') }) }}">{% endif %}{{ dayOfMonth }}{% if events[dayOfMonth] | length > 0 %}</a>{% endif %}{% set dayOfMonth = dayOfMonth + 1 %}{% endif %}</td>{% endfor %}
         {% endif %}
         </tr>
     {% endfor %}
