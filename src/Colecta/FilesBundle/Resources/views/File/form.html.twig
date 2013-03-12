@@ -33,8 +33,9 @@
             <label class="control-label" for="FileFolder">Carpeta</label>
             <div class="controls">
                     <select name="folder" id="FileFolder">
-                        <option value=""></option>
-                        <option value="3073">Carpeta de prueba</option>
+                        {% for folder in folders %}
+                            <option value="{{ folder.id }}"{% if folder == item.folder %}selected="selected"{% endif %}>{{ folder.name }}</option>
+                        {% endfor %}
                     </select>
                 <input type="text" id="NewFolder" name="newFolder" style="display:none" placeholder="Nombre">
                 <button class="btn newfolder" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="icon-plus-sign"></i> Nueva carpeta</button>

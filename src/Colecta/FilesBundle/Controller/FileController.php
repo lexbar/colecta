@@ -57,10 +57,11 @@ class FileController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        $folders = $em->getRepository('ColectaFilesBundle:Folder')->findAll();
         
         $item = new File();
         
-        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'item' => $item));
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'folders' => $folders, 'item' => $item));
     }
     public function editAction($slug)
     {
@@ -193,8 +194,9 @@ class FileController extends Controller
         }
         
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        $folders = $em->getRepository('ColectaFilesBundle:Folder')->findAll();
         
-        return $this->render('ColectaFilesBundle:File:edit.html.twig', array('item' => $item, 'categories' => $categories));
+        return $this->render('ColectaFilesBundle:File:edit.html.twig', array('item' => $item, 'categories' => $categories, 'folders' => $folders));
     }
     public function deleteAction($slug)
     {
@@ -413,8 +415,9 @@ class FileController extends Controller
         }
         
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        $folders = $em->getRepository('ColectaFilesBundle:Folder')->findAll();
         
-        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'item' => $item));
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'folders' => $folders, 'item' => $item));
     }
     public function thumbnailAction($slug, $width, $height)
     {
