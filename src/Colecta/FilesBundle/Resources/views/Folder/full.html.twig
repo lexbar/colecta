@@ -6,7 +6,7 @@
     <ul class="thumbnails">
         {% for file in item.files | reverse %}
             {% if file.filetype in ['jpeg','gif','png'] %}
-                <li><a class="thumbnail" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img height="160" width="160" style="height:160px;" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'160', 'height':'160'}) }}"></a></li>
+                <li><a class="thumbnail" style="height:160px;width:160px;" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img height="160" width="160" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'160', 'height':'160'}) }}"></a></li>
             {% endif %}
         {% endfor %}
     </ul>
