@@ -217,7 +217,7 @@ class FileController extends Controller
             throw $this->createNotFoundException('El archivo no existe');
         }
         
-        $image = new Imagick($item->getAbsolutePath());
+        $image = new \Imagick($item->getAbsolutePath());
         $image->cropThumbnailImage($width, $height);
         $image->setImagePage(0, 0, 0, 0);
         
