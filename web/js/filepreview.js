@@ -28,7 +28,7 @@ function previewImage(el,width,limit){
     output.innerHTML = '';
     
     var processed = files.length;
-    var thumbnails = 0;
+    var thumbnails = totalsize = 0;
     
     for(var n = 0; n < files.length; n++) {
     	file = files[n];
@@ -46,8 +46,10 @@ function previewImage(el,width,limit){
     	var reader = new FileReader();
     	reader.onload = (function(aImg) {
     		return function(e) {
-    			var format = e.target.result.split(';');
-    			format = format[0].split('/');
+    			var mimeformat = e.target.result.split(';');
+    			alert(e.target.result);
+    			mimeformat = mimeformat[0]
+    			var format = mimeformat.split('/');
     			format = format[1].toUpperCase();
     
     			// We will change this for an android
@@ -76,9 +78,6 @@ function previewImage(el,width,limit){
 					
 					var li = document.createElement('li');
 					li.className = 'span2';
-					if(! n % 2) {
-					   li.style = 'clear: left;';
-					}
 					
 					var div = document.createElement('div');
 					div.className = 'thumbnail'
@@ -100,7 +99,47 @@ function previewImage(el,width,limit){
 					output.appendChild(li);
 					
 					thumbnails++;
+    			} else {
+                    //icon on mime type
+                    var formaticon = 'icon-file';
+                    if(mimeformat.match(/image\//)) {
+                        formaticon = 'icon-picture';
+                    } else if(mimeformat.match(/application\//)) {
+                        formaticon = 'icon-file-alt';
+                    } else if(mimeformat.match(/video\//)) {
+                        formaticon = 'icon-facetime-video';
+                    } else if(mimeformat.match(/audio\//)) {
+                        formaticon = 'icon-music';
+                    }
+                    
+                    var img = document.createElement('i');
+                    img.className = formaticon;
+                    
+                    var li = document.createElement('li');
+					li.className = 'span2';
+					
+					var div = document.createElement('div');
+					div.className = 'thumbnail'
+					
+					var text = document.createElement('div');
+					text.className = 'caption'
+                    text.innerHTML = '<strong><small>(archivo)</small></strong>';
+                    
+                    var fit = document.createElement('div');
+                    fit.style.height = (width - 20) + 'px';
+                    fit.className = 'fit';
+                    
+                    fit.innerHTML = '<i class="'+formaticon+'"></i><br>';
+                    div.appendChild(fit);
+					div.appendChild(text);
+					
+					li.appendChild(div);
+					
+					output.appendChild(li);
     			}
+    			
+    			totalsize += e.total;
+    			
     			processed--;
     			
     			if(processed == 0) { //last iteration
