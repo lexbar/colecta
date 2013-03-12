@@ -16,7 +16,8 @@ class EventController extends Controller
     
     public function indexAction()
     {
-        return $this->pageAction(1);
+        $today = new \DateTime('today');
+        return $this->dateAction($today->format('Y-m'));
     }
     
     public function pageAction($page)
