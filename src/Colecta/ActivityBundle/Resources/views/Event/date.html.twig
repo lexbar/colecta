@@ -5,14 +5,14 @@
 {% block article %}
 
 <div class="title-block">
-
-{% if date %}
+    {% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right btn-primary">Crear evento <i class="icon-plus"></i></a> {% endif %}
+    <h2>
     {% if ismonth %}
-        <h2>Eventos en {% include "::month.html.twig" with {'date': date, 'short':0} %}</h2>
+        Eventos en {% include "::month.html.twig" with {'date': date, 'short':0} %}</h2>
     {% else %}
-<h2>Eventos el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} </h2>
+        Eventos el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} 
     {% endif %}
-{% endif %}
+    </h2>
 </div>
 
 <div class="bigcalendar">
