@@ -13,7 +13,7 @@
     
     {% set targetdateob = targetdateob.modify('+1 month') %} {# increase 1 month #}
     
-    <a href="{{ path('ColectaEventDate', {'date': targetdateob.format('Y-m') }) }}">{% include '::month.html.twig' with {'date':targetdateob, 'short':0} %} de {{ targetdate | date('Y') }}</a>
+    {% include '::month.html.twig' with {'date':targetdateob, 'short':0} %} de {{ targetdate | date('Y') }}
     
     {% set targetdateob = targetdateob.modify('+1 month') %} {# increase 1 month #}
     
