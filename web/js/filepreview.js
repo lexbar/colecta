@@ -27,136 +27,113 @@ function previewImage(el,width,limit){
     
     output.innerHTML = '';
     
-    var processed = files.length;
-    var thumbnails = totalsize = 0;
+    if(files.length > 2) {
+        output.style.margin = '10px 0 0 -120px';
+    } else if(files.length > 0) {
+        output.style.margin = '10px 0 0 -20px';
+    } else {
+        output.style.margin = '0';
+    }
+    
+    var thumbnails = totalsize = processed = 0;
     
     for(var n = 0; n < files.length; n++) {
     	file = files[n];
+    	
+    	totalsize += file.size;
+    	
+    	if( ( totalsize / (1024 * 1024)) > 95 ){
+            alert('No podemos procesar tantos bytes\n\nPor favor selecciona menos archivos.\n\nDespués puedes volver y seguir subiendo en la misma carpeta.');
+            output.innerHTML = '';
+            break;
+        } 
+    	
+    	//icon on mime type
+        var formaticon = 'icon-file';
+        if(file.type){
+            if(file.type.match(/image\//)) {
+                formaticon = 'icon-picture';
+            } else if(file.type.match(/application\//)) {
+                formaticon = 'icon-file-alt';
+            } else if(file.type.match(/video\//)) {
+                formaticon = 'icon-facetime-video';
+            } else if(file.type.match(/audio\//)) {
+                formaticon = 'icon-music';
+            }
+        }
+        
+        var li = document.createElement('li');
+    	li.className = 'span2';
+    	
+    	var div = document.createElement('div');
+    	div.className = 'thumbnail'
+    	
+    	var text = document.createElement('div');
+    	text.className = 'caption'
+        text.innerHTML = '<strong><small>(vista previa)</small></strong>';
+        
+        var fit = document.createElement('div');
+        fit.style.height = (width - 20) + 'px';
+        fit.className = 'fit';
+        
+        fit.innerHTML = '<i class="'+formaticon+' icon-4x"></i><br><small>'+file.name+'</small>';
+        div.appendChild(fit);
+    	div.appendChild(text);
+    	
+    	li.appendChild(div);
+    	
+    	output.appendChild(li);
     
-    	// detect device
-    	if (!device.android){ // Since android doesn't handle file types right, do not do this check for phones
-    		if (!file.type.match(imageType)) {
-    			output.innerHTML='';
-    			break;
-    		}
+        
+        if (device.android || file.type.match(imageType)) { // Since android doesn't handle file types right, do not do this check for phones
+            processed++;
+            
+        	var reader = new FileReader();
+        	reader.onload = (function(fit) {
+        		return function(e) {
+        			var format = e.target.result.split(';');
+        			format = format[0].split('/');
+        			format = format[1].toUpperCase();
+        			
+        			// We will change this for an android
+        			if (device.android){
+        				format = file.name.split('.');
+        				format = format[format.length-1].toUpperCase();
+        			}
+                    if (((format=='JPG')||(format=='JPEG')||(format=='PNG')||(format=='GIF'))){
+    					var image = document.createElement('img');
+    					var src = e.target.result;
+    
+    					// very nasty hack for android
+    					// This actually injects a small string with format into a temp image.
+    					if (device.android){
+    						src = src.split(':');
+    						if (src[1].substr(0,4) == 'base'){
+    							src = src[0] + ':image/'+format.toLowerCase()+';'+src[1];
+    						}
+    					}
+                        
+    					image.src = src;
+    					image.title = 'Vista previa';
+                        
+                        fit.innerHTML = '';
+                        fit.appendChild(image);
+        			}
+        			
+        			processed--;
+        			
+        			if(processed == 0) { //last iteration                    
+                        $('#fileLoading').addClass('hidden');
+        			}
+        		};
+        	})(fit);
+        	reader.readAsDataURL(file);
     	}
+    }
     
-    	var img='';
-    
-    	var reader = new FileReader();
-    	reader.onload = (function(aImg) {
-    		return function(e) {
-    			var mimeformat = e.target.result.split(';');
-    			alert(e.target);
-    			mimeformat = mimeformat[0]
-    			var format = mimeformat.split('/');
-    			format = format[1].toUpperCase();
-    
-    			// We will change this for an android
-    			if (device.android){
-    				format = file.name.split('.');
-    				format = format[format.length-1].toUpperCase();
-    			}
-                if(e.total>(limit*1024*1024)) {
-                    //output.innerHTML='<p>El archivo es demasiado grande!</p>';
-                    //return;
-                } else if (((format=='JPG')||(format=='JPEG')||(format=='PNG')||(format=='GIF'))){
-					var image = document.createElement('img');
-					var src = e.target.result;
-
-					// very nasty hack for android
-					// This actually injects a small string with format into a temp image.
-					if (device.android){
-						src = src.split(':');
-						if (src[1].substr(0,4) == 'base'){
-							src = src[0] + ':image/'+format.toLowerCase()+';'+src[1];
-						}
-					}
-                    
-					image.src = src;
-					image.title = 'Vista previa';
-					
-					var li = document.createElement('li');
-					li.className = 'span2';
-					
-					var div = document.createElement('div');
-					div.className = 'thumbnail'
-					
-					var text = document.createElement('div');
-					text.className = 'caption'
-                    text.innerHTML = '<strong><small>(Vista previa)</small></strong>';
-                    
-                    var fit = document.createElement('div');
-                    fit.style.height = (width - 20) + 'px';
-                    fit.className = 'fit';
-                    
-                    fit.appendChild(image);
-                    div.appendChild(fit);
-					div.appendChild(text);
-					
-					li.appendChild(div);
-					
-					output.appendChild(li);
-					
-					thumbnails++;
-    			} else {
-                    //icon on mime type
-                    var formaticon = 'icon-file';
-                    if(mimeformat.match(/image\//)) {
-                        formaticon = 'icon-picture';
-                    } else if(mimeformat.match(/application\//)) {
-                        formaticon = 'icon-file-alt';
-                    } else if(mimeformat.match(/video\//)) {
-                        formaticon = 'icon-facetime-video';
-                    } else if(mimeformat.match(/audio\//)) {
-                        formaticon = 'icon-music';
-                    }
-                    
-                    var img = document.createElement('i');
-                    img.className = formaticon;
-                    
-                    var li = document.createElement('li');
-					li.className = 'span2';
-					
-					var div = document.createElement('div');
-					div.className = 'thumbnail'
-					
-					var text = document.createElement('div');
-					text.className = 'caption'
-                    text.innerHTML = '<strong><small>(archivo)</small></strong>';
-                    
-                    var fit = document.createElement('div');
-                    fit.style.height = (width - 20) + 'px';
-                    fit.className = 'fit';
-                    
-                    fit.innerHTML = '<i class="'+formaticon+'"></i><br>';
-                    div.appendChild(fit);
-					div.appendChild(text);
-					
-					li.appendChild(div);
-					
-					output.appendChild(li);
-    			}
-    			
-    			totalsize += e.total;
-    			
-    			processed--;
-    			
-    			if(processed == 0) { //last iteration
-                    if(thumbnails > 2) {
-                        output.style.margin = '10px 0 0 -120px';
-                    } else if(thumbnails > 0) {
-                        output.style.margin = '10px 0 0 -20px';
-                    } else {
-                        output.style.margin = '0';
-                    }
-                    
-                    $('#fileLoading').addClass('hidden');
-    			}
-    		};
-    	})(img);
-    	reader.readAsDataURL(file);
-    }    
+    if(processed == 0) { //last iteration                    
+        $('#fileLoading').addClass('hidden');
+	}
 }
 
 // Detect client's device

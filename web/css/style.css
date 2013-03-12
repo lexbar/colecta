@@ -620,6 +620,7 @@ ul.comments form {
     overflow: hidden;
     text-align: center;
     word-wrap: break-word;
+    line-height: 14px;
 }
 .thumbnail .fit img {
     max-height: 100%;
