@@ -11,49 +11,54 @@
  *	</div>
  *
  */
-function previewImage(el,widths,limit){
+function previewImage(el,width,limit){
     if(typeof FileReader !== 'function' ) return;
+    
+    $('#fileLoading').removeClass('hidden');
     
 	var files = el.files;
 	var wrap = el.parentNode;
 	var output = wrap.getElementsByClassName('imagePreview')[0];
 
-	output.innerHTML='<i class="icon-spinner icon-spin icon-2x pull-left"></i>';
-
-	var file = files[0];
-	var imageType = /image.*/;
-
-	// detect device
-	var device = detectDevice();
-
-	if (!device.android){ // Since android doesn't handle file types right, do not do this check for phones
-		if (!file.type.match(imageType)) {
-			output.innerHTML='';
-			return;
-		}
-	}
-
-	var img='';
-
-	var reader = new FileReader();
-	reader.onload = (function(aImg) {
-		return function(e) {
-			output.innerHTML='';
-
-			var format = e.target.result.split(';');
-			format = format[0].split('/');
-			format = format[1].toUpperCase();
-
-			// We will change this for an android
-			if (device.android){
-				format = file.name.split('.');
-				format = format[format.length-1].toUpperCase();
-			}
-            if(e.total>(limit*1024*1024)) {
-                output.innerHTML='<p>El archivo es demasiado grande!</p>';
-                return;
-            } else if (((format=='JPG')||(format=='JPEG')||(format=='PNG')||(format=='GIF'))){
-				for (var size in widths){
+    var imageType = /image.*/;
+    var device = detectDevice();
+    
+    var file
+    
+    output.innerHTML = '';
+    
+    var processed = files.length;
+    var thumbnails = 0;
+    
+    for(var n = 0; n < files.length; n++) {
+    	file = files[n];
+    
+    	// detect device
+    	if (!device.android){ // Since android doesn't handle file types right, do not do this check for phones
+    		if (!file.type.match(imageType)) {
+    			output.innerHTML='';
+    			break;
+    		}
+    	}
+    
+    	var img='';
+    
+    	var reader = new FileReader();
+    	reader.onload = (function(aImg) {
+    		return function(e) {
+    			var format = e.target.result.split(';');
+    			format = format[0].split('/');
+    			format = format[1].toUpperCase();
+    
+    			// We will change this for an android
+    			if (device.android){
+    				format = file.name.split('.');
+    				format = format[format.length-1].toUpperCase();
+    			}
+                if(e.total>(limit*1024*1024)) {
+                    //output.innerHTML='<p>El archivo es demasiado grande!</p>';
+                    //return;
+                } else if (((format=='JPG')||(format=='JPEG')||(format=='PNG')||(format=='GIF'))){
 					var image = document.createElement('img');
 					var src = e.target.result;
 
@@ -67,22 +72,52 @@ function previewImage(el,widths,limit){
 					}
                     
 					image.src = src;
-                    image.className = 'thumbnail';
-					image.width = widths[size];
 					image.title = 'Vista previa';
-					output.appendChild(image);
 					
-					var text = document.createElement('p');
+					var li = document.createElement('li');
+					li.className = 'span2';
+					if(! n % 2) {
+					   li.style = 'clear: left;';
+					}
+					
+					var div = document.createElement('div');
+					div.className = 'thumbnail'
+					
+					var text = document.createElement('div');
+					text.className = 'caption'
                     text.innerHTML = '<strong><small>(Vista previa)</small></strong>';
-                    output.appendChild(text);
-				}
-			} else {
-                output.innerHTML='';
-                return;
-			}
-		};
-	})(img);
-	reader.readAsDataURL(file);
+                    
+                    var fit = document.createElement('div');
+                    fit.style.height = (width - 20) + 'px';
+                    fit.className = 'fit';
+                    
+                    fit.appendChild(image);
+                    div.appendChild(fit);
+					div.appendChild(text);
+					
+					li.appendChild(div);
+					
+					output.appendChild(li);
+					
+					thumbnails++;
+    			}
+    			processed--;
+    			
+    			if(processed == 0) { //last iteration
+                    if(thumbnails > 2) {
+                        output.style.margin = '10px 0 0 -120px';
+                    } else if(thumbnails > 0) {
+                        output.style.margin = '10px 0 0 -20px';
+                    } else {
+                        output.style.margin = '0';
+                    }
+                    
+                    $('#fileLoading').addClass('hidden');
+    			}
+    		};
+    	})(img);
+    	reader.readAsDataURL(file);
+    }    
 }
 
 // Detect client's device

@@ -202,4 +202,9 @@ class File extends \Colecta\ItemBundle\Entity\Item
             unlink($file);
         }
     }
+    
+    public function isValid()
+    {
+        return true;
+    }
 }

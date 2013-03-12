@@ -1,11 +1,25 @@
 {% extends '::frontend.html.twig' %}
 
 {% block article %}
-<h2>{{ item.name }}</h2>
-<p>Numero de archivos: {{ item.files | length }}</p>
-<ul>
+    <h2><a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    
+    <ul class="thumbnails">
+        {% for file in item.files | reverse %}
+            {% if file.filetype in ['jpeg','gif','png'] %}
+                <li><a class="thumbnail" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img height="160" width="160" style="height:160px;" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'160', 'height':'160'}) }}"></a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    
     {% for file in item.files %}
-        <li><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></li>
+        {% if file.filetype not in ['jpeg','gif','png'] %}
+            <p>
+            <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong><br>
+            <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></strong></a>
+            </p>
+        {% endif %}
     {% endfor %}
-</ul>
+    
+    <p>{{ item.summary }}</p>
+    
 {% endblock %}

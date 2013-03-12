@@ -5,6 +5,7 @@ namespace Colecta\FilesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Colecta\FilesBundle\Form\Frontend\FileType;
 use Colecta\FilesBundle\Entity\File;
 use Colecta\FilesBundle\Entity\Folder;
@@ -58,9 +59,16 @@ class FileController extends Controller
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
         $item = new File();
-        $form = $this->createForm(new FileType(), $item);
         
-        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'form' => $form->createView()));
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'item' => $item));
+    }
+    function rearrange( $arr ){
+        foreach( $arr as $key => $all ){
+            foreach( $all as $i => $val ){
+                $new[$i][$key] = $val;   
+            }   
+        }
+        return $new;
     }
     public function uploadAction()
     {
@@ -75,24 +83,44 @@ class FileController extends Controller
         $request = $this->getRequest();
         
         $item = new File();
-        $form = $this->createForm(new FileType(), $item);
         
         if ($request->getMethod() == 'POST') 
         {
+            /*if(count($_FILES['colecta_filesbundle_filetype']['name']) > 1)
+            {
+                $_FILES = array(
+                            'colecta_filesbundle_filetype'=>
+                                array(
+                                        'name' => $_FILES['colecta_filesbundle_filetype']['name'][0],
+                                        'type' => $_FILES['colecta_filesbundle_filetype']['type'][0],
+                                        'tmp_name' => $_FILES['colecta_filesbundle_filetype']['tmp_name'][0],
+                                        'error' => $_FILES['colecta_filesbundle_filetype']['error'][0],
+                                        'size' => $_FILES['colecta_filesbundle_filetype']['size'][0]
+                                )
+                        );
+            }*/
+            
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
+            $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneById($request->request->get('folder'));
+            
+            $item->setName($request->request->get('name'));
+            $item->setDescription($request->request->get('description'));
+            $item->setFolder($folder);
+            $item->setCategory($category);
+            $item->setFile(new UploadedFile($_FILES['files']['tmp_name'][0],$_FILES['files']['name'][0],$_FILES['files']['type'][0],$_FILES['files']['size'][0],$_FILES['files']['error'][0]));
             
             if(!$request->get('newCategory') && !$category)
             {
                 $this->get('session')->setFlash('error', 'No existe la categoria');
             }
+            elseif(!$request->get('newFolder') && !$folder)
+            {
+                $this->get('session')->setFlash('error', 'No existe la carpeta');
+            }
             else
             {
-                $form->bindRequest($request);
-                
-                if ($form->isValid()) 
+                if($item->isValid())
                 {
-                    $item->upload();
-                    
                     //New Category
                     if($request->request->get('newCategory'))
                     {
@@ -166,7 +194,6 @@ class FileController extends Controller
                         $item->getFolder()->setDate(new \DateTime('now'));
                     }
                     
-                    
                     $category->setLastchange(new \DateTime('now'));
                     $em->persist($category);                     
                     
@@ -192,23 +219,58 @@ class FileController extends Controller
                     $item->summarize($item->getDescription());
                     $item->setAllowComments(true);
                     $item->setDraft(false);
-            
+                    
+                    $item->upload();
+                    
                     $em->persist($item);
                     $em->flush();
-                
-                    return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
+                    
+                    if(count($_FILES['files']['name']) > 1) //if multiple upload
+                    {
+                        for($i = 1; $i < count($_FILES['files']['name']); $i++)
+                        {
+                            $newItem = clone $item;
+                            
+                            //new slug
+                            $slug = substr($slug,0,-2).'_'.$n; $n++;
+                            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+                            {
+                                if($n > 2)
+                                {
+                                    $slug = substr($slug,0,-2);
+                                }
+                                
+                                $slug .= '_'.$n;
+                                
+                                $n++;
+                            }
+                            $newItem->setSlug($slug);
+                            
+                            $newItem->setFile(new UploadedFile($_FILES['files']['tmp_name'][$i],$_FILES['files']['name'][$i],$_FILES['files']['type'][$i],$_FILES['files']['size'][$i],$_FILES['files']['error'][$i]));
+                            $newItem->upload();
+                            
+                            $em->persist($newItem);
+                            $em->flush();
+                        }
+                        
+                        return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getFolder()->getSlug())));
+                    }
+                    else
+                    {
+                        return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
+                    }                    
                 }
                 else
                 {
                     $uplmaxsize = ini_get('upload_max_filesize');
-                    $this->get('session')->setFlash('error', 'El tamaño del archivo debe ser inferior a '.$uplmaxsize);
+                    $this->get('session')->setFlash('error', 'El formulario no es válido.');
                 }
             }
         }
         
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
-        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'form' => $form->createView()));
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'item' => $item));
     }
     public function thumbnailAction($slug, $width, $height)
     {

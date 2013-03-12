@@ -593,6 +593,11 @@ ul.comments form {
 }
 .calendar td a {
     text-decoration: underline;
+    display: block;
+}
+.calendar td a:hover, .calendar td a:active {
+    background-color: #eee;
+    color: #005580;
 }
 .calendar td.today {
     background-color: #2F7ED4;
@@ -600,4 +605,21 @@ ul.comments form {
 }
 .calendar td.today a {
     color: #fff;
+}
+.calendar td.today a:hover, .calendar td.today a:active {
+    background-color: transparent;
+    color: #fff;
+}
+.thumbnail {
+    background-color: #FFF;
+}
+.thumbnail .caption {
+    padding: 2px 9px;
+}
+.thumbnail .fit {
+    overflow: hidden;
+    text-align: center;
+}
+.thumbnail .fit img {
+    max-height: 100%;
 }
