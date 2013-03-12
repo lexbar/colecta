@@ -11,7 +11,9 @@
     <h2>Actividades{% if page > 1 %} (página {{page}}){% endif %}</h2>
 </div>
 
-{% render "ColectaActivityBundle:Event:calendar" with {'date': 'today'} %}
+<div class="bigcalendar">
+{% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
+</div>
 
 {% for item in items %}
 

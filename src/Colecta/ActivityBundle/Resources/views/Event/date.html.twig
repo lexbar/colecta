@@ -15,7 +15,9 @@
 {% endif %}
 </div>
 
+<div class="bigcalendar">
 {% render "ColectaActivityBundle:Event:calendar" with {'date':date | date('Y/n/j')} %}
+</div>
 
 {% for item in items %}
 

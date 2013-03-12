@@ -570,6 +570,9 @@ ul.comments form {
     font-size: 12px;
     background-color: #fff;
 }
+.bigcalendar .calendar {
+    font-size: 14px;
+}
 .calendartitle {
     display: block;
     background-color: #EEE;
@@ -577,6 +580,9 @@ ul.comments form {
     padding: 3px 5px;
     font-size: 12px;
     text-align: center;
+}
+.bigcalendar .calendartitle {
+    font-size: 16px;
 }
 .calendar th {
     text-align: center;
