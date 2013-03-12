@@ -7,35 +7,22 @@
 <div class="title-block">
 
 {% if date %}
-<h2>Eventos el {{ date | date('j')  }} de 
-        {{ date | date('n') | replace({
-            '1':'enero',
-            '2':'febrero',
-            '3':'marzo',
-            '4':'abril',
-            '5':'mayo',
-            '6':'junio',
-            '7':'julio',
-            '8':'agosto',
-            '9':'septiembre',
-            '10':'octubre',
-            '11':'noviembre',
-            '12':'diciembre'
-        }) }} </h2>
+    {% if ismonth %}
+        <h2>Eventos en {% include "::month.html.twig" with {'date': date, 'short':0} %}</h2>
+    {% else %}
+<h2>Eventos el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} </h2>
+    {% endif %}
 {% endif %}
-
 </div>
+
+{% render "ColectaActivityBundle:Event:calendar" with {'date':date | date('Y/n/j')} %}
 
 {% for item in items %}
 
-    <div class="item">
-        {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-        
-        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+    <div class="item">        
+        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
-        
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
     </div>
 
 {% else %}
@@ -45,7 +32,5 @@
     </div>
 
 {% endfor %}
-
-{% render "ColectaActivityBundle:Event:calendar" with {'date':date | date('Y/n/j')} %}
 
 {% endblock %}

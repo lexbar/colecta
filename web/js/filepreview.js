@@ -69,7 +69,7 @@ function previewImage(el,widths,limit){
 					image.src = src;
                     image.className = 'thumbnail';
 					image.width = widths[size];
-					image.title = 'Image preview '+widths[size]+'px';
+					image.title = 'Vista previa';
 					output.appendChild(image);
 					
 					var text = document.createElement('p');
