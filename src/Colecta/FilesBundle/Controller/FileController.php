@@ -62,13 +62,171 @@ class FileController extends Controller
         
         return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'item' => $item));
     }
-    function rearrange( $arr ){
-        foreach( $arr as $key => $all ){
-            foreach( $all as $i => $val ){
-                $new[$i][$key] = $val;   
-            }   
+    public function editAction($slug)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $request = $this->getRequest();
+        
+        $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
+        
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            return new RedirectResponse($this->generateUrl('userLogin'));
         }
-        return $new;
+        elseif($user != $item->getAuthor())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
+        }
+        
+        if ($request->getMethod() == 'POST') 
+        {
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
+            $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneById($request->request->get('folder'));
+            
+            $item->setName($request->request->get('name'));
+            $item->setDescription($request->request->get('description'));
+            $item->setFolder($folder);
+            $item->setCategory($category);
+            
+            if(!$request->get('newCategory') && !$category)
+            {
+                $this->get('session')->setFlash('error', 'No existe la categoria');
+            }
+            elseif(!$request->get('newFolder') && !$folder)
+            {
+                $this->get('session')->setFlash('error', 'No existe la carpeta');
+            }
+            else
+            {
+                if($item->isValid())
+                {
+                    //New Category
+                    if($request->request->get('newCategory'))
+                    {
+                        $category = new Category();
+                        $category->setName($request->request->get('newCategory'));
+                        
+                        //Category Slug generate
+                        $catSlug = $item->generateSlug($request->request->get('newCategory'));
+                        $n = 2;
+                        
+                        while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                        {
+                            if($n > 2)
+                            {
+                                $catSlug = substr($catSlug,0,-2);
+                            }
+                            
+                            $catSlug .= '_'.$n;
+                            
+                            $n++;
+                        }
+                    
+                        $category->setSlug($catSlug);
+                        $category->setDescription('');
+                    }
+                    
+                    $category->setLastchange(new \DateTime('now'));
+                    $em->persist($category); 
+                    $item->setCategory($category);
+                    
+                    //New Folder
+                    if($request->request->get('newFolder'))
+                    {
+                        $folder = new Folder();
+                        $folder->setName($request->request->get('newFolder'));
+                        
+                        //Slug generation
+                        $slug = $folder->generateSlug();
+                        $n = 2;
+                        
+                        while($em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug)) 
+                        {
+                            if($n > 2)
+                            {
+                                $slug = substr($slug,0,-2);
+                            }
+                            
+                            $slug .= '_'.$n;
+                            
+                            $n++;
+                        }
+                        $folder->setSlug($slug);
+                        // End slug generation
+                        $folder->setSummary('');
+                        $folder->setTagwords('');
+                        $folder->setAllowComments(1);
+                        $folder->setDraft(0);
+                        $folder->setPublic(1);
+                        $folder->setPersonal(0);
+                        
+                        $folder->setCategory($category);
+                        $folder->setAuthor($user);
+                        
+                        
+                        $em->persist($folder);
+                        
+                        $item->setFolder($folder);
+                    }
+                    if($item->getFolder())
+                    {
+                        $item->getFolder()->setDate(new \DateTime('now'));
+                    }
+                    
+                    $category->setLastchange(new \DateTime('now'));
+                    $em->persist($category);                     
+                    
+                    $em->persist($item);
+                    $em->flush();
+                    
+                    $this->get('session')->setFlash('success', 'Archivo modificado correctamente');
+                    return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));                  
+                }
+                else
+                {
+                    $uplmaxsize = ini_get('upload_max_filesize');
+                    $this->get('session')->setFlash('error', 'El formulario no es válido.');
+                }
+            }
+        }
+        
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaFilesBundle:File:edit.html.twig', array('item' => $item, 'categories' => $categories));
+    }
+    public function deleteAction($slug)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
+        
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        elseif($user != $item->getAuthor())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
+        }
+        
+        if($item->getFolder())
+        {
+            $returnURL = $this->generateUrl('ColectaFolderView', array('slug' => $item->getFolder()->getSlug()));
+        }
+        else
+        {
+            $returnURL = $this->generateUrl('ColectaFileIndex');
+        }
+        
+        $em->remove($item);
+        $em->flush();
+        
+        
+        return new RedirectResponse($returnURL);
     }
     public function uploadAction()
     {
@@ -86,20 +244,6 @@ class FileController extends Controller
         
         if ($request->getMethod() == 'POST') 
         {
-            /*if(count($_FILES['colecta_filesbundle_filetype']['name']) > 1)
-            {
-                $_FILES = array(
-                            'colecta_filesbundle_filetype'=>
-                                array(
-                                        'name' => $_FILES['colecta_filesbundle_filetype']['name'][0],
-                                        'type' => $_FILES['colecta_filesbundle_filetype']['type'][0],
-                                        'tmp_name' => $_FILES['colecta_filesbundle_filetype']['tmp_name'][0],
-                                        'error' => $_FILES['colecta_filesbundle_filetype']['error'][0],
-                                        'size' => $_FILES['colecta_filesbundle_filetype']['size'][0]
-                                )
-                        );
-            }*/
-            
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
             $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneById($request->request->get('folder'));
             

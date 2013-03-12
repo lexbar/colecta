@@ -47,7 +47,7 @@ function previewImage(el,width,limit){
     	reader.onload = (function(aImg) {
     		return function(e) {
     			var mimeformat = e.target.result.split(';');
-    			alert(e.target.result);
+    			alert(e.target);
     			mimeformat = mimeformat[0]
     			var format = mimeformat.split('/');
     			format = format[1].toUpperCase();

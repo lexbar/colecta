@@ -27,9 +27,9 @@
 {% block article %}
 
 <div class="title-block">
-    <h2>Subir Archivo</h2>
+    <h2>Editar Archivo</h2>
 </div>
 
-{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileUpload')} %}
+{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug})} %}
 
 {% endblock %}

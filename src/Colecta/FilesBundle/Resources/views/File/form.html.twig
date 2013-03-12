@@ -1,12 +1,17 @@
 {% if app.user %}
-<form action="{{ path('ColectaFileUpload') }}" method="POST" class="form-horizontal well" enctype="multipart/form-data">
+<form action="{{ formaction }}" method="POST" class="form-horizontal well" enctype="multipart/form-data">
     <fieldset>
         
         <div class="control-group">
         <label class="control-label" for="PostFile">Archivo</label>
         <div class="controls">
+            {% if item.filename %}
+                <a href="{{ path( "ColectaFileDelete", {'slug':item.slug}) }}" class="btn btn-danger"><i class="icon-trash"></i> Eliminar archivo</a><br>
+                {% if item.filetype in ['jpeg','gif','png'] %}<img class="thumbnail" height="100" width="100" src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'160', 'height':'160'}) }}">{% endif %}
+            {% else %}
             <input type="file" onchange="previewImage(this,130,32)" multiple="multiple" required="required" name="files[]">  <i class="icon-spinner icon-spin icon-2x hidden" id="fileLoading"></i>
             <ul class="imagePreview thumbnails"></ul>
+            {% endif %}
         </div>
         </div>
         

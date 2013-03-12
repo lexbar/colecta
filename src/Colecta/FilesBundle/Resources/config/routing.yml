@@ -5,7 +5,7 @@ ColectaFolderView:
     pattern:  /carpeta/{slug}
     defaults: { _controller: ColectaFilesBundle:Folder:view }
 ColectaFolderEdit:
-    pattern:  /carpeta/{slug}/edit
+    pattern:  /carpeta/{slug}/edit/
     defaults: { _controller: ColectaFilesBundle:Folder:edit }
 ColectaFileIndex:
     pattern:  /archivo/
@@ -24,7 +24,10 @@ ColectaFileView:
     defaults: { _controller: ColectaFilesBundle:File:view }
 ColectaFileEdit:
     pattern:  /archivo/{slug}/edit/
-    defaults: { _controller: ColectaFilesBundle:File:view }
+    defaults: { _controller: ColectaFilesBundle:File:edit }
+ColectaFileDelete:
+    pattern:  /archivo/{slug}/delete/
+    defaults: { _controller: ColectaFilesBundle:File:delete }
 ColectaFileDownload:
     pattern:  /archivo/descargar/{slug}.{type}
     defaults: { _controller: ColectaFilesBundle:File:download }
