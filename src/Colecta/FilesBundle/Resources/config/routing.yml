@@ -1,33 +1,33 @@
 ColectaFolderIndex:
-    pattern:  /folder/
+    pattern:  /carpeta/
     defaults: { _controller: ColectaFilesBundle:Folder:index }
 ColectaFolderView:
-    pattern:  /folder/{slug}
+    pattern:  /carpeta/{slug}
     defaults: { _controller: ColectaFilesBundle:Folder:view }
 ColectaFolderEdit:
-    pattern:  /folder/{slug}/edit
+    pattern:  /carpeta/{slug}/edit
     defaults: { _controller: ColectaFilesBundle:Folder:edit }
 ColectaFileIndex:
-    pattern:  /file/
+    pattern:  /archivo/
     defaults: { _controller: ColectaFilesBundle:File:index }
 ColectaFilePage:
-    pattern:  /file/page/{page}
+    pattern:  /archivo/pagina/{page}
     defaults: { _controller: ColectaFilesBundle:File:page }
 ColectaFileNew:
-    pattern:  /file/new/
+    pattern:  /archivo/crear/
     defaults: { _controller: ColectaFilesBundle:File:new }
 ColectaFileUpload:
     pattern:  /fileupload/
     defaults: { _controller: ColectaFilesBundle:File:upload }
 ColectaFileView:
-    pattern:  /file/{slug}
+    pattern:  /archivo/{slug}
     defaults: { _controller: ColectaFilesBundle:File:view }
 ColectaFileEdit:
-    pattern:  /file/{slug}/edit/
+    pattern:  /archivo/{slug}/edit/
     defaults: { _controller: ColectaFilesBundle:File:view }
 ColectaFileDownload:
-    pattern:  /file/download/{slug}.{type}
+    pattern:  /archivo/descargar/{slug}.{type}
     defaults: { _controller: ColectaFilesBundle:File:download }
 ColectaFileThumbnail:
-    pattern:  /file/thumbnail/{slug}/{width}/{height}/
+    pattern:  /archivo/thumbnail/{slug}/{width}/{height}/
     defaults: { _controller: ColectaFilesBundle:File:thumbnail }

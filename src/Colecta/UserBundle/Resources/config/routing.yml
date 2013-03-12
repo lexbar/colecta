@@ -13,7 +13,7 @@ userResetPassword:
     defaults: { _controller: ColectaUserBundle:Default:resetPassword }
     
 userProfile:
-    pattern:  /user/{id}
+    pattern:  /usuario/{id}
     defaults: { _controller: ColectaUserBundle:User:profile }
     
 userEditProfile:
@@ -21,11 +21,11 @@ userEditProfile:
     defaults: { _controller: ColectaUserBundle:User:editProfile }
 
 userNotifications:
-    pattern:  /notifications/
+    pattern:  /notificaciones/
     defaults: { _controller: ColectaUserBundle:Notification:index }
     
 userNotificationDismiss:
-    pattern:  /notification/dismiss/{id}
+    pattern:  /notificaciones/dismiss/{id}
     defaults: { _controller: ColectaUserBundle:Notification:dismiss }
     
 ColectaAjaxUserSearch:

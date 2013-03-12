@@ -1,71 +1,71 @@
 ColectaPlaceCreate:
-    pattern:  /new/place/
+    pattern:  /crear/lugar/
     defaults: { _controller: ColectaActivityBundle:Place:create }
 ColectaPlaceIndex:
-    pattern:  /place/
+    pattern:  /lugares/
     defaults: { _controller: ColectaActivityBundle:Place:index }
 ColectaPlaceNew:
-    pattern:  /place/new/
+    pattern:  /lugares/crear/
     defaults: { _controller: ColectaActivityBundle:Place:new }
 ColectaPlacePage:
-    pattern:  /place/page/{page}
+    pattern:  /lugares/pagina/{page}
     defaults: { _controller: ColectaActivityBundle:Place:page }
 ColectaPlaceView:
-    pattern:  /place/{slug}
+    pattern:  /lugares/{slug}
     defaults: { _controller: ColectaActivityBundle:Place:view }
 ColectaPlaceEdit:
-    pattern:  /place/{slug}/edit/
+    pattern:  /lugares/{slug}/editar/
     defaults: { _controller: ColectaActivityBundle:Place:edit }
 ColectaEventCreate:
-    pattern:  /new/event/
+    pattern:  /crear/actividad/
     defaults: { _controller: ColectaActivityBundle:Event:create }
 ColectaEventIndex:
-    pattern:  /event/
+    pattern:  /actividades/
     defaults: { _controller: ColectaActivityBundle:Event:index }
 ColectaEventNew:
-    pattern:  /event/new/
+    pattern:  /actividades/crear/
     defaults: { _controller: ColectaActivityBundle:Event:new }
 ColectaEventPage:
-    pattern:  /event/page/{page}
+    pattern:  /actividades/pagina/{page}
     defaults: { _controller: ColectaActivityBundle:Event:page }
 ColectaEventDate:
-    pattern:  /event/date/{date}
+    pattern:  /actividades/fecha/{date}
     defaults: { _controller: ColectaActivityBundle:Event:date }
 ColectaEventView:
-    pattern:  /event/{slug}
+    pattern:  /actividades/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }
 ColectaEventEdit:
-    pattern:  /event/{slug}/edit/
+    pattern:  /actividades/{slug}/editar/
     defaults: { _controller: ColectaActivityBundle:Event:edit }
 ColectaEventAsist:
-    pattern:  /event/{slug}/asist/
+    pattern:  /actividades/{slug}/asist/
     defaults: { _controller: ColectaActivityBundle:Event:assistance }
 ColectaEventUpdateAsist:
-    pattern:  /event/{slug}/updateasist/
+    pattern:  /actividades/{slug}/updateasist/
     defaults: { _controller: ColectaActivityBundle:Event:updateAssistances }
 ColectaRouteUpload:
-    pattern:  /upload/route/
+    pattern:  /upload/rutas/
     defaults: { _controller: ColectaActivityBundle:Route:upload }
 ColectaRouteCreate:
-    pattern:  /new/route/
+    pattern:  /crear/ruta/
     defaults: { _controller: ColectaActivityBundle:Route:create }
 ColectaRouteNew:
-    pattern:  /route/new/
+    pattern:  /rutas/crear/
     defaults: { _controller: ColectaActivityBundle:Route:new }
 ColectaRouteIndex:
-    pattern:  /route/
+    pattern:  /rutas/
     defaults: { _controller: ColectaActivityBundle:Route:index }
 ColectaRoutePage:
-    pattern:  /route/page/{page}
+    pattern:  /rutas/pagina/{page}
     defaults: { _controller: ColectaActivityBundle:Route:page }
 ColectaRouteDownload:
-    pattern:  /route/download/{slug}.{extension}
+    pattern:  /rutas/descargar/{slug}.{extension}
     defaults: { _controller: ColectaActivityBundle:Route:download }
 ColectaRouteView:
-    pattern:  /route/{slug}
+    pattern:  /rutas/{slug}
     defaults: { _controller: ColectaActivityBundle:Route:view }
 ColectaRouteEdit:
-    pattern:  /route/{slug}/edit/
+    pattern:  /rutas/{slug}/editar/
     defaults: { _controller: ColectaActivityBundle:Route:edit }
 ColectaRouteMap:
     pattern:  /routemap/{id}

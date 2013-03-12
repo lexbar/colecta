@@ -2,45 +2,45 @@ ColectaDashboard:
     pattern:  /
     defaults: { _controller: ColectaItemBundle:Default:dashboard }
 ColectaDashboardPage:
-    pattern:  /page/{page}
+    pattern:  /pagina/{page}/
     defaults: { _controller: ColectaItemBundle:Default:dashboardPage }
 ColectaSearch:
-    pattern:  /search/
+    pattern:  /buscar/
     defaults: { _controller: ColectaItemBundle:Default:search }
 ColectaAjaxSearch:
     pattern:  /ajaxsearch/
     defaults: { _controller: ColectaItemBundle:Default:ajaxsearch }
 ColectaItemRelate:
-    pattern:  /item/{id}/relate
+    pattern:  /item/{id}/relate/
     defaults: { _controller: ColectaItemBundle:Default:relate }
 ColectaComment:
-    pattern:  /comment/{slug}
+    pattern:  /comment/{slug}/
     defaults: { _controller: ColectaItemBundle:Comment:comment }
 ColectaPostIndex:
-    pattern:  /post/
+    pattern:  /foro/
     defaults: { _controller: ColectaItemBundle:Post:index }
 ColectaPostPage:
-    pattern:  /post/page/{page}
+    pattern:  /foro/pagina/{page}/
     defaults: { _controller: ColectaItemBundle:Post:page }
 ColectaPostNew:
-    pattern:  /post/new/
+    pattern:  /foro/crear/
     defaults: { _controller: ColectaItemBundle:Post:new }
 ColectaPostCreate:
-    pattern:  /new/post/
+    pattern:  /crear/publicacion/
     defaults: { _controller: ColectaItemBundle:Post:create }
 ColectaPostView:
-    pattern:  /post/{slug}
+    pattern:  /foro/{slug}/
     defaults: { _controller: ColectaItemBundle:Post:view }
 ColectaPostEdit:
-    pattern:  /post/{slug}/edit
+    pattern:  /foro/{slug}/editar/
     defaults: { _controller: ColectaItemBundle:Post:edit }
 ColectaCategoryPage:
-    pattern:  /category/{slug}/page/{page}
+    pattern:  /categoria/{slug}/pagina/{page}/
     defaults: { _controller: ColectaItemBundle:Category:page }
 ColectaCategoryView:
-    pattern:  /category/{slug}
+    pattern:  /categoria/{slug}/
     defaults: { _controller: ColectaItemBundle:Category:view }
 ColectaItemLike:
-    pattern:  /like/{slug}
+    pattern:  /like/{slug}/
     defaults: { _controller: ColectaItemBundle:Default:like }
 
