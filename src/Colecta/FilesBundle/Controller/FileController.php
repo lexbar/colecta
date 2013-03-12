@@ -274,7 +274,7 @@ class FileController extends Controller
     }
     public function thumbnailAction($slug, $width, $height)
     {
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' . $slug . '_' . $width . 'x' . $height ;
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/thumbnail-' . $slug . '_' . $width . 'x' . $height ;
         
         if(file_exists($cachePath))
         {
@@ -302,6 +302,49 @@ class FileController extends Controller
             $image->cropThumbnailImage($width, $height);
             $image->setImagePage(0, 0, 0, 0);
             $image->normalizeImage();
+            
+            //fill out the cache
+            file_put_contents($cachePath, $image);
+            
+            $response = new Response();
+            
+            $response->setStatusCode(200);
+            $response->setContent($image);
+            $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
+            
+            return $response;
+        }
+    }
+    public function resizeAction($slug, $width, $height) //max width and height
+    {
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/bestfit-' . $slug . '_' . $width . 'x' . $height ;
+        
+        if(file_exists($cachePath))
+        {
+            $image = file_get_contents($cachePath);
+            
+            $response = new Response($image);
+            
+            $response->headers->set('Content-Type', mime_content_type($cachePath) );
+            
+            return $response;
+        }
+        else
+        {   
+            
+            $em = $this->getDoctrine()->getEntityManager();
+            
+            $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
+            
+            if(!$item)
+            {
+                throw $this->createNotFoundException('El archivo no existe');
+            }
+            
+            $image = new \Imagick($item->getAbsolutePath());
+            $image->setImageResolution(72,72); 
+            $image->scaleImage($width, $height, true);
+            $image->setImagePage(0, 0, 0, 0);
             
             //fill out the cache
             file_put_contents($cachePath, $image);

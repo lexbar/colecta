@@ -31,3 +31,6 @@ ColectaFileDownload:
 ColectaFileThumbnail:
     pattern:  /archivo/thumbnail/{slug}/{width}/{height}/
     defaults: { _controller: ColectaFilesBundle:File:thumbnail }
+ColectaFileResize:
+    pattern:  /archivo/resize/{slug}/{width}/{height}/
+    defaults: { _controller: ColectaFilesBundle:File:resize }
