@@ -2,7 +2,7 @@
     <h2><a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     
     {% if item.filetype in ['jpeg','gif','png'] %}
-        <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}" class=""><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'560', 'height':'560'}) }}"></a>
+        <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}" class=""><img src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'560', 'height':'560'}) }}"></a>
     {% else %}
         <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
