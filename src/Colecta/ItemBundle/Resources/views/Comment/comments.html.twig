@@ -1,4 +1,4 @@
-<div class="comments">
+{% if(comments | length > 0 || app.user )%}<div class="comments">{% endif %}
 
 {% for comment in comments%}
     <div class="media">
@@ -53,4 +53,4 @@
     </div>
 {% endif %}
 
-</div>
+{% if(comments | length > 0 || app.user )%}</div>{% endif %}
