@@ -1,46 +1,56 @@
-<ul class="comments">
-    {% for comment in comments%}
-        <li><img src="{% if comment.user.avatar %}{{ comment.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}" width="30" height="30"> <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="author">{{comment.user.name}}</a> {{comment.text}}<br>
-        
-        <span>        
-        {% set itemtimestamp = comment.date | date('U') %}
-        {% set nowtimestamp =  'now' | date('U') %}
-        {% set secondsago = nowtimestamp - itemtimestamp %}
-        
-        {% if secondsago < 60 %}
-            Hace {{ secondsago }} segundo{% if secondsago != 1 %}s{% endif %}
-        {% elseif secondsago/60 < 60 %}
-            Hace {{ secondsago // 60 }} minuto{% if secondsago // 60 != 1 %}s{% endif %}
-        {% else %}
-            {% set hoursago = secondsago / 60 // 60 %}
-            {% if hoursago < 24 %}
-                Hace {{ hoursago }} hora{% if hoursago != 1 %}s{% endif %}
-            {% elseif itemtimestamp > 'yesterday' | date('U') %}
-                Ayer a las {{ comment.date | date('H:i')  }}
-            {% else %}
-                {{ comment.date | date('j')  }} de 
-                {{ comment.date | date('n') | replace({
-                    '1':'enero',
-                    '2':'febrero',
-                    '3':'marzo',
-                    '4':'abril',
-                    '5':'mayo',
-                    '6':'junio',
-                    '7':'julio',
-                    '8':'agosto',
-                    '9':'septiembre',
-                    '10':'octubre',
-                    '11':'noviembre',
-                    '12':'diciembre'
-                }) }}
-                 a las {{ comment.date | date('H:i')  }}
-            {% endif %}
-        {% endif %}
-        </span>
-        </li>
-    {% endfor %}
+<div class="comments">
+
+{% for comment in comments%}
+    <div class="media">
+        <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">
+            <img src="{% if comment.user.avatar %}{{ comment.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
+        </a> 
+
     
-    {% if app.user %}
-    <li><img src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}" width="30" height="30"> <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST"><input type="text" name="comment" class="span6" placeholder="Escribe un comentario…"></form></li>
-    {% endif %}
-</ul>
+        <div class="media-body">
+            <p class="media-heading">
+                <strong><a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a></strong>
+        
+                <small>        
+                {% set itemtimestamp = comment.date | date('U') %}
+                {% set nowtimestamp =  'now' | date('U') %}
+                {% set secondsago = nowtimestamp - itemtimestamp %}
+                
+                {% if secondsago < 60 %}
+                    Hace {{ secondsago }} segundo{% if secondsago != 1 %}s{% endif %}
+                {% elseif secondsago/60 < 60 %}
+                    Hace {{ secondsago // 60 }} minuto{% if secondsago // 60 != 1 %}s{% endif %}
+                {% else %}
+                    {% set hoursago = secondsago / 60 // 60 %}
+                    {% if hoursago < 24 %}
+                        Hace {{ hoursago }} hora{% if hoursago != 1 %}s{% endif %}
+                    {% elseif itemtimestamp > 'yesterday' | date('U') %}
+                        Ayer a las {{ comment.date | date('H:i')  }}
+                    {% else %}
+                        {{ comment.date | date('j')  }} {% include "::month.html.twig" with{'date':comment.date,'short':1} %} {{ comment.date | date('Y H:i')  }}
+                    {% endif %}
+                {% endif %}
+            </small>
+            </p>
+            {% set maxcharacters = 100 %}
+            <p>{{ comment.text[0:maxcharacters] | nl2br}}{% if comment.text | length > maxcharacters %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[maxcharacters:comment.text|length] | nl2br}}</span>{% endif %}</p>
+        </div>
+    </div>
+{% endfor %}
+
+{% if app.user %}
+    <div class="media">
+        <span class="pull-left">
+            <img src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
+        </span>
+        
+        <div class="media-body">
+            <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST">
+                <textarea style="height:32px;" onClick="this.style.height = ''; document.getElementById('commentItem{{ item.id }}').style.display = '';" name="comment" class="span6" placeholder="Escribe un comentario…"></textarea><br>
+                <button style="display:none;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i class="icon-comment"></i></button>
+            </form>
+        </div>
+    </div>
+{% endif %}
+
+</div>

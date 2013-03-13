@@ -508,37 +508,12 @@ div.assistances ul li a {
     margin: 10px 0;
     padding-left: 25px;
 }
-ul.comments {
+.comments {
     clear: both;
-    margin: 10px 0 0 0;
+    margin: 10px 0 0 10px;
 }
-.full ul.comments {
-    margin-left: 0;
-}
-.full ul.comments li {
-    padding-left: 25px;
-}
-ul.comments li {
-    list-style: none;
-    padding: 4px;
-    background-color: #e4eefa;
-    margin: 0 0 1px 0;
-    overflow: hidden;
-}
-ul.comments li a.author {
+.comments a {
     color: #000;
-    font-weight: bold;
-}
-ul.comments img {
-    float: left;
-    margin-right: 5px;
-}
-ul.comments span {
-    color: gray;
-    font-size: 12px;
-}
-ul.comments form {
-    margin: 0;
 }
 
 #chatform {
