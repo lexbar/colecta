@@ -420,15 +420,22 @@ class FileController extends Controller
         return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'folders' => $folders, 'item' => $item));
     }
     public function thumbnailAction($slug, $width, $height)
-    {
+    {    
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/thumbnail-' . $slug . '_' . $width . 'x' . $height ;
+        
+        $response = new Response();
+        $response->setLastModified(new \DateTime(date("F d Y H:i:s.",filemtime($cachePath))));
+        $response->setPublic();
+        
+        if ($response->isNotModified($this->getRequest())) {
+            return $response; // this will return the 304 if the cache is OK
+        } 
         
         if(file_exists($cachePath))
         {
             $image = file_get_contents($cachePath);
             
-            $response = new Response($image);
-            
+            $response->setContent($image);
             $response->headers->set('Content-Type', mime_content_type($cachePath) );
             
             return $response;
@@ -437,7 +444,6 @@ class FileController extends Controller
         {   
             
             $em = $this->getDoctrine()->getEntityManager();
-            
             $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
             
             if(!$item)
@@ -453,11 +459,11 @@ class FileController extends Controller
             //fill out the cache
             file_put_contents($cachePath, $image);
             
-            $response = new Response();
             
             $response->setStatusCode(200);
             $response->setContent($image);
             $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
+            
             
             return $response;
         }
