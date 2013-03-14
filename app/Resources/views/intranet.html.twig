@@ -3,6 +3,22 @@
 
 {% block title 'Club Mountain Bike Turyciclo' %}
 
+{% block stylesheets %}
+    <style>
+        a {
+            color: #4B6E00;
+        }
+        #sidebar li a.active, .nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus, .calendar td.today {
+            background-color: #5B8500;
+        }
+        .progress .bar, .btn-primary, .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] {
+            background-color: #4B6E00;
+            background-image: linear-gradient(to bottom, #5B8500, #4B6E00);
+        }
+        
+    </style>
+{% endblock %}
+
 {% block body %}
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
