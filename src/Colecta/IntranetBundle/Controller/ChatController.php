@@ -84,7 +84,7 @@ class ChatController extends Controller
         $this->recordInteraction();
         
         //Who is online
-        $users = $em->createQuery('SELECT u FROM ColectaIntranetBundle:ChatInteraction i, ColectaUserBundle:User u WHERE i.user = u AND i.date > :date')->setParameter('date',new \DateTime('now -20 seconds'))->getResult();
+        $users = $em->createQuery('SELECT u FROM ColectaIntranetBundle:ChatInteraction i, ColectaUserBundle:User u WHERE i.user = u AND i.date > :date')->setParameter('date',new \DateTime('now -12 seconds'))->getResult();
         
         //Last inputs
         $inputs = $em->createQuery('SELECT i FROM ColectaIntranetBundle:ChatInput i WHERE i.id > :id')->setParameter('id',$lastinput)->getResult();
