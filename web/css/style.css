@@ -22,9 +22,6 @@ h2 {
 form.well {
     border-radius: 0 0 4px 4px;
 }
-.well form {
-    
-}
 a i {
     text-decoration: none !important;
 }
@@ -86,10 +83,7 @@ form.form-horizontal .controls textarea {
     padding: 4px 20px 8px;
 }
 .navbar form {
-    margin: 0 0 0 35px;
-}
-.navbar form input, .navbar form button.btn {
-    margin-top: 4px;
+    margin: 5px 0 0 35px;
 }
 .headimg {
     background-size: 100% auto;
