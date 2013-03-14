@@ -2,21 +2,81 @@
 
 {% block chat 'active' %}
 
+{% block javascripts %}
+    <script>
+        var lastInputId = {{ messages[0].id }};
+        
+        function showWhosOnline(users) {
+            $('#whosonline').html('');
+            
+            for(var i = 0; i < users.length; i++) {
+                $('#whosonline').append(' <i class="icon-user"></i> '+users[i].name);
+            }
+        }
+        
+        function newInputs(inputs) {            
+            for(var i = 0; i < inputs.length; i++) {
+                $('#chatstream').prepend('<div class="row"><div class="span1"><img width="40" height="40" src="'+inputs[i].useravatar+'"></div><div class="span6"><strong>'+inputs[i].username+':</strong> '+inputs[i].text+'<br><small class="'+inputs[i].timestamp+'">'+inputs[i].timeago+'</small></div></div>');
+            }
+        }
+        
+        function hace(timestamp, el) {
+            var now = new Date();
+            var nowts = Math.round(now.getTime() / 1000);
+            
+            var secondsago = nowts - timestamp;
+            
+            if(secondsago < 60) {
+                $(el).html('Hace '+ secondsago + ' segundos');
+            } else if(secondsago/60 < 60) {
+                $(el).html('Hace '+ Math.round(secondsago / 60) + ' minutos');
+            } else {
+                var horas = Math.round(secondsago / (60 * 60));
+                if(horas < 24) {
+                    $(el).html('Hace '+ horas + ' horas');
+                }
+            }
+        }
+    
+        (function reload() {
+            $.getJSON('reload/'+lastInputId, function(data) {
+                showWhosOnline(data.users);
+                newInputs(data.inputs);
+                
+                if(data.inputs.length) {
+                    lastInputId = data.inputs[data.inputs.length - 1].id;
+                }
+            }).complete(function() {
+                setTimeout(reload, 10000);
+            });
+        })();
+        
+        (function timeago() {
+            $.each($('#chatstream .span6 small'), function(index, value) {
+                hace($(value).attr('class'),$(value));
+            });
+            
+            setTimeout(timeago, 10000);
+        })();
+    </script>
+{% endblock %}
+
 {% block content %}
     <div class="title-block">
         <h2>Chat</h2>
     </div>
     
-    <div class="row">
     <form method="post" action="{{ path('ColectaChatPost') }}" id="chatform">
         <div class="span6"><textarea name="text"></textarea></div>
         <button class="btn btn-primary span1">Enviar</button>
     </form>
-    </div>
+    
+    <p><strong>¿Quién está online?</strong></p>
+    <p id="whosonline" class="well" style="padding: 10px 20px"></p>
     
     <div id="chatstream">
     {% for m in messages %}
-        <div class="row"><div class="span1"><img width="40" height="40" src="{% if m.user.avatar %}{{m.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}"></div><div class="span6"><strong>{{ m.user.name }}:</strong> {{ m.text }}<br><small>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div>
+        <div class="row"><div class="span1"><img width="40" height="40" src="{% if m.user.avatar %}{{m.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}"></div><div class="span6"><strong>{{ m.user.name }}:</strong> {{ m.text }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div>
     {% endfor %}
     </div>
         

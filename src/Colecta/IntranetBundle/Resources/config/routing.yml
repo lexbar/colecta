@@ -4,6 +4,9 @@ ColectaChatIndex:
 ColectaChatPost:
     pattern:  /chat/post/
     defaults: { _controller: ColectaIntranetBundle:Chat:post }
+ColectaChatReload:
+    pattern:  /chat/reload/{lastinput}
+    defaults: { _controller: ColectaIntranetBundle:Chat:reload }
 ColectaActivitiesIndex:
     pattern:  /actividades/
     defaults: { _controller: ColectaIntranetBundle:Activities:index }
