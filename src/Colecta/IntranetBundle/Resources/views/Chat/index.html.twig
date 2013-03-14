@@ -47,7 +47,7 @@
                     lastInputId = data.inputs[data.inputs.length - 1].id;
                 }
             }).complete(function() {
-                setTimeout(reload, 10000);
+                setTimeout(reload, 5000);
             });
         })();
         
@@ -58,6 +58,14 @@
             
             setTimeout(timeago, 10000);
         })();
+        
+        $('#chatText').keydown(function(e){
+            if(e.keyCode == 13) {
+                $('#chatform').submit();
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
     </script>
 {% endblock %}
 
@@ -66,8 +74,8 @@
         <h2>Chat</h2>
     </div>
     
-    <form method="post" action="{{ path('ColectaChatPost') }}" id="chatform">
-        <div class="span6"><textarea name="text"></textarea></div>
+    <form method="post" action="{{ path('ColectaChatPost', {'method':'html'}) }}" id="chatform" onSubmit="$.post('{{ path('ColectaChatPost', {'method':'json'}) }}', {text:$('#chatText').val()});$('#chatText').val('');return false;">
+        <div class="span6"><textarea name="text" id="chatText"></textarea></div>
         <button class="btn btn-primary span1">Enviar</button>
     </form>
     

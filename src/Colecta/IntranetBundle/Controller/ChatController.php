@@ -26,7 +26,7 @@ class ChatController extends Controller
         
         return $this->render('ColectaIntranetBundle:Chat:index.html.twig', array('messages'=>$messages));
     }
-    public function postAction()
+    public function postAction($method)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
@@ -53,6 +53,13 @@ class ChatController extends Controller
             $em->flush();
             
             $this->recordInteraction();
+        }
+        
+        if($method == 'json') {
+            $response = new Response('true',200);
+            $response->headers->set('Content-Type', 'application/json');
+            
+            return $response;
         }
         
         $referer = $this->get('request')->headers->get('referer');
