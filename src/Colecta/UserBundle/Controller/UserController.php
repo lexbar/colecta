@@ -23,7 +23,6 @@ class UserController extends Controller
         
         return $this->render('ColectaUserBundle:User:profile.html.twig', array('user' => $user, 'items' => $items));
     }
-    
     public function editProfileAction() 
     {
         $user = $this->get('security.context')->getToken()->getUser();

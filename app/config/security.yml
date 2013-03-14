@@ -24,4 +24,4 @@ security:
             entity: { class: Colecta\UserBundle\Entity\User, property: mail }
 
     encoders:
-        Colecta\UserBundle\Entity\User: plaintext
+        Colecta\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }
