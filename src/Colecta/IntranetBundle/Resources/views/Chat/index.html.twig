@@ -6,7 +6,7 @@
     <script>
         var lastInputId = {% if messages | length > 0 %}{{ messages[0].id }}{% else %}0{% endif %};
         var now = new Date();
-        var tsdiff = Math.round(now.getTime() / 1000) - {{ 'now' | date('U')}};
+        var tsdiff = {{ 'now' | date('U')}} - Math.round(now.getTime() / 1000);
         
         function showWhosOnline(users) {
             $('#whosonline').html('');
