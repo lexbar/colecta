@@ -5,6 +5,8 @@
 {% block javascripts %}
     <script>
         var lastInputId = {% if messages | length > 0 %}{{ messages[0].id }}{% else %}0{% endif %};
+        var now = new Date();
+        var tsdiff = Math.round(now.getDate() / 1000) - {{ 'now' | date('U')}};
         
         function showWhosOnline(users) {
             $('#whosonline').html('');
@@ -21,6 +23,8 @@
         }
         
         function hace(timestamp, el) {
+            timestamp += tsdiff;
+            
             var now = new Date();
             var nowts = Math.round(now.getTime() / 1000);
             
