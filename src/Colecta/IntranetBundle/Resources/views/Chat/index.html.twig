@@ -4,7 +4,7 @@
 
 {% block javascripts %}
     <script>
-        var lastInputId = {{ messages[0].id }};
+        var lastInputId = {% if messages | length > 0 %}{{ messages[0].id }}{% else %}0{% endif %};
         
         function showWhosOnline(users) {
             $('#whosonline').html('');
