@@ -149,6 +149,8 @@ class DefaultController extends Controller
     }
     public function newPasswordAction($uid, $code)
     {
+        $this->get('request')->getSession()->invalidate();
+        
         $em = $this->getDoctrine()->getEntityManager();
         
         $user = $em->getRepository('ColectaUserBundle:User')->find($uid);
