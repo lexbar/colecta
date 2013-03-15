@@ -3,7 +3,7 @@
 {% for comment in comments%}
     <div class="media">
         <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">
-            <img src="{% if comment.user.avatar %}{{ comment.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
+            <img src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
         </a> 
 
     
@@ -41,7 +41,7 @@
 {% if app.user %}
     <div class="media">
         <span class="pull-left">
-            <img src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
+            <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
         </span>
         
         <div class="media-body">
