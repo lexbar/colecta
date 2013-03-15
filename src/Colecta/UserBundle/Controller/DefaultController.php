@@ -174,6 +174,7 @@ class DefaultController extends Controller
                                     ->getEncoder($user); 
                         $encodedpass = $encoder->encodePassword( $request->request->get('pass1'), $user->getSalt()); 
                         $user->setPass($encodedpass);
+                        $user->setSalt(md5(time()));
                         $em->persist($user); 
                         $em->flush();
                         
