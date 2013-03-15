@@ -42,6 +42,6 @@
                 {% set assists = true %}
             {% endif %}
         {% endfor %}
-        <li class="assistance"><button onClick="window.location='{{ path('ColectaEventAsist',{'slug':item.slug}) }}'" class="btn btn-medium{% if not haspassed and not assists %} btn-primary{% endif %}" type="button">{% if not haspassed %}{% if assists %}Vas{% else %}Voy{% endif %} a asistir{% else %}{% if assists %}Has{% else %}He{% endif %} asistido{% endif %} {%if assists %}<i class="icon-ok{% if not haspassed and not assists %} icon-white{% endif %}"></i>{% endif %}</button></li>
+        <li class="assistance"><button onClick="window.location='{{ path('ColectaEventAsist',{'slug':item.slug}) }}'" class="btn btn-medium{% if not haspassed and not assists %} btn-primary{% endif %}" type="button">{% if not haspassed %}{% if assists %}Asistirás{% else %}Asistiré{% endif %}{% else %}{% if assists %}Has{% else %}He{% endif %} asistido{% endif %} {%if assists %}<i class="icon-ok{% if not haspassed and not assists %} icon-white{% endif %}"></i>{% endif %}</button></li>
     {% endif %}
 </ul>
