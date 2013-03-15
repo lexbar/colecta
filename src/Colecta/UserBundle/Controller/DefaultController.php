@@ -149,8 +149,8 @@ class DefaultController extends Controller
     }
     public function newPasswordAction($uid, $code)
     {
-        $this->get('security.context')->setToken(null);
-        $this->get('request')->getSession()->invalidate();
+        //$this->get('security.context')->setToken(null);
+        //$this->get('request')->getSession()->invalidate();
         
         $em = $this->getDoctrine()->getEntityManager();
         
@@ -176,8 +176,10 @@ class DefaultController extends Controller
                         $encoder = $this->get('security.encoder_factory')
                                     ->getEncoder($user); 
                         $encodedpass = $encoder->encodePassword( $request->request->get('pass1'), $user->getSalt()); 
+                        
                         $user->setPass($encodedpass);
-                        $user->setSalt(md5(time()));
+                        //$user->setSalt(md5(time()));
+                        
                         $em->persist($user); 
                         $em->flush();
                         
@@ -192,7 +194,7 @@ class DefaultController extends Controller
             }
             else
             {
-                $this->get('session')->setFlash('error', 'El usuario no está en nuestra base de datos.');
+                $this->get('session')->setFlash('error', 'El código no es correcto.');
                 return $this->render('ColectaUserBundle:Default:resetPassword.html.twig');
             }
         }
