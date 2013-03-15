@@ -148,10 +148,7 @@ class DefaultController extends Controller
         return $this->render('ColectaUserBundle:Default:resetPassword.html.twig');
     }
     public function newPasswordAction($uid, $code)
-    {
-        //$this->get('security.context')->setToken(null);
-        //$this->get('request')->getSession()->invalidate();
-        
+    {        
         $em = $this->getDoctrine()->getEntityManager();
         
         $user = $em->getRepository('ColectaUserBundle:User')->find($uid);
@@ -173,12 +170,15 @@ class DefaultController extends Controller
                     }
                     else
                     {
+                        //New Salt
+                        $user->setSalt(md5(time()));
+                        
                         $encoder = $this->get('security.encoder_factory')
                                     ->getEncoder($user); 
                         $encodedpass = $encoder->encodePassword( $request->request->get('pass1'), $user->getSalt()); 
                         
                         $user->setPass($encodedpass);
-                        //$user->setSalt(md5(time()));
+                       
                         
                         $em->persist($user); 
                         $em->flush();
