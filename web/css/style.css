@@ -566,6 +566,7 @@ div.assistances ul li a {
 .calendar td a {
     text-decoration: underline;
     display: block;
+    font-weight: bold;
 }
 .calendar td a:hover, .calendar td a:active {
     background-color: #eee;
