@@ -343,8 +343,9 @@ class Event extends \Colecta\ItemBundle\Entity\Item
         return 'Activity/Event';
     }
     
-    public function happended()
+    public function happened()
     {
-        return new \DateTime('now') <= $this->getDateini();
+        $now = new \DateTime('now');
+        return $now >= $this->getDateini();
     }
 }

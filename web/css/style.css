@@ -407,6 +407,9 @@ div.assistances ul li a {
     margin-bottom: -35px;
     overflow: hidden;
 }
+.event.micro.happened h2 a {
+    color: #5B6469;
+}
 .event .date {
     float: left;
     margin: 0 20px 15px 0px;

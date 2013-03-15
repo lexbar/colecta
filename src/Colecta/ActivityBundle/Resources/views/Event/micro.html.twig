@@ -1,4 +1,4 @@
-<div class="event micro">
+<div class="event micro{% if item.happened %} happened{% endif %}">
 
     <div class="date">
         <span class="weekday">{{ item.dateini | date('l') | replace ({
@@ -16,9 +16,7 @@
     </div>
     
     <div class="datum">
-        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
-            <h2>{{ item.name }}</h2>
-        </a>
+        <h2><a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
         
         {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     </div>
