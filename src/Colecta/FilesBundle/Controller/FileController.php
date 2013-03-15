@@ -424,7 +424,12 @@ class FileController extends Controller
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/thumbnail-' . $slug . '_' . $width . 'x' . $height ;
         
         $response = new Response();
-        $response->setLastModified(new \DateTime(date("F d Y H:i:s.",filemtime($cachePath))));
+        
+        if(@filemtime($cachePath))
+        {
+            $response->setLastModified(new \DateTime(date("F d Y H:i:s.",filemtime($cachePath))));
+        }
+        
         $response->setPublic();
         
         if ($response->isNotModified($this->getRequest())) {
@@ -471,6 +476,19 @@ class FileController extends Controller
     public function resizeAction($slug, $width, $height) //max width and height
     {
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/bestfit-' . $slug . '_' . $width . 'x' . $height ;
+        
+        $response = new Response();
+        
+        if(@filemtime($cachePath))
+        {
+            $response->setLastModified(new \DateTime(date("F d Y H:i:s.",filemtime($cachePath))));
+        }
+        
+        $response->setPublic();
+        
+        if ($response->isNotModified($this->getRequest())) {
+            return $response; // this will return the 304 if the cache is OK
+        } 
         
         if(file_exists($cachePath))
         {

@@ -524,7 +524,7 @@ class User implements UserInterface
         return $this->getAvatarWebPath();
     }
     
-    protected function getUploadDir() 
+    public function getUploadDir() 
     {
         return '/uploads/avatars';
     }
