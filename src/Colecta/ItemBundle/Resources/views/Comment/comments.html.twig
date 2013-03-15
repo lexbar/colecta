@@ -32,7 +32,7 @@
                 {% endif %}
             </small>
             </p>
-            {% set maxcharacters = 100 %}
+            {% set maxcharacters = 170 %}
             <p>{{ comment.text[0:maxcharacters] | nl2br}}{% if comment.text | length > maxcharacters %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[maxcharacters:comment.text|length] | nl2br}}</span>{% endif %}</p>
         </div>
     </div>
