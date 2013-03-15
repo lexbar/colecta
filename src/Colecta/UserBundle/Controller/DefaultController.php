@@ -149,6 +149,7 @@ class DefaultController extends Controller
     }
     public function newPasswordAction($uid, $code)
     {
+        $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
         
         $em = $this->getDoctrine()->getEntityManager();
