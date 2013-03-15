@@ -52,7 +52,7 @@ class UserController extends Controller
             $form->bindRequest($this->getRequest());
             if ($form->isValid()) {
                 
-                if(empty($user->getPass())) 
+                if(!$user->getPass()) 
                 {
                     $user->setPass($oldpass);
                 }
