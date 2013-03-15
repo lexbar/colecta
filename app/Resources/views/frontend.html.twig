@@ -53,7 +53,7 @@
 <div class="span3" id="userbar">
     {% if app.user %}
     
-        <p class="myself"><img src="{% if app.user.avatar %}{{app.user.avatarWebPath}}{% else %}/img/unknown.gif{% endif %}" width="48" height="48"> <strong class="name">{{ app.user.name }}</strong><br><a href="{{ path('userEditProfile') }}">Editar perfil</a></p>
+        <p class="myself"><img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> <strong class="name">{{ app.user.name }}</strong><br><a href="{{ path('userEditProfile') }}">Editar perfil</a></p>
         
         {% block navigation %}
             {% include '::navigation.html.twig' with {'navigation': 'extranet'} %}
