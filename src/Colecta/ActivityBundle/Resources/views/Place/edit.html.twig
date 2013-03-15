@@ -109,7 +109,7 @@
         <i class="icon-info-sign"></i> <strong>Información: </strong> Haz click en el mapa para cambiar la localización.
     </div>
           
-    <form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceCreate') }}" method="POST" class="form-horizontal" id="PlaceForm">
+    <form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceEdit') }}" method="POST" class="form-horizontal" id="PlaceForm">
         <hr>
         
         <fieldset>
