@@ -32,6 +32,8 @@ class UserController extends Controller
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
+        $oldpass = $user->getPass();
+        
         $form = $this->createFormBuilder($user)
             ->add('name',   'text',     array('label'=>'Nombre:',       'required'=>true))
             ->add('mail',   'email',    array('label'=>'Email:',        'required'=>true))
@@ -49,8 +51,14 @@ class UserController extends Controller
         if ($this->getRequest()->getMethod() === 'POST') {
             $form->bindRequest($this->getRequest());
             if ($form->isValid()) {
+                
+                if(empty($user->getPass())) 
+                {
+                    $user->setPass($oldpass);
+                }
+                
                 $em = $this->getDoctrine()->getEntityManager();
-            
+                
                 $user->upload();
             
                 $em->persist($user);
