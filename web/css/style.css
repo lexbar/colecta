@@ -3,11 +3,12 @@ body {
 }
 #main {
     padding-top: 50px;
-    background-color: #fff;
 }
 #body {
     background-color: #FFFFFF;
     padding-top: 10px;
+    overflow: visible;
+    margin-left: 0;
 }
 h1 {
     margin: 0;
@@ -93,7 +94,7 @@ form.form-horizontal .controls textarea {
     line-height: 160px;
     text-align: center;
     color: #EEEEEE;
-    font-size: 200px;
+    font-size: 160px;
     overflow: hidden;
 }
 .intranet-menu {
@@ -168,6 +169,7 @@ form.form-horizontal .controls textarea {
 /* G+ */
 #sidebar {
     width: 100px;
+    margin-left: 0;
 }
 #stream {
     width: 580px;

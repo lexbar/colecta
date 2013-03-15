@@ -2,6 +2,6 @@
     
     <h2><a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     
-    <p>{{ item.summary | nl2br }}{% if item.text | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.text[item.summary|length:item.text|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
+    <p>{{ item.summary | raw | nl2br }}{% if item.text | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.text[item.summary|length:item.text|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
     
 </div>
