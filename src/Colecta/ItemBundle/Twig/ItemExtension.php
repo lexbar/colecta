@@ -11,9 +11,16 @@ class ItemExtension extends \Twig_Extension
         );
     }
 
-    public function usercontentFilter($text)
+    public function usercontentFilter($text, $addslashes = false)
     {
-        return htmlEscapeAndLinkUrls($text);
+        $return = htmlEscapeAndLinkUrls($text);
+        
+        if($addslashes)
+        {
+            $return = addslashes($return);
+        }
+        
+        return $return;
     }
     
     public function summarizeFilter($text, $limit = 200)
