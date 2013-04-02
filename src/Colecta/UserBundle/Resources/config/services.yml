@@ -8,3 +8,9 @@ services:
         arguments: [@colectauser]
         tags:
             - { name: twig.extension }
+            
+    lastaccess:
+        class: Colecta\UserBundle\Service\Service
+        arguments: [@security.context, @doctrine]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: lastAccess, priority: 64 }

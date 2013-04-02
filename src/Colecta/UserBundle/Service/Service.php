@@ -22,5 +22,23 @@ class Service
         
         return $query->getResult();
     }
+    
+    public function lastAccess()
+    {
+        $em = $this->doctrine->getEntityManager();
+        
+        if($this->securityContext->getToken())
+        {
+            $user = $this->securityContext->getToken()->getUser();
+        
+            if($user != 'anon.')
+            {
+                $user->setLastAccess(new \DateTime('now'));
+            
+                $em->persist($user); 
+                $em->flush();
+            }
+        }
+    }
 }
 ?>
