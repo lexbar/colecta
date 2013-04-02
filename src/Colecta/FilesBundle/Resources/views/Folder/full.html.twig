@@ -20,6 +20,6 @@
         {% endif %}
     {% endfor %}
     
-    <p>{{ item.summary }}</p>
+    <p>{{ item.summary | usercontent | raw | nl2br }}</p>
     
 {% endblock %}

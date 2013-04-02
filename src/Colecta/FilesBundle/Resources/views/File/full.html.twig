@@ -14,7 +14,7 @@
         <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
     
-    <p>{{ item.description | nl2br }}</p>
+    <p>{{ item.description | usercontent | raw | nl2br }}</p>
     {% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}

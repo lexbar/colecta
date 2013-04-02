@@ -7,7 +7,7 @@
         <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
     
-    <p>{{ item.summary | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | nl2br}} </span>{% endif %}</p>
+    <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
     
     {% if item.folder %}<p style="clear:both">Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
     

@@ -514,7 +514,7 @@ div.assistances ul li a {
     clear: both;
     margin: 10px 0 0 10px;
 }
-.comments a {
+.comments .media-heading a {
     color: #000;
 }
 

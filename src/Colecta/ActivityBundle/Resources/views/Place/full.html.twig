@@ -26,7 +26,7 @@
     
     <div id="map" style="width:auto;height:300px;"></div>
 
-    <p>{{ item.description | nl2br }}</p>
+    <p>{{ item.description | usercontent | raw | nl2br }}</p>
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     

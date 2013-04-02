@@ -7,6 +7,7 @@ class ItemExtension extends \Twig_Extension
     {
         return array(
             'usercontent' => new \Twig_Filter_Method($this, 'usercontentFilter'),
+            'summarize' => new \Twig_Filter_Method($this, 'summarizeFilter'),
         );
     }
 
@@ -14,11 +15,38 @@ class ItemExtension extends \Twig_Extension
     {
         return htmlEscapeAndLinkUrls($text);
     }
+    
+    public function summarizeFilter($text, $limit = 200)
+    {
+        return summarize($text, $limit);
+    }
 
     public function getName()
     {
         return 'item_extension';
     }
+}
+
+function summarize($text, $limit)
+{
+    if(strlen($text) > $limit)
+    {
+        $summary = '';
+        for($i = 0; $i < $limit; $i++)
+        {
+            if($text[$i] == ' ')
+            {
+                $summary = substr($text, 0, $i);
+            }
+        }
+    }
+    else
+    {
+        $summary = $text;
+    }
+    
+    
+    return $summary;
 }
 
 

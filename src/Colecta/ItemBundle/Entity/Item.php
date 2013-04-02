@@ -525,7 +525,7 @@ abstract class Item
                 }
             }
             
-            $tagwords = $tagwords = substr(implode(' ',$tags), 0, 255);
+            $tagwords = substr(implode(' ',$tags), 0, 255);
         }
         else
         {

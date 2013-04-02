@@ -255,7 +255,7 @@
         {% if item.IBP %}<li><strong>IBP:</strong> {{ item.IBP }}</li>{% endif %}
     </ul>
     
-    <p>{{ item.description | nl2br }}</p>
+    <p>{{ item.description | usercontent | raw | nl2br }}</p>
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     

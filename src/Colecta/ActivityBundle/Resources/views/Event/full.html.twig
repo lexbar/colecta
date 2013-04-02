@@ -130,7 +130,7 @@
     </div>
     
     <h2>{{ item.name }}</h2>
-    <p>{{ item.description | nl2br }}</p>
+    <p>{{ item.description | usercontent | raw | nl2br }}</p>
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
