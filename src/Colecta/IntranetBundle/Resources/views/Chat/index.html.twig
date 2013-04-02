@@ -5,6 +5,7 @@
 {% block javascripts %}
     <script>
         var lastInputId = {% if messages | length > 0 %}{{ messages[0].id }}{% else %}0{% endif %};
+        var moreInputId = {% if messages | length > 0 %}{{ messages[messages | length - 1].id }}{% else %}0{% endif %};
         var now = new Date();
         var tsdiff = {{ 'now' | date('U')}} - Math.round(now.getTime() / 1000);
         
@@ -20,6 +21,22 @@
             for(var i = 0; i < inputs.length; i++) {
                 $('#chatstream').prepend('<div class="row"><div class="span1"><img width="40" height="40" src="'+inputs[i].useravatar+'"></div><div class="span6"><strong>'+inputs[i].username+':</strong> '+inputs[i].text+'<br><small class="'+inputs[i].timestamp+'">'+inputs[i].timeago+'</small></div></div>');
             }
+        }
+        
+        function moreInputs(inputs) {            
+            for(var i = 0; i < inputs.length; i++) {
+                $('#chatstream').append('<div class="row"><div class="span1"><img width="40" height="40" src="'+inputs[i].useravatar+'"></div><div class="span6"><strong>'+inputs[i].username+':</strong> '+inputs[i].text+'<br><small class="'+inputs[i].timestamp+'">'+inputs[i].timeago+'</small></div></div>');
+            }
+        }
+        
+        function loadMore() {
+            $.getJSON('more/'+moreInputId, function(data) {
+                moreInputs(data.inputs);
+                
+                if(data.inputs.length) {
+                    moreInputId = data.inputs[data.inputs.length - 1].id;
+                }
+            });
         }
         
         function hace(timestamp, el) {
@@ -90,5 +107,7 @@
         <div class="row"><div class="span1"><img width="40" height="40" src="{% if m.user.avatar %}{{ path('userAvatar',{'uid':m.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"></div><div class="span6"><strong>{{ m.user.name }}:</strong> {{ m.text | usercontent | raw | nl2br }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div>
     {% endfor %}
     </div>
+    
+    <div style="text-align:center"><button class="btn" onClick="loadMore()">Ver más</button></div>
         
 {% endblock%}

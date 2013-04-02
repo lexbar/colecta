@@ -1,4 +1,4 @@
-{% set month = date | date('n') | replace({
+{% spaceless %}{% set month = date | date('n') | replace({
         '1':'Enero',
         '2':'Febrero',
         '3':'Marzo',
@@ -13,9 +13,8 @@
         '12':'Diciembre'
     }) 
 %}
-    
 {% if short %}
     {{ month | slice(0,3) }}
 {% else %}
     {{ month }}
-{% endif %}
+{% endif %}{% endspaceless %}

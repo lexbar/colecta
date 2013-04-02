@@ -94,6 +94,26 @@ class ChatController extends Controller
         
         return $response;
     }
+    public function moreAction($until)
+    {
+        $limit = 10;
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            return false;
+        }
+        
+        //More inputs
+        $inputs = $em->createQuery('SELECT i FROM ColectaIntranetBundle:ChatInput i WHERE i.id < :id ORDER BY i.id DESC')->setParameter('id',$until)->setMaxResults($limit)->getResult();
+        
+        $response = new Response($this->renderView('ColectaIntranetBundle:Chat:reload.json.twig', array('users' => array(), 'inputs' => $inputs)),200);
+        $response->headers->set('Content-Type', 'application/json');
+        
+        return $response;
+    }
     public function recordInteraction()
     {
         $em = $this->getDoctrine()->getEntityManager();
