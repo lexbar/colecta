@@ -29,6 +29,9 @@ a i {
 .hidden {
     display: none !important;
 }
+.navbar-fixed-top {
+    opacity: .95; 
+}
 .title-block {
     background-color: #FFF;
     border: 1px solid #DDDDDD;

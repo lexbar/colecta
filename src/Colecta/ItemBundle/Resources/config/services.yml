@@ -2,6 +2,7 @@ parameters:
 #    colecta_item.example.class: Colecta\ItemBundle\Example
 
 services:
-#    colecta_item.example:
-#        class: %colecta_item.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    colecta.twig.item_extension:
+        class: Colecta\ItemBundle\Twig\ItemExtension
+        tags:
+            - { name: twig.extension }
