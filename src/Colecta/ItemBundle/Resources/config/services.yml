@@ -4,5 +4,6 @@ parameters:
 services:
     colecta.twig.item_extension:
         class: Colecta\ItemBundle\Twig\ItemExtension
+        arguments: [@doctrine, @router]
         tags:
             - { name: twig.extension }

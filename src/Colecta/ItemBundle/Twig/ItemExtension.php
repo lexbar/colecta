@@ -3,10 +3,20 @@ namespace Colecta\ItemBundle\Twig;
 
 class ItemExtension extends \Twig_Extension
 {
+    private $doctrine;
+    private $router;
+    
+    public function __construct($doctrine, $router)
+    {
+        $this->doctrine = $doctrine;
+        $this->router = $router;
+    }
+    
     public function getFilters()
     {
         return array(
             'usercontent' => new \Twig_Filter_Method($this, 'usercontentFilter'),
+            'itemlinkable' => new \Twig_Filter_Method($this, 'itemlinkableFilter'),
             'summarize' => new \Twig_Filter_Method($this, 'summarizeFilter'),
         );
     }
@@ -26,6 +36,50 @@ class ItemExtension extends \Twig_Extension
     public function summarizeFilter($text, $limit = 200)
     {
         return summarize($text, $limit);
+    }
+    
+    public function itemlinkableFilter($text)
+    {
+        $em = $this->doctrine->getEntityManager();
+        
+        $return = '';
+        $position = 0;
+        
+        while(preg_match("/:item:([0-9]+):/", $text, $match, PREG_OFFSET_CAPTURE, $position))
+        {
+            list($all, $theposition) = $match[0];
+            $itemId = $match[1][0];
+
+            // Add the text leading up to the URL.
+            $return .= htmlspecialchars(substr($text, $position, $theposition - $position));
+            
+            $item = $em->getRepository('ColectaItemBundle:Item')->find($itemId);
+            
+            if($item)
+            {
+                $urlTypes = array(
+                    'Item/Post' => 'ColectaPostView',
+                    'Activity/Route' => 'ColectaRouteView',
+                    'Activity/Place' => 'ColectaPlaceView',
+                    'Activity/Event' => 'ColectaEventView',
+                    'Files/Folder' => 'ColectaFolderView',
+                    'Files/File' => 'ColectaFileView',
+                    'Colective/Poll' => 'ColectaPollView',
+                    'Colective/Contest' => 'ColectaContestView'
+                );
+                
+                $url = $this->router->generate($urlTypes[$item->getType()], array('slug'=>$item->getSlug()));
+                
+                $return .= '<a href="'.$url.'">'.$item->getName().'</a>';
+            }
+            
+            $position = $theposition + strlen($all);
+        }
+        
+        // Add the remainder of the text.
+        $return .= htmlspecialchars(substr($text, $position));
+    
+        return $return;
     }
 
     public function getName()

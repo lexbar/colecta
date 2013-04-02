@@ -32,16 +32,16 @@ class CommentController extends Controller
             
             $em->persist($comment); 
             
-            $notifications = array();
+            $notifications = array($user->getId());
             
-            if($user != $item->getauthor())
+            if($user != $item->getAuthor())
             {
                 //Notification to the owner
                 $notification = new Notification();
                 $notification->setUser($item->getAuthor());
                 $notification->setDismiss(0);
                 $notification->setDate(new \DateTime('now'));
-                $notification->setText($user->getName().' ha escrito un comentario en <a href="'.$this->generateUrl('ColectaEventView', array('slug'=>$item->getSlug())).'">'.$item->getName().'</a>');
+                $notification->setText($user->getName().' ha escrito un comentario en :item:'.$item->getId().':');
                 $em->persist($notification); 
                 
                 $notifications[] = $item->getAuthor()->getId();
@@ -58,7 +58,7 @@ class CommentController extends Controller
                     $notification->setUser($c->getUser());
                     $notification->setDismiss(0);
                     $notification->setDate(new \DateTime('now'));
-                    $notification->setText($user->getName().' ha contestado en <a href="'.$this->generateUrl('ColectaEventView', array('slug'=>$item->getSlug())).'">'.$item->getName().'</a>');
+                    $notification->setText($user->getName().' ha contestado en :item:'.$item->getId().':');
                     $em->persist($notification); 
                     
                     $notifications[] = $c->getUser()->getId();
