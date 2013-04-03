@@ -33,6 +33,7 @@
 
         $(function() {
             $( "#EventDateini" ).datepicker({onSelect : function(text,obj){
+                        $( "#EventDateend" ).val($( "#EventDateini" ).val());
                         $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
             }});
             $( "#EventDateend" ).datepicker();
