@@ -29,7 +29,7 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         
-        $assistances = $em->createQuery("SELECT a FROM ColectaActivityBundle:EventAssistance a, ColectaActivityBundle:Event e WHERE e = a.event AND a.user = :user AND a.confirmed = true ORDER BY e.dateini DESC")->setParameters(array('user'=>$user->getId()))->setMaxResults(15)->getResult();
+        $assistances = $em->createQuery("SELECT a FROM ColectaActivityBundle:EventAssistance a, ColectaActivityBundle:Event e WHERE e = a.event AND a.user = :user AND a.confirmed = true ORDER BY e.dateini DESC")->setParameters(array('user'=>$user->getId()))->setMaxResults(100)->getResult();
         
         return $this->render('ColectaUserBundle:User:assistances.html.twig', array('user' => $user, 'assistances' => $assistances));
     }
