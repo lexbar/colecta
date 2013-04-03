@@ -344,7 +344,7 @@ class EventController extends Controller
                     $notification->setUser($item->getAuthor());
                     $notification->setDismiss(0);
                     $notification->setDate(new \DateTime('now'));
-                    $notification->setText($user->getName().' va a asistir a <a href="'.$this->generateUrl('ColectaEventView', array('slug'=>$item->getSlug())).'">'.$item->getName().'</a>');
+                    $notification->setText($user->getName().' va a asistir a :item:'.$item->getId().':');
                     
                     $em->persist($notification); 
                 }
