@@ -1,0 +1,18 @@
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>{{ user.name }} <br><span>Actividades con asistencia confirmada</span></h2>
+</div>
+
+{% for a in assistances %}
+    <div class="item">
+        {% set path = 'Colecta' ~ a.event.type ~ ':micro.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': a.event } only %}
+    </div>
+{% else %}
+    <p><strong>No consta como asistente a ningún evento.</strong></p>
+{% endfor %}
+{% endblock %}

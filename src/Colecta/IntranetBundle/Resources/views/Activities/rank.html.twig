@@ -13,7 +13,7 @@
     {% for user in users %}
         <tr>
             <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
-            <td><a href="{{ path('userProfile', {'id':user.id}) }}">{{ user.name }}</a></td>
+            <td><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">{{ user.name }}</a></td>
             <td><div class="progress"><div class="bar" style="width: {{ (kms[user.id] / maxkm * 100) | number_format(1,'.',',') }}%;"></div></div></td>
         </tr>
     {% endfor %}
