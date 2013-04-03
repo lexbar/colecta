@@ -25,7 +25,8 @@
         {% elseif item.likers | length > 1 %}
             <span>(A {% for u in item.likers[0:item.likers | length - 2] %}{% if not loop.first %},{% endif %}{{ u.name }}{% endfor %} y {{ item.likers[item.likers | length - 1].name }} les gusta)</span> 
         {% elseif item.likers | length > 0 %}
-            <span>(A {{ item.likers[0].name }} le gusta)</span> 
+            <span>(A {{ item.likers[0].name }} le gusta)</span>
+        {% endif %}
     {% endif%}
     
     {# ASSISTANCE #}
