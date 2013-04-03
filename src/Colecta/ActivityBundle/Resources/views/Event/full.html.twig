@@ -97,11 +97,11 @@
 {% endblock %}
 
 {% block article %}
-<div class="event full">
+<div class="event full" itemscope itemtype="http://schema.org/Event">
     
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
     
-    <div class="date">
+    <div class="date" itemprop="startDate">
         <span class="weekday">{{ item.dateini | date('l') | replace ({
             'Monday':'Lunes',
             'Tuesday':'Martes',
@@ -129,8 +129,8 @@
         <span class="hour">{{ item.dateini | date('H:i') }}</span>
     </div>
     
-    <h2>{{ item.name }}</h2>
-    <p>{{ item.description | usercontent | raw | nl2br }}</p>
+    <h2 itemprop="name">{{ item.name }}</h2>
+    <p itemprop="description">{{ item.description | usercontent | raw | nl2br }}</p>
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
@@ -150,7 +150,7 @@
     {% for assistance in item.assistances %}
     
         <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}">
-            <a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}">
+            <a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">
             <img width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}
             </a> 
         
