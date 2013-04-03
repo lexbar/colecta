@@ -7,6 +7,9 @@ ColectaDashboardPage:
 ColectaSearch:
     pattern:  /buscar/
     defaults: { _controller: ColectaItemBundle:Default:search }
+ColectaSearchPage:
+    pattern:  /buscar/{page}/
+    defaults: { _controller: ColectaItemBundle:Default:searchPage }
 ColectaAjaxSearch:
     pattern:  /ajaxsearch/
     defaults: { _controller: ColectaItemBundle:Default:ajaxsearch }
