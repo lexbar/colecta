@@ -32,6 +32,9 @@ a i {
 .navbar-fixed-top {
     opacity: .95; 
 }
+.pagination {
+    margin: 10px 0;
+}
 .title-block {
     background-color: #FFF;
     border: 1px solid #DDDDDD;

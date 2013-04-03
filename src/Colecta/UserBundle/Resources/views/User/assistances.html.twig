@@ -6,6 +6,13 @@
     <h2><img src="{% if user.avatar %}{{ path('userAvatar',{'uid':user.id,'width':100,'height':100}) }}{% else %}/img/unknown.gif{% endif %}">{{ user.name }} <br><span>Actividades con asistencia confirmada</span></h2>
 </div>
 
+<div class="pagination">
+    <ul>
+        <li><a href="{{ path('userProfile', {'id':user.id}) }}">Historial</a></li>
+        <li class="active"><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Asistencias</a></li>
+    </ul>
+</div>
+
 {% for a in assistances %}
     <div class="item">
         {% set path = 'Colecta' ~ a.event.type ~ ':micro.html.twig' %}

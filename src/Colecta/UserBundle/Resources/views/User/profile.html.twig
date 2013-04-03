@@ -6,6 +6,13 @@
     <h2><img src="{% if user.avatar %}{{ path('userAvatar',{'uid':user.id,'width':100,'height':100}) }}{% else %}/img/unknown.gif{% endif %}">{{ user.name }} <br><span>Historial de publicaciones</span></h2>
 </div>
 
+<div class="pagination">
+    <ul>
+        <li class="active"><a href="{{ path('userProfile', {'id':user.id}) }}">Historial</a></li>
+        <li><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Asistencias</a></li>
+    </ul>
+</div>
+
 {% for item in items %}
 <div class="item">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
