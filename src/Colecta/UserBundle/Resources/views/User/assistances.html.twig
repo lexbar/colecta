@@ -3,7 +3,7 @@
 {% block article %}
 
 <div class="title-block">
-    <h2>{{ user.name }} <br><span>Actividades con asistencia confirmada</span></h2>
+    <h2><img src="{% if user.avatar %}{{ path('userAvatar',{'uid':user.id,'width':100,'height':100}) }}{% else %}/img/unknown.gif{% endif %}">{{ user.name }} <br><span>Actividades con asistencia confirmada</span></h2>
 </div>
 
 {% for a in assistances %}

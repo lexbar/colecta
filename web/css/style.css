@@ -37,7 +37,7 @@ a i {
     border: 1px solid #DDDDDD;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     margin-bottom: -10px;
-    padding: 10px 20px 15px;
+    padding: 10px 10px 15px 20px;
     position: relative;
     top: -20px;
 }
@@ -47,6 +47,12 @@ a i {
     font-weight: bold;
     text-transform: uppercase;
     line-height: 11px;
+}
+.title-block img {
+    float: right;
+    border: 1px solid #ccc; 
+    padding: 4px; 
+    background-color: #fff; 
 }
 .title-block h2 {
     color: #333333;
@@ -310,7 +316,6 @@ form.form-horizontal .controls textarea {
 /* ITEMS */
 .item {
     border-bottom: 1px solid #EEE;
-    overflow: hidden;
     padding: 10px 4px 30px;
 }
 .itemActions {

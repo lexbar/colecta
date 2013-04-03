@@ -1,7 +1,11 @@
 {% extends '::frontend.html.twig' %}
 
 {% block article %}
-<h2>El historial de {{ user.name }}:</h2>
+
+<div class="title-block">
+    <h2><img src="{% if user.avatar %}{{ path('userAvatar',{'uid':user.id,'width':100,'height':100}) }}{% else %}/img/unknown.gif{% endif %}">{{ user.name }} <br><span>Historial de publicaciones</span></h2>
+</div>
+
 {% for item in items %}
 <div class="item">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
