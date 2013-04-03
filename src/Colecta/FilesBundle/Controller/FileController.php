@@ -160,6 +160,7 @@ class FileController extends Controller
                         $folder->setTagwords('');
                         $folder->setAllowComments(1);
                         $folder->setDraft(0);
+                        $folder->setPart(0);
                         $folder->setPublic(1);
                         $folder->setPersonal(0);
                         
@@ -174,6 +175,11 @@ class FileController extends Controller
                     if($item->getFolder())
                     {
                         $item->getFolder()->setDate(new \DateTime('now'));
+                        $item->setPart(true);
+                    }
+                    else
+                    {
+                        $item->setPart(false);
                     }
                     
                     $category->setLastchange(new \DateTime('now'));
@@ -324,6 +330,7 @@ class FileController extends Controller
                         $folder->setTagwords('');
                         $folder->setAllowComments(1);
                         $folder->setDraft(0);
+                        $folder->setPart(0);
                         $folder->setPublic(1);
                         $folder->setPersonal(0);
                         
@@ -338,6 +345,11 @@ class FileController extends Controller
                     if($item->getFolder())
                     {
                         $item->getFolder()->setDate(new \DateTime('now'));
+                        $item->setPart(true);
+                    }
+                    else
+                    {
+                        $item->setPart(false);
                     }
                     
                     $category->setLastchange(new \DateTime('now'));

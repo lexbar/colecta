@@ -140,6 +140,7 @@ class PlaceController extends Controller
             $item->summarize($request->get('description'));
             $item->setAllowComments(true);
             $item->setDraft(false);
+            $item->setPart(false);
             $item->setDescription($request->get('description'));
             $item->setLatitude($request->get('latitude'));
             $item->setLongitude($request->get('longitude'));

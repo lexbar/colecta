@@ -239,6 +239,7 @@ class RouteController extends Controller
                     $item->summarize($item->getDescription());
                     $item->setAllowComments(true);
                     $item->setDraft(false);
+                    $item->setPart(false);
                     $item->setActivity(null);
                     $item->setDifficulty($post->get('difficulty'));
                     

@@ -162,6 +162,11 @@ abstract class Item
         $this->relatedfrom = new \Doctrine\Common\Collections\ArrayCollection();
         $this->editors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        //Default values
+        $this->part = false;
+        $this->allowComments = true;
+        $this->draft = true;
     }
     
     public function generateSlug($string = false, $separator = '-') {
@@ -195,7 +200,7 @@ abstract class Item
             
             //And now the tagwords if the text was longer than 255
             
-            $words = explode(' ', str_replace(array(',',';','=','(',')','?','!'), ' ', $text));
+            $words = explode(' ', str_replace(array(',',';','.',':','=','(',')','?','!'), ' ', $text));
             $summarywords = explode(' ', str_replace(array(',','.',':',';','=','(',')','?','!'), ' ', $summary));
             
             $tags = array();

@@ -180,6 +180,7 @@ class EventController extends Controller
             $item->summarize($request->get('description'));
             $item->setAllowComments(true);
             $item->setDraft(false);
+            $item->setPart(false);
             $item->setActivity(null);
             $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
             $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));

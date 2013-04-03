@@ -137,6 +137,7 @@ class PostController extends Controller
             $item->summarize($request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(false);
+            $item->setPart(false);
             $item->setText($request->get('text'));
             
             
