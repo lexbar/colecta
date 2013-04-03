@@ -46,87 +46,88 @@ class File extends \Colecta\ItemBundle\Entity\Item
     * @ORM\JoinColumn(name="folder_id", referencedColumnName="id") 
     */
     protected $folder;
-
-    /**
-     * Set filename
-     *
-     * @param string $filename
-     */
-    public function setFilename($filename)
-    {
-        $this->filename = $filename;
-    }
-
-    /**
-     * Get filename
-     *
-     * @return string 
-     */
-    public function getFilename()
-    {
-        return $this->filename;
-    }
-
-    /**
-     * Set filetype
-     *
-     * @param string $filetype
-     */
-    public function setFiletype($filetype)
-    {
-        $this->filetype = $filetype;
-    }
-
-    /**
-     * Get filetype
-     *
-     * @return string 
-     */
-    public function getFiletype()
-    {
-        return $this->filetype;
-    }
-
-    /**
-     * Set description
-     *
-     * @param text $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * Get description
-     *
-     * @return text 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set folder
-     *
-     * @param string $folder
-     */
-    public function setFolder($folder)
-    {
-        $this->folder = $folder;
-    }
-
-    /**
-     * Get folder
-     *
-     * @return string 
-     */
-    public function getFolder()
-    {
-        return $this->folder;
-    }
     
+    //Heritage
+    /**
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $slug;
+
+    /**
+     * @var boolean
+     */
+    protected $part;
+
+    /**
+     * @var string
+     */
+    protected $summary;
+
+    /**
+     * @var string
+     */
+    protected $tagwords;
+
+    /**
+     * @var \DateTime
+     */
+    protected $date;
+
+    /**
+     * @var boolean
+     */
+    protected $allowComments;
+
+    /**
+     * @var boolean
+     */
+    protected $draft;
+
+    /**
+     * @var \Colecta\ActivityBundle\Entity\Category
+     */
+    protected $category;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedto;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedfrom;
+
+    /**
+     * @var \Colecta\UserBundle\Entity\User
+     */
+    protected $author;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $editors;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $likers;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $comments;
+        
     public function getType()
     {
         return 'Files/File';
@@ -206,5 +207,97 @@ class File extends \Colecta\ItemBundle\Entity\Item
     public function isValid()
     {
         return true;
+    }
+
+    /**
+     * Set filename
+     *
+     * @param string $filename
+     * @return File
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    
+        return $this;
+    }
+
+    /**
+     * Get filename
+     *
+     * @return string 
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * Set filetype
+     *
+     * @param string $filetype
+     * @return File
+     */
+    public function setFiletype($filetype)
+    {
+        $this->filetype = $filetype;
+    
+        return $this;
+    }
+
+    /**
+     * Get filetype
+     *
+     * @return string 
+     */
+    public function getFiletype()
+    {
+        return $this->filetype;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return File
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set folder
+     *
+     * @param \Colecta\FilesBundle\Entity\Folder $folder
+     * @return File
+     */
+    public function setFolder(\Colecta\FilesBundle\Entity\Folder $folder = null)
+    {
+        $this->folder = $folder;
+    
+        return $this;
+    }
+
+    /**
+     * Get folder
+     *
+     * @return \Colecta\FilesBundle\Entity\Folder 
+     */
+    public function getFolder()
+    {
+        return $this->folder;
     }
 }

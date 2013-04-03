@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({"Item/Item" = "Item", "Item/Post" = "Post", "Colective/Poll" = "Colecta\ColectiveBundle\Entity\Poll", "Activity/Route" = "Colecta\ActivityBundle\Entity\Route", "Activity/Place" = "Colecta\ActivityBundle\Entity\Place", "Files/File" = "Colecta\FilesBundle\Entity\File", "Colective/Contest" = "Colecta\ColectiveBundle\Entity\Contest", "Activity/Event" = "Colecta\ActivityBundle\Entity\Event", "Files/Folder" = "Colecta\FilesBundle\Entity\Folder"})
+ * @ORM\DiscriminatorMap({"Item/Item" = "Item", "Item/Post" = "Post", "Colective/Poll" = "Colecta\ColectiveBundle\Entity\Poll", "Activity/Route" = "Colecta\ActivityBundle\Entity\Route", "Activity/Place" = "Colecta\ActivityBundle\Entity\Place", "Files/File" = "Colecta\FilesBundle\Entity\File", "Colective/Contest" = "Colecta\ColectiveBundle\Entity\Contest", "Activity/Event" = "Colecta\ActivityBundle\Entity\Event", "Files/Folder" = "Colecta\FilesBundle\Entity\Folder", "Activity/CompoundEvent" = "Colecta\ActivityBundle\Entity\CompoundEvent"})
  */
 abstract class Item
 {
@@ -41,6 +41,13 @@ abstract class Item
      * @ORM\Column(name="slug", type="string", length=255)
      */
     protected $slug;
+    
+    /**
+     * @var boolean $part
+     *
+     * @ORM\Column(name="part", type="boolean")
+     */
+    protected $part;
 
     /**
      * @var string $summary
@@ -113,237 +120,6 @@ abstract class Item
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="item")
      */
     protected $comments;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * Set summary
-     *
-     * @param string $summary
-     */
-    public function setSummary($summary)
-    {
-        $this->summary = $summary;
-    }
-
-    /**
-     * Get summary
-     *
-     * @return string 
-     */
-    public function getSummary()
-    {
-        return $this->summary;
-    }
-
-    /**
-     * Set tagwords
-     *
-     * @param string $tagwords
-     */
-    public function setTagwords($tagwords)
-    {
-        $this->tagwords = $tagwords;
-    }
-
-    /**
-     * Get tagwords
-     *
-     * @return string 
-     */
-    public function getTagwords()
-    {
-        return $this->tagwords;
-    }
-
-    /**
-     * Set date
-     *
-     * @param datetime $date
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-    }
-
-    /**
-     * Get date
-     *
-     * @return datetime 
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Set allowComments
-     *
-     * @param boolean $allowComments
-     */
-    public function setAllowComments($allowComments)
-    {
-        $this->allowComments = $allowComments;
-    }
-
-    /**
-     * Get allowComments
-     *
-     * @return boolean 
-     */
-    public function getAllowComments()
-    {
-        return $this->allowComments;
-    }
-
-    /**
-     * Set draft
-     *
-     * @param boolean $draft
-     */
-    public function setDraft($draft)
-    {
-        $this->draft = $draft;
-    }
-
-    /**
-     * Get draft
-     *
-     * @return boolean 
-     */
-    public function getDraft()
-    {
-        return $this->draft;
-    }
-
-    /**
-     * Set category
-     *
-     * @param string $category
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * Get category
-     *
-     * @return string 
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Set relatedto
-     *
-     * @param string $relatedto
-     */
-    public function setRelatedto($relatedto)
-    {
-        $this->relatedto = $relatedto;
-    }
-
-    /**
-     * Get relatedto
-     *
-     * @return string 
-     */
-    public function getRelatedto()
-    {
-        return $this->relatedto;
-    }
-
-    /**
-     * Set relatedfrom
-     *
-     * @param string $relatedfrom
-     */
-    public function setRelatedfrom($relatedfrom)
-    {
-        $this->relatedfrom = $relatedfrom;
-    }
-
-    /**
-     * Get relatedfrom
-     *
-     * @return string 
-     */
-    public function getRelatedfrom()
-    {
-        return $this->relatedfrom;
-    }
     
     /**
      * Get related
@@ -380,101 +156,12 @@ abstract class Item
         return array_values($all);
     }
 
-    /**
-     * Set author
-     *
-     * @param string $author
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * Get author
-     *
-     * @return string 
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * Set editors
-     *
-     * @param string $editors
-     */
-    public function setEditors($editors)
-    {
-        $this->editors = $editors;
-    }
-
-    /**
-     * Get editors
-     *
-     * @return string 
-     */
-    public function getEditors()
-    {
-        return $this->editors;
-    }
-
-    /**
-     * Set comments
-     *
-     * @param string $comments
-     */
-    public function setComments($comments)
-    {
-        $this->comments = $comments;
-    }
-
-    /**
-     * Get comments
-     *
-     * @return string 
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-    public function __construct()
+     public function __construct()
     {
         $this->relatedto = new \Doctrine\Common\Collections\ArrayCollection();
         $this->relatedfrom = new \Doctrine\Common\Collections\ArrayCollection();
         $this->editors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add relatedto
-     *
-     * @param Colecta\ItemBundle\Entity\Relation $relatedto
-     */
-    public function addRelation(\Colecta\ItemBundle\Entity\Relation $relatedto)
-    {
-        $this->relatedto[] = $relatedto;
-    }
-
-    /**
-     * Add editors
-     *
-     * @param Colecta\UserBundle\Entity\User $editors
-     */
-    public function addUser(\Colecta\UserBundle\Entity\User $editors)
-    {
-        $this->editors[] = $editors;
-    }
-
-    /**
-     * Add comments
-     *
-     * @param Colecta\ItemBundle\Entity\Comment $comments
-     */
-    public function addComment(\Colecta\ItemBundle\Entity\Comment $comments)
-    {
-        $this->comments[] = $comments;
     }
     
     public function generateSlug($string = false, $separator = '-') {
@@ -546,6 +233,239 @@ abstract class Item
         $this->setDate(new \DateTime('now'));
     }
 
+
+    
+    public function userLikes(\Colecta\UserBundle\Entity\User $user)
+    {
+        $likers = $this->getLikers();
+        if(count($likers) < 1) return false;
+        
+        foreach($likers as $l) 
+        {
+            if($l == $user) return true;
+        }
+        
+        return false;
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Item
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Item
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set part
+     *
+     * @param boolean $part
+     * @return Item
+     */
+    public function setPart($part)
+    {
+        $this->part = $part;
+    
+        return $this;
+    }
+
+    /**
+     * Get part
+     *
+     * @return boolean 
+     */
+    public function getPart()
+    {
+        return $this->part;
+    }
+
+    /**
+     * Set summary
+     *
+     * @param string $summary
+     * @return Item
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
+    
+        return $this;
+    }
+
+    /**
+     * Get summary
+     *
+     * @return string 
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    /**
+     * Set tagwords
+     *
+     * @param string $tagwords
+     * @return Item
+     */
+    public function setTagwords($tagwords)
+    {
+        $this->tagwords = $tagwords;
+    
+        return $this;
+    }
+
+    /**
+     * Get tagwords
+     *
+     * @return string 
+     */
+    public function getTagwords()
+    {
+        return $this->tagwords;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Item
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set allowComments
+     *
+     * @param boolean $allowComments
+     * @return Item
+     */
+    public function setAllowComments($allowComments)
+    {
+        $this->allowComments = $allowComments;
+    
+        return $this;
+    }
+
+    /**
+     * Get allowComments
+     *
+     * @return boolean 
+     */
+    public function getAllowComments()
+    {
+        return $this->allowComments;
+    }
+
+    /**
+     * Set draft
+     *
+     * @param boolean $draft
+     * @return Item
+     */
+    public function setDraft($draft)
+    {
+        $this->draft = $draft;
+    
+        return $this;
+    }
+
+    /**
+     * Get draft
+     *
+     * @return boolean 
+     */
+    public function getDraft()
+    {
+        return $this->draft;
+    }
+
+    /**
+     * Set category
+     *
+     * @param \Colecta\ItemBundle\Entity\Category $category
+     * @return Item
+     */
+    public function setCategory(\Colecta\ItemBundle\Entity\Category $category = null)
+    {
+        $this->category = $category;
+    
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \Colecta\ItemBundle\Entity\Category 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
     /**
      * Add relatedto
      *
@@ -567,6 +487,16 @@ abstract class Item
     public function removeRelatedto(\Colecta\ItemBundle\Entity\Relation $relatedto)
     {
         $this->relatedto->removeElement($relatedto);
+    }
+
+    /**
+     * Get relatedto
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRelatedto()
+    {
+        return $this->relatedto;
     }
 
     /**
@@ -593,6 +523,39 @@ abstract class Item
     }
 
     /**
+     * Get relatedfrom
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRelatedfrom()
+    {
+        return $this->relatedfrom;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \Colecta\UserBundle\Entity\User $author
+     * @return Item
+     */
+    public function setAuthor(\Colecta\UserBundle\Entity\User $author = null)
+    {
+        $this->author = $author;
+    
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \Colecta\UserBundle\Entity\User 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
      * Add editors
      *
      * @param \Colecta\UserBundle\Entity\User $editors
@@ -613,6 +576,16 @@ abstract class Item
     public function removeEditor(\Colecta\UserBundle\Entity\User $editors)
     {
         $this->editors->removeElement($editors);
+    }
+
+    /**
+     * Get editors
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEditors()
+    {
+        return $this->editors;
     }
 
     /**
@@ -647,18 +620,18 @@ abstract class Item
     {
         return $this->likers;
     }
-    
-    public function userLikes(\Colecta\UserBundle\Entity\User $user)
+
+    /**
+     * Add comments
+     *
+     * @param \Colecta\ItemBundle\Entity\Comment $comments
+     * @return Item
+     */
+    public function addComment(\Colecta\ItemBundle\Entity\Comment $comments)
     {
-        $likers = $this->getLikers();
-        if(count($likers) < 1) return false;
-        
-        foreach($likers as $l) 
-        {
-            if($l == $user) return true;
-        }
-        
-        return false;
+        $this->comments[] = $comments;
+    
+        return $this;
     }
 
     /**
@@ -669,5 +642,15 @@ abstract class Item
     public function removeComment(\Colecta\ItemBundle\Entity\Comment $comments)
     {
         $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

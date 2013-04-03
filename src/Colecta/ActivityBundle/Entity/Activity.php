@@ -37,8 +37,15 @@ class Activity
      * @ORM\OneToMany(targetEntity="Event", mappedBy="activity")
      */
     protected $events;
-
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->routes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->events = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -53,10 +60,13 @@ class Activity
      * Set name
      *
      * @param string $name
+     * @return Activity
      */
     public function setName($name)
     {
         $this->name = $name;
+    
+        return $this;
     }
 
     /**
@@ -70,19 +80,32 @@ class Activity
     }
 
     /**
-     * Set routes
+     * Add routes
      *
-     * @param string $routes
+     * @param \Colecta\ActivityBundle\Entity\Route $routes
+     * @return Activity
      */
-    public function setRoutes($routes)
+    public function addRoute(\Colecta\ActivityBundle\Entity\Route $routes)
     {
-        $this->routes = $routes;
+        $this->routes[] = $routes;
+    
+        return $this;
+    }
+
+    /**
+     * Remove routes
+     *
+     * @param \Colecta\ActivityBundle\Entity\Route $routes
+     */
+    public function removeRoute(\Colecta\ActivityBundle\Entity\Route $routes)
+    {
+        $this->routes->removeElement($routes);
     }
 
     /**
      * Get routes
      *
-     * @return string 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getRoutes()
     {
@@ -90,47 +113,35 @@ class Activity
     }
 
     /**
-     * Set events
+     * Add events
      *
-     * @param string $events
+     * @param \Colecta\ActivityBundle\Entity\Event $events
+     * @return Activity
      */
-    public function setEvents($events)
+    public function addEvent(\Colecta\ActivityBundle\Entity\Event $events)
     {
-        $this->events = $events;
+        $this->events[] = $events;
+    
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \Colecta\ActivityBundle\Entity\Event $events
+     */
+    public function removeEvent(\Colecta\ActivityBundle\Entity\Event $events)
+    {
+        $this->events->removeElement($events);
     }
 
     /**
      * Get events
      *
-     * @return string 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getEvents()
     {
         return $this->events;
-    }
-    public function __construct()
-    {
-        $this->routes = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->events = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add routes
-     *
-     * @param Colecta\ActivityBundle\Entity\Route $routes
-     */
-    public function addRoute(\Colecta\ActivityBundle\Entity\Route $routes)
-    {
-        $this->routes[] = $routes;
-    }
-
-    /**
-     * Add events
-     *
-     * @param Colecta\ActivityBundle\Entity\Event $events
-     */
-    public function addEvent(\Colecta\ActivityBundle\Entity\Event $events)
-    {
-        $this->events[] = $events;
     }
 }

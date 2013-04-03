@@ -55,7 +55,6 @@ class RouteTrackpoint
     */
     protected $route;
 
-
     /**
      * Get id
      *
@@ -70,10 +69,13 @@ class RouteTrackpoint
      * Set latitude
      *
      * @param float $latitude
+     * @return RouteTrackpoint
      */
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
+    
+        return $this;
     }
 
     /**
@@ -90,10 +92,13 @@ class RouteTrackpoint
      * Set longitude
      *
      * @param float $longitude
+     * @return RouteTrackpoint
      */
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
+    
+        return $this;
     }
 
     /**
@@ -109,17 +114,20 @@ class RouteTrackpoint
     /**
      * Set altitude
      *
-     * @param smallint $altitude
+     * @param integer $altitude
+     * @return RouteTrackpoint
      */
     public function setAltitude($altitude)
     {
         $this->altitude = $altitude;
+    
+        return $this;
     }
 
     /**
      * Get altitude
      *
-     * @return smallint 
+     * @return integer 
      */
     public function getAltitude()
     {
@@ -129,17 +137,20 @@ class RouteTrackpoint
     /**
      * Set date
      *
-     * @param datetime $date
+     * @param \DateTime $date
+     * @return RouteTrackpoint
      */
     public function setDate($date)
     {
         $this->date = $date;
+    
+        return $this;
     }
 
     /**
      * Get date
      *
-     * @return datetime 
+     * @return \DateTime 
      */
     public function getDate()
     {
@@ -149,17 +160,20 @@ class RouteTrackpoint
     /**
      * Set route
      *
-     * @param string $route
+     * @param \Colecta\ActivityBundle\Entity\Route $route
+     * @return RouteTrackpoint
      */
-    public function setRoute($route)
+    public function setRoute(\Colecta\ActivityBundle\Entity\Route $route = null)
     {
         $this->route = $route;
+    
+        return $this;
     }
 
     /**
      * Get route
      *
-     * @return string 
+     * @return \Colecta\ActivityBundle\Entity\Route 
      */
     public function getRoute()
     {

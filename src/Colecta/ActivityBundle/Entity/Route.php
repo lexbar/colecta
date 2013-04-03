@@ -114,21 +114,123 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * @ORM\OneToMany(targetEntity="RouteTrackpoint", mappedBy="route", cascade={"persist", "remove"})
      */
     protected $trackpoints;
+    
+    //Heritage
+    /**
+     * @var integer
+     */
+    protected $id;
 
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $slug;
+
+    /**
+     * @var boolean
+     */
+    protected $part;
+
+    /**
+     * @var string
+     */
+    protected $summary;
+
+    /**
+     * @var string
+     */
+    protected $tagwords;
+
+    /**
+     * @var \DateTime
+     */
+    protected $date;
+
+    /**
+     * @var boolean
+     */
+    protected $allowComments;
+
+    /**
+     * @var boolean
+     */
+    protected $draft;
+
+    /**
+     * @var \Colecta\ActivityBundle\Entity\Category
+     */
+    protected $category;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedto;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedfrom;
+
+    /**
+     * @var \Colecta\UserBundle\Entity\User
+     */
+    protected $author;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $editors;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $likers;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $comments;
+
+
+    public function __toString() 
+    {
+        return $this->getName();
+    }
+    
+    public function getType()
+    {
+        return 'Activity/Route';
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->trackpoints = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Set description
      *
-     * @param text $description
+     * @param string $description
+     * @return Route
      */
     public function setDescription($description)
     {
         $this->description = $description;
+    
+        return $this;
     }
 
     /**
      * Get description
      *
-     * @return text 
+     * @return string 
      */
     public function getDescription()
     {
@@ -139,10 +241,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set distance
      *
      * @param float $distance
+     * @return Route
      */
     public function setDistance($distance)
     {
         $this->distance = $distance;
+    
+        return $this;
     }
 
     /**
@@ -159,10 +264,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set uphill
      *
      * @param integer $uphill
+     * @return Route
      */
     public function setUphill($uphill)
     {
         $this->uphill = $uphill;
+    
+        return $this;
     }
 
     /**
@@ -179,10 +287,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set downhill
      *
      * @param integer $downhill
+     * @return Route
      */
     public function setDownhill($downhill)
     {
         $this->downhill = $downhill;
+    
+        return $this;
     }
 
     /**
@@ -199,10 +310,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set time
      *
      * @param integer $time
+     * @return Route
      */
     public function setTime($time)
     {
         $this->time = $time;
+    
+        return $this;
     }
 
     /**
@@ -219,10 +333,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set avgspeed
      *
      * @param float $avgspeed
+     * @return Route
      */
     public function setAvgspeed($avgspeed)
     {
         $this->avgspeed = $avgspeed;
+    
+        return $this;
     }
 
     /**
@@ -239,10 +356,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set maxspeed
      *
      * @param float $maxspeed
+     * @return Route
      */
     public function setMaxspeed($maxspeed)
     {
         $this->maxspeed = $maxspeed;
+    
+        return $this;
     }
 
     /**
@@ -258,17 +378,20 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     /**
      * Set minheight
      *
-     * @param smallint $minheight
+     * @param integer $minheight
+     * @return Route
      */
     public function setMinheight($minheight)
     {
         $this->minheight = $minheight;
+    
+        return $this;
     }
 
     /**
      * Get minheight
      *
-     * @return smallint 
+     * @return integer 
      */
     public function getMinheight()
     {
@@ -278,17 +401,20 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     /**
      * Set maxheight
      *
-     * @param smallint $maxheight
+     * @param integer $maxheight
+     * @return Route
      */
     public function setMaxheight($maxheight)
     {
         $this->maxheight = $maxheight;
+    
+        return $this;
     }
 
     /**
      * Get maxheight
      *
-     * @return smallint 
+     * @return integer 
      */
     public function getMaxheight()
     {
@@ -299,10 +425,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set isloop
      *
      * @param boolean $isloop
+     * @return Route
      */
     public function setIsloop($isloop)
     {
         $this->isloop = $isloop;
+    
+        return $this;
     }
 
     /**
@@ -319,10 +448,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set difficulty
      *
      * @param string $difficulty
+     * @return Route
      */
     public function setDifficulty($difficulty)
     {
         $this->difficulty = $difficulty;
+    
+        return $this;
     }
 
     /**
@@ -339,10 +471,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set IBP
      *
      * @param string $iBP
+     * @return Route
      */
     public function setIBP($iBP)
     {
         $this->IBP = $iBP;
+    
+        return $this;
     }
 
     /**
@@ -359,10 +494,13 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      * Set sourcefile
      *
      * @param string $sourcefile
+     * @return Route
      */
     public function setSourcefile($sourcefile)
     {
         $this->sourcefile = $sourcefile;
+    
+        return $this;
     }
 
     /**
@@ -378,17 +516,20 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     /**
      * Set activity
      *
-     * @param string $activity
+     * @param \Colecta\ActivityBundle\Entity\Activity $activity
+     * @return Route
      */
-    public function setActivity($activity)
+    public function setActivity(\Colecta\ActivityBundle\Entity\Activity $activity = null)
     {
         $this->activity = $activity;
+    
+        return $this;
     }
 
     /**
      * Get activity
      *
-     * @return string 
+     * @return \Colecta\ActivityBundle\Entity\Activity 
      */
     public function getActivity()
     {
@@ -396,45 +537,35 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     }
 
     /**
-     * Set trackpoints
+     * Add trackpoints
      *
-     * @param string $trackpoints
+     * @param \Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints
+     * @return Route
      */
-    public function setTrackpoints($trackpoints)
+    public function addTrackpoint(\Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints)
     {
-        $this->trackpoints = $trackpoints;
+        $this->trackpoints[] = $trackpoints;
+    
+        return $this;
+    }
+
+    /**
+     * Remove trackpoints
+     *
+     * @param \Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints
+     */
+    public function removeTrackpoint(\Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints)
+    {
+        $this->trackpoints->removeElement($trackpoints);
     }
 
     /**
      * Get trackpoints
      *
-     * @return string 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getTrackpoints()
     {
         return $this->trackpoints;
-    }
-    public function __construct()
-    {
-        $this->trackpoints = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add trackpoints
-     *
-     * @param Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints
-     */
-    public function addRouteTrackpoint(\Colecta\ActivityBundle\Entity\RouteTrackpoint $trackpoints)
-    {
-        $this->trackpoints[] = $trackpoints;
-    }
-    public function __toString() 
-    {
-        return $this->getName();
-    }
-    
-    public function getType()
-    {
-        return 'Activity/Route';
     }
 }

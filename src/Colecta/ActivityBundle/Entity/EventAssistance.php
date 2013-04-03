@@ -59,53 +59,16 @@ class EventAssistance
     }
 
     /**
-     * Set event
-     *
-     * @param string $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     * Get event
-     *
-     * @return string 
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     * Set user
-     *
-     * @param string $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Get user
-     *
-     * @return string 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
      * Set confirmed
      *
      * @param boolean $confirmed
+     * @return EventAssistance
      */
     public function setConfirmed($confirmed)
     {
         $this->confirmed = $confirmed;
+    
+        return $this;
     }
 
     /**
@@ -122,10 +85,13 @@ class EventAssistance
      * Set km
      *
      * @param float $km
+     * @return EventAssistance
      */
     public function setKm($km)
     {
         $this->km = $km;
+    
+        return $this;
     }
 
     /**
@@ -136,5 +102,51 @@ class EventAssistance
     public function getKm()
     {
         return $this->km;
+    }
+
+    /**
+     * Set event
+     *
+     * @param \Colecta\ActivityBundle\Entity\Event $event
+     * @return EventAssistance
+     */
+    public function setEvent(\Colecta\ActivityBundle\Entity\Event $event = null)
+    {
+        $this->event = $event;
+    
+        return $this;
+    }
+
+    /**
+     * Get event
+     *
+     * @return \Colecta\ActivityBundle\Entity\Event 
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Colecta\UserBundle\Entity\User $user
+     * @return EventAssistance
+     */
+    public function setUser(\Colecta\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Colecta\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

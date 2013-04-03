@@ -33,21 +33,110 @@ class Place extends \Colecta\ItemBundle\Entity\Item
      * @ORM\Column(name="longitude", type="float")
      */
     protected $longitude;
+    
+    //Heritage
+    /**
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $slug;
+
+    /**
+     * @var boolean
+     */
+    protected $part;
+
+    /**
+     * @var string
+     */
+    protected $summary;
+
+    /**
+     * @var string
+     */
+    protected $tagwords;
+
+    /**
+     * @var \DateTime
+     */
+    protected $date;
+
+    /**
+     * @var boolean
+     */
+    protected $allowComments;
+
+    /**
+     * @var boolean
+     */
+    protected $draft;
+
+    /**
+     * @var \Colecta\ActivityBundle\Entity\Category
+     */
+    protected $category;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedto;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedfrom;
+
+    /**
+     * @var \Colecta\UserBundle\Entity\User
+     */
+    protected $author;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $editors;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $likers;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $comments;
+    
+    public function getType()
+    {
+        return 'Activity/Place';
+    }
 
     /**
      * Set description
      *
-     * @param text $description
+     * @param string $description
+     * @return Place
      */
     public function setDescription($description)
     {
         $this->description = $description;
+    
+        return $this;
     }
 
     /**
      * Get description
      *
-     * @return text 
+     * @return string 
      */
     public function getDescription()
     {
@@ -58,10 +147,13 @@ class Place extends \Colecta\ItemBundle\Entity\Item
      * Set latitude
      *
      * @param float $latitude
+     * @return Place
      */
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
+    
+        return $this;
     }
 
     /**
@@ -78,10 +170,13 @@ class Place extends \Colecta\ItemBundle\Entity\Item
      * Set longitude
      *
      * @param float $longitude
+     * @return Place
      */
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
+    
+        return $this;
     }
 
     /**
@@ -92,10 +187,5 @@ class Place extends \Colecta\ItemBundle\Entity\Item
     public function getLongitude()
     {
         return $this->longitude;
-    }
-    
-    public function getType()
-    {
-        return 'Activity/Place';
     }
 }

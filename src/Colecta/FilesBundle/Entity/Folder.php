@@ -30,15 +30,117 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
      * @ORM\OneToMany(targetEntity="File", mappedBy="folder")
      */
     protected $files;
+    
+    //Heritage
+    /**
+     * @var integer
+     */
+    protected $id;
 
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $slug;
+
+    /**
+     * @var boolean
+     */
+    protected $part;
+
+    /**
+     * @var string
+     */
+    protected $summary;
+
+    /**
+     * @var string
+     */
+    protected $tagwords;
+
+    /**
+     * @var \DateTime
+     */
+    protected $date;
+
+    /**
+     * @var boolean
+     */
+    protected $allowComments;
+
+    /**
+     * @var boolean
+     */
+    protected $draft;
+
+    /**
+     * @var \Colecta\ActivityBundle\Entity\Category
+     */
+    protected $category;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedto;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $relatedfrom;
+
+    /**
+     * @var \Colecta\UserBundle\Entity\User
+     */
+    protected $author;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $editors;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $likers;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $comments;
+        
+    public function getType()
+    {
+        return 'Files/Folder';
+    }
+    
+    public function __toString()
+    {
+        return $this->getName();
+    }
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Set public
      *
      * @param boolean $public
+     * @return Folder
      */
     public function setPublic($public)
     {
         $this->public = $public;
+    
+        return $this;
     }
 
     /**
@@ -55,10 +157,13 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
      * Set personal
      *
      * @param boolean $personal
+     * @return Folder
      */
     public function setPersonal($personal)
     {
         $this->personal = $personal;
+    
+        return $this;
     }
 
     /**
@@ -72,46 +177,35 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
     }
 
     /**
-     * Set files
+     * Add files
      *
-     * @param string $files
+     * @param \Colecta\FilesBundle\Entity\File $files
+     * @return Folder
      */
-    public function setFiles($files)
+    public function addFile(\Colecta\FilesBundle\Entity\File $files)
     {
-        $this->files = $files;
+        $this->files[] = $files;
+    
+        return $this;
+    }
+
+    /**
+     * Remove files
+     *
+     * @param \Colecta\FilesBundle\Entity\File $files
+     */
+    public function removeFile(\Colecta\FilesBundle\Entity\File $files)
+    {
+        $this->files->removeElement($files);
     }
 
     /**
      * Get files
      *
-     * @return string 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getFiles()
     {
         return $this->files;
-    }
-    public function __construct()
-    {
-        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add files
-     *
-     * @param Colecta\FilesBundle\Entity\File $files
-     */
-    public function addFile(\Colecta\FilesBundle\Entity\File $files)
-    {
-        $this->files[] = $files;
-    }
-    
-    public function getType()
-    {
-        return 'Files/Folder';
-    }
-    
-    public function __toString()
-    {
-        return $this->getName();
     }
 }
