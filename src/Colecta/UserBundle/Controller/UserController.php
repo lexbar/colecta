@@ -63,6 +63,22 @@ class UserController extends Controller
             
                 $em->persist($user);
                 $em->flush();
+                
+                //Delete avatar cache
+                $cachePath = __DIR__ . '/../../../../app/cache/prod/images';
+                $uid = $user->getId();
+                
+                if ($handle = opendir($cachePath)) 
+                {
+                    while (false !== ($file = readdir($handle))) 
+                    {
+                        if(preg_match("#avatar-".$uid."_.*#", $file))
+                        {
+                            unlink($cachePath.'/'.$file);
+                        }
+                    }
+                    closedir($handle);
+                }
             
                 $this->redirect($this->generateUrl('userEditProfile'));
             }

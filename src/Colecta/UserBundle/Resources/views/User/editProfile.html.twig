@@ -6,7 +6,7 @@
 </div>
 
 <form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+    {{ form_rest(form) }}
     <br>
     <img class="thumbnail" width="50" height="50" src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}">
     <hr>
