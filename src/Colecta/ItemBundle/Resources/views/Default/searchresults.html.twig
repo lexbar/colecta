@@ -22,8 +22,8 @@
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
 </div>
 {% else %}
-    <h3>Nadie ha escrito nada... por ahora.</h3>
-    <p>Navega por el menú de la izquierda para crear nuevos contenidos.</p>
+    <h3>Ningún resultado.</h3>
+    <p>Prueba con otras palabras.</p>
 {% endfor %}
 
 <ul class="pager">
