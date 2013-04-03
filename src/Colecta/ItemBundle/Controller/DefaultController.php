@@ -67,7 +67,7 @@ class DefaultController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Default:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaItemBundle:Default:searchresults.html.twig', array('search'=>$search, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function ajaxsearchAction()
     {
