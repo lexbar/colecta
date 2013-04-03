@@ -502,6 +502,9 @@ div.assistances ul li a {
 .poll .progress {
     margin: 5px 0 10px;
 }
+.mini p {
+    margin: 10px;
+}
 
 .place.mini .thumbnail, .file.mini .thumbnail {
     margin: 0 10px 10px 0;
