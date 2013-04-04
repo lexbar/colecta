@@ -538,6 +538,9 @@ div.assistances ul li a {
 .comments .media-heading a {
     color: #000;
 }
+.comments .media-heading {
+    padding: 0;
+}
 
 #chatform {
     overflow: hidden;
@@ -608,6 +611,26 @@ div.assistances ul li a {
 .calendar td.today a:hover, .calendar td.today a:active {
     background-color: transparent;
     color: #fff;
+}
+.nextevent {
+    border-top: 2px solid #0088CC;
+    margin-bottom: 10px;
+    padding: 4px;
+}
+.nextevent a {
+    display: block;
+}
+.nextevent.level1 {
+    opacity: 1
+}
+.nextevent.level2 {
+    opacity: .6
+}
+.nextevent.level3 {
+    opacity: .3
+}
+.nextevent.level4 {
+    opacity: .1
 }
 .thumbnail {
     background-color: #FFF;

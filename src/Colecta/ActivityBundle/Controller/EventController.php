@@ -562,4 +562,13 @@ class EventController extends Controller
         
         return $this->render('ColectaActivityBundle:Event:calendar.html.twig', array('events' => $ev, 'targetdate'=>$date, 'targetdateob'=>$dateOb));
     }
+    
+    public function nextEventAction()
+    {
+        $now = new \DateTime();
+        $em = $this->getDoctrine()->getEntityManager();
+        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.$now->format('Y-m-d H:i:s').'\' ORDER BY e.date ASC')->setMaxResults(3)->getResult();
+        
+        return $this->render('ColectaActivityBundle:Event:nextEvent.html.twig', array('events' => $items));
+    }
 }

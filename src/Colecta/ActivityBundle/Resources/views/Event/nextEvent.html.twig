@@ -1,0 +1,7 @@
+{% if events | length > 0 %}
+    {% for event in events %}
+        <div class="nextevent level{{ loop.index }}">
+            <a href="{{ path('ColectaEventView', { 'slug': event.slug }) }}">{{ event.name }} <i class="icon-double-angle-right"></i></a>
+        </div>
+    {% endfor %}
+{% endif %}
