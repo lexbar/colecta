@@ -380,6 +380,74 @@ class EventController extends Controller
         return new RedirectResponse($referer);
     }
     
+    public function unassistanceAction($slug)
+    /*
+        Mark Unassistance of logged User to an Event
+        
+        From the Event node
+    */
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+        
+        if($user == 'anon.')
+        {
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
+        }
+        elseif(!$item)
+        {
+            $this->get('session')->setFlash('error', 'No existe el evento');
+        }
+        else
+        {
+            $assistance = $em->getRepository('ColectaActivityBundle:EventAssistance')->findOneBy(array('event'=>$item->getId(),'user'=>$user->getId()));
+            
+            if(!$assistance)
+            {
+                $this->get('session')->setFlash('error', 'No habías marcado tu asistencia');
+            }
+            else
+            {
+                $em->remove($assistance);
+                $em->flush();
+                
+                //Notification to the author of the event
+                if($user != $item->getAuthor())
+                {
+                    $notification = new Notification();
+                    $notification->setUser($item->getAuthor());
+                    $notification->setDismiss(0);
+                    $notification->setDate(new \DateTime('now'));
+                    $notification->setText($user->getName().' ya no asiste a :item:'.$item->getId().':');
+                    
+                    $em->persist($notification); 
+                }
+                
+                $this->get('session')->setFlash('success', 'Has desmarcado tu asistencia al evento.');
+            }
+        }
+        
+        if($item)
+        {
+            $referer = $this->generateUrl('ColectaEventView', array('slug'=>$item->getSlug()));
+        }
+        else
+        {
+            $referer = $this->get('request')->headers->get('referer');
+            
+            if(empty($referer))
+            {
+                $referer = $this->generateUrl('ColectaEventView');
+            }
+        }
+        
+        
+        return new RedirectResponse($referer);
+    }
+    
     public function updateAssistancesAction($slug)
     /*
         Update Assistances

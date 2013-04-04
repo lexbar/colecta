@@ -40,6 +40,9 @@ ColectaEventEdit:
 ColectaEventAsist:
     pattern:  /actividades/{slug}/asist/
     defaults: { _controller: ColectaActivityBundle:Event:assistance }
+ColectaEventUnasist:
+    pattern:  /actividades/{slug}/unasist/
+    defaults: { _controller: ColectaActivityBundle:Event:unassistance }
 ColectaEventUpdateAsist:
     pattern:  /actividades/{slug}/updateasist/
     defaults: { _controller: ColectaActivityBundle:Event:updateAssistances }

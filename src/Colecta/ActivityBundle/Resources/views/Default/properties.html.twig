@@ -42,6 +42,45 @@
                 {% set assists = true %}
             {% endif %}
         {% endfor %}
-        <li class="assistance"><button onClick="window.location='{{ path('ColectaEventAsist',{'slug':item.slug}) }}'" class="btn btn-medium{% if not haspassed and not assists %} btn-primary{% endif %}" type="button">{% if not haspassed %}{% if assists %}Vas a asistir{% else %}Asistiré{% endif %}{% else %}{% if assists %}Has asistido{% else %}Asistí{% endif %}{% endif %} {%if assists %}<i class="icon-ok{% if not haspassed and not assists %} icon-white{% endif %}"></i>{% endif %}</button></li>
+        
+        {% spaceless %}
+        <li class="assistance">
+            <button 
+                onClick="window.location='{% if assists %}{{ path('ColectaEventUnasist',{'slug':item.slug}) }}{% else %}{{ path('ColectaEventAsist',{'slug':item.slug}) }}{% endif%}'" 
+                class="btn btn-medium{% if not haspassed and not assists %} btn-primary{% endif %}" 
+                type="button">
+                    {% if assists %}
+                        <span class="done">
+                    {% endif %}
+                    
+                    {% if not haspassed %}
+                        {% if assists %}
+                            Vas a asistir
+                        {% else %}
+                            Asistiré
+                        {% endif %}
+                    {% else %}
+                        {% if assists %}
+                            Has asistido
+                        {% else %}
+                            Asistí
+                        {% endif %}
+                    {% endif %} 
+                    
+                    {% if assists %}
+                        <i 
+                            class="icon-ok
+                            {% if not haspassed and not assists %} icon-white{% endif %}"></i>
+                    {% endif %} 
+                
+                    {% if assists %}
+                        </span>
+                        <span class="undo">
+                            Deshacer <i class="icon-trash icon-white"></i>
+                        </span>
+                    {% endif %} 
+                </button>
+            </li>
+        {% endspaceless %}
     {% endif %}
 </ul>

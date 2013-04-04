@@ -376,6 +376,15 @@ ul.properties .assistance {
 ul.properties .assistance .btn {
     text-transform: none;
 }
+ul.properties .assistance .btn .undo {
+    display: none;
+}
+ul.properties .assistance .btn:hover .undo {
+    display: inline;
+}
+ul.properties .assistance .btn:hover .done {
+    display: none;
+}
 ul.moreproperties {
     float: right;
     background-color: #f7f7f7;
