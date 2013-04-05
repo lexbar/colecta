@@ -117,7 +117,7 @@ class UserController extends Controller
         
         $response = new Response();
         
-        if(@filemtime($cachePath))
+        if(file_exists($cachePath) && filemtime($cachePath))
         {
             $response->setLastModified(new \DateTime(date("F d Y H:i:s.",filemtime($cachePath))));
         }
@@ -177,8 +177,6 @@ class UserController extends Controller
                 //fill out the cache
                 file_put_contents($cachePath, $image);
             }
-            
-            $response = new Response();
             
             $response->setStatusCode(200);
             $response->setContent($image);
