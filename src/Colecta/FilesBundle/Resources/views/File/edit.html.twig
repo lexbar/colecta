@@ -5,7 +5,7 @@
 {% block javascripts %}  
     <script src="/js/filepreview.js"></script>
     <script>        
-        {% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
+        {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
         
         function toggleFolderCreate() {
             var button = $('#folderCreateButton');
@@ -27,7 +27,7 @@
 {% block article %}
 
 <div class="title-block">
-    <h2>Editar Archivo</h2>
+    <h2>Editar {{ item.name }}<br><span><a href="{{ path('ColectaFileView', {'slug':item.slug}) }}"><i class="icon-double-angle-left"></i> Volver al archivo</a></span></h2>
 </div>
 
 {% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug})} %}

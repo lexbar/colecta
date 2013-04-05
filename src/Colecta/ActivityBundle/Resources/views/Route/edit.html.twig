@@ -8,7 +8,7 @@
 
 {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
     
-{% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
+{% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
     
     </script>
 {% endblock %}
@@ -164,7 +164,7 @@
       
       {{ form_rest(form) }}
       
-      {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
+      {% render 'ColectaItemBundle:Category:formlist' with {'selected':item.category.id} %}
       
       <div class="form-actions">
         <button type="submit" class="btn btn-primary" id="RouteSubmit"><i id="RouteSubmitLoading"></i> <span id="RouteSubmitText">Actualizar</span></button>

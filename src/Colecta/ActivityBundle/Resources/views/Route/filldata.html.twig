@@ -52,7 +52,7 @@
         path.setMap(map);
     }
     
-    {% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
+    {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
     
     </script>
     
@@ -208,7 +208,7 @@
       <input type="hidden" value="{{ filename }}" name="filename">
       <input type="hidden" value="{% if trackdata.isloop %}1{% else %}0{% endif %}" name="isloop">
       
-      {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
+      {% render 'ColectaItemBundle:Category:formlist' with {'selected':0} %}
       
       <div class="form-actions">
         <button class="btn disabled" disabled="disabled">Guardar como borrador</button>

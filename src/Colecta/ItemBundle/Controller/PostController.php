@@ -24,7 +24,6 @@ class PostController extends Controller
         
         //Get ALL the items that are not drafts
         $items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
         //Pagination
         if(count($items) > $this->ipp) 
@@ -37,7 +36,7 @@ class PostController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Post:index.html.twig', array('items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaItemBundle:Post:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function viewAction($slug)
     {
@@ -50,9 +49,8 @@ class PostController extends Controller
     public function newAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
-        return $this->render('ColectaItemBundle:Post:new.html.twig', array('categories' => $categories));
+        return $this->render('ColectaItemBundle:Post:new.html.twig');
     }
     public function createAction()
     {
@@ -230,7 +228,6 @@ class PostController extends Controller
             }
         }
         
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
-        return $this->render('ColectaItemBundle:Post:edit.html.twig', array('item' => $item, 'categories'=>$categories));
+        return $this->render('ColectaItemBundle:Post:edit.html.twig', array('item' => $item));
     }
 }

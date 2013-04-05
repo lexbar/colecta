@@ -40,20 +40,7 @@
         
 {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
   
-        function toggleCategoryCreate() {
-            var button = $('#categoryCreateButton');
-            if(button.hasClass('newcategory')) {
-                button.removeClass('newcategory').addClass('selectcategory');
-                button.html('Seleccionar una categoría existente');
-                $('#EventCategory').hide();
-                $('#EventNewCategory').show().focus();
-            } else {
-                button.removeClass('selectcategory').addClass('newcategory');
-                button.html('Crear una nueva categoría');
-                $('#EventCategory').show();
-                $('#EventNewCategory').hide().attr('value','');
-            }
-        }
+{% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
     
     </script>
 {% endblock %}
@@ -61,7 +48,7 @@
 
 {% if item.author == app.user %}
 <div class="title-block">
-    <h2>Editar Evento</h2>
+    <h2>Editar {{ item.name }}<br><span><a href="{{ path('ColectaEventView', {'slug':item.slug}) }}"><i class="icon-double-angle-left"></i> Volver al evento</a></span></h2>
 </div>
 <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal well">
     <fieldset>
@@ -160,17 +147,7 @@
         </div>
       </div>
       
-      <div class="control-group">
-        <label class="control-label" for="EventCategory">Categoría</label>
-        <div class="controls">
-          <select id="EventCategory" name="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}"{% if item.category.slug == category.slug %} selected{% endif %}>{{ category.name }}</option>
-            {% endfor %}
-          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
-          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
-        </div>
-      </div>
+      {% render 'ColectaItemBundle:Category:formlist' with {'selected':item.category.id} %}
       
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Actualizar</button>

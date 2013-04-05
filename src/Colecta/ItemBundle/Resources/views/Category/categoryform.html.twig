@@ -3,7 +3,7 @@
     <div class="controls">
       <select id="Category" name="category">
         {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.name }}</option>
+            <option value="{{ category.id }}"{% if category.id == selected %}selected="selected"{% endif %}>{{ category.name }}</option>
         {% endfor %}
       </select><input type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre">
       <button class="btn newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton"><i class="icon-plus-sign"></i> Nueva categoría</button>

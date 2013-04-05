@@ -36,7 +36,7 @@
             </div>
           </div>
           
-          {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
+          {% render 'ColectaItemBundle:Category:formlist' with {'selected':0} %}
           
           <div class="form-actions">
             <input type="hidden" name="latitude" id="PlaceLatitude">

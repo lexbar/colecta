@@ -1,6 +1,5 @@
 <div class="itemActions">
     {# LIKE #}
-    
     {% if app.user and item.userLikes(app.user) %}
         {% if item.likers | length > 3 %}
             <span><i class="icon-thumbs-up icon-large"></i> A {{ item.likers | length - 1 }} personas y a ti os gusta</span> 
