@@ -174,11 +174,9 @@ class UserController extends Controller
                 $image->setImageResolution(72,72); 
                 $image->scaleImage($width, $height, true);
                 $image->setImagePage(0, 0, 0, 0);
+                //fill out the cache
+                file_put_contents($cachePath, $image);
             }
-            
-            
-            //fill out the cache
-            file_put_contents($cachePath, $image);
             
             $response = new Response();
             
