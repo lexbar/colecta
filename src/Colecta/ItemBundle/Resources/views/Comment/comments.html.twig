@@ -44,7 +44,7 @@
         </span>
         
         <div class="media-body">
-            <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST">
+            <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST" onSubmit="$('#commentItem{{ item.id }}').attr('disabled','disabled')">
                 <textarea style="height:32px;" onClick="this.style.height = ''; document.getElementById('commentItem{{ item.id }}').style.display = '';" name="comment" class="span6" placeholder="Escribe un comentario…"></textarea><br>
                 <button style="display:none;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i class="icon-comment"></i></button>
             </form>
