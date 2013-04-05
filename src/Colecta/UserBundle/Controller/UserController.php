@@ -153,9 +153,29 @@ class UserController extends Controller
             $imagefile = __DIR__ . '/../../../../web' . $user->getUploadDir() . '/' .$user->getAvatar();
             
             $image = new \Imagick($imagefile);
-            $image->setImageResolution(72,72); 
-            $image->scaleImage($width, $height, true);
-            $image->setImagePage(0, 0, 0, 0);
+            
+            $format = $image->getImageFormat();
+            if ($format == 'GIF') 
+            {
+                //$image = $image->coalesceImages();
+
+                foreach ($image as $frame) 
+                {
+                    $frame->scaleImage($width, $height, true);
+                }
+                
+                //$image = $image->deconstructImages(); 
+                $image->writeImages($cachePath, true); 
+                
+                $image = file_get_contents($cachePath);
+            }
+            else
+            {
+                $image->setImageResolution(72,72); 
+                $image->scaleImage($width, $height, true);
+                $image->setImagePage(0, 0, 0, 0);
+            }
+            
             
             //fill out the cache
             file_put_contents($cachePath, $image);
