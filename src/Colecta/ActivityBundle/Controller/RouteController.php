@@ -370,6 +370,81 @@ class RouteController extends Controller
                 $persist = false;
             }
             
+            //File replacement
+            if ($persist && isset($_FILES['file']))
+            {
+                if(($file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'])) === null)
+                {
+                    $this->get('session')->setFlash('error', 'No se ha podido subir el archivo.');
+                    $persist = false;
+                }
+                else
+                {
+                    $extension = $this->extension($file->getClientOriginalName());
+            
+                    if(!$extension) //Extension not accepted
+                    {
+                        $this->get('session')->setFlash('error', 'El archivo no tiene una extensión correcta.');
+                        $persist = false;
+                    }
+                    else
+                    {
+                        $hashName = sha1($file->getClientOriginalName() . $user->getId() . mt_rand(0, 99999));
+                        $filename = $hashName . '.' . $extension;
+                        
+                        $rootdir = $this->getUploadDir();
+                        
+                        $file->move($rootdir, $filename);
+                        unset($file);
+                        
+                        $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
+                                        
+                        if(!$track)
+                        {
+                            $this->get('session')->setFlash('error', 'No se ha podido leer correctamente el archivo.');
+                            $persist = false;
+                        }
+                        else
+                        {
+                            $item->setSourcefile($filename);
+                            $em->createQuery("DELETE ColectaActivityBundle:RouteTrackpoint t WHERE t.route = :route")->setParameter('route', $item)->execute();
+                            
+                            //New RouteTrackpooints                            
+                            foreach($track as $point)
+                            {
+                                $trackpoint = new RouteTrackpoint();
+                                $trackpoint->setLatitude($point['latitude']);
+                                $trackpoint->setLongitude($point['longitude']);
+                                $trackpoint->setAltitude($point['altitude']);
+                                $trackpoint->setDate($point['datetime']);
+                                $trackpoint->setRoute($item);
+                                
+                                
+                                $em->persist($trackpoint); 
+                                unset($trackpoint);
+                            }
+                            
+                            //Delete avatar cache
+                            $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/';
+                            $id = $item->getId();
+                            
+                            if ($handle = opendir($cachePath)) 
+                            {
+                                while (false !== ($file = readdir($handle))) 
+                                {
+                                    if(preg_match("#".$id.".*#", $file))
+                                    {
+                                        unlink($cachePath.'/'.$file);
+                                    }
+                                }
+                                closedir($handle);
+                            }
+                        }
+                    }
+
+                }
+            }
+            
             $item->summarize($item->getDescription());
             $item->setDifficulty($post->get('difficulty'));
             $time = intval($post->get('days')) * 24 * 60 * 60 + intval($post->get('hours')) * 60 * 60 + intval($post->get('minutes')) * 60;

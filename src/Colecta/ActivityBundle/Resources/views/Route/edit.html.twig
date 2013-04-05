@@ -8,20 +8,7 @@
 
 {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
     
-    function toggleCategoryCreate() {
-            var button = $('#categoryCreateButton');
-            if(button.hasClass('newcategory')) {
-                button.removeClass('newcategory').addClass('selectcategory');
-                button.html('Seleccionar una categoría existente');
-                $('#EventCategory').hide();
-                $('#EventNewCategory').show().focus();
-            } else {
-                button.removeClass('selectcategory').addClass('newcategory');
-                button.html('Crear una nueva categoría');
-                $('#EventCategory').show();
-                $('#EventNewCategory').hide().attr('value','');
-            }
-        }
+{% include 'ColectaItemBundle:Default:categoryform.js.twig' %}
     
     </script>
 {% endblock %}
@@ -29,24 +16,30 @@
 
 {% if item.author == app.user %}
 <div class="title-block">
-    <h2>Editar Ruta</h2>
+    <h2>Editar {{ item.name }}<br><span><a href="{{ path('ColectaRouteView', {'slug':item.slug}) }}"><i class="icon-double-angle-left"></i> Volver a la ruta</a></span></h2>
 </div>
-<form action="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal well">
+<form action="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal well" onSubmit="$('#RouteSubmit').attr('disabled','disabled').addClass('disabled'); $('#RouteSubmitText').html('Enviando...'); $('#RouteSubmitLoading').addClass('icon-refresh icon-spin');" action="{{ path('ColectaRouteUpload') }}" enctype="multipart/form-data">
     <fieldset>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Nombre</label>
+        <label class="control-label" for="RouteFile">Modificar track</label>
+        <div class="controls">
+          <input type="file" id="RouteFile" name="file">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteName">Nombre</label>
         <div class="controls">
           {{ form_widget(form.name) }}
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Descripción</label>
+        <label class="control-label" for="RouteDescription">Descripción</label>
         <div class="controls">
           {{ form_widget(form.description) }}
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteName">Distancia</label>
+        <label class="control-label" for="RouteDistance">Distancia</label>
         <div class="controls">
           <div class="input-append">
             {{ form_widget(form.distance, {'attr':{'class':'input-small','value': item.distance}}) }}<span class="add-on"> km</span>
@@ -54,7 +47,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Subida</label>
+        <label class="control-label" for="RouteUphill">Subida</label>
         <div class="controls">
           <div class="input-append">
             {{ form_widget(form.uphill, {'attr':{'class':'input-small','value': item.uphill}}) }}<span class="add-on"> metros</span>
@@ -62,7 +55,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Bajada</label>
+        <label class="control-label" for="RouteDownhill">Bajada</label>
         <div class="controls">
           <div class="input-append">
             {{ form_widget(form.downhill, {'attr':{'class':'input-small','value': item.downhill}}) }}<span class="add-on"> metros</span>
@@ -70,7 +63,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Tiempo</label>
+        <label class="control-label" for="RouteTime">Tiempo</label>
         <div class="controls">
           {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
           {% if item.time < 60 %}
@@ -107,7 +100,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Velocidad media</label>
+        <label class="control-label" for="RouteAvgspeed">Velocidad media</label>
         <div class="controls">
           <div class="input-append">
             {{ form_widget(form.avgspeed, {'attr':{'value': item.avgspeed}}) }}<span class="input-small uneditable-input">{{ item.avgspeed }}</span><span class="add-on"> km/h</span>
@@ -115,7 +108,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Velocidad máxima</label>
+        <label class="control-label" for="RouteMaxspeed">Velocidad máxima</label>
         <div class="controls">
           <div class="input-append">
             {{ form_widget(form.maxspeed, {'attr':{'value': item.maxspeed}}) }}<span class="input-small uneditable-input">{{ item.maxspeed }}</span><span class="add-on"> km/h</span>
@@ -123,7 +116,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Cota inferior</label>
+        <label class="control-label" for="RouteMinheight">Cota inferior</label>
         <div class="controls">
           <div class="input-append">
             {{ form_widget(form.minheight, {'attr':{'class':'input-small','value': item.minheight}}) }}<span class="add-on"> metros</span>
@@ -131,7 +124,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteFile">Cota superior</label>
+        <label class="control-label" for="RouteMaxheight">Cota superior</label>
         <div class="controls">
           <div class="input-append">
             {{ form_widget(form.maxheight, {'attr':{'class':'input-small','value': item.maxheight}}) }}<span class="add-on"> metros</span>
@@ -139,7 +132,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="RouteName">Dificultad</label>
+        <label class="control-label" for="RouteDifficulty">Dificultad</label>
         <div class="controls">
             <label class="radio">
                 <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
@@ -171,20 +164,10 @@
       
       {{ form_rest(form) }}
       
-      <div class="control-group">
-        <label class="control-label" for="EventCategory">Categoría</label>
-        <div class="controls">
-          <select id="EventCategory" name="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}"{% if item.category.slug == category.slug %} selected{% endif %}>{{ category.name }}</option>
-            {% endfor %}
-          </select><input type="text" id="EventNewCategory" name="newCategory" style="display:none"><br>
-          <button class="btn btn-link newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton">Crear una nueva categoría</button>
-        </div>
-      </div>
+      {% include 'ColectaItemBundle:Default:categoryform.html.twig' %}
       
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary" id="RouteSubmit">Actualizar</button>
+        <button type="submit" class="btn btn-primary" id="RouteSubmit"><i id="RouteSubmitLoading"></i> <span id="RouteSubmitText">Actualizar</span></button>
       </div>
     </fieldset>
 </form>

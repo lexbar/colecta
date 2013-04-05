@@ -1,5 +1,5 @@
 {% if app.user %}
-<form onSubmit="$('#RouteSubmit').disabled = 'disabled'; $('#RouteSubmitText').html('Subiendo...'); $('#RouteSubmitLoading').addClass('icon-refresh icon-spin');" action="{{ path('ColectaRouteUpload') }}" method="POST" class="form-horizontal well" enctype="multipart/form-data">
+<form onSubmit="$('#RouteSubmit').attr('disabled','disabled').addClass('disabled'); $('#RouteSubmitText').html('Subiendo...'); $('#RouteSubmitLoading').addClass('icon-refresh icon-spin');" action="{{ path('ColectaRouteUpload') }}" method="POST" class="form-horizontal well" enctype="multipart/form-data">
     <fieldset>
       <div class="control-group">
         <label class="control-label" for="RouteFile">Archivo</label>

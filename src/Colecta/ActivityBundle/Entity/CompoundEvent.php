@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class CompoundEvent extends \Colecta\ItemBundle\Entity\Item
+class CompoundEvent extends \Colecta\ActivityBundle\Entity\Event
 {
     /**
      * @ORM\OneToMany(targetEntity="Event", mappedBy="compound")
@@ -98,18 +98,72 @@ class CompoundEvent extends \Colecta\ItemBundle\Entity\Item
     protected $comments;
 
     /**
+     * @var \DateTime
+     */
+    protected $dateini;
+
+    /**
+     * @var \DateTime
+     */
+    protected $dateend;
+
+    /**
+     * @var boolean
+     */
+    protected $showhours;
+
+    /**
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @var float
+     */
+    protected $distance;
+
+    /**
+     * @var integer
+     */
+    protected $uphill;
+
+    /**
+     * @var integer
+     */
+    protected $downhill;
+
+    /**
+     * @var string
+     */
+    protected $difficulty;
+
+    /**
+     * @var string
+     */
+    protected $status;
+
+    /**
+     * @var \Colecta\ActivityBundle\Entity\Activity
+     */
+    protected $activity;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $assistances;
+
+    /**
+     * @var \Colecta\ActivityBundle\Entity\CompoundEvent
+     */
+    protected $compound;
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->events = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->relatedto = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->relatedfrom = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->editors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->likers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
     /**
      * Add events
      *
