@@ -371,7 +371,7 @@ class RouteController extends Controller
             }
             
             //File replacement
-            if ($persist && isset($_FILES['file']))
+            if ($persist && isset($_FILES['file']) && $_FILES['file']['tmp_name'])
             {
                 if(($file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'])) === null)
                 {
