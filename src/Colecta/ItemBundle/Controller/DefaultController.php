@@ -26,7 +26,7 @@ class DefaultController extends Controller
         //$items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         $query = $em->createQuery(
-            'SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 AND NOT (i INSTANCE OF \'Colecta\FilesBundle\Entity\File\') ORDER BY i.date DESC'
+            'SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 AND i.part = 0 ORDER BY i.date DESC'
         )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
         
         $items = $query->getResult();
