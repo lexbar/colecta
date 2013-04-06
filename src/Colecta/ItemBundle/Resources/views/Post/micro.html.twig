@@ -1,0 +1,8 @@
+<div class="post micro">
+    
+    <h2><a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    
+    {% set limit = 120 %}
+    <p>{{ item.text | summarize(limit) | usercontent | raw | nl2br }}{% if item.text | length > limit %}<span id="com-linkrm{{ item.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ item.id }}').style.display = '';document.getElementById('com-linkrm{{ item.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ item.id }}" style="display:none">{{ item.text[limit:item.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
+    
+</div>

@@ -73,7 +73,7 @@ class DefaultController extends Controller
     {
         $search = trim($this->get('request')->query->get('search'));
         
-        $items = $this->search($search, 1);
+        $items = $this->search($search, 0);
         
         $response = new Response($this->renderView('ColectaItemBundle:Default:items.json.twig', array('items' => $items)),200);
         $response->headers->set('Content-Type', 'application/json');
