@@ -64,8 +64,26 @@ class CommentController extends Controller
                     $notifications[] = $c->getUser()->getId();
                 }
             }
-                            
-            
+                 
+            if($item->getType() == 'Activity/Event')
+            {
+                $assistances = $item->getAssistances();
+                foreach($assistances as $a) 
+                {
+                    if(!in_array($a->getUser()->getId(), $notifications)) //if he has not already received a notification..
+                    {
+                        //Notification to assistant
+                        $notification = new Notification();
+                        $notification->setUser($a->getUser());
+                        $notification->setDismiss(0);
+                        $notification->setDate(new \DateTime('now'));
+                        $notification->setText($user->getName().' ha comentado en :item:'.$item->getId().':');
+                        $em->persist($notification); 
+                        
+                        $notifications[] = $a->getUser()->getId();
+                    }
+                }
+            }  
                     
             $em->flush();
         }
