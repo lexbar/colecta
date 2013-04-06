@@ -36,4 +36,5 @@
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
 </div>

@@ -11,4 +11,5 @@
     
     {% if item.folder %}<p style="clear:both">Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
     
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
 </div>
