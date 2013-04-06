@@ -427,7 +427,7 @@ div.assistances ul li a {
     color: #000;
 }
 .event.micro {
-    margin-bottom: -35px;
+    margin-bottom: -25px;
     overflow: hidden;
 }
 .event.micro.happened h2 a {

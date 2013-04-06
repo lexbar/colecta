@@ -1,0 +1,10 @@
+{% set mapwidth = 564 %}
+{% set mapheight = 100 %}
+<div class="place micro">
+    <h2><a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    
+    <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}" class="maplink"><img src="http://maps.google.com/maps/api/staticmap?center={{ item.latitude ~ ',' ~ item.longitude }}&zoom=13&size={{ mapwidth }}x{{ mapheight }}&maptype=terrain&markers=color:blue%7C{{ item.latitude ~ ',' ~ item.longitude }}&sensor=false" width="{{ mapwidth }}" height="{{ mapheight }}"></a>
+    
+    {% set limit = 150 %}
+    <p>{{ item.description | summarize(limit) | usercontent | raw | nl2br }}{% if item.description | length > limit %}<span id="com-linkrm{{ item.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ item.id }}').style.display = '';document.getElementById('com-linkrm{{ item.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ item.id }}" style="display:none">{{ item.description[limit:item.description | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
+</div>

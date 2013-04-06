@@ -4,4 +4,6 @@
     
     <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.text | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.text[item.summary|length:item.text|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
     
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+    
 </div>

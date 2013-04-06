@@ -138,7 +138,11 @@ abstract class Item
             foreach($from as $i)
             {
                 $item = $i->getItemto();
-                $all[intval($item->getDate()->format('U'))] = $item;
+                $index = intval($item->getDate()->format('U'));
+                while(isset($all[$index])) {
+                    $index++;
+                }
+                $all[$index] = $item;
             }
         }
         
@@ -147,7 +151,11 @@ abstract class Item
             foreach($to as $i)
             {
                 $item = $i->getItemfrom();
-                $all[intval($item->getDate()->format('U'))] = $item;
+                $index = intval($item->getDate()->format('U'));
+                while(isset($all[$index])) {
+                    $index++;
+                }
+                $all[$index] = $item;
             }
         }
         

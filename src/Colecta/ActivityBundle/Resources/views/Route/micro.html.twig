@@ -1,0 +1,9 @@
+<div class="route mini">
+    <h2><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="maplink"><img class="" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
+    
+    {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+    
+    {% set limit = 150 %}
+    <p>{{ item.description | summarize(limit) | usercontent | raw | nl2br }}{% if item.description | length > limit %}<span id="com-linkrm{{ item.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ item.id }}').style.display = '';document.getElementById('com-linkrm{{ item.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ item.id }}" style="display:none">{{ item.description[limit:item.description | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
+</div>

@@ -1,0 +1,9 @@
+<div class="file mini">
+    <h2><a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    
+    {% if item.filetype in ['jpeg','gif','png'] %}
+        <a class="thumbnail" style="height:100px;width:100px;" href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img height="160" width="160" src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'100', 'height':'100'}) }}"></a>
+    {% else %}
+        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
+    {% endif %}    
+</div>
