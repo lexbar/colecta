@@ -132,6 +132,12 @@ class File extends \Colecta\ItemBundle\Entity\Item
     {
         return 'Files/File';
     }
+    
+    public function isImage()
+    {
+        return in_array($this->getFiletype(), array('jpg', 'jpeg', 'png', 'gif', 'tiff'));
+    }
+    
     // File upload
     public function getURLPath() 
     {

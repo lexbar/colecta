@@ -339,6 +339,21 @@ form.form-horizontal .controls textarea {
     padding: 3px;
     display: block;
 }
+.fullimage .pull-left, .fullimage .pull-right {
+    line-height: 420px;
+    color: #fff;
+    text-shadow: 0 2px 2px black;
+    opacity: .3;
+}
+.fullimage .pull-left.active:hover, .fullimage .pull-right.active:hover {
+    opacity: .9;
+}
+.fullimage .pull-left {
+    padding: 0 210px 0 10px;
+}
+.fullimage .pull-right {
+    padding: 0 10px 0 210px;
+}
 ul.properties {
     overflow: hidden;
     clear: both;

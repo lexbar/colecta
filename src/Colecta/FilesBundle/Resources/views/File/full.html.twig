@@ -9,7 +9,13 @@
     <h2>{{ item.name }}</h2>
     
     {% if item.filetype in ['jpeg','gif','png'] %}
-        <a href="{{ item.URLPath }}" class=""><img src="{{ path('ColectaFileResize', {'slug':item.slug, 'width':'560', 'height':'560'}) }}"></a>
+        <div class="fullimage" style="width:auto;height:420px;background: transparent url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'560', 'height':'420'}) }}') scroll no-repeat center center;">
+            {% set next = item.folder.getNextPicture(item) %}
+            {% set previous = item.folder.getPreviousPicture(item) %}
+            <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-left{% if next %} active{% endif %}"><i class="icon-chevron-left icon-4x"></i></a>
+            <a href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-right{% if previous %} active{% endif %}"><i class="icon-chevron-right icon-4x"></i></a>
+        </div>
+        {#<a href="{{ item.URLPath }}" class=""><img src=""></a>#}
     {% else %}
         <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}

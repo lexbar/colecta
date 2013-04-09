@@ -122,6 +122,94 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
         return $this->getName();
     }
     
+    public function getNextPicture(\Colecta\FilesBundle\Entity\File $file)
+    {
+        $files = $this->getFiles();
+        
+        $count = count($files);
+        if($count)
+        {
+            $i = 0;
+            $intheloop = false;
+            while($files[$i] != $file && $i < $count)
+            {
+                $i++; 
+                $intheloop = true;
+            }
+            
+            if($i < ($count - 1) && isset($files[$i]) && $files[$i] == $file)
+            {
+                //$i is the key for my file in the collection
+                $i++;
+                while(isset($files[$i]) && !$files[$i]->isImage() && $i < $count)
+                {
+                    $i++;
+                }
+                
+                if(isset($files[$i]) && $files[$i]->isImage())
+                {
+                    return $files[$i];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public function getPreviousPicture(\Colecta\FilesBundle\Entity\File $file)
+    {
+        $files = $this->getFiles();
+        
+        $count = count($files);
+        if($count)
+        {
+            $i = 0;
+            $intheloop = false;
+            while($files[$i] != $file && $i < $count)
+            {
+                $i++; 
+                $intheloop = true;
+            }
+            
+            if($i < $count && isset($files[$i]) && $files[$i] == $file)
+            {
+                //$i is the key for my file in the collection
+                $i--;
+                while(isset($files[$i]) && !$files[$i]->isImage() && $i >= 0)
+                {
+                    $i--;
+                }
+                
+                if(isset($files[$i]) && $files[$i]->isImage())
+                {
+                    return $files[$i];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
     /**
      * Constructor
      */
