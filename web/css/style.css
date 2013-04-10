@@ -249,6 +249,9 @@ form.form-horizontal .controls textarea {
     border: 1px solid #999;
     margin-bottom: 0;
 }
+#map img {
+    max-width: none;
+}
 #map.fullscreen {
     width: auto;
     height: auto;

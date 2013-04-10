@@ -59,13 +59,6 @@
             chartData.push([chartDistance, value[2]]);
         });
         
-        {% for rel in item.related if rel.type == 'Activity/Place' %}
-        new google.maps.Marker({
-            position: new google.maps.LatLng(points[0][0], points[0][1]),
-            map: map
-        });
-        {% endfor %}
-        
         if(chartDistance && Math.abs(chartDistance - {{ item.distance * 1000 }}) > 100) {
             //multiplier so that the distance values match the item distance on the chart
             var diff = {{ item.distance * 1000 }} / chartDistance;
@@ -251,7 +244,7 @@
     <div id="mapproperties">
         <p><button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small btn-block" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></p>
         
-        <p><button id="fullscreen" onClick="if(!isFullScreen){toggleFullScreen();} if(map.getZoom() > 12){map.setZoom(12);} var weatherLayer = new google.maps.weather.WeatherLayer({temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS});weatherLayer.setMap(map);$(this).attr('disabled','disabled')" class="btn btn-small btn-block" type="button">Previsión meteorológica <i class="icon-cloud"></i></button></p>
+        <p><button id="fullscreen" onClick="if(!isFullScreen){toggleFullScreen();} if(map.getZoom() > 12){map.setZoom(12);} var weatherLayer = new google.maps.weather.WeatherLayer({temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS. windSpeedUnits: google.maps.weather.WindSpeedUnit.KILOMETERS_PER_HOUR});weatherLayer.setMap(map);$(this).attr('disabled','disabled')" class="btn btn-small btn-block" type="button">Previsión meteorológica <i class="icon-cloud"></i></button></p>
         
         <ul class="nav nav-list">
             <li class="nav-header">Tracks</li>
