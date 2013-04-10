@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Colecta\ActivityBundle\Form\Frontend\RouteType;
 use Colecta\ActivityBundle\Entity\Route;
 use Colecta\ActivityBundle\Entity\RouteTrackpoint;
+use Colecta\ActivityBundle\Entity\Place;
+use Colecta\ItemBundle\Entity\Relation;
 use Colecta\ItemBundle\Entity\Category;
 use Colecta\UserBundle\Entity\Notification;
 
@@ -237,9 +239,11 @@ class RouteController extends Controller
                     $item->setSlug($slug);
                     
                     $item->summarize($item->getDescription());
+                    
                     $item->setAllowComments(true);
                     $item->setDraft(false);
                     $item->setPart(false);
+                    
                     $item->setActivity(null);
                     $item->setDifficulty($post->get('difficulty'));
                     
@@ -253,7 +257,7 @@ class RouteController extends Controller
                     
                     $em->persist($item); 
                     
-                    //Now retrieve and save RouteTrackpooints
+                    //Retrieve and save RouteTrackpooints
                     $filename = $post->get('filename');
                     $rootdir = $this->getUploadDir();
                     
@@ -271,6 +275,60 @@ class RouteController extends Controller
                         
                         $em->persist($trackpoint); 
                         unset($trackpoint);
+                    }
+                    
+                    //Retrieve and save Places
+                    $points = $this->extractPoints($rootdir.'/'.$filename); //the waypoints
+                    
+                    foreach($points as $point)
+                    {
+                        $place = new Place();
+                        $place->setLatitude($point['latitude']);
+                        $place->setLongitude($point['longitude']);
+                        if(!empty($point['name']))
+                        {
+                            $place->setName($point['name']);
+                        }
+                        else
+                        {
+                            $place->setName($item->getName());
+                        }
+                        $place->setDescription('');
+                        $place->setSummary('');
+                        $place->setTagwords($item->getTagwords());
+                        $place->setAuthor($user);
+                        $place->setCategory($category);
+                        $place->setAllowComments(true);
+                        $place->setDraft(false);
+                        $place->setPart(true);
+                        
+                        //Slug generate
+                        $slug = $place->generateSlug();
+                        $n = 2;
+                        
+                        while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+                        {
+                            if($n > 2)
+                            {
+                                $slug = substr($slug,0,-2);
+                            }
+                            
+                            $slug .= '_'.$n;
+                            
+                            $n++;
+                        }
+                        $place->setSlug($slug);
+                        
+                        $relation = new Relation();
+                        $relation->setUser($user);
+                        $relation->setItemfrom($item);
+                        $relation->setItemTo($place);
+                        $relation->setText($place->getName());
+                        $em->persist($relation); 
+                        
+                        $place->addRelatedto($relation);
+                        
+                        $em->persist($place); 
                     }
                     
                     $em->flush();
@@ -643,6 +701,63 @@ class RouteController extends Controller
 		
 		return null;
     }
+    
+    function extractPoints($filepath) {
+        //Using gpsbabel we transform whatever format the file is to CVS
+        $format = $this->acceptedExtensions($this->extension($filepath));
+        
+        $csv = shell_exec("gpsbabel -w -i $format -f $filepath -o unicsv -F -");
+        
+        $lines = explode("\n",$csv);
+        
+        //Check for the order of values, set in first line
+		$csvheader = explode(',',$lines[0]);
+		
+		if(count($csvheader)) {
+			$i = 0;
+			$latitude = $longitude = $name = $altitude = $date = $time = null;
+			foreach($csvheader as $row) {
+				switch(trim($row)) {
+					case 'Latitude': $latitude = $i ; break;
+					case 'Longitude': $longitude = $i ; break;
+					case 'Name': $name = $i ; break;
+					case 'Altitude': $altitude = $i ; break;
+					case 'Date': $date = $i ; break;
+					case 'Time': $time = $i ; break;
+				}
+				$i++;
+			}
+		} else {
+			return null; //something went wrong
+		}
+		
+		unset($lines[0]); //Delete the header
+		
+		if(count($lines) > 0) 
+		{
+			$points = array();
+			
+			foreach($lines as $line) {
+				$l = explode(',',$line);
+				if(count($l) != count($csvheader)) break; //count of data in csv must match with the header line
+				
+				$point = array();
+				
+				$point['latitude'] = $l[$latitude];
+				$point['longitude'] = $l[$longitude];
+				if($altitude !== null) { $trackpoint['altitude'] = $l[$altitude];}
+				else { $point['altitude'] = 0; }
+				if($date !== null) { $point['datetime'] = safeDateTime($l[$date],$l[$time]); }
+				else { $point['datetime'] = new \DateTime('today'); }
+				
+				$points[] = $point;
+			}
+			
+			return $points;
+		}
+		
+		return null;
+	}
     
     public function getRouteData($track)
     {

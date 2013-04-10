@@ -3,7 +3,7 @@
 {% block routes 'active' %}
 {% block onload 'initialize()' %}
 {% block javascripts %}
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=weather"></script>
     <script src="/js/highcharts.js"></script>
     <script>
      
@@ -58,6 +58,13 @@
             
             chartData.push([chartDistance, value[2]]);
         });
+        
+        {% for rel in item.related if rel.type == 'Activity/Place' %}
+        new google.maps.Marker({
+            position: new google.maps.LatLng(points[0][0], points[0][1]),
+            map: map
+        });
+        {% endfor %}
         
         if(chartDistance && Math.abs(chartDistance - {{ item.distance * 1000 }}) > 100) {
             //multiplier so that the distance values match the item distance on the chart
@@ -244,12 +251,17 @@
     <div id="mapproperties">
         <p><button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small btn-block" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></p>
         
+        <p><button id="fullscreen" onClick="var weatherLayer = new google.maps.weather.WeatherLayer({temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS});weatherLayer.setMap(map);$(this).attr('disabled','disabled')" class="btn btn-small btn-block" type="button">Previsión meteorológica <i class="icon-cloud"></i></button></p>
+        
         <ul class="nav nav-list">
             <li class="nav-header">Tracks</li>
                 <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} <small>({% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}Limitado a {{ item.trackpoints | length }}.{% endif%})</small></a></li>
             <li class="divider"></li>
             <li class="nav-header">Puntos</li>
-                <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
+                <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
+                {% for rel in item.related if rel.type == 'Activity/Place' %}
+                    <li><a href="#" onClick="map.panTo(new google.maps.LatLng({{ rel.latitude }}, {{ rel.longitude }})); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#00f;" class="icon-map-marker"></i> {{ rel.name }}</a></li>
+                {% endfor %}
         </ul>
     </div>
     
