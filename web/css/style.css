@@ -252,7 +252,7 @@ form.form-horizontal .controls textarea {
 #map.fullscreen {
     width: auto;
     height: auto;
-    top: 13px;
+    top: 0;
     left: 0;
     right: 200px;
     bottom: 180px;
