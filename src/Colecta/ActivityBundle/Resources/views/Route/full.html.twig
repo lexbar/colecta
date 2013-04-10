@@ -187,27 +187,28 @@
         {
             $('#map').removeClass('fullscreen').addClass('full'); 
             $('#map').css('position','relative');
-            $('#submap').removeClass('fullscreen');
+            $('#mapproperties').removeClass('fullscreen');
             $('#chart').removeClass('fullscreen');
             $('#fullscreen').html('Ver en pantalla completa <i class="icon-fullscreen"></i>').removeClass('btn-danger') ;
             
-            $('body').css('overflow','auto')
+            $('body').css('overflow','auto');
         }
         else
         {
             $('#map').removeClass('full').addClass('fullscreen'); 
             $('#map').css('position','absolute');
-            $('#submap').addClass('fullscreen');
+            $('#mapproperties').addClass('fullscreen');
             $('#chart').addClass('fullscreen');
             $('#fullscreen').html('Salir de pantalla completa <i class="icon-resize-small icon-white"></i>').addClass('btn-danger');
             
-            $('body').css('overflow','hidden')
+            $('body').css('overflow','hidden');            
         }
         isFullScreen = !isFullScreen;
         
         chart.setSize($('#chart').width(),180);
         google.maps.event.trigger(map, 'resize');
         map.setCenter(center);
+        map.fitBounds(bounds);
     }
     
     </script>
@@ -240,8 +241,21 @@
     
     <h2>{{ item.name }}</h2>
     
+    <div id="mapproperties">
+        <p><button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small btn-block" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></p>
+        
+        <ul class="nav nav-list">
+            <li class="nav-header">Tracks</li>
+                <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} {% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%}</a></li>
+            <li class="divider"></li>
+            <li class="nav-header">Puntos</li>
+                <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
+        </ul>
+    </div>
+    
     <div id="map" class="full"></div>
-    <div id="submap">{% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%} <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-mini pull-right" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></div>
+    
+    {#<div id="submap">{% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%} <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-mini pull-right" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></div>#}
     <div id="chart"></div>
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}

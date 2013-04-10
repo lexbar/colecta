@@ -245,36 +245,36 @@ form.form-horizontal .controls textarea {
 }
 #map.full {
     height: 300px;
-    width: auto;
+    width: 365px;
     border: 1px solid #999;
     margin-bottom: 0;
 }
 #map.fullscreen {
     width: auto;
     height: auto;
-    top: 24px;
+    top: 13px;
     left: 0;
-    right: 0;
+    right: 200px;
     bottom: 180px;
     margin: 0;
 }
-#submap {
-    background-color: #eee;
-    border: 1px solid #999;
-    border-top-width: 0;
-    margin-bottom: 10px;
-    padding: 2px 2px 2px 6px;
-    overflow: hidden;
-    font-size: 11px;
+#mapproperties {
+    float: right;
+    height: 300px;
+    width: 200px;
+    overflow-y: auto;
+    background-color: #fff;
 }
-#submap.fullscreen {
+#mapproperties .nav a {
+    color: #666;
+}
+#mapproperties.fullscreen {
     position: fixed;
-    width: auto;
-    height: 24px;
-    left: 0;
+    height: auto;
     border: 0;
     right: 0;
     top: 0;
+    bottom: 180px;
     margin: 0;
 }
 #chart {
