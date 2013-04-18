@@ -5,7 +5,7 @@ body {
 #main {
     border: 1px solid #CCCCCC;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    margin-top: 50px;
+    margin-top: 40px;
 }
 #body {
     background-color: #FFF;
@@ -105,7 +105,7 @@ form.form-horizontal .controls textarea {
 }
 .headimg {
     background-size: 100% auto;
-    margin: -10px 0 0;
+    margin: 0;
     height: 140px; 
     width: 940px; 
     line-height: 160px;
@@ -163,6 +163,7 @@ form.form-horizontal .controls textarea {
 #sidebar ul {
     margin: 0;
     padding: 0;
+    background-color: #444444;
 }
 #sidebar li {
     list-style: none;
@@ -173,10 +174,10 @@ form.form-horizontal .controls textarea {
     padding: 5px 0 5px 12px;
     font-size: 14px;
     line-height: 24px;
-    border-bottom: 1px solid #f2f2f2;
+    border-bottom: 1px solid #666666;
 }
 #sidebar li a#homeButton {
-    color: #2F7ED4;
+    color: #fff;
     font-size: 16px;
     font-weight: bold;
 }
@@ -185,15 +186,15 @@ form.form-horizontal .controls textarea {
 }
 /* G+ */
 #sidebar {
-    width: 100px;
+    width: 80px;
     margin-left: 0;
 }
 #stream {
-    width: 580px;
+    width: 604px;
 }
 #sidebar li a {
     text-align: center;
-    color: #555555;
+    color: #CCCCCC;
     padding: 5px;
 }
 #sidebar li a i {
@@ -201,12 +202,12 @@ form.form-horizontal .controls textarea {
     display: block;
     margin: 0 auto;
 }
-/* G+ */
 #sidebar li a:hover {
     background-color: #f7f7f7;
+    color: #444 !important;
 }
 #sidebar li a.active {
-    background-color: #2F7ED4;
+    background-color: #222222;
     color: #fff !important;
 }
 
@@ -223,7 +224,6 @@ form.form-horizontal .controls textarea {
     background-color: #FAFAFA;
 }
 #stream{
-    border-left: 1px solid #2F7ED4;
     margin-left: 0;
     padding-left: 12px;
 }
@@ -248,7 +248,7 @@ form.form-horizontal .controls textarea {
 }
 #map.full {
     height: 300px;
-    width: 370px;
+    width: 460px;
     border: 1px solid #999;
     margin-bottom: 0;
 }
@@ -267,9 +267,12 @@ form.form-horizontal .controls textarea {
 #mapproperties {
     float: right;
     height: 300px;
-    width: 200px;
+    width: 130px;
     overflow-y: auto;
     background-color: #fff;
+}
+#mapproperties ul {
+    padding-left: 0;
 }
 #mapproperties .nav a {
     color: #666;
@@ -629,14 +632,16 @@ div.assistances ul li a {
 .calendar td.today a {
     color: #fff;
 }
+.calendar .active {
+    background-color: #E6F2F7;
+}
 .calendar td.today a:hover, .calendar td.today a:active {
     background-color: transparent;
     color: #fff;
 }
 .nextevent {
-    border-top: 2px solid #0088CC;
-    margin-bottom: 10px;
-    padding: 4px;
+    background-color: #E6F2F7;
+    padding: 6px 4px;
 }
 .nextevent a {
     display: block;
@@ -645,10 +650,10 @@ div.assistances ul li a {
     opacity: 1
 }
 .nextevent.level2 {
-    opacity: .6
+    opacity: .7
 }
 .nextevent.level3 {
-    opacity: .3
+    opacity: .4
 }
 .nextevent.level4 {
     opacity: .1

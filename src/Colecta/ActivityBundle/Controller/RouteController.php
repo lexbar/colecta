@@ -74,7 +74,7 @@ class RouteController extends Controller
             $n = count($itemtrack);
             if($n > 0) 
             {
-                $url = "http://maps.google.com/maps/api/staticmap?size=564x250&maptype=terrain&markers=color:red%7C".$itemtrack[0]->getLatitude().",".$itemtrack[0]->getLongitude()."&sensor=false&path=color:0xff0000|weight:3";
+                $url = "http://maps.google.com/maps/api/staticmap?size=588x250&maptype=terrain&markers=color:red%7C".$itemtrack[0]->getLatitude().",".$itemtrack[0]->getLongitude()."&sensor=false&path=color:0xff0000|weight:3";
                 $step = floor($n / 60);
                 for($i = 0; $i < $n; $i += $step)
                 {
@@ -106,7 +106,7 @@ class RouteController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         
-        if(!$user) 
+        if($user == 'anon.') 
         {
             $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
         }

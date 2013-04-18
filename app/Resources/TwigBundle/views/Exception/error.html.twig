@@ -1,0 +1,17 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title 'Ha ocurrido un error' %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Error <span>{{ status_text }}</span></h2>
+</div>
+
+<p class="lead">He ocurrido un error. Disculpa las molestias.</p>
+
+{% endblock %}
+
+{% block navigation %}
+    {% include '::navigation.html.twig' with {'navigation': ''} %}
+{% endblock %}

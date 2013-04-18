@@ -1,0 +1,19 @@
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Mensajes <a href="{{ path('userMessageNew')}}" class="btn btn-small btn-primary pull-right">Nuevo mensaje <i class="icon-plus"></i></a></h2>
+</div>
+
+{% for message in messages %}
+    <p class="{% if not message.dismiss %}alert{% else %}well{% endif %} alert-block">{{ message.text | usercontent | raw | nl2br }}<br><small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small></p>
+{% else %}
+<p class="lead">No tienes ningún mensaje</p>
+{% endfor %}
+
+{% endblock %}
+
+{% block navigation %}
+    {% include '::navigation.html.twig' with {'navigation': 'messages'} %}
+{% endblock %}

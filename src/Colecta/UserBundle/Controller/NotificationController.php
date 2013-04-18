@@ -12,6 +12,12 @@ class NotificationController extends Controller
     public function indexAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            return new RedirectResponse($this->generateUrl('UserLogin'));
+        }
+        
         $em = $this->getDoctrine()->getEntityManager();
         
         $notifications = $em->getRepository('ColectaUserBundle:Notification')->findBy(array('user'=>$user->getId()), array('date'=>'DESC'),30,0);

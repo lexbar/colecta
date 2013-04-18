@@ -3,7 +3,6 @@
 {% block events 'active' %}
 
 {% block javascripts %}    
-    <script src="/js/jquery.min.js"></script>
     <script>
     var xhr;
     var searchagain = false;
@@ -15,7 +14,7 @@
             return;
         }
         
-        $('#userSearch').css('background','url("/img/loading.gif") no-repeat scroll right center #fff')
+        $('#destinationLoading').removeClass('hidden');
         
         if(xhr && xhr.readyState != 4) {
             searchagain = true;
@@ -41,7 +40,7 @@
                 }
                 else
                 {
-                    $('#userSearch').css('background','#fff');
+                    $('#destinationLoading').addClass('hidden');
                 }
             });
         }
@@ -171,7 +170,7 @@
     {% endfor %}
     
     {% if canedit %}
-        <li>Añadir un usuario:<br><input id="userSearch" type="text" name="targetUser" autocomplete="off">
+        <li>Añadir un usuario:<br><input id="userSearch" type="text" name="targetUser" autocomplete="off"> <i id="destinationLoading" class="icon-cog icon-spin hidden"></i>
             <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
         </li>
     {% endif %}

@@ -39,6 +39,14 @@ userNotifications:
 userNotificationDismiss:
     pattern:  /notificaciones/dismiss/{id}
     defaults: { _controller: ColectaUserBundle:Notification:dismiss }
+
+userMessages:
+    pattern:  /mensajes/
+    defaults: { _controller: ColectaUserBundle:Message:index }
+
+userMessageNew:
+    pattern:  /mensajes/nuevo/
+    defaults: { _controller: ColectaUserBundle:Message:new }
     
 ColectaAjaxUserSearch:
     pattern:  /ajaxusersearch/

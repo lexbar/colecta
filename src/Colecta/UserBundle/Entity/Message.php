@@ -29,13 +29,6 @@ class Message
     protected $date;
 
     /**
-     * @var string $subject
-     *
-     * @ORM\Column(name="subject", type="string", length=255)
-     */
-    protected $subject;
-
-    /**
      * @var text $text
      *
      * @ORM\Column(name="text", type="text")
@@ -60,7 +53,13 @@ class Message
     */
     protected $destination;
 
-
+    /**
+     * @var boolean $dismiss
+     *
+     * @ORM\Column(name="dismiss", type="boolean")
+     */
+    protected $dismiss;
+    
     /**
      * Get id
      *
@@ -89,26 +88,6 @@ class Message
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * Set subject
-     *
-     * @param string $subject
-     */
-    public function setSubject($subject)
-    {
-        $this->subject = $subject;
-    }
-
-    /**
-     * Get subject
-     *
-     * @return string 
-     */
-    public function getSubject()
-    {
-        return $this->subject;
     }
 
     /**
@@ -189,5 +168,25 @@ class Message
     public function getDestination()
     {
         return $this->destination;
+    }
+    
+    /**
+     * Set dismiss
+     *
+     * @param boolean $dismiss
+     */
+    public function setDismiss($dismiss)
+    {
+        $this->dismiss = $dismiss;
+    }
+
+    /**
+     * Get dismiss
+     *
+     * @return boolean 
+     */
+    public function getDismiss()
+    {
+        return $this->dismiss;
     }
 }

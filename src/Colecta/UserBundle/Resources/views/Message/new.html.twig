@@ -1,0 +1,130 @@
+{% extends '::frontend.html.twig' %}
+
+{% block javascripts %}    
+    <script>
+    var xhr;
+    var searchagain = false;
+    
+    function showResults()
+    {
+        if($('#userSearch').val().length < 2) {
+            hideResults();
+            return;
+        }
+        
+        $('#destinationLoading').removeClass('hidden');
+        
+        if(xhr && xhr.readyState != 4) {
+            searchagain = true;
+        } else {        
+            
+            xhr = $.ajax({
+                url: '{{ path('ColectaAjaxUserSearch') }}?search='+$('#userSearch').val(),
+                success: function(json) {
+                    $('#userResults').html('');
+                    $('#userResults').css('display','none');
+                    for(var i = 0; i < json.length; i++) {
+                        $('#userResults').append('<li id="userResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
+                    } 
+                    if(json.length) { $('#userResults').css('display','block'); }
+                    //$('#searchButton').removeAttr("disabled"); 
+                },
+                cache: false
+            }).done(function() { 
+                if(searchagain) 
+                {
+                    searchagain = false;
+                    showResults();
+                }
+                else
+                {
+                    $('#destinationLoading').addClass('hidden');
+                }
+            });
+        }
+    }
+    
+    //Key up
+    $('#userSearch').keyup(function(e){
+        if($('#userResults li').length) {
+            var current = $('#userResults li.active');
+            var currentN = 0;
+            if(current.length) {
+                currentN = parseInt(current.attr('id').substring(10));
+            } 
+            
+            if(e.keyCode == 40){
+                if($('#userResult'+(currentN + 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN + 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 38){
+                if($('#userResult'+(currentN - 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN - 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 13){
+                if($('#userResult'+(currentN)).length) {
+                    $('#userResult'+(currentN)+' a').click();
+                    return;
+                }
+                return;
+            }
+        }
+        
+        showResults();
+    });
+    
+    function hideResults() 
+    {
+        $('#userResults').html('');
+        $('#userResults').css('display','none');
+    }
+    
+    function highlightUpdateBtn() 
+    {
+        $('#updateBtn').addClass('btn-primary');
+    }
+    
+    </script>
+{% endblock %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Nuevo mensaje</h2>
+</div>
+
+{% if app.user %}
+<form action="{{ path('userMessageNew') }}" method="POST" class="form-horizontal well" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('icon-refresh icon-spin')">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="MessageName">Para:</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="userSearch" name="destination" autocomplete="off" value="{{ app.session.flash('MessageDestination') }}"> <i id="destinationLoading" class="icon-cog icon-spin hidden"></i>
+          <br>
+          <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="MessageText">Texto</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="MessageText" name="text" rows="3">{{ app.session.flash('MessageText') }}</textarea>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn" id="updateBtn"><i id="updateBtnLoading"></i> Enviar Mensaje </button>
+      </div>
+    </fieldset>
+</form>
+{% else %}
+<div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
+{% endif %}
+
+
+{% endblock %}
