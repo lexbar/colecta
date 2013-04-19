@@ -1,7 +1,9 @@
 {% extends '::frontend.html.twig' %}
 
 {% block article %}
-    <h2><a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+<div class="folder full">
+    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    <h2>{{ item.name }}</h2>
     
     <ul class="thumbnails">
         {% for file in item.files | reverse %}
@@ -22,4 +24,8 @@
     
     <p>{{ item.summary | usercontent | raw | nl2br }}</p>
     
+    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
+</div>
 {% endblock %}

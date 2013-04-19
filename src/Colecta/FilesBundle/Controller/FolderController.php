@@ -26,7 +26,16 @@ class FolderController extends Controller
         
         return $this->render('ColectaFilesBundle:Folder:full.html.twig', array('item' => $item));
     }
-    
+    public function editAction($slug)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
+        
+        $this->get('session')->setFlash('success', 'No es posible editar carpetas todavía. Disculpa las molestias.');
+        
+        return $this->render('ColectaFilesBundle:Folder:full.html.twig', array('item' => $item));
+    }
     public function formlistAction($selected)
     {
         $em = $this->getDoctrine()->getEntityManager();
