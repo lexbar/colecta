@@ -48,6 +48,10 @@ userMessageNew:
     pattern:  /mensajes/nuevo/
     defaults: { _controller: ColectaUserBundle:Message:new }
     
+userMessageResponse:
+    pattern:  /mensajes/responder/{responseto}
+    defaults: { _controller: ColectaUserBundle:Message:response }
+    
 ColectaAjaxUserSearch:
     pattern:  /ajaxusersearch/
     defaults: { _controller: ColectaUserBundle:User:ajaxsearch }

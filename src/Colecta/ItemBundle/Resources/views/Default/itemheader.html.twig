@@ -1,5 +1,5 @@
 <div class="profile mini">
     
     <a class="username" href="{{ path('userProfile', { 'id': item.author.id }) }}"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}">
-    {{item.author.name}}</a><br> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>
+    {{item.author.name}}</a><br> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}
 </div>

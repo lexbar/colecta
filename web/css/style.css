@@ -80,6 +80,7 @@ a i {
 }
 form.form-horizontal label.control-label {
     width: 110px;
+    padding-top: 0;
 }
 form.form-horizontal .controls {
     margin-left: 130px;
@@ -622,10 +623,6 @@ div.assistances ul li a {
     display: block;
     font-weight: bold;
 }
-.calendar td a:hover, .calendar td a:active {
-    background-color: #eee;
-    color: #005580;
-}
 .calendar td.today {
     background-color: #2F7ED4;
     color: #FFF;
@@ -673,4 +670,14 @@ div.assistances ul li a {
 }
 .thumbnail .fit img {
     max-height: 100%;
+}
+.message {
+    padding: 8px 15px;
+}
+.message a.username {
+    color: #000;
+    font-weight: bold;
+}
+.unread.message {
+    border: 1px solid orange;
 }

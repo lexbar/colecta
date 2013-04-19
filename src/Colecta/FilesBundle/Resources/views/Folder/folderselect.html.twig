@@ -1,0 +1,12 @@
+<div class="control-group">
+    <label class="control-label" for="Folder">Carpeta</label>
+    <div class="controls">
+            <select name="folder" id="Folder">
+                {% for folder in folders %}
+                    <option value="{{ folder.id }}"{% if folder.id == selected %}selected="selected"{% endif %}>{{ folder.name }}</option>
+                {% endfor %}
+            </select>
+        <input type="text" id="NewFolder" name="newFolder" style="display:none" placeholder="Nombre">
+        <button class="btn newfolder" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="icon-plus-sign"></i> Nueva carpeta</button>
+    </div>
+</div>

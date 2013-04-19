@@ -15,6 +15,8 @@
         </div>
         </div>
         
+        {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':0} %}
+        
         <div class="control-group">
         <label class="control-label" for="PostName">Título</label>
         <div class="controls">
@@ -27,19 +29,6 @@
         <div class="controls">
           <textarea name="description">{{ item.description }}</textarea>
         </div>
-        </div>
-      
-        <div class="control-group">
-            <label class="control-label" for="FileFolder">Carpeta</label>
-            <div class="controls">
-                    <select name="folder" id="FileFolder">
-                        {% for folder in folders %}
-                            <option value="{{ folder.id }}"{% if folder == item.folder %}selected="selected"{% endif %}>{{ folder.name }}</option>
-                        {% endfor %}
-                    </select>
-                <input type="text" id="NewFolder" name="newFolder" style="display:none" placeholder="Nombre">
-                <button class="btn newfolder" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="icon-plus-sign"></i> Nueva carpeta</button>
-            </div>
         </div>
         
         {% render 'ColectaItemBundle:Category:formlist' with {'selected':0} %}

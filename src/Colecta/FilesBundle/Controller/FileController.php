@@ -27,11 +27,11 @@ class FileController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaFilesBundle:File')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        $items = $em->getRepository('ColectaFilesBundle:Folder')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $count = count($items);
         
         //Pagination
-        if(count($items) > $this->ipp) 
+        if($count > $this->ipp) 
         {
             $thereAreMore = true;
             unset($items[$this->ipp]);
@@ -43,7 +43,7 @@ class FileController extends Controller
         
         $form = $this->uploadAction();
         
-        return $this->render('ColectaFilesBundle:File:index.html.twig', array('items' => $items, 'categories' => $categories,'form' => $form, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaFilesBundle:File:index.html.twig', array('items' => $items,'form' => $form, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function viewAction($slug)
     {
@@ -172,15 +172,17 @@ class FileController extends Controller
                         
                         $item->setFolder($folder);
                     }
-                    if($item->getFolder())
-                    {
-                        $item->getFolder()->setDate(new \DateTime('now'));
-                        $item->setPart(true);
-                    }
                     else
                     {
-                        $item->setPart(false);
+                        if($folder->getDraft())
+                        {
+                            $folder->setDraft(0);
+                            $em->persist($folder);
+                        }
                     }
+                    
+                    $item->getFolder()->setDate(new \DateTime('now'));
+                    $item->setPart(true);
                     
                     $category->setLastchange(new \DateTime('now'));
                     $em->persist($category);                     
@@ -342,15 +344,17 @@ class FileController extends Controller
                         
                         $item->setFolder($folder);
                     }
-                    if($item->getFolder())
-                    {
-                        $item->getFolder()->setDate(new \DateTime('now'));
-                        $item->setPart(true);
-                    }
                     else
                     {
-                        $item->setPart(false);
+                        if($folder->getDraft())
+                        {
+                            $folder->setDraft(0);
+                            $em->persist($folder);
+                        }
                     }
+                    
+                    $item->getFolder()->setDate(new \DateTime('now'));
+                    $item->setPart(true);
                     
                     $category->setLastchange(new \DateTime('now'));
                     $em->persist($category);                     

@@ -7,7 +7,24 @@
 </div>
 
 {% for message in messages %}
-    <p class="well{% if app.session.hasFlash('message' ~ message.id) %} {{ app.session.flash('message' ~ message.id) }}{% else %}{% endif %} alert-block">{{ message.text | usercontent | raw | nl2br }}<br><small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
+    <div class="well{% if app.session.hasFlash('message' ~ message.id) %} {{ app.session.flash('message' ~ message.id) }}{% else %}{% endif %} message">
+        <a class="username" href="{{ path('userProfile', { 'id': message.origin.id }) }}" itemprop="attendee">
+            <img width="20" height="20" src="{% if message.origin.avatar %}{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{ message.origin.name }}
+        </a> <br>
+        
+        <p>{{ message.text | usercontent | raw | nl2br }}</p>
+        
+        {% if message.responseto %}
+            <br><small>En respuesta a:</small>
+            <blockquote>
+                {{ message.responseto.text | usercontent | raw | nl2br }}
+            </blockquote>
+        {% endif %}
+        
+        <a href="{{ path('userMessageResponse',{'responseto':message.id}) }}" class="pull-right btn-small"><i class="icon-reply"></i> Responder</a>
+        <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
+        
+    </div>
 {% else %}
 <p class="lead">No tienes ningún mensaje</p>
 {% endfor %}

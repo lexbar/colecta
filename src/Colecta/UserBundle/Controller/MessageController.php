@@ -37,7 +37,7 @@ class MessageController extends Controller
                     
                     $em->flush();
                     
-                    $this->get('session')->setFlash('message'.$messages[$i]->getId() , 'alert');
+                    $this->get('session')->setFlash('message'.$messages[$i]->getId() , 'unread');
                 }
             }
         }
@@ -116,6 +116,78 @@ class MessageController extends Controller
         else
         {
             return $this->render('ColectaUserBundle:Message:new.html.twig');
+        }
+    }
+    public function responseAction($responseto)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->get('request');
+        
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
+        $responsetoMessage = $em->getRepository('ColectaUserBundle:Message')->findOneById($responseto);
+        
+        if(!$responsetoMessage)
+        {
+            $this->get('session')->setFlash('error', 'No se ha encontrado la conversación');
+            return new RedirectResponse($this->generateUrl('userMessages'));
+        }
+        
+        if ($request->getMethod() == 'POST') 
+        {
+            $persist = true;
+            
+            $text = $request->request->get('text');
+            $destinationUser = $responsetoMessage->getOrigin();
+            
+            if(!$destinationUser)
+            {
+                $this->get('session')->setFlash('MessageDestinationError',true);
+                $this->get('session')->setFlash('error', 'No existe el usuario en la base de datos');
+                $persist = false;
+            }
+            
+            if(empty($text))
+            {
+                $this->get('session')->setFlash('MessageTextError',true);
+                $this->get('session')->setFlash('error', 'No puedes dejar el texto vacío');
+                $persist = false;
+            }
+            
+            if($persist)
+            {
+                $message = new Message();
+                
+                $message->setDate(new \DateTime('now'));
+                $message->setText($text);
+                $message->setResponseto($responsetoMessage);
+                $message->setOrigin($user);
+                $message->setDestination($destinationUser);
+                $message->setDismiss(false);
+                
+                $em->persist($message); 
+                $em->flush();
+                
+                $this->get('session')->setFlash('success', 'Mensaje enviado.');
+                
+                return new RedirectResponse($this->generateUrl('userMessages'));
+            }
+            else
+            {
+                $this->get('session')->setFlash('MessageDestination',$destination);
+                $this->get('session')->setFlash('MessageText',$text);
+                
+                return $this->render('ColectaUserBundle:Message:response.html.twig', array('originalMessage'=>$responsetoMessage, 'destination'=>$responsetoMessage->getOrigin()->getName()));
+            }
+        }
+        else
+        {
+            return $this->render('ColectaUserBundle:Message:response.html.twig', array('originalMessage'=>$responsetoMessage, 'destination'=>$responsetoMessage->getOrigin()->getName()));
         }
     }
 }

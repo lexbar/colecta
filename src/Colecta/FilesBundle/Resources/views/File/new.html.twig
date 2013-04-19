@@ -12,12 +12,12 @@
             if(button.hasClass('newfolder')) {
                 button.removeClass('newfolder').addClass('selectfolder');
                 button.html('<i class="icon-th-list"></i> Seleccionar');
-                $('#FileFolder').hide();
+                $('#Folder').hide();
                 $('#NewFolder').show().focus();
             } else {
                 button.removeClass('selectfolder').addClass('newfolder');
                 button.html('<i class="icon-plus-sign"></i> Nueva carpeta');
-                $('#FileFolder').show();
+                $('#Folder').show();
                 $('#NewFolder').hide().attr('value','');
             }
         }

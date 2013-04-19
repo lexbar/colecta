@@ -1,0 +1,41 @@
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Nuevo mensaje</h2>
+</div>
+
+{% if app.user %}
+<form action="{{ path('userMessageResponse', {'responseto':originalMessage.id}) }}" method="POST" class="form-horizontal well" onSubmit="$('#updateBtnLoading').addClass('icon-refresh icon-spin')">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="MessageName">Para:</label>
+        <div class="controls">
+          <input type="hidden" class="hidden" name="destination" value="{{ destination }}"> <strong>{{ destination }}</strong>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Texto original:</label>
+        <div class="controls">
+          <p>{{ originalMessage.text }}
+        </div>
+      </div>
+      <div class="control-group{% if app.session.flash('MessageTextError') %} error{% endif %}">
+        <label class="control-label" for="MessageText">Respuesta:</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="MessageText" name="text" rows="3">{{ app.session.flash('MessageText') }}</textarea>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn" id="updateBtn"><i id="updateBtnLoading"></i> Enviar Mensaje </button>
+      </div>
+    </fieldset>
+</form>
+{% else %}
+<div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
+{% endif %}
+
+
+{% endblock %}
