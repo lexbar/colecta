@@ -549,9 +549,11 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.$dateOb->format('Y-m-1 00:00:00').'\' AND e.dateini < \''.$dateOb->format('Y-').(intval($dateOb->format('m'))+1).'-1 00:00:00'.'\' ORDER BY e.date ASC')->getResult();
         
+        //array of each day of the month prepared with empty arrays
         $ev = array();
         for($i = 1; $i <= 31; $i++){$ev[$i] = array();}
         
+        //fulfill the days with existing events
         if(count($items))
         {
             foreach($items as $item)
