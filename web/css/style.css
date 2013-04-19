@@ -287,6 +287,8 @@ form.form-horizontal .controls textarea {
     top: 0;
     bottom: 180px;
     margin: 0;
+    width: 190px;
+    padding: 5px;
 }
 #chart {
     height: 180px;
