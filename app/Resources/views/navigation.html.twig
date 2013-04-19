@@ -1,4 +1,5 @@
 {% set notifications = colectauser.notDismissedNotifications | length %}
+{% set messages = colectauser.notDismissedMessages | length %}
 
 <ul class="nav nav-list well">
     <li class="nav-header">Navegación</li>
@@ -12,9 +13,9 @@
     
     <li class="divider"></li>
     
-    {#<li{% if navigation == 'messages' %} class="active"{% endif %}>
-        <a href="{{ path('userMessages')}}"><i class="icon-envelope"></i>{% if 0 %} <span class="label label-important" style="font-size: 10px;">3</span>{% endif %} Mensajes</a>
-    </li>#}
+    <li{% if navigation == 'messages' %} class="active"{% endif %}>
+        <a href="{{ path('userMessages')}}"><i class="icon-envelope"></i>{% if messages > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ messages }}</span>{% endif %} Mensajes</a>
+    </li>
     <li{% if navigation == 'notifications' %} class="active"{% endif %}>
         <a href="{{ path('userNotifications')}}"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a>
         </li>

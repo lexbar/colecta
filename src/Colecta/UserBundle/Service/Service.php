@@ -23,6 +23,15 @@ class Service
         return $query->getResult();
     }
     
+    public function notDismissedMessages() 
+    {
+        $em = $this->doctrine->getEntityManager();
+        $query = $em->createQuery('SELECT m FROM ColectaUserBundle:Message m WHERE m.destination = :uid AND m.dismiss = 0 ORDER BY m.date DESC');
+        $query->setParameter('uid', $this->securityContext->getToken()->getUser()->getId());
+        
+        return $query->getResult();
+    }
+    
     public function lastAccess()
     {
         $em = $this->doctrine->getEntityManager();

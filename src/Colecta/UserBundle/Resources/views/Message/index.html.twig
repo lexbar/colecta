@@ -7,7 +7,7 @@
 </div>
 
 {% for message in messages %}
-    <p class="{% if not message.dismiss %}alert{% else %}well{% endif %} alert-block">{{ message.text | usercontent | raw | nl2br }}<br><small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small></p>
+    <p class="well{% if app.session.hasFlash('message' ~ message.id) %} {{ app.session.flash('message' ~ message.id) }}{% else %}{% endif %} alert-block">{{ message.text | usercontent | raw | nl2br }}<br><small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
 {% else %}
 <p class="lead">No tienes ningún mensaje</p>
 {% endfor %}

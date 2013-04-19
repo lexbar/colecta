@@ -203,14 +203,15 @@ form.form-horizontal .controls textarea {
     margin: 0 auto;
 }
 #sidebar li a:hover {
-    background-color: #f7f7f7;
-    color: #444 !important;
+    background-color: #777;
 }
 #sidebar li a.active {
     background-color: #222222;
     color: #fff !important;
 }
-
+#sidebar i {
+    text-shadow: 1px 1px 1px rgba(0,0,0,.3);
+}
 #userbar {
     margin-left: 10px;
     width: 230px;
@@ -328,8 +329,8 @@ form.form-horizontal .controls textarea {
 }
 /* ITEMS */
 .item {
-    border-bottom: 1px solid #EEE;
-    padding: 10px 4px 30px;
+    border-bottom: 1px solid #CCC;
+    padding: 10px 4px 20px;
 }
 .itemActions {
     margin: 10px 0 0 3px;

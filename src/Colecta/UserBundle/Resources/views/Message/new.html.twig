@@ -102,7 +102,7 @@
 {% if app.user %}
 <form action="{{ path('userMessageNew') }}" method="POST" class="form-horizontal well" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('icon-refresh icon-spin')">
     <fieldset>
-      <div class="control-group">
+      <div class="control-group{% if app.session.flash('MessageDestinationError') %} error{% endif %}">
         <label class="control-label" for="MessageName">Para:</label>
         <div class="controls">
           <input type="text" class="input-xlarge" id="userSearch" name="destination" autocomplete="off" value="{{ app.session.flash('MessageDestination') }}"> <i id="destinationLoading" class="icon-cog icon-spin hidden"></i>
@@ -110,7 +110,7 @@
           <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
         </div>
       </div>
-      <div class="control-group">
+      <div class="control-group{% if app.session.flash('MessageTextError') %} error{% endif %}">
         <label class="control-label" for="MessageText">Texto</label>
         <div class="controls">
           <textarea class="input-xlarge" id="MessageText" name="text" rows="3">{{ app.session.flash('MessageText') }}</textarea>
