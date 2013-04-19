@@ -514,7 +514,8 @@ div.assistances ul li a {
 }    
 .event.micro .datum {
     float: left;
-    width: 490px;
+    padding: 0;
+    width: 515px;
 }
 .event.micro .datum h2 {
     margin: 0 0 2px;
