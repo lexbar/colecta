@@ -1,4 +1,9 @@
 services:
+    colectauser.login_success_handler:
+        class:  Colecta\UserBundle\Service\LoginSuccessHandler
+        arguments:  [@router, @security.context]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
     colectauser:
         class: Colecta\UserBundle\Service\Service
         arguments: [@security.context, @doctrine]

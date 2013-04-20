@@ -10,6 +10,7 @@ security:
             form_login:
                 login_path: userLogin
                 check_path: userLoginCheck
+                success_handler: colectauser.login_success_handler
             logout:
                 path: userLogout
             remember_me:
