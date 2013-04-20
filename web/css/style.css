@@ -684,3 +684,14 @@ div.assistances ul li a {
 .unread.message {
     border: 1px solid orange;
 }
+.filelist li {
+    border-bottom: 1px solid #EDF1F5;
+    padding: 8px 5px;
+}
+.filelist strong {
+    font-size: 20px;
+}
+.filelist .btn {
+    font-weight: bold;
+    margin-top: 6px;
+}

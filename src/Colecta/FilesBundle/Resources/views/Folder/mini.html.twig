@@ -9,14 +9,16 @@
         {% endfor %}
     </ul>
     
-    {% for file in item.files %}
-        {% if file.filetype not in ['jpeg','gif','png'] %}
-            <p>
-            <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong><br>
-            <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></strong></a>
-            </p>
-        {% endif %}
-    {% endfor %}
-    
+    <ul class="filelist unstyled">
+        {% for file in item.files %}
+            {% if file.filetype not in ['jpeg','gif','png'] %}
+                <li><i class="icon-file icon-2x"></i>
+                <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
+                <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-mini pull-right"><i class="icon-download-alt icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+        
     <p>{{ item.summary | usercontent | raw | nl2br }}</p>
 </div>

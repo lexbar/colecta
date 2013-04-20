@@ -17,7 +17,7 @@
         </div>
         {#<a href="{{ item.URLPath }}" class=""><img src=""></a>#}
     {% else %}
-        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
+        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
     
     <p>{{ item.description | usercontent | raw | nl2br }}</p>
