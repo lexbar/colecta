@@ -1,9 +1,19 @@
-{% if comments | length > 0 or app.user %}<div class="comments">{% endif %}
+{% set commentslength = comments | length %}
+
+{% if commentslength > 0 or app.user %}<div class="comments">{% endif %}
+
+{% if collapse is defined and commentslength > 5 %}
+    <button class="btn btn-small" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
+        <i class="icon-comments"></i> Cargar todos los comentarios (+{{ commentslength - 4 }})
+    </button>
+        
+    <div id="showcomments{{ comments[0].id }}" class="hidden">
+{% endif %}
 
 {% for comment in comments%}
     <div class="media">
         <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">
-            <img src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
+            <img src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> 
         </a> 
 
     
@@ -35,6 +45,9 @@
             <p>{{ comment.text | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
         </div>
     </div>
+    
+    {% if collapse is defined and commentslength > 5 and (commentslength - loop.index) == 4 %}</div>{% endif %}
+    
 {% endfor %}
 
 {% if app.user %}
