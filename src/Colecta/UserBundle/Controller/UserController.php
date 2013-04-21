@@ -3,6 +3,8 @@
 namespace Colecta\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\UserBundle\Entity\User;
@@ -67,11 +69,24 @@ class UserController extends Controller
                 {
                     $user->setPass($oldpass);
                 }
+                else
+                {
+                    //Set new password
+                    $encoder = $this->get('security.encoder_factory')
+                                    ->getEncoder($user); 
+                    $user->setSalt(md5(time()));
+                    $encodedpass = $encoder->encodePassword( $user->getPassword(), $user->getSalt()); 
+                    $user->setPass($encodedpass);
+                    
+                    $token = new UsernamePasswordToken($user, null, 'main', array('ROLE_USER'));
+                    $this->get('security.context')->setToken($token);
+                } 
+                
+                //Upload avatar
+                $user->upload();
+                
                 
                 $em = $this->getDoctrine()->getEntityManager();
-                
-                $user->upload();
-            
                 $em->persist($user);
                 $em->flush();
                 
