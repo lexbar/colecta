@@ -53,6 +53,9 @@ class UserController extends Controller
             //->add('pass',   'password', array('label'=>'Contraseña:',   'required'=>false))
             ->add('pass', 'repeated', array(
                                                     'type' => 'password',
+                                                    'attr' => array(
+                                                         'autocomplete' => 'off',
+                                                     ),
                                                     'invalid_message' => 'Las contraseñas deben coincidir.',
                                                     'required' => false,
                                                     'first_options'  => array('label' => 'Nueva Contraseña'),
