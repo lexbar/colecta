@@ -68,7 +68,7 @@ a i {
     line-height: 26px;
     margin: 0;
 }
-.title-block a.btn-primary {
+.title-block a.btn-primary, .title-block button.btn-primary {
     text-transform: uppercase;
     font-weight: bold;
     padding: 5px 25px;

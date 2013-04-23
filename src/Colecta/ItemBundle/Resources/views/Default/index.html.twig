@@ -5,6 +5,18 @@
 {% block article %}
 
 <div class="title-block">
+    {% if app.user %}
+        <div class="dropdown pull-right">
+            <button onclick="return false;" type="button" class="btn btn-small btn-primary pull-right">Publicar <i class="icon-chevron-down icon-white" id="ddarrow"></i></button>
+            <ul id="dropdown" aria-labelledby="dropdownMenu" role="menu" class="dropdown-menu download">
+                <li><a href="{{ path('ColectaPostNew')}}" tabindex="-1"><i class="icon-file"></i> Texto</a></li>
+                <li><a href="{{ path('ColectaEventNew')}}" tabindex="-1"><i class="icon-calendar"></i> Actividad</a></li>
+                <li><a href="{{ path('ColectaRouteNew')}}" tabindex="-1"><i class="icon-globe"></i> Ruta</a></li>
+                <li><a href="{{ path('ColectaPlaceNew')}}" tabindex="-1"><i class="icon-map-marker"></i> Lugar</a></li>
+                <li><a href="{{ path('ColectaFileNew')}}" tabindex="-1"><i class="icon-folder-open"></i> Archivo</a></li>
+            </ul>
+        </div>
+    {% endif %}
     <h2>Inicio{% if page > 1 %} (página {{page}}){% endif %}</h2>
 </div>
 
