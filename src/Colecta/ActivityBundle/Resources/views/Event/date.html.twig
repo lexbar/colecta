@@ -20,13 +20,11 @@
 </div>
 
 {% for item in items %}
-
-    <div class="item">        
-        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}
-    </div>
-
+      
+    {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': item } only %}
+        
 {% else %}
     
     <div class="alert alert-info">
