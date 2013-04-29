@@ -1,5 +1,10 @@
-{% set notifications = colectauser.notDismissedNotifications | length %}
-{% set messages = colectauser.notDismissedMessages | length %}
+{% if item is defined %}
+    {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
+{% else %}
+    {% set notifications = colectauser.notDismissedNotifications %}
+{% endif %}
+
+{% set messages = colectauser.notDismissedMessages %}
 
 <ul class="nav nav-list well">
     <li class="nav-header">Navegación</li>
@@ -14,16 +19,16 @@
     <li class="divider"></li>
     
     <li{% if navigation == 'messages' %} class="active"{% endif %}>
-        <a href="{{ path('userMessages')}}"><i class="icon-envelope"></i>{% if messages > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ messages }}</span>{% endif %} Mensajes</a>
+        <a href="{{ path('userMessages')}}"><i class="icon-envelope"></i>{% if messages | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ messages | length }}</span>{% endif %} Mensajes</a>
     </li>
     <li{% if navigation == 'notifications' %} class="active"{% endif %}>
-        <a href="{{ path('userNotifications')}}"><i class="icon-bullhorn"></i>{% if notifications > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications }}</span>{% endif %} Notificaciones</a>
+        <a href="{{ path('userNotifications')}}"><i class="icon-bullhorn"></i>{% if notifications | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications| length }}</span>{% endif %} Notificaciones</a>
         </li>
     <li>
         <a href="{{ path('userLogout') }}" style="color:darkred"><i class="icon-off"></i> Salir</a>
     </li>
 </ul>
 
-{% for notification in colectauser.notDismissedNotifications %}
+{% for notification in notifications %}
     <p class="alert alert-block"><a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{{ notification.text | itemlinkable | raw }}</p>
 {% endfor %}

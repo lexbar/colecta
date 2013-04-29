@@ -14,13 +14,29 @@ class Service
         $this->doctrine = $doctrine;
     }
     
-    public function notDismissedNotifications() 
+    public function notDismissedNotifications($item = 0) //if item is set means this is called from the view of the item 
     {
         $em = $this->doctrine->getEntityManager();
         $query = $em->createQuery('SELECT n FROM ColectaUserBundle:Notification n WHERE n.user = :uid AND n.dismiss = 0 ORDER BY n.date DESC');
         $query->setParameter('uid', $this->securityContext->getToken()->getUser()->getId());
         
-        return $query->getResult();
+        $notifications = $query->getResult();
+        
+        if($item > 0)
+        {
+            for($i = 0; $i < count($notifications); $i++)
+            {
+                if(preg_match('/:item:'.$item.':/',$notifications[$i]->getText()))
+                {
+                    $em->remove($notifications[$i]);
+                    $em->flush();
+                    unset($notifications[$i]);
+                    $notifications = array_values($notifications);
+                }
+            }
+        }
+        
+        return $notifications;
     }
     
     public function notDismissedMessages() 
