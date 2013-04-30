@@ -7,6 +7,7 @@ class Service
 {
     private $securityContext;
     private $doctrine;
+    private $lastAccessDone = false;
     
     public function __construct(SecurityContextInterface $securityContext, $doctrine)
     {
@@ -50,20 +51,26 @@ class Service
     
     public function lastAccess()
     {
-        $em = $this->doctrine->getEntityManager();
-        
-        if($this->securityContext->getToken())
+        if(!$this->lastAccessDone)
         {
-            $user = $this->securityContext->getToken()->getUser();
-        
-            if($user != 'anon.')
-            {
-                $user->setLastAccess(new \DateTime('now'));
+            $em = $this->doctrine->getEntityManager();
             
-                $em->persist($user); 
-                $em->flush();
+            if($this->securityContext->getToken())
+            {
+                $user = $this->securityContext->getToken()->getUser();
+            
+                if($user != 'anon.')
+                {
+                    $user->setLastAccess(new \DateTime('now'));
+                
+                    $em->persist($user); 
+                    $em->flush();
+                }
             }
+            
+            $this->lastAccessDone = true;
         }
+       
     }
 }
 ?>
