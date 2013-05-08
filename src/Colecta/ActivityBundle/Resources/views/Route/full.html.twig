@@ -257,40 +257,43 @@
     
     <h2>{{ item.name }}</h2>
     
-    <div id="mapproperties">
-        <p><button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small btn-block" type="button">Pantalla completa <i class="icon-fullscreen"></i></button></p>
+    <div class="unity">
+        <div id="mapproperties">
+            <p><button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small btn-block" type="button">Pantalla completa <i class="icon-fullscreen"></i></button></p>
+            
+            <p><button id="weather" onClick="toggleWeather()" class="btn btn-small btn-block" type="button">Meteorología <i class="icon-cloud"></i></button></p>
+            
+            <ul class="nav nav-list">
+                <li class="nav-header">Tracks</li>
+                    <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} <small>({% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}Limitado a {{ item.trackpoints | length }}.{% endif%})</small></a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Puntos</li>
+                    <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
+                    {% for rel in item.related if rel.type == 'Activity/Place' %}
+                        <li><a href="#" onClick="map.panTo(new google.maps.LatLng({{ rel.latitude }}, {{ rel.longitude }})); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#00f;" class="icon-map-marker"></i> {{ rel.name }}</a></li>
+                    {% endfor %}
+            </ul>
+        </div>
         
-        <p><button id="weather" onClick="toggleWeather()" class="btn btn-small btn-block" type="button">Meteorología <i class="icon-cloud"></i></button></p>
+        <div id="map" class="full"></div>
         
-        <ul class="nav nav-list">
-            <li class="nav-header">Tracks</li>
-                <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} <small>({% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}Limitado a {{ item.trackpoints | length }}.{% endif%})</small></a></li>
-            <li class="divider"></li>
-            <li class="nav-header">Puntos</li>
-                <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
-                {% for rel in item.related if rel.type == 'Activity/Place' %}
-                    <li><a href="#" onClick="map.panTo(new google.maps.LatLng({{ rel.latitude }}, {{ rel.longitude }})); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#00f;" class="icon-map-marker"></i> {{ rel.name }}</a></li>
-                {% endfor %}
+        {#<div id="submap">{% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%} <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-mini pull-right" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></div>#}
+        <div id="chart"></div>
+        
+        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+        
+        <ul class="moreproperties">
+            {% if item.avgspeed > 0 %}<li><strong>Velocidad media:</strong> {{ item.avgspeed }} km/h</li>{% endif %}
+            {% if item.maxspeed > 0 %}<li><strong>Velocidad máxima:</strong> {{ item.maxspeed }} km/h</li>{% endif %}
+            {% if item.minheight > 0 %}<li><strong>Cota inferior:</strong> {{ item.minheight }} m</li>{% endif %}
+            {% if item.maxheight > 0 %}<li><strong>Cota superior:</strong> {{ item.maxheight }} m</li>{% endif %}
+            <li><strong>Circular:</strong> {% if item.isloop %}Sí{% else %}No{% endif %}</li>
+            {% if item.IBP %}<li><strong>IBP:</strong> {{ item.IBP }}</li>{% endif %}
         </ul>
+        
+        <p>{{ item.description | usercontent | raw | nl2br }}</p>
     </div>
-    
-    <div id="map" class="full"></div>
-    
-    {#<div id="submap">{% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%} <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-mini pull-right" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></div>#}
-    <div id="chart"></div>
-    
-    {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
-    
-    <ul class="moreproperties">
-        {% if item.avgspeed > 0 %}<li><strong>Velocidad media:</strong> {{ item.avgspeed }} km/h</li>{% endif %}
-        {% if item.maxspeed > 0 %}<li><strong>Velocidad máxima:</strong> {{ item.maxspeed }} km/h</li>{% endif %}
-        {% if item.minheight > 0 %}<li><strong>Cota inferior:</strong> {{ item.minheight }} m</li>{% endif %}
-        {% if item.maxheight > 0 %}<li><strong>Cota superior:</strong> {{ item.maxheight }} m</li>{% endif %}
-        <li><strong>Circular:</strong> {% if item.isloop %}Sí{% else %}No{% endif %}</li>
-        {% if item.IBP %}<li><strong>IBP:</strong> {{ item.IBP }}</li>{% endif %}
-    </ul>
-    
-    <p>{{ item.description | usercontent | raw | nl2br }}</p>
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     
