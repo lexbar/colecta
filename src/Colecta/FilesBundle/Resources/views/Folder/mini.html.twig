@@ -2,9 +2,9 @@
     <h2><a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     
     <ul class="thumbnails">
-        {% for file in item.files | reverse | slice(0,9) %}
+        {% for file in item.files | reverse | slice(0,6) %}
             {% if file.filetype in ['jpeg','gif','png'] %}
-                <li><a class="thumbnail" style="height:150px;width:175px;" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'175', 'height':'150'}) }}"></a></li>
+                <li><a class="thumbnail" style="width:150px;height:130px;" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'150', 'height':'130'}) }}"></a></li>
             {% endif %}
         {% endfor %}
     </ul>

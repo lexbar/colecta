@@ -23,6 +23,7 @@ h2 {
     font-weight: bold;
     font-family: 'Proxima Nova', 'proxima-nova', 'Helvetica Neue', Helvetica, sans-serif;
 }
+
 form.well {
     border-radius: 0 0 4px 4px;
 }
@@ -31,6 +32,10 @@ a i {
 }
 .hidden {
     display: none !important;
+}
+.unity {
+    overflow: hidden;
+    margin-bottom: 5px;
 }
 .navbar-fixed-top {
     opacity: .95; 
@@ -332,13 +337,17 @@ form.form-horizontal .controls textarea {
 }
 /* ITEMS */
 .item {
-    border-bottom: 1px solid #CCC;
+    border-bottom: 1px solid #999;
     padding: 10px 4px 20px;
 }
 .itemActions {
-    margin: 10px 0 0 3px;
+    margin: 10px 0 0 45px;
+    padding: 1px 5px;
     font-size: 12px;
     clear: both;
+}
+.itemActions a { 
+    color: #005580;
 }
 .itemActions span, .itemActions a {
     padding: 0 10px 0 0;
@@ -346,11 +355,9 @@ form.form-horizontal .controls textarea {
 .event.mini h2{
     margin-left: 0;
 }
-.maplink {
-    border: 1px solid #CCC;
-    margin-bottom: 10px;
-    padding: 3px;
-    display: block;
+.maplink img {
+    float: left;
+    margin: 0 10px 0 0;
 }
 .fullimage .pull-left, .fullimage .pull-right {
     line-height: 420px;
@@ -369,8 +376,7 @@ form.form-horizontal .controls textarea {
 }
 ul.properties {
     overflow: hidden;
-    clear: both;
-    margin: 0;
+    margin: 6px 0 0;
     background-color: #f7f7f7;
 }
 ul.properties li {
@@ -479,6 +485,7 @@ div.assistances ul li a {
 }
 .event.micro .date {
     width: 60px;
+    float: left;
 }
 .event .date span {
     display: block;
@@ -516,9 +523,8 @@ div.assistances ul li a {
     padding-bottom: 2px;
 }    
 .event.micro .datum {
-    float: left;
+    margin-left: 80px;
     padding: 0;
-    width: 515px;
 }
 .event.micro .datum h2 {
     margin: 0 0 2px;
@@ -550,10 +556,32 @@ div.assistances ul li a {
 .poll .progress {
     margin: 5px 0 10px;
 }
-.mini p {
-    margin: 10px;
+.mini {
+    margin-left: 45px;
 }
-
+.mini h2 {
+    margin: 0;
+}
+.mini h2.related {
+    border-bottom: 1px solid #888;
+    color: 666;
+    margin: 25px 0 15px;
+}
+.mini p {
+    margin: 5px;
+}
+.micro {
+    padding: 3px 0;
+}
+.micro h2 {
+    margin: 0;
+}
+.micro p {
+    margin: 5px;
+}
+.route.micro .maplink img {
+    width:100px;
+}
 .place.mini .thumbnail, .file.mini .thumbnail {
     margin: 0 10px 10px 0;
 }
@@ -563,13 +591,29 @@ div.assistances ul li a {
 }
 .comments {
     clear: both;
-    margin: 10px 0 0 10px;
+    margin: 10px 0 0 50px;
+}
+.comments .media {
+    margin-top: 2px;
+}
+.comments .media .pull-left {
+    width: 30px;
 }
 .comments .media-heading a {
     color: #000;
 }
 .comments .media-heading {
     padding: 0;
+}
+.comments .media-body {
+    background-color: #F6F6F6;
+    padding: 3px;
+}
+.comments form {
+    margin-bottom: 5px;
+}
+.comments .form {
+    background-color: transparent;
 }
 
 #chatform {

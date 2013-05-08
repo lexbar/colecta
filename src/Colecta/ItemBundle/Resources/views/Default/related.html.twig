@@ -1,5 +1,11 @@
-{% for item in items %}    
-    {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
-{% endfor %}
+{% if items | length > 0 %}
+
+    <h2 class="related">Relacionado <i class="icon-paper-clip"></i></h2>
+    
+    {% for item in items %}    
+        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+    {% endfor %}
+
+{% endif %}

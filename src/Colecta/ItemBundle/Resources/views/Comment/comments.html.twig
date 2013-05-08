@@ -3,9 +3,11 @@
 {% if commentslength > 0 or app.user %}<div class="comments">{% endif %}
 
 {% if collapse is defined and commentslength > 5 %}
+    <p>
     <button class="btn btn-small" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
-        <i class="icon-comments"></i> Cargar todos los comentarios (+{{ commentslength - 4 }})
+        <i class="icon-comments"></i> Ver todos los comentarios (+{{ commentslength - 4 }})
     </button>
+    </p>
         
     <div id="showcomments{{ comments[0].id }}" class="hidden">
 {% endif %}
@@ -56,9 +58,9 @@
             <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
         </span>
         
-        <div class="media-body">
+        <div class="media-body form">
             <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST" onSubmit="$('#commentItem{{ item.id }}').attr('disabled','disabled')">
-                <textarea style="height:32px;" onClick="this.style.height = ''; document.getElementById('commentItem{{ item.id }}').style.display = '';" name="comment" class="span6" placeholder="Escribe un comentario…"></textarea><br>
+                <textarea style="height:20px;" onClick="this.style.height = ''; document.getElementById('commentItem{{ item.id }}').style.display = '';" name="comment" class="span6" placeholder="Escribe un comentario…"></textarea><br>
                 <button style="display:none;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i class="icon-comment"></i></button>
             </form>
         </div>

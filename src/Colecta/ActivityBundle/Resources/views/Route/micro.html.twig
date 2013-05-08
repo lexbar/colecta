@@ -1,9 +1,11 @@
-<div class="route mini">
-    <h2><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
-    <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="maplink"><img class="" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
+<div class="route micro">
+    <div class="unity">
+        <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="maplink"><img src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
+        
+        <h2><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+        
+        <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
+    </div>
     
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
-    
-    {% set limit = 150 %}
-    <p>{{ item.description | summarize(limit) | usercontent | raw | nl2br }}{% if item.description | length > limit %}<span id="com-linkrm{{ item.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ item.id }}').style.display = '';document.getElementById('com-linkrm{{ item.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ item.id }}" style="display:none">{{ item.description[limit:item.description | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
 </div>
