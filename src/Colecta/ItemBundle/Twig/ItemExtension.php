@@ -88,7 +88,7 @@ class ItemExtension extends \Twig_Extension
     {
         return preg_replace(
             array(
-                "#https?://(www.)?([^\.]{0,3}\.)?youtube.com/watch\?.*v=([^&]+)&?.*#", 
+                "#https?://(www.)?([^\.]{0,3}\.)?youtube.com/watch\?.*v=([^&\n ]+)(&[^\n ]*)?#", 
                 "#https?://(www.)?([^\.]{0,3}\.)?vimeo.com/([0-9]+)#", 
             ),
             array(
