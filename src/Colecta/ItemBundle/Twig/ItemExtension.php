@@ -202,6 +202,10 @@ function htmlEscapeAndLinkUrls($text)
                 $completeUrl = $scheme ? $url : "http://$url";
                 $linkText = "$domain$port$path";
             }
+            
+            if(strlen($linkText) > 28) {
+                $linkText = substr($linkText, 0, 26) . '...';
+            }
 
             $linkHtml = '<a href="' . htmlspecialchars($completeUrl) . '">'
                 . htmlspecialchars($linkText)
