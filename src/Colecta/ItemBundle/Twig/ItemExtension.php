@@ -17,6 +17,8 @@ class ItemExtension extends \Twig_Extension
         return array(
             'usercontent' => new \Twig_Filter_Method($this, 'usercontentFilter'),
             'itemlinkable' => new \Twig_Filter_Method($this, 'itemlinkableFilter'),
+            'videodetect' => new \Twig_Filter_Method($this, 'videodetectFilter'),
+            'video2viewer' => new \Twig_Filter_Method($this, 'video2viewerFilter'),
             'summarize' => new \Twig_Filter_Method($this, 'summarizeFilter'),
         );
     }
@@ -80,6 +82,36 @@ class ItemExtension extends \Twig_Extension
         $return .= htmlspecialchars(substr($text, $position));
     
         return $return;
+    }
+    
+    public function videodetectFilter($text)
+    {
+        return preg_replace(
+            array(
+                "#https?://(www.)?([^\.]{0,3}\.)?youtube.com/watch\?.*v=([^&]+)&?.*#", 
+                "#https?://(www.)?([^\.]{0,3}\.)?vimeo.com/([0-9]+)#", 
+            ),
+            array(
+                ':youtube:$3:', 
+                ':vimeo:$3:', 
+            ),
+            $text
+        );
+    }
+    
+    public function video2viewerFilter($text)
+    {
+        return preg_replace(
+            array(
+                "#:youtube:([^:]+):#", 
+                "#:vimeo:([^:]+):#", 
+            ),
+            array(
+                '<iframe width="500" height="281" src="http://www.youtube.com/embed/$1" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>', 
+                '<iframe src="http://player.vimeo.com/video/65576562?badge=0" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
+            ),
+            $text
+        );
     }
 
     public function getName()

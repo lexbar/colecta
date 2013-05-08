@@ -11,15 +11,19 @@
         <div class="alert alert-error">{{ error.message }}</div> 
     {% endif %}
     
-    <form class="well form-inline" action="{{ path('userLoginCheck') }}" method="post">
-        <input type="text" class="input-small" id="username" name="_username" placeholder="Email" value="{{ last_username }}">
-        
-        <input type="password" id="password" name="_password" class="input-small" placeholder="Contraseña">
-        
-        <label for="remember_me" class="checkbox">
-            <input id="remember_me" name="_remember_me" type="checkbox" checked /> Recuérdame
-        </label>
-        
-        <button type="submit" name="login" class="btn btn-success">Acceder</button>
-    </form>
+    {% if app.user %}
+        <p class="lead">Hola {{ app.user.name }}, ya has iniciado sesión.</p>
+    {% else %}
+        <form class="well form-inline" action="{{ path('userLoginCheck') }}" method="post">
+            <input type="text" class="input-small" id="username" name="_username" placeholder="Email" value="{{ last_username }}">
+            
+            <input type="password" id="password" name="_password" class="input-small" placeholder="Contraseña">
+            
+            <label for="remember_me" class="checkbox">
+                <input id="remember_me" name="_remember_me" type="checkbox" checked /> Recuérdame
+            </label>
+            
+            <button type="submit" name="login" class="btn btn-success">Acceder</button>
+        </form>
+    {% endif %}
 {% endblock %}
