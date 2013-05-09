@@ -335,7 +335,7 @@ class DefaultController extends Controller
     		    $message->setSubject('Contacto en Ciclubs')
     		        ->setFrom(array($email => $name))
     		        ->setReplyTo(array($email => $name))
-    		        ->setTo('zumbenet@gmail.com')
+    		        ->setTo($this->container->getParameter('admin.mail'))
     		        ->setBody($this->renderView('ColectaItemBundle:Default:contactmail.txt.twig', array('name'=>$name, 'email'=>$email, 'text'=>$text)), 'text/plain');
     		    $mailer->send($message);
     		    
