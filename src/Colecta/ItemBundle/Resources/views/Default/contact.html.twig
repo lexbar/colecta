@@ -1,0 +1,37 @@
+{% extends '::frontend.html.twig' %}
+
+{% block home 'contact' %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Contacto</h2>
+</div>
+
+<form action="{{ path('ColectaContact') }}" method="POST" class="form-horizontal well" onSubmit="$('#ContactSubmit').attr('disabled','disabled').addClass('disabled'); $('#ContactSubmitText').html('Enviando...'); $('#ContactSubmitLoading').addClass('icon-refresh icon-spin');">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label" for="ContactName">Tu nombre</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="ContactName" name="name" value="{{ app.session.flash('ContactName') }}">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="ContactEmail">Tu email</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="ContactEmail" name="email" value="{{ app.session.flash('ContactEmail') }}">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="ContactText">Texto</label>
+        <div class="controls">
+          <textarea class="input-xlarge" id="ContactText" name="text" rows="3">{{ app.session.flash('ContactText') }}</textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="ContactSubmit"><i id="ContactSubmitLoading"></i> <span id="ContactSubmitText">Enviar mensaje</span></button>
+      </div>
+    </fieldset>
+</form>
+
+{% endblock %}

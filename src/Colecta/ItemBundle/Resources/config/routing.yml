@@ -20,22 +20,22 @@ ColectaComment:
     pattern:  /comment/{slug}/
     defaults: { _controller: ColectaItemBundle:Comment:comment }
 ColectaPostIndex:
-    pattern:  /foro/
+    pattern:  /textos/
     defaults: { _controller: ColectaItemBundle:Post:index }
 ColectaPostPage:
-    pattern:  /foro/pagina/{page}/
+    pattern:  /textos/pagina/{page}/
     defaults: { _controller: ColectaItemBundle:Post:page }
 ColectaPostNew:
-    pattern:  /foro/crear/
+    pattern:  /textos/crear/
     defaults: { _controller: ColectaItemBundle:Post:new }
 ColectaPostCreate:
-    pattern:  /crear/publicacion/
+    pattern:  /crear/texto/
     defaults: { _controller: ColectaItemBundle:Post:create }
 ColectaPostView:
-    pattern:  /foro/{slug}/
+    pattern:  /textos/{slug}/
     defaults: { _controller: ColectaItemBundle:Post:view }
 ColectaPostEdit:
-    pattern:  /foro/{slug}/editar/
+    pattern:  /textos/{slug}/editar/
     defaults: { _controller: ColectaItemBundle:Post:edit }
 ColectaCategoryPage:
     pattern:  /categoria/{slug}/pagina/{page}/
@@ -46,4 +46,7 @@ ColectaCategoryView:
 ColectaItemLike:
     pattern:  /like/{slug}/
     defaults: { _controller: ColectaItemBundle:Default:like }
+ColectaContact:
+    pattern:  /contacto/
+    defaults: { _controller: ColectaItemBundle:Default:contact }
 

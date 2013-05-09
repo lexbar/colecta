@@ -68,12 +68,12 @@
         
         <div class="input-prepend">
               <span class="add-on"><i class="icon-envelope"></i></span>
-              <input type="text" class="span2" id="username" name="_username" placeholder="Email" value="">
+              <input type="text" class="span2" id="username" name="_username" placeholder="Email" value="" onFocus="if(this.value == 'Email') this.value=''">
         </div>
         
         <div class="input-prepend">
               <span class="add-on"><i class="icon-key"></i></span>
-              <input type="password" class="span2" id="password" name="_password" class="input-medium" placeholder="Contraseña">
+              <input type="password" class="span2" id="password" name="_password" class="input-medium" placeholder="Contraseña" value="" onFocus="if(this.value == 'Contraseña') this.value=''">
         </div>
         
         <p><label for="remember_me" class="checkbox">
@@ -81,7 +81,28 @@
         </label></p>
         
         <p><button type="submit" name="login" class="btn btn-success">Acceder</button> <a href="{{ path('userResetPassword') }}" class="btn btn-link btn-mini">Olvidé mi contraseña</a></p>
-    </form>
+    </form> 
+    
+    <script>
+        var phitest = document.createElement('input');
+        if(!('placeholder' in phitest)) {
+            document.getElementById('username').value='Email';
+            document.getElementById('password').value='Contraseña';
+        }
+    </script>
+    
+    <ul class="nav nav-list">        
+        <li>
+            <a href="{{ path('ColectaContact') }}"><i class="icon-envelope-alt"></i> Contacto con el Club</a>
+        </li>
+        <li>
+            <a href="{{ path('ColectaPostView', {'slug':'acerca-de-nosotros'}) }}"><i class="icon-info-sign"></i> Acerca de nosotros</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="{{ path('ColectaPostView', {'slug':'por-que-hacerse-socio'}) }}"><i class="icon-question-sign"></i> Por qué hacerse socio</a>
+        </li>        
+    </ul>
     
     {% endif %}
     

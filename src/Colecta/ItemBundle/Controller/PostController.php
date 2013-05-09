@@ -167,7 +167,8 @@ class PostController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
         }
         
-        if ($this->get('request')->getMethod() == 'POST') {
+        if ($this->get('request')->getMethod() == 'POST') 
+        {
             $persist = true;
             
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
