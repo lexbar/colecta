@@ -108,7 +108,7 @@ class ItemExtension extends \Twig_Extension
             ),
             array(
                 '<iframe width="500" height="281" src="http://www.youtube.com/embed/$1" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>', 
-                '<iframe src="http://player.vimeo.com/video/65576562?badge=0" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
+                '<iframe src="http://player.vimeo.com/video/$1?badge=0" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
             ),
             $text
         );
