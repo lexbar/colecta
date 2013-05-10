@@ -1,9 +1,9 @@
 {% if app.user %}
-<form action="{{ formaction }}" method="POST" class="form-horizontal well" enctype="multipart/form-data">
+<form action="{{ formaction }}" method="POST" class="form-horizontal well" enctype="multipart/form-data" onSubmit="$('#FileSubmit').attr('disabled','disabled').addClass('disabled'); $('#FileSubmitText').html('Enviando...'); $('#FileSubmitLoading').addClass('icon-refresh icon-spin');">
     <fieldset>
         
         <div class="control-group">
-        <label class="control-label" for="PostFile">Archivo</label>
+        <label class="control-label" for="FileFile">Archivo</label>
         <div class="controls">
             {% if item.filename %}
                 <a href="{{ path( "ColectaFileDelete", {'slug':item.slug}) }}" class="btn btn-danger"><i class="icon-trash"></i> Eliminar archivo</a><br>
@@ -18,14 +18,14 @@
         {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':0} %}
         
         <div class="control-group">
-        <label class="control-label" for="PostName">Título</label>
+        <label class="control-label" for="FileName">Título</label>
         <div class="controls">
             <input type="text" maxlength="255" required="required" name="name" value="{{ item.name }}">
         </div>
         </div>
       
         <div class="control-group">
-        <label class="control-label" for="PostText">Texto</label>
+        <label class="control-label" for="FileText">Texto</label>
         <div class="controls">
           <textarea name="description">{{ item.description }}</textarea>
         </div>
@@ -35,7 +35,7 @@
         
         <div class="form-actions">
             <button class="btn disabled" disabled="disabled">Guardar como borrador</button>
-            <button type="submit" class="btn btn-primary">Publicar ahora</button>
+            <button type="submit" class="btn btn-primary" id="FileSubmit"><i id="FileSubmitLoading"></i> <span id="FileSubmitText">Publicar ahora</span></button>
         </div>
     </fieldset>
 </form>
