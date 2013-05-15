@@ -204,19 +204,28 @@ form.form-horizontal .controls textarea {
 }
 #sidebar li a {
     text-align: center;
-    color: #CCCCCC;
+    color: #DDD;
     padding: 5px;
+    background-color: #444;
+    transition: background-color .5s;
+    -webkit-transition: background-color .5s; /* Safari */
 }
 #sidebar li a i {
     font-size: 40px;
     display: block;
     margin: 0 auto;
+    transition: color 1s;
+    -webkit-transition: color 1s; /* Safari */
 }
 #sidebar li a:hover {
-    background-color: #777;
+    background-color: #000;
+    text-decoration: none;
+}
+#sidebar li a:hover i {
+    color: #2986b6;
 }
 #sidebar li a.active {
-    background-color: #222222;
+    background-color: #222;
     color: #fff !important;
 }
 #sidebar i {
@@ -706,8 +715,26 @@ div.assistances ul li a {
 .nextevent.level4 {
     opacity: .1
 }
+.thumbnails {
+    margin-left: 0;
+}
+.thumbnails li {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.thumbnail.one {
+    width: 500px;
+}
+.thumbnail.two {
+    width: 240px;
+}
+.thumbnail.three {
+    width: 153px;
+}
 .thumbnail {
     background-color: #FFF;
+    border: 0 none;
+    box-shadow: none;
 }
 .thumbnail .caption {
     padding: 2px 9px;
