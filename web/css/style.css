@@ -207,15 +207,15 @@ form.form-horizontal .controls textarea {
     color: #DDD;
     padding: 5px;
     background-color: #444;
-    transition: background-color .5s;
-    -webkit-transition: background-color .5s; /* Safari */
+    transition: background-color .7s;
+    -webkit-transition: background-color .7s; /* Safari */
 }
 #sidebar li a i {
     font-size: 40px;
     display: block;
     margin: 0 auto;
-    transition: color 1s;
-    -webkit-transition: color 1s; /* Safari */
+    transition: color .5s;
+    -webkit-transition: color .5s; /* Safari */
 }
 #sidebar li a:hover {
     background-color: #000;
@@ -719,8 +719,7 @@ div.assistances ul li a {
     margin-left: 0;
 }
 .thumbnails li {
-    margin-left: 10px;
-    margin-bottom: 10px;
+    margin: 0 10px 10px 0;
 }
 .thumbnail.one {
     width: 500px;
