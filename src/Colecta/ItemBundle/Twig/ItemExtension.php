@@ -27,6 +27,20 @@ class ItemExtension extends \Twig_Extension
     {
         $return = htmlEscapeAndLinkUrls($text);
         
+        //Emoticons by FontAwesome
+        
+        $return = preg_replace(
+                                array(
+                                    "#:\)#",
+                                    "#:\(#",
+                                    "#:\|#"
+                                ),array(
+                                    ' <i class="icon-smile"></i> ',
+                                    ' <i class="icon-frown"></i> ',
+                                    ' <i class="icon-meh"></i> '
+                                ), $return
+        );
+        
         if($addslashes)
         {
             $return = addslashes($return);
