@@ -15,7 +15,12 @@
         </div>
         </div>
         
-        {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':0} %}
+        {% if item.folder.id is defined %}
+            {% set folder = item.folder.id %}
+        {% else %}
+            {% set folder = 0 %}
+        {% endif %}
+        {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':folder} %}
         
         <div class="control-group">
         <label class="control-label" for="FileName">Título</label>
@@ -31,7 +36,12 @@
         </div>
         </div>
         
-        {% render 'ColectaItemBundle:Category:formlist' with {'selected':0} %}
+        {% if item.category.id is defined %}
+            {% set category = item.category.id %}
+        {% else %}
+            {% set category = 0 %}
+        {% endif %}
+        {% render 'ColectaItemBundle:Category:formlist' with {'selected':category} %}
         
         <div class="form-actions">
             <button class="btn disabled" disabled="disabled">Guardar como borrador</button>
