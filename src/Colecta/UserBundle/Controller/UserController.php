@@ -42,6 +42,7 @@ class UserController extends Controller
         
         if($user == 'anon.')
         {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -108,8 +109,13 @@ class UserController extends Controller
                     }
                     closedir($handle);
                 }
-            
+                
+                $this->get('session')->setFlash('success', 'Datos modificados correctamente');
                 $this->redirect($this->generateUrl('userEditProfile'));
+            }
+            else
+            {
+                $this->get('session')->setFlash('error', 'Ha ocurrido un error y no se han guardado los cambios');
             }
         }
         
