@@ -1,5 +1,7 @@
 {% extends '::frontend.html.twig' %}
 
+{% block files 'active' %}
+
 {% block article %}
 <div class="folder full">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
