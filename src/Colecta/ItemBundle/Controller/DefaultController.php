@@ -140,6 +140,8 @@ class DefaultController extends Controller
                 $queryString .= implode(' OR ', $queryStringParts);
             }
             
+            $queryString .= " OR i.id IN (SELECT DISTINCT(c.item) FROM ColectaItemBundle:Comment c WHERE c.text LIKE '%".implode("%' OR c.text LIKE '%",$words)."%')";
+            
             $queryString .= ' ORDER BY i.date DESC';
             
             $query = $em->createQuery($queryString)->setParameters($parameters)->setMaxResults(($this->ipp + 1))->setFirstResult($page * $this->ipp);

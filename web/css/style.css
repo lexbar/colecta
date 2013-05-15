@@ -363,11 +363,14 @@ form.form-horizontal .controls textarea {
     float: left;
     margin: 0 10px 0 0;
 }
+.fullimage:hover a{
+    opacity: .5;
+}
 .fullimage .pull-left, .fullimage .pull-right {
     line-height: 420px;
     color: #fff;
     text-shadow: 0 2px 2px black;
-    opacity: .3;
+    opacity: .1;
 }
 .fullimage .pull-left.active:hover, .fullimage .pull-right.active:hover {
     opacity: .9;
