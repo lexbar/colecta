@@ -13,13 +13,13 @@
       <div class="control-group">
         <label class="control-label" for="ContactName">Tu nombre</label>
         <div class="controls">
-          <input type="text" class="input-xlarge" id="ContactName" name="name" value="{{ app.session.flash('ContactName') }}">
+          <input type="text" class="input-xlarge" id="ContactName" name="name" value="{% if app.session.hasFlash('ContactName') %}{{ app.session.flash('ContactName') }}{% elseif app.user %}{{ app.user.name }}{% endif %}">
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="ContactEmail">Tu email</label>
         <div class="controls">
-          <input type="text" class="input-xlarge" id="ContactEmail" name="email" value="{{ app.session.flash('ContactEmail') }}">
+          <input type="text" class="input-xlarge" id="ContactEmail" name="email" value="{% if app.session.hasFlash('ContactEmail') %}{{ app.session.flash('ContactEmail') }}{% elseif app.user %}{{ app.user.mail }}{% endif %}">
         </div>
       </div>
       <div class="control-group">
