@@ -43,6 +43,9 @@ ColectaCategoryPage:
 ColectaCategoryView:
     pattern:  /categoria/{slug}/
     defaults: { _controller: ColectaItemBundle:Category:view }
+ColectaCategoryIndex:
+    pattern:  /categoria/
+    defaults: { _controller: ColectaItemBundle:Category:index }
 ColectaItemLike:
     pattern:  /like/{slug}/
     defaults: { _controller: ColectaItemBundle:Default:like }

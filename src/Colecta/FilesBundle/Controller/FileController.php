@@ -120,7 +120,7 @@ class FileController extends Controller
                                 $catSlug = substr($catSlug,0,-2);
                             }
                             
-                            $catSlug .= '_'.$n;
+                            $catSlug .= '-'.$n;
                             
                             $n++;
                         }
@@ -150,7 +150,7 @@ class FileController extends Controller
                                 $slug = substr($slug,0,-2);
                             }
                             
-                            $slug .= '_'.$n;
+                            $slug .= '-'.$n;
                             
                             $n++;
                         }
@@ -189,6 +189,11 @@ class FileController extends Controller
                     
                     $em->persist($item);
                     $em->flush();
+                    
+                    // Update all categories. 
+                    // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
+                
+                    $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
                     
                     $this->get('session')->setFlash('success', 'Archivo modificado correctamente');
                     return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));                  
@@ -292,7 +297,7 @@ class FileController extends Controller
                                 $catSlug = substr($catSlug,0,-2);
                             }
                             
-                            $catSlug .= '_'.$n;
+                            $catSlug .= '-'.$n;
                             
                             $n++;
                         }
@@ -322,7 +327,7 @@ class FileController extends Controller
                                 $slug = substr($slug,0,-2);
                             }
                             
-                            $slug .= '_'.$n;
+                            $slug .= '-'.$n;
                             
                             $n++;
                         }
@@ -371,7 +376,7 @@ class FileController extends Controller
                             $slug = substr($slug,0,-2);
                         }
                         
-                        $slug .= '_'.$n;
+                        $slug .= '-'.$n;
                         
                         $n++;
                     }
@@ -394,7 +399,7 @@ class FileController extends Controller
                             $newItem = clone $item;
                             
                             //new slug
-                            $slug = substr($slug,0,-2).'_'.$n; $n++;
+                            $slug = substr($slug,0,-2).'-'.$n; $n++;
                             while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
                             {
                                 if($n > 2)
@@ -402,7 +407,7 @@ class FileController extends Controller
                                     $slug = substr($slug,0,-2);
                                 }
                                 
-                                $slug .= '_'.$n;
+                                $slug .= '-'.$n;
                                 
                                 $n++;
                             }
@@ -415,12 +420,22 @@ class FileController extends Controller
                             $em->flush();
                         }
                         
+                        // Update all categories. 
+                        // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
+                    
+                        $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
+                        
                         return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getFolder()->getSlug())));
                     }
                     else
                     {
+                        // Update all categories. 
+                        // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
+                    
+                        $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
+                        
                         return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
-                    }                    
+                    }
                 }
                 else
                 {

@@ -23,13 +23,13 @@
 <div class="row" id="body">
 <div class="span2" id="sidebar">
     <ul> 
-        <li><a class="{% block home '' %}" id="homeButton" href="{{ path('ColectaDashboard')}}"><i class="icon-home icon-white"></i> Inicio</a></li>
+        <li><a class="{% block home '' %}" id="homeButton" href="{{ path('ColectaDashboard')}}"><i class="icon-home"></i> Inicio</a></li>
+        <li><a class="{% block categories '' %}" href="{{ path('ColectaCategoryIndex') }}"><i class="icon-list-ul"></i> Categorías</a></li>
         <li><a class="{% block posts '' %}" href="{{ path('ColectaPostIndex') }}"><i class="icon-file"></i> Foro</a></li>
         <li><a class="{% block events '' %}" href="{{ path('ColectaEventIndex') }}"><i class="icon-calendar-empty"></i> Actividades</a></li>  
         <li><a class="{% block routes '' %}" href="{{ path('ColectaRouteIndex') }}"><i class="icon-globe"></i> Rutas</a></li>
         <li><a class="{% block places '' %}" href="{{ path('ColectaPlaceIndex') }}"><i class="icon-map-marker"></i> Lugares</a></li>
         <li><a class="{% block files '' %}" href="{{ path('ColectaFileIndex') }}"><i class="icon-folder-open"></i> Archivos</a></li>
-        {#<li><a class="{% block categories '' %}" href="{{ path('ColectaFileIndex') }}"><i class="icon-list-ul"></i> Categorías</a></li>#}
         {#<li><a class="{% block polls '' %}" href="{{ path('ColectaPollIndex') }}"><i class="icon-tasks"></i> Encuestas</a></li>#}
         {#<li><a class="{% block contests '' %}" href="{{ path('') }}"><i class="icon-gift"></i> Concursos</a></li>#}
         {#<li><a class="{% block people '' %}" href="/"><i class="icon-user"></i> Personas</a></li>#}
@@ -55,8 +55,10 @@
     {% if app.user %}
     
         <p class="myself">
-            <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
-            <strong class="name">{{ app.user.name }}</strong>
+            <a href="{{ path('userProfile', { 'id': app.user.id }) }}">
+                <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
+                <strong class="name">{{ app.user.name }}</strong>
+            </a>
             <br>
             <small><a href="{{ path('userEditProfile') }}">Editar perfil</a></small>
         </p>

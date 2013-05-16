@@ -8,11 +8,17 @@ class CategoryController extends Controller
 {
     private $ipp = 10; //Items per page
     
+    public function indexAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        
+        return $this->render('ColectaItemBundle:Category:index.html.twig', array('categories'=>$categories));
+    }
     public function viewAction($slug)
     {
         return $this->pageAction($slug, 1);
-    }
-    
+    }    
     public function pageAction($slug, $page)
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
@@ -33,7 +39,7 @@ class CategoryController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Category:index.html.twig', array('category'=>$category, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaItemBundle:Category:page.html.twig', array('category'=>$category, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     
     public function formlistAction($selected)

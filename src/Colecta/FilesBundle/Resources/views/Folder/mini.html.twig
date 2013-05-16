@@ -1,25 +1,27 @@
 <div class="folder mini">
     <h2><a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     
+    {% set files = item.isolateLast %}
+    
     <ul class="thumbnails">
         {# first calculate how many pictures we are going to show #}
         {% set picturesn = 0 %}
-        {% for file in item.files | reverse | slice(0,6) %}
+        {% for file in files | reverse | slice(0,6) %}
             {% if file.filetype in ['jpeg','gif','png'] %}
                 {% set picturesn = picturesn + 1 %}
             {% endif %}
         {% endfor %}
         
-        {% for file in item.files | reverse | slice(0,6) %}
+        {% for file in files | reverse | slice(0,6) %}
             {% if file.filetype in ['jpeg','gif','png'] %}
                 {% set sizes = item.thumbnailSize(picturesn,loop.index) %}
-                <li><a class="thumbnail {{ sizes.class }}" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':sizes.width, 'height':sizes.height}) }}"></a></li>
+                <li><a class="thumbnail {{ sizes.class }}" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img width="{{sizes.width}}" height="{{sizes.height}}" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':sizes.width, 'height':sizes.height}) }}"></a></li>
             {% endif %}
         {% endfor %}
     </ul>
     
     <ul class="filelist unstyled">
-        {% for file in item.files %}
+        {% for file in files %}
             {% if file.filetype not in ['jpeg','gif','png'] %}
                 <li><i class="icon-file icon-2x"></i>
                 <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>

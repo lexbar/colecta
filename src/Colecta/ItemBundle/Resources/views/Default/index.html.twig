@@ -17,7 +17,7 @@
             </ul>
         </div>
     {% endif %}
-    <h2>Inicio{% if page > 1 %} (página {{page}}){% endif %}</h2>
+    <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
 {% for item in items %}

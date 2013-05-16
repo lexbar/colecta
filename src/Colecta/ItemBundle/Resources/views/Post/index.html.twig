@@ -8,7 +8,7 @@
 
 <div class="title-block">
     {% if app.user %} <a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-primary pull-right">Crear publicación <i class="icon-plus"></i></a> {% endif %}
-    <h2>Foro</h2>
+    <h2>Foro</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
 {% for item in items %}

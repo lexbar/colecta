@@ -53,6 +53,41 @@ class Category
      * @ORM\OneToMany(targetEntity="Item", mappedBy="category")
      */
     protected $items;
+    
+    /**
+     * @var integer $posts
+     *
+     * @ORM\Column(name="posts", type="integer")
+     */
+    protected $posts = 0;
+    
+    /**
+     * @var integer $events
+     *
+     * @ORM\Column(name="events", type="integer")
+     */
+    protected $events = 0;
+    
+    /**
+     * @var integer $routes
+     *
+     * @ORM\Column(name="routes", type="integer")
+     */
+    protected $routes = 0;
+    
+    /**
+     * @var integer $places
+     *
+     * @ORM\Column(name="places", type="integer")
+     */
+    protected $places = 0;
+    
+    /**
+     * @var integer $files
+     *
+     * @ORM\Column(name="files", type="integer")
+     */
+    protected $files = 0;
 
 
     /**
@@ -187,5 +222,136 @@ class Category
     public function removeItem(\Colecta\ItemBundle\Entity\Item $items)
     {
         $this->items->removeElement($items);
+    }
+
+    /**
+     * Set posts
+     *
+     * @param integer $posts
+     * @return Category
+     */
+    public function setPosts($posts)
+    {
+        $this->posts = $posts;
+    
+        return $this;
+    }
+
+    /**
+     * Get posts
+     *
+     * @return integer 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * Set events
+     *
+     * @param integer $events
+     * @return Category
+     */
+    public function setEvents($events)
+    {
+        $this->events = $events;
+    
+        return $this;
+    }
+
+    /**
+     * Get events
+     *
+     * @return integer 
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * Set routes
+     *
+     * @param integer $routes
+     * @return Category
+     */
+    public function setRoutes($routes)
+    {
+        $this->routes = $routes;
+    
+        return $this;
+    }
+
+    /**
+     * Get routes
+     *
+     * @return integer 
+     */
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
+    /**
+     * Set places
+     *
+     * @param integer $places
+     * @return Category
+     */
+    public function setPlaces($places)
+    {
+        $this->places = $places;
+    
+        return $this;
+    }
+
+    /**
+     * Get places
+     *
+     * @return integer 
+     */
+    public function getPlaces()
+    {
+        return $this->places;
+    }
+
+    /**
+     * Set files
+     *
+     * @param integer $files
+     * @return Category
+     */
+    public function setFiles($files)
+    {
+        $this->files = $files;
+    
+        return $this;
+    }
+
+    /**
+     * Get files
+     *
+     * @return integer 
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+    
+    
+    public function sortedTypes()
+    {
+        $types = array(
+                        'posts' => $this->getPosts(),
+                        'events' => $this->getEvents(),
+                        'routes' => $this->getRoutes(),
+                        'places' => $this->getPlaces(),
+                        'files' => $this->getFiles(),
+        );
+        
+        arsort($types);
+        
+        return $types;
     }
 }

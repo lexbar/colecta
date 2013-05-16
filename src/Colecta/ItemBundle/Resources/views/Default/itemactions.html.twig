@@ -30,7 +30,7 @@
     
     {# ASSISTANCE #}
     {% if item.type == 'Activity/Event' %}
-        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="icon-calendar"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Hasta ahora nadie se ha apuntado{% endif %}</a>
+        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="icon-user"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Hasta ahora nadie se ha apuntado{% endif %}</a>
     {% endif %}
     
     {# EDIT #}

@@ -207,7 +207,7 @@ class RouteController extends Controller
                                 $catSlug = substr($catSlug,0,-2);
                             }
                             
-                            $catSlug .= '_'.$n;
+                            $catSlug .= '-'.$n;
                             
                             $n++;
                         }
@@ -232,7 +232,7 @@ class RouteController extends Controller
                             $slug = substr($slug,0,-2);
                         }
                         
-                        $slug .= '_'.$n;
+                        $slug .= '-'.$n;
                         
                         $n++;
                     }
@@ -313,7 +313,7 @@ class RouteController extends Controller
                                 $slug = substr($slug,0,-2);
                             }
                             
-                            $slug .= '_'.$n;
+                            $slug .= '-'.$n;
                             
                             $n++;
                         }
@@ -332,6 +332,11 @@ class RouteController extends Controller
                     }
                     
                     $em->flush();
+                    
+                    // Update all categories. 
+                    // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
+                
+                    $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
                     
                     return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug' => $slug)));
                 }
@@ -405,7 +410,7 @@ class RouteController extends Controller
                             $catSlug = substr($catSlug,0,-2);
                         }
                         
-                        $catSlug .= '_'.$n;
+                        $catSlug .= '-'.$n;
                         
                         $n++;
                     }
@@ -513,6 +518,11 @@ class RouteController extends Controller
                 $em->persist($item); 
                 $em->flush();
                 $this->get('session')->setFlash('success', 'Modificado con éxito.');
+                
+                // Update all categories. 
+                // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
+            
+                $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
             }
         }
         

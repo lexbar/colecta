@@ -212,7 +212,14 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
     
     public function isolateLast()
     {
-        $files;
+        $d = $this->getDate(); // Date of the folder, set to the last file post to it
+        $d->modify("-12 hours"); // select all files on the 12h previous to the last post
+        
+        return  $this->getFiles()->filter(
+            function($file) use($d) {
+                return $file->getDate() > $d; 
+            }
+        );
     }
     
     public function thumbnailSize($base, $index)
