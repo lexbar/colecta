@@ -11,7 +11,7 @@ class CategoryController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        $categories = $em->getRepository('ColectaItemBundle:Category')->findBy(array(),array('lastchange'=>'DESC'));
         
         return $this->render('ColectaItemBundle:Category:index.html.twig', array('categories'=>$categories));
     }

@@ -774,6 +774,9 @@ div.assistances ul li a {
     font-weight: bold;
     margin-top: 6px;
 }
+.categories {
+    margin: 0 50px;
+}
 .categories h2 {
     font-size: 14px;
     font-weight: normal;
