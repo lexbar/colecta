@@ -11,11 +11,13 @@
 <div class="categories">
     {% for category in categories %}
         <div class="pull-right">
-            {% set typeicon = {'posts':'file','events':'calendar-empty','routes':'globe','places':'map-marker','files':'folder-open'}%}
+            {% set typeicon = {'posts':'file','events':'calendar','routes':'globe','places':'map-marker','files':'folder-open'}%}
             {% for type, amount in category.sortedTypes %}
-                {% if loop.first %}<span style="font-size:18px;">{% else %}<span> | {% endif %}
-                    <i class="icon-{{ typeicon[type] }}"></i> {{ amount }} 
-                </span>
+                {% if amount > 0 %}
+                    {% if loop.first %}<span style="font-size:18px;">{% elseif loop.index > 3 %}<span style="font-size:12px;">{% else %}<span> | {% endif %}
+                        <i class="icon-{{ typeicon[type] }}"></i> {{ amount }} 
+                    </span>
+                {% endif %}
             {% endfor %}
         </div>
         
