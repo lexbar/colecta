@@ -6,7 +6,7 @@
                     <option value="{{ folder.id }}"{% if folder.id == selected %}selected="selected"{% endif %}>{{ folder.name }}</option>
                 {% endfor %}
             </select>
-        <input type="text" id="NewFolder" name="newFolder"{% if not firstwrite  %} style="display:none"{% endif %} placeholder="Nombre">
+        <input type="text" id="NewFolder" name="newFolder"{% if not firstwrite  %} style="display:none"{% endif %} placeholder="Nombre" onKeyUp="var name = document.getElementById('FileName'); if(name.value == '' || name.value == this.value.slice(0,-1)){name.value = this.value}">
         <button class="btn{% if not firstwrite  %} newfolder{% endif %}" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="icon-{% if firstwrite %}th-list{% else %}plus-sign{% endif %}"></i> {% if firstwrite  %}Seleccionar{% else %}Nueva carpeta{% endif %}</button>
     </div>
 </div>

@@ -26,14 +26,14 @@
         <div class="control-group">
         <label class="control-label" for="FileName">Título</label>
         <div class="controls">
-            <input type="text" maxlength="255" required="required" name="name" value="{{ item.name }}">
+            <input id="FileName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}">
         </div>
         </div>
       
         <div class="control-group">
         <label class="control-label" for="FileText">Texto</label>
         <div class="controls">
-          <textarea name="description">{{ item.description }}</textarea>
+          <textarea id="FileText" name="description">{{ item.description }}</textarea>
         </div>
         </div>
         
