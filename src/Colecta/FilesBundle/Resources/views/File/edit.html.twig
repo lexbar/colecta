@@ -12,12 +12,12 @@
             if(button.hasClass('newfolder')) {
                 button.removeClass('newfolder').addClass('selectfolder');
                 button.html('<i class="icon-th-list"></i> Seleccionar');
-                $('#FileFolder').hide();
+                $('#Folder').hide();
                 $('#NewFolder').show().focus();
             } else {
                 button.removeClass('selectfolder').addClass('newfolder');
                 button.html('<i class="icon-plus-sign"></i> Nueva carpeta');
-                $('#FileFolder').show();
+                $('#Folder').show();
                 $('#NewFolder').hide().attr('value','');
             }
         }
@@ -30,6 +30,6 @@
     <h2>Editar {{ item.name }}<br><span><a href="{{ path('ColectaFileView', {'slug':item.slug}) }}"><i class="icon-double-angle-left"></i> Volver al archivo</a></span></h2>
 </div>
 
-{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug})} %}
+{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug}),'firstwrite':0} %}
 
 {% endblock %}

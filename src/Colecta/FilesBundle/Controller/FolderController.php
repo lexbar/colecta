@@ -36,7 +36,7 @@ class FolderController extends Controller
         
         return $this->render('ColectaFilesBundle:Folder:full.html.twig', array('item' => $item));
     }
-    public function formlistAction($selected)
+    public function formlistAction($selected, $firstwrite)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -100,6 +100,6 @@ class FolderController extends Controller
         
         $folders = $em->createQuery("SELECT f FROM ColectaFilesBundle:Folder f WHERE f.author = :user OR (f.public = 1 AND f.personal = 0 AND f.draft = 0) ORDER BY f.date DESC")->setParameter('user',$user->getId())->getResult();
         
-        return $this->render('ColectaFilesBundle:Folder:folderselect.html.twig', array('folders'=>$folders, 'selected'=>$selected));
+        return $this->render('ColectaFilesBundle:Folder:folderselect.html.twig', array('folders'=>$folders, 'selected'=>$selected, 'firstwrite'=>$firstwrite));
     }
 }

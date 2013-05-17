@@ -17,10 +17,11 @@
         
         {% if item.folder.id is defined %}
             {% set folder = item.folder.id %}
+            {% set firstwrite = 0 %}
         {% else %}
             {% set folder = 0 %}
         {% endif %}
-        {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':folder} %}
+        {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':folder, 'firstwrite':firstwrite} %}
         
         <div class="control-group">
         <label class="control-label" for="FileName">Título</label>

@@ -1,12 +1,12 @@
 <div class="control-group">
     <label class="control-label" for="Folder">Carpeta</label>
     <div class="controls">
-            <select name="folder" id="Folder">
+            <select name="folder" id="Folder"{% if firstwrite %} style="display: none;"{% endif %}>
                 {% for folder in folders %}
                     <option value="{{ folder.id }}"{% if folder.id == selected %}selected="selected"{% endif %}>{{ folder.name }}</option>
                 {% endfor %}
             </select>
-        <input type="text" id="NewFolder" name="newFolder" style="display:none" placeholder="Nombre">
-        <button class="btn newfolder" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="icon-plus-sign"></i> Nueva carpeta</button>
+        <input type="text" id="NewFolder" name="newFolder"{% if not firstwrite  %} style="display:none"{% endif %} placeholder="Nombre">
+        <button class="btn{% if not firstwrite  %} newfolder{% endif %}" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="icon-{% if firstwrite %}th-list{% else %}plus-sign{% endif %}"></i> {% if firstwrite  %}Seleccionar{% else %}Nueva carpeta{% endif %}</button>
     </div>
 </div>

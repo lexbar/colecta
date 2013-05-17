@@ -333,8 +333,7 @@ class FileController extends Controller
                         }
                         $folder->setSlug($slug);
                         // End slug generation
-                        $folder->setSummary('');
-                        $folder->setTagwords('');
+                        $folder->summarize($item->getDescription());
                         $folder->setAllowComments(1);
                         $folder->setDraft(0);
                         $folder->setPart(0);

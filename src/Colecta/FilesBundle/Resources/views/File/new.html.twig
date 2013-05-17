@@ -30,6 +30,6 @@
     <h2>Subir Archivo</h2>
 </div>
 
-{% include 'ColectaFilesBundle:File:form.html.twig' with { 'item': item, 'formaction': path('ColectaFileUpload')} %}
+{% include 'ColectaFilesBundle:File:form.html.twig' with { 'item': item, 'formaction': path('ColectaFileUpload'), 'firstwrite': 1} %}
 
 {% endblock %}
