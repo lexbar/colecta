@@ -2,7 +2,7 @@
 
     <h2 class="related">Relacionado <i class="icon-paper-clip"></i></h2>
     
-    {% for item in items %}    
+    {% for item in items if item.draft == 0 %}    
         {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
