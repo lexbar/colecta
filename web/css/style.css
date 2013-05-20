@@ -123,10 +123,9 @@ form.form-horizontal .controls textarea {
     margin: 0;
     height: 140px; 
     width: 940px; 
-    line-height: 160px;
+    line-height: 90px;
     text-align: center;
-    color: #EEEEEE;
-    font-size: 160px;
+    font-size: 100px;
     overflow: hidden;
 }
 .intranet-menu {
@@ -162,7 +161,10 @@ form.form-horizontal .controls textarea {
     color: #222;
 }
 #userbar .nav li.active a {
-    color: #fff;
+    background-color: #F5F5F5;
+    border-left: 4px solid #0088CC;
+    padding-left: 10px;
+    color: #222;
 }
 .well.login {
     padding: 7px 0 2px 14px;
