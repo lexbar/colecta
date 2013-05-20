@@ -355,7 +355,10 @@ class EventController extends Controller
                     $notification->setUser($item->getAuthor());
                     $notification->setDismiss(0);
                     $notification->setDate(new \DateTime('now'));
-                    $notification->setText($user->getName().' va a asistir a :item:'.$item->getId().':');
+                    $notification->setWhat('assist');
+                    $notification->setWho($user);
+                    $notification->setItem($item);
+                    //$notification->setText($user->getName().' va a asistir a :item:'.$item->getId().':');
                     
                     $em->persist($notification); 
                 }
@@ -432,7 +435,10 @@ class EventController extends Controller
                     $notification->setUser($item->getAuthor());
                     $notification->setDismiss(0);
                     $notification->setDate(new \DateTime('now'));
-                    $notification->setText($user->getName().' ya no asiste a :item:'.$item->getId().':');
+                    $notification->setWhat('unassist');
+                    $notification->setWho($user);
+                    $notification->setItem($item);
+                    //$notification->setText($user->getName().' ya no asiste a :item:'.$item->getId().':');
                     
                     $em->persist($notification); 
                 }

@@ -34,5 +34,5 @@
 </ul>
 
 {% for notification in notifications %}
-    <p class="alert alert-block"><a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>{{ notification.text | itemlinkable | raw }}</p>
+   {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'nitification': notification} %}
 {% endfor %}

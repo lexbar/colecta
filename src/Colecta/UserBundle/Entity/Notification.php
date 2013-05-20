@@ -22,11 +22,11 @@ class Notification
     protected $id;
 
     /**
-     * @var string $text
+     * @var string $what
      *
-     * @ORM\Column(name="text", type="string", length=255)
+     * @ORM\Column(name="what", type="string", length=15)
      */
-    protected $text;
+    protected $what; // comment / reply / assist / unassist
 
     /**
      * @var datetime $date
@@ -46,6 +46,23 @@ class Notification
     * @ORM\ManyToOne(targetEntity="User")
     */
     protected $user;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Colecta\ItemBundle\Entity\Item")
+    */
+    protected $item;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="User")
+    */
+    protected $who;
+    
+    /**
+    * @var integer $pluspeople
+    *
+    * @ORM\Column(name="pluspeople", type="integer")
+    */
+    protected $pluspeople = 0;
 
 
     /**
@@ -56,26 +73,6 @@ class Notification
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set text
-     *
-     * @param string $text
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-    }
-
-    /**
-     * Get text
-     *
-     * @return string 
-     */
-    public function getText()
-    {
-        return $this->text;
     }
 
     /**
@@ -136,5 +133,97 @@ class Notification
     public function getDismiss()
     {
         return $this->dismiss;
+    }
+
+    /**
+     * Set what
+     *
+     * @param string $what
+     * @return Notification
+     */
+    public function setWhat($what)
+    {
+        $this->what = $what;
+    
+        return $this;
+    }
+
+    /**
+     * Get what
+     *
+     * @return string 
+     */
+    public function getWhat()
+    {
+        return $this->what;
+    }
+
+    /**
+     * Set item
+     *
+     * @param \Colecta\ItemBundle\Entity\Item $item
+     * @return Notification
+     */
+    public function setItem(\Colecta\ItemBundle\Entity\Item $item = null)
+    {
+        $this->item = $item;
+    
+        return $this;
+    }
+
+    /**
+     * Get item
+     *
+     * @return \Colecta\ItemBundle\Entity\Item 
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * Set who
+     *
+     * @param \Colecta\UserBundle\Entity\User $who
+     * @return Notification
+     */
+    public function setWho(\Colecta\UserBundle\Entity\User $who = null)
+    {
+        $this->who = $who;
+    
+        return $this;
+    }
+
+    /**
+     * Get who
+     *
+     * @return \Colecta\UserBundle\Entity\User 
+     */
+    public function getWho()
+    {
+        return $this->who;
+    }
+
+    /**
+     * Set pluspeople
+     *
+     * @param integer $pluspeople
+     * @return Notification
+     */
+    public function setPluspeople($pluspeople)
+    {
+        $this->pluspeople = $pluspeople;
+    
+        return $this;
+    }
+
+    /**
+     * Get pluspeople
+     *
+     * @return integer 
+     */
+    public function getPluspeople()
+    {
+        return $this->pluspeople;
     }
 }

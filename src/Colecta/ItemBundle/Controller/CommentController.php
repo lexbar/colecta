@@ -41,7 +41,11 @@ class CommentController extends Controller
                 $notification->setUser($item->getAuthor());
                 $notification->setDismiss(0);
                 $notification->setDate(new \DateTime('now'));
-                $notification->setText($user->getName().' ha escrito un comentario en :item:'.$item->getId().':');
+                $notification->setWhat('comment');
+                $notification->setWho($user);
+                $notification->setItem($item);
+                //$notification->setText($user->getName().' ha escrito un comentario en :item:'.$item->getId().':');
+                
                 $em->persist($notification); 
                 
                 $notifications[] = $item->getAuthor()->getId();
@@ -58,7 +62,11 @@ class CommentController extends Controller
                     $notification->setUser($c->getUser());
                     $notification->setDismiss(0);
                     $notification->setDate(new \DateTime('now'));
-                    $notification->setText($user->getName().' ha contestado en :item:'.$item->getId().':');
+                    $notification->setWhat('reply');
+                    $notification->setWho($user);
+                    $notification->setItem($item);
+                    //$notification->setText($user->getName().' ha contestado en :item:'.$item->getId().':');
+                    
                     $em->persist($notification); 
                     
                     $notifications[] = $c->getUser()->getId();
@@ -77,7 +85,11 @@ class CommentController extends Controller
                         $notification->setUser($a->getUser());
                         $notification->setDismiss(0);
                         $notification->setDate(new \DateTime('now'));
-                        $notification->setText($user->getName().' ha comentado en :item:'.$item->getId().':');
+                        $notification->setWhat('comment');
+                        $notification->setWho($user);
+                        $notification->setItem($item);
+                        //$notification->setText($user->getName().' ha comentado en :item:'.$item->getId().':');
+                        
                         $em->persist($notification); 
                         
                         $notifications[] = $a->getUser()->getId();
