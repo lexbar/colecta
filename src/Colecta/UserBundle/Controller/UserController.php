@@ -23,7 +23,10 @@ class UserController extends Controller
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('author'=>$id), array('date'=>'DESC'),10,0);
         
-        return $this->render('ColectaUserBundle:User:profile.html.twig', array('user' => $user, 'items' => $items));
+        $salt = $user->getSalt();
+        $thecode = substr(md5($salt.$this->container->getParameter('secret')),5,18);
+        
+        return $this->render('ColectaUserBundle:User:profile.html.twig', array('user' => $user, 'items' => $items, 'thecode' => $thecode));
     }
     
     public function assistancesAction($id)

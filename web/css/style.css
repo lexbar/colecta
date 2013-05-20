@@ -629,6 +629,9 @@ div.assistances ul li a {
 .comments form {
     margin-bottom: 5px;
 }
+.comments textarea {
+    width: 97%;
+}
 .comments .form {
     background-color: transparent;
 }
