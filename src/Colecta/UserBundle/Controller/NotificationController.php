@@ -21,6 +21,7 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         // TEMPORARY
+        /*
             $conn = $em->getConnection();
             $stmt = $conn->query("SELECT * FROM NotificationB");
             
@@ -81,6 +82,7 @@ class NotificationController extends Controller
                 $em->persist($notification); 
                 $em->flush();
             }
+        */
         // TEMPORARY
         
         $notifications = $em->getRepository('ColectaUserBundle:Notification')->findBy(array('user'=>$user->getId()), array('date'=>'DESC'),30,0);
