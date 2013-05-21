@@ -5,7 +5,7 @@
     
     {{ notification.who.name }} 
     
-    {% if notification.pluspeople > 0 %} y {{ notification.pluspeople }} personas más {% endif %}
+    {% if notification.pluspeople > 0 %} y {{ notification.pluspeople }} persona{% if notification.pluspeople > 1 %}s{% endif %} más {% endif %}
     
     {% if notification.what == 'comment' %}
         ha{% if notification.pluspeople > 0 %}n{% endif %} comentado en 

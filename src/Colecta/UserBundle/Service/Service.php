@@ -27,12 +27,13 @@ class Service
         {
             for($i = 0; $i < count($notifications); $i++)
             {
-                if(preg_match('/:item:'.$item.':/',$notifications[$i]->getText()))
+                if($item == $notifications[$i]->getItem()->getId())
                 {
                     $em->remove($notifications[$i]);
                     $em->flush();
                     unset($notifications[$i]);
                     $notifications = array_values($notifications);
+                    $i--;
                 }
             }
         }

@@ -37,15 +37,27 @@ class CommentController extends Controller
             if($user != $item->getAuthor())
             {
                 //Notification to the owner
-                $notification = new Notification();
-                $notification->setUser($item->getAuthor());
-                $notification->setDismiss(0);
-                $notification->setDate(new \DateTime('now'));
-                $notification->setWhat('comment');
-                $notification->setWho($user);
-                $notification->setItem($item);
-                //$notification->setText($user->getName().' ha escrito un comentario en :item:'.$item->getId().':');
-                
+                $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$item->getAuthor(),'dismiss'=>0,'what'=>'comment','item'=>$item));
+                    
+                if($notification)
+                {
+                    if($notification->getWho() != $user) 
+                    {
+                        $notification->setPluspeople(intval($notification->getPluspeople()) + 1);
+                    }
+                    $notification->setDate(new \DateTime('now'));
+                }
+                else
+                {
+                    $notification = new Notification();
+                    $notification->setUser($item->getAuthor());
+                    $notification->setDismiss(0);
+                    $notification->setDate(new \DateTime('now'));
+                    $notification->setWhat('comment');
+                    $notification->setWho($user);
+                    $notification->setItem($item);
+                    //$notification->setText($user->getName().' ha escrito un comentario en :item:'.$item->getId().':');
+                }
                 $em->persist($notification); 
                 
                 $notifications[] = $item->getAuthor()->getId();
@@ -58,15 +70,27 @@ class CommentController extends Controller
                 if(!in_array($c->getUser()->getId(), $notifications)) //if he has not already received a notification..
                 {
                     //Notification to a subscriber
-                    $notification = new Notification();
-                    $notification->setUser($c->getUser());
-                    $notification->setDismiss(0);
-                    $notification->setDate(new \DateTime('now'));
-                    $notification->setWhat('reply');
-                    $notification->setWho($user);
-                    $notification->setItem($item);
-                    //$notification->setText($user->getName().' ha contestado en :item:'.$item->getId().':');
+                    $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$item->getAuthor(),'dismiss'=>0,'what'=>'reply','item'=>$item));
                     
+                    if($notification)
+                    {
+                        if($notification->getWho() != $user) 
+                        {
+                            $notification->setPluspeople(intval($notification->getPluspeople()) + 1);
+                        }
+                        $notification->setDate(new \DateTime('now'));
+                    }
+                    else
+                    {
+                        $notification = new Notification();
+                        $notification->setUser($c->getUser());
+                        $notification->setDismiss(0);
+                        $notification->setDate(new \DateTime('now'));
+                        $notification->setWhat('reply');
+                        $notification->setWho($user);
+                        $notification->setItem($item);
+                        //$notification->setText($user->getName().' ha contestado en :item:'.$item->getId().':');
+                    }
                     $em->persist($notification); 
                     
                     $notifications[] = $c->getUser()->getId();
@@ -81,15 +105,27 @@ class CommentController extends Controller
                     if(!in_array($a->getUser()->getId(), $notifications)) //if he has not already received a notification..
                     {
                         //Notification to assistant
-                        $notification = new Notification();
-                        $notification->setUser($a->getUser());
-                        $notification->setDismiss(0);
-                        $notification->setDate(new \DateTime('now'));
-                        $notification->setWhat('comment');
-                        $notification->setWho($user);
-                        $notification->setItem($item);
-                        //$notification->setText($user->getName().' ha comentado en :item:'.$item->getId().':');
-                        
+                        $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$a->getUser(),'dismiss'=>0,'what'=>'comment','item'=>$item));
+                    
+                        if($notification)
+                        {
+                            if($notification->getWho() != $user) 
+                            {
+                                $notification->setPluspeople(intval($notification->getPluspeople()) + 1);
+                            }
+                            $notification->setDate(new \DateTime('now'));
+                        }
+                        else
+                        {
+                            $notification = new Notification();
+                            $notification->setUser($a->getUser());
+                            $notification->setDismiss(0);
+                            $notification->setDate(new \DateTime('now'));
+                            $notification->setWhat('comment');
+                            $notification->setWho($user);
+                            $notification->setItem($item);
+                            //$notification->setText($user->getName().' ha comentado en :item:'.$item->getId().':');
+                        }
                         $em->persist($notification); 
                         
                         $notifications[] = $a->getUser()->getId();

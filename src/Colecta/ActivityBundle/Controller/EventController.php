@@ -350,16 +350,28 @@ class EventController extends Controller
                 /* Notification to owner */
                 if($user != $item->getAuthor())
                 {
-                    $notification = new Notification();
-                    // text date dismiss user
-                    $notification->setUser($item->getAuthor());
-                    $notification->setDismiss(0);
-                    $notification->setDate(new \DateTime('now'));
-                    $notification->setWhat('assist');
-                    $notification->setWho($user);
-                    $notification->setItem($item);
-                    //$notification->setText($user->getName().' va a asistir a :item:'.$item->getId().':');
+                    $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$item->getAuthor(),'dismiss'=>0,'what'=>'assist','item'=>$item));
                     
+                    if($notification)
+                    {
+                        if($notification->getWho() != $user) 
+                        {
+                            $notification->setPluspeople(intval($notification->getPluspeople()) + 1);
+                        }
+                        $notification->setDate(new \DateTime('now'));
+                    }
+                    else
+                    {
+                        $notification = new Notification();
+                        // text date dismiss user
+                        $notification->setUser($item->getAuthor());
+                        $notification->setDismiss(0);
+                        $notification->setDate(new \DateTime('now'));
+                        $notification->setWhat('assist');
+                        $notification->setWho($user);
+                        $notification->setItem($item);
+                        //$notification->setText($user->getName().' va a asistir a :item:'.$item->getId().':');
+                    }
                     $em->persist($notification); 
                 }
                 else
@@ -431,14 +443,27 @@ class EventController extends Controller
                 //Notification to the author of the event
                 if($user != $item->getAuthor())
                 {
-                    $notification = new Notification();
-                    $notification->setUser($item->getAuthor());
-                    $notification->setDismiss(0);
-                    $notification->setDate(new \DateTime('now'));
-                    $notification->setWhat('unassist');
-                    $notification->setWho($user);
-                    $notification->setItem($item);
-                    //$notification->setText($user->getName().' ya no asiste a :item:'.$item->getId().':');
+                    $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$item->getAuthor(),'dismiss'=>0,'what'=>'unassist','item'=>$item));
+                    
+                    if($notification)
+                    {
+                        if($notification->getWho() != $user) 
+                        {
+                            $notification->setPluspeople(intval($notification->getPluspeople()) + 1);
+                        }
+                        $notification->setDate(new \DateTime('now'));
+                    }
+                    else
+                        {
+                        $notification = new Notification();
+                        $notification->setUser($item->getAuthor());
+                        $notification->setDismiss(0);
+                        $notification->setDate(new \DateTime('now'));
+                        $notification->setWhat('unassist');
+                        $notification->setWho($user);
+                        $notification->setItem($item);
+                        //$notification->setText($user->getName().' ya no asiste a :item:'.$item->getId().':');
+                    }
                     
                     $em->persist($notification); 
                 }
