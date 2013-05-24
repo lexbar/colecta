@@ -29,8 +29,10 @@ class Service
             {
                 if($item == $notifications[$i]->getItem()->getId())
                 {
-                    $em->remove($notifications[$i]);
+                    $notifications[$i]->setDismiss(1);
+                    $em->persist($notifications[$i]);
                     $em->flush();
+                    
                     unset($notifications[$i]);
                     $notifications = array_values($notifications);
                     $i--;

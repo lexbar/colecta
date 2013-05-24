@@ -34,9 +34,9 @@ h2.related {
     margin: 25px 0 15px !important;
 }
 form.well {
-    border-radius: 0 0 4px 4px;
+    border-radius: 0;
 }
-a i {
+a i, a:active i, a:hover i {
     text-decoration: none !important;
 }
 .hidden {
@@ -215,6 +215,7 @@ form.form-horizontal .controls textarea {
     color: #DDD;
     padding: 5px;
     background-color: #444;
+    text-decoration: none !important;
     transition: background-color .7s;
     -webkit-transition: background-color .7s; /* Safari */
 }
@@ -358,7 +359,7 @@ form.form-horizontal .controls textarea {
 }
 /* ITEMS */
 .item {
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid #BBB;
     padding: 10px 4px 20px;
 }
 .itemActions {
@@ -380,8 +381,11 @@ form.form-horizontal .controls textarea {
     float: left;
     margin: 0 10px 0 0;
 }
-.fullimage:hover a{
-    opacity: .5;
+.fullimage:hover a {
+    text-decoration: none !important;
+}
+.fullimage:hover a.active {
+opacity: .5;
 }
 .fullimage .pull-left, .fullimage .pull-right {
     line-height: 420px;
