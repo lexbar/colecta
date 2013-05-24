@@ -33,6 +33,10 @@
     </li>
 </ul>
 
-{% for notification in notifications %}
-   {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'nitification': notification} %}
-{% endfor %}
+{% if notifications | length > 0 %}
+    <div class="notificationstream">
+        {% for notification in notifications %}
+           {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'notification': notification} %}
+        {% endfor %}
+    </div>
+{% endif %}

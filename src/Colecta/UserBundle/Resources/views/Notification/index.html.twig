@@ -1,16 +1,52 @@
 {% extends '::frontend.html.twig' %}
 
+{% block javascripts %}
+<script>
+    var currentpage = 0;
+    var loading = 0;
+    
+    function loadMore() {
+        if(loading) return;
+        loading = 1;
+        var prevtext = $('#loadMore').html();
+        $('#loadMore').html('<i class="icon-refresh icon-spin"></i> Cargando...')
+        
+        $.getJSON((currentpage +1), function(data) {
+                for(var i = 0; i < data.length; i++) {
+                    $('#notificationstream').append(data[i]);
+                } 
+                
+                if(data.length) {
+                    currentpage++;
+                } else {
+                    $('#notificationstream').append('<p class="lead" style="text-align:center">No hay más notificaciones</p>');
+                    $('#loadMore').hide();
+                }
+                
+                loading = 0;
+                $('#loadMore').html(prevtext);
+        });
+    } 
+</script>
+{% endblock %}
+
 {% block article %}
 
 <div class="title-block">
     <h2>Notificaciones</h2>
 </div>
 
-{% for notification in notifications %}
-    {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'nitification': notification} %}
+{% if notifications | length > 0 %}
+    <div class="notificationstream" id="notificationstream">
+        {% for notification in notifications %}
+           {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'notification': notification} %}
+        {% endfor %}
+    </div>
+    
+    <div style="text-align:center"><button onclick="loadMore()" class="btn" id="loadMore">Ver más</button></div>
 {% else %}
-<p>No tienes ninguna notificación</p>
-{% endfor %}
+    <p class="lead">No tienes ninguna notificación</p>
+{% endif %}
 
 {% endblock %}
 

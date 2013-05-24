@@ -3,6 +3,7 @@
 namespace Colecta\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\UserBundle\Entity\Notification;
 
@@ -20,74 +21,26 @@ class NotificationController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         
-        // TEMPORARY
-        /*
-            $conn = $em->getConnection();
-            $stmt = $conn->query("SELECT * FROM NotificationB");
-            
-            while ($row = $stmt->fetch()) {
-                $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneById($row['id']);
-                
-                if(preg_match('/(.*) va a asistir a :item:([0-9]+):/', $row['text'], $matches))
-                {
-                    $notification->setWhat('assist');
-                    
-                    $who = $em->getRepository('ColectaUserBundle:User')->findOneByName($matches[1]);
-                    $notification->setWho($who);
-                    
-                    $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($matches[2]);
-                    $notification->setItem($item);
-                }
-                elseif(preg_match('/(.*) ya no asiste a :item:([0-9]+):/', $row['text'], $matches))
-                {
-                    $notification->setWhat('unassist');
-                    
-                    $who = $em->getRepository('ColectaUserBundle:User')->findOneByName($matches[1]);
-                    $notification->setWho($who);
-                    
-                    $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($matches[2]);
-                    $notification->setItem($item);
-                }
-                elseif(preg_match('/(.*) ha escrito un comentario en :item:([0-9]+):/', $row['text'], $matches))
-                {
-                    $notification->setWhat('comment');
-                    
-                    $who = $em->getRepository('ColectaUserBundle:User')->findOneByName($matches[1]);
-                    $notification->setWho($who);
-                    
-                    $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($matches[2]);
-                    $notification->setItem($item);
-                }
-                elseif(preg_match('/(.*) ha contestado en :item:([0-9]+):/', $row['text'], $matches))
-                {
-                    $notification->setWhat('reply');
-                    
-                    $who = $em->getRepository('ColectaUserBundle:User')->findOneByName($matches[1]);
-                    $notification->setWho($who);
-                    
-                    $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($matches[2]);
-                    $notification->setItem($item);
-                }
-                elseif(preg_match('/(.*) ha comentado en :item:([0-9]+):/', $row['text'], $matches))
-                {
-                    $notification->setWhat('comment');
-                    
-                    $who = $em->getRepository('ColectaUserBundle:User')->findOneByName($matches[1]);
-                    $notification->setWho($who);
-                    
-                    $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($matches[2]);
-                    $notification->setItem($item);
-                }
-                
-                $em->persist($notification); 
-                $em->flush();
-            }
-        */
-        // TEMPORARY
-        
-        $notifications = $em->getRepository('ColectaUserBundle:Notification')->findBy(array('user'=>$user->getId()), array('date'=>'DESC'),30,0);
+        $notifications = $em->getRepository('ColectaUserBundle:Notification')->findBy(array('user'=>$user->getId()), array('date'=>'DESC'),20,0);
         
         return $this->render('ColectaUserBundle:Notification:index.html.twig', array('notifications' => $notifications));
+    }
+    public function loadAction($page)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            return new RedirectResponse($this->generateUrl('UserLogin'));
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $notifications = $em->getRepository('ColectaUserBundle:Notification')->findBy(array('user'=>$user->getId()), array('date'=>'DESC'),20,20 * intval($page));
+        
+        $response = new Response($this->renderView('ColectaUserBundle:Notification:load.json.twig', array('notifications' => $notifications)),200);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
     public function dismissAction($id)
     {

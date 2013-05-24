@@ -36,6 +36,10 @@ userNotifications:
     pattern:  /notificaciones/
     defaults: { _controller: ColectaUserBundle:Notification:index }
     
+userNotificationsLoad:
+    pattern:  /notificaciones/{page}
+    defaults: { _controller: ColectaUserBundle:Notification:load }
+    
 userNotificationDismiss:
     pattern:  /notificaciones/dismiss/{id}
     defaults: { _controller: ColectaUserBundle:Notification:dismiss }

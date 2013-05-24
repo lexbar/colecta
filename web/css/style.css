@@ -88,9 +88,14 @@ a i, a:active i, a:hover i {
     padding: 5px 25px;
     font-size: 11px;
 }
+.notificationstream {
+    margin-bottom: 12px;
+}
 .alert-block {
     padding: 5px 8px;
-    margin-bottom: 12px;
+    margin-bottom: 0;
+    border-radius: 0;
+    border: 0;
 }
 form.form-horizontal label.control-label {
     width: 110px;
