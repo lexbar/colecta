@@ -16,7 +16,7 @@
     {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
     
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 3 } only %}
 </div>
 {% endfor %}
 
