@@ -39,11 +39,21 @@
 <div class="span7" id="stream">
 {% if app.session.hasFlash('error') %}
     <div class="alert alert-error">
+        <span class="icon-stack">
+            <i class="icon-sign-blank icon-stack-base"></i>
+            <i class="icon-exclamation icon-light"></i>
+        </span> 
+        
         {{ app.session.flash('error') }}
     </div>
 {% endif %}
 {% if app.session.hasFlash('success') %}
     <div class="alert alert-success">
+        <span class="icon-stack">
+            <i class="icon-sign-blank icon-stack-base"></i>
+            <i class="icon-ok icon-light"></i>
+        </span> 
+        
         {{ app.session.flash('success') }}
     </div>
 {% endif %}

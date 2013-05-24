@@ -64,6 +64,10 @@ class PostController extends Controller
         {
             $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
         }
+        elseif(!$request->get('name'))
+        {
+            $this->get('session')->setFlash('error', 'Debes escribir un título');
+        }
         elseif(!$request->get('text'))
         {
             $this->get('session')->setFlash('error', 'No has escrito ningun texto');

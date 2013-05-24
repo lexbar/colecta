@@ -9,15 +9,18 @@
 </div>
 
 {% for item in items %}
-<div class="item">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    
-    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
-    
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 3 } only %}
-</div>
+    {% set typeicon = {'Item/Post':'file','Activity/Event':'calendar','Activity/Route':'globe','Activity/Place':'map-marker','Files/Folder':'folder-open'} %}
+    {% set type = item.type %}
+    <h2>
+        <span style="font-size: 14px;" class="icon-stack">
+            <i class="icon-sign-blank icon-stack-base"></i>
+            <i class="icon-{{ typeicon[type] }} icon-fixed-width icon-light"></i>
+        </span> 
+        
+        <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Activity/':'','Files/':'','Colective/':''}) ~ 'View', {'slug':item.slug}) }}">{{ item.name }}</a>
+    </h2>
+{% else %}
+    <p class="lead">Ninguna publicación en esta categoría</p>
 {% endfor %}
 
 <ul class="pager">
