@@ -2,10 +2,10 @@
 
 {% if commentslength > 0 or app.user %}<div class="comments">{% endif %}
 
-{% if collapse is defined and commentslength > 5 %}
+{% if collapse is defined and commentslength > collapse %}
     <p>
     <button class="btn btn-small" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
-        <i class="icon-comments"></i> Ver todos los comentarios (+{{ commentslength - 4 }})
+        <i class="icon-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
     </button>
     </p>
         
@@ -48,7 +48,7 @@
         </div>
     </div>
     
-    {% if collapse is defined and commentslength > 5 and (commentslength - loop.index) == 4 %}</div>{% endif %}
+    {% if collapse is defined and commentslength > collapse and (commentslength - loop.index) == (collapse - 1) %}</div>{% endif %}
     
 {% endfor %}
 

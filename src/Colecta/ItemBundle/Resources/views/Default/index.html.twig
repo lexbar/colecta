@@ -31,7 +31,7 @@
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 1 } only %}
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
 </div>
 {% else %}
     <h3>Nadie ha escrito nada... por ahora.</h3>

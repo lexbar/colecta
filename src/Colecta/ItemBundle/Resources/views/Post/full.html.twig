@@ -12,8 +12,8 @@
     
     {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { 'item': item } only %}
     
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 18 } only %}
 </div>
 {% endblock %}
