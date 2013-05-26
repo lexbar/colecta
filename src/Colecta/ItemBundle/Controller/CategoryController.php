@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CategoryController extends Controller
 {
-    private $ipp = 10; //Items per page
+    private $ipp = 30; //Items per page
     
     public function indexAction()
     {
