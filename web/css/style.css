@@ -33,6 +33,12 @@ h2.related {
     margin: 25px 0 15px -40px !important;
     font-size: 18px;
 }
+.full .micro {
+    margin-left: 45px;
+}
+.full h2.related {
+    margin-left: 0 !important;
+}
 form.well {
     border-radius: 0;
 }
