@@ -305,6 +305,7 @@ form.form-horizontal .controls textarea {
 }
 #mapproperties ul {
     padding-left: 0;
+    font-size: 0.8em;
 }
 #mapproperties .nav a {
     color: #666;
