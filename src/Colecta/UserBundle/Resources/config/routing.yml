@@ -47,6 +47,10 @@ userNotificationDismiss:
 userMessages:
     pattern:  /mensajes/
     defaults: { _controller: ColectaUserBundle:Message:index }
+    
+userSentMessages:
+    pattern:  /mensajes/enviados/
+    defaults: { _controller: ColectaUserBundle:Message:sent }
 
 userMessageNew:
     pattern:  /mensajes/nuevo/

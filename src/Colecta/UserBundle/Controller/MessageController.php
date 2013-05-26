@@ -45,6 +45,39 @@ class MessageController extends Controller
         return $this->render('ColectaUserBundle:Message:index.html.twig', array('messages' => $messages));
     }
     
+    public function sentAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $messages = $em->getRepository('ColectaUserBundle:Message')->findBy(array('origin'=>$user->getId()), array('date'=>'DESC'),30,0);
+        
+        if(count($messages))
+        {
+            for($i = 0; $i < count($messages); $i++)
+            {
+                if(!$messages[$i]->getDismiss())
+                {
+                    $messages[$i]->setDismiss(true);
+                    $em->persist($messages[$i]);
+                    
+                    $em->flush();
+                    
+                    $this->get('session')->setFlash('message'.$messages[$i]->getId() , 'unread');
+                }
+            }
+        }
+        
+        return $this->render('ColectaUserBundle:Message:sent.html.twig', array('messages' => $messages));
+    }
+    
     public function newAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();

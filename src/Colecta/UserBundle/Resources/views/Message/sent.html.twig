@@ -4,8 +4,8 @@
 
 <div class="title-block">
     <a href="{{ path('userMessageNew')}}" class="btn btn-small btn-primary pull-right">Nuevo mensaje <i class="icon-plus"></i></a>
-    <h2>Mensajes Recibidos</h2>
-    <span><a href="{{ path('userSentMessages') }}">Ver mensajes enviados</a></span>
+    <h2>Mensajes Enviados</h2>
+    <span><a href="{{ path('userMessages') }}">Ver mensajes recibidos</a></span>
 </div>
 
 {% for message in messages %}
