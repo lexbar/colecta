@@ -5,11 +5,11 @@
 {% block article %}
 
 <div class="title-block">
-    <h2>Publicado en <em>{{ category.name }}</em></h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
+    <h2>Publicado en <em>{{ category.name }}</em></h2>{% if page > 1 %} <span>página {{ page }}</span> | {% endif %}<span><a href="{{ path('ColectaCategoryIndex') }}"><i class="icon-double-angle-left"></i> Volver al índice de categorías</a></span>
 </div>
 
 {% for item in items %}
-    {% set typeicon = {'Item/Post':'file','Activity/Event':'calendar','Activity/Route':'globe','Activity/Place':'map-marker','Files/Folder':'folder-open'} %}
+    {% set typeicon = {'Item/Post':'file','Activity/Event':'calendar','Activity/Route':'globe','Activity/Place':'map-marker','Files/Folder':'folder-open','Files/File':'folder-open'} %}
     {% set type = item.type %}
     <h2>
         <span style="font-size: 14px;" class="icon-stack">
