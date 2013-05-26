@@ -47,6 +47,14 @@
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
         map.fitBounds(bounds);
         
+        var weatherDIV = document.createElement('div');
+        weatherDIV.className = 'control';
+        weatherDIV.innerHTML = 'Meteorología';
+        google.maps.event.addDomListener(weatherDIV, 'click', function() {
+            toggleWeather();
+        });
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(weatherDIV);
+        
         positionMarker = new google.maps.Marker({
             position: new google.maps.LatLng(points[0][0], points[0][1]),
             map: map
@@ -193,7 +201,6 @@
             $('#map').css('position','relative');
             $('#mapproperties').removeClass('fullscreen');
             $('#chart').removeClass('fullscreen');
-            $('#fullscreen').html('<i class="icon-fullscreen icon-fixed-width"></i>').removeClass('btn-danger') ;
             
             $('body').css('overflow','auto');
         }
@@ -203,7 +210,6 @@
             $('#map').css('position','absolute');
             $('#mapproperties').addClass('fullscreen');
             $('#chart').addClass('fullscreen');
-            $('#fullscreen').html('Salir <i class="icon-resize-small icon-white"></i>').addClass('btn-danger');
             
             $('body').css('overflow','hidden');            
         }
@@ -235,8 +241,10 @@
 <div class="route full">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
     
+    <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small pull-right" type="button"><i class="icon-fullscreen icon-fixed-width"></i></button>
+    
     <div class="dropdown pull-right">
-        <button class="btn btn-small btn-primary pull-right" type="button" onClick="return false;">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
+        <button class="btn btn-small btn-primary" type="button" onClick="return false;">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
         <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
             <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
             <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
@@ -259,14 +267,11 @@
     
     <div class="unity">
         <div id="mapproperties">
-            <p>
-                <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small" type="button"><i class="icon-fullscreen icon-fixed-width"></i></button>
-                <button id="weather" onClick="toggleWeather()" class="btn btn-small" type="button"><i class="icon-cloud icon-fixed-width"></i></button>
-            </p>
+            <button class="btn btn-danger btn-small btn-block" onClick="toggleFullScreen()">Salir <i class="icon-resize-small icon-white"></i></button>
             
             <ul class="nav nav-list">
                 <li class="nav-header">Tracks</li>
-                    <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} <small>({% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}Limitado a {{ item.trackpoints | length }}.{% endif%})</small></a></li>
+                    <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} <br><small>({% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} puntos{% else %}Limitado a {{ item.trackpoints | length }} puntos.{% endif%})</small></a></li>
                 <li class="divider"></li>
                 <li class="nav-header">Puntos</li>
                     <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
