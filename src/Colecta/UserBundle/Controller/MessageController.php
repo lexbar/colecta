@@ -59,22 +59,6 @@ class MessageController extends Controller
         
         $messages = $em->getRepository('ColectaUserBundle:Message')->findBy(array('origin'=>$user->getId()), array('date'=>'DESC'),30,0);
         
-        if(count($messages))
-        {
-            for($i = 0; $i < count($messages); $i++)
-            {
-                if(!$messages[$i]->getDismiss())
-                {
-                    $messages[$i]->setDismiss(true);
-                    $em->persist($messages[$i]);
-                    
-                    $em->flush();
-                    
-                    $this->get('session')->setFlash('message'.$messages[$i]->getId() , 'unread');
-                }
-            }
-        }
-        
         return $this->render('ColectaUserBundle:Message:sent.html.twig', array('messages' => $messages));
     }
     
