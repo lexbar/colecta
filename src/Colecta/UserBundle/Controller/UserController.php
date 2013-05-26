@@ -63,7 +63,10 @@ class UserController extends Controller
                                                     'invalid_message' => 'Las contraseñas deben coincidir.',
                                                     'required' => false,
                                                     'first_options'  => array('label' => 'Nueva Contraseña'),
-                                                    'second_options' => array('label' => 'Repite Contraseña')))
+                                                    'second_options' => array('label' => 'Repite Contraseña'),
+                                                    'first_name'  => 'pass1', // form.userPass.pass1
+                                                    'second_name' => 'pass2' // form.userPass.pass2
+                                                    ))
             ->add('file',   'file',     array('label'=>'Avatar:',       'required'=>false))
             ->getForm()
         ;

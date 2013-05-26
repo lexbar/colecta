@@ -2,15 +2,60 @@
 
 {% block article %}
 <div class="title-block">
-    <h2>Editar Perfil</h2>
+    <h2>Editar mi perfil</h2>
 </div>
 
-<form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_rest(form) }}
-    <br>
-    <img class="thumbnail" width="50" height="50" src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}">
+<form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }} class="well form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="UserName">Nombre</label>
+        <div class="controls">
+            {{ form_widget(form.name, { 'attr': {'id': 'UserName'} }) }}
+            {{ form_errors(form.name) }}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="UserMail">Email</label>
+        <div class="controls">
+            {{ form_widget(form.mail, { 'attr': {'id': 'UserMail'} }) }}
+            {{ form_errors(form.mail) }}
+        </div>
+    </div>
+    
     <hr>
-    <p><input class="btn btn-primary" type="submit" value="Guardar cambios" /></p>
+    
+    <div class="control-group">
+        <label class="control-label" for="UserPassword1">Nueva Contraseña</label>
+        <div class="controls">
+            {{ form_widget(form.pass.pass1, { 'attr': {'id': 'UserPassword1', 'autocomplete':'off'} }) }}
+            {{ form_errors(form.pass.pass1) }}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="UserPassword2">Repite Contraseña</label>
+        <div class="controls">
+            {{ form_widget(form.pass.pass2, { 'attr': {'id': 'UserPassword2', 'autocomplete':'off'} }) }}
+            {{ form_errors(form.pass.pass2) }}
+        </div>
+    </div>
+    
+    <hr>
+    
+    <div class="control-group">
+        <label class="control-label" for="UserAvatar">Avatar</label>
+        <div class="controls">
+            {{ form_widget(form.file, { 'attr': {'id': 'UserAvatar'} }) }}
+            {{ form_errors(form.file) }}
+            <br><br><img width="50" height="50" src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}">
+        </div>
+    </div>
+    
+    {{ form_rest(form) }}
+    
+    <div class="form-actions">
+        <input class="btn btn-primary" type="submit" value="Guardar cambios" />
+    </div>
 </form>
 {% endblock %}
 
