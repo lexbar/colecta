@@ -1,6 +1,13 @@
 {% if items | length > 0 %}
 
-    <h2 class="related">Relacionado <i class="icon-paper-clip"></i></h2>
+    <h2 class="related">
+        <span class="icon-stack">
+            <i class="icon-circle icon-stack-base" style="color: rgb(221, 221, 221);"></i>
+            <i class="icon-paper-clip"></i>
+        </span> 
+        
+        Relacionado:
+    </h2>
     
     {% for item in items if item.draft == 0 %}    
         {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
