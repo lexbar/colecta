@@ -53,13 +53,7 @@ a i, a:active i, a:hover i {
     margin: 10px 0;
 }
 .title-block {
-    background-color: #FFF;
-    border: 1px solid #DDDDDD;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    margin-bottom: -10px;
-    padding: 10px 10px 15px 20px;
-    position: relative;
-    top: -20px;
+    padding: 10px 10px 25px 5px;
 }
 .title-block span {
     color: #777777;
@@ -77,10 +71,13 @@ a i, a:active i, a:hover i {
 }
 .title-block h2 {
     color: #333333;
-    font-size: 34px;
+    font-size: 40px;
     font-weight: normal;
-    line-height: 26px;
+    line-height: 36px;
     margin: 0;
+}
+.title-block .dropdown {
+    margin-top: 2px;
 }
 .title-block a.btn-primary, .title-block button.btn-primary {
     text-transform: uppercase;
