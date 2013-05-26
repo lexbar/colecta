@@ -23,7 +23,6 @@
             </blockquote>
         {% endif %}
         
-        <a href="{{ path('userMessageResponse',{'responseto':message.id}) }}" class="pull-right btn-small"><i class="icon-reply"></i> Responder</a>
         <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
         
     </div>
