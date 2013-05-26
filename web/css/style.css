@@ -279,7 +279,7 @@ form.form-horizontal .controls textarea {
 }
 #map.full {
     height: 300px;
-    width: 460px;
+    width: 500px;
     border: 1px solid #999;
     margin-bottom: 0;
 }
@@ -296,11 +296,12 @@ form.form-horizontal .controls textarea {
     margin: 0;
 }
 #mapproperties {
+    background-color: #FFF;
     float: right;
     height: 300px;
-    width: 130px;
     overflow-y: auto;
-    background-color: #fff;
+    padding-top: 4px;
+    width: 90px;
 }
 #mapproperties ul {
     padding-left: 0;

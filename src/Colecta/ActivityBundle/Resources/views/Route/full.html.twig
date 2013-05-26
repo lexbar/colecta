@@ -193,7 +193,7 @@
             $('#map').css('position','relative');
             $('#mapproperties').removeClass('fullscreen');
             $('#chart').removeClass('fullscreen');
-            $('#fullscreen').html('Pantalla Completa <i class="icon-fullscreen"></i>').removeClass('btn-danger') ;
+            $('#fullscreen').html('<i class="icon-fullscreen icon-fixed-width"></i>').removeClass('btn-danger') ;
             
             $('body').css('overflow','auto');
         }
@@ -203,7 +203,7 @@
             $('#map').css('position','absolute');
             $('#mapproperties').addClass('fullscreen');
             $('#chart').addClass('fullscreen');
-            $('#fullscreen').html('Salir de pantalla completa <i class="icon-resize-small icon-white"></i>').addClass('btn-danger');
+            $('#fullscreen').html('Salir <i class="icon-resize-small icon-white"></i>').addClass('btn-danger');
             
             $('body').css('overflow','hidden');            
         }
@@ -221,7 +221,7 @@
             $('#weather').removeClass('disabled');
         } else {
             if(!isFullScreen){toggleFullScreen();} 
-            if(map.getZoom() > 12){map.setZoom(12);} 
+            if(map.getZoom() > 12){map.setZoom(11);} 
             weatherLayer.setMap(map);
             $('#weather').addClass('disabled');
         }
@@ -259,9 +259,10 @@
     
     <div class="unity">
         <div id="mapproperties">
-            <p><button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small btn-block" type="button">Pantalla completa <i class="icon-fullscreen"></i></button></p>
-            
-            <p><button id="weather" onClick="toggleWeather()" class="btn btn-small btn-block" type="button">Meteorología <i class="icon-cloud"></i></button></p>
+            <p>
+                <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small" type="button"><i class="icon-fullscreen icon-fixed-width"></i></button>
+                <button id="weather" onClick="toggleWeather()" class="btn btn-small" type="button"><i class="icon-cloud icon-fixed-width"></i></button>
+            </p>
             
             <ul class="nav nav-list">
                 <li class="nav-header">Tracks</li>
