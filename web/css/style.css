@@ -248,15 +248,54 @@ form.form-horizontal .controls textarea {
     transition: color .3s;
     -webkit-transition: color .3s; /* Safari */
 }
+#sidebar li a:hover i {
+    color: #fff !important;
+}
 #sidebar li a:hover {
-    background-color: #eee;
+    background-color: #111;
     text-decoration: none;
 }
-#sidebar li a:hover i {
-    color: #2986b6;
+#sidebar:hover li a.red i {
+    color: #d86348;
+}
+#sidebar li a.red:hover {
+    background-color: #d86348;
+}
+#sidebar:hover li a.orange i {
+    color: #f19e3d;
+}
+#sidebar li a.orange:hover {
+    background-color: #f19e3d;
+}
+#sidebar:hover li a.green i {
+    color: #5abb8b;
+}
+#sidebar li a.green:hover {
+    background-color: #5abb8b;
+}
+#sidebar:hover li a.blue i {
+    color: #4ca9d6;
+}
+#sidebar li a.blue:hover {
+    background-color: #4ca9d6;
+}
+#sidebar:hover li a.purple i {
+    color: #ac81c3;
+}
+#sidebar li a.purple:hover {
+    background-color: #ac81c3;
+}
+#sidebar:hover li a.grey i {
+    color: #77828d;
+}
+#sidebar li a.grey:hover {
+    background-color: #77828d;
 }
 #sidebar li a.active {
     background-color: #eee;
+}
+#sidebar li a#homeButton:hover {
+    background-color: #111;
 }
 #userbar {
     margin-left: 10px;
