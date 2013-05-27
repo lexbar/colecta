@@ -80,7 +80,7 @@ class DefaultController extends Controller
             ->select('i')
             ->from('ColectaItemBundle:Item', 'i')
             ->leftJoin('i.comments', 'c')
-            ->where('i.draft = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
+            ->where('i.draft = 0 AND i.part = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
             ->orderBy('i.date', 'ASC')
             ->getQuery();
         
