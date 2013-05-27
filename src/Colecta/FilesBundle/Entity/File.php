@@ -133,6 +133,11 @@ class File extends \Colecta\ItemBundle\Entity\Item
         return 'Files/File';
     }
     
+    public function getExif()
+    {
+        return (function_exists('exif_read_data')) ?  exif_read_data( $this->getAbsolutePath() ) : array();
+    }
+    
     public function isImage()
     {
         return in_array($this->getFiletype(), array('jpg', 'jpeg', 'png', 'gif', 'tiff'));

@@ -487,7 +487,7 @@ class FileController extends Controller
             }
             
             $image = new \Imagick($item->getAbsolutePath());
-            autoRotateImage($image);
+            autoRotateImage($image, $item);
             $image->cropThumbnailImage($width, $height);
             $image->setImagePage(0, 0, 0, 0);
             $image->normalizeImage();
@@ -544,7 +544,7 @@ class FileController extends Controller
             }
             
             $image = new \Imagick($item->getAbsolutePath());
-            autoRotateImage($image);
+            autoRotateImage($image, $item);
             $image->setImageResolution(72,72); 
             $image->scaleImage($width, $height, true);
             $image->setImagePage(0, 0, 0, 0);
@@ -587,23 +587,22 @@ class FileController extends Controller
     }
 }
 
-function autoRotateImage($image) {
-    $orientation = $image->getImageOrientation();
-
-    switch($orientation) {
-        case imagick::ORIENTATION_BOTTOMRIGHT:
-            $image->rotateimage("#000", 180); // rotate 180 degrees
-        break;
-
-        case imagick::ORIENTATION_RIGHTTOP:
-            $image->rotateimage("#000", 90); // rotate 90 degrees CW
-        break;
-
-        case imagick::ORIENTATION_LEFTBOTTOM:
-            $image->rotateimage("#000", -90); // rotate 90 degrees CCW
-        break;
+function autoRotateImage($image, $item) 
+{
+    $exif = $item->getExif();
+    if(!empty($exif['Orientation'])) 
+    {
+        switch($exif['Orientation']) 
+        {
+            case 8:
+                $image->rotateimage("#000", -90);
+                break;
+            case 3:
+                $image->rotateimage("#000", 180);
+                break;
+            case 6:
+                $image->rotateimage("#000", 90);
+                break;
+        }
     }
-
-    // Now that it's auto-rotated, make sure the EXIF data is correct in case the EXIF gets saved with the image!
-    $image->setImageOrientation(imagick::ORIENTATION_TOPLEFT);
 } 
