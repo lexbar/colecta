@@ -1,5 +1,10 @@
 {% set mapwidth = 150 %}
 {% set mapheight = 100 %}
+
+{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
+{% endif %}
+
 <div class="place mini">
     <div class="unity">
         <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}" class="maplink"><img src="http://maps.google.com/maps/api/staticmap?center={{ item.latitude ~ ',' ~ item.longitude }}&zoom=12&size={{ mapwidth }}x{{ mapheight }}&maptype=terrain&markers=color:red%7C{{ item.latitude ~ ',' ~ item.longitude }}&sensor=false" width="{{ mapwidth }}" height="{{ mapheight }}"></a>

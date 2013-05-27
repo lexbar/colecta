@@ -1,3 +1,6 @@
+{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
+{% endif %}
 <div class="event micro{% if item.happened %} happened{% endif %}">
 
     <div class="date">

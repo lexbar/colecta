@@ -9,10 +9,11 @@ class Service
     private $doctrine;
     private $lastAccessDone = false;
     
-    public function __construct(SecurityContextInterface $securityContext, $doctrine)
+    public function __construct(SecurityContextInterface $securityContext, $doctrine, $session)
     {
         $this->securityContext = $securityContext;
         $this->doctrine = $doctrine;
+        $this->session = $session;
     }
     
     public function notDismissedNotifications($item = 0) //if item is set means this is called from the view of the item 
@@ -74,6 +75,30 @@ class Service
             $this->lastAccessDone = true;
         }
        
+    }
+    
+    public function sinceLastVisit()
+    {
+        if(!$this->securityContext->getToken())
+        {
+            return;
+        }
+        else
+        {
+            $user = $this->securityContext->getToken()->getUser();
+        
+            if($user == 'anon.')
+            {
+                return;
+            }
+        }
+            
+        $slv = $this->session->get('sinceLastVisit');
+        
+        if(empty($slv))
+        {
+            $this->session->set('sinceLastVisit',$user->getLastAccess());
+        }
     }
 }
 ?>

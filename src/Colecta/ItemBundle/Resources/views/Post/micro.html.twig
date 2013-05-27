@@ -1,3 +1,6 @@
+{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
+{% endif %}
 <div class="post micro">
     
     <h2><a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>

@@ -20,6 +20,16 @@
     <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
+{% set slv = app.session.get('sinceLastVisit') %}
+{% if slv and slv != 'dismiss' %}
+    <div class="sys">
+        <a class="close pull-right" href="{{ path('ColectaSinceLastVisitDismiss') }}">&times;</a>
+        <i class="icon-eye-open pull-left icon-4x"></i>
+        <h2><a href="{{ path('ColectaSinceLastVisit') }}">Ver todo lo que me he perdido desde mi última visita <i class="icon-double-angle-right"></i></a></h2>
+        <p>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': slv } only %}</p>
+    </div>
+{% endif %}
+
 {% for item in items %}
     
 <div class="item">

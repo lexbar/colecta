@@ -1,3 +1,7 @@
+{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
+{% endif %}
+
 <div class="route micro">
     <div class="unity">
         <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="maplink"><img src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>

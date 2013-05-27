@@ -680,6 +680,10 @@ div.assistances ul li a {
 }
 .micro {
     padding: 3px 0;
+    margin: 0 0 0 45px;
+}
+.mini .micro {
+    margin: 0;
 }
 .micro h2 {
     margin: 0;
@@ -886,4 +890,21 @@ div.assistances ul li a {
     float: left;
     overflow: visible;
     width: 50px;
+}
+.sys {
+    border: 1px solid #ddd;
+    padding: 5px 15px;
+    margin: 5px 5px 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+}
+.sys p {
+    color: #999;
+}
+span.new {
+    color: orange; 
+    font-size: 10px; 
+    position: absolute;
+}
+div.new {
+    border: 1px solid orange; 
 }

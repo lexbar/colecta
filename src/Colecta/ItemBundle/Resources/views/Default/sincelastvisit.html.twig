@@ -1,0 +1,37 @@
+{% extends '::frontend.html.twig' %}
+
+{% block home 'active' %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Desde mi última visita</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
+</div>
+
+{% for item in items %}
+    
+<div class="item">
+    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    
+    {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': item } only %}
+    
+    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+</div>
+{% else %}
+    <p class="lead">No se ha publicado nada nuevo.</p>
+{% endfor %}
+
+<ul class="pager">
+  <li class="previous{% if page == 1 %} disabled{% endif %}">
+    <a href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+  </li>
+  <li class="next{% if not thereAreMore %} disabled{% endif %}">
+    <a href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+  </li>
+</ul>
+
+{% endblock %}

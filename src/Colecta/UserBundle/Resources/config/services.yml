@@ -1,21 +1,26 @@
 services:
     colectauser.login_success_handler:
         class:  Colecta\UserBundle\Service\LoginSuccessHandler
-        arguments:  [@router, @security.context]
+        arguments:  [@router, @security.context, @session]
         tags:
             - { name: 'monolog.logger', channel: 'security' }
     colectauser:
         class: Colecta\UserBundle\Service\Service
-        arguments: [@security.context, @doctrine]
+        arguments: [@security.context, @doctrine, @session]
         
     twig.extension.colectauser:
         class: Colecta\UserBundle\Service\ServiceExtension
         arguments: [@colectauser]
         tags:
             - { name: twig.extension }
-            
+    sincelastvisit:
+        class: Colecta\UserBundle\Service\Service
+        arguments: [@security.context, @doctrine, @session]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: sinceLastVisit }
+                        
     lastaccess:
         class: Colecta\UserBundle\Service\Service
-        arguments: [@security.context, @doctrine]
+        arguments: [@security.context, @doctrine, @session]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: lastAccess, priority: 64 }

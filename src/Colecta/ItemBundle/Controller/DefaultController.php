@@ -44,6 +44,76 @@ class DefaultController extends Controller
         
         return $this->render('ColectaItemBundle:Default:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
+    public function sinceLastVisitAction()
+    {
+        return $this->sinceLastVisitPageAction(1);
+    }
+    public function sinceLastVisitPageAction($page)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $slv = $this->get('session')->get('sinceLastVisit');
+        
+        if(empty($slv) || $slv == 'dismiss') {
+            $slv = $user->getLastAccess();
+        }
+        
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        //Get ALL the items that are not drafts
+        //$items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        
+        /*$query = $em->createQuery(
+            'SELECT i FROM ColectaItemBundle:Item i JOIN ColectaItemBundle:Comment c ON c.item = i WHERE i.draft = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\') ORDER BY i.date ASC'
+        );*/
+        
+        $query = $em->createQueryBuilder('ColectaItemBundle:Item')
+            ->select('i')
+            ->from('ColectaItemBundle:Item', 'i')
+            ->leftJoin('i.comments', 'c')
+            ->where('i.draft = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
+            ->orderBy('i.date', 'ASC')
+            ->getQuery();
+        
+        $query->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
+        
+        $items = $query->getResult();
+        
+        //Pagination
+        if(count($items) > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
+        
+        return $this->render('ColectaItemBundle:Default:sincelastvisit.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+    }
+    public function dismissSinceLastVisitAction()
+    {
+        $this->get('session')->set('sinceLastVisit','dismiss');
+        
+        $referer = $this->get('request')->headers->get('referer');
+        
+        if(empty($referer))
+        {
+            $referer = $this->generateUrl('ColectaDashboard');
+        }
+        
+        return new RedirectResponse($referer);
+    }
     public function searchAction()
     {
         return $this->searchPageAction(1);

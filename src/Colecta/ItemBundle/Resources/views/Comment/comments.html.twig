@@ -19,7 +19,7 @@
         </a> 
 
     
-        <div class="media-body">
+        <div class="media-body{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < comment.date %} new{% endif %}">
             <p class="media-heading">
                 <strong><a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a></strong>
         
