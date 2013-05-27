@@ -235,10 +235,11 @@ form.form-horizontal .controls textarea {
     border: 1px solid #CCCCCC;
     color: #222222;
     display: block;
-    left: 45px;
-    padding: 2px 14px;
+    left: 100%;
+    padding: 10px 14px;
     position: absolute;
-    top: 6px;
+    top: -1px;
+    line-height: 22px;
     z-index: 1000;  
 }
 #sidebar li a i {
