@@ -803,7 +803,7 @@ class FileController extends Controller
 
 function autoRotateImage($image, $path) 
 {
-    $exif = (function_exists('exif_read_data')) ?  exif_read_data( $path ) : array();
+    $exif = (function_exists('exif_read_data')) ? @exif_read_data( $path ) : array();
     if(!empty($exif['Orientation'])) 
     {
         switch($exif['Orientation']) 
