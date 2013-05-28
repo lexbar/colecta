@@ -170,7 +170,7 @@ class FolderController extends Controller
                 $folder->setPublic(1);
                 $folder->setPersonal(1);
                 
-                $folder->setCategory($em->getRepository('ColectaFilesBundle:Folder')->findOneById(1));
+                $folder->setCategory($em->getRepository('ColectaItemBundle:Category')->findOneById(1));
                 $folder->setAuthor($user);
                 
                 
