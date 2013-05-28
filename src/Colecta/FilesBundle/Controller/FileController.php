@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Colecta\FilesBundle\Form\Frontend\FileType;
 use Colecta\FilesBundle\Entity\File;
+use Colecta\ItemBundle\Entity\Item;
 use Colecta\FilesBundle\Entity\Folder;
 use Colecta\ItemBundle\Entity\Category;
 
@@ -56,12 +57,225 @@ class FileController extends Controller
     public function newAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         $folders = $em->getRepository('ColectaFilesBundle:Folder')->findAll();
         
-        $item = new File();
+        return $this->render('ColectaFilesBundle:File:new.html.twig', array('folders' => $folders));
+    }
+    public function pickAction($slug) //slug of the destiny folder
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
         
-        return $this->render('ColectaFilesBundle:File:new.html.twig', array('categories' => $categories, 'folders' => $folders, 'item' => $item));
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
+        $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
+        
+        if(!$folder)
+        {
+            $this->get('session')->setFlash('error', 'No existe la carpeta indicada.');
+            return new RedirectResponse($this->generateUrl('ColectaFileNew'));
+        }
+        elseif($folder->getAuthor() != $user && ($folder->getPersonal() || $folder->getDraft()))
+        {
+            $this->get('session')->setFlash('error', 'No puedes publicar en esta carpeta.');
+            return new RedirectResponse($this->generateUrl('ColectaFileNew'));
+        }
+        
+        return $this->render('ColectaFilesBundle:File:pick.html.twig', array('folder' => $folder));
+    }
+    public function XHRUploadAction($slug) 
+    {
+        //Single file upload from XHR form
+        
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.') 
+        {
+            throw $this->createNotFoundException();
+        }
+        
+        set_time_limit (60*3);
+        
+        $file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'],$_FILES['file']['type'],$_FILES['file']['size'],$_FILES['file']['error']);
+        
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' ;
+        $filename = 'xhr-' . $slug . md5($file->getClientOriginalName() . $_FILES['file']['tmp_name']);
+        
+        $extension = str_replace('jpg', 'jpeg', $file->guessExtension() );
+        if(empty($extension)) 
+        {
+            $extension = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION));
+        }
+        
+        $file->move($cachePath, $filename.'.'.$extension);
+        
+        $response = new Response();
+        $response->setStatusCode(200);
+        $response->setContent($filename.'.'.$extension);
+        $response->headers->set('Content-Type', 'text/plain');
+        
+        return $response;
+    }
+    public function XHRPreviewAction($slug, $token)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.') 
+        {
+            throw $this->createNotFoundException();
+        }
+        
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' ;
+        
+        if(!file_exists($cachePath.$token))
+        {
+            throw $this->createNotFoundException();
+        }
+        
+        $image = new \Imagick($cachePath.$token);
+        autoRotateImage($image, $cachePath.$token);
+        $image->cropThumbnailImage(250, 190);
+        $image->setImagePage(0, 0, 0, 0);
+        $image->normalizeImage();
+        $image->setImageFormat('jpeg'); 
+        
+        $response = new Response();
+        
+        $response->setStatusCode(200);
+        $response->setContent($image);
+        $response->headers->set('Content-Type', 'image/jpeg');
+        
+        return $response;
+    }
+    public function XHRProcessAction($slug) 
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
+        $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
+        
+        if(!$folder)
+        {
+            $this->get('session')->setFlash('error', 'No existe la carpeta indicada.');
+            return new RedirectResponse($this->generateUrl('ColectaFileNew'));
+        }
+        elseif($folder->getAuthor() != $user && ($folder->getPersonal() || $folder->getDraft()))
+        {
+            $this->get('session')->setFlash('error', 'No puedes publicar en esta carpeta.');
+            return new RedirectResponse($this->generateUrl('ColectaFileNew'));
+        }
+        
+        $request = $this->getRequest();
+        
+        if ($request->getMethod() == 'POST')
+        {
+            if(! $request->request->get('file0Token') )
+            {
+                $this->get('session')->setFlash('error', 'Ha ocurrido un error enviando el formulario.');
+                return new RedirectResponse($this->generateUrl('ColectaFilePick', array('slug'=>$slug)));
+            }
+            
+            $i = 0;
+            
+            while($request->request->get('file'.$i.'Token')) //while there are more files...
+            {
+                $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' ;
+                $uploadPath = __DIR__ . '/../../../../web/uploads/files/';
+                $token = $request->request->get('file'.$i.'Token').'';
+                $extension = strtolower(pathinfo($token, PATHINFO_EXTENSION));
+                $hashName = sha1($token . mt_rand(0, 99999)).'.'.$extension;
+                
+                if($request->request->get('file'.$i.'Delete') == 1)
+                {
+                    //Delete file
+                    unlink($cachePath.$token);
+                }
+                else
+                {
+                    rename($cachePath.$token,$uploadPath.$hashName);
+                    
+                    $item = new File();
+                    if($request->request->get('file'.$i.'Name') == '')
+                    {
+                        $name = $folder->getName();
+                    }
+                    else
+                    {
+                        $name = $request->request->get('file'.$i.'Name');
+                    }
+                    
+                    $item->setName($name);
+                    $item->setDescription(strval($request->request->get('file'.$i.'Description')));
+                    
+                    //Slug generation
+                    $slug = $item->generateSlug();
+                    $n = 2;
+                    
+                    while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+                    {
+                        if($n > 2)
+                        {
+                            $slug = substr($slug,0,-2);
+                        }
+                        
+                        $slug .= '-'.$n;
+                        
+                        $n++;
+                    }
+                    $item->setSlug($slug);
+                    
+                    $item->setAuthor($user);
+                    $item->summarize($item->getDescription());
+                    $item->setAllowComments(true);
+                    $item->setDraft(false);
+                    $item->setDate(new \DateTime('now'));
+                    
+                    $item->setFilename($hashName);
+                    $item->setFiletype($extension);
+                    
+                    $item->setFolder($folder);
+                    if($folder->getDraft())
+                    {
+                        $folder->setDraft(0);
+                       
+                    }
+                    $em->persist($folder);
+                    
+                    $folder->setDate(new \DateTime('now'));
+                    $item->setPart(true);
+                    
+                    $item->setCategory($folder->getCategory());
+                    $folder->getCategory()->setLastchange(new \DateTime('now'));
+                    $em->persist($folder->getCategory());  
+                    
+                    $em->persist($item);
+                    $em->flush();
+                }
+                
+                $i++;
+            }
+            
+            
+            
+            return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug'=>$folder->getSlug())));
+        }
+        else
+        {
+            $this->get('session')->setFlash('error', 'Ha ocurrido un error enviando el formulario.');
+            return new RedirectResponse($this->generateUrl('ColectaFilePick', array('slug'=>$slug)));
+        }
+        
+        return $this->render('ColectaFilesBundle:File:pick.html.twig', array('folder' => $folder));
     }
     public function editAction($slug)
     {
@@ -487,7 +701,7 @@ class FileController extends Controller
             }
             
             $image = new \Imagick($item->getAbsolutePath());
-            autoRotateImage($image, $item);
+            autoRotateImage($image, $item->getAbsolutePath());
             $image->cropThumbnailImage($width, $height);
             $image->setImagePage(0, 0, 0, 0);
             $image->normalizeImage();
@@ -544,7 +758,7 @@ class FileController extends Controller
             }
             
             $image = new \Imagick($item->getAbsolutePath());
-            autoRotateImage($image, $item);
+            autoRotateImage($image, $item->getAbsolutePath());
             $image->setImageResolution(72,72); 
             $image->scaleImage($width, $height, true);
             $image->setImagePage(0, 0, 0, 0);
@@ -587,9 +801,9 @@ class FileController extends Controller
     }
 }
 
-function autoRotateImage($image, $item) 
+function autoRotateImage($image, $path) 
 {
-    $exif = $item->getExif();
+    $exif = (function_exists('exif_read_data')) ?  exif_read_data( $path ) : array();
     if(!empty($exif['Orientation'])) 
     {
         switch($exif['Orientation']) 

@@ -1,0 +1,68 @@
+<form onsubmit="$('#FolderSubmit').attr('disabled','disabled').addClass('disabled'); $('#FolderSubmitText').html('Enviando...'); $('#FolderSubmitLoading').addClass('icon-refresh icon-spin');" class="form-horizontal well" method="POST" action="{{ path('ColectaFolderCreate') }}">
+    
+    <p class="lead">Selecciona o crea la carpeta de destino:</p>
+
+    <fieldset style="display:none" id="createNewFolder">
+        
+        <div class="control-group">
+            <label class="control-label">Nombre Carpeta</label>
+            <div class="controls">
+                <input type="text" name="name">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Descripción</label>
+            <div class="controls">
+                <textarea name="description"></textarea>
+            </div>
+        </div>
+        
+        {% render 'ColectaItemBundle:Category:formlist' with {'selected': 0} %}
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="FolderSubmit"><i id="FolderSubmitLoading"></i> <span id="FolderSubmitText">Crear y continuar</span></button>
+            <button type="button" class="btn" onClick="document.getElementById('createNewFolder').style.display = 'none'; document.getElementById('foldersList').style.display = 'block';">Cancelar</button>
+        </div>
+        
+        <hr>
+    </fieldset>
+    
+    <fieldset id="foldersList">
+        <button style="margin-left: 130px" onclick="document.getElementById('createNewFolder').style.display = 'block'; document.getElementById('foldersList').style.display = 'none';" type="button" class="btn newcategory"><i class="icon-plus-sign"></i> Nueva carpeta</button>
+        
+        <hr>
+        
+        <div class="control-group">
+            <label class="control-label">Tus Carpetas</label>
+            <div class="controls">
+                <ul class="unstyled">
+                    {# PERSONAL FOLDERS #}
+                    {% for folder in folders if folder.personal and folder.author == app.user %}
+                        <li><a href="{{ path('ColectaFilePick',{'slug':folder.slug}) }}"><i class="icon-folder-open icon-fixed-width"></i> {{ folder.name }}</a></li>
+                    {% endfor %}
+                    
+                    {# FOLDERS I HAVE CREATED #}
+                    {% for folder in folders if folder.author == app.user and not folder.personal %}
+                        <li><a href="{{ path('ColectaFilePick',{'slug':folder.slug}) }}"><i class="icon-folder-open icon-fixed-width"></i> {{ folder.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div class="control-group">
+            <label class="control-label">Otras carpetas</label>
+            <div class="controls">
+                <ul class="unstyled">                    
+                    {# FOLDERS FROM OTHERS #}
+                    {% for folder in folders if folder.author != app.user and not folder.personal and not folder.draft %}
+                        <li><a href="{{ path('ColectaFilePick',{'slug':folder.slug}) }}"><i class="icon-folder-open icon-fixed-width"></i> {{ folder.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>     
+        
+    </fieldset>
+</form>

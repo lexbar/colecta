@@ -1,6 +1,9 @@
 ColectaFolderIndex:
     pattern:  /carpeta/
     defaults: { _controller: ColectaFilesBundle:Folder:index }
+ColectaFolderCreate:
+    pattern:  /carpeta/crear/
+    defaults: { _controller: ColectaFilesBundle:Folder:create }
 ColectaFolderView:
     pattern:  /carpeta/{slug}
     defaults: { _controller: ColectaFilesBundle:Folder:view }
@@ -16,6 +19,18 @@ ColectaFilePage:
 ColectaFileNew:
     pattern:  /archivo/crear/
     defaults: { _controller: ColectaFilesBundle:File:new }
+ColectaFilePick:
+    pattern:  /archivo/crear/{slug}/
+    defaults: { _controller: ColectaFilesBundle:File:pick }
+ColectaFileXHRUpload:
+    pattern:  /archivo/crear/{slug}/upload/
+    defaults: { _controller: ColectaFilesBundle:File:XHRUpload }
+ColectaFileXHRPreview:
+    pattern:  /archivo/crear/{slug}/preview/{token}
+    defaults: { _controller: ColectaFilesBundle:File:XHRPreview }
+ColectaFileXHRProcess:
+    pattern:  /archivo/crear/{slug}/process/
+    defaults: { _controller: ColectaFilesBundle:File:XHRProcess }
 ColectaFileUpload:
     pattern:  /fileupload/
     defaults: { _controller: ColectaFilesBundle:File:upload }

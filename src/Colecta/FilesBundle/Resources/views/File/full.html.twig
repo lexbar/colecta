@@ -12,8 +12,8 @@
         <div class="fullimage" style="width:auto;height:420px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'600', 'height':'420'}) }}') scroll no-repeat center center #111;">
             {% set next = item.folder.getNextPicture(item) %}
             {% set previous = item.folder.getPreviousPicture(item) %}
-            <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-left{% if next %} active{% endif %}"><i class="icon-chevron-left icon-4x"></i></a>
-            <a href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-right{% if previous %} active{% endif %}"><i class="icon-chevron-right icon-4x"></i></a>
+            <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-left{% if next %} active{% endif %}"><i class="icon-angle-left icon-4x"></i></a>
+            <a href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-right{% if previous %} active{% endif %}"><i class="icon-angle-right icon-4x"></i></a>
         </div>
         {#<a href="{{ item.URLPath }}" class=""><img src=""></a>#}
     {% else %}

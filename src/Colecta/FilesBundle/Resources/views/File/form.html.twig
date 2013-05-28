@@ -24,17 +24,17 @@
         {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':folder, 'firstwrite':firstwrite} %}
         
         <div class="control-group">
-        <label class="control-label" for="FileName">Título</label>
-        <div class="controls">
-            <input id="FileName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}">
-        </div>
+            <label class="control-label" for="FileName">Título</label>
+            <div class="controls">
+                <input id="FileName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}">
+            </div>
         </div>
       
         <div class="control-group">
-        <label class="control-label" for="FileText">Texto</label>
-        <div class="controls">
-          <textarea id="FileText" name="description">{{ item.description }}</textarea>
-        </div>
+            <label class="control-label" for="FileText">Texto</label>
+            <div class="controls">
+              <textarea id="FileText" name="description">{{ item.description }}</textarea>
+            </div>
         </div>
         
         {% if item.category.id is defined %}
