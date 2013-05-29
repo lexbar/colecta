@@ -125,7 +125,14 @@ class Service
         
         if(empty($slv))
         {
-            $this->session->set('sinceLastVisit',$user->getLastAccess());
+            if($this->sinceLastVisitItems() > 0)
+            {
+                $this->session->set('sinceLastVisit',$user->getLastAccess());
+            }
+            else
+            {
+                $this->session->set('sinceLastVisit','dismiss');
+            }
         }
     }
 }
