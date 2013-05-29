@@ -70,7 +70,7 @@ class CommentController extends Controller
                 if(!in_array($c->getUser()->getId(), $notifications)) //if he has not already received a notification..
                 {
                     //Notification to a subscriber
-                    $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$item->getAuthor(),'dismiss'=>0,'what'=>'reply','item'=>$item));
+                    $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$c->getUser(),'dismiss'=>0,'what'=>'reply','item'=>$item));
                     
                     if($notification)
                     {
