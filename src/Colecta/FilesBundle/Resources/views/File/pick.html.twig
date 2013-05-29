@@ -181,7 +181,7 @@
     <div class="control-group" id="FileControlGroup">
         <label class="control-label" for="File" id="FileLabel">Archivos</label>
         <div class="controls">
-            <input id="File" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
+            <input id="File" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="this.html('<i class=\"icon-refresh icon-spin\"></i> Subiendo...').attr('disabled','disabled').addClass('disabled');$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
             <p class="muted">Selecciona uno o varios archivos</p>
         </div>
     </div>
