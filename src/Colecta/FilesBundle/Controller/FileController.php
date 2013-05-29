@@ -85,6 +85,40 @@ class FileController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
         }
         
+        $request = $this->getRequest();
+        
+        if ($request->getMethod() == 'POST')
+        {
+            $token = $this->XHRUploadAction($slug)->getContent();
+            
+            $TheFiles = $this->get('session')->get('TheFiles');
+            if(is_array($TheFiles))
+            {
+                $newTheFiles = array();
+                $i = 0;
+                
+                foreach($TheFiles as $f)
+                {
+                    if(!$request->request->get('file'.$i.'Delete'))
+                    {
+                        $newTheFiles[] = array('name'=>$request->request->get('file'.$i.'Name'),'description'=>$request->request->get('file'.$i.'Description'),'token'=>$f['token']);
+                    }
+                    
+                    $i++;
+                }
+                
+                $newTheFiles[] = array('name'=>'','description'=>'','token'=>$token);
+                
+                $TheFiles = $newTheFiles;
+            }
+            else
+            {
+                $TheFiles = array(array('name'=>'','description'=>'','token'=>$token));
+            }
+            
+            $this->get('session')->set('TheFiles',$TheFiles);
+        }        
+        
         return $this->render('ColectaFilesBundle:File:pick.html.twig', array('folder' => $folder));
     }
     public function XHRUploadAction($slug) 
@@ -99,8 +133,16 @@ class FileController extends Controller
         }
         
         set_time_limit (60*3);
-        
-        $file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'],$_FILES['file']['type'],$_FILES['file']['size'],$_FILES['file']['error']);
+
+        //Only first file
+        if(is_array($_FILES['file']['tmp_name']))
+        {
+            $file = new UploadedFile($_FILES['file']['tmp_name'][0],$_FILES['file']['name'][0],$_FILES['file']['type'][0],$_FILES['file']['size'][0],$_FILES['file']['error'][0]);
+        }
+        else
+        {
+            $file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'],$_FILES['file']['type'],$_FILES['file']['size'],$_FILES['file']['error']);
+        } 
         
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' ;
         $filename = 'xhr-' . $slug . md5($file->getClientOriginalName() . $_FILES['file']['tmp_name']);
@@ -266,7 +308,10 @@ class FileController extends Controller
             }
             
             
-            
+            if($this->get('session')->get('TheFiles'))
+            {
+                $this->get('session')->set('TheFiles',null);
+            }
             return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug'=>$folder->getSlug())));
         }
         else

@@ -5,7 +5,6 @@
 {% block javascripts %}
 <script>
 <!--
-    var preventSubmit = false;
     var uploading = false;
     var currentFileIndex = -1;
     var TheFiles = [];
@@ -114,13 +113,12 @@
     }
     
     function process() {
-        $('#File').remove();
+        $('#FileControlGroup').remove();
         $('#FileSubmit').attr('disabled','disabled').addClass('disabled'); 
         $('#FileSubmitText').html('Enviando...'); 
         $('#FileSubmitLoading').addClass('icon-refresh icon-spin');
         
-        preventSubmit = false;
-        $('#ProcessForm').submit();
+        $('#ProcessForm').attr('action','{{ path('ColectaFileXHRProcess', {'slug':folder.slug}) }}').attr('onSubmit','').submit();
     }
 -->
 </script>
@@ -129,7 +127,7 @@
 {% block stylesheets %}
 <style>
     #filesPreview {
-        display:none;
+        {% if not app.session.get('TheFiles') %}display:none;{% endif %}
         overflow:hidden;
         margin-bottom: 40px;
     }
@@ -142,6 +140,7 @@
         margin: 0 4px 4px 0;
         text-align: center;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+        background-color:#FFF;
     }
     #filesPreview .pv .uploadmessage {
         margin-top: 50px;
@@ -162,21 +161,34 @@
     <h2>Subir Archivos</h2>
 </div>
 
-<form action="{{ path('ColectaFileXHRProcess', {'slug':folder.slug}) }}" method="POST" class="form-horizontal well" enctype="multipart/form-data" onSubmit="if(preventSubmit) return false;" id="ProcessForm">
+<form action="{{ path('ColectaFilePick', {'slug':folder.slug}) }}" method="POST" class="form-horizontal well" enctype="multipart/form-data" onSubmit="{% if not app.session.get('TheFiles') %}if(TheFiles.length){% endif %} return false;" id="ProcessForm">
     
-    <ul id="filesPreview"></ul>
+    <ul id="filesPreview">
+        {% if app.session.get('TheFiles') %}
+            {% for f in app.session.get('TheFiles')%}
+                <div class="pv" id="UFC{{ loop.index0 }}">
+                    <img src="preview/{{ f.token }}" style="width:250px;height:190px;background-color:#AAA">
+                    <input type="text" name="file{{ loop.index0 }}Name" placeholder="Nombre..." value="{{ f.name }}">
+                    <textarea name="file{{ loop.index0 }}Description" placeholder="Descripción...">{{ f.description }}</textarea>
+                    <small class="btn btn-link btn-small" onClick="deleteFile({{ loop.index0 }})">(Eliminar archivo)</small>
+                    <input type="hidden" name="file{{ loop.index0 }}Token" value="{{ f.token }}">
+                    <input type="hidden" name="file{{ loop.index0 }}Delete" value="0" id="file{{ loop.index0 }}Delete">
+                </div>
+            {% endfor %}
+        {% endif %}
+    </ul>
     
-    <div class="control-group">
+    <div class="control-group" id="FileControlGroup">
         <label class="control-label" for="File" id="FileLabel">Archivos</label>
         <div class="controls">
-            <input id="File" type="file" multiple="multiple" required="required" name="files[]">    
+            <input id="File" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
             <p class="muted">Selecciona uno o varios archivos</p>
         </div>
     </div>
     
     <div class="form-actions">
         <button class="btn disabled" disabled="disabled">Guardar como borrador</button>
-        <button type="submit" class="btn btn-primary" id="FileSubmit" onClick="process()"><i id="FileSubmitLoading"></i> <span id="FileSubmitText">Publicar ahora</span></button>
+        <button type="submit" class="btn btn-primary" id="FileSubmit" onClick="{% if not app.session.get('TheFiles') %}if(TheFiles.length) {% endif %}process()"><i id="FileSubmitLoading"></i> <span id="FileSubmitText">Publicar ahora</span></button>
     </div>
 </form>
 {% endblock %}
