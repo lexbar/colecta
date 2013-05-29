@@ -53,6 +53,34 @@ class Service
         return $query->getResult();
     }
     
+    public function sinceLastVisitItems()
+    {
+        if(!$this->securityContext->getToken())
+        {
+            return 0;
+        }
+        else
+        {
+            $em = $this->doctrine->getEntityManager();
+            $slv = $this->session->get('sinceLastVisit');
+            $user = $this->securityContext->getToken()->getUser();
+            
+            if(empty($slv) || $slv == 'dismiss') {
+                $slv = $user->getLastAccess();
+            }
+            
+            $query = $em->createQueryBuilder('ColectaItemBundle:Item')
+                ->select('COUNT(i)')
+                ->from('ColectaItemBundle:Item', 'i')
+                ->leftJoin('i.comments', 'c')
+                ->where('i.draft = 0 AND i.part = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
+                ->orderBy('i.date', 'ASC')
+                ->getQuery();
+                
+            return $query->getSingleScalarResult();
+        }
+    }
+    
     public function lastAccess()
     {
         if(!$this->lastAccessDone)

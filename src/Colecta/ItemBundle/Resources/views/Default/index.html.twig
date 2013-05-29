@@ -21,7 +21,7 @@
 </div>
 
 {% set slv = app.session.get('sinceLastVisit') %}
-{% if slv and slv != 'dismiss' %}
+{% if slv and slv != 'dismiss' and colectauser.sinceLastVisitItems > 0 %}
     <div class="sys">
         <a class="close pull-right" href="{{ path('ColectaSinceLastVisitDismiss') }}">&times;</a>
         <i class="icon-eye-open pull-left icon-4x"></i>
