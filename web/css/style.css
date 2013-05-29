@@ -447,6 +447,7 @@ form.form-horizontal .controls textarea {
 .item {
     border-bottom: 1px solid #BBB;
     padding: 10px 4px 20px;
+    position: relative;
 }
 .itemActions {
     margin: 10px 0 0 45px;
@@ -905,6 +906,8 @@ span.new {
     color: orange; 
     font-size: 10px; 
     position: absolute;
+    left: 5px;
+    display: block;
 }
 div.new {
     border: 1px solid orange; 
