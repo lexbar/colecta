@@ -20,6 +20,10 @@ userProfile:
     pattern:  /usuario/{id}
     defaults: { _controller: ColectaUserBundle:User:profile }
     
+userItems:
+    pattern:  /usuario/{id}/pagina/{page}
+    defaults: { _controller: ColectaUserBundle:User:items }
+    
 ColectaUserAssistances:
     pattern:  /usuario/{id}/asistencias/
     defaults: { _controller: ColectaUserBundle:User:assistances }

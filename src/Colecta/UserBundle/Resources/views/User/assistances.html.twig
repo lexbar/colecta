@@ -14,11 +14,9 @@
 </div>
 
 {% for a in assistances %}
-    <div class="item">
-        {% set path = 'Colecta' ~ a.event.type ~ ':micro.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': a.event } only %}
-    </div>
+    {% set path = 'Colecta' ~ a.event.type ~ ':micro.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': a.event } only %}
 {% else %}
     <p><strong>No consta como asistente a ningún evento.</strong></p>
 {% endfor %}

@@ -42,9 +42,7 @@ class FileController extends Controller
             $thereAreMore = false;
         }
         
-        $form = $this->uploadAction();
-        
-        return $this->render('ColectaFilesBundle:File:index.html.twig', array('items' => $items,'form' => $form, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaFilesBundle:File:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function viewAction($slug)
     {

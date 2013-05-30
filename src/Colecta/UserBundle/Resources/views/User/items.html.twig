@@ -5,9 +5,6 @@
 <div class="title-block">
     <h2><img src="{% if user.avatar %}{{ path('userAvatar',{'uid':user.id,'width':100,'height':100}) }}{% else %}/img/unknown.gif{% endif %}">{{ user.name }} <br><span>Historial de publicaciones</span></h2>
 </div>
-{% if app.user and app.user.id == 1 %}
-<p>Código de recuperación: {{ thecode }}</p>
-{% endif %}
 
 <div class="pagination">
     <ul>
@@ -36,4 +33,5 @@
     <a href="{% if thereAreMore %}{{ path('userItems', {'id': user.id, 'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
   </li>
 </ul>
+
 {% endblock %}

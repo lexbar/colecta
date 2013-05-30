@@ -12,6 +12,8 @@ use Colecta\UserBundle\Entity\User;
 
 class UserController extends Controller
 {
+    private $ipp = 10; //Items per page
+    
     /*
         View the public profile
     */
@@ -19,16 +21,52 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        //Get ALL the items that are not drafts
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
-        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('author'=>$id), array('date'=>'DESC'),10,0);
+        //Get ALL the items that are not drafts
+        $page = 0;
+        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('author'=>$id), array('date'=>'DESC'),$this->ipp + 1, $page * $this->ipp);
+        $count = count($items);
+        
+        //Pagination
+        if($count > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
         
         $salt = $user->getSalt();
         $thecode = substr(md5($salt.$this->container->getParameter('secret')),5,18);
         
-        return $this->render('ColectaUserBundle:User:profile.html.twig', array('user' => $user, 'items' => $items, 'thecode' => $thecode));
+        return $this->render('ColectaUserBundle:User:profile.html.twig', array('user' => $user, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1), 'thecode' => $thecode));
     }
-    
+    public function itemsAction($id, $page)
+    {
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $user = $em->getRepository('ColectaUserBundle:User')->find($id);
+        //Get ALL the items that are not drafts
+        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('author'=>$id), array('date'=>'DESC'),$this->ipp + 1, $page * $this->ipp);
+        $count = count($items);
+        
+        //Pagination
+        if($count > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
+        
+        return $this->render('ColectaUserBundle:User:items.html.twig', array('user' => $user, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+    }
     public function assistancesAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
