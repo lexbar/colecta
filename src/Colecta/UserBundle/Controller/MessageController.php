@@ -120,7 +120,7 @@ class MessageController extends Controller
                 
                 $this->get('session')->setFlash('success', 'Mensaje enviado.');
                 
-                return new RedirectResponse($this->generateUrl('userMessages'));
+                return new RedirectResponse($this->generateUrl('userSentMessages'));
             }
             else
             {
