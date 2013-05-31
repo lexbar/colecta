@@ -1,5 +1,13 @@
 {% extends '::frontend.html.twig' %}
 
+{% block javascripts %} 
+<script>
+    $(document).ready(function() {
+        $('#MessageText').focus();
+    });
+</script>
+{% endblock %}
+
 {% block article %}
 
 <div class="title-block">
