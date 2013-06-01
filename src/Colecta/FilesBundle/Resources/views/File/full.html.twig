@@ -15,7 +15,7 @@
             <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-left{% if next %} active{% endif %}"><i class="icon-angle-left icon-4x"></i></a>
             <a href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-right{% if previous %} active{% endif %}"><i class="icon-angle-right icon-4x"></i></a>
         </div>
-        {#<a href="{{ item.URLPath }}" class=""><img src=""></a>#}
+        <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="icon-download-alt"></i></small></a>
     {% else %}
         <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
