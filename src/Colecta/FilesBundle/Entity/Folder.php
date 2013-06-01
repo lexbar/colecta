@@ -416,4 +416,18 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
     {
         return $this->files;
     }
+    
+    public function getAuthor()
+    {
+        $files = $this->getFiles();
+        
+        if(count($files))
+        {
+            return $files->last()->getAuthor();
+        }
+        else
+        {
+            return $this->author;
+        }
+    }
 }
