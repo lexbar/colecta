@@ -33,6 +33,9 @@ h2.related {
     margin: 25px 0 15px -40px !important;
     font-size: 18px;
 }
+.itemcontent {
+    margin-left: 45px;
+}
 .full .micro {
     margin-left: 45px;
 }

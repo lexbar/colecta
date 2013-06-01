@@ -5,10 +5,12 @@
 {% block article %}
 <div class="post full">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    
+    <div class="itemcontent">
+        <h2>{{ item.name }}</h2>
 
-    <h2>{{ item.name }}</h2>
-
-    <p>{{ item.text | videodetect | usercontent | video2viewer | raw | nl2br }}</p>
+        <p>{{ item.text | videodetect | usercontent | video2viewer | raw | nl2br }}</p>
+    </div>
     
     {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     

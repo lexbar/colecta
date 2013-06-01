@@ -5,28 +5,30 @@
 {% block article %}
 <div class="folder full">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    <h2>{{ item.name }}</h2>
-    
-    <ul class="thumbnails">
-        {% for file in item.files | reverse %}
-            {% if file.filetype in ['jpeg','gif','png'] %}
-                <li><a class="thumbnail" style="height:160px;width:160px;" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img height="160" width="160" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'160', 'height':'160'}) }}"></a></li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    
-    <ul class="filelist unstyled">
-        {% for file in item.files %}
-            {% if file.filetype not in ['jpeg','gif','png'] %}
-                <li><i class="icon-file icon-2x"></i>
-                <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
-                <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-mini pull-right"><i class="icon-download-alt icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    
-    <p>{{ item.summary | usercontent | raw | nl2br }}</p>
+    <div class="itemcontent">
+        <h2>{{ item.name }}</h2>
+        
+        <ul class="thumbnails">
+            {% for file in item.files | reverse %}
+                {% if file.filetype in ['jpeg','gif','png'] %}
+                    <li><a class="thumbnail" style="height:160px;width:160px;" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img height="160" width="160" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'160', 'height':'160'}) }}"></a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        
+        <ul class="filelist unstyled">
+            {% for file in item.files %}
+                {% if file.filetype not in ['jpeg','gif','png'] %}
+                    <li><i class="icon-file icon-2x"></i>
+                    <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
+                    <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-mini pull-right"><i class="icon-download-alt icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        
+        <p>{{ item.summary | usercontent | raw | nl2br }}</p>
+    </div>
     
     {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     

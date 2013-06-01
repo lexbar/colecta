@@ -21,13 +21,13 @@
 {% block article %}
 <div class="place full">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+    <div class="itemcontent">
+        <h2>{{ item.name }}</h2>
+        
+        <div id="map" style="width:auto;height:300px;"></div>
     
-    <h2>{{ item.name }}</h2>
-    
-    <div id="map" style="width:auto;height:300px;"></div>
-
-    <p>{{ item.description | usercontent | raw | nl2br }}</p>
-    
+        <p>{{ item.description | usercontent | raw | nl2br }}</p>
+    </div>
     {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
