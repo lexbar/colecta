@@ -11,5 +11,12 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
-    locale:            en
+    locale:            es
     secret:            ThisTokenIsNotSoSecretChangeIt
+    
+    from.mail:         { example@gmail.com : Nombre remitente }
+    admin.mail:        example@gmail.com
+
+twig:
+    globals:
+        web_title: Nombre del club
