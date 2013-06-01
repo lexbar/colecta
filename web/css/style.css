@@ -34,7 +34,7 @@ h2.related {
     font-size: 18px;
 }
 .itemcontent {
-    margin-left: 45px;
+    margin-left: 45px; 
 }
 .full .micro {
     margin-left: 45px;
@@ -478,7 +478,7 @@ form.form-horizontal .controls textarea {
 opacity: .5;
 }
 .fullimage .pull-left, .fullimage .pull-right {
-    line-height: 420px;
+    line-height: 480px;
     color: #fff;
     text-shadow: 0 2px 2px black;
     opacity: .1;
