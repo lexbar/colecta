@@ -1,6 +1,6 @@
 <form onsubmit="$('#FolderSubmit').attr('disabled','disabled').addClass('disabled'); $('#FolderSubmitText').html('Enviando...'); $('#FolderSubmitLoading').addClass('icon-refresh icon-spin');" class="form-horizontal well" method="POST" action="{{ path('ColectaFolderCreate') }}">
     
-    <p class="lead">Selecciona o crea la carpeta de destino:</p>
+    <p class="lead">Crea o selecciona la carpeta de destino:</p>
 
     <fieldset style="display:none" id="createNewFolder">
         
@@ -29,7 +29,13 @@
     </fieldset>
     
     <fieldset id="foldersList">
-        <button style="margin-left: 130px" onclick="document.getElementById('createNewFolder').style.display = 'block'; document.getElementById('foldersList').style.display = 'none';" type="button" class="btn newcategory"><i class="icon-plus-sign"></i> Nueva carpeta</button>
+        <div class="control-group">
+            <label class="control-label">Nueva</label>
+            <div class="controls">
+                <button onclick="document.getElementById('createNewFolder').style.display = 'block'; document.getElementById('foldersList').style.display = 'none';" type="button" class="btn btn-primary newcategory"><i class="icon-plus-sign"></i> Crear nueva carpeta</button>
+            </div>
+        </div>    
+        
         
         <hr>
         
