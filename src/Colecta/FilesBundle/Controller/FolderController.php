@@ -99,6 +99,7 @@ class FolderController extends Controller
         
             $category->setSlug($catSlug);
             $category->setDescription('');
+            $category->setLastchange(new \DateTime('now'));
         }
         
         $em->persist($category); 

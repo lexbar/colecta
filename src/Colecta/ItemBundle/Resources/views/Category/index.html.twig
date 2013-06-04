@@ -23,7 +23,9 @@
         
         <h2{% if loop.index < 6 %} class="main"{% endif %}>
             <a href="{{ path('ColectaCategoryView',{'slug':category.slug}) }}">
-                <i class="icon-expand-alt"></i> {{ category.name }} 
+                {% set slv = app.session.get('sinceLastVisit') %}
+                <i class="icon-expand-alt"{% if slv and slv != 'dismiss' and slv < category.lastchange%}style="color:orange"{% endif %}></i> 
+                {{ category.name }} 
             </a>
         </h2>
     {% endfor %}

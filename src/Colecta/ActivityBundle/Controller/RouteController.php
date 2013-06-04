@@ -214,10 +214,11 @@ class RouteController extends Controller
                     
                         $category->setSlug($catSlug);
                         $category->setDescription('');
-                        $category->setLastchange(new \DateTime('now'));
-                        
-                        $em->persist($category); 
                     }
+                    
+                    $category->setLastchange(new \DateTime('now'));
+                    $em->persist($category); 
+                    
                     $item->setCategory($category);
                     $item->setAuthor($user);
                     

@@ -2,6 +2,12 @@
 
 {% block files 'active' %}
 
+{% block javascripts %}  
+    <script>        
+        {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+    </script>
+{% endblock %}
+
 {% block article %}
 
 <div class="title-block">
