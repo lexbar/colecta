@@ -23,10 +23,10 @@ ColectaFilePick:
     pattern:  /archivo/crear/{slug}/
     defaults: { _controller: ColectaFilesBundle:File:pick }
 ColectaFileXHRUpload:
-    pattern:  /archivo/crear/{slug}/upload/
+    pattern:  /archivo/XHR/upload/
     defaults: { _controller: ColectaFilesBundle:File:XHRUpload }
 ColectaFileXHRPreview:
-    pattern:  /archivo/crear/{slug}/preview/{token}
+    pattern:  /archivo/XHR/preview/{token}
     defaults: { _controller: ColectaFilesBundle:File:XHRPreview }
 ColectaFileXHRProcess:
     pattern:  /archivo/crear/{slug}/process/

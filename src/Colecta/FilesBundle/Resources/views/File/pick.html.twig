@@ -70,7 +70,7 @@
         xhr.addEventListener("error", uploadFailed, false);
         xhr.addEventListener("abort", uploadCanceled, false);
         
-        xhr.open("POST", "upload/");
+        xhr.open("POST", "{% if folder is defined %}../{% endif %}../XHR/upload/");
         
         xhr.send(fd);
     }
@@ -92,7 +92,15 @@
         if(res.length > 180) {
             uploadFailed();
         } else {
-            $('#UFC'+currentFileIndex).html('<img src="preview/'+$.trim(res)+'" style="width:250px;height:190px;background-color:#AAA"><input type="text" name="file'+currentFileIndex+'Name" placeholder="Nombre..."><textarea name="file'+currentFileIndex+'Description" placeholder="Descripción..."></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+currentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+currentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+currentFileIndex+'Delete" value="0" id="file'+currentFileIndex+'Delete">');
+            $('#UFC'+currentFileIndex).html('<img src="{% if folder is defined %}../{% endif %}../XHR/preview/'+$.trim(res)+'" style="width:250px;height:190px;background-color:#AAA"><input type="text" name="file'+currentFileIndex+'Name" placeholder="Nombre..." onFocus="if(this.value == \'Nombre...\') this.value=\'\'"><textarea name="file'+currentFileIndex+'Description" placeholder="Descripción..." onFocus="if($(this).val(\'Descripción...\')) $(this).val(\'\')"></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+currentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+currentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+currentFileIndex+'Delete" value="0" id="file'+currentFileIndex+'Delete">');
+            
+            //Placeholder problems
+            var phitest = document.createElement('input');
+            if(!('placeholder' in phitest)) {
+                $('#UFC'+currentFileIndex+' input[type=text]').val('Nombre...')
+                $('#UFC'+currentFileIndex+' textarea').val('Descripción...')
+            }
+            
             uploadNext();
         }
     }
@@ -118,8 +126,11 @@
         $('#FileSubmitText').html('Enviando...'); 
         $('#FileSubmitLoading').addClass('icon-refresh icon-spin');
         
-        $('#ProcessForm').attr('action','{{ path('ColectaFileXHRProcess', {'slug':folder.slug}) }}').attr('onSubmit','').submit();
+        $('#ProcessForm').attr('action','{% if folder is defined  %}{{ path('ColectaFileXHRProcess', {'slug':folder.slug}) }}{% else %}{{ path('ColectaFileNew') }}{% endif %}').attr('onSubmit','').submit();
     }
+    
+    {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+    
 -->
 </script>
 {% endblock %}
@@ -161,7 +172,32 @@
     <h2>Subir Archivos</h2>
 </div>
 
-<form action="{{ path('ColectaFilePick', {'slug':folder.slug}) }}" method="POST" class="form-horizontal well" enctype="multipart/form-data" onSubmit="{% if not app.session.get('TheFiles') %}if(TheFiles.length){% endif %} return false;" id="ProcessForm">
+<form action="{% if folder is defined  %}{{ path('ColectaFilePick', {'slug':folder.slug}) }}{% else %}{{ path('ColectaFileNew') }}{% endif %}" method="POST" class="form-horizontal well" enctype="multipart/form-data" onSubmit="{% if not app.session.get('TheFiles') %}if(TheFiles.length){% endif %} return false;" id="ProcessForm">
+    
+    {% if folder is not defined %}
+    
+        <div class="control-group">
+            <label class="control-label">Nombre Carpeta</label>
+            <div class="controls">
+                <input type="text" name="name">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Descripción</label>
+            <div class="controls">
+                <textarea name="description"></textarea>
+            </div>
+        </div>
+    
+    {% render 'ColectaItemBundle:Category:formlist' with {'selected': 0} %}
+    
+    {% else %}
+        {% include 'ColectaFilesBundle:Folder:micro.html.twig' with { 'item': folder } only %}
+        
+    {% endif %}
+
+    <hr>
     
     <ul id="filesPreview">
         {% if app.session.get('TheFiles') %}
@@ -179,7 +215,7 @@
     </ul>
     
     <div class="control-group" id="FileControlGroup">
-        <label class="control-label" for="File" id="FileLabel">Archivos</label>
+        <label class="control-label" for="File" id="FileLabel">{% if folder is defined %}Subir {% endif %}Archivos</label>
         <div class="controls">
             <input id="File" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="$(this).html('Subiendo...').attr('disabled','disabled').addClass('disabled');$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
             <p class="muted">Selecciona uno o varios archivos</p>

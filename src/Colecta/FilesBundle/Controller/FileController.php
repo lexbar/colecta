@@ -54,10 +54,98 @@ class FileController extends Controller
     }
     public function newAction()
     {
+        $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
-        $folders = $em->getRepository('ColectaFilesBundle:Folder')->findAll();
         
-        return $this->render('ColectaFilesBundle:File:new.html.twig', array('folders' => $folders));
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        
+        $request = $this->getRequest();
+        
+        if ($request->getMethod() == 'POST')
+        {           
+            
+            //New Folder
+            if(! $request->request->get('name'))
+            {
+                $this->get('session')->setFlash('error', 'No has indicado el nombre de la carpeta');
+                return new RedirectResponse($this->generateUrl('ColectaFileNew'));
+            }
+            
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
+            
+            $item = new Folder();        
+            $item->setName($request->request->get('name'));
+            
+            //Slug generation
+            $slug = $item->generateSlug();
+            $n = 2;
+            
+            while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
+            {
+                if($n > 2)
+                {
+                    $slug = substr($slug,0,-2);
+                }
+                
+                $slug .= '-'.$n;
+                
+                $n++;
+            }
+            $item->setSlug($slug);
+            
+            $item->setAuthor($user);
+            $item->summarize($request->request->get('description'));
+            $item->setAllowComments(true);
+            $item->setDraft(true);
+            $item->setPart(false);
+            $item->setPublic(true);
+            $item->setPersonal(false);
+            $item->setDate(new \DateTime('now'));
+            
+            //New Category
+            if($request->request->get('newCategory'))
+            {
+                $category = new Category();
+                $category->setName($request->request->get('newCategory'));
+                
+                //Category Slug generate
+                $catSlug = $item->generateSlug($request->request->get('newCategory'));
+                $n = 2;
+                
+                while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                {
+                    if($n > 2)
+                    {
+                        $catSlug = substr($catSlug,0,-2);
+                    }
+                    
+                    $catSlug .= '-'.$n;
+                    
+                    $n++;
+                }
+            
+                $category->setSlug($catSlug);
+                $category->setDescription('');
+                $category->setLastchange(new \DateTime('now'));
+            }
+            
+            $em->persist($category); 
+            $item->setCategory($category);
+            
+            $em->persist($item);
+            $em->flush();
+            
+            // Process the files 
+            return $this->XHRProcessAction($item->getSlug());
+        }
+        else
+        {
+            return $this->render('ColectaFilesBundle:File:pick.html.twig');
+        }
     }
     public function pickAction($slug) //slug of the destiny folder
     {
@@ -87,7 +175,7 @@ class FileController extends Controller
         
         if ($request->getMethod() == 'POST')
         {
-            $token = $this->XHRUploadAction($slug)->getContent();
+            $token = $this->XHRUploadAction()->getContent();
             
             $TheFiles = $this->get('session')->get('TheFiles');
             if(is_array($TheFiles))
@@ -119,7 +207,7 @@ class FileController extends Controller
         
         return $this->render('ColectaFilesBundle:File:pick.html.twig', array('folder' => $folder));
     }
-    public function XHRUploadAction($slug) 
+    public function XHRUploadAction() 
     {
         //Single file upload from XHR form
         
@@ -130,7 +218,7 @@ class FileController extends Controller
             throw $this->createNotFoundException();
         }
         
-        set_time_limit (60*3);
+        set_time_limit(60*5);
 
         //Only first file
         if(is_array($_FILES['file']['tmp_name']))
@@ -143,7 +231,7 @@ class FileController extends Controller
         } 
         
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/' ;
-        $filename = 'xhr-' . $slug . md5($file->getClientOriginalName() . $_FILES['file']['tmp_name']);
+        $filename = 'xhr-' . md5($file->getClientOriginalName() . $_FILES['file']['tmp_name']);
         
         $extension = str_replace('jpg', 'jpeg', $file->guessExtension() );
         if(empty($extension)) 
@@ -160,7 +248,7 @@ class FileController extends Controller
         
         return $response;
     }
-    public function XHRPreviewAction($slug, $token)
+    public function XHRPreviewAction($token)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         
@@ -176,7 +264,16 @@ class FileController extends Controller
             throw $this->createNotFoundException();
         }
         
-        $image = new \Imagick($cachePath.$token);
+        $is = getimagesize($cachePath.$token);
+        if(!in_array($is[2] , array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG))) 
+        {
+            $image = new \Imagick(__DIR__ . '/../../../../web/img/novisible.png');
+        }
+        else
+        {
+            $image = new \Imagick($cachePath.$token);
+        }
+        
         autoRotateImage($image, $cachePath.$token);
         $image->cropThumbnailImage(250, 190);
         $image->setImagePage(0, 0, 0, 0);
