@@ -249,8 +249,6 @@ form.form-horizontal .controls textarea {
     display: block;
     font-size: 20px;
     margin: 0 auto;
-    transition: color .3s;
-    -webkit-transition: color .3s; /* Safari */
 }
 #sidebar li a:hover i {
     color: #fff !important;
@@ -587,7 +585,7 @@ div.assistances ul li a {
     color: #5B6469;
 }
 .event .date {
-    float: left;
+    float: right;
     margin: 0 20px 15px 0px;
     padding-bottom: 6px;
     cursor: default;
@@ -607,7 +605,7 @@ div.assistances ul li a {
 }
 .event .date span {
     display: block;
-    width: 120px;
+    width: 100px;
 }
 .event.micro .date span {
     width: auto;
@@ -622,8 +620,8 @@ div.assistances ul li a {
     font-size: 12px;
 }
 .event .date .monthday {
-    font-size: 40px;
-    line-height: 40px;
+    font-size: 30px;
+    line-height: 34px;
     color: #FFF;
     background-color: #444;
 }
@@ -825,7 +823,7 @@ div.assistances ul li a {
     opacity: .1
 }
 .thumbnails {
-    margin-left: 0;
+    margin: 0;
 }
 .thumbnails li {
     margin: 0 10px 10px 0;
@@ -865,6 +863,9 @@ div.assistances ul li a {
 }
 .unread.message {
     border: 1px solid orange;
+}
+.filelist {
+    margin: 0;
 }
 .filelist li {
     border-bottom: 1px solid #EDF1F5;

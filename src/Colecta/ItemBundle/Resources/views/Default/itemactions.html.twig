@@ -2,14 +2,14 @@
     {# LIKE #}
     {% if app.user and item.userLikes(app.user) %}
         {% if item.likers | length > 3 %}
-            <span><i class="icon-thumbs-up icon-large"></i> A {{ item.likers | length - 1 }} personas y a ti os gusta</span> 
+            <span><i class="icon-thumbs-up-alt icon-large"></i> A {{ item.likers | length - 1 }} personas y a ti os gusta</span> 
         {% elseif item.likers | length > 1 %}
-            <span><i class="icon-thumbs-up icon-large"></i> A {% for u in item.likers %}{% if u != app.user %}{% if not loop.first and item.likers[0] != app.user %}, {% endif %}{{ u.name }}{%endif%}{% endfor %} y a ti os gusta</span> 
+            <span><i class="icon-thumbs-up-alt icon-large"></i> A {% for u in item.likers %}{% if u != app.user %}{% if not loop.first and item.likers[0] != app.user %}, {% endif %}{{ u.name }}{%endif%}{% endfor %} y a ti os gusta</span> 
         {% else %}
-            <span><i class="icon-thumbs-up icon-large"></i> Te gusta</span>
+            <span><i class="icon-thumbs-up-alt icon-large"></i> Te gusta</span>
         {% endif %}
     {% elseif app.user %}
-        <a href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="icon-thumbs-up"></i> Me gusta</a>
+        <a href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="icon-thumbs-up-alt"></i> Me gusta</a>
         
         {% if item.likers | length > 3 %}
             <span>(A {{ item.likers | length }} personas les gusta)</span> 
@@ -30,7 +30,12 @@
     
     {# ASSISTANCE #}
     {% if item.type == 'Activity/Event' %}
-        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="icon-user"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Hasta ahora nadie se ha apuntado{% endif %}</a>
+        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="icon-user"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Nadie se ha apuntado{% endif %}</a>
+    {% endif %}
+    
+    {# FILE #}
+    {% if item.type == 'Files/Folder' %}
+        <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="icon-plus"></i> Agregar archivos a este álbum</a>
     {% endif %}
     
     {# EDIT #}
