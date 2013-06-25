@@ -136,12 +136,12 @@ class DefaultController extends Controller
 			        ->setBody($this->renderView('ColectaUserBundle:Default:resetPasswordMail.txt.twig', array('user'=>$user, 'code'=>$code)), 'text/plain');
 			    $mailer->send($message);
 			    
-			    $this->get('session')->setFlash('success', 'Te hemos enviado un email. Revisa tu bandeja de entrada, y la de spam por si acaso.');
+			    $this->get('session')->setFlash('resetmailsuccess', 'Te hemos enviado un email. Revisa tu bandeja de entrada, y la de spam por si acaso.');
 			    return $this->render('ColectaUserBundle:Default:resetPassword.html.twig');
             }
             else
             {
-                $this->get('session')->setFlash('error', 'El email no está en nuestra base de datos');
+                $this->get('session')->setFlash('resetmailerror', 'El email no está en nuestra base de datos');
                 $this->get('session')->setFlash('email', $email);
             }
         }
