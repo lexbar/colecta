@@ -8,7 +8,7 @@
     <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
-    {% if app.user %}
+    {% if 1 or app.user %}
         <form style="margin: 20px;">
             <input type="text" placeholder="Título" style="border-radius: 0px 0px 0px 0px; display: block; width: 98%; margin-bottom: -1px;">
             <textarea style="margin-bottom: 0px; border-radius: 0px 0px 0px 0px; resize: vertical; width: 98%;" placeholder="Descripción"></textarea>
@@ -58,11 +58,7 @@
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
 </div>
 {% else %}
-    {% if app.user %}
-        <h3 style="text-align:center">Pulsa ese botón para empezar a compartir <i class="icon-arrow-up icon-2x" style="color:#2F7ED4;margin-left: 50px;"></i></h3>
-    {% else %}
-        <h3>Nadie ha escrito nada... por ahora.</h3>
-    {% endif %}
+    <h3>Nadie ha escrito nada... por ahora.</h3>
 {% endfor %}
 
 {% if page > 1 or thereAreMore %}
