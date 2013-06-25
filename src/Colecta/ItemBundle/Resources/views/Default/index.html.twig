@@ -5,20 +5,34 @@
 {% block article %}
 
 <div class="title-block">
-    {% if app.user %}
-        <div class="dropdown pull-right">
-            <button onclick="return false;" type="button" class="btn btn-small btn-primary pull-right">Publicar <i class="icon-chevron-down icon-white" id="ddarrow"></i></button>
-            <ul id="dropdown" aria-labelledby="dropdownMenu" role="menu" class="dropdown-menu download">
-                <li><a href="{{ path('ColectaPostNew')}}" tabindex="-1"><i class="icon-file"></i> Texto</a></li>
-                <li><a href="{{ path('ColectaEventNew')}}" tabindex="-1"><i class="icon-calendar"></i> Actividad</a></li>
-                <li><a href="{{ path('ColectaRouteNew')}}" tabindex="-1"><i class="icon-globe"></i> Ruta</a></li>
-                <li><a href="{{ path('ColectaPlaceNew')}}" tabindex="-1"><i class="icon-map-marker"></i> Lugar</a></li>
-                <li><a href="{{ path('ColectaFileNew')}}" tabindex="-1"><i class="icon-folder-open"></i> Archivo</a></li>
-            </ul>
-        </div>
-    {% endif %}
     <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
+
+    {% if app.user %}
+        <form style="margin: 20px;">
+            <input type="text" placeholder="Título" style="border-radius: 0px 0px 0px 0px; display: block; width: 98%; margin-bottom: -1px;">
+            <textarea style="margin-bottom: 0px; border-radius: 0px 0px 0px 0px; resize: vertical; width: 98%;" placeholder="Descripción"></textarea>
+            <ul class="unstyled" style="background-color: rgb(238, 238, 238); overflow: hidden; padding: 4px 6px; width: 98%; border: 1px solid rgb(204, 204, 204); margin: -1px 0px 0px;"><li class="pull-left" style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;"><i class="icon-calendar-empty"></i> Evento</li><li style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;" class="pull-left"><i class="icon-globe"></i> Ruta</li><li style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;" class="pull-left"><i class="icon-map-marker"></i> Lugar</li><li style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;" class="pull-left"><i class="icon-folder-open"></i> Archivo</li><li class="pull-right"><button class="btn btn-small btn-primary">Publicar</button></li><li class="pull-right"><select name="category" id="Category" style="width: 120px; padding: 2px; height: 26px; margin: 0px 8px;">
+                            <option value="1">General</option>
+                            <option value="2">El Club</option>
+                            <option value="3">Fotos</option>
+                            <option value="4">Rutas</option>
+                            <option value="5">Seguridad</option>
+                            <option value="6">Próxima Ruta</option>
+                            <option value="7">Travesías</option>
+                            <option value="8">GPS</option>
+                            <option value="9">Pedales de Hassia</option>
+                            <option value="10">Curiosidades</option>
+                            <option value="12">Yo Ruedo</option>
+                            <option value="13">Propuestas</option>
+                            <option value="14">Gátova</option>
+                            <option value="15">Compra-Venta</option>
+                            <option value="16">La Web</option>
+                            <option style="font-style: italic; color: rgb(153, 153, 153);" value="0">Nueva Categoría</option>
+                      </select><input type="text" placeholder="Nombre" style="display:none" name="newCategory" id="NewCategory">
+              </li></ul>
+        </form>
+    {% endif %}
 
 {% set slv = app.session.get('sinceLastVisit') %}
 {% if slv and slv != 'dismiss' and colectauser.sinceLastVisitItems > 0 %}
