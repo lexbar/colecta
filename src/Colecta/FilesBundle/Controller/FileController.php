@@ -69,16 +69,19 @@ class FileController extends Controller
         {           
             
             //New Folder
-            if(! $request->request->get('name'))
-            {
-                $this->get('session')->setFlash('error', 'No has indicado el nombre de la carpeta');
-                return new RedirectResponse($this->generateUrl('ColectaFileNew'));
-            }
-            
+                        
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
             
-            $item = new Folder();        
-            $item->setName($request->request->get('name'));
+            $item = new Folder();
+            
+            if(! $request->request->get('name') )
+            {
+                $item->setName($user->getName() . ' ' . date("d.m.y"));
+            }
+            else
+            {
+                $item->setName($request->request->get('name'));
+            }
             
             //Slug generation
             $slug = $item->generateSlug();
@@ -98,7 +101,7 @@ class FileController extends Controller
             $item->setSlug($slug);
             
             $item->setAuthor($user);
-            $item->summarize($request->request->get('description'));
+            $item->summarize(strval($request->request->get('description')));
             $item->setAllowComments(true);
             $item->setDraft(true);
             $item->setPart(false);
@@ -342,7 +345,8 @@ class FileController extends Controller
                     rename($cachePath.$token,$uploadPath.$hashName);
                     
                     $item = new File();
-                    if($request->request->get('file'.$i.'Name') == '')
+                    
+                    if($request->request->get('file'.$i.'Name') == '' || $request->request->get('file'.$i.'Name') == 'Nombre...')
                     {
                         $name = $folder->getName();
                     }
@@ -352,7 +356,17 @@ class FileController extends Controller
                     }
                     
                     $item->setName($name);
-                    $item->setDescription(strval($request->request->get('file'.$i.'Description')));
+                    
+                    if($request->request->get('file'.$i.'Description') == '' || $request->request->get('file'.$i.'Description') == 'Descripción...')
+                    {
+                        $description = '';
+                    }
+                    else
+                    {
+                        $description = strval($request->request->get('file'.$i.'Description'));
+                    }
+                    
+                    $item->setDescription($description);
                     
                     //Slug generation
                     $slug = $item->generateSlug();

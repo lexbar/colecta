@@ -169,7 +169,7 @@
 {% block article %}
 
 <div class="title-block">
-    <h2>Subir Archivos</h2>
+    <h2>{% if folder is defined %}Añadir archivos{% else %}Nueva carpeta{% endif %}</h2>
 </div>
 
 <form action="{% if folder is defined  %}{{ path('ColectaFilePick', {'slug':folder.slug}) }}{% else %}{{ path('ColectaFileNew') }}{% endif %}" method="POST" class="form-horizontal well" enctype="multipart/form-data" onSubmit="{% if not app.session.get('TheFiles') %}if(TheFiles.length){% endif %} return false;" id="ProcessForm">
