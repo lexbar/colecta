@@ -25,19 +25,20 @@
     </div>
     {% else %}
         {% if app.user %}
-            <h3 style="text-align:center">Pulsa ese botón para empezar a compartir <i class="icon-arrow-up icon-2x" style="color:#2F7ED4"></i></h3>
+            <h3 style="text-align:center">Pulsa ese botón para empezar a compartir <i class="icon-arrow-up icon-2x" style="color:#2F7ED4;margin-left: 50px;"></i></h3>
         {% else %}
             <h3>Nadie ha escrito nada... por ahora.</h3>
         {% endif %}
     {% endfor %}
-    
-    <ul class="pager">
-      <li class="previous{% if page == 1 %} disabled{% endif %}">
-        <a href="{% if page > 1 %}{{ path('ColectaFilePage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-      </li>
-      <li class="next{% if not thereAreMore %} disabled{% endif %}">
-        <a href="{% if thereAreMore %}{{ path('ColectaFilePage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-      </li>
-    </ul>
+    {% if page > 1 or thereAreMore %}
+        <ul class="pager">
+          <li class="previous{% if page == 1 %} disabled{% endif %}">
+            <a href="{% if page > 1 %}{{ path('ColectaFilePage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+          </li>
+          <li class="next{% if not thereAreMore %} disabled{% endif %}">
+            <a href="{% if thereAreMore %}{{ path('ColectaFilePage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+          </li>
+        </ul>
+    {% endif %}
 
 {% endblock %}
