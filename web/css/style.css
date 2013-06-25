@@ -62,7 +62,9 @@ a i, a:active i, a:hover i {
     margin: 10px 0;
 }
 .title-block {
-    padding: 10px 10px 25px 5px;
+    border-bottom: 1px solid #EEEEEE;
+    margin: 0 0 10px;
+    padding: 10px 10px 15px 5px;
 }
 .title-block span {
     color: #777777;

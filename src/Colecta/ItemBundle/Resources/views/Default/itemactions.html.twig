@@ -34,7 +34,7 @@
     {% endif %}
     
     {# FILE #}
-    {% if app.user and item.type == 'Files/Folder' %}
+    {% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}
         <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="icon-plus"></i> Agregar archivos a este álbum</a>
     {% endif %}
     

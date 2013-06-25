@@ -304,12 +304,12 @@ class FileController extends Controller
         
         $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
         
-        if(!$folder)
+        if(!$folder )
         {
             $this->get('session')->setFlash('error', 'No existe la carpeta indicada.');
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
         }
-        elseif($folder->getAuthor() != $user && ($folder->getPersonal() || $folder->getDraft()))
+        elseif($folder->getPublic() == false || $folder->getAuthor() != $user && ($folder->getPersonal() || $folder->getDraft()))
         {
             $this->get('session')->setFlash('error', 'No puedes publicar en esta carpeta.');
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
