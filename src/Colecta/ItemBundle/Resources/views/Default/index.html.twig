@@ -8,11 +8,11 @@
     <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
-    {% if 1 or app.user %}
+    {% if app.user %}
         <form style="margin: 20px;">
-            <input type="text" placeholder="Título" style="border-radius: 0px 0px 0px 0px; display: block; width: 98%; margin-bottom: -1px;">
-            <textarea style="margin-bottom: 0px; border-radius: 0px 0px 0px 0px; resize: vertical; width: 98%;" placeholder="Descripción"></textarea>
-            <ul class="unstyled" style="background-color: rgb(238, 238, 238); overflow: hidden; padding: 4px 6px; width: 98%; border: 1px solid rgb(204, 204, 204); margin: -1px 0px 0px;"><li class="pull-left" style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;"><i class="icon-calendar-empty"></i> Evento</li><li style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;" class="pull-left"><i class="icon-globe"></i> Ruta</li><li style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;" class="pull-left"><i class="icon-map-marker"></i> Lugar</li><li style="color: rgb(136, 136, 136); margin-right: 10px; padding: 2px; cursor: pointer;" class="pull-left"><i class="icon-folder-open"></i> Archivo</li><li class="pull-right"><button class="btn btn-small btn-primary">Publicar</button></li><li class="pull-right"><select name="category" id="Category" style="width: 120px; padding: 2px; height: 26px; margin: 0px 8px;">
+            <input type="text" style="border-radius: 0px 0px 0px 0px; display: block; width: 98%; margin-bottom: -1px;" placeholder="Título">
+            <textarea placeholder="Descripción" style="margin-bottom: 0px; border-radius: 0px 0px 0px 0px; resize: vertical; width: 98%;"></textarea>
+            <ul style="background-color: rgb(238, 238, 238); overflow: hidden; padding: 4px 6px; width: 98%; border: 1px solid rgb(204, 204, 204); margin: -1px 0px 0px;" class="unstyled"><li style="color: rgb(136, 136, 136); cursor: pointer; padding: 2px 6px; margin-right: 5px;" class="pull-left"><i class="icon-calendar-empty"></i> Evento</li><li class="pull-left" style="color: rgb(136, 136, 136); cursor: pointer; padding: 2px 6px; margin-right: 5px;"><i class="icon-globe"></i> Ruta</li><li class="pull-left" style="color: rgb(136, 136, 136); cursor: pointer; padding: 2px 6px; margin-right: 5px;"><i class="icon-map-marker"></i> Lugar</li><li class="pull-left" style="cursor: pointer; margin-right: 5px; padding: 1px 6px; border: 1px solid rgb(187, 187, 187); background-color: rgb(221, 221, 221); color: rgb(34, 34, 34);"><i class="icon-folder-open"></i> Archivo</li><li class="pull-right"><button class="btn btn-small btn-primary">Publicar</button></li><li class="pull-right"><select style="width: 120px; padding: 2px; height: 26px; margin: 0px 8px;" id="Category" name="category">
                             <option value="1">General</option>
                             <option value="2">El Club</option>
                             <option value="3">Fotos</option>
@@ -28,8 +28,8 @@
                             <option value="14">Gátova</option>
                             <option value="15">Compra-Venta</option>
                             <option value="16">La Web</option>
-                            <option style="font-style: italic; color: rgb(153, 153, 153);" value="0">Nueva Categoría</option>
-                      </select><input type="text" placeholder="Nombre" style="display:none" name="newCategory" id="NewCategory">
+                            <option value="0" style="font-style: italic; color: rgb(153, 153, 153);">Nueva Categoría</option>
+                      </select><input type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre">
               </li></ul>
         </form>
     {% endif %}

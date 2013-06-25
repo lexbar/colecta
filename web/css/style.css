@@ -62,9 +62,8 @@ a i, a:active i, a:hover i {
     margin: 10px 0;
 }
 .title-block {
-    border-bottom: 1px solid #EEEEEE;
     margin: 0 0 10px;
-    padding: 10px 10px 15px 5px;
+    padding: 0 10px 10px 5px;
 }
 .title-block span {
     color: #777777;
@@ -587,7 +586,7 @@ div.assistances ul li a {
     color: #5B6469;
 }
 .event .date {
-    float: right;
+    float: left;
     margin: 0 20px 15px 0px;
     padding-bottom: 6px;
     cursor: default;

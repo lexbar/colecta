@@ -223,12 +223,12 @@
             {% endfor %}
         {% endif %}
     </ul>
-    
+        
     <div class="control-group" id="FileControlGroup">
         <label class="control-label" for="File" id="FileLabel">{% if folder is defined %}Subir {% endif %}Archivos</label>
-        <div class="controls">
-            <input id="File" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="$(this).html('Subiendo...').attr('disabled','disabled').addClass('disabled');$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
-            <p class="muted">Selecciona uno o varios archivos</p>
+        <div class="controls" style="position: relative;">
+            <input id="File" style="position: absolute; width: 400px; padding: 5px; font-size: 20px; opacity: 0;" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="$(this).html('Subiendo...').attr('disabled','disabled').addClass('disabled');$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
+            <p><strong class="btn"> <i class="icon-upload-alt"></i> Pulsa para seleccionar uno o varios archivos</strong></p>
         </div>
     </div>
     
