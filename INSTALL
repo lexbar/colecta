@@ -1,0 +1,14 @@
+git clone http://github.com/lexbar/colecta ./
+
+mkdir app/cache app/logs app/cache/prod app/cache/dev
+
+chmod -R 775 app/cache/ app/logs/
+
+chown -R ciclubs:apache ./*
+
+cp app/config/parameters.yml.dist app/config/parameters.yml
+
+nano app/config/parameters.yml
+
+php app/console doctrine:schema:create
+
