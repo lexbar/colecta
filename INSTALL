@@ -1,8 +1,8 @@
 git clone http://github.com/lexbar/colecta ./
 
-mkdir app/cache app/logs app/cache/prod app/cache/dev
+mkdir app/cache app/logs app/cache/prod app/cache/dev app/cache/prod/images app/cache/prod/images/maps
 
-chmod -R 775 app/cache/ app/logs/
+chmod -R 775 app/cache/ app/logs/ web/uploads/
 
 chown -R ciclubs:apache ./*
 
