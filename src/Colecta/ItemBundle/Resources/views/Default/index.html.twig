@@ -58,7 +58,7 @@
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
 </div>
 {% else %}
-    {% if app.user %}
+    {% if not app.user %}
         <h3>Nadie ha escrito nada... por ahora.</h3>
     {% endif %}
 {% endfor %}
