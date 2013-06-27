@@ -2,6 +2,22 @@
 
 {% block home 'active' %}
 
+{% block javascripts %}
+    <script>
+        function toggleCategoryCreate() {
+            var nc = $('#NewCategory');
+            if(nc.css('display') == 'none') {
+                $('#Category').hide();
+                $('#NewCategory').show().focus();
+            } else {
+                $('#Category').show();
+                $('#NewCategory').hide().attr('value','');
+            }
+        }
+    </script>
+{% endblock %}
+
+
 {% block article %}
 
 <div class="title-block">
@@ -10,27 +26,16 @@
 
     {% if app.user %}
         <form class="itemSubmit">
-            <input type="text" placeholder="Título">
-            <textarea placeholder="Descripción"></textarea>
-            <ul class="unstyled"><li class="pull-left"><i class="icon-calendar-empty"></i> Evento</li><li class="pull-left"><i class="icon-globe"></i> Ruta</li><li class="pull-left"><i class="icon-map-marker"></i> Lugar</li><li class="pull-left file"> <input type="file"><i class="icon-folder-open"></i> Archivo</li><li class="pull-right"><button class="btn btn-small btn-primary">Publicar</button></li><li class="pull-right"><select id="Category" name="category">
-                            <option value="1">General</option>
-                            <option value="2">El Club</option>
-                            <option value="3">Fotos</option>
-                            <option value="4">Rutas</option>
-                            <option value="5">Seguridad</option>
-                            <option value="6">Próxima Ruta</option>
-                            <option value="7">Travesías</option>
-                            <option value="8">GPS</option>
-                            <option value="9">Pedales de Hassia</option>
-                            <option value="10">Curiosidades</option>
-                            <option value="12">Yo Ruedo</option>
-                            <option value="13">Propuestas</option>
-                            <option value="14">Gátova</option>
-                            <option value="15">Compra-Venta</option>
-                            <option value="16">La Web</option>
-                            <option value="0" class="new">Nueva Categoría</option>
-                      </select><input type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre">
-              </li>
+            <input type="text" class="title" placeholder="Título">
+            <textarea placeholder="Descripción" class="description"></textarea>
+            <ul class="unstyled">
+                <li class="pull-left"><i class="icon-calendar-empty"></i> Evento</li>
+                <li class="pull-left route"> <input type="file"><i class="icon-globe"></i> Ruta</li>
+                <li class="pull-left"><i class="icon-map-marker"></i> Lugar</li>
+                <li class="pull-left file"> <input type="file"><i class="icon-folder-open"></i> Archivo</li>
+                
+                <li class="pull-right"><button class="btn btn-small btn-primary">Publicar</button></li>
+                <li class="pull-right">{% render 'ColectaItemBundle:Category:formlist' with {'selected': 0, 'simplified': 1} %}</li>
             </ul>
         </form>
     {% endif %}

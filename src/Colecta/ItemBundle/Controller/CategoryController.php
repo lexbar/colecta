@@ -47,12 +47,12 @@ class CategoryController extends Controller
         return $this->render('ColectaItemBundle:Category:page.html.twig', array('category'=>$category, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     
-    public function formlistAction($selected)
+    public function formlistAction($selected, $simplified)
     {
         $em = $this->getDoctrine()->getEntityManager();
         
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
-        return $this->render('ColectaItemBundle:Category:categoryform.html.twig', array('categories'=>$categories, 'selected'=>$selected));
+        return $this->render('ColectaItemBundle:Category:categoryform.html.twig', array('categories'=>$categories, 'selected'=>$selected, 'simplified'=>$simplified));
     }
 }

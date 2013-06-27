@@ -1,3 +1,4 @@
+{% if not simplified %}
 <div class="control-group">
     <label class="control-label" for="Category">Categoría</label>
     <div class="controls">
@@ -9,3 +10,12 @@
       <button class="btn newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton"><i class="icon-plus-sign"></i> Nueva categoría</button>
     </div>
 </div>
+{% else %}
+<select id="Category" name="category" onChange="if(this.value == 0) toggleCategoryCreate()">
+    {% for category in categories %}
+        <option value="{{ category.id }}"{% if category.id == selected %}selected="selected"{% endif %}>{{ category.name }}</option>
+    {% endfor %}
+    <option value="0" class="new">Nueva Categoría</option>
+</select>
+<input type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre Categoría">
+{% endif %}
