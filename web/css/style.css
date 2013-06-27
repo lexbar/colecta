@@ -178,6 +178,9 @@ form.form-horizontal .controls textarea {
     padding-left: 10px;
     color: #222;
 }
+.well {
+    border-radius: 0;
+}
 .well.login {
     padding: 7px 0 2px 14px;
 }
@@ -303,6 +306,73 @@ form.form-horizontal .controls textarea {
 #userbar {
     margin-left: 10px;
     width: 230px;
+}
+
+.itemSubmit {
+    margin: 10px 5px;
+}
+.itemSubmit input {
+    border-radius: 0px; 
+    width: 98%; 
+    margin-bottom: 2px;
+}
+.itemSubmit textarea {
+    margin-bottom: 0px; 
+    border-radius: 0px; 
+    resize: vertical; 
+    width: 98%;
+}
+.itemSubmit ul {
+    background-color: #EEEEEE; 
+    overflow: hidden; 
+    padding: 4px 6px; 
+    width: 98%; 
+    border: 1px solid #CCCCCC; 
+    margin: 2px 0px 0px;
+}
+.itemSubmit ul li.pull-left {
+    color: #888888; 
+    cursor: pointer; 
+    padding: 2px 6px; 
+    margin-right: 5px;
+}
+.itemSubmit ul li:hover {
+    color: #222222
+}
+.itemSubmit ul li.active {
+    margin-right: 5px; 
+    padding: 1px 6px; 
+    border: 1px solid #BBBBBB; 
+    background-color: #DDDDDD; 
+    color: #222222; 
+}
+.itemSubmit ul li.file {
+    cursor: pointer; 
+    position: relative;
+    overflow: hidden;
+}
+.itemSubmit ul li.file input {
+    position:absolute;
+    z-index:999;
+    right:0;
+    top:0;
+    opacity:0;
+    -moz-opacity:0;
+    filter:alpha(opacity: 0);
+    cursor:pointer;
+    font-size:50px;
+    text-align:right;
+}
+.itemSubmit ul li.pull-right select {
+    width: 120px; 
+    padding: 2px; 
+    height: 26px; 
+    margin: 0px 8px;
+}
+.itemSubmit ul li.pull-right select .new{
+    font-style: italic; 
+    color: rgb(153, 153, 153);
+    padding:5px;
 }
 
 .ads {
