@@ -200,7 +200,7 @@
             </div>
         </div>
     
-    {% render 'ColectaItemBundle:Category:formlist' with {'selected': 0} %}
+    {% render 'ColectaItemBundle:Category:formlist' with {'selected': 0, 'simplified':0} %}
     
     {% else %}
         {% include 'ColectaFilesBundle:Folder:micro.html.twig' with { 'item': folder } only %}

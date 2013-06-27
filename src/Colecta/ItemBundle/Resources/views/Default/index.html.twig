@@ -2,21 +2,11 @@
 
 {% block home 'active' %}
 
-{% block javascripts %}
-    <script>
-        function toggleCategoryCreate() {
-            var nc = $('#NewCategory');
-            if(nc.css('display') == 'none') {
-                $('#Category').hide();
-                $('#NewCategory').show().focus();
-            } else {
-                $('#Category').show();
-                $('#NewCategory').hide().attr('value','');
-            }
-        }
-    </script>
-{% endblock %}
-
+{% if app.user %}
+    {% block javascripts %}
+        <script src="/js/userInteraction.js"></script>
+    {% endblock %}
+{% endif %}
 
 {% block article %}
 
@@ -25,14 +15,15 @@
 </div>
 
     {% if app.user %}
-        <form class="itemSubmit">
-            <input type="text" class="title" placeholder="Título">
-            <textarea placeholder="Descripción" class="description"></textarea>
-            <ul class="unstyled">
+        <form class="itemSubmit" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
+            <input type="text" name="name" class="title" placeholder="Título">
+            <textarea name="description" placeholder="Descripción" class="description"></textarea>
+            <div id="itemDetails"></div>
+            <ul class="types unstyled">
                 <li class="pull-left"><i class="icon-calendar-empty"></i> Evento</li>
                 <li class="pull-left route"> <input type="file"><i class="icon-globe"></i> Ruta</li>
                 <li class="pull-left"><i class="icon-map-marker"></i> Lugar</li>
-                <li class="pull-left file"> <input type="file"><i class="icon-folder-open"></i> Archivo</li>
+                <li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivo</li>
                 
                 <li class="pull-right"><button class="btn btn-small btn-primary">Publicar</button></li>
                 <li class="pull-right">{% render 'ColectaItemBundle:Category:formlist' with {'selected': 0, 'simplified': 1} %}</li>

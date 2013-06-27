@@ -339,12 +339,22 @@ form.form-horizontal .controls textarea {
 .itemSubmit ul li:hover {
     color: #222222
 }
-.itemSubmit ul li.active {
+.itemSubmit ul.types.chosen li, .itemSubmit ul.types.chosen li:hover {
+    color: #CCC;
+    cursor: default;
+}
+.itemSubmit ul.types.chosen li input {
+    display: none;
+}
+.itemSubmit ul.types.chosen li.active {
     margin-right: 5px; 
     padding: 1px 6px; 
     border: 1px solid #BBBBBB; 
     background-color: #DDDDDD; 
     color: #222222; 
+}
+.itemSubmit ul.types.chosen li.active input {
+    display: block;
 }
 .itemSubmit ul li.file, .itemSubmit ul li.route {
     cursor: pointer; 
@@ -376,8 +386,34 @@ form.form-horizontal .controls textarea {
 }
 .itemSubmit ul li.pull-right input {
     width: 120px;
-    margin: 0 8px;
+    margin: 0;
     height: 18px;
+}
+.itemSubmit ul li.pull-right button {
+    margin-right: 10px;
+}
+.itemSubmit #itemDetails {
+    overflow:hidden;
+}
+.itemSubmit #itemDetails .pv {
+    background-color: #FFF;
+    float: left;
+    margin: 0;
+    min-height: 315px;
+    padding: 7px;
+    text-align: center;
+    width: 295px;
+}
+.itemSubmit #itemDetails .pv .uploadmessage {
+    margin-top: 50px;
+}
+.itemSubmit #itemDetails .pv input, .itemSubmit #itemDetails .pv textarea {
+    width: 240px;
+    resize: none;
+    margin: 1px;
+}
+.itemSubmit #itemDetails .pv small {
+    color: darkred;
 }
 
 .ads {
