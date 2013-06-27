@@ -263,7 +263,7 @@ class RouteController extends Controller
                     $t0 = microtime(1);
                     #TESTTIME 
                     
-                    $itemdata .= $this->getRouteData($fulltrack);
+                    $itemdata = $this->getRouteData($fulltrack);
                     
                     #TESTTIME
                     $timetxt .= 'Extraccion datos: '.(microtime(1) - $t0).' <br> ';
