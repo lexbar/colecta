@@ -20,6 +20,100 @@ function typeChosen(type) {
         return false;
     }
 }
+/* RU Route Uploading */
+var RUuploadAddress = '/rutas/XHR/upload/';
+var RUpreviewAddress = '/rutas/XHR/preview/';
+
+var RUuploading = false;
+
+$('#Route').change(RouteChange);
+
+function RouteChange() {
+    if(typeChosen('route')) {
+        return;
+    }
+    var files = this.files;    
+    var fp = $('#itemDetails');
+    if(files.length) {        
+        //Show the file uloading process
+        var f = files[0]
+        fp.append('<div id="RUloading"><p class="lead">Subiendo el archivo <small>'+f.name+'</small></p><div class="progress"><div class="bar" id="RUprogress" style="width: 0%;"></div></div>');
+        
+        //Start upload
+        uploadRouteFile(f);
+    }
+}
+
+function uploadRouteFile(file) {
+    if(!RUuploading) {
+        RUuploading = true;
+        
+        $('#itemSubmitButton').attr('disabled','disabled').addClass('disabled'); 
+        $('#itemSubmitButtonText').html('Subiendo...'); 
+        $('#itemSubmitButtonLoading').addClass('icon-refresh icon-spin');
+    
+        uploadRoute(file);
+    }
+}
+
+function uploadRoute(file) {
+    var fd = new FormData();
+    
+    fd.append("file", file);
+    
+    var xhr = new XMLHttpRequest();
+    
+    xhr.upload.addEventListener("progress", RUuploadProgress, false);
+    xhr.addEventListener("load", RUuploadComplete, false);
+    xhr.addEventListener("error", RUuploadFailed, false);
+    xhr.addEventListener("abort", RUuploadCanceled, false);
+    
+    xhr.open("POST", RUuploadAddress);
+    
+    xhr.send(fd);
+}
+
+function RUuploadProgress(evt) {
+    if (evt.lengthComputable) {
+        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+        $('#RUprogress').css('width',percentComplete.toString() + '%');
+    }
+    else {
+        $('#RUprogress').css('width','40%');
+    }
+}
+
+function RUuploadComplete(evt) {
+    /* This event is raised when the server send back a response */
+    var token = evt.target.responseText;
+    
+    $('#itemDetails').html('<p class="lead"> <i class="icon-refresh icon-spin"></i> Procesando archivo...</p>')
+    $('#itemDetails').load(RUpreviewAddress+token);
+    
+    RUuploadEnd();
+}
+
+function RUuploadFailed(evt) {
+    $('#itemDetails').html('<p class="lead">Ha ocurrido un fallo en la subida.</p>');
+    RUuploadEnd();
+}
+
+function RUuploadCanceled(evt) {
+    $('#itemDetails').html('<p class="lead">La subida del archivo se ha cancelado.</p>');
+    RUuploadEnd();
+}
+
+function RUuploadEnd() {
+    RUuploading = false;
+    
+    $('#Route').remove();
+    $('.itemSubmit .types .route').prepend('<input type="file" id="Route" name="file">');
+    $('#Route').change(RouteChange);
+    
+    $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled'); 
+    $('#itemSubmitButtonText').html('Publicar'); 
+    $('#itemSubmitButtonLoading').removeClass('icon-refresh icon-spin');
+}
 
 /* FU File Uploading */
 var FUuploadAddress = '/archivo/XHR/upload/';
@@ -29,11 +123,13 @@ var FUuploading = false;
 var FUcurrentFileIndex = -1;
 var FUTheFiles = [];
 
-$('#File').change(function(){
+$('#File').change(FileChange);
+
+function FileChange() {
     if(typeChosen('file')) {
         return;
     }
-    var files = this.files;
+    var files = this.files;    
     var fp = $('#itemDetails');
     if(files.length) {
         fp.show();
@@ -51,18 +147,16 @@ $('#File').change(function(){
         }
         
         uploadFUTheFiles();
-        
-        $('#FileLabel').html('Más archivos');
     }
-});
+}
 
 function uploadFUTheFiles() {
     if(!FUuploading && FUTheFiles.length) {
         FUuploading = true;
         
-        $('#FileSubmit').attr('disabled','disabled').addClass('disabled'); 
-        $('#FileSubmitText').html('Subiendo archivos...'); 
-        $('#FileSubmitLoading').addClass('icon-refresh icon-spin');
+        $('#itemSubmitButton').attr('disabled','disabled').addClass('disabled'); 
+        $('#itemSubmitButtonText').html('Subiendo...'); 
+        $('#itemSubmitButtonLoading').addClass('icon-refresh icon-spin');
     
         uploadNext();
     }
@@ -85,9 +179,13 @@ function uploadNext() {
 function endOfUploads() {
     FUuploading = false;
     
-    $('#FileSubmit').removeAttr('disabled').removeClass('disabled'); 
-    $('#FileSubmitText').html('Publicar ahora'); 
-    $('#FileSubmitLoading').removeClass('icon-refresh icon-spin');
+    $('#File').remove();
+    $('.itemSubmit .types .file').prepend('<input type="file" id="File" multiple="multiple" name="file[]">');
+    $('#File').change(FileChange);
+    
+    $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled'); 
+    $('#itemSubmitButtonText').html('Publicar'); 
+    $('#itemSubmitButtonLoading').removeClass('icon-refresh icon-spin');
 }
 function uploadFile(file) {
     var fd = new FormData();
@@ -96,17 +194,17 @@ function uploadFile(file) {
     
     var xhr = new XMLHttpRequest();
     
-    xhr.upload.addEventListener("progress", uploadProgress, false);
-    xhr.addEventListener("load", uploadComplete, false);
-    xhr.addEventListener("error", uploadFailed, false);
-    xhr.addEventListener("abort", uploadCanceled, false);
+    xhr.upload.addEventListener("progress", FUuploadProgress, false);
+    xhr.addEventListener("load", FUuploadComplete, false);
+    xhr.addEventListener("error", FUuploadFailed, false);
+    xhr.addEventListener("abort", FUuploadCanceled, false);
     
     xhr.open("POST", FUuploadAddress);
     
     xhr.send(fd);
 }
 
-function uploadProgress(evt) {
+function FUuploadProgress(evt) {
     if (evt.lengthComputable) {
         var percentComplete = Math.round(evt.loaded * 100 / evt.total);
         $('#progress'+FUcurrentFileIndex).css('width',percentComplete.toString() + '%');
@@ -116,12 +214,12 @@ function uploadProgress(evt) {
     }
 }
 
-function uploadComplete(evt) {
+function FUuploadComplete(evt) {
     /* This event is raised when the server send back a response */
     var res = evt.target.responseText;
     
     if(res.length > 180) {
-        uploadFailed();
+        FUuploadFailed();
     } else {
         $('#UFC'+FUcurrentFileIndex).html('<img src="'+FUpreviewAddress + $.trim(res)+'" style="width:250px;height:190px;background-color:#AAA"><input type="text" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..." onFocus="if(this.value == \'Nombre...\') this.value=\'\'"><textarea name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..." onFocus="if($(this).val(\'Descripción...\')) $(this).val(\'\')"></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete">');
         
@@ -136,12 +234,12 @@ function uploadComplete(evt) {
     }
 }
 
-function uploadFailed(evt) {
+function FUuploadFailed(evt) {
     $('#UFC'+FUcurrentFileIndex).html('Ha ocurrido un fallo en la subida.');
     uploadNext();
 }
 
-function uploadCanceled(evt) {
+function FUuploadCanceled(evt) {
     $('#UFC'+FUcurrentFileIndex).html('La subida del archivo se ha cancelado.');
     uploadNext();
 }

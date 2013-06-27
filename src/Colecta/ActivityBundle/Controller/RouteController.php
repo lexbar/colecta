@@ -164,6 +164,118 @@ class RouteController extends Controller
         return new RedirectResponse($referer);
         
     }
+    public function XHRUploadAction() 
+    {
+        //Single file upload from XHR form
+        
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.') 
+        {
+            throw $this->createNotFoundException();
+        }
+        
+        set_time_limit(60*5);
+
+        //Only first file
+        if(is_array($_FILES['file']['tmp_name']))
+        {
+            $file = new UploadedFile($_FILES['file']['tmp_name'][0],$_FILES['file']['name'][0],$_FILES['file']['type'][0],$_FILES['file']['size'][0],$_FILES['file']['error'][0]);
+        }
+        else
+        {
+            $file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'],$_FILES['file']['type'],$_FILES['file']['size'],$_FILES['file']['error']);
+        } 
+        
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
+        $filename = 'xhr-' . md5($file->getClientOriginalName() . $_FILES['file']['tmp_name']);
+        
+        $extension = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION));
+        
+        $file->move($cachePath, $filename.'.'.$extension);
+        
+        $response = new Response();
+        $response->setStatusCode(200);
+        $response->setContent($filename.'.'.$extension);
+        $response->headers->set('Content-Type', 'text/plain');
+        
+        return $response;
+    }
+    public function XHRPreviewAction($token)
+    {
+        #TESTTIME
+        $t0 = microtime(1);
+        $timetxt = '';
+        #TESTTIME 
+        
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $response = new Response();
+        $response->setStatusCode(200);
+        
+        if($user == 'anon.') 
+        {
+            $response->setContent('<strong>Ha ocurrido un error, tienes que estar logueado.</strong>');
+        
+            return $response;
+        }
+        else
+        {
+            $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
+            
+            $extension = $this->extension($token);
+            
+            if(!$extension) //Extension not accepted
+            {
+                $response->setContent('<strong>El archivo no tiene una extensión correcta.</strong>');
+        
+                return $response;
+            }
+            else
+            {
+                #TESTTIME
+                $timetxt .= 'Comprobar extension: '.(microtime(1) - $t0).' <br> ';
+                $t0 = microtime(1);
+                #TESTTIME 
+                
+                $track = $this->extractTrack($cachePath.'/'.$token, 500); //simplified to 500 points only
+                
+                #TESTTIME
+                $timetxt .= 'Extraccion 500 puntos: '.(microtime(1) - $t0).' <br> ';
+                $t0 = microtime(1);
+                #TESTTIME 
+                                
+                if(!$track)
+                {
+                    $response->setContent('<strong>No se ha podido leer correctamente el archivo.</strong>');
+                    
+                    return $response;
+                }
+                else
+                {
+                    $item = new Route();
+                    $form = $this->createForm(new RouteType(), $item);
+                    
+                    $fulltrack = $this->extractTrack($cachePath.'/'.$token); //full track
+                    
+                    #TESTTIME
+                    $timetxt .= 'Extraccion completa: '.(microtime(1) - $t0).' <br> ';
+                    $t0 = microtime(1);
+                    #TESTTIME 
+                    
+                    $itemdata .= $this->getRouteData($fulltrack);
+                    
+                    #TESTTIME
+                    $timetxt .= 'Extraccion datos: '.(microtime(1) - $t0).' <br> ';
+                    $t0 = microtime(1);
+                    #TESTTIME 
+                    
+                    return $this->render('ColectaActivityBundle:Route:detailsform.html.twig', array('timetxt'=>$timetxt,'filename' => $token, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView()));
+                }
+            }
+        }
+        
+    }
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();

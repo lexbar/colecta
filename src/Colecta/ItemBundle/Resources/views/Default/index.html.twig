@@ -21,11 +21,16 @@
             <div id="itemDetails"></div>
             <ul class="types unstyled">
                 <li class="pull-left"><i class="icon-calendar-empty"></i> Evento</li>
-                <li class="pull-left route"> <input type="file"><i class="icon-globe"></i> Ruta</li>
+                <li class="pull-left route"> <input type="file" name="file" id="Route"><i class="icon-globe"></i> Ruta</li>
                 <li class="pull-left"><i class="icon-map-marker"></i> Lugar</li>
                 <li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivo</li>
                 
-                <li class="pull-right"><button class="btn btn-small btn-primary">Publicar</button></li>
+                <li class="pull-right">
+                    <button class="btn btn-small btn-primary" type="submit" id="itemSubmitButton">
+                        <i id="itemSubmitButtonLoading"></i> 
+                        <span id="itemSubmitButtonText">Publicar</span> 
+                    </button>
+                </li>
                 <li class="pull-right">{% render 'ColectaItemBundle:Category:formlist' with {'selected': 0, 'simplified': 1} %}</li>
             </ul>
         </form>

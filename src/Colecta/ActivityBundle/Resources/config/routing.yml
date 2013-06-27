@@ -55,6 +55,12 @@ ColectaRouteCreate:
 ColectaRouteNew:
     pattern:  /rutas/crear/
     defaults: { _controller: ColectaActivityBundle:Route:new }
+ColectaRouteXHRUpload:
+    pattern:  /rutas/XHR/upload/
+    defaults: { _controller: ColectaActivityBundle:Route:XHRUpload }
+ColectaRouteXHRPreview:
+    pattern:  /rutas/XHR/preview/{token}
+    defaults: { _controller: ColectaActivityBundle:Route:XHRPreview }
 ColectaRouteIndex:
     pattern:  /rutas/
     defaults: { _controller: ColectaActivityBundle:Route:index }

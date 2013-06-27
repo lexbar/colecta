@@ -1,0 +1,186 @@
+<script>
+{% spaceless %}
+    {% set boundsswlat, boundsswlng = track[0].latitude, track[0].longitude %}
+    {% set boundsnelat, boundsnelng = track[0].latitude, track[0].longitude %} 
+    {% set points = '[' ~ track[0].latitude ~ ',' ~ track[0].longitude ~ ']' %}
+    
+    {% for tp in track %}
+        {% if not loop.first %}
+            {% set points = points ~ ',[' ~ tp.latitude ~ ',' ~ tp.longitude ~ ']' %}
+            {% if tp.latitude < boundsswlat %}{% set boundsswlat = tp.latitude %}{% endif %}
+            {% if tp.longitude < boundsswlng %}{% set boundsswlng = tp.longitude %}{% endif %}
+            {% if tp.latitude > boundsnelat %}{% set boundsnelat = tp.latitude %}{% endif %}
+            {% if tp.longitude > boundsnelng %}{% set boundsnelng = tp.longitude %}{% endif %}
+        {% endif %}
+    {% endfor %}
+{% endspaceless %}
+    var map;
+    var polyline = [];
+    var points = [{{ points }}];
+    var bounds = null;
+    
+    //Load Asynchronously GMaps
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
+    document.body.appendChild(script);
+        
+    function initialize() {   
+        bounds = new google.maps.LatLngBounds(new google.maps.LatLng({{ boundsswlat }}, {{ boundsswlng }}), new google.maps.LatLng({{ boundsnelat }}, {{ boundsnelng }}));
+        
+        var mapOptions = {
+            zoom: 3,
+            center: bounds.getCenter(),
+            mapTypeId: google.maps.MapTypeId.TERRAIN, 
+            streetViewControl: false
+        };
+        
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        map.fitBounds(bounds);
+        
+        $.each(points, function(index, value) { 
+            polyline.push(new google.maps.LatLng(value[0], value[1]));
+        });
+        
+        var path = new google.maps.Polyline({
+            path: polyline,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+        
+        path.setMap(map);
+    }
+</script>
+
+    <div id="map" class="full"></div>
+
+      <div class="control-group">
+        <label class="control-label" for="RouteName">Distancia</label>
+        <div class="controls">
+          <div class="input-append">
+            {{ form_widget(form.distance, {'attr':{'class':'input-small','value': trackdata.distance}}) }}<span class="add-on"> km</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Subida</label>
+        <div class="controls">
+          <div class="input-append">
+            {{ form_widget(form.uphill, {'attr':{'class':'input-small','value': trackdata.uphill}}) }}<span class="add-on"> metros</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Bajada</label>
+        <div class="controls">
+          <div class="input-append">
+            {{ form_widget(form.downhill, {'attr':{'class':'input-small','value': trackdata.downhill}}) }}<span class="add-on"> metros</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Tiempo</label>
+        <div class="controls">
+          {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
+          {% if trackdata.time < 60 %}
+            {% set secconds = trackdata.time %}
+          {% else %}
+            {% set minutes = trackdata.time // 60 %}
+            {% set secconds = trackdata.time - minutes * 60 %}
+            
+            {% if minutes >= 60 %}
+                {% set hours = minutes // 60 %}
+                {% set minutes = minutes - hours * 60 %}
+                
+                {% if hours >= 24 %}
+                    {% set days = hours // 24 %}
+                    {% set hours = hours - days * 24 %}
+                {% endif %}
+            {% endif %}
+          {% endif %}
+            <input type="text" class="spanhalf" name="days" value="{{ days }}"> dias,  
+            
+            <select name="hours" style="width:auto">
+            {% for hour in 0..23 %}
+                <option value="{{ hour }}"{% if hour == hours %}selected="selected"{% endif%}>{{ hour }}</option>
+            {% endfor %}
+            </select>            
+             horas y 
+            
+            <select name="minutes" style="width:auto">
+            {% for minute in 0..59 %}
+                <option value="{{ minute }}"{% if minute == minutes %}selected="selected"{% endif%}>{{ minute }}</option>
+            {% endfor %}
+            </select>
+             minutos 
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Velocidad media</label>
+        <div class="controls">
+          <div class="input-append">
+            {{ form_widget(form.avgspeed, {'attr':{'value': trackdata.avgspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.avgspeed }}</span><span class="add-on"> km/h</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Velocidad máxima</label>
+        <div class="controls">
+          <div class="input-append">
+            {{ form_widget(form.maxspeed, {'attr':{'value': trackdata.maxspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.maxspeed }}</span><span class="add-on"> km/h</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Cota inferior</label>
+        <div class="controls">
+          <div class="input-append">
+            {{ form_widget(form.minheight, {'attr':{'class':'input-small','value': trackdata.minheight}}) }}<span class="add-on"> metros</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteFile">Cota superior</label>
+        <div class="controls">
+          <div class="input-append">
+            {{ form_widget(form.maxheight, {'attr':{'class':'input-small','value': trackdata.maxheight}}) }}<span class="add-on"> metros</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="RouteName">Dificultad</label>
+        <div class="controls">
+            <label class="radio">
+                <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy" checked>
+                <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                Fácil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="RouteDifficultyModerate" value="moderate">
+                <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                Moderado
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="RouteDifficultyHard" value="hard">
+                <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                Difícil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="RouteDifficultyVeryhard" value="very hard">
+                <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                Muy difícil
+            </label>
+            <label class="radio">
+                <input type="radio" name="difficulty" id="RouteDifficultyExpertsonly" value="experts only">
+                <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                Sólo expertos
+            </label>
+        </div>
+      </div>
+      
+      {{ form_rest(form) }}
+      {{ timetxt }}
+      
+      <input type="hidden" value="{{ filename }}" name="filename">
+      <input type="hidden" value="{% if trackdata.isloop %}1{% else %}0{% endif %}" name="isloop">
