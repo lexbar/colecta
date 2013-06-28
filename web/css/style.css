@@ -1004,17 +1004,17 @@ div.assistances ul li a {
     font-size: 14px;
     font-weight: normal;
     border-bottom: 1px solid #eee;
+    padding: 5px 0 5px;
 }
 .categories h2.main {
     font-size: 18px;
-    font-weight: bold;
 }
 .categories span {
-    color: #666;
+    color: #999;
     display: block;
     float: left;
     overflow: visible;
-    width: 60px;
+    width: 54px;
 }
 .sys {
     border: 1px solid #ddd;

@@ -89,7 +89,7 @@ class Category
      */
     protected $files = 0;
 
-
+    
     /**
      * Get id
      *
@@ -339,6 +339,10 @@ class Category
         return $this->files;
     }
     
+    public function getItemsCount()
+    {
+        return intval($this->getPosts()) + intval($this->getEvents()) + intval($this->getRoutes()) + intval($this->getPlaces()) + intval($this->getFiles());
+    }
     
     public function sortedTypes()
     {

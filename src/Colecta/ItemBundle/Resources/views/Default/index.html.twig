@@ -16,8 +16,8 @@
 
     {% if app.user %}
         <form class="itemSubmit form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
-            <input type="text" name="name" class="title" placeholder="Título">
-            <textarea name="description" placeholder="Descripción" class="description"></textarea>
+            <input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título">
+            <textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea>
             <div id="itemDetails"></div>
             <ul class="types unstyled">
                 <li class="pull-left"><i class="icon-calendar-empty"></i> Evento</li>

@@ -18,7 +18,7 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      *
      * @ORM\Column(name="description", type="text")
      */
-    protected $description;
+    protected $description = '';
 
     /**
      * @var float $distance

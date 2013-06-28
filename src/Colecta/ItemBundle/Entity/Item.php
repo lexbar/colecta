@@ -54,14 +54,14 @@ abstract class Item
      *
      * @ORM\Column(name="summary", type="string", length=255)
      */
-    protected $summary;
+    protected $summary = '';
 
     /**
      * @var string $tagwords
      *
      * @ORM\Column(name="tagwords", type="string", length=255)
      */
-    protected $tagwords;
+    protected $tagwords = '';
 
     /**
      * @var datetime $date

@@ -239,7 +239,12 @@ class RouteController extends Controller
             if(!$extension) //Extension not accepted
             {
                 $response->setContent('<strong>El archivo no tiene una extensión correcta.</strong>');
-        
+                
+                if(file_exists($cachePath.'/'.$token))
+                {
+                    unlink($cachePath.'/'.$token);
+                }
+                
                 return $response;
             }
             else
@@ -249,6 +254,11 @@ class RouteController extends Controller
                 {
                     $response->setContent('<strong>No se ha podido leer correctamente el archivo.</strong>');
                     
+                    if(file_exists($cachePath.'/'.$token))
+                    {
+                        unlink($cachePath.'/'.$token);
+                    }
+                
                     return $response;
                 }
                 else
@@ -274,7 +284,9 @@ class RouteController extends Controller
                     
                     $itemdata = $this->getRouteData($fulltrack);
                     
-                    return $this->render('ColectaActivityBundle:Route:detailsform.html.twig', array('filename' => $token, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView()));
+                    $guessname = $this->guessName($fulltrack[0]['latitude'],$fulltrack[0]['longitude']);
+                    
+                    return $this->render('ColectaActivityBundle:Route:detailsform.html.twig', array('guessname'=>$guessname, 'filename' => $token, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView()));
                 }
             }
         }
@@ -349,6 +361,26 @@ class RouteController extends Controller
                         $item->setDescription($request->get('description'));
                     }
                     
+                    
+                    
+                    //Move file out of cache to accesible folder
+                    $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
+                    $rootdir = $this->getUploadDir();
+                    
+                    $filename = $this->safeToken($post->get('filename'));
+                    
+                    if(copy($cachePath.'/'.$filename, $rootdir.'/'.$filename))
+                    {
+                        unlink($cachePath.'/'.$filename);
+                    }
+                    
+                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
+                    
+                    if(!$item->getName())
+                    {
+                        $item->setName($this->guessName($fulltrack[0]['latitude'],$fulltrack[0]['longitude']));
+                    }
+                    
                     //Slug generate
                     $slug = $item->generateSlug();
                     $n = 2;
@@ -366,7 +398,7 @@ class RouteController extends Controller
                     }
                     $item->setSlug($slug);
                     
-                    $item->summarize($item->getDescription());
+                    $item->summarize(strval($item->getDescription()));
                     
                     $item->setAllowComments(true);
                     $item->setDraft(false);
@@ -382,22 +414,11 @@ class RouteController extends Controller
                     $item->setIBP('');
                     $item->setIsloop(intval($post->get('isloop')));
                     
-                    $filename = $this->safeToken($post->get('filename'));
                     $item->setSourcefile($filename);
                     
                     $em->persist($item); 
                     
-                    //Move file out of cache to accesible folder
-                    $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
-                    $rootdir = $this->getUploadDir();
-                    
-                    if(copy($cachePath.'/'.$filename, $rootdir.'/'.$filename))
-                    {
-                        unlink($cachePath.'/'.$filename);
-                    }
-                    
-                    //Retrieve and save RouteTrackpooints
-                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
+                    //Save RouteTrackpooints
                     
                     foreach($fulltrack as $point)
                     {
@@ -429,8 +450,8 @@ class RouteController extends Controller
                         {
                             $place->setName($item->getName());
                         }
-                        $place->setDescription('');
-                        $place->setSummary('');
+                        $place->setDescription($point['description']);
+                        $place->summarize($place->getDescription());
                         $place->setTagwords($item->getTagwords());
                         $place->setAuthor($user);
                         $place->setCategory($category);
@@ -474,7 +495,7 @@ class RouteController extends Controller
                 
                     $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
                     
-                    return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug' => $slug)));
+                    return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug' => $item->getSlug())));
                 }
                 else
                 {
@@ -867,6 +888,7 @@ class RouteController extends Controller
 					case 'Latitude': $latitude = $i ; break;
 					case 'Longitude': $longitude = $i ; break;
 					case 'Name': $name = $i ; break;
+					case 'Description': $description = $i ; break;
 					case 'Altitude': $altitude = $i ; break;
 					case 'Date': $date = $i ; break;
 					case 'Time': $time = $i ; break;
@@ -891,6 +913,8 @@ class RouteController extends Controller
 				
 				$point['latitude'] = $l[$latitude];
 				$point['longitude'] = $l[$longitude];
+				$point['name'] = $l[$name];
+				$point['description'] = preg_replace("#^\"(.*)\"$#","$1",$l[$description]);
 				if($altitude !== null) { $trackpoint['altitude'] = $l[$altitude];}
 				else { $point['altitude'] = 0; }
 				if($date !== null) { $point['datetime'] = safeDateTime($l[$date],$l[$time]); }
@@ -995,12 +1019,37 @@ class RouteController extends Controller
         );
     }
     
+    public function guessName($lat, $lng)
+    {
+        $content = getContent('http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false');
+        
+        $json = json_decode($content, 1);
+        
+        if(count($json['results']))
+        {
+            $firstresult = $json['results'][0]['address_components'];
+            
+            foreach($firstresult as $r)
+            {
+                if(in_array('political',$r['types']))
+                {
+                    return $r['long_name'];
+                }
+            }
+            
+            return $firstresult[0]['long_name'];
+        }
+        else
+        {
+            return '';
+        }
+    }
+    
     public function safeToken($token)
     {
         return preg_replace("#[^a-zA-Z0-9.\-]#",'',$token);
     }
 }
-
 
 function median()
 {

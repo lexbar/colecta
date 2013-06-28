@@ -14,14 +14,14 @@
             {% set typeicon = {'posts':'file','events':'calendar','routes':'globe','places':'map-marker','files':'folder-open'}%}
             {% for type, amount in category.sortedTypes %}
                 {% if amount > 0 %}
-                    {% if loop.first %}<span style="font-size:18px;">{% elseif loop.index > 3 %}<span style="font-size:12px;">{% else %}<span> | {% endif %}
+                    {% if loop.first %}<span style="font-size:16px;">{% elseif loop.index > 3 %}<span style="font-size:12px;">{% else %}<span> | {% endif %}
                         <i class="icon-{{ typeicon[type] }}"></i> {{ amount }} 
                     </span>
                 {% endif %}
             {% endfor %}
         </div>
         
-        <h2{% if loop.index < 6 %} class="main"{% endif %}>
+        <h2 class="main">
             <a href="{{ path('ColectaCategoryView',{'slug':category.slug}) }}">
                 {% set slv = app.session.get('sinceLastVisit') %}
                 <i class="icon-expand-alt"{% if slv and slv != 'dismiss' and slv < category.lastchange%}style="color:orange"{% endif %}></i> 
