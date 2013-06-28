@@ -18,10 +18,22 @@ function typeChosen(type) {
             break;
             case 'route': $('.itemSubmit').attr('action','/crear/ruta/');
             break;
+            case 'event': $('.itemSubmit').attr('action','/crear/actividad/');
+            break;
         }
         return false;
     }
 }
+/* Event Creation */
+function loadEventForm() {
+    if(typeChosen('event')) {
+        return;
+    }
+    
+    $('#itemDetails').html('<p class="lead"> <i class="icon-refresh icon-spin"></i> Espere un instante...</p>');
+    $('#itemDetails').load('/actividades/crear/detalles/');
+}
+
 /* RU Route Uploading */
 var RUuploadAddress = '/rutas/XHR/upload/';
 var RUpreviewAddress = '/rutas/XHR/preview/';

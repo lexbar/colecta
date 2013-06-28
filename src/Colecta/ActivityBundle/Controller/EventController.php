@@ -96,6 +96,20 @@ class EventController extends Controller
         
         return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items, 'date' => $myDate, 'ismonth' => $ismonth));
     }
+    public function detailsFormAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user == 'anon.')
+        {
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
+        }
+        else
+        {
+            return $this->render('ColectaActivityBundle:Event:detailsform.html.twig');
+        }
+    }
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();

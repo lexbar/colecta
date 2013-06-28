@@ -2,17 +2,23 @@
 
     <h2 class="related">
         <span class="icon-stack">
-            <i class="icon-circle icon-stack-base" style="color: rgb(221, 221, 221);"></i>
-            <i class="icon-pushpin"></i>
+            <i class="icon-circle icon-stack-base" style="color: #0088CC;"></i>
+            <i class="icon-pushpin icon-light"></i>
         </span> 
         
         Relacionado:
     </h2>
     
     {% for item in items if item.draft == 0 %}    
+        {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+        
         {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
+        
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 3 } only %}
     {% endfor %}
 
 {% endif %}

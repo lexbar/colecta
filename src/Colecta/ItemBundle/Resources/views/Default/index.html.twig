@@ -20,9 +20,9 @@
             <textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea>
             <div id="itemDetails"></div>
             <ul class="types unstyled">
-                <li class="pull-left"><i class="icon-calendar-empty"></i> Evento</li>
+                <li class="pull-left event" onClick="loadEventForm();"><i class="icon-calendar-empty"></i> Evento</li>
                 <li class="pull-left route"> <input type="file" name="file" id="Route"><i class="icon-globe"></i> Ruta</li>
-                <li class="pull-left"><i class="icon-map-marker"></i> Lugar</li>
+                <li class="pull-left place"><i class="icon-map-marker"></i> Lugar</li>
                 <li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivo</li>
                 
                 <li class="pull-right">
@@ -48,17 +48,24 @@
 
 {% for item in items %}
     
-<div class="item">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    
-    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
-    
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-    
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
-</div>
+    <div class="item">
+        {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+        
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+        
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+        
+        {% if item.related | length > 0 %}
+            <div class="relations">
+                {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+            </div>
+        {% endif %}
+    </div>
+
 {% else %}
     {% if not app.user %}
         <h3>Nadie ha escrito nada... por ahora.</h3>

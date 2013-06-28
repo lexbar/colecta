@@ -29,11 +29,12 @@
         
         <p>{{ item.summary | usercontent | raw | nl2br }}</p>
     </div>
-    
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-    
+
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item, 'collapse': 18 } only %}
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item, 'collapse': 10 } only %}
+        
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+
 </div>
 {% endblock %}

@@ -30,8 +30,12 @@ h3 {
 }
 h2.related {
     color: 666;
-    margin: 25px 0 15px -40px !important;
+    margin: 0 0 15px 0 !important;
     font-size: 18px;
+}
+.relations {
+    border-left: 2px solid #0088CC;
+    padding-left: 10px;
 }
 .itemcontent {
     margin-left: 45px; 
@@ -684,7 +688,6 @@ div.assistances ul li {
 }
 div.assistances ul li input {
     margin: 0;
-    padding: 2px;
 }
 div.assistances ul li label {
     display: inline;

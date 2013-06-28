@@ -25,6 +25,9 @@ ColectaEventIndex:
 ColectaEventNew:
     pattern:  /actividades/crear/
     defaults: { _controller: ColectaActivityBundle:Event:new }
+ColectaEventDetails:
+    pattern:  /actividades/crear/detalles/
+    defaults: { _controller: ColectaActivityBundle:Event:detailsForm }
 ColectaEventPage:
     pattern:  /actividades/pagina/{page}
     defaults: { _controller: ColectaActivityBundle:Event:page }
