@@ -913,8 +913,8 @@ class RouteController extends Controller
 				
 				$point['latitude'] = $l[$latitude];
 				$point['longitude'] = $l[$longitude];
-				$point['name'] = $l[$name];
-				$point['description'] = preg_replace("#^\"(.*)\"$#","$1",$l[$description]);
+				$point['name'] = preg_replace('#^\"(.*)\"$#', '$1', $l[$name]);
+				$point['description'] = preg_replace('#^\"(.*)\"$#', '$1', $l[$description]);
 				if($altitude !== null) { $trackpoint['altitude'] = $l[$altitude];}
 				else { $point['altitude'] = 0; }
 				if($date !== null) { $point['datetime'] = safeDateTime($l[$date],$l[$time]); }

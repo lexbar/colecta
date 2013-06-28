@@ -20,10 +20,108 @@ function typeChosen(type) {
             break;
             case 'event': $('.itemSubmit').attr('action','/crear/actividad/');
             break;
+            case 'place': $('.itemSubmit').attr('action','/crear/lugar/');
+            break;
         }
         return false;
     }
 }
+
+/* Place Creation */
+var PCgeocoder;
+var PCmap;
+var PCmarker;
+
+function loadPlaceForm() {
+    if(typeChosen('place')) {
+        return;
+    }
+    
+    $('#itemDetails').html('<p class="lead">Escribe un lugar para buscar en el mapa:</p><div class="input-append"><p><input id="PlaceMapSearch" type="text" placeholder="Dirección..." class="span4"><button type="button" id="mapSearchIcon" class="btn btn-primary"><i class="icon-search"></i> Localizar</button></p></div><ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;width:90%;" class="dropdown-menu hidden" id="mapResults"></ul><div id="map" style="display:none"></div><input type="hidden" name="latitude" id="PlaceLatitude"><input type="hidden" name="longitude" id="PlaceLongitude">');
+    
+    $('.itemSubmit').submit(function(e){
+        if(typeof google === 'object' && typeof google.maps === 'object') {
+            searchLocation();
+        } else {
+            //Load Asynchronously GMaps
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=searchLocation";
+            document.body.appendChild(script);
+        }
+        
+        $('.itemSubmit').unbind();
+        
+        return false;
+    });
+}
+
+function searchLocation() {
+    $('#mapSearchIcon').removeClass('btn-primary').html('<i class="icon-refresh icon-spin"></i> Localizando...');
+    
+    if(!PCgeocoder) {
+        PCgeocoder = new google.maps.Geocoder();
+    }
+    
+    var address = $('#PlaceMapSearch').val();
+    
+    $('#mapResults').addClass('hidden');
+    
+    PCgeocoder.geocode( { 'address': address}, function(results, status) {
+    
+        if (status == google.maps.GeocoderStatus.OK) {
+            
+            if(results.length > 1) {
+                $('#mapResults').html('');
+                for(var i = 0; i < results.length; i++) {
+                    $('#mapResults').append('<li id="mapResult'+(i + 1)+'"><a tabindex="-1" href="#result'+i+'" onClick="mapPosition(new google.maps.LatLng('+results[i].geometry.location.lat()+', '+results[i].geometry.location.lng()+'));$(\'#itemSubmitName\').val(\''+results[i].formatted_address+'\');$(\'#mapResults\').addClass(\'hidden\');return false;"> '+results[i].formatted_address+'</a></li>');
+                }
+                
+                $('#mapResults').removeClass('hidden');
+            } else {
+                mapPosition(results[0].geometry.location);
+                $('#itemSubmitName').val(results[0].formatted_address);
+            }
+            
+        } else {
+            if(status == 'ZERO_RESULTS') {
+                alert('No hemos encontrado ningun sitio con esas palabras. \nPrueba de nuevo');
+            } else {
+                alert('Ha ocurrido un error: ' + status);
+            }
+        }
+
+        $('#mapSearchIcon').html('<i class="icon-search"></i> Localizar');
+    });
+}
+
+function mapPosition(position) { //google maps latlng object
+    //If not active, create map
+    if( $('#map').css('display') == 'none') {
+        $('#map').css('display', 'block');
+        PCmap = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:position, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
+        google.maps.event.addListener(PCmap, 'click', function(event) {
+            mapPosition(event.latLng);
+        });
+        
+        $('#PlaceLatitude').val(position.lat());
+        $('#PlaceLongitude').val(position.lng());
+    } else {
+        PCmap.panTo(position);
+        $('#PlaceLatitude').val(position.lat());
+        $('#PlaceLongitude').val(position.lng());
+    }
+    
+    if(!PCmarker) {
+        PCmarker = new google.maps.Marker({
+            map: PCmap,
+            position:position
+        });
+    } else {
+        PCmarker.setPosition(position);
+    }
+}
+
 /* Event Creation */
 function loadEventForm() {
     if(typeChosen('event')) {
