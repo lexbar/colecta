@@ -47,7 +47,7 @@ class CategoryController extends Controller
         return $this->render('ColectaItemBundle:Category:page.html.twig', array('category'=>$category, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     
-    public function formlistAction($selected, $simplified)
+    public function formlistAction($selected, $simplified = false)
     {
         $em = $this->getDoctrine()->getEntityManager();
         

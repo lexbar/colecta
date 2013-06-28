@@ -15,7 +15,7 @@
 </div>
 
     {% if app.user %}
-        <form class="itemSubmit" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
+        <form class="itemSubmit form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
             <input type="text" name="name" class="title" placeholder="Título">
             <textarea name="description" placeholder="Descripción" class="description"></textarea>
             <div id="itemDetails"></div>

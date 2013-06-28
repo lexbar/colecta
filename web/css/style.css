@@ -414,6 +414,14 @@ form.form-horizontal .controls textarea {
 .itemSubmit #itemDetails .pv small {
     color: darkred;
 }
+.itemSubmit #itemDetails .lead {
+    margin: 8px;
+}
+.itemSubmit #map {
+    display: block;
+    height: 230px;
+    margin: 10px 0;
+}
 
 .ads {
     text-align: center;

@@ -3,7 +3,7 @@ var itemSubmitType = false;
 function typeChosen(type) {
     //Set the type of item chosen. Returns true when you can't choose that type
     if(itemSubmitType) {
-        if(itemSubmitType == 'file') {
+        if(itemSubmitType == 'file' || itemSubmitType == 'route') {
             return false;
         } else {
             return true;
@@ -15,6 +15,8 @@ function typeChosen(type) {
         
         switch(type) {
             case 'file': $('.itemSubmit').attr('action','/archivo/crear/');
+            break;
+            case 'route': $('.itemSubmit').attr('action','/crear/ruta/');
             break;
         }
         return false;

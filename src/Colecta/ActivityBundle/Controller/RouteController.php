@@ -128,14 +128,14 @@ class RouteController extends Controller
                 $hashName = sha1($file->getClientOriginalName() . $user->getId() . mt_rand(0, 99999));
                 $filename = $hashName . '.' . $extension;
                 
-                $rootdir = $this->getUploadDir();
+                $rootdir = $cachePath = __DIR__ . '/../../../../app/cache/prod/files';
                 
                 $file->move($rootdir, $filename);
                 unset($file);
                 
-                $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
+                $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
                                 
-                if(!$track)
+                if(!$fulltrack)
                 {
                     $this->get('session')->setFlash('error', 'No se ha podido leer correctamente el archivo.');
                 }
@@ -144,7 +144,22 @@ class RouteController extends Controller
                     $item = new Route();
                     $form = $this->createForm(new RouteType(), $item);
                     
-                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
+                    $points = count($fulltrack);
+                    if($points > 500)
+                    {
+                        $track = array();
+                        $cadence = ceil($points / 500);
+                        
+                        for($i = 0; $i < $points ; $i += $cadence)
+                        {
+                            $track[] = $fulltrack[$i];
+                        }
+                    }
+                    else
+                    {
+                        $track = $fulltrack;
+                    }
+                    
                     $itemdata = $this->getRouteData($fulltrack);
                     
                     $categories = $this->getDoctrine()->getEntityManager()->getRepository('ColectaItemBundle:Category')->findAll();
@@ -202,12 +217,7 @@ class RouteController extends Controller
         return $response;
     }
     public function XHRPreviewAction($token)
-    {
-        #TESTTIME
-        $t0 = microtime(1);
-        $timetxt = '';
-        #TESTTIME 
-        
+    {        
         $user = $this->get('security.context')->getToken()->getUser();
         
         $response = new Response();
@@ -222,6 +232,7 @@ class RouteController extends Controller
         else
         {
             $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
+            $token = $this->safeToken($token);
             
             $extension = $this->extension($token);
             
@@ -232,20 +243,9 @@ class RouteController extends Controller
                 return $response;
             }
             else
-            {
-                #TESTTIME
-                $timetxt .= 'Comprobar extension: '.(microtime(1) - $t0).' <br> ';
-                $t0 = microtime(1);
-                #TESTTIME 
-                
-                $track = $this->extractTrack($cachePath.'/'.$token, 500); //simplified to 500 points only
-                
-                #TESTTIME
-                $timetxt .= 'Extraccion 500 puntos: '.(microtime(1) - $t0).' <br> ';
-                $t0 = microtime(1);
-                #TESTTIME 
-                                
-                if(!$track)
+            {                
+                $fulltrack = $this->extractTrack($cachePath.'/'.$token); //full track   
+                if(!$fulltrack)
                 {
                     $response->setContent('<strong>No se ha podido leer correctamente el archivo.</strong>');
                     
@@ -256,21 +256,25 @@ class RouteController extends Controller
                     $item = new Route();
                     $form = $this->createForm(new RouteType(), $item);
                     
-                    $fulltrack = $this->extractTrack($cachePath.'/'.$token); //full track
-                    
-                    #TESTTIME
-                    $timetxt .= 'Extraccion completa: '.(microtime(1) - $t0).' <br> ';
-                    $t0 = microtime(1);
-                    #TESTTIME 
+                    $points = count($fulltrack);
+                    if($points > 500)
+                    {
+                        $track = array();
+                        $cadence = ceil($points / 500);
+                        
+                        for($i = 0; $i < $points ; $i += $cadence)
+                        {
+                            $track[] = $fulltrack[$i];
+                        }
+                    }
+                    else
+                    {
+                        $track = $fulltrack;
+                    }
                     
                     $itemdata = $this->getRouteData($fulltrack);
                     
-                    #TESTTIME
-                    $timetxt .= 'Extraccion datos: '.(microtime(1) - $t0).' <br> ';
-                    $t0 = microtime(1);
-                    #TESTTIME 
-                    
-                    return $this->render('ColectaActivityBundle:Route:detailsform.html.twig', array('timetxt'=>$timetxt,'filename' => $token, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView()));
+                    return $this->render('ColectaActivityBundle:Route:detailsform.html.twig', array('filename' => $token, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView()));
                 }
             }
         }
@@ -334,6 +338,17 @@ class RouteController extends Controller
                     $item->setCategory($category);
                     $item->setAuthor($user);
                     
+                    //if comes from itemSubmit i have to fill name and description
+                    if($request->get('name'))
+                    {
+                        $item->setName($request->get('name'));
+                    }
+                    
+                    if($request->get('description'))
+                    {
+                        $item->setDescription($request->get('description'));
+                    }
+                    
                     //Slug generate
                     $slug = $item->generateSlug();
                     $n = 2;
@@ -366,14 +381,22 @@ class RouteController extends Controller
                     $item->setIsloop(false);
                     $item->setIBP('');
                     $item->setIsloop(intval($post->get('isloop')));
-                    $item->setSourcefile($post->get('filename'));
+                    
+                    $filename = $this->safeToken($post->get('filename'));
+                    $item->setSourcefile($filename);
                     
                     $em->persist($item); 
                     
-                    //Retrieve and save RouteTrackpooints
-                    $filename = $post->get('filename');
+                    //Move file out of cache to accesible folder
+                    $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
                     $rootdir = $this->getUploadDir();
                     
+                    if(copy($cachePath.'/'.$filename, $rootdir.'/'.$filename))
+                    {
+                        unlink($cachePath.'/'.$filename);
+                    }
+                    
+                    //Retrieve and save RouteTrackpooints
                     $fulltrack = $this->extractTrack($rootdir.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
                     
                     foreach($fulltrack as $point)
@@ -970,6 +993,11 @@ class RouteController extends Controller
 			'time' => $time,
 			'isloop' => $isLoop
         );
+    }
+    
+    public function safeToken($token)
+    {
+        return preg_replace("#[^a-zA-Z0-9.\-]#",'',$token);
     }
 }
 

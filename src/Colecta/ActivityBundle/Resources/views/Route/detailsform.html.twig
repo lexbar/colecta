@@ -53,7 +53,7 @@
     }
 </script>
 
-    <div id="map" class="full"></div>
+    <div id="map"></div>
 
       <div class="control-group">
         <label class="control-label" for="RouteName">Distancia</label>
@@ -179,8 +179,7 @@
         </div>
       </div>
       
-      {{ form_rest(form) }}
-      {{ timetxt }}
+      {{ form_widget(form._token) }}
       
       <input type="hidden" value="{{ filename }}" name="filename">
       <input type="hidden" value="{% if trackdata.isloop %}1{% else %}0{% endif %}" name="isloop">
