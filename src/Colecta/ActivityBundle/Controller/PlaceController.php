@@ -68,10 +68,6 @@ class PlaceController extends Controller
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
         }
-        elseif(!$request->get('description'))
-        {
-            $this->get('session')->setFlash('error', 'No has escrito ningun texto');
-        }
         elseif(!$category)
         {
             $this->get('session')->setFlash('error', 'No existe la categoria');
@@ -110,18 +106,18 @@ class PlaceController extends Controller
             
             $item->setCategory($category);
             $item->setAuthor($user);
-            $item->setName($request->get('name'));
-            
-            //Slug generate
             if(strlen($request->get('name')) == 0)
             {
-                $slug = 'untitled';
+                $item->setName($this->guessName($request->get('latitude'), $request->get('longitude')));
             }
             else
             {
-                $slug = $item->generateSlug();
+                $item->setName($request->get('name'));
             }
             
+            
+            //Slug generate
+            $slug = $item->generateSlug();
             $n = 2;
             
             while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
@@ -251,5 +247,55 @@ class PlaceController extends Controller
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         return $this->render('ColectaActivityBundle:Place:edit.html.twig', array('item' => $item, 'categories'=>$categories));
     }
+    
+    public function guessName($lat, $lng)
+    {
+        $content = getContent('http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false');
+        
+        $json = json_decode($content, 1);
+        
+        if(count($json['results']))
+        {
+            $firstresult = $json['results'][0]['address_components'][0]['long_name'];
+            
+            foreach($firstresult as $r)
+            {
+                if(in_array('political',$r['types']))
+                {
+                    return $r['long_name'];
+                }
+            }
+            
+            return $firstresult[0]['long_name'];
+        }
+        else
+        {
+            return '';
+        }
+    }
+}
 
+function getContent($url) 
+{
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url );
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 7);
+	$content = curl_exec($ch); //return result 
+	
+	if(curl_getinfo($ch, CURLINFO_HTTP_CODE) === 403) 
+	{
+		return null;
+	}
+	
+	if (curl_errno($ch)) 
+	{
+		return false; //this stops the execution under a Curl failure
+	}
+	
+	curl_close($ch); //close connection_aborted()
+	
+	return $content;
 }

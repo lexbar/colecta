@@ -39,7 +39,11 @@ function loadPlaceForm() {
     
     $('#itemDetails').html('<p class="lead">Escribe un lugar para buscar en el mapa:</p><div class="input-append"><p><input id="PlaceMapSearch" type="text" placeholder="Dirección..." class="span4"><button type="button" id="mapSearchIcon" class="btn btn-primary"><i class="icon-search"></i> Localizar</button></p></div><ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;width:90%;" class="dropdown-menu hidden" id="mapResults"></ul><div id="map" style="display:none"></div><input type="hidden" name="latitude" id="PlaceLatitude"><input type="hidden" name="longitude" id="PlaceLongitude">');
     
-    $('.itemSubmit').submit(function(e){
+    $('.itemSubmit').submit(searchAction);
+    $('#mapSearchIcon').click(searchAction);
+}
+
+function searchAction() {
         if(typeof google === 'object' && typeof google.maps === 'object') {
             searchLocation();
         } else {
@@ -51,10 +55,10 @@ function loadPlaceForm() {
         }
         
         $('.itemSubmit').unbind();
+        $('#PlaceMapSearch').focus(function(){$('.itemSubmit').submit(searchAction);})
         
         return false;
-    });
-}
+    }
 
 function searchLocation() {
     $('#mapSearchIcon').removeClass('btn-primary').html('<i class="icon-refresh icon-spin"></i> Localizando...');
