@@ -1,0 +1,20 @@
+{% extends '::frontend.html.twig' %}
+
+{% block files 'active' %}
+
+{% block javascripts %}  
+    <script src="/js/filepreview.js"></script>
+    <script>        
+        {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+    </script>
+{% endblock %}
+
+{% block article %}
+
+<div class="title-block">
+    <h2>Editar {{ item.name }}<br><span><a href="{{ path('ColectaFolderView', {'slug':item.slug}) }}"><i class="icon-double-angle-left"></i> Volver a la carpeta</a></span></h2>
+</div>
+
+{% include 'ColectaFilesBundle:Folder:form.html.twig' with { 'item': item, 'formaction': path('ColectaFolderEdit', {'slug':item.slug}),'firstwrite':0} %}
+
+{% endblock %}

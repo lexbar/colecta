@@ -113,12 +113,79 @@ class FolderController extends Controller
     public function editAction($slug)
     {
         $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $request = $this->getRequest();
         
         $item = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
         
-        $this->get('session')->setFlash('success', 'No es posible editar carpetas todavía. Disculpa las molestias.');
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        elseif($user != $item->getAuthor())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));
+        }
         
-        return $this->render('ColectaFilesBundle:Folder:full.html.twig', array('item' => $item));
+        if ($request->getMethod() == 'POST') 
+        {
+            $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
+            
+            $item->setName($request->request->get('name'));
+            $item->setCategory($category);
+            
+            if(!$request->get('newCategory') && !$category)
+            {
+                $this->get('session')->setFlash('error', 'No existe la categoria');
+            }
+            else
+            {
+                //New Category
+                if($request->request->get('newCategory'))
+                {
+                    $category = new Category();
+                    $category->setName($request->request->get('newCategory'));
+                    
+                    //Category Slug generate
+                    $catSlug = $item->generateSlug($request->request->get('newCategory'));
+                    $n = 2;
+                    
+                    while($em->getRepository('ColectaItemBundle:Category')->findOneBySlug($catSlug)) 
+                    {
+                        if($n > 2)
+                        {
+                            $catSlug = substr($catSlug,0,-2);
+                        }
+                        
+                        $catSlug .= '-'.$n;
+                        
+                        $n++;
+                    }
+                
+                    $category->setSlug($catSlug);
+                    $category->setDescription('');
+                }
+                
+                $category->setLastchange(new \DateTime('now'));
+                $em->persist($category); 
+                $item->setCategory($category);
+                                  
+                
+                $em->persist($item);
+                $em->flush();
+                
+                // Update all categories. 
+                // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
+            
+                $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
+                
+                $this->get('session')->setFlash('success', 'Carpeta modificada correctamente');
+                return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));     
+            }
+        }
+        
+        return $this->render('ColectaFilesBundle:Folder:edit.html.twig', array('item' => $item));
     }
     public function formlistAction($selected, $firstwrite)
     {

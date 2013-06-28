@@ -1,0 +1,27 @@
+{% if app.user %}
+<form action="{{ formaction }}" method="POST" class="form-horizontal well" onSubmit="$('#FolderSubmit').attr('disabled','disabled').addClass('disabled'); $('#FolderSubmitText').html('Enviando...'); $('#FolderSubmitLoading').addClass('icon-refresh icon-spin');">
+    <fieldset>        
+        
+        <div class="control-group">
+            <label class="control-label" for="FolderName">Nombre</label>
+            <div class="controls">
+                <input id="FolderName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}">
+            </div>
+        </div>
+        
+        {% if item.category.id is defined %}
+            {% set category = item.category.id %}
+        {% else %}
+            {% set category = 0 %}
+        {% endif %}
+        {% render 'ColectaItemBundle:Category:formlist' with {'selected':category} %}
+        
+        <div class="form-actions">
+            <button class="btn disabled" disabled="disabled">Guardar como borrador</button>
+            <button type="submit" class="btn btn-primary" id="FolderSubmit"><i id="FolderSubmitLoading"></i> <span id="FolderSubmitText">Publicar ahora</span></button>
+        </div>
+    </fieldset>
+</form>
+{% else %}
+<div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
+{% endif %}
