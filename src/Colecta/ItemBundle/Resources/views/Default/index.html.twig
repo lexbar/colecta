@@ -11,11 +11,12 @@
 {% block article %}
 
 <div class="title-block">
+    <button class="btn btn-small btn-primary pull-right" type="button" onclick="$('.itemSubmit').toggle()">Publicar <i class="icon-plus icon-white" style="margin-left:7px;"></i></button>
     <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
     {% if app.user %}
-        <form class="itemSubmit form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
+        <form style="display:none" class="itemSubmit form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
             <input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título">
             <textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea>
             <div id="itemDetails"></div>
