@@ -250,7 +250,7 @@ class PlaceController extends Controller
     
     public function guessName($lat, $lng)
     {
-        $content = getContent('http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false');
+        $content = mycurl('http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false');
         
         $json = json_decode($content, 1);
         
@@ -275,7 +275,7 @@ class PlaceController extends Controller
     }
 }
 
-function getContent($url) 
+function mycurl($url) 
 {
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url );
