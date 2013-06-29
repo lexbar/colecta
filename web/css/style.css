@@ -93,7 +93,7 @@ a i, a:active i, a:hover i {
 .title-block .dropdown {
     margin-top: 2px;
 }
-.title-block a.btn-primary, .title-block button.btn-primary {
+.title-block a.btn, .title-block button.btn {
     text-transform: uppercase;
     font-weight: bold;
     padding: 5px 25px;
