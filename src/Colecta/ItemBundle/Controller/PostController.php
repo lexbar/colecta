@@ -59,7 +59,11 @@ class PostController extends Controller
         $request = $this->get('request')->request;
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
-    
+        if($request->get('description'))
+        {
+            $request->set('text', $request->get('description'));
+        }
+        
         if($user == 'anon.') 
         {
             $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
