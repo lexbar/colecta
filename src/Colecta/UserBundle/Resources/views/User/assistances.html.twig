@@ -10,6 +10,7 @@
     <ul>
         <li><a href="{{ path('userProfile', {'id':user.id}) }}">Historial</a></li>
         <li class="active"><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Asistencias</a></li>
+        <li><a href="{{ path('userMessageNewTo', {'user_id':user.id}) }}">Enviar Mensaje</a></li>
     </ul>
 </div>
 

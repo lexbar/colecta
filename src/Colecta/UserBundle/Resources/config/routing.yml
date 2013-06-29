@@ -64,6 +64,10 @@ userMessageNew:
     pattern:  /mensajes/nuevo/
     defaults: { _controller: ColectaUserBundle:Message:new }
     
+userMessageNewTo:
+    pattern:  /mensajes/nuevo/{user_id}
+    defaults: { _controller: ColectaUserBundle:Message:newTo }
+    
 userMessageResponse:
     pattern:  /mensajes/responder/{responseto}
     defaults: { _controller: ColectaUserBundle:Message:response }

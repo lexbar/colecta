@@ -5,16 +5,18 @@
 <div class="title-block">
     <h2><img src="{% if user.avatar %}{{ path('userAvatar',{'uid':user.id,'width':100,'height':100}) }}{% else %}/img/unknown.gif{% endif %}">{{ user.name }} <br><span>Historial de publicaciones</span></h2>
 </div>
-{% if app.user and app.user.id == 1 %}
-<p>Código de recuperación: {{ thecode }}</p>
-{% endif %}
 
 <div class="pagination">
     <ul>
         <li class="active"><a href="{{ path('userProfile', {'id':user.id}) }}">Historial</a></li>
         <li><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Asistencias</a></li>
+        <li><a href="{{ path('userMessageNewTo', {'user_id':user.id}) }}">Enviar Mensaje</a></li>
     </ul>
 </div>
+
+{% if app.user and app.user.id == 1 %}
+<p>Código de recuperación: {{ thecode }}</p>
+{% endif %}
 
 {% for item in items %}
 <div class="item">

@@ -135,6 +135,24 @@ class MessageController extends Controller
             return $this->render('ColectaUserBundle:Message:new.html.twig');
         }
     }
+    public function newToAction($user_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $userTo = $em->getRepository('ColectaUserBundle:User')->find($user_id);
+        
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
+        elseif(!$userTo)
+        {
+            return $this->render('ColectaUserBundle:Message:new.html.twig');
+        }
+        
+        return $this->render('ColectaUserBundle:Message:new.html.twig', array('userTo'=>$userTo));
+    }
     public function responseAction($responseto)
     {
         $user = $this->get('security.context')->getToken()->getUser();

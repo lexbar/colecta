@@ -11,7 +11,7 @@
 {% block article %}
 
 <div class="title-block">
-    <button class="btn btn-small btn-primary pull-right" type="button" onclick="$('.itemSubmit').toggle();{% if app.user and items | length == 0 %}$('#MessageEmptyItems').hide();{% endif %}$(this).toggleClass('btn-primary')">Publicar <i class="icon-plus icon-white" style="margin-left:7px;"></i></button>
+    {% if app.user %}<button class="btn btn-small btn-primary pull-right" type="button" onclick="$('.itemSubmit').toggle();{% if items | length == 0 %}$('#MessageEmptyItems').hide();{% endif %}$(this).toggleClass('btn-primary')">Publicar <i class="icon-plus icon-white" style="margin-left:7px;"></i></button>{% endif %}
     <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
