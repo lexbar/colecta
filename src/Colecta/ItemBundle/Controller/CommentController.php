@@ -32,6 +32,9 @@ class CommentController extends Controller
             
             $em->persist($comment); 
             
+            $item->getCategory()->setLastchange(new \DateTime('now'));
+            $em->persist($item); 
+            
             $notifications = array($user->getId());
             
             if($user != $item->getAuthor())
