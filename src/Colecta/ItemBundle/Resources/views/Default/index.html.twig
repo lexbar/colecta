@@ -11,7 +11,7 @@
 {% block article %}
 
 <div class="title-block">
-    <button class="btn btn-small btn-primary pull-right" type="button" onclick="$('.itemSubmit').toggle()">Publicar <i class="icon-plus icon-white" style="margin-left:7px;"></i></button>
+    <button class="btn btn-small btn-primary pull-right" type="button" onclick="$('.itemSubmit').toggle();{% if app.user and items | length == 0 %}$('#MessageEmptyItems').hide();{% endif %}">Publicar <i class="icon-plus icon-white" style="margin-left:7px;"></i></button>
     <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
 </div>
 
@@ -69,7 +69,7 @@
 
 {% else %}
     {% if app.user %}
-        <h3 style="text-align:center">Pulsa ese botón para empezar a compartir <i class="icon-arrow-up icon-2x" style="color:#2F7ED4;margin-left: 50px;"></i></h3>
+        <h3 id="MessageEmptyItems" style="text-align:center">Pulsa ese botón para empezar a compartir <i class="icon-arrow-up icon-2x" style="color:#2F7ED4;margin-left: 50px;"></i></h3>
     {% else %}
         <h3>Nadie ha escrito nada... por ahora.</h3>
     {% endif %}
