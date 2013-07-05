@@ -925,6 +925,7 @@ div.assistances ul li a {
 }
 .calendar td {
     text-align: center;
+    font-size: 18px;
 }
 .calendar td a {
     text-decoration: underline;
