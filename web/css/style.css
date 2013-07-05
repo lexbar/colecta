@@ -919,13 +919,15 @@ div.assistances ul li a {
 .bigcalendar .calendartitle {
     font-size: 16px;
 }
+.bigcalendar td {
+    font-size: 18px;
+}
 .calendar th {
     text-align: center;
     color: #777;
 }
 .calendar td {
     text-align: center;
-    font-size: 18px;
 }
 .calendar td a {
     text-decoration: underline;
