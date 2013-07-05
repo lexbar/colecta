@@ -313,7 +313,26 @@ form.form-horizontal .controls textarea {
 }
 
 .itemSubmit {
-    margin: 10px 5px;
+    margin: 5px 5px 10px;
+}
+.itemSubmit .mainData {
+    display: none;
+}
+.itemSubmit.active .mainData {
+    display: block;
+}
+.itemSubmit ul.types li.pull-right {
+    display: none;
+}
+.itemSubmit.active ul.types li.pull-right {
+    display: block;
+}
+.itemSubmit ul.types li.text {
+    font-weight: bold;
+    color: #555;
+}
+.itemSubmit.active .text {
+    display: none;
 }
 .itemSubmit input.title {
     border-radius: 0px; 

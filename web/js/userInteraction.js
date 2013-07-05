@@ -2,6 +2,8 @@ var itemSubmitType = false;
 
 function typeChosen(type) {
     //Set the type of item chosen. Returns true when you can't choose that type
+    $('.itemSubmit').addClass('active');
+    
     if(itemSubmitType) {
         if(itemSubmitType == 'file' || itemSubmitType == 'route') {
             return false;
@@ -24,6 +26,14 @@ function typeChosen(type) {
             break;
         }
         return false;
+    }
+}
+
+/* Post Creation */
+
+function loadPostForm() {
+    if(typeChosen('post')) {
+        return;
     }
 }
 
