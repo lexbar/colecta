@@ -1,6 +1,5 @@
-{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
-    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
-{% endif %}
+{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+
 <div class="event micro{% if item.happened %} happened{% endif %}">
 
     <div class="date">
@@ -19,7 +18,7 @@
     </div>
     
     <div class="datum">
-        <h2><a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+        <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}<a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
         
         {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     </div>

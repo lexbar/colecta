@@ -1,9 +1,7 @@
-{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
-    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
-{% endif %}
+{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
 <div class="file micro">
-    <h2><a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}<a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     
     {% if item.filetype in ['jpeg','gif','png'] %}
         <a class="thumbnail" style="height:100px;width:100px;" href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img height="160" width="160" src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'100', 'height':'100'}) }}"></a>

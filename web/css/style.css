@@ -330,6 +330,7 @@ form.form-horizontal .controls textarea {
 .itemSubmit ul.types li.text {
     font-weight: bold;
     color: #555;
+    cursor: default;
 }
 .itemSubmit.active .text {
     display: none;
@@ -1046,13 +1047,6 @@ div.assistances ul li a {
 }
 .sys p {
     color: #999;
-}
-span.new {
-    color: orange; 
-    font-size: 10px; 
-    position: absolute;
-    left: 5px;
-    display: block;
 }
 div.new {
     border: 1px solid orange; 

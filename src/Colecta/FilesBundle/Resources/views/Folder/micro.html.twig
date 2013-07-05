@@ -1,9 +1,7 @@
-{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
-    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
-{% endif %}
+{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
 <div class="folder micro">
-    <h2><a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}<a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
     
     {% set files = item.isolateLast %}
     

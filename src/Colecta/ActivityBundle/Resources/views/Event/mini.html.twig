@@ -1,6 +1,5 @@
-{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
-    <span class="new"><i class="icon-asterisk"></i> Nuevo</span>
-{% endif %}
+{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+
 <div class="event mini">
      <div class="unity">
         <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
@@ -32,7 +31,7 @@
             <span class="hour">{{ item.dateini | date('H:i') }}</span>
         </div>
         
-        <h2>{{ item.name }}</h2>
+        <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}{{ item.name }}</h2>
         
         </a>
         
