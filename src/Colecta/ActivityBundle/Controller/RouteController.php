@@ -360,7 +360,10 @@ class RouteController extends Controller
                     {
                         $item->setDescription($request->get('description'));
                     }
-                    
+                    elseif(!$item->getDescription())
+                    {
+                        $item->setDescription('');
+                    }
                     
                     
                     //Move file out of cache to accesible folder
