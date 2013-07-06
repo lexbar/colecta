@@ -311,7 +311,9 @@ form.form-horizontal .controls textarea {
     margin-left: 10px;
     width: 230px;
 }
-
+#userbar .nav.nav-list li {
+    line-height: 24px;
+}
 .itemSubmit {
     margin: 5px 5px 10px;
 }
