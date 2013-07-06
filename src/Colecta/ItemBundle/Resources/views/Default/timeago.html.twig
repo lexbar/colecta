@@ -10,7 +10,11 @@
 {% else %}
     {% set hoursago = secondsago / 60 // 60 %}
     {% if hoursago < 24 %}
-        Hace {{ hoursago }} h<span>ora{% if hoursago != 1 %}s{% endif %}</span>
+        {% if nowtimestamp | date('z') > itemtimestamp | date('z') %}
+            Ayer<span> a las {{ date | date('H:i')  }}</span>
+        {% else %}
+            Hace {{ hoursago }} h<span>ora{% if hoursago != 1 %}s{% endif %}</span>
+        {% endif %}
     {% elseif itemtimestamp > 'yesterday' | date('U') %}
         Ayer<span> a las {{ date | date('H:i')  }}</span>
     {% else %}
