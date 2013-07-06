@@ -3,7 +3,7 @@
 {% block files 'active' %}
 
 {% block article %}
-<div class="file full">
+<div class="file full" id="item{{ item.id }}">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
     
     <h2>{{ item.name }}</h2>

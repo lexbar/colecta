@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ActivityBundle\Entity\Place;
 use Colecta\ItemBundle\Entity\Category;
+use Colecta\ItemBundle\Entity\Relation;
 use Colecta\UserBundle\Entity\Notification;
 
 class PlaceController extends Controller
@@ -68,7 +69,7 @@ class PlaceController extends Controller
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
         }
-        elseif(!$category)
+        elseif(!$category && !$request->get('newCategory'))
         {
             $this->get('session')->setFlash('error', 'No existe la categoria');
         }
@@ -140,6 +141,20 @@ class PlaceController extends Controller
             $item->setDescription($request->get('description'));
             $item->setLatitude($request->get('latitude'));
             $item->setLongitude($request->get('longitude'));
+            
+            if($request->get('attachTo'))
+            {
+                $itemRelated = $em->getRepository('ColectaItemBundle:Item')->findOneById($request->get('attachTo'));
+                $relation = new Relation();
+                $relation->setUser($user);
+                $relation->setItemto($itemRelated);
+                $relation->setItemfrom($item);
+                $relation->setText($itemRelated->getName());
+                
+                $em->persist($relation);
+                
+                $item->setPart(true);
+            }
             
             $em->persist($item); 
             $em->flush();

@@ -9,7 +9,7 @@
             <span><i class="icon-thumbs-up-alt icon-large"></i> Te gusta</span>
         {% endif %}
     {% elseif app.user %}
-        <a href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="icon-thumbs-up-alt"></i> Me gusta</a>
+        <a href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="icon-thumbs-up-alt icon-large"></i> Me gusta</a>
         
         {% if item.likers | length > 3 %}
             <span>(A {{ item.likers | length }} personas les gusta)</span> 
@@ -41,5 +41,10 @@
     {# EDIT #}
     {% if item.author == app.user %}
         <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="icon-pencil icon-large"></i> Editar</a>
+    {% endif %}
+    
+    {# ATTACH #}
+    {% if app.user and not item.part %}
+        <a href="#item{{ item.id}}" onClick="ItemAttachForm({{ item.id}}); return false;" title="Adjuntar"><i class="icon-pushpin icon-large"></i> Adjuntar</a>
     {% endif %}
 </div>

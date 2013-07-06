@@ -2,12 +2,6 @@
 
 {% block home 'active' %}
 
-{% if app.user %}
-    {% block javascripts %}
-        <script src="/js/userInteraction.js"></script>
-    {% endblock %}
-{% endif %}
-
 {% block article %}
 
 <div class="title-block">
@@ -15,7 +9,7 @@
 </div>
 
     {% if app.user %}
-        <form class="itemSubmit form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
+        <form id="itemSubmit" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
             <div class="mainData">
                 <input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título">
                 <textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea>
@@ -35,7 +29,7 @@
                         <span id="itemSubmitButtonText">Publicar</span> 
                     </button>
                 </li>
-                <li class="pull-right">{% render 'ColectaItemBundle:Category:formlist' with {'selected': 0, 'simplified': 1} %}</li>
+                <li class="pull-right category">{% render 'ColectaItemBundle:Category:formlist' with {'selected': 0, 'simplified': 1} %}</li>
             </ul>
         </form>
     {% endif %}
@@ -52,7 +46,7 @@
 
 {% for item in items %}
     
-    <div class="item">
+    <div class="item" id="item{{ item.id}}">
         {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
         
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}

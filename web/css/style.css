@@ -46,6 +46,9 @@ h2.related {
 .full h2.related {
     margin-left: 0 !important;
 }
+.full #itemSubmit {
+    margin-left: 50px;
+}
 form.well {
     border-radius: 0;
 }
@@ -314,41 +317,41 @@ form.form-horizontal .controls textarea {
 #userbar .nav.nav-list li {
     line-height: 24px;
 }
-.itemSubmit {
+#itemSubmit {
     margin: 5px 5px 10px;
 }
-.itemSubmit .mainData {
+#itemSubmit .mainData {
     display: none;
 }
-.itemSubmit.active .mainData {
+#itemSubmit.active .mainData {
     display: block;
 }
-.itemSubmit ul.types li.pull-right {
+#itemSubmit ul.types li.pull-right {
     display: none;
 }
-.itemSubmit.active ul.types li.pull-right {
+#itemSubmit.active ul.types li.pull-right {
     display: block;
 }
-.itemSubmit ul.types li.text {
+#itemSubmit ul.types li.text {
     font-weight: bold;
     color: #555;
     cursor: default;
 }
-.itemSubmit.active .text {
+#itemSubmit.active .text {
     display: none;
 }
-.itemSubmit input.title {
+#itemSubmit input.title {
     border-radius: 0px; 
     width: 98%; 
     margin-bottom: 2px;
 }
-.itemSubmit textarea.description {
+#itemSubmit textarea.description {
     margin-bottom: 0px; 
     border-radius: 0px; 
     resize: vertical; 
     width: 98%;
 }
-.itemSubmit ul {
+#itemSubmit ul {
     background-color: #EEEEEE; 
     overflow: hidden; 
     padding: 4px 6px; 
@@ -356,38 +359,38 @@ form.form-horizontal .controls textarea {
     border: 1px solid #CCCCCC; 
     margin: 2px 0px 0px;
 }
-.itemSubmit ul li.pull-left {
+#itemSubmit ul li.pull-left {
     color: #888888; 
     cursor: pointer; 
     padding: 2px 6px; 
     margin-right: 5px;
 }
-.itemSubmit ul li:hover {
+#itemSubmit ul li:hover {
     color: #222222
 }
-.itemSubmit ul.types.chosen li, .itemSubmit ul.types.chosen li:hover {
-    color: #CCC;
-    cursor: default;
-}
-.itemSubmit ul.types.chosen li input {
+#itemSubmit ul.types.chosen li {
     display: none;
 }
-.itemSubmit ul.types.chosen li.active {
+#itemSubmit ul.types.chosen li input {
+    display: none;
+}
+#itemSubmit ul.types.chosen li.active {
     margin-right: 5px; 
     padding: 1px 6px; 
     border: 1px solid #BBBBBB; 
     background-color: #DDDDDD; 
     color: #222222; 
-}
-.itemSubmit ul.types.chosen li.active input {
     display: block;
 }
-.itemSubmit ul li.file, .itemSubmit ul li.route {
+#itemSubmit ul.types.chosen li.active input {
+    display: block;
+}
+#itemSubmit ul li.file, #itemSubmit ul li.route {
     cursor: pointer; 
     position: relative;
     overflow: hidden;
 }
-.itemSubmit ul li.file input, .itemSubmit ul li.route input {
+#itemSubmit ul li.file input, #itemSubmit ul li.route input {
     position:absolute;
     z-index:999;
     right:0;
@@ -399,28 +402,28 @@ form.form-horizontal .controls textarea {
     font-size:50px;
     text-align:right;
 }
-.itemSubmit ul li.pull-right select {
+#itemSubmit ul li.pull-right select {
     width: 120px; 
     padding: 2px; 
     height: 26px; 
     margin: 0px 8px;
 }
-.itemSubmit ul li.pull-right select .new{
+#itemSubmit ul li.pull-right select .new{
     font-style: italic; 
     color: rgb(153, 153, 153);
 }
-.itemSubmit ul li.pull-right input {
+#itemSubmit ul li.pull-right input {
     width: 120px;
     margin: 0;
     height: 18px;
 }
-.itemSubmit ul li.pull-right #categoryCreateButton {
+#itemSubmit ul li.pull-right #categoryCreateButton {
     margin-right: 10px;
 }
-.itemSubmit #itemDetails {
+#itemSubmit #itemDetails {
     overflow:hidden;
 }
-.itemSubmit #itemDetails .pv {
+#itemSubmit #itemDetails .pv {
     background-color: #FFF;
     float: left;
     margin: 0;
@@ -429,21 +432,24 @@ form.form-horizontal .controls textarea {
     text-align: center;
     width: 295px;
 }
-.itemSubmit #itemDetails .pv .uploadmessage {
+.item #itemSubmit #itemDetails .pv {
+    width: 265px;
+}
+#itemSubmit #itemDetails .pv .uploadmessage {
     margin-top: 50px;
 }
-.itemSubmit #itemDetails .pv input, .itemSubmit #itemDetails .pv textarea {
+#itemSubmit #itemDetails .pv input, #itemSubmit #itemDetails .pv textarea {
     width: 240px;
     resize: none;
     margin: 1px;
 }
-.itemSubmit #itemDetails .pv small {
+#itemSubmit #itemDetails .pv small {
     color: darkred;
 }
-.itemSubmit #itemDetails .lead {
+#itemSubmit #itemDetails .lead {
     margin: 8px;
 }
-.itemSubmit #map {
+#itemSubmit #map {
     display: block;
     height: 230px;
     margin: 10px 0;
@@ -606,6 +612,9 @@ form.form-horizontal .controls textarea {
 }
 .itemActions span, .itemActions a {
     padding: 0 10px 0 0;
+}
+.item #itemSubmit {
+    margin-left: 50px;
 }
 .event.mini h2{
     margin-left: 0;

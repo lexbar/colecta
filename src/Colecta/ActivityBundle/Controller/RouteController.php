@@ -307,7 +307,7 @@ class RouteController extends Controller
             {
                 $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
             }
-            elseif(!$category)
+            elseif(!$category && !$request->get('newCategory'))
             {
                 $this->get('session')->setFlash('error', 'No existe la categoria');
             }
@@ -416,6 +416,20 @@ class RouteController extends Controller
                     
                     $item->setSourcefile($filename);
                     
+                    if($post->get('attachTo'))
+                    {
+                        $itemRelated = $em->getRepository('ColectaItemBundle:Item')->findOneById($post->get('attachTo'));
+                        $relation = new Relation();
+                        $relation->setUser($user);
+                        $relation->setItemto($itemRelated);
+                        $relation->setItemfrom($item);
+                        $relation->setText($itemRelated->getName());
+                        
+                        $em->persist($relation);
+                        
+                        $item->setPart(true);
+                    }
+                    
                     $em->persist($item); 
                     
                     //Save RouteTrackpooints
@@ -456,7 +470,7 @@ class RouteController extends Controller
                         $place->setAuthor($user);
                         $place->setCategory($category);
                         $place->setAllowComments(true);
-                        $place->setDraft(false);
+                        $place->setDraft(true);
                         $place->setPart(true);
                         
                         //Slug generate

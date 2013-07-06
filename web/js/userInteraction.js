@@ -2,7 +2,7 @@ var itemSubmitType = false;
 
 function typeChosen(type) {
     //Set the type of item chosen. Returns true when you can't choose that type
-    $('.itemSubmit').addClass('active');
+    $('#itemSubmit').addClass('active');
     
     if(itemSubmitType) {
         if(itemSubmitType == 'file' || itemSubmitType == 'route') {
@@ -11,21 +11,43 @@ function typeChosen(type) {
             return true;
         }
     } else {
-        $('.itemSubmit .types').addClass('chosen');
-        $('.itemSubmit .types .'+type).addClass('active');
+        $('#itemSubmit .types').addClass('chosen');
+        $('#itemSubmit .types .'+type).addClass('active');
         itemSubmitType = type;
         
         switch(type) {
-            case 'file': $('.itemSubmit').attr('action','/archivo/crear/');
+            case 'file': $('#itemSubmit').attr('action','/archivo/crear/');
             break;
-            case 'route': $('.itemSubmit').attr('action','/crear/ruta/');
+            case 'route': $('#itemSubmit').attr('action','/crear/ruta/');
             break;
-            case 'event': $('.itemSubmit').attr('action','/crear/actividad/');
+            case 'event': $('#itemSubmit').attr('action','/crear/actividad/');
             break;
-            case 'place': $('.itemSubmit').attr('action','/crear/lugar/');
+            case 'place': $('#itemSubmit').attr('action','/crear/lugar/');
+            break;
+            case 'post': $('#itemSubmit').attr('action','/crear/texto/');
             break;
         }
         return false;
+    }
+}
+
+function ItemAttachForm(id) {
+    var categorylist = $('#itemSubmit .category').first().html();
+    if(typeof categorylist == 'undefined') {
+        var categorylist = '';
+    }
+    
+    $('#itemSubmit').remove();
+    itemSubmitType = false;
+    
+    $('#item'+id+' .itemActions').first().after('<form id="itemSubmit" class="form-horizontal" enctype="multipart/form-data" method="POST" action=""><div class="mainData"><input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título"><textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea></div><div id="itemDetails"></div><ul class="types unstyled"><li class="pull-left text">Publicar: </li><li class="pull-left post" onClick="loadPostForm();"><i class="icon-file-text-alt"></i> Texto</li><li class="pull-left event" onClick="loadEventForm();"><i class="icon-calendar-empty"></i> Actividad</li><li class="pull-left route"> <input type="file" name="file" id="Route"><i class="icon-globe"></i> Ruta</li><li class="pull-left place" onClick="loadPlaceForm();"><i class="icon-map-marker"></i> Lugar</li><li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivos</li><li class="pull-right"><button class="btn btn-small btn-primary" type="submit" id="itemSubmitButton"><i id="itemSubmitButtonLoading"></i> <span id="itemSubmitButtonText">Publicar</span> </button></li><li class="pull-right category">'+categorylist+'</li></ul><input type="hidden" name="attachTo" value="'+id+'"></form>');
+    
+    $('#Route').change(RouteChange);
+    $('#File').change(FileChange);
+    
+    if(categorylist == '') {
+        $('#itemSubmitButton').attr('disabled','disabled').addClass('disabled'); 
+        $('#itemSubmit .category').load('/categorias/formlist/', function(){ $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled');  });
     }
 }
 
@@ -49,7 +71,7 @@ function loadPlaceForm() {
     
     $('#itemDetails').html('<p class="lead">Escribe un lugar para buscar en el mapa:</p><div class="input-append"><p><input id="PlaceMapSearch" type="text" placeholder="Dirección..." class="span4"><button type="button" id="mapSearchIcon" class="btn btn-primary"><i class="icon-search"></i> Localizar</button></p></div><ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;width:90%;" class="dropdown-menu hidden" id="mapResults"></ul><div id="map" style="display:none"></div><input type="hidden" name="latitude" id="PlaceLatitude"><input type="hidden" name="longitude" id="PlaceLongitude">');
     
-    $('.itemSubmit').submit(searchAction);
+    $('#itemSubmit').submit(searchAction);
     $('#mapSearchIcon').click(searchAction);
 }
 
@@ -64,8 +86,8 @@ function searchAction() {
             document.body.appendChild(script);
         }
         
-        $('.itemSubmit').unbind();
-        $('#PlaceMapSearch').focus(function(){$('.itemSubmit').submit(searchAction);})
+        $('#itemSubmit').unbind();
+        $('#PlaceMapSearch').focus(function(){$('#itemSubmit').submit(searchAction);})
         
         return false;
     }
@@ -233,7 +255,7 @@ function RUuploadEnd() {
     RUuploading = false;
     
     $('#Route').remove();
-    $('.itemSubmit .types .route').prepend('<input type="file" id="Route" name="file">');
+    $('#itemSubmit .types .route').prepend('<input type="file" id="Route" name="file">');
     $('#Route').change(RouteChange);
     
     $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled'); 
@@ -306,7 +328,7 @@ function endOfUploads() {
     FUuploading = false;
     
     $('#File').remove();
-    $('.itemSubmit .types .file').prepend('<input type="file" id="File" multiple="multiple" name="file[]">');
+    $('#itemSubmit .types .file').prepend('<input type="file" id="File" multiple="multiple" name="file[]">');
     $('#File').change(FileChange);
     
     $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled'); 

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ActivityBundle\Entity\Event;
 use Colecta\ActivityBundle\Entity\EventAssistance;
 use Colecta\ItemBundle\Entity\Category;
+use Colecta\ItemBundle\Entity\Relation;
 use Colecta\UserBundle\Entity\Notification;
 
 
@@ -127,7 +128,7 @@ class EventController extends Controller
         {
             $this->get('session')->setFlash('error', 'No has escrito ningun texto');
         }
-        elseif(!$category)
+        elseif(!$category && !$request->get('newCategory'))
         {
             $this->get('session')->setFlash('error', 'No existe la categoria');
         }
@@ -205,6 +206,20 @@ class EventController extends Controller
             $item->setDownhill(0);
             $item->setDifficulty($request->get('difficulty'));
             $item->setStatus('');
+            
+            if($request->get('attachTo'))
+            {
+                $itemRelated = $em->getRepository('ColectaItemBundle:Item')->findOneById($request->get('attachTo'));
+                $relation = new Relation();
+                $relation->setUser($user);
+                $relation->setItemto($itemRelated);
+                $relation->setItemfrom($item);
+                $relation->setText($itemRelated->getName());
+                
+                $em->persist($relation);
+                
+                $item->setPart(true);
+            }
             
             $em->persist($item); 
             $em->flush();

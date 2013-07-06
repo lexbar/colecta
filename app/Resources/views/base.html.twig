@@ -4,13 +4,20 @@
         <meta charset="UTF-8" />
         <title>{% block title %}Club Mountain Bike Turyciclo{% endblock %}</title>
         <script src="/js/jquery.min.js"></script>
+        
+        {% if app.user %}
+            <script src="/js/userInteraction.js"></script>
+        {% endif %}
+        
         <link href="/css/bootstrap.min.css" rel="stylesheet">
         <link href="/css/font-awesome.min.css" rel="stylesheet">
         <!--[if IE 7]>
         <link href="/css/font-awesome-ie7.min.css" rel="stylesheet">
         <![endif]-->
-        <link href="/css/style.css?v=20130508" rel="stylesheet">
+        <link href="/css/style.css?v=20130706" rel="stylesheet">
+        
         {% block stylesheets %}{% endblock %}
+        
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body onload="{% block onload '' %}">

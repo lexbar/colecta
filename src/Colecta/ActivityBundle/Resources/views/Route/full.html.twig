@@ -238,7 +238,7 @@
 {% endblock %}
 
 {% block article %}    
-<div class="route full">
+<div class="route full" id="item{{ item.id }}">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
     
     <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small pull-right" type="button"><i class="icon-fullscreen icon-fixed-width"></i></button>

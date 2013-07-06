@@ -40,6 +40,9 @@ ColectaPostEdit:
 ColectaCategoryPage:
     pattern:  /categoria/{slug}/pagina/{page}/
     defaults: { _controller: ColectaItemBundle:Category:page }
+ColectaCategoryFormlist:
+    pattern:  /categorias/formlist/
+    defaults: { _controller: ColectaItemBundle:Category:formlist, selected : 0, simplified : 1 }
 ColectaCategoryView:
     pattern:  /categoria/{slug}/
     defaults: { _controller: ColectaItemBundle:Category:view }

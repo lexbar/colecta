@@ -96,7 +96,7 @@
 {% endblock %}
 
 {% block article %}
-<div class="event full" itemscope itemtype="http://schema.org/Event">
+<div class="event full" itemscope itemtype="http://schema.org/Event" id="item{{ item.id }}">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
     
     <div class="itemcontent">

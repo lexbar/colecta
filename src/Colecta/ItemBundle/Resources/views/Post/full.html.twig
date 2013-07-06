@@ -3,7 +3,7 @@
 {% block posts 'active' %}
 
 {% block article %}
-<div class="post full">
+<div class="post full" id="item{{ item.id }}">
     {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
     
     <div class="itemcontent">

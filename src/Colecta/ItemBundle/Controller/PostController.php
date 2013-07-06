@@ -5,6 +5,7 @@ namespace Colecta\ItemBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ItemBundle\Entity\Post;
+use Colecta\ItemBundle\Entity\Relation;
 use Colecta\ItemBundle\Entity\Category;
 
 class PostController extends Controller
@@ -146,6 +147,19 @@ class PostController extends Controller
             $item->setPart(false);
             $item->setText($request->get('text'));
             
+            if($request->get('attachTo'))
+            {
+                $itemRelated = $em->getRepository('ColectaItemBundle:Item')->findOneById($request->get('attachTo'));
+                $relation = new Relation();
+                $relation->setUser($user);
+                $relation->setItemto($itemRelated);
+                $relation->setItemfrom($item);
+                $relation->setText($itemRelated->getName());
+                
+                $em->persist($relation);
+                
+                $item->setPart(true);
+            }
             
             $em->persist($item); 
             $em->flush();

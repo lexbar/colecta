@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Colecta\FilesBundle\Form\Frontend\FileType;
 use Colecta\FilesBundle\Entity\File;
 use Colecta\ItemBundle\Entity\Item;
+use Colecta\ItemBundle\Entity\Relation;
 use Colecta\FilesBundle\Entity\Folder;
 use Colecta\ItemBundle\Entity\Category;
 
@@ -138,6 +139,20 @@ class FileController extends Controller
             
             $em->persist($category); 
             $item->setCategory($category);
+            
+            if($request->get('attachTo'))
+            {
+                $itemRelated = $em->getRepository('ColectaItemBundle:Item')->findOneById($request->get('attachTo'));
+                $relation = new Relation();
+                $relation->setUser($user);
+                $relation->setItemto($itemRelated);
+                $relation->setItemfrom($item);
+                $relation->setText($itemRelated->getName());
+                
+                $em->persist($relation);
+                
+                $item->setPart(true);
+            }
             
             $em->persist($item);
             $em->flush();
