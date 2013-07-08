@@ -65,11 +65,7 @@
     </div>
 
 {% else %}
-    {% if app.user %}
-        <h3 id="MessageEmptyItems" style="text-align:center">Pulsa ese botón para empezar a compartir <i class="icon-arrow-up icon-2x" style="color:#2F7ED4;margin-left: 50px;"></i></h3>
-    {% else %}
-        <h3>Nadie ha escrito nada... por ahora.</h3>
-    {% endif %}
+    <h3>Nadie ha escrito nada... por ahora.</h3>
 {% endfor %}
 
 {% if page > 1 or thereAreMore %}
