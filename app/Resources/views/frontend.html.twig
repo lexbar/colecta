@@ -111,12 +111,13 @@
     
     <ul class="nav nav-list">        
         <li>
-            <a href="{{ path('ColectaContact') }}"><i class="icon-envelope icon-fixed-width"></i> Contacto con el Club</a>
-        </li>
+        <a style="font-size:18px;padding:10px;margin-top:-5px;text-align:center" href="{{ path('ColectaContact') }}"><i class="icon-envelope-alt"></i> Contacto</a>
+    </li>
+    
+        <li class="divider"></li>
         <li>
             <a href="{{ path('ColectaPostView', {'slug':'acerca-de-nosotros'}) }}"><i class="icon-info icon-fixed-width"></i> Acerca de nosotros</a>
         </li>
-        <li class="divider"></li>
         <li>
             <a href="{{ path('ColectaPostView', {'slug':'por-que-hacerse-socio'}) }}"><i class="icon-question icon-fixed-width"></i> Por qué hacerse socio</a>
         </li>        
