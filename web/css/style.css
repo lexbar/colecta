@@ -952,10 +952,6 @@ div.assistances ul li a {
 .calendar .active {
     background-color: #E6F2F7;
 }
-.calendar td.today a:hover, .calendar td.today a:active {
-    background-color: transparent;
-    color: #fff;
-}
 .nextevent {
     background-color: #E6F2F7;
     padding: 6px 4px;

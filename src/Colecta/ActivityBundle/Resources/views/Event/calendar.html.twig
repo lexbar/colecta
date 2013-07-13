@@ -36,7 +36,7 @@
             {% for i in 0..6 %}
                 {% if events[dayOfMonth] is defined %}{% set hasevents = events[dayOfMonth] | length %}{% else %}{% set hasevents = 0 %}{% endif %}
                 
-                <td{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %} class="today"{% elseif hasevents %} class="active"{% endif %}>{% if dayOfMonth <= daysOfMonth %}{% if hasevents %}<a href="{{ path('ColectaEventDate', {'date':events[dayOfMonth][0].dateini | date('Y-m-d') }) }}">{% endif %}{{ dayOfMonth }}{% if hasevents %}</a>{% endif %}{% set dayOfMonth = dayOfMonth + 1 %}{% endif %}</td>
+                <td class="{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %}today{% endif %}{% if hasevents %} active{% endif %}">{% if dayOfMonth <= daysOfMonth %}{% if hasevents %}<a href="{{ path('ColectaEventDate', {'date':events[dayOfMonth][0].dateini | date('Y-m-d') }) }}">{% endif %}{{ dayOfMonth }}{% if hasevents %}</a>{% endif %}{% set dayOfMonth = dayOfMonth + 1 %}{% endif %}</td>
             {% endfor %}
         {% endif %}
         </tr>
