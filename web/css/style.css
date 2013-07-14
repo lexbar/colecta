@@ -449,7 +449,7 @@ form.form-horizontal .controls textarea {
 #itemSubmit #itemDetails .lead {
     margin: 8px;
 }
-#itemSubmit #map {
+#itemSubmit #ItemSubmitMap {
     display: block;
     height: 230px;
     margin: 10px 0;

@@ -39,7 +39,7 @@
             streetViewControl: false
         };
         
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        map = new google.maps.Map(document.getElementById('ItemSubmitMap'), mapOptions);
         map.fitBounds(bounds);
         
         $.each(points, function(index, value) { 
@@ -61,7 +61,7 @@
     }
 </script>
 
-    <div id="map"></div>
+    <div id="ItemSubmitMap"></div>
 
       <div class="control-group">
         <label class="control-label" for="RouteName">Distancia</label>

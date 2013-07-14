@@ -77,7 +77,7 @@ function loadPlaceForm() {
         return;
     }
     
-    $('#itemDetails').html('<p class="lead">Escribe un lugar para buscar en el mapa:</p><div class="input-append"><p><input id="PlaceMapSearch" type="text" placeholder="Dirección..." class="span4"><button type="button" id="mapSearchIcon" class="btn btn-primary"><i class="icon-search"></i> Localizar</button></p></div><ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;width:90%;" class="dropdown-menu hidden" id="mapResults"></ul><div id="map" style="display:none"></div><input type="hidden" name="latitude" id="PlaceLatitude"><input type="hidden" name="longitude" id="PlaceLongitude">');
+    $('#itemDetails').html('<p class="lead">Escribe un lugar para buscar en el mapa:</p><div class="input-append"><p><input id="PlaceMapSearch" type="text" placeholder="Dirección..." class="span4"><button type="button" id="mapSearchIcon" class="btn btn-primary"><i class="icon-search"></i> Localizar</button></p></div><ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;width:90%;" class="dropdown-menu hidden" id="mapResults"></ul><div id="ItemSubmitMap" style="display:none"></div><input type="hidden" name="latitude" id="PlaceLatitude"><input type="hidden" name="longitude" id="PlaceLongitude">');
     
     $('#itemSubmit').submit(searchAction);
     $('#mapSearchIcon').click(searchAction);
@@ -143,9 +143,9 @@ function searchLocation() {
 
 function mapPosition(position) { //google maps latlng object
     //If not active, create map
-    if( $('#map').css('display') == 'none') {
-        $('#map').css('display', 'block');
-        PCmap = new google.maps.Map(document.getElementById('map'), {zoom: 15,center:position, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
+    if( $('#ItemSubmitMap').css('display') == 'none') {
+        $('#ItemSubmitMap').css('display', 'block');
+        PCmap = new google.maps.Map(document.getElementById('ItemSubmitMap'), {zoom: 15,center:position, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
         google.maps.event.addListener(PCmap, 'click', function(event) {
             mapPosition(event.latLng);
         });
