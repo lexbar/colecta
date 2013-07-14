@@ -174,8 +174,6 @@ var RUpreviewAddress = '/rutas/XHR/preview/';
 
 var RUuploading = false;
 
-$('#Route').change(RouteChange);
-
 function RouteChange() {
     if(typeChosen('route')) {
         return;
@@ -270,8 +268,6 @@ var FUpreviewAddress = '/archivo/XHR/preview/';
 var FUuploading = false;
 var FUcurrentFileIndex = -1;
 var FUTheFiles = [];
-
-$('#File').change(FileChange);
 
 function FileChange() {
     if(typeChosen('file')) {
@@ -424,3 +420,7 @@ function toggleCategoryCreate() {
     }
 }
 
+$(document).ready(function() {
+      $('#File').change(FileChange);
+      $('#Route').change(RouteChange);
+});
