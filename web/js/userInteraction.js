@@ -4,6 +4,14 @@ function typeChosen(type) {
     //Set the type of item chosen. Returns true when you can't choose that type
     $('#itemSubmit').addClass('active');
     
+    $(window).bind('beforeunload', function(){
+      return 'Seguro que quieres irte sin publicar?';
+    });
+    
+    $('#itemSubmit').submit( function(){
+        window.onbeforeunload = null;
+    });
+    
     if(itemSubmitType) {
         if(itemSubmitType == 'file' || itemSubmitType == 'route') {
             return false;
@@ -86,7 +94,9 @@ function searchAction() {
             document.body.appendChild(script);
         }
         
-        $('#itemSubmit').unbind();
+        $('#itemSubmit').unbind().submit( function(){
+            window.onbeforeunload = null;
+        });
         $('#PlaceMapSearch').focus(function(){$('#itemSubmit').submit(searchAction);})
         
         return false;
