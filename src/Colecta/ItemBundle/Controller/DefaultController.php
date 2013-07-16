@@ -103,7 +103,7 @@ class DefaultController extends Controller
     }
     public function dismissSinceLastVisitAction()
     {
-        $this->get('session')->set('sinceLastVisit','dismiss');
+        $this->get('session')->set('sinceLastVisit',new \DateTime('now'));
         
         $referer = $this->get('request')->headers->get('referer');
         

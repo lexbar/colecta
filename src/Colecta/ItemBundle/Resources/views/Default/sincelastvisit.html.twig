@@ -25,6 +25,10 @@
     <p class="lead">No se ha publicado nada nuevo.</p>
 {% endfor %}
 
+{% if not thereAreMore and items | length > 0 %}
+    <p style="margin:20px;text-align:center"><a href="{{ path('ColectaSinceLastVisitDismiss') }}" class="btn btn-warning btn-large">Marcar todo como leido <i class="icon-check"></i></a></p>
+{% endif %}
+
 <ul class="pager">
   <li class="previous{% if page == 1 %} disabled{% endif %}">
     <a href="{% if page > 1 %}{{ path('ColectaSinceLastVisitPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
