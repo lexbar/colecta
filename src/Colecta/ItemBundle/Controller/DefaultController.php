@@ -105,14 +105,7 @@ class DefaultController extends Controller
     {
         $this->get('session')->set('sinceLastVisit',new \DateTime('now'));
         
-        $referer = $this->get('request')->headers->get('referer');
-        
-        if(empty($referer))
-        {
-            $referer = $this->generateUrl('ColectaDashboard');
-        }
-        
-        return new RedirectResponse($referer);
+        return new RedirectResponse($this->generateUrl('ColectaDashboard'));
     }
     public function searchAction()
     {
