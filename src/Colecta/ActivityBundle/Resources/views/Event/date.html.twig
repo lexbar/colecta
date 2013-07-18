@@ -8,9 +8,9 @@
     {% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right btn-primary">Crear evento <i class="icon-plus"></i></a> {% endif %}
     <h2>
     {% if ismonth %}
-        Actividades en {% include "::month.html.twig" with {'date': date, 'short':0} %}</h2>
+        {% include "::month.html.twig" with {'date': date, 'short':0} %}
     {% else %}
-        Actividades el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} 
+        {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} 
     {% endif %}
     </h2>
 </div>
