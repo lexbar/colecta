@@ -157,7 +157,7 @@ class FileController extends Controller
             $em->persist($item);
             $em->flush();
             
-            if(count($_FILES['file']))
+            if(is_array($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name'][0]) || ! is_array($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name']))
             {
                 return $this->pickAction($item->getSlug());
             }
