@@ -157,6 +157,11 @@ class FileController extends Controller
             $em->persist($item);
             $em->flush();
             
+            if(count($_FILES['file']))
+            {
+                return $this->pickAction($item->getSlug());
+            }
+            
             // Process the files 
             return $this->XHRProcessAction($item->getSlug());
         }

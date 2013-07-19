@@ -213,7 +213,7 @@
         {% if app.session.get('TheFiles') %}
             {% for f in app.session.get('TheFiles')%}
                 <div class="pv" id="UFC{{ loop.index0 }}">
-                    <img src="preview/{{ f.token }}" style="width:250px;height:190px;background-color:#AAA">
+                    <img src="/archivo/XHR/preview/{{ f.token }}" style="width:250px;height:190px;background-color:#AAA">
                     <input type="text" name="file{{ loop.index0 }}Name" placeholder="Nombre..." value="{{ f.name }}">
                     <textarea name="file{{ loop.index0 }}Description" placeholder="Descripción...">{{ f.description }}</textarea>
                     <small class="btn btn-link btn-small" onClick="deleteFile({{ loop.index0 }})">(Eliminar archivo)</small>
