@@ -166,7 +166,15 @@ class EventController extends Controller
             
             $item->setCategory($category);
             $item->setAuthor($user);
-            $item->setName($request->get('name'));
+            if($request->get('name'))
+            {
+                $item->setName($request->get('name'));
+            }
+            else
+            {
+                $item->setName(trim($request->get('dateini')).' ('.$request->get('dateinihour').':'.$request->get('dateiniminute').') - '.trim($request->get('dateend')).' ('.$request->get('dateendhour').':'.$request->get('dateendminute').')');
+            }
+            
             
             //Slug generate
             if(strlen($request->get('name')) == 0)
@@ -240,6 +248,23 @@ class EventController extends Controller
             $this->get('session')->setFlash('EventDescription', $request->get('description'));
             $this->get('session')->setFlash('EventDateini', $request->get('dateini'));
             $this->get('session')->setFlash('EventDateend', $request->get('dateend'));
+            $this->get('session')->setFlash('EventDateinihour', $request->get('dateinihour'));
+            $this->get('session')->setFlash('EventDateiniminute', $request->get('dateiniminute'));
+            $this->get('session')->setFlash('EventDateendhour', $request->get('dateendhour'));
+            $this->get('session')->setFlash('EventDateendminute', $request->get('dateendminute'));
+            $this->get('session')->setFlash('EventDistance', $request->get('distance'));
+            $this->get('session')->setFlash('EventUphill', $request->get('uphill'));
+            $this->get('session')->setFlash('EventDifficulty', $request->get('difficulty'));
+            $this->get('session')->setFlash('EventAttachTo', $request->get('attachTo'));
+            if($request->get('newCategory'))
+            {
+                $this->get('session')->setFlash('EventCategory', 0);
+            }
+            else
+            {
+                $this->get('session')->setFlash('EventCategory', $request->get('category'));
+            }
+            
             return new RedirectResponse($this->generateUrl('ColectaEventNew'));
         }
     }

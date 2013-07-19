@@ -2,33 +2,37 @@
 <form action="{{ path('ColectaEventCreate') }}" method="POST" class="form-horizontal well">
     <fieldset>
       <div class="control-group">
-        <label class="control-label" for="EventName">Fecha Inicio</label>
+        <label class="control-label" for="EventDateini">Fecha Inicio</label>
         <div class="controls">
-          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{% if app.session.hasFlash('EventDateini') %}{{ app.session.flash('EventDateini') }}{% else %}{{ 'tomorrow' | date('Y-m-d') }}{% endif %}"> a las 
+          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{% if app.session.hasFlash('EventDateini') %}{{ app.session.flash('EventDateini') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}"> a las 
           <select id="EventDifficulty" id="EventDateiniHour" name="dateinihour" style="width:auto">
+              {% set inihour = app.session.flash('EventDateinihour') %}
               {% for hour in 0..23 %}
-                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == 8 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if (inihour == hour) or (not inihour and hour == 8) %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
               {% endfor %}
           </select> :
           <select id="EventDifficulty" id="EventDateiniMinute" name="dateiniminute" style="width:auto">
+              {% set iniminute = app.session.flash('EventDateiniminute') %}
               {% for minute in ['00','10','20','30','40','50'] %}
-                <option value="{{ minute }}">{{ minute }}</option>
+                <option value="{{ minute }}" {% if (iniminute == minute) %} selected="selected"{% endif %}>{{ minute }}</option>
               {% endfor %}
           </select>
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="medium">Fecha Fin</label>
+        <label class="control-label" for="EventDateend">Fecha Fin</label>
         <div class="controls">
-          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{% if app.session.hasFlash('EventDateend') %}{{ app.session.flash('EventDateend') }}{% else %}{{ 'tomorrow' | date('Y-m-d') }}{% endif %}"> a las 
+          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{% if app.session.hasFlash('EventDateend') %}{{ app.session.flash('EventDateend') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}"> a las 
           <select id="EventDifficulty" id="EventDateendHour" name="dateendhour" style="width:auto">
+              {% set endhour = app.session.flash('EventDateendhour') %}
               {% for hour in 0..23 %}
-                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == 14 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if (endhour == hour) or (not endhour and hour == 14) %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
               {% endfor %}
           </select> :
           <select id="EventDifficulty" id="EventDateendMinute" name="dateendminute" style="width:auto">
+              {% set endminute = app.session.flash('EventDateendminute') %}
               {% for minute in ['00','10','20','30','40','50'] %}
-                <option value="{{ minute }}">{{ minute }}</option>
+                <option value="{{ minute }}" {% if (endminute == minute) %} selected="selected"{% endif %}>{{ minute }}</option>
               {% endfor %}
           </select>
         </div>
@@ -46,57 +50,58 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="EventName">Distancia</label>
+        <label class="control-label" for="EventDistance">Distancia</label>
         <div class="controls">
           <div class="input-append">
-            <input type="text" class="input-small" id="EventDistance" name="distance"><span class="add-on"> km</span>
+            <input type="text" class="input-small" id="EventDistance" name="distance" value="{{ app.session.flash('EventDistance') }}"><span class="add-on"> km</span>
           </div>
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="EventName">Desnivel subida</label>
+        <label class="control-label" for="EventUphill">Desnivel subida</label>
         <div class="controls">
           <div class="input-append">
-            <input type="text" class="input-small" id="EventUphill" name="uphill"><span class="add-on"> metros</span>
+            <input type="text" class="input-small" id="EventUphill" name="uphill" value="{{ app.session.flash('EventUphill') }}"><span class="add-on"> metros</span>
           </div>
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="EventName">Dificultad</label>
+        <label class="control-label">Dificultad</label>
         <div class="controls">
+            {% set difficulty = app.session.flash('EventDifficulty') %}
             <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyEasy" value="" checked>
+                <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if not difficulty %} checked{% endif %}>
                 No indicar
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy">
+                <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if difficulty == 'easy' %} checked{% endif %}>
                 <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
                 Fácil
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate">
+                <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if difficulty == 'moderate' %} checked{% endif %}>
                 <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
                 Moderado
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard">
+                <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if difficulty == 'hard' %} checked{% endif %}>
                 <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
                 Difícil
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard">
+                <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if difficulty == 'very hard' %} checked{% endif %}>
                 <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
                 Muy difícil
             </label>
             <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only">
+                <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if difficulty == 'experts only' %} checked{% endif %}>
                 <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
                 Sólo expertos
             </label>
         </div>
       </div>
       
-      {% render 'ColectaItemBundle:Category:formlist' with {'selected':0} %}
+      {% render 'ColectaItemBundle:Category:formlist' with {'selected':app.session.flash('EventCategory')} %}
       
       <div class="form-actions">
         <button class="btn disabled" disabled="disabled">Guardar como borrador</button>

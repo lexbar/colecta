@@ -176,6 +176,8 @@
         <li>
             <p class="lead" style="margin-bottom:10px;">Añadir un usuario:</p>
             
+            <button id="updateBtn" class="btn pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+            
             <div class="input-prepend">
                 <span class="add-on"><i class="icon-user"></i></span>
                 <input type="text" class="span2" id="userSearch" name="targetUser" autocomplete="off">
@@ -187,8 +189,6 @@
     {% endif %}
     
     </ul>
-    
-    {% if canedit %}<p style="text-align:right"><button id="updateBtn" class="btn" type="submit"><i id="updateBtnLoading"></i> Actualizar</button></p>{% endif %}
     
     </div>
     
