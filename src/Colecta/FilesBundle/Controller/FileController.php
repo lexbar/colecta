@@ -157,7 +157,7 @@ class FileController extends Controller
             $em->persist($item);
             $em->flush();
             
-            if(is_array($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name'][0]) || ! is_array($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name']))
+            if(isset($_FILES['file']) && (is_array($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name'][0]) || ! is_array($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name'])))
             {
                 return $this->pickAction($item->getSlug());
             }
@@ -357,8 +357,11 @@ class FileController extends Controller
                 
                 if($request->request->get('file'.$i.'Delete') == 1)
                 {
-                    //Delete file
-                    unlink($cachePath.$token);
+                    if(file_exists($cachePath.$token))
+                    {
+                        //Delete file
+                        unlink($cachePath.$token);
+                    }
                 }
                 else
                 {

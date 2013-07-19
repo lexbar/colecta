@@ -282,7 +282,7 @@ var FUTheFiles = [];
 function FileChange() {
     if(typeChosen('file')) {
         return;
-    }
+    }return;
     var files = this.files;    
     var fp = $('#itemDetails');
     if(files.length) {

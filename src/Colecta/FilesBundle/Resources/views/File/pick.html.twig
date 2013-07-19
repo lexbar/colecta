@@ -9,7 +9,7 @@
     var currentFileIndex = -1;
     var TheFiles = [];
     
-    $('#File').change(function(){
+    $('#File').change(function(){return;
         var files = this.files;
         var fp = $('#filesPreview');
         if(files.length) {
@@ -139,6 +139,10 @@
         $('#ProcessForm').attr('action','{% if folder is defined  %}{{ path('ColectaFileXHRProcess', {'slug':folder.slug}) }}{% else %}{{ path('ColectaFileNew') }}{% endif %}').attr('onSubmit','').submit();
     }
     
+    $('#ProcessForm').submit( function(){
+        window.onbeforeunload = null;
+    });
+    
     {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
     
 -->
@@ -225,20 +229,12 @@
     </ul>
     
     <div class="control-group" id="FileControlGroup">
-        <label class="control-label" for="File" id="FileLabel">{% if folder is defined %}Subir {% endif %}Archivos</label>
+        <label class="control-label" for="File" id="FileLabel">Subir {% if app.session.get('TheFiles') %}más{% else %}Archivos{% endif %}</label>
         <div class="controls">
-            <input id="File" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="$(this).html('Subiendo...').attr('disabled','disabled').addClass('disabled');$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
+            <input id="File" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% else %} onchange="$('#FileAddButton').removeClass('hidden');"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="$(this).html('Subiendo...').attr('disabled','disabled').addClass('disabled');$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary hidden" id="FileAddButton">Subir otro archivo</button>{% endif %}
             <p class="muted">Selecciona uno o varios archivos</p>
         </div>
     </div>
-    
-    {#<div class="control-group" id="FileControlGroup">
-        <label class="control-label" for="File" id="FileLabel">{% if folder is defined %}Subir {% endif %}Archivos</label>
-        <div class="controls" style="position: relative;">
-            <input id="File" style="position: absolute; width: 400px; padding: 5px; font-size: 20px; opacity: 0;filter: alpha(opacity = 0);-ms-filter: "alpha(opacity=0)";cursor: pointer;_cursor: hand;" type="file"{% if not app.session.get('TheFiles') %} multiple="multiple"{% endif %} name="file[]"> {% if app.session.get('TheFiles') %}<button onClick="$(this).html('Subiendo...').attr('disabled','disabled').addClass('disabled');$('#ProcessForm').attr('onSubmit','').submit()" type="submit" class="btn btn-primary">Subir otro archivo</button>{% endif %}
-            <p><strong class="btn"> <i class="icon-upload-alt"></i> Pulsa para seleccionar uno o varios archivos</strong></p>
-        </div>
-    </div>#}
     
     <div class="form-actions">
         <button class="btn disabled" disabled="disabled">Guardar como borrador</button>
