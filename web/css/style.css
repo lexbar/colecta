@@ -70,7 +70,7 @@ a i, a:active i, a:hover i {
 }
 .title-block {
     margin: 0 0 10px;
-    padding: 0 10px 10px 5px;
+    padding: 0 10px 8px 5px;
 }
 .title-block span {
     color: #777777;
@@ -333,9 +333,10 @@ form.form-horizontal .controls textarea {
     display: block;
 }
 #itemSubmit ul.types li.text {
-    font-weight: bold;
-    color: #555;
+    color: #444;
     cursor: default;
+    font-weight: bold;
+    letter-spacing: 0.2px;
 }
 #itemSubmit.active .text {
     display: none;
@@ -352,12 +353,12 @@ form.form-horizontal .controls textarea {
     width: 98%;
 }
 #itemSubmit ul {
-    background-color: #EEEEEE; 
-    overflow: hidden; 
-    padding: 4px 6px; 
-    width: 98%; 
-    border: 1px solid #CCCCCC; 
-    margin: 2px 0px 0px;
+    background-color: #FAFAFA;
+    border-top: 1px solid #CCC;
+    margin: 2px 0 0;
+    overflow: hidden;
+    padding: 4px 6px;
+    width: 98%;
 }
 #itemSubmit ul li.pull-left {
     color: #888888; 
@@ -377,8 +378,6 @@ form.form-horizontal .controls textarea {
 #itemSubmit ul.types.chosen li.active {
     margin-right: 5px; 
     padding: 1px 6px; 
-    border: 1px solid #BBBBBB; 
-    background-color: #DDDDDD; 
     color: #222222; 
     display: block;
 }
