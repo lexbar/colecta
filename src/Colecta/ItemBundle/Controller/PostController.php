@@ -179,6 +179,7 @@ class PostController extends Controller
         {
             $this->get('session')->setFlash('PostName', $request->get('name'));
             $this->get('session')->setFlash('PostText', $request->get('text'));
+            $this->get('session')->setFlash('PostCategory', $request->get('category'));
             return new RedirectResponse($this->generateUrl('ColectaPostNew'));
         }
     }
