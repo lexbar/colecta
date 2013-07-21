@@ -132,6 +132,7 @@
             <input type="hidden" name="latitude" id="PlaceLatitude" value="{{ item.latitude }}">
             <input type="hidden" name="longitude" id="PlaceLongitude" value="{{ item.longitude }}">
             <button type="submit" class="btn btn-primary">Actualizar</button>
+            <a href="{{ path('ColectaPlaceDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
           </div>
         </fieldset>
     </form>

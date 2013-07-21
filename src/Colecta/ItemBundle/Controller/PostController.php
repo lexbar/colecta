@@ -265,4 +265,31 @@ class PostController extends Controller
         
         return $this->render('ColectaItemBundle:Post:edit.html.twig', array('item' => $item));
     }
+    
+    public function deleteAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        if(!$user || $user != $item->getAuthor()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
+        }
+        
+        $name = $item->getName();
+        
+        $em->remove($item);
+        $em->flush();
+        
+        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        
+        return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+    }
 }

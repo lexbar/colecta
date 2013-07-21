@@ -37,6 +37,9 @@ ColectaPostView:
 ColectaPostEdit:
     pattern:  /textos/{slug}/editar/
     defaults: { _controller: ColectaItemBundle:Post:edit }
+ColectaPostDelete:
+    pattern:  /textos/{slug}/eliminar/
+    defaults: { _controller: ColectaItemBundle:Post:delete }
 ColectaCategoryPage:
     pattern:  /categoria/{slug}/pagina/{page}/
     defaults: { _controller: ColectaItemBundle:Category:page }

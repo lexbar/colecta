@@ -168,6 +168,7 @@
       
       <div class="form-actions">
         <button type="submit" class="btn btn-primary" id="RouteSubmit"><i id="RouteSubmitLoading"></i> <span id="RouteSubmitText">Actualizar</span></button>
+        <a href="{{ path('ColectaRouteDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
       </div>
     </fieldset>
 </form>

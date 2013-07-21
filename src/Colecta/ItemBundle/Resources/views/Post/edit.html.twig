@@ -37,7 +37,8 @@
       
       <div class="form-actions">
         {% if item.draft %}<button class="btn">Guardar como borrador</button>{% endif %}
-        <button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button>
+        <button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button> 
+        <a href="{{ path('ColectaPostDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
       </div>
     </fieldset>
 </form>

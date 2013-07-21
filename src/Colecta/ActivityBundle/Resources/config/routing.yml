@@ -16,6 +16,9 @@ ColectaPlaceView:
 ColectaPlaceEdit:
     pattern:  /lugares/{slug}/editar/
     defaults: { _controller: ColectaActivityBundle:Place:edit }
+ColectaPlaceDelete:
+    pattern:  /lugares/{slug}/eliminar/
+    defaults: { _controller: ColectaActivityBundle:Place:delete }
 ColectaEventCreate:
     pattern:  /crear/actividad/
     defaults: { _controller: ColectaActivityBundle:Event:create }
@@ -40,6 +43,9 @@ ColectaEventView:
 ColectaEventEdit:
     pattern:  /actividades/{slug}/editar/
     defaults: { _controller: ColectaActivityBundle:Event:edit }
+ColectaEventDelete:
+    pattern:  /actividades/{slug}/eliminar/
+    defaults: { _controller: ColectaActivityBundle:Event:delete }
 ColectaEventAsist:
     pattern:  /actividades/{slug}/asist/
     defaults: { _controller: ColectaActivityBundle:Event:assistance }
@@ -79,6 +85,9 @@ ColectaRouteView:
 ColectaRouteEdit:
     pattern:  /rutas/{slug}/editar/
     defaults: { _controller: ColectaActivityBundle:Route:edit }
+ColectaRouteDelete:
+    pattern:  /rutas/{slug}/eliminar/
+    defaults: { _controller: ColectaActivityBundle:Route:delete }
 ColectaRouteMap:
     pattern:  /routemap/{id}
     defaults: { _controller: ColectaActivityBundle:Route:map }

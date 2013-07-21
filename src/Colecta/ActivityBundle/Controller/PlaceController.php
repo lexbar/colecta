@@ -263,6 +263,33 @@ class PlaceController extends Controller
         return $this->render('ColectaActivityBundle:Place:edit.html.twig', array('item' => $item, 'categories'=>$categories));
     }
     
+    public function deleteAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        if(!$user || $user != $item->getAuthor()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
+        }
+        
+        $name = $item->getName();
+        
+        $em->remove($item);
+        $em->flush();
+        
+        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        
+        return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+    }
+    
     public function guessName($lat, $lng)
     {
         $content = mycurl('http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false');

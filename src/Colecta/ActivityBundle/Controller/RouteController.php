@@ -703,6 +703,34 @@ class RouteController extends Controller
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         return $this->render('ColectaActivityBundle:Route:edit.html.twig', array('item' => $item, 'categories'=>$categories, 'form' => $form->createView()));
     }
+    
+    public function deleteAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        if(!$user || $user != $item->getAuthor()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
+        }
+        
+        $name = $item->getName();
+        
+        $em->remove($item);
+        $em->flush();
+        
+        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        
+        return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+    }
+    
     public function downloadAction($slug, $extension)
     {
         $em = $this->getDoctrine()->getEntityManager();

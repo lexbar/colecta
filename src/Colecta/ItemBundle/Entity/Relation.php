@@ -30,19 +30,19 @@ class Relation
 
     /**
     * @ORM\ManyToOne(targetEntity="Item")
-    * @ORM\JoinColumn(name="itemto_id", referencedColumnName="id") 
+    * @ORM\JoinColumn(name="itemto_id", referencedColumnName="id", onDelete="CASCADE") 
     */
     protected $itemto;
 
     /**
     * @ORM\ManyToOne(targetEntity="Item")
-    * @ORM\JoinColumn(name="itemfrom_id", referencedColumnName="id") 
+    * @ORM\JoinColumn(name="itemfrom_id", referencedColumnName="id", onDelete="CASCADE") 
     */
     protected $itemfrom;
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
-    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE") 
     */
     protected $user;
 

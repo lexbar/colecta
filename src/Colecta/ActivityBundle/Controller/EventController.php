@@ -363,6 +363,32 @@ class EventController extends Controller
         return $this->render('ColectaActivityBundle:Event:edit.html.twig', array('item' => $item, 'categories'=>$categories));
     }
     
+    public function deleteAction($slug)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        if(!$user || $user != $item->getAuthor()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaEventView', array('slug'=>$slug)));
+        }
+        
+        $name = $item->getName();
+        
+        $em->remove($item);
+        $em->flush();
+        
+        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        
+        return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+    }
     
     public function assistanceAction($slug)
     /*
