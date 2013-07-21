@@ -51,7 +51,7 @@ class RouteTrackpoint
 
     /**
     * @ORM\ManyToOne(targetEntity="Route")
-    * @ORM\JoinColumn(name="route_id", referencedColumnName="id") 
+    * @ORM\JoinColumn(name="route_id", referencedColumnName="id", onDelete="CASCADE") 
     */
     protected $route;
 

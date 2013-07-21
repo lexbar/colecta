@@ -37,13 +37,13 @@ class EventAssistance
 
     /**
     * @ORM\ManyToOne(targetEntity="Event")
-    * @ORM\JoinColumn(name="event_id", referencedColumnName="id") 
+    * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE") 
     */
     protected $event;
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\User")
-    * @ORM\JoinColumn(name="user_id", referencedColumnName="id") 
+    * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE") 
     */
     protected $user;
 
