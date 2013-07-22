@@ -73,7 +73,7 @@ class Service
                 ->select('COUNT(i)')
                 ->from('ColectaItemBundle:Item', 'i')
                 ->leftJoin('i.comments', 'c')
-                ->where('i.author != '.$user->getId().' AND i.draft = 0 AND i.part = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
+                ->where('i.author != '.$user->getId().' AND i.draft = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
                 ->orderBy('i.date', 'ASC')
                 ->getQuery();
                 
