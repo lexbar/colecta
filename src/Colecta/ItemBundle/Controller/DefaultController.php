@@ -331,7 +331,7 @@ class DefaultController extends Controller
         if($user == 'anon.')
         {
             //User must log in
-            return new RedirectResponse($this->generateUrl('userLogin'));
+            return new Response('Error',200);
         }
         
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug);
@@ -339,8 +339,10 @@ class DefaultController extends Controller
         if(!$item) 
         {
             //The item doesn't exist
-            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+            return new Response('Error',200);
         }
+        
+        $alreadylikes = false;
         
         $likers = $item->getLikers();
         if(count($likers))
@@ -350,23 +352,20 @@ class DefaultController extends Controller
                 if($l == $user)
                 {
                     //You already like this item
-                    return new RedirectResponse($this->get('request')->headers->get('referer'));
+                    $alreadylikes = true;
                 }
             }
         }
         
-        $user->addLikedItem($item);
-        $em->flush();
-    
-        
-        $referer = $this->get('request')->headers->get('referer');
-        
-        if(empty($referer))
+        if(!$alreadylikes)
         {
-            $referer = $this->generateUrl('ColectaDashboard');
+            $user->addLikedItem($item);
+            $item->addLiker($user);
+            $em->persist($item); 
+            $em->flush();
         }
         
-        return new RedirectResponse($referer);
+        return new Response($this->renderView('ColectaItemBundle:Default:likes.json.twig', array('item' => $item)),200);
     }
     function contactAction()
     {
