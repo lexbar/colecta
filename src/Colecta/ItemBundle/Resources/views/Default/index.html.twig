@@ -57,11 +57,7 @@
         
         {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
         
-        {% if item.related | length > 0 %}
-            <div class="relations">
-                {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-            </div>
-        {% endif %}
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     </div>
 
 {% else %}

@@ -1,5 +1,7 @@
 {% if items | length > 0 %}
 
+<div class="relations">
+
     <h2 class="related">
         <span class="icon-stack">
             <i class="icon-circle icon-stack-base" style="color: #0088CC;"></i>
@@ -8,6 +10,7 @@
         
         Relacionado:
     </h2>
+    
     
     {% for item in items if item.draft == 0 %}
         <div id="item{{ item.id }}" class="relatedItem">
@@ -23,4 +26,6 @@
         </div>
     {% endfor %}
 
+</div>
+    
 {% endif %}
