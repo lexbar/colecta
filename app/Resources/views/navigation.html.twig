@@ -10,22 +10,27 @@
     <li class="nav-header">Navegación</li>
     
     <li{% if navigation == 'extranet' %} class="active"{% endif %}>
-        <a href="/"><i class="icon-home"></i> Extranet</a>
+        <a href="/"><i class="icon-home icon-fixed-width"></i> Extranet</a>
     </li>
     <li{% if navigation == 'intranet' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaChatIndex') }}"><i class="icon-unlock-alt"></i> Intranet</a>
+        <a href="{{ path('ColectaChatIndex') }}"><i class="icon-unlock-alt icon-fixed-width"></i> Intranet</a>
     </li>
+    {% if app.user.role.siteConfig %}
+    <li{% if navigation == 'config' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaChatIndex') }}"><i class="icon-wrench icon-fixed-width"></i> Configuración</a>
+    </li>
+    {% endif %}
     
     <li class="divider"></li>
     
     <li{% if navigation == 'messages' %} class="active"{% endif %}>
-        <a href="{{ path('userMessages')}}"><i class="icon-envelope"></i>{% if messages | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ messages | length }}</span>{% endif %} Mensajes</a>
+        <a href="{{ path('userMessages')}}"><i class="icon-envelope icon-fixed-width"></i>{% if messages | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ messages | length }}</span>{% endif %} Mensajes</a>
     </li>
     <li{% if navigation == 'notifications' %} class="active"{% endif %}>
-        <a href="{{ path('userNotifications')}}"><i class="icon-bullhorn"></i>{% if notifications | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications| length }}</span>{% endif %} Notificaciones</a>
+        <a href="{{ path('userNotifications')}}"><i class="icon-bullhorn icon-fixed-width"></i>{% if notifications | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications| length }}</span>{% endif %} Notificaciones</a>
         </li>
     <li>
-        <a href="{{ path('userLogout') }}" style="color:darkred"><i class="icon-off"></i> Salir</a>
+        <a href="{{ path('userLogout') }}" style="color:darkred"><i class="icon-off icon-fixed-width"></i> Salir</a>
     </li>
     
     <li>

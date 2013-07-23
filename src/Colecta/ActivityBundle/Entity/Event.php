@@ -27,11 +27,11 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     protected $dateend;
 
     /**
-     * @var boolean $showhours
+     * @var boolean $allowassistances
      *
-     * @ORM\Column(name="showhours", type="boolean")
+     * @ORM\Column(name="allowassistances", type="boolean")
      */
-    protected $showhours;
+    protected $allowassistances;
 
     /**
      * @var text $description
@@ -254,29 +254,6 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     }
 
     /**
-     * Set showhours
-     *
-     * @param boolean $showhours
-     * @return Event
-     */
-    public function setShowhours($showhours)
-    {
-        $this->showhours = $showhours;
-    
-        return $this;
-    }
-
-    /**
-     * Get showhours
-     *
-     * @return boolean 
-     */
-    public function getShowhours()
-    {
-        return $this->showhours;
-    }
-
-    /**
      * Set description
      *
      * @param string $description
@@ -412,6 +389,29 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     public function getStatus()
     {
         return $this->status;
+    }
+    
+    /**
+     * Set allowassistances
+     *
+     * @param boolean $allowassistances
+     * @return Event
+     */
+    public function setAllowassistances($allowassistances)
+    {
+        $this->allowassistances = $allowassistances;
+    
+        return $this;
+    }
+
+    /**
+     * Get allowassistances
+     *
+     * @return boolean 
+     */
+    public function getAllowassistances()
+    {
+        return $this->allowassistances;
     }
 
     /**

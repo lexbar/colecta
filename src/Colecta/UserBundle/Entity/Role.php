@@ -41,6 +41,7 @@ class Role
      * @ORM\Column(name="site_access", type="boolean")
      */
     protected $site_access;
+    // access granted to the site in general
 
     /**
      * @var boolean $site_config
@@ -48,6 +49,7 @@ class Role
      * @ORM\Column(name="site_config", type="boolean")
      */
     protected $site_config;
+    // access to the configuration backend of the site
 
     /**
      * @var boolean $item_post_create
@@ -55,6 +57,7 @@ class Role
      * @ORM\Column(name="item_post_create", type="boolean")
      */
     protected $item_post_create;
+    // creation of a text-based item
 
     /**
      * @var boolean $item_event_create
@@ -62,6 +65,7 @@ class Role
      * @ORM\Column(name="item_event_create", type="boolean")
      */
     protected $item_event_create;
+    // creation of a time-based item
 
     /**
      * @var boolean $item_route_create
@@ -69,6 +73,7 @@ class Role
      * @ORM\Column(name="item_route_create", type="boolean")
      */
     protected $item_route_create;
+    // creation of a track-based item
 
     /**
      * @var boolean $item_place_create
@@ -76,6 +81,7 @@ class Role
      * @ORM\Column(name="item_place_create", type="boolean")
      */
     protected $item_place_create;
+    // creation of a location-based item
 
     /**
      * @var boolean $item_file_create
@@ -83,6 +89,7 @@ class Role
      * @ORM\Column(name="item_file_create", type="boolean")
      */
     protected $item_file_create;
+    // creation of a file-based item
 
     /**
      * @var boolean $item_contest_create
@@ -90,6 +97,7 @@ class Role
      * @ORM\Column(name="item_contest_create", type="boolean")
      */
     protected $item_contest_create;
+    // creation of a competition-based item
 
     /**
      * @var boolean $item_poll_create
@@ -97,13 +105,15 @@ class Role
      * @ORM\Column(name="item_poll_create", type="boolean")
      */
     protected $item_poll_create;
-
+    // creation of a vote-based item
+    
     /**
      * @var boolean $item_post_view
      *
      * @ORM\Column(name="item_post_view", type="boolean")
      */
     protected $item_post_view;
+    // access to text-based items
 
     /**
      * @var boolean $item_event_view
@@ -111,6 +121,7 @@ class Role
      * @ORM\Column(name="item_event_view", type="boolean")
      */
     protected $item_event_view;
+    // access to time-based items
 
     /**
      * @var boolean $item_route_view
@@ -118,6 +129,7 @@ class Role
      * @ORM\Column(name="item_route_view", type="boolean")
      */
     protected $item_route_view;
+    // access to track-based items
 
     /**
      * @var boolean $item_place_view
@@ -125,6 +137,7 @@ class Role
      * @ORM\Column(name="item_place_view", type="boolean")
      */
     protected $item_place_view;
+    // access to location-based items
 
     /**
      * @var boolean $item_file_view
@@ -132,6 +145,7 @@ class Role
      * @ORM\Column(name="item_file_view", type="boolean")
      */
     protected $item_file_view;
+    // access to file-based items
 
     /**
      * @var boolean $item_contest_view
@@ -139,6 +153,7 @@ class Role
      * @ORM\Column(name="item_contest_view", type="boolean")
      */
     protected $item_contest_view;
+    // access to competition-based items
 
     /**
      * @var boolean $item_poll_view
@@ -146,6 +161,7 @@ class Role
      * @ORM\Column(name="item_poll_view", type="boolean")
      */
     protected $item_poll_view;
+    // access to vote-based items
 
     /**
      * @var boolean $item_post_edit
@@ -153,6 +169,7 @@ class Role
      * @ORM\Column(name="item_post_edit", type="boolean")
      */
     protected $item_post_edit;
+    // update my own text-based items
 
     /**
      * @var boolean $item_event_edit
@@ -160,6 +177,7 @@ class Role
      * @ORM\Column(name="item_event_edit", type="boolean")
      */
     protected $item_event_edit;
+    // update my own time-based items
 
     /**
      * @var boolean $item_route_edit
@@ -167,6 +185,7 @@ class Role
      * @ORM\Column(name="item_route_edit", type="boolean")
      */
     protected $item_route_edit;
+    // update my own track-based items
 
     /**
      * @var boolean $item_place_edit
@@ -174,6 +193,7 @@ class Role
      * @ORM\Column(name="item_place_edit", type="boolean")
      */
     protected $item_place_edit;
+    // update my own location-based items
 
     /**
      * @var boolean $item_file_edit
@@ -181,6 +201,7 @@ class Role
      * @ORM\Column(name="item_file_edit", type="boolean")
      */
     protected $item_file_edit;
+    // update my own file-based items
 
     /**
      * @var boolean $item_contest_edit
@@ -188,6 +209,7 @@ class Role
      * @ORM\Column(name="item_contest_edit", type="boolean")
      */
     protected $item_contest_edit;
+    // update my own competition-based items
 
     /**
      * @var boolean $item_poll_edit
@@ -195,6 +217,7 @@ class Role
      * @ORM\Column(name="item_poll_edit", type="boolean")
      */
     protected $item_poll_edit;
+    // update my own vote-based items
 
     /**
      * @var boolean $item_post_edit_any
@@ -202,6 +225,7 @@ class Role
      * @ORM\Column(name="item_post_edit_any", type="boolean")
      */
     protected $item_post_edit_any;
+    // update any text-based items
 
     /**
      * @var boolean $item_event_edit_any
@@ -209,6 +233,7 @@ class Role
      * @ORM\Column(name="item_event_edit_any", type="boolean")
      */
     protected $item_event_edit_any;
+    // update any time-based items
 
     /**
      * @var boolean $item_route_edit_any
@@ -216,6 +241,7 @@ class Role
      * @ORM\Column(name="item_route_edit_any", type="boolean")
      */
     protected $item_route_edit_any;
+    // update any track-based items
 
     /**
      * @var boolean $item_place_edit_any
@@ -223,6 +249,7 @@ class Role
      * @ORM\Column(name="item_place_edit_any", type="boolean")
      */
     protected $item_place_edit_any;
+    // update any location-based items
 
     /**
      * @var boolean $item_file_edit_any
@@ -230,6 +257,7 @@ class Role
      * @ORM\Column(name="item_file_edit_any", type="boolean")
      */
     protected $item_file_edit_any;
+    // update any file-based items
 
     /**
      * @var boolean $item_contest_edit_any
@@ -237,6 +265,7 @@ class Role
      * @ORM\Column(name="item_contest_edit_any", type="boolean")
      */
     protected $item_contest_edit_any;
+    // update any competition-based items
 
     /**
      * @var boolean $item_poll_edit_any
@@ -244,6 +273,7 @@ class Role
      * @ORM\Column(name="item_poll_edit_any", type="boolean")
      */
     protected $item_poll_edit_any;
+    // update any vote-based items
 
     /**
      * @var boolean $item_relate_own
@@ -251,6 +281,7 @@ class Role
      * @ORM\Column(name="item_relate_own", type="boolean")
      */
     protected $item_relate_own;
+    // relate my own items with others
 
     /**
      * @var boolean $item_relate_any
@@ -258,6 +289,7 @@ class Role
      * @ORM\Column(name="item_relate_any", type="boolean")
      */
     protected $item_relate_any;
+    // relate any item with any other
 
     /**
      * @var boolean $item_post_comment
@@ -265,6 +297,7 @@ class Role
      * @ORM\Column(name="item_post_comment", type="boolean")
      */
     protected $item_post_comment;
+    // submit comments on text-based items
 
     /**
      * @var boolean $item_event_comment
@@ -272,6 +305,7 @@ class Role
      * @ORM\Column(name="item_event_comment", type="boolean")
      */
     protected $item_event_comment;
+    // submit comments on time-based items
 
     /**
      * @var boolean $item_route_comment
@@ -279,6 +313,7 @@ class Role
      * @ORM\Column(name="item_route_comment", type="boolean")
      */
     protected $item_route_comment;
+    // submit comments on track-based items
 
     /**
      * @var boolean $item_place_comment
@@ -286,6 +321,7 @@ class Role
      * @ORM\Column(name="item_place_comment", type="boolean")
      */
     protected $item_place_comment;
+    // submit comments on location-based items
 
     /**
      * @var boolean $item_file_comment
@@ -293,6 +329,7 @@ class Role
      * @ORM\Column(name="item_file_comment", type="boolean")
      */
     protected $item_file_comment;
+    // submit comments on file-based items
 
     /**
      * @var boolean $item_contest_comment
@@ -300,6 +337,7 @@ class Role
      * @ORM\Column(name="item_contest_comment", type="boolean")
      */
     protected $item_contest_comment;
+    // submit comments on competition-based items
 
     /**
      * @var boolean $item_poll_comment
@@ -307,6 +345,7 @@ class Role
      * @ORM\Column(name="item_poll_comment", type="boolean")
      */
     protected $item_poll_comment;
+    // submit comments on vote-based items
 
     /**
      * @var boolean $item_poll_vote
@@ -314,6 +353,7 @@ class Role
      * @ORM\Column(name="item_poll_vote", type="boolean")
      */
     protected $item_poll_vote;
+    // submit vote on polls
 
     /**
      * @var boolean $category_create
@@ -321,6 +361,7 @@ class Role
      * @ORM\Column(name="category_create", type="boolean")
      */
     protected $category_create;
+    // create a new category and edit the ones I have created
 
     /**
      * @var boolean $category_edit
@@ -328,6 +369,7 @@ class Role
      * @ORM\Column(name="category_edit", type="boolean")
      */
     protected $category_edit;
+    // edit any category
 
     /**
      * @var boolean $activity_create
@@ -335,6 +377,7 @@ class Role
      * @ORM\Column(name="activity_create", type="boolean")
      */
     protected $activity_create;
+    // create a new activity and edit the ones I have created
 
     /**
      * @var boolean $activity_edit
@@ -342,6 +385,7 @@ class Role
      * @ORM\Column(name="activity_edit", type="boolean")
      */
     protected $activity_edit;
+    // edit any activity
 
     /**
      * @var boolean $user_create
@@ -349,6 +393,7 @@ class Role
      * @ORM\Column(name="user_create", type="boolean")
      */
     protected $user_create;
+    // create new users to the system
 
     /**
      * @var boolean $user_edit
@@ -356,6 +401,7 @@ class Role
      * @ORM\Column(name="user_edit", type="boolean")
      */
     protected $user_edit;
+    // edit any user of the system
 
     /**
      * @var boolean $user_view
@@ -363,6 +409,7 @@ class Role
      * @ORM\Column(name="user_view", type="boolean")
      */
     protected $user_view;
+    // access to users information
 
     /**
      * @var boolean $message_send
@@ -370,6 +417,7 @@ class Role
      * @ORM\Column(name="message_send", type="boolean")
      */
     protected $message_send;
+    // send and reply to private messages
 
     /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="role")
