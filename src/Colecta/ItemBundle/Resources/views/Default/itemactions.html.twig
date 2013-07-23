@@ -31,7 +31,7 @@
     </span>
     
     {# ASSISTANCE #}
-    {% if item.type == 'Activity/Event' %}
+    {% if item.type == 'Activity/Event' and item.allowassistances %}
         <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="icon-user"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Nadie se ha apuntado{% endif %}</a>
     {% endif %}
     
