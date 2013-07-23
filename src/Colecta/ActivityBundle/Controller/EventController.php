@@ -207,7 +207,7 @@ class EventController extends Controller
             $item->setActivity(null);
             $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
             $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
-            $item->setShowhours(false);
+            $item->setAllowassistances(true);
             $item->setDescription($request->get('description'));
             $item->setDistance(str_replace(',','.', $request->get('distance')));
             $item->setUphill($request->get('uphill'));
@@ -338,7 +338,7 @@ class EventController extends Controller
             $item->setActivity(null);
             $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
             $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
-            $item->setShowhours(false);
+            //$item->setAllowassistances(true);
             $item->setDescription($request->get('description'));
             $item->setDistance(str_replace(',','.', $request->get('distance')));
             $item->setUphill($request->get('uphill'));
