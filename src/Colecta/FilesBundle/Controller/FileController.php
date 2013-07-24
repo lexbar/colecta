@@ -474,12 +474,7 @@ class FileController extends Controller
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
         
-        if($user == 'anon.') 
-        {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
-            return new RedirectResponse($this->generateUrl('userLogin'));
-        }
-        elseif($user != $item->getAuthor())
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
         }
@@ -621,12 +616,7 @@ class FileController extends Controller
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
         
-        if($user == 'anon.') 
-        {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
-            return new RedirectResponse($this->generateUrl('userLogin'));
-        }
-        elseif($user != $item->getAuthor())
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
         }

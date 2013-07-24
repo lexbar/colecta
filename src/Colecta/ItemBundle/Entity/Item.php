@@ -163,8 +163,138 @@ abstract class Item
         
         return array_values($all);
     }
-
-     public function __construct()
+    
+    public function canEdit(\Colecta\UserBundle\Entity\User $user)
+    {
+        $isAuthor = $this->getAuthor() == $user;
+        $role = $user->getRole();
+        
+        if(!$role)
+        {
+            return false;
+        }
+        
+        switch($this->getType())
+        {
+            case 'Item/Post':
+                if($isAuthor && $role->getItemPostEdit() || $role->getItemPostEditAny())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Event':
+                if($isAuthor && $role->getItemEventEdit() || $role->getItemEventEditAny())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Place':
+                if($isAuthor && $role->getItemPlaceEdit() || $role->getItemPlaceEditAny())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Route':
+                if($isAuthor && $role->getItemRouteEdit() || $role->getItemRouteEditAny())
+                {
+                    return true;
+                }
+            break;
+            case 'Files/File':
+                if($isAuthor && $role->getItemFileEdit() || $role->getItemFileEditAny())
+                {
+                    return true;
+                }
+            break;
+            case 'Files/Folder':
+                if($isAuthor && $role->getItemFileEdit() || $role->getItemFileEditAny())
+                {
+                    return true;
+                }
+            break;
+            case 'Colective/Contest':
+                if($isAuthor && $role->getItemContestEdit() || $role->getItemContestEditAny())
+                {
+                    return true;
+                }
+            break;
+            case 'Colective/Poll':
+                if($isAuthor && $role->getItemPollEdit() || $role->getItemPollEditAny())
+                {
+                    return true;
+                }
+            break;
+        }
+        
+        return false;
+    }
+    
+    public function canView(\Colecta\UserBundle\Entity\User $user)
+    {
+        $isAuthor = $this->getAuthor() == $user;
+        $role = $user->getRole();
+        
+        if(!$role)
+        {
+            return false;
+        }
+        
+        switch($this->getType())
+        {
+            case 'Item/Post':
+                if($role->getItemPostView())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Event':
+                if($role->getItemEventView())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Place':
+                if($role->getItemPlaceView())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Route':
+                if($role->getItemRouteView())
+                {
+                    return true;
+                }
+            break;
+            case 'Files/File':
+                if($role->getItemFileView())
+                {
+                    return true;
+                }
+            break;
+            case 'Files/Folder':
+                if($role->getItemFileView())
+                {
+                    return true;
+                }
+            break;
+            case 'Colective/Contest':
+                if($role->getItemContestView())
+                {
+                    return true;
+                }
+            break;
+            case 'Colective/Poll':
+                if($role->getItemPollView())
+                {
+                    return true;
+                }
+            break;
+        }
+        
+        return false;
+    }
+    
+    public function __construct()
     {
         $this->relatedto = new \Doctrine\Common\Collections\ArrayCollection();
         $this->relatedfrom = new \Doctrine\Common\Collections\ArrayCollection();

@@ -186,7 +186,7 @@ class PlaceController extends Controller
         
         $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
         
-        if(!$user || $user != $item->getAuthor()) 
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaPlaceView', array('slug'=>$slug)));
         }
@@ -275,7 +275,7 @@ class PlaceController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        if(!$user || $user != $item->getAuthor()) 
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
         }

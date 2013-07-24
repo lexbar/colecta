@@ -276,7 +276,7 @@ class EventController extends Controller
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
-        if(!$user || $user != $item->getAuthor()) 
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaEventView', array('slug'=>$slug)));
         }
@@ -375,7 +375,7 @@ class EventController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        if(!$user || $user != $item->getAuthor()) 
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaEventView', array('slug'=>$slug)));
         }

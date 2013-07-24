@@ -41,7 +41,7 @@
     {% endif %}
     
     {# EDIT #}
-    {% if item.author == app.user %}
+    {% if item.canEdit(app.user) %}
         <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="icon-pencil icon-large"></i> Editar</a>
     {% endif %}
     

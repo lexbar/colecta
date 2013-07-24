@@ -14,7 +14,7 @@
 {% endblock %}
 {% block article %}
 
-{% if item.author == app.user %}
+{% if item.canEdit(app.user) %}
 <div class="title-block">
     <h2>Editar {{ item.name }}<br><span><a href="{{ path('ColectaRouteView', {'slug':item.slug}) }}"><i class="icon-double-angle-left"></i> Volver a la ruta</a></span></h2>
 </div>

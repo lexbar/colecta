@@ -551,7 +551,7 @@ class RouteController extends Controller
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         $form = $this->createForm(new RouteType(), $item);
         
-        if($user == 'anon.' || $user != $item->getAuthor()) 
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug'=>$slug)));
         }
@@ -716,7 +716,7 @@ class RouteController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        if(!$user || $user != $item->getAuthor()) 
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
         }

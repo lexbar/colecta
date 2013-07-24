@@ -118,12 +118,7 @@ class FolderController extends Controller
         
         $item = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
         
-        if($user == 'anon.') 
-        {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
-            return new RedirectResponse($this->generateUrl('userLogin'));
-        }
-        elseif($user != $item->getAuthor())
+        if($user == 'anon.' || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));
         }

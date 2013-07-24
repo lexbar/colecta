@@ -16,7 +16,7 @@
 
 {% for item in items %}
     
-    <div class="item">
+    <div class="item" id="item{{ item.id}}">
         {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
         
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
@@ -27,14 +27,11 @@
         
         {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
         
-        {% if item.related | length > 0 %}
-            <div class="relations">
-                {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-            </div>
-        {% endif %}
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     </div>
+
 {% else %}
-    <h3>{{ user.name }} no ha compartido nada... por ahora.</h3>
+    <h3>No ha publicado nada... por ahora.</h3>
 {% endfor %}
 
 <ul class="pager">
