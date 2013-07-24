@@ -361,7 +361,7 @@ form.form-horizontal .controls textarea {
     width: 98%;
 }
 #itemSubmit ul li.pull-left {
-    color: #888888; 
+    color: #666; 
     cursor: pointer; 
     padding: 2px 6px; 
     margin-right: 5px;
@@ -376,7 +376,7 @@ form.form-horizontal .controls textarea {
     display: none;
 }
 #itemSubmit ul.types.chosen li.active {
-    margin-right: 5px; 
+    margin-right: 6px; 
     padding: 1px 6px; 
     color: #222222; 
     display: block;

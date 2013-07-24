@@ -14,10 +14,6 @@
     </ul>
 </div>
 
-{% if app.user and app.user.id == 1 %}
-<p>Código de recuperación: {{ thecode }}</p>
-{% endif %}
-
 {% for item in items %}
     
     <div class="item" id="item{{ item.id}}">
