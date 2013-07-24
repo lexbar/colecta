@@ -33,9 +33,8 @@
                     $( "#EventDateend" ).val($( "#EventDateini" ).val());
                     $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
         }});
-        $( "#EventDateend" ).datepicker();
         
-        $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
+        $( "#EventDateend" ).datepicker();
         
 {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
   
@@ -54,7 +53,7 @@
       <div class="control-group">
         <label class="control-label" for="EventName">Fecha Inicio</label>
         <div class="controls">
-          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{{ item.dateini | date('Y-m-d') }}"> a las 
+          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{{ item.dateini | date('d-m-Y') }}"> a las 
           <select id="EventDifficulty" id="EventDateiniHour" name="dateinihour" style="width:auto">
               {% for hour in 0..23 %}
                 <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateini | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
@@ -70,7 +69,7 @@
       <div class="control-group">
         <label class="control-label" for="medium">Fecha Fin</label>
         <div class="controls">
-          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{{ item.dateend | date('Y-m-d') }}"> a las 
+          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{{ item.dateend | date('d-m-Y') }}"> a las 
           <select id="EventDifficulty" id="EventDateendHour" name="dateendhour" style="width:auto">
               {% for hour in 0..23 %}
                 <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateend | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
