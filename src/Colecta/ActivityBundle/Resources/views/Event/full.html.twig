@@ -140,7 +140,7 @@
     
     {######## ASSISTANCES ########}
     
-    {% set canedit = item.author == app.user %}
+    {% set canedit = item.canEdit(app.user) %}
     {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
     
     {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('icon-refresh icon-spin')">{% endif %}

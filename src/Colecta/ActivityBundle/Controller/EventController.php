@@ -595,7 +595,7 @@ class EventController extends Controller
         {
             $this->get('session')->setFlash('error', 'No existe el evento');
         }
-        elseif($item->getAuthor() != $user)
+        elseif(!$item->canEdit($user))
         {
             $this->get('session')->setFlash('error', 'No tienes permiso para gestionar las asistencias de este evento');
         }
