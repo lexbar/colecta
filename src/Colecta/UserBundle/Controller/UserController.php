@@ -172,7 +172,7 @@ class UserController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         
-        $users = $em->createQuery("SELECT u FROM ColectaUserBundle:User u WHERE u.name LIKE :search")->setParameters(array('search'=>'%'.$search.'%'))->setMaxResults(12)->getResult();
+        $users = $em->createQuery("SELECT u FROM ColectaUserBundle:User u WHERE u.name LIKE :search AND u.role != 3")->setParameters(array('search'=>'%'.$search.'%'))->setMaxResults(12)->getResult();
         
         $response = new Response($this->renderView('ColectaUserBundle:User:users.json.twig', array('users' => $users)),200);
         $response->headers->set('Content-Type', 'application/json');
