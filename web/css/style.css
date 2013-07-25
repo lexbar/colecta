@@ -65,6 +65,7 @@ a i, a:active i, a:hover i {
 .unity {
     overflow: hidden;
     margin-bottom: 5px;
+    position: relative;
 }
 .navbar-fixed-top {
     opacity: .95; 
@@ -478,7 +479,7 @@ form.form-horizontal .controls textarea {
     width: 30px;
 }
 .fullscreen {
-    z-index: 10001;
+    z-index: 10001 !important;
 }
 .dropdown:hover .download {
     display: block;
@@ -489,7 +490,6 @@ form.form-horizontal .controls textarea {
 }
 #map.full {
     height: 300px;
-    width: 520px;
     border: 1px solid #999;
     margin-bottom: 0;
 }
@@ -522,13 +522,20 @@ form.form-horizontal .controls textarea {
     right: 200px;
     bottom: 180px;
     margin: 0;
+    position: fixed !important;
 }
 #mapproperties {
-    background-color: #FFF;
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
     float: right;
-    height: 300px;
+    height: 240px;
     overflow-y: auto;
-    width: 100px;
+    padding: 2px 4px;
+    position: absolute;
+    right: 6px;
+    top: 35px;
+    width: 140px;
+    z-index: 200;
 }
 #mapproperties ul {
     padding-left: 0;
@@ -563,7 +570,7 @@ form.form-horizontal .controls textarea {
     margin: 15px 0 5px;
 }
 #chart.fullscreen {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     margin: 0;
