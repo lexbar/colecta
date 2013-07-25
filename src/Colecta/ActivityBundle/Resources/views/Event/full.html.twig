@@ -178,7 +178,9 @@
                 <p class="lead" style="margin-bottom:10px;">Añadir un usuario:</p>
             {% endif %}
             
-            <button id="updateBtn" class="btn pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+            {% if item.assistances | length and haspassed %}
+                <button id="updateBtn" class="btn pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+            {% endif %}
             
             {% if item.allowassistances %}
                 <div class="input-prepend">
