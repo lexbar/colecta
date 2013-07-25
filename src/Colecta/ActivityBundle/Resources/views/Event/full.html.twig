@@ -143,62 +143,66 @@
     {% set canedit = item.canEdit(app.user) %}
     {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
     
-    {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('icon-refresh icon-spin')">{% endif %}
+    {% if item.assistances | length or item.allowassistances %}
     
-    <div class="assistances">
-    <h2>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}</h2>
+        {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('icon-refresh icon-spin')">{% endif %}
         
-    <ul class="unstyled">    
-    {% for assistance in item.assistances %}
-    
-        <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}">
-            <a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">
-            <img width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}
-            </a> 
+        <div class="assistances">
+        <h2>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}</h2>
+            
+        <ul class="unstyled">    
+        {% for assistance in item.assistances %}
         
-            {% if haspassed %}
-                {% if canedit %}
-                    <span class="pull-right">
-                        <input type="text" class="span1" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()"> km | 
-                        <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
-                    </span>
-                {% elseif assistance.confirmed %}
-                    <span class="pull-right">{{ assistance.km }} km <i class="icon-ok"></i></span>
+            <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}">
+                <a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">
+                <img width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}
+                </a> 
+            
+                {% if haspassed %}
+                    {% if canedit %}
+                        <span class="pull-right">
+                            <input type="text" class="span1" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()"> km | 
+                            <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
+                        </span>
+                    {% elseif assistance.confirmed %}
+                        <span class="pull-right">{{ assistance.km }} km <i class="icon-ok"></i></span>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </li>
+            </li>
+            
+        {% else %}
+            <li><em>Ninguna asistencia confirmada</em></li>
+        {% endfor %}
         
-    {% else %}
-        <li><em>Ninguna asistencia confirmada</em></li>
-    {% endfor %}
-    
-    {% if canedit %}
-        <li>
-            {% if item.allowassistances %}
-                <p class="lead" style="margin-bottom:10px;">Añadir un usuario:</p>
-            {% endif %}
-            
-            {% if item.assistances | length and haspassed %}
-                <button id="updateBtn" class="btn pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
-            {% endif %}
-            
-            {% if item.allowassistances %}
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="text" class="span2" id="userSearch" name="targetUser" autocomplete="off">
-                </div> 
+        {% if canedit %}
+            <li>
+                {% if item.allowassistances %}
+                    <p class="lead" style="margin-bottom:10px;">Añadir un usuario:</p>
+                {% endif %}
                 
-                <i id="destinationLoading" class="icon-cog icon-spin hidden"></i>
-                <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
-            {% endif %}
-        </li>
+                {% if item.assistances | length and haspassed %}
+                    <button id="updateBtn" class="btn pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+                {% endif %}
+                
+                {% if item.allowassistances %}
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        <input type="text" class="span2" id="userSearch" name="targetUser" autocomplete="off">
+                    </div> 
+                    
+                    <i id="destinationLoading" class="icon-cog icon-spin hidden"></i>
+                    <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
+                {% endif %}
+            </li>
+        {% endif %}
+        
+        </ul>
+        
+        </div>
+        
+        {% if canedit %}</form>{% endif %}
+    
     {% endif %}
-    
-    </ul>
-    
-    </div>
-    
-    {% if canedit %}</form>{% endif %}
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     
