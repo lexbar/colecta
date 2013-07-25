@@ -33,6 +33,10 @@ h2.related {
     margin: 0 0 15px 0 !important;
     font-size: 18px;
 }
+.smiley {
+    position: relative;
+    top: -2px;
+}
 .relations {
     border-left: 2px solid #0088CC;
     padding-left: 10px;

@@ -29,20 +29,55 @@ class ItemExtension extends \Twig_Extension
         
         $return = preg_replace(
                                 array(  
-                                    //Smilies by FontAwesome
-                                    "#:\)#",
-                                    "#:\(#",
-                                    "#:\|#",
                                     "#\*([^\*]+)\*#",
                                     "#_([^_]+)_#",
                                 ),array(
-                                    ' <i class="icon-smile"></i> ',
-                                    ' <i class="icon-frown"></i> ',
-                                    ' <i class="icon-meh"></i> ',
                                     ' <strong>$1</strong> ',
                                     ' <span style="text-decoration:underline;">$1</span> ',
                                 ), $return
         );
+        $icons = array(
+                ':)'    =>  '<img src="/img/smileys/smiling.png" alt=":)" class="smiley" />',
+                ':-)'   =>  '<img src="/img/smileys/smiling.png" alt=":-)" class="smiley" />',
+                ':D'    =>  '<img src="/img/smileys/grinning.png" alt=":D" class="smiley" />',
+                ':d'    =>  '<img src="/img/smileys/grinning.png" alt=":d" class="smiley" />',
+                ';)'    =>  '<img src="/img/smileys/winking.png" alt=";)" class="smiley" />',
+                ':P'    =>  '<img src="/img/smileys/tongue_out.png" alt=":P" class="smiley" />',
+                ':-P'   =>  '<img src="/img/smileys/tongue_out.png" alt=":-P" class="smiley" />',
+                ':-p'   =>  '<img src="/img/smileys/tongue_out.png" alt=":-p" class="smiley" />',
+                ':p'    =>  '<img src="/img/smileys/tongue_out.png" alt=":p" class="smiley" />',
+                ':('    =>  '<img src="/img/smileys/frowning.png" alt=":(" class="smiley" />',
+                ':o'    =>  '<img src="/img/smileys/gasping.png" alt=":o" class="smiley" />',
+                ':O'    =>  '<img src="/img/smileys/gasping.png" alt=":O" class="smiley" />',
+                ':0'    =>  '<img src="/img/smileys/gasping.png" alt=":0" class="smiley" />',
+                ':|'    =>  '<img src="/img/smileys/speechless.png" alt=":|" class="smiley" />',
+                ':-|'   =>  '<img src="/img/smileys/speechless.png" alt=":-|" class="smiley" />',
+                ':/'    =>  '<img src="/img/smileys/unsure.png" alt=":/" class="smiley" />',
+                ':-/'   =>  '<img src="/img/smileys/unsure.png" alt=":-/" class="smiley" />',
+                '>:('   =>  '<img src="/img/smileys/angry.png" alt=">:(" class="smiley" />',
+                ':3'   =>  '<img src="/img/smileys/cute.png" alt=":3" class="smiley" />',
+                ';3'   =>  '<img src="/img/smileys/cute_winking.png" alt=";3" class="smiley" />',
+                '3:)'   =>  '<img src="/img/smileys/devil.png" alt="3:)" class="smiley" />',
+                '^^'   =>  '<img src="/img/smileys/happy_smiling.png" alt="^^" class="smiley" />',
+                '<3'   =>  '<img src="/img/smileys/heart.png" alt="<3" class="smiley" />',
+                'o_O'   =>  '<img src="/img/smileys/surprised.png" alt="o_O" class="smiley" />',
+                'o.O'   =>  '<img src="/img/smileys/surprised.png" alt="o.O" class="smiley" />',
+                'O_o'   =>  '<img src="/img/smileys/surprised_2.png" alt="" class="smiley" />',
+                'O.o'   =>  '<img src="/img/smileys/surprised_2.png" alt="O.o" class="smiley" />',
+                '-_-'   =>  '<img src="/img/smileys/tired.png" alt="-_-" class="smiley" />',
+                'D:'   =>  '<img src="/img/smileys/terrified.png" alt="D:" class="smiley" />',
+                ';P'    =>  '<img src="/img/smileys/winking_tongue_out.png" alt=";P" class="smiley" />',
+                ';-P'   =>  '<img src="/img/smileys/winking_tongue_out.png" alt=";-P" class="smiley" />',
+                ';-p'   =>  '<img src="/img/smileys/winking_tongue_out.png" alt=";-p" class="smiley" />',
+                ';p'    =>  '<img src="/img/smileys/winking_tongue_out.png" alt=";p" class="smiley" />',
+                ':\'('   =>  '<img src="/img/smileys/crying.png" alt=":\'(" class="smiley" />',
+                '$_$'   =>  '<img src="/img/smileys/greedy.png" alt="$_$" class="smiley" />',
+                ':pulpo:'   =>  '<img src="/img/smileys/cthulhu.png" alt=":pulpo:" class="smiley" />',
+        );
+        
+        foreach($icons as $icon=>$image) {
+            $return = preg_replace('#(?<=\s|^)(' . preg_quote($icon,'#') . ')(?=\s|$)#',$image,$return);
+        }
         
         if($addslashes)
         {
