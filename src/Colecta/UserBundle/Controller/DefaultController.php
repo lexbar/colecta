@@ -126,11 +126,12 @@ class DefaultController extends Controller
                 
                 
                 $mailer = $this->get('mailer');
+                $configmail = $this->container->getParameter('mail');
                 
                 $message = \Swift_Message::newInstance();
                 //$logo = $message->embed(\Swift_Image::fromPath($this->get('kernel')->getRootDir().'/../web/logo.png'));
 			    $message->setSubject('Regenerar contraseña - Ciclubs')
-			        ->setFrom($this->container->getParameter('from.mail'))
+			        ->setFrom($configmail['from'])
 			        ->setTo($user->getMail())
 			        //->addPart($this->renderView('CaucesTiendaBundle:Mail:regalo.txt.twig', array('request'=>$r, 'payment'=>$payment)), 'text/plain')
 			        ->setBody($this->renderView('ColectaUserBundle:Default:resetPasswordMail.txt.twig', array('user'=>$user, 'code'=>$code)), 'text/plain');

@@ -395,11 +395,13 @@ class DefaultController extends Controller
             else
             {
                 $mailer = $this->get('mailer');
+                $configmail = $this->container->getParameter('mail');
+                
                 $message = \Swift_Message::newInstance();
     		    $message->setSubject('Contacto en Ciclubs')
-    		        ->setFrom(array($email => $name))
+    		        ->setFrom($configmail['from'])
     		        ->setReplyTo(array($email => $name))
-    		        ->setTo(array($this->container->getParameter('admin.mail'),'zumbenet@gmail.com'))
+    		        ->setTo($configmail['admin'])
     		        ->setBody($this->renderView('ColectaItemBundle:Default:contactmail.txt.twig', array('name'=>$name, 'email'=>$email, 'text'=>$text)), 'text/plain');
     		    $mailer->send($message);
     		    

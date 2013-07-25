@@ -164,8 +164,10 @@ abstract class Item
         return array_values($all);
     }
     
-    public function canEdit(\Colecta\UserBundle\Entity\User $user)
+    public function canEdit($user)
     {
+        if($user == null) return false;
+        
         $isAuthor = $this->getAuthor() == $user;
         $role = $user->getRole();
         

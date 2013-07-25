@@ -19,7 +19,9 @@
 </div>
 
 <div class="container" id="main">
-<div class="headimg" style="background-image: url(http://turyciclo.com/img/bg/0{{ random(9) }}.jpg);"></div>
+{% if web_header_img | length %}
+<div class="headimg" style="background-image: url( {{ random(web_header_img) }} );"></div>
+{% endif %}
 <div class="row" id="body">
 <div class="span2" id="sidebar">
     <ul> 
