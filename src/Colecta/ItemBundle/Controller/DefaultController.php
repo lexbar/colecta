@@ -230,7 +230,7 @@ class DefaultController extends Controller
         
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($id);
     
-        if(!$user) 
+        if($user == 'anon.') 
         {
             $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
         }
@@ -238,7 +238,7 @@ class DefaultController extends Controller
         {
             $this->get('session')->setFlash('error', 'No existe el item');
         }
-        elseif($item->getAuthor() != $user)
+        elseif(!$user->getRole()->getItemRelateAny() && !($item->canEdit($user) && $user->getRole()->getItemRelateOwn()))
         {
             $this->get('session')->setFlash('error', 'No eres propietario');
         }
