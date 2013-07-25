@@ -26,16 +26,6 @@ class ItemExtension extends \Twig_Extension
     public function usercontentFilter($text, $addslashes = false)
     {
         $return = htmlEscapeAndLinkUrls($text);
-        
-        $return = preg_replace(
-                                array(  
-                                    "#\*([^\*]+)\*#",
-                                    "#_([^_]+)_#",
-                                ),array(
-                                    ' <strong>$1</strong> ',
-                                    ' <span style="text-decoration:underline;">$1</span> ',
-                                ), $return
-        );
         $icons = array(
                 ':)'    =>  '<img src="/img/smileys/smiling.png" alt=":)" class="smiley" />',
                 ':-)'   =>  '<img src="/img/smileys/smiling.png" alt=":-)" class="smiley" />',
@@ -59,7 +49,7 @@ class ItemExtension extends \Twig_Extension
                 ';3'   =>  '<img src="/img/smileys/cute_winking.png" alt=";3" class="smiley" />',
                 '3:)'   =>  '<img src="/img/smileys/devil.png" alt="3:)" class="smiley" />',
                 '^^'   =>  '<img src="/img/smileys/happy_smiling.png" alt="^^" class="smiley" />',
-                '<3'   =>  '<img src="/img/smileys/heart.png" alt="<3" class="smiley" />',
+                '&lt;3'   =>  '<img src="/img/smileys/heart.png" alt="<3" class="smiley" />',
                 'o_O'   =>  '<img src="/img/smileys/surprised.png" alt="o_O" class="smiley" />',
                 'o.O'   =>  '<img src="/img/smileys/surprised.png" alt="o.O" class="smiley" />',
                 'O_o'   =>  '<img src="/img/smileys/surprised_2.png" alt="" class="smiley" />',
@@ -78,6 +68,16 @@ class ItemExtension extends \Twig_Extension
         foreach($icons as $icon=>$image) {
             $return = preg_replace('#(?<=\s|^)(' . preg_quote($icon,'#') . ')(?=\s|$)#',$image,$return);
         }
+        
+        $return = preg_replace(
+                                array(  
+                                    "#(?<=\s|^)\*([^\*]+)\*(?=\s|$)#",
+                                    "#(?<=\s|^)_([^_]+)_(?=\s|$)#",
+                                ),array(
+                                    ' <strong>$2</strong> ',
+                                    ' <span style="text-decoration:underline;">$2</span> ',
+                                ), $return
+        );
         
         if($addslashes)
         {
