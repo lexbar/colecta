@@ -43,20 +43,23 @@ class ActivitiesController extends Controller
             $newusers = array(); //the new array of users, that will be sorted by total kms
             foreach($users as $u)
             {
-                $k = 0;
-                
-                $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 ORDER BY e.dateini ASC')->setParameter('user', $u)->getResult();
-                
-                if(count($assistances))
+                if($u->getRole()->getName() != 'ROLE_BANNED')
                 {
-                    foreach($assistances as $as)
-                    {
-                        $k += $as->getKm();
-                    }
-                }
+                    $k = 0;
                 
-                $kms[$u->getId()] = $k;
-                $newusers[$k][] = $u;
+                    $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 ORDER BY e.dateini ASC')->setParameter('user', $u)->getResult();
+                    
+                    if(count($assistances))
+                    {
+                        foreach($assistances as $as)
+                        {
+                            $k += $as->getKm();
+                        }
+                    }
+                    
+                    $kms[$u->getId()] = $k;
+                    $newusers[$k][] = $u;
+                }
             }
             
             // now we resort the array to make it of 1d instead of 2d
