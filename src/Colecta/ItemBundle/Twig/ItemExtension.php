@@ -54,7 +54,7 @@ class ItemExtension extends \Twig_Extension
                 ':-|'   =>  '<img src="/img/smileys/speechless.png" alt=":-|" class="smiley" />',
                 ':/'    =>  '<img src="/img/smileys/unsure.png" alt=":/" class="smiley" />',
                 ':-/'   =>  '<img src="/img/smileys/unsure.png" alt=":-/" class="smiley" />',
-                '>:('   =>  '<img src="/img/smileys/angry.png" alt=">:(" class="smiley" />',
+                '&gt;:('   =>  '<img src="/img/smileys/angry.png" alt=">:(" class="smiley" />',
                 ':3'   =>  '<img src="/img/smileys/cute.png" alt=":3" class="smiley" />',
                 ';3'   =>  '<img src="/img/smileys/cute_winking.png" alt=";3" class="smiley" />',
                 '3:)'   =>  '<img src="/img/smileys/devil.png" alt="3:)" class="smiley" />',
