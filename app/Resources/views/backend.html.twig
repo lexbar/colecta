@@ -1,0 +1,60 @@
+{% if app.user %}
+{% extends '::base.html.twig' %}
+
+{% block title 'Club Mountain Bike Turyciclo' %}
+
+{% block body %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <h1><a class="brand" href="/">Club Mountain Bike Turyciclo</a></h1>
+            
+            <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
+                <div class="input-append">
+                    <input type="text" class="input-medium search-query" name="q" value="{{ app.request.get('search') }}">
+                    <button type="submit" class="btn">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="main">
+<div class="row" id="body">
+<div class="span2" id="sidebar">
+    <ul> 
+        <li><a class="{% block chat '' %} blue" href="{{ path('ColectaChatIndex') }}"><i class="icon-cogs"></i> <span>Ajustes</span></a></li>
+        <li><a class="{% block activities '' %} orange" href="{{ path('ColectaActivitiesIndex') }}"><i class="icon-male"></i> <span>Usuarios</span></a></li>
+        <li><a class="{% block rank '' %} green" href="{{ path('ColectaActivitiesRank') }}"><i class="icon-file-text"></i> <span>Páginas</span></a></li>  
+        <li><a class="{% block payment '' %}" href="{{ path('ColectaPaymentIndex') }}"><i class="icon-bar-chart"></i> <span>Estadísticas</span></a></li>
+        <li><a class="{% block lottery '' %}" href="{{ path('ColectaLotteryIndex') }}"><i class="icon-dashboard"></i> <span>Plan</span></a></li>
+    </ul> 
+</div>
+
+<div class="span7" id="stream">
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+        {{ app.session.flash('error') }}
+    </div>
+{% endif %}
+{% if app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+        {{ app.session.flash('success') }}
+    </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+</div>
+
+<div class="span3" id="userbar">
+    
+    <p class="myself"><img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> <strong class="name">{{ app.user.name }}</strong><br><a href="{{ path('userEditProfile') }}">Editar perfil</a></p>
+    
+    {% block navigation %}
+        {% include '::navigation.html.twig' with {'navigation': 'backend'} %}
+    {% endblock %}
+</div>
+</div>
+</div>
+{% endblock %}
+{% endif %}

@@ -343,6 +343,10 @@ form.form-horizontal .controls textarea {
     font-weight: bold;
     letter-spacing: 0.2px;
 }
+#itemSubmit ul.types li.cancel {
+    display: none;
+    padding: 0;
+}
 #itemSubmit.active .text {
     display: none;
 }
@@ -376,6 +380,9 @@ form.form-horizontal .controls textarea {
 }
 #itemSubmit ul.types.chosen li {
     display: none;
+}
+#itemSubmit ul.types.chosen li.cancel {
+    display: block;
 }
 #itemSubmit ul.types.chosen li input {
     display: none;

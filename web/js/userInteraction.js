@@ -39,6 +39,26 @@ function typeChosen(type) {
     }
 }
 
+function cancelType() {
+    itemSubmitType = false;
+    
+    window.onbeforeunload = null;
+    
+    $('#itemSubmit').removeClass('active');
+    $('#itemSubmit .types').removeClass('chosen');
+    $('#itemSubmit .types *').removeClass('active');
+    
+    $('#Route').remove();
+    $('#itemSubmit .types .route').prepend('<input type="file" id="Route" name="file">');
+    $('#Route').change(RouteChange);
+    
+    $('#File').remove();
+    $('#itemSubmit .types .file').prepend('<input type="file" id="File" multiple="multiple" name="file[]">');
+    $('#File').change(FileChange);
+    
+    $('#itemDetails').html('');
+}
+
 function ItemAttachForm(id) {
     var categorylist = $('#itemSubmit .category').first().html();
     if(typeof categorylist == 'undefined') {
@@ -48,7 +68,7 @@ function ItemAttachForm(id) {
     $('#itemSubmit').remove();
     itemSubmitType = false;
     
-    $('#item'+id+' .itemActions').first().after('<form id="itemSubmit" class="form-horizontal" enctype="multipart/form-data" method="POST" action=""><div class="mainData"><input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título"><textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea></div><div id="itemDetails"></div><ul class="types unstyled"><li class="pull-left text">Adjuntar: </li><li class="pull-left post" onClick="loadPostForm();"><i class="icon-file-text-alt"></i> Texto</li><li class="pull-left event" onClick="loadEventForm();"><i class="icon-calendar-empty"></i> Actividad</li><li class="pull-left route"> <input type="file" name="file" id="Route"><i class="icon-globe"></i> Ruta</li><li class="pull-left place" onClick="loadPlaceForm();"><i class="icon-map-marker"></i> Lugar</li><li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivos</li><li class="pull-right"><button class="btn btn-small btn-primary" type="submit" id="itemSubmitButton"><i id="itemSubmitButtonLoading"></i> <span id="itemSubmitButtonText">Publicar</span> </button></li><li class="pull-right category">'+categorylist+'</li></ul><input type="hidden" name="attachTo" value="'+id+'"></form>');
+    $('#item'+id+' .itemActions').first().after('<form id="itemSubmit" class="form-horizontal" enctype="multipart/form-data" method="POST" action=""><div class="mainData"><input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título"><textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea></div><div id="itemDetails"></div><ul class="types unstyled"><li class="pull-left cancel"><button type="button" class="btn btn-mini" onclick="cancelType()"><i class="icon-remove"></i> Cancelar</button></li><li class="pull-left text">Adjuntar: </li><li class="pull-left post" onClick="loadPostForm();"><i class="icon-file-text-alt"></i> Texto</li><li class="pull-left event" onClick="loadEventForm();"><i class="icon-calendar-empty"></i> Actividad</li><li class="pull-left route"> <input type="file" name="file" id="Route"><i class="icon-globe"></i> Ruta</li><li class="pull-left place" onClick="loadPlaceForm();"><i class="icon-map-marker"></i> Lugar</li><li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivos</li><li class="pull-right"><button class="btn btn-small btn-primary" type="submit" id="itemSubmitButton"><i id="itemSubmitButtonLoading"></i> <span id="itemSubmitButtonText">Publicar</span> </button></li><li class="pull-right category">'+categorylist+'</li></ul><input type="hidden" name="attachTo" value="'+id+'"></form>');
     
     $('#Route').change(RouteChange);
     $('#File').change(FileChange);

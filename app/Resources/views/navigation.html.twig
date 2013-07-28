@@ -16,7 +16,7 @@
         <a href="{{ path('ColectaChatIndex') }}"><i class="icon-unlock-alt icon-fixed-width"></i> Intranet</a>
     </li>
     {% if app.user.role.siteConfig %}
-    <li{% if navigation == 'config' %} class="active"{% endif %}>
+    <li{% if navigation == 'backend' %} class="active"{% endif %}>
         <a href="{{ path('ColectaChatIndex') }}"><i class="icon-wrench icon-fixed-width"></i> Configuración</a>
     </li>
     {% endif %}
