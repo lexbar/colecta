@@ -77,7 +77,7 @@ class FileController extends Controller
             
             if(! $request->request->get('name') )
             {
-                $item->setName($user->getName() . ' ' . date("d.m.y"));
+                $item->setName($user->getName() . ' ' . date("d/m/Y"));
             }
             else
             {
