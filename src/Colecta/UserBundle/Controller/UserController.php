@@ -246,6 +246,11 @@ class UserController extends Controller
                 file_put_contents($cachePath, $image);
             }
             
+            if($width != 40 || $height != 40) 
+            {
+                unlink($cachePath);
+            }
+            
             $response->setStatusCode(200);
             $response->setContent($image);
             $response->headers->set('Content-Type', mime_content_type( $imagefile ));
