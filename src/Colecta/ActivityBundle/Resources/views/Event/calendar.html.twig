@@ -6,17 +6,33 @@
 
 
 <strong class="calendartitle">
-    {% set targetdateob = targetdateob.modify('-1 month') %} {# decrease 1 month #}
+    {# current Y-m #}
+    {% set currentY = targetdateob.format('Y') %}
+    {% set currentm = targetdateob.format('m') %}
     
-    <a href="{{ path('ColectaEventDate', {'date': targetdateob.format('Y-m') }) }}" class="pull-left"><i class="icon-caret-left"></i> {% include '::month.html.twig' with {'date':targetdateob, 'short':1} %}</a> 
+    {# previous Y-m #}
+    {% if currentm == 1 %}
+        {% set previousY = currentY - 1 %}
+        {% set previousm = 12 %}
+    {% else %}
+        {% set previousY = currentY %}
+        {% set previousm = currentm - 1 %}
+    {% endif %}
     
-    {% set targetdateob = targetdateob.modify('+1 month') %} {# increase 1 month #}
+    {# next Y-m #}
+    {% if currentm == 12 %}
+        {% set nextY = currentY + 1 %}
+        {% set nextm = 1 %}
+    {% else %}
+        {% set nextY = currentY %}
+        {% set nextm = currentm + 1 %}
+    {% endif %}
     
-    <a href="{{ path('ColectaEventDate', {'date': targetdateob.format('Y-m') }) }}">{% include '::month.html.twig' with {'date':targetdateob, 'short':0} %} de {{ targetdate | date('Y') }}</a>
+    <a href="{{ path('ColectaEventDate', {'date': previousY ~ '-' ~ previousm }) }}" class="pull-left"><i class="icon-caret-left"></i> {% include '::month.html.twig' with {'date':previousY ~ '-' ~ previousm ~ '-1', 'short':1} %}</a> 
     
-    {% set targetdateob = targetdateob.modify('+1 month') %} {# increase 1 month #}
+    <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm }) }}">{% include '::month.html.twig' with {'date':currentY ~ '-' ~ currentm ~ '-1', 'short':0} %} de {{ currentY }}</a>
     
-    <a href="{{ path('ColectaEventDate', {'date': targetdateob.format('Y-m') }) }}" class="pull-right">{% include '::month.html.twig' with {'date':targetdateob, 'short':1} %} <i class="icon-caret-right"></i></a>     
+    <a href="{{ path('ColectaEventDate', {'date': nextY ~ '-' ~ nextm }) }}" class="pull-right">{% include '::month.html.twig' with {'date':nextY ~ '-' ~ nextm ~ '-1', 'short':1} %} <i class="icon-caret-right"></i></a>     
 </strong>
     
 <table class="table table-condensed calendar">
