@@ -45,7 +45,8 @@
     </div>
 {% endif %}
 
-{% for item in items %}
+{% set shownItems = [] %}
+{% for item in items if not ( item.part and not item.id in shownItems ) %}
     
     <div class="item" id="item{{ item.id}}">
         {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
@@ -60,7 +61,8 @@
         
         {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     </div>
-
+    
+    {% set shownItems = shownItems | merge([item.id]) %}
 {% else %}
     <h3>Nadie ha publicado nada... por ahora.</h3>
 {% endfor %}
