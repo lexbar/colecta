@@ -101,9 +101,17 @@ class DefaultController extends Controller
         
         return $this->render('ColectaItemBundle:Default:sincelastvisit.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
-    public function dismissSinceLastVisitAction()
+    public function dismissSinceLastVisitAction($date)
     {
-        $this->get('session')->set('sinceLastVisit',new \DateTime('now'));
+        $newDate = new \DateTime($date);
+        $dateSLV = $this->get('session')->get('sinceLastVisit');
+        
+        if( ! $newDate or $newDate > new \DateTime('now') or ($dateSLV and $newDate < $dateSLV) )
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $this->get('session')->set('sinceLastVisit', $newDate);
         
         return new RedirectResponse($this->generateUrl('ColectaDashboard'));
     }

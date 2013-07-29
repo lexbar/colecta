@@ -62,7 +62,7 @@ ColectaSinceLastVisit:
     pattern:  /ultimavisita/
     defaults: { _controller: ColectaItemBundle:Default:sinceLastVisit }
 ColectaSinceLastVisitDismiss:
-    pattern:  /ultimavisita/dismiss/
+    pattern:  /ultimavisita/dismiss/{date}
     defaults: { _controller: ColectaItemBundle:Default:dismissSinceLastVisit }
 
 
