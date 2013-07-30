@@ -17,6 +17,9 @@
     {% else %}
         {% set previousY = currentY %}
         {% set previousm = currentm - 1 %}
+        {% if previousm < 10 %}
+            {% set previousm = '0' ~ previousm %}
+        {% endif %}
     {% endif %}
     
     {# next Y-m #}
@@ -26,6 +29,10 @@
     {% else %}
         {% set nextY = currentY %}
         {% set nextm = currentm + 1 %}
+        
+        {% if nextm < 10 %}
+            {% set nextm = '0' ~ nextm %}
+        {% endif %}
     {% endif %}
     
     <a href="{{ path('ColectaEventDate', {'date': previousY ~ '-' ~ previousm }) }}" class="pull-left"><i class="icon-caret-left"></i> {% include '::month.html.twig' with {'date':previousY ~ '-' ~ previousm ~ '-1', 'short':1} %}</a> 
