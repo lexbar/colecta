@@ -63,6 +63,9 @@
     </div>
     
     {% set shownItems = shownItems | merge([item.id]) %}
+    {% for ri in item.related %}
+        {% set shownItems = shownItems | merge([ri.id]) %}
+    {% endfor %}
 {% else %}
     <h3>Nadie ha publicado nada... por ahora.</h3>
 {% endfor %}
