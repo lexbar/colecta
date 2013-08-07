@@ -46,7 +46,7 @@
 {% endif %}
 
 {% set shownItems = [] %}
-{% for item in items if not ( item.part and not item.id in shownItems ) %}
+{% for item in items if not item.id in shownItems %}
     
     <div class="item" id="item{{ item.id}}">
         {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
