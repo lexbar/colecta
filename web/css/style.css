@@ -968,8 +968,7 @@ div.assistances ul li a {
     font-weight: bold;
 }
 .calendar td.today {
-    border: 4px solid #428BCA;
-    padding: 2px;
+    border: 1px solid #428BCA;
 }
 .calendar .active {
     background-color: #E6F2F7;

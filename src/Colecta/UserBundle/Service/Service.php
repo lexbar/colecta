@@ -8,6 +8,7 @@ class Service
     private $securityContext;
     private $doctrine;
     private $lastAccessDone = false;
+    private $visitDone = false;
     
     public function __construct(SecurityContextInterface $securityContext, $doctrine, $session)
     {
@@ -133,6 +134,30 @@ class Service
                 $this->session->set('sinceLastVisit','dismiss');
             }
         }
+    }
+    
+    public function visit()
+    {
+        if(!$this->visitDone)
+        {
+            $em = $this->doctrine->getEntityManager();
+            
+            if($this->securityContext->getToken())
+            {
+                $user = $this->securityContext->getToken()->getUser();
+            
+                if($user != 'anon.')
+                {
+                    $user->setLastAccess(new \DateTime('now'));
+                
+                    $em->persist($user); 
+                    $em->flush();
+                }
+            }
+            
+            $this->visitDone = true;
+        }
+       
     }
 }
 ?>
