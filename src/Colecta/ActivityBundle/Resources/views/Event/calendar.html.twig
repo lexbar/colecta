@@ -1,4 +1,4 @@
-{% set firstWeekDay = ((targetdate | date('Y-m-1')) | date('w')) - 1 %}
+{% set firstWeekDay = ((targetdate | date('Y-m-1')) | date('N')) - 1 %}
 {% set daysOfMonth = targetdate | date('t') %}
 {% set rows = (firstWeekDay + daysOfMonth) // 7 %}
 {% if ((firstWeekDay + daysOfMonth) / 7) > rows %}{% set rows = rows + 1 %}{% endif %}
