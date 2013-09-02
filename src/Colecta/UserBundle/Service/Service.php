@@ -66,7 +66,7 @@ class Service
             $slv = $this->session->get('sinceLastVisit');
             $user = $this->securityContext->getToken()->getUser();
             
-            if(empty($slv) || $slv == 'dismiss') {
+            if(empty($slv) || ! $slv instanceof \DateTime) {
                 $slv = $user->getLastAccess();
             }
             
