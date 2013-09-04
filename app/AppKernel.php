@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Colecta\ColectiveBundle\ColectaColectiveBundle(),
             new Colecta\ActivityBundle\ColectaActivityBundle(),
             new Colecta\IntranetBundle\ColectaIntranetBundle(),
+            new Colecta\StatsBundle\StatsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
