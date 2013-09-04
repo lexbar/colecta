@@ -5,7 +5,7 @@
 {% set dayOfMonth = 1 %}
 
 
-<strong class="calendartitle">
+<span class="calendartitle">
     {# current Y-m #}
     {% set currentY = targetdateob.format('Y') %}
     {% set currentm = targetdateob.format('m') %}
@@ -40,7 +40,7 @@
     <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm }) }}">{% include '::month.html.twig' with {'date':currentY ~ '-' ~ currentm ~ '-1', 'short':0} %} de {{ currentY }}</a>
     
     <a href="{{ path('ColectaEventDate', {'date': nextY ~ '-' ~ nextm }) }}" class="pull-right">{% include '::month.html.twig' with {'date':nextY ~ '-' ~ nextm ~ '-1', 'short':1} %} <i class="icon-caret-right"></i></a>     
-</strong>
+</span>
     
 <table class="table table-condensed calendar">
     <thead><tr><th>lun</th><th>mar</th><th>mie</th><th>jue</th><th>vie</th><th>sáb</th><th>dom</th></tr></thead>

@@ -961,6 +961,7 @@ div.assistances ul li a {
 }
 .calendar td {
     text-align: center;
+    border-color: #eee;
 }
 .calendar td a {
     text-decoration: underline;
