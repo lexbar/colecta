@@ -1,5 +1,7 @@
 <?php
 
+namespace Colecta\StatsBundle\Service\UAParser;
+
 /*!
  * ua-parser-php v2.1.1
  *

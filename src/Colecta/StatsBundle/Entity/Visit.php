@@ -31,7 +31,7 @@ class Visit
     /**
      * @var integer
      *
-     * @ORM\Column(name="ip", type="integer")
+     * @ORM\Column(name="ip", type="bigint")
      */
     private $ip;
 
@@ -41,6 +41,13 @@ class Visit
      * @ORM\Column(name="route", type="string", length=255)
      */
     private $route;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=20)
+     */
+    private $type;
 
     /**
      * @var string
@@ -48,6 +55,43 @@ class Visit
      * @ORM\Column(name="ref", type="string", length=255)
      */
     private $ref;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="osName", type="string", length=25)
+     */
+    private $osName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="osVersion", type="string", length=20)
+     */
+    private $osVersion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="browserName", type="string", length=25)
+     */
+    private $browserName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="browserVersion", type="string", length=20)
+     */
+    private $browserVersion;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="device", type="string", length=30)
+     */
+    private $device;
+    
+    //FROM HERE ON, THE DATA IS COLLECTED IN A SECCOND PHASE VIA JAVASCRIPT
 
     /**
      * @var float
@@ -70,26 +114,6 @@ class Visit
      */
     private $screenh=0;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="os", type="string", length=15)
-     */
-    private $os='';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="browser", type="string", length=25)
-     */
-    private $browser='';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="browserVersion", type="string", length=20)
-     */
-    private $browserVersion='';
 
     /**
      * @var string
@@ -294,26 +318,26 @@ class Visit
     }
 
     /**
-     * Set browser
+     * Set browserName
      *
      * @param string $browser
      * @return Visit
      */
-    public function setBrowser($browser)
+    public function setBrowserName($browserName)
     {
-        $this->browser = $browser;
+        $this->browserName = $browserName;
     
         return $this;
     }
 
     /**
-     * Get browser
+     * Get browserName
      *
      * @return string 
      */
-    public function getBrowser()
+    public function getBrowserName()
     {
-        return $this->browser;
+        return $this->browserName;
     }
 
     /**
@@ -360,5 +384,97 @@ class Visit
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * Set osName
+     *
+     * @param string $osName
+     * @return Visit
+     */
+    public function setOsName($osName)
+    {
+        $this->osName = $osName;
+    
+        return $this;
+    }
+
+    /**
+     * Get osName
+     *
+     * @return string 
+     */
+    public function getOsName()
+    {
+        return $this->osName;
+    }
+
+    /**
+     * Set osVersion
+     *
+     * @param string $osVersion
+     * @return Visit
+     */
+    public function setOsVersion($osVersion)
+    {
+        $this->osVersion = $osVersion;
+    
+        return $this;
+    }
+
+    /**
+     * Get osVersion
+     *
+     * @return string 
+     */
+    public function getOsVersion()
+    {
+        return $this->osVersion;
+    }
+
+    /**
+     * Set device
+     *
+     * @param string $device
+     * @return Visit
+     */
+    public function setDevice($device)
+    {
+        $this->device = $device;
+    
+        return $this;
+    }
+
+    /**
+     * Get device
+     *
+     * @return string 
+     */
+    public function getDevice()
+    {
+        return $this->device;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Visit
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function gettype()
+    {
+        return $this->type;
     }
 }

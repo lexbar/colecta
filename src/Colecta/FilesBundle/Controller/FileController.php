@@ -273,6 +273,8 @@ class FileController extends Controller
     }
     public function XHRPreviewAction($token)
     {
+        $this->get('request')->setRequestFormat('image');
+        
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.') 
@@ -844,6 +846,8 @@ class FileController extends Controller
     }
     public function thumbnailAction($slug, $width, $height)
     {    
+        $this->get('request')->setRequestFormat('image');
+        
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/thumbnail-' . $slug . '_' . $width . 'x' . $height ;
         
         $response = new Response();
@@ -899,6 +903,8 @@ class FileController extends Controller
     }
     public function resizeAction($slug, $width, $height) //max width and height
     {
+        $this->get('request')->setRequestFormat('image');
+        
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/bestfit-' . $slug . '_' . $width . 'x' . $height ;
         
         $response = new Response();

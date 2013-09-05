@@ -57,6 +57,8 @@ class RouteController extends Controller
     }
     public function mapAction($id)
     {
+        $this->get('request')->setRequestFormat('image');
+        
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id ;
         
         if(file_exists($cachePath))
@@ -733,6 +735,8 @@ class RouteController extends Controller
     
     public function downloadAction($slug, $extension)
     {
+        $this->get('request')->setRequestFormat($extension);
+        
         $em = $this->getDoctrine()->getEntityManager();
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         

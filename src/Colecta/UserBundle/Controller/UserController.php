@@ -168,6 +168,8 @@ class UserController extends Controller
     
     public function ajaxsearchAction()
     {
+        $this->get('request')->setRequestFormat('json');
+        
         $search = trim($this->get('request')->query->get('search'));
         
         $em = $this->getDoctrine()->getEntityManager();
@@ -181,6 +183,7 @@ class UserController extends Controller
     
     public function avatarAction($uid,$width,$height)
     {
+        $this->get('request')->setRequestFormat('image');
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/avatar-' . $uid . '_' . $width . 'x' . $height ;
         
         $response = new Response();
