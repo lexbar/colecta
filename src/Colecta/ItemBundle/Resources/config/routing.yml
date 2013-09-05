@@ -19,6 +19,9 @@ ColectaItemRelate:
 ColectaComment:
     pattern:  /comment/{slug}/
     defaults: { _controller: ColectaItemBundle:Comment:comment }
+ColectaCommentRemove:
+    pattern:  /removecomment/{id}/
+    defaults: { _controller: ColectaItemBundle:Comment:remove }
 ColectaPostIndex:
     pattern:  /textos/
     defaults: { _controller: ColectaItemBundle:Post:index }

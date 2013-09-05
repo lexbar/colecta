@@ -149,4 +149,43 @@ class CommentController extends Controller
         return new RedirectResponse($referer);
     }
     
+    function removeAction($id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if($user == 'anon.') 
+        {
+            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+        }
+        else
+        {
+            $comment = $em->getRepository('ColectaItemBundle:Comment')->findOneById($id);
+            
+            if(!$comment)
+            {
+                $this->get('session')->setFlash('error', 'El comentario no existe');
+            }
+            elseif($comment->getUser() != $user && !$user->getRole()->getUserEdit()) //if user can edit any other user, means he can change any of their data (including comments)
+            {
+                $this->get('session')->setFlash('error', 'No tienes permiso para borrar este comentario');
+            }
+            else
+            {
+                $em->remove($comment);
+                $em->flush();
+                
+                $this->get('session')->setFlash('sucess', 'Mensaje eliminado');
+            }
+        }
+        
+        $referer = $this->get('request')->headers->get('referer');
+        
+        if(empty($referer))
+        {
+            $referer = $this->generateUrl('ColectaDashboard');
+        }
+        
+        return new RedirectResponse($referer);
+    }
 }

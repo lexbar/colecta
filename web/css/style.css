@@ -899,6 +899,14 @@ div.assistances ul li a {
     background-color: #F6F6F6;
     padding: 3px;
 }
+.comments .media .removeComment {
+    color: #777;
+    margin-right: 5px;
+    display: none;
+}
+.comments .media:hover .removeComment {
+    display: block;
+}
 .comments form {
     margin-bottom: 5px;
 }
