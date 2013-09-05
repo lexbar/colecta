@@ -22,7 +22,7 @@
         <div class="media-body{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < comment.date %} new{% endif %}">
         
             {% if app.user and (app.user == comment.user or app.user.role.userEdit) %}
-            <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="pull-right removeComment"><i class="icon-remove"></i></a>
+            <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="pull-right removeComment" onclick="return confirm('¿Seguro que deseas borrar este comentario?');"><i class="icon-remove"></i></a>
             {% endif %}
             
             <p class="media-heading">
