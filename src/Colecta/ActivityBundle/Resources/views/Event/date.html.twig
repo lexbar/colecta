@@ -19,8 +19,20 @@
 {% render "ColectaActivityBundle:Event:calendar" with {'date':date | date('Y/n/j')} %}
 </div>
 
+{% set hiddenset = 0 %}
+{% if date | date('Ym') == 'now' | date('Ym') and items | length > 0 and items[0].happened %}
+    {% set hiddenset = 1 %}
+    <div id="hiddenset" style="display:none;">
+{% endif %}
+
 {% for item in items %}
-      
+    
+    {% if hiddenset and not item.happened %}
+        {% set hiddenset = 0 %}
+        </div>
+        <p style="margin:10px 0 20px 45px;"><button onClick="$(this).css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-small"><i class="icon-ellipsis-vertical" style="padding:0 5px"></i> Ver eventos pasados</button></p>
+    {% endif %}
+    
     {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
     {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
