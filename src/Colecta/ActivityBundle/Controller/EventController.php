@@ -77,17 +77,13 @@ class EventController extends Controller
             if(strlen($date) == 7) //format YYYY-MM
             {
                 $ismonth = true;
-                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".$myDate->format('Y-m-1 00:00:00')."' AND e.dateini <= '".$myDate->format('Y-m-31 23:59:59')."' ORDER BY e.dateini ASC")->getResult();
-                if(count($items))
-                {
-                   $myDate =  $items[0]->getDateIni();
-                }
+                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini <= '".$myDate->format('Y-m-t 23:59:59')."' AND e.dateend >= '".$myDate->format('Y-m-1 00:00:00')."' ORDER BY e.dateini ASC")->getResult();
                 
             }
             else
             {
                 $ismonth = false;
-                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".$myDate->format('Y-m-d 00:00:00')."' AND e.dateini <= '".$myDate->format('Y-m-d 23:59:59')."' ORDER BY e.dateini ASC")->getResult();
+                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini <= '".$myDate->format('Y-m-d 23:59:59')."' AND e.dateend >= '".$myDate->format('Y-m-d 00:00:00')."' ORDER BY e.dateini ASC")->getResult();
             } 
         }
         else
@@ -707,7 +703,7 @@ class EventController extends Controller
     {
         $dateOb = new \DateTime($date);
         $em = $this->getDoctrine()->getEntityManager();
-        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.$dateOb->format('Y-m-1 00:00:00').'\' AND e.dateini < \''.$dateOb->format('Y-').(intval($dateOb->format('m'))+1).'-1 00:00:00'.'\' ORDER BY e.dateini ASC')->getResult();
+        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini <= \''.$dateOb->format('Y-m-t 23:59:59').'\' AND e.dateend >= \''.$dateOb->format('Y-m-1 00:00:00').'\' ORDER BY e.dateini ASC')->getResult();
         
         //array of each day of the month prepared with empty arrays
         $ev = array();
@@ -718,8 +714,29 @@ class EventController extends Controller
         {
             foreach($items as $item)
             {
-                $day = intval($item->getDateini()->format('j'));
-                $ev[$day][] = $item;
+                if($item->getDateini()->format('m') != $dateOb->format('m')) //the event starts before this month
+                {
+                    $dayIni = 1;
+                }
+                else
+                {
+                    $dayIni = intval($item->getDateini()->format('j'));
+                }
+                
+                if($item->getDateend()->format('m') != $dateOb->format('m')) //the event ends after this month
+                {
+                    $dayEnd = $dateOb->format('t'); //last day of current month
+                }
+                else
+                {
+                    $dayEnd = intval($item->getDateend()->format('j'));
+                }
+                
+                //Fullfill days of the month
+                for($i = $dayIni; $i <= $dayEnd; $i++)
+                {
+                    $ev[$i][] = $item;
+                }
             }
         }
         
