@@ -97,6 +97,45 @@ class EventController extends Controller
         
         return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items, 'date' => $myDate, 'ismonth' => $ismonth));
     }
+    
+    public function date2Action($date)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        try 
+        {
+            $myDate = new \DateTime($date);
+        }
+        catch(Exception $e)
+        {
+            $myDate = false;
+        }
+        
+        if($myDate)
+        {
+            if(strlen($date) == 7) //format YYYY-MM
+            {
+                $ismonth = true;
+                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".$myDate->format('Y-m-1 00:00:00')."' AND e.dateini <= '".$myDate->format('Y-m-31 23:59:59')."' ORDER BY e.dateini ASC")->getResult();
+                if(count($items))
+                {
+                   $myDate =  $items[0]->getDateIni();
+                }
+                
+            }
+            else
+            {
+                $ismonth = false;
+                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".$myDate->format('Y-m-d 00:00:00')."' AND e.dateini <= '".$myDate->format('Y-m-d 23:59:59')."' ORDER BY e.dateini ASC")->getResult();
+            } 
+        }
+        else
+        {
+            $items = array();
+        }
+        
+        return $this->render('ColectaActivityBundle:Event:date2.html.twig', array('items' => $items, 'date' => $myDate, 'ismonth' => $ismonth));
+    }
     public function detailsFormAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
