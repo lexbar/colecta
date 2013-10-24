@@ -17,26 +17,36 @@
     </div>
 </div>
 
-<div class="list-group">
+<ul class="list-group">
     {% for message in messages %}
-        <a href="{{ path('userMessageResponse',{'responseto':message.id}) }}" class="list-group-item">
-            <h4><img width="30" height="30" src="{% if message.origin.avatar %}{{ path('userAvatar',{'uid':message.origin.id,'width':30,'height':30}) }}{% else %}/img/unknown.gif{% endif %}"> a {{ message.origin.name }}</h4>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-sm-1 col-xs-2">
+                    <img width="40" height="40" src="{% if message.origin.avatar %}{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}">
+                </div>
+                
+                <div class="col-sm-9 col-xs-8">
             
-            <p>{{ message.text | usercontent | raw | nl2br }}</p>
+                    <p><strong>{{ message.origin.name }}</strong> {{ message.text | usercontent | raw | nl2br }}</p>
             
-            {% if message.responseto %}
-                <br><small>En respuesta a:</small>
-                <blockquote>
-                    {{ message.responseto.text | usercontent | raw | nl2br }}
-                </blockquote>
-            {% endif %}
+                    {% if message.responseto %}
+                        <br><small>En respuesta a:</small>
+                        <blockquote>
+                            {{ message.responseto.text | usercontent | raw | nl2br }}
+                        </blockquote>
+                    {% endif %}
             
-            <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
-        </a>
+                    <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
+                </div>
+                <div class="col-sm-2 col-xs-2">
+                    <a href="{{ path('userMessageResponse',{'responseto':message.id}) }}" class="btn btn-sm btn-block btn-default" style="min-width:25px;"><span class="hidden-xs">Responder <i class="fa fa-mail-reply"></i></span><span class="visible-xs"><i class="fa fa-mail-reply"></i></span></a>
+                </div>
+            </div>
+        </li>
     {% else %}
-        <p class="lead">No has enviado ningún mensaje</p>
+        <li class="list-group-item clearfix"><p class="lead">No tienes ningún mensaje</p></li>
     {% endfor %}
-</div>
+</ul>
 
 {% endblock %}
 
