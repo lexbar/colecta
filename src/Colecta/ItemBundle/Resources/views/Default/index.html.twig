@@ -46,8 +46,20 @@
 {% endif %}
 
 {% set shownItems = [] %}
+{% set mainItemsToShow = [] %}
+
+{% for item in items if not item.part %}
+    {% set mainItemsToShow = mainItemsToShow | merge([item.id]) %}
+{% endfor %}
 
 {% for item in items if item.id not in shownItems %}
+    {% if item.part %}
+        {% for relitem in item.related %}
+            {% if not relitem.part %}
+                {% set item = relitem %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     <div class="item" id="item{{ item.id}}">        
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
