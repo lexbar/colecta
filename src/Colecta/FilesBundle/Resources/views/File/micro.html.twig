@@ -1,11 +1,25 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
-<div class="file micro" id="item{{ item.id }}">
-    <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}<a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+<div class="item panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-folder-open"></i> <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
     
-    {% if item.filetype in ['jpeg','gif','png'] %}
-        <a class="thumbnail" style="height:100px;width:100px;" href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img height="160" width="160" src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'100', 'height':'100'}) }}"></a>
-    {% else %}
-        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
-    {% endif %}    
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+    
+        {% if item.filetype in ['jpeg','gif','png'] %}
+            <a class="thumbnail one" href="{{ path('ColectaFileView', { 'slug': item.slug }) }}" class=""><img src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'500', 'height':'200'}) }}"></a>
+        {% else %}
+            <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
+        {% endif %}
+        
+        <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
+        
+        {% if item.folder %}<p style="clear:both">Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
+    </div>
+    
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    </div>
 </div>
