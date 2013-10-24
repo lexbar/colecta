@@ -1,34 +1,42 @@
 {% extends '::frontend.html.twig' %}
 
+{% block title %}Mensajes enviados{% endblock %}
+
 {% block article %}
 
-<div class="title-block">
-    <a href="{{ path('userMessageNew')}}" class="btn btn-small btn-primary pull-right">Nuevo mensaje <i class="icon-plus"></i></a>
-    <h2>Mensajes Enviados</h2>
-    <span><a href="{{ path('userMessages') }}">Ver mensajes recibidos</a></span>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Mensajes Enviados</h2>
+    </div>
+    <div class="col-sm-3">
+        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Mensajes recibidos <i class="fa fa-inbox"></i></a>
+    </div>
+    <div class="col-sm-3">
+        <a class="btn btn-primary btn-block" href="{{ path('userMessageNew')}}">Nuevo mensaje <i class="fa fa-plus"></i></a>
+    </div>
 </div>
 
-{% for message in messages %}
-    <div class="well{% if app.session.hasFlash('message' ~ message.id) %} {{ app.session.flash('message' ~ message.id) }}{% else %}{% endif %} message">
-        <a class="username" href="{{ path('userProfile', { 'id': message.origin.id }) }}" itemprop="attendee">
-            <img width="20" height="20" src="{% if message.origin.avatar %}{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{ message.origin.name }}
-        </a> <br>
-        
-        <p>{{ message.text | usercontent | raw | nl2br }}</p>
-        
-        {% if message.responseto %}
-            <br><small>En respuesta a:</small>
-            <blockquote>
-                {{ message.responseto.text | usercontent | raw | nl2br }}
-            </blockquote>
-        {% endif %}
-        
-        <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
-        
-    </div>
-{% else %}
-<p class="lead">No has enviado ningún mensaje</p>
-{% endfor %}
+<div class="list-group">
+    {% for message in messages %}
+        <a href="{{ path('userMessageResponse',{'responseto':message.id}) }}" class="list-group-item">
+            <h4><img width="30" height="30" src="{% if message.origin.avatar %}{{ path('userAvatar',{'uid':message.origin.id,'width':30,'height':30}) }}{% else %}/img/unknown.gif{% endif %}"> a {{ message.origin.name }}</h4>
+            
+            <p>{{ message.text | usercontent | raw | nl2br }}</p>
+            
+            {% if message.responseto %}
+                <br><small>En respuesta a:</small>
+                <blockquote>
+                    {{ message.responseto.text | usercontent | raw | nl2br }}
+                </blockquote>
+            {% endif %}
+            
+            <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
+        </a>
+    {% else %}
+        <p class="lead">No has enviado ningún mensaje</p>
+    {% endfor %}
+</div>
 
 {% endblock %}
 
