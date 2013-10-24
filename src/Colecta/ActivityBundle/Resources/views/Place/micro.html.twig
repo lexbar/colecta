@@ -3,7 +3,7 @@
 
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
-<div class="item panel {% if new %}panel-warning{% else %}panel-primary{% endif %}">
+<div class="item panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title"><i class="fa fa-map-marker"></i> <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
     </div>
