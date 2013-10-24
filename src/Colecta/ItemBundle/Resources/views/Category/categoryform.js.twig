@@ -2,12 +2,12 @@ function toggleCategoryCreate() {
     var button = $('#categoryCreateButton');
     if(button.hasClass('newcategory')) {
         button.removeClass('newcategory').addClass('selectcategory');
-        button.html('<i class="icon-th-list"></i> Seleccionar');
+        button.html('<i class="fa fa-th-list"></i> Seleccionar');
         $('#Category').hide();
         $('#NewCategory').show().focus();
     } else {
         button.removeClass('selectcategory').addClass('newcategory');
-        button.html('<i class="icon-plus-sign"></i> Nueva categoría');
+        button.html('<i class="fa fa-plus"></i> Nueva categoría');
         $('#Category').show();
         $('#NewCategory').hide().attr('value','');
     }

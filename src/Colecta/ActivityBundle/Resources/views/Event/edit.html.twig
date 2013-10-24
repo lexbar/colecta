@@ -1,10 +1,9 @@
 {% extends '::frontend.html.twig' %}
 
-{% block events 'active' %}
+{% block title %}Editar {{ item.name }} | Actividades{% endblock %}
 
 {% block javascripts %}    
     <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
-    <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
     <script>
         $('head').append('<link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" type="text/css" />');
@@ -43,119 +42,155 @@
     </script>
 {% endblock %}
 {% block article %}
-
+    
 {% if item.canEdit(app.user) %}
-<div class="title-block">
-    <h2>Editar {{ item.name }}<br><span><a href="{{ path('ColectaEventView', {'slug':item.slug}) }}"><i class="icon-double-angle-left"></i> Volver al evento</a></span></h2>
-</div>
-<form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal well">
-    <fieldset>
-      <div class="control-group">
-        <label class="control-label" for="EventName">Fecha Inicio</label>
-        <div class="controls">
-          <input type="text" class="input-small" id="EventDateini" name="dateini" value="{{ item.dateini | date('d-m-Y') }}"> a las 
-          <select id="EventDifficulty" id="EventDateiniHour" name="dateinihour" style="width:auto">
-              {% for hour in 0..23 %}
-                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateini | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
-              {% endfor %}
-          </select> :
-          <select id="EventDifficulty" id="EventDateiniMinute" name="dateiniminute" style="width:auto">
-              {% for minute in ['00','10','20','30','40','50'] %}
-                <option value="{{ minute }}"{% if minute == item.dateini | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
-              {% endfor %}
-          </select>
+    <div class="row">
+        <div class="col-sm-8 col-lg-9">
+            <h2>Editar {{ item.name }}</h2>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="medium">Fecha Fin</label>
-        <div class="controls">
-          <input type="text" class="input-small" id="EventDateend" name="dateend" value="{{ item.dateend | date('d-m-Y') }}"> a las 
-          <select id="EventDifficulty" id="EventDateendHour" name="dateendhour" style="width:auto">
-              {% for hour in 0..23 %}
-                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateend | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
-              {% endfor %}
-          </select> :
-          <select id="EventDifficulty" id="EventDateendMinute" name="dateendminute" style="width:auto">
-              {% for minute in ['00','10','20','30','40','50'] %}
-                <option value="{{ minute }}"{% if minute == item.dateend | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
-              {% endfor %}
-          </select>
+        <div class="col-sm-4 col-lg-3">
+            <a class="btn btn-default btn-block" href="{{ path('ColectaEventView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al evento</a>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="EventName">Título</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge" id="EventName" name="name" value="{{ item.name }}">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="EventDescription">Descripción</label>
-        <div class="controls">
-          <textarea class="input-xlarge" id="EventDescription" name="description" rows="3">{{ item.description }}</textarea>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="EventName">Distancia</label>
-        <div class="controls">
-          <div class="input-append">
-            <input type="text" class="input-small" id="EventDistance" name="distance" value="{{ item.distance }}"><span class="add-on"> km</span>
-          </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="EventName">Desnivel subida</label>
-        <div class="controls">
-          <div class="input-append">
-            <input type="text" class="input-small" id="EventUphill" name="uphill" value="{{ item.uphill }}"><span class="add-on"> metros</span>
-          </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="EventName">Dificultad</label>
-        <div class="controls">
-            <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item.difficulty == '' %} checked{% endif %}>
-                No indicar
-            </label>
-            <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
-                <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
-                Fácil
-            </label>
-            <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
-                <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
-                Moderado
-            </label>
-            <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
-                <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
-                Difícil
-            </label>
-            <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
-                <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
-                Muy difícil
-            </label>
-            <label class="radio">
-                <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
-                <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
-                Sólo expertos
-            </label>
-        </div>
-      </div>
-      
-      {% render 'ColectaItemBundle:Category:formlist' with {'selected':item.category.id} %}
-      
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Actualizar</button>
-        <a href="{{ path('ColectaEventDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
-      </div>
-    </fieldset>
-</form>
-
-{% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
-
+    </div>
+    
+    <div class="monocontent">
+        <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal">
+            <fieldset>
+                <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="EventDateini" name="dateini" value="{{ item.dateini | date('d-m-Y') }}">
+                        
+                            <span class="input-group-addon">a las</span>
+                            
+                            <select class="form-control" id="EventDifficulty" id="EventDateiniHour" name="dateinihour">
+                                {% for hour in 0..23 %}
+                                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateini | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+                                {% endfor %}
+                            </select> 
+                            
+                            <span class="input-group-addon">:</span>
+                            
+                            <select class="form-control" id="EventDifficulty" id="EventDateiniMinute" name="dateiniminute">
+                                {% for minute in ['00','10','20','30','40','50'] %}
+                                <option value="{{ minute }}"{% if minute == item.dateini | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="EventDateend" name="dateend" value="{{ item.dateend | date('d-m-Y') }}">
+                            
+                            <span class="input-group-addon">a las</span>
+                            
+                            <select class="form-control" id="EventDifficulty" id="EventDateendHour" name="dateendhour">
+                                {% for hour in 0..23 %}
+                                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateend | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                            <span class="input-group-addon">:</span>
+                            
+                            <select class="form-control" id="EventDifficulty" id="EventDateendMinute" name="dateendminute">
+                                {% for minute in ['00','10','20','30','40','50'] %}
+                                <option value="{{ minute }}"{% if minute == item.dateend | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Título</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <input type="text" class="form-control" id="EventName" name="name" value="{{ item.name }}">
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventDescription">Descripción</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <textarea class="form-control" id="EventDescription" name="description" rows="5">{{ item.description }}</textarea>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Distancia</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="EventDistance" name="distance" value="{{ item.distance }}"><span class="input-group-addon"> km</span>
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Desnivel subida</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="EventUphill" name="uphill" value="{{ item.uphill }}"><span class="input-group-addon"> metros</span>
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Dificultad</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item.difficulty == '' %} checked{% endif %}>
+                            No indicar
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
+                            <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                            Fácil
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
+                            <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                            Moderado
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
+                            <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                            Difícil
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
+                            <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                            Muy difícil
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
+                            <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                            Sólo expertos
+                        </label>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="PostText">Categoría</label>
+                    <div class="col-sm-9 col-lg-10">
+                        {% render 'ColectaItemBundle:Category:formlist' with {'selected':item.category.id} %}
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <a href="{{ path('ColectaEventDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        
+        {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
+    </div>
 {% endif %}
 
 {% endblock %}

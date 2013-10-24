@@ -1,5 +1,6 @@
 body {
     background-color: #EFF2EB;
+    padding-bottom: 30px;
 }
 h2 {
     color: #333333;
@@ -7,6 +8,12 @@ h2 {
     font-weight: normal;
     line-height: 30px;
     margin: 5px 0 10px 5px;
+}
+textarea {
+    resize: vertical;
+}
+.alert {
+    padding: 10px 15px;
 }
 .row.content {
     margin-top: 5px;

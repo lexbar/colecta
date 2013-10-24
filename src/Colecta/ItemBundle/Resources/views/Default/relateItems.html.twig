@@ -1,21 +1,30 @@
-<form action="{{ path('ColectaItemRelate', {id: item.id }) }}" method="POST" class="form-horizontal well" onSubmit="if($('#itemResults .active a').length) return false;">
-<h2>Relacionar con otros contenidos</h2>
+<hr>
+<form action="{{ path('ColectaItemRelate', {id: item.id }) }}" method="POST" class="form-horizontal" onSubmit="if($('#itemResults .active a').length) return false;">
+
+<h3>Enlazar con otros contenidos</h3>
     {% set relateds = '' %}
     <div id="showRelateds">
     {% for related in item.related%}
-        <p><button type="button" onClick="removeRelation({{ related.id }})" class="btn btn-mini"><i class="icon-remove" style="color:darkred;"></i> Eliminar</button> <strong>{{ related.name }}</strong></p>
+        <p><button type="button" onClick="removeRelation({{ related.id }})" class="btn btn-xs"><i class="fa fa-times" style="color:darkred;"></i> Eliminar enlace</button> <strong>{{ related.name }}</strong></p>
         {% set relateds = relateds ~ related.id ~ ',' %}
     {% endfor%}
     </div>
     <input type="hidden" id="relateds" name="relateds" value="{{relateds}}">
     
     <label for="searchItem">Buscar otro contenido para relacionar</label>
-    <div class="input-append">
-        <input type="text" name="search" id="searchItem" class="input-xlarge" autocomplete="off"><button id="searchButton" class="btn btn-default" type="button" onclick="showResults();"><i id="searchButtonLoading"></i> Buscar <i class="icon-search"></i></button>
+    <div class="row">
+        <div class="col-sm-4">
+            <input type="text" name="search" id="searchItem" class="form-control" autocomplete="off">
+        </div>
+        <div class="col-sm-2">
+            <button id="searchButton" class="btn btn-default btn-block" type="button" onclick="showResults();"><i id="searchButtonLoading"></i> Buscar <i class="fa fa-search"></i></button>
+        </div>
+        
+        <div class="col-sm-3">
+            <button type="submit" class="btn btn-primary btn-block">Guardar enlaces</button>
+        </div>
     </div>
+    
     <ul id="itemResults" class="dropdown-menu" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu">
     </ul>
-    
-    <hr>
-    <p><button type="submit" class="btn btn-primary">Guardar cambios</button></p>
 </form>

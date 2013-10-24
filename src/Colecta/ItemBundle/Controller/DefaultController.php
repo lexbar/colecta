@@ -319,7 +319,7 @@ class DefaultController extends Controller
             $em->persist($item); 
             $em->flush();
             
-            $this->get('session')->setFlash('success', 'Las relaciones se han guardado con éxito');
+            $this->get('session')->setFlash('success', 'Los enlaces se han guardado con éxito');
         }
         
         $referer = $this->get('request')->headers->get('referer');
