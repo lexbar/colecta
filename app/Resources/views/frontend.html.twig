@@ -8,13 +8,13 @@
             <nav class="navbar navbar-default navbar-static-top" role="navigation">
                 <div class="container">
                     <div class="row">
-                        <div class="navbar-header col-sm-7">
+                        <div class="navbar-header col-sm-6">
                             <button type="button" class="btn visible-xs pull-right" onClick="this.className = 'hidden';document.getElementById('searchForm').className = 'navbar-form navbar-right'; document.getElementById('searchInput').focus()"><i class="fa fa-search fa-2x"></i></button>
                             
                             <a class="navbar-brand" href="/">{{ web_title }}</a>
                         </div>
                         
-                        <div class="col-sm-5">
+                        <div class="col-sm-6">
                             <form id="searchForm" class="navbar-form navbar-right hidden-xs" role="search" action="{{ path('ColectaSearch') }}" method="GET">
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('search') }}">
