@@ -26,6 +26,17 @@ class ItemExtension extends \Twig_Extension
     public function usercontentFilter($text, $addslashes = false)
     {
         $return = htmlEscapeAndLinkUrls($text);
+        
+        $return = preg_replace(
+                                array(  
+                                    "#\*([^\*]+)\*#",
+                                    "#_([^_]+)_#",
+                                ),array(
+                                    ' <strong>$1</strong> ',
+                                    ' <span style="text-decoration:underline;">$1</span> ',
+                                ), $return
+        );
+        
         $icons = array(
                 ':)'    =>  '<img src="/img/smileys/smiling.png" alt=":)" class="smiley" />',
                 ':-)'   =>  '<img src="/img/smileys/smiling.png" alt=":-)" class="smiley" />',
@@ -68,16 +79,6 @@ class ItemExtension extends \Twig_Extension
         foreach($icons as $icon=>$image) {
             $return = preg_replace('#(?<=\s|^)(' . preg_quote($icon,'#') . ')(?=\s|$)#',$image,$return);
         }
-        
-        $return = preg_replace(
-                                array(  
-                                    "#(?<=\s|^)\*([^\*]+)\*(?=\s|$)#",
-                                    "#(?<=\s|^)_([^_]+)_(?=\s|$)#",
-                                ),array(
-                                    ' <strong>$1</strong> ',
-                                    ' <span style="text-decoration:underline;">$1</span> ',
-                                ), $return
-        );
         
         if($addslashes)
         {
