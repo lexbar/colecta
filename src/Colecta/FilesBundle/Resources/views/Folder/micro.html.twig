@@ -1,26 +1,57 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
-<div class="folder micro" id="item{{ item.id }}">
-    <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}<a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+<div class="item panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-folder-open"></i> <a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
     
-    {% set files = item.isolateLast %}
-    
-    <ul class="thumbnails">
-        {% for file in files | reverse | slice(0,6) %}
-            {% if file.filetype in ['jpeg','gif','png'] %}
-                <li><a class="thumbnail three" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img width="150" height="130" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'150', 'height':'130'}) }}"></a></li>
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+        
+        {% set files = item.isolateLast %}
+        
+        {% set thumbnails = 0 %} {% set listed = 0 %}
+        {% for file in files %}
+            {% if file.filetype in ['jpeg','gif','png'] %}  
+                {% set thumbnails = thumbnails + 1 %}
+            {% else %}
+                {% set listed = listed + 1 %}
             {% endif %}
         {% endfor %}
-    </ul>
-    
-    {% for file in files %}
-        {% if file.filetype not in ['jpeg','gif','png'] %}
-            <p>
-            <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong><br>
-            <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></strong></a>
-            </p>
+        
+        {% if thumbnails > 0 %}
+        <div class="row thumbnails">        
+            {% for file in files | reverse | slice(0,8) %}
+                {% if file.filetype in ['jpeg','gif','png'] %}                    
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
         {% endif %}
-    {% endfor %}
+        
+        {% if listed > 0 %}
+        <ul class="filelist unstyled">
+            {% for file in files %}
+                {% if file.filetype not in ['jpeg','gif','png'] %}
+                    <li><i class="icon-file icon-2x"></i>
+                    <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
+                    <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-mini pull-right"><i class="icon-download-alt icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        {% if item.summary | length > 0 %}
+        <p>{{ item.summary | usercontent | raw | nl2br }}</p>
+        {% endif %}
+    </div>
     
-    <p>{{ item.summary | usercontent | raw | nl2br }}</p>
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+    </div>
 </div>

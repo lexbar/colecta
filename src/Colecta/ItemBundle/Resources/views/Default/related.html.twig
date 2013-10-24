@@ -1,28 +1,12 @@
 {% if items | length > 0 %}
 
 <div class="relations">
-
-    <h2 class="related">
-        <span class="icon-stack">
-            <i class="icon-circle icon-stack-base" style="color: #0088CC;"></i>
-            <i class="icon-pushpin icon-light"></i>
-        </span> 
-        
-        Relacionado:
-    </h2>
-    
     
     {% for item in items if item.draft == 0 %}
-        <div id="item{{ item.id }}" class="relatedItem">
-            {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-            
+        <div id="item{{ item.id }}" class="relatedItem">            
             {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
             {% set path = path | replace({'/':'Bundle:'}) %}
             {% include path with { 'item': item } only %}
-            
-            {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-            
-            {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 3 } only %}
         </div>
     {% endfor %}
 

@@ -1,32 +1,41 @@
 {% extends '::frontend.html.twig' %}
 
-{% block files 'active' %}
+{% block title %}{{ item.name }} | Archivos{% endblock %}
 
 {% block article %}
-<div class="file full" id="item{{ item.id }}">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
+
+<div class="item panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-folder-open"></i> <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
     
-    <h2>{{ item.name }}</h2>
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
     
     {% if item.filetype in ['jpeg','gif','png'] %}
-        <div class="fullimage" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'640', 'height':'480'}) }}') scroll no-repeat center center #111;">
+        <div class="fullimage" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'480', 'height':'480'}) }}') scroll no-repeat center center #111;">
             {% set next = item.folder.getNextPicture(item) %}
             {% set previous = item.folder.getPreviousPicture(item) %}
             <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-left{% if next %} active{% endif %}"><i class="icon-angle-left icon-4x"></i></a>
             <a href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-right{% if previous %} active{% endif %}"><i class="icon-angle-right icon-4x"></i></a>
         </div>
-        <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="icon-download-alt"></i></small></a>
+        <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="fa fa-download"></i></small></a>
     {% else %}
-        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
+        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
     
     <p>{{ item.description | usercontent | raw | nl2br }}</p>
     {% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
     
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    </div>
     
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item, 'collapse': 10 } only %}
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
         
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
+    </div>
 </div>
+
+{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+
 {% endblock %}

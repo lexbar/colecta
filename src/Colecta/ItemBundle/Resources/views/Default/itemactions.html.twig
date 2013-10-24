@@ -1,52 +1,62 @@
-<div class="itemActions">
-    {# LIKE #}
-    <span id="itemLikes{{ item.id }}">
-    {% if app.user and item.userLikes(app.user) %}
-        {% if item.likers | length > 3 %}
-            <span><i class="icon-thumbs-up-alt icon-large"></i> A {{ item.likers | length - 1 }} personas y a ti os gusta</span> 
-        {% elseif item.likers | length > 1 %}
-            <span><i class="icon-thumbs-up-alt icon-large"></i> A {% for u in item.likers %}{% if u != app.user %}{% if not loop.first and item.likers[0] != app.user %}, {% endif %}{{ u.name }}{%endif%}{% endfor %} y a ti os gusta</span> 
+{% if app.user %}
+    {% set userLikes = item.userLikes(app.user) %}
+    
+    <div class="itemActions">
+    
+        {# LIKE #}
+        <span id="itemLikes{{ item.id }}" class="like">
+        {% if userLikes %}
+            <span><i class="fa fa-thumbs-o-up"></i> Te gusta</span>
         {% else %}
-            <span><i class="icon-thumbs-up-alt icon-large"></i> Te gusta</span>
-        {% endif %}
-    {% elseif app.user %}
-        <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="icon-thumbs-up-alt icon-large"></i> Me gusta</a>
+            <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
+        {% endif%}
+        </span>
         
-        {% if item.likers | length > 3 %}
-            <span>(A {{ item.likers | length }} personas les gusta)</span> 
-        {% elseif item.likers | length > 1 %}
-            <span>(A {% for u in item.likers[0:item.likers | length - 1] %}{% if not loop.first %}, {% endif %}{{ u.name }}{% endfor %} y {{ item.likers[item.likers | length - 1].name }} les gusta)</span> 
-        {% elseif item.likers | length > 0 %}
-            <span>(A {{ item.likers[0].name }} le gusta)</span> 
+        {# ASSISTANCE #}
+        {% if item.type == 'Activity/Event' and item.allowassistances %}
+            <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="fa fa-user"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Nadie se ha apuntado{% endif %}</a>
         {% endif %}
-    {% else %}
-        {% if item.likers | length > 3 %}
-            <span>(A {{ item.likers | length }} personas les gusta)</span> 
-        {% elseif item.likers | length > 1 %}
-            <span>(A {% for u in item.likers[0:item.likers | length - 1] %}{% if not loop.first %}, {% endif %}{{ u.name }}{% endfor %} y {{ item.likers[item.likers | length - 1].name }} les gusta)</span> 
-        {% elseif item.likers | length > 0 %}
-            <span>(A {{ item.likers[0].name }} le gusta)</span>
+        
+        {# COMMENTS #}
+        {% if showComments is defined %}
+            {% set n_comments = item.comments | length %}
+            <a href="#" onClick="$('#itemcomments{{ item.id }}').show(); return false;"><i class="fa fa-comment"></i> {{ n_comments }} comentario{% if n_comments != 1 %}s{% endif %}</a>
         {% endif %}
-    {% endif%}
-    </span>
-    
-    {# ASSISTANCE #}
-    {% if item.type == 'Activity/Event' and item.allowassistances %}
-        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="icon-user"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Nadie se ha apuntado{% endif %}</a>
-    {% endif %}
-    
-    {# FILE #}
-    {% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}
-        <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="icon-plus"></i> Agregar archivos</a>
-    {% endif %}
-    
-    {# EDIT #}
-    {% if item.canEdit(app.user) %}
-        <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="icon-pencil icon-large"></i> Editar</a>
-    {% endif %}
-    
-    {# ATTACH #}
-    {% if app.user and not item.part %}
-        <a href="#item{{ item.id}}" onClick="ItemAttachForm({{ item.id}}); return false;" title="Adjuntar"><i class="icon-pushpin icon-large"></i> Adjuntar</a>
-    {% endif %}
-</div>
+        
+        {# FILE #}
+        {% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}
+            <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="fa fa-plus"></i> Agregar archivos</a>
+        {% endif %}
+        
+        {# EDIT #}
+        {% if item.canEdit(app.user) %}
+            <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+        {% endif %}
+        
+        {# ATTACH #}
+        {% if app.user and not item.part %}
+            <a href="#item{{ item.id}}" onClick="ItemAttachForm({{ item.id}}); return false;" title="Adjuntar"><i class="fa fa-share"></i> Adjuntar</a>
+        {% endif %}
+        
+    </div>
+{% endif %}
+
+{% if item.likers | length > 0 and not (app.user and item.likers | length == 1 and userLikes) %}
+    <div class="whoLikes">
+        {% if app.user and userLikes %}
+            {% if item.likers | length > 3 %}
+                A {{ item.likers | length - 1 }} personas y a ti os gusta esto.
+            {% else %}
+                A {% for u in item.likers %}{% if u != app.user %}{% if not loop.first and item.likers[0] != app.user %}, {% endif %}{{ u.name }}{%endif%}{% endfor %} y a ti os gusta esto.
+            {% endif %}
+        {% else %}
+            {% if item.likers | length > 3 %}
+                A {{ item.likers | length }} personas les gusta esto.
+            {% elseif item.likers | length > 1 %}
+                A {% for u in item.likers[0:item.likers | length - 1] %}{% if not loop.first %}, {% endif %}{{ u.name }}{% endfor %} y {{ item.likers[item.likers | length - 1].name }} les gusta esto.
+            {% elseif item.likers | length > 0 %}
+                A {{ item.likers[0].name }} le gusta esto.
+            {% endif %}
+        {% endif%}
+    </div>
+{% endif %}

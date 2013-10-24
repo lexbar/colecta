@@ -5,57 +5,60 @@
     <h2>Editar mi perfil</h2>
 </div>
 
-<form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }} class="well form-horizontal">
-    <div class="control-group">
-        <label class="control-label" for="UserName">Nombre</label>
-        <div class="controls">
-            {{ form_widget(form.name, { 'attr': {'id': 'UserName'} }) }}
-            {{ form_errors(form.name) }}
+<div class="monocontent">
+    <form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }} class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="col-sm-4 col-lg-3 control-label" for="UserName">Nombre</label>
+            <div class="col-sm-8 col-lg-9">
+                {{ form_widget(form.name, { 'attr': {'id': 'UserName','class' : 'form-control'} }) }}
+                {{ form_errors(form.name) }}
+            </div>
         </div>
-    </div>
-    
-    <div class="control-group">
-        <label class="control-label" for="UserMail">Email</label>
-        <div class="controls">
-            {{ form_widget(form.mail, { 'attr': {'id': 'UserMail'} }) }}
-            {{ form_errors(form.mail) }}
+        
+        <div class="form-group">
+            <label class="col-sm-4 col-lg-3 control-label" for="UserMail">Email</label>
+            <div class="col-sm-8 col-lg-9">
+                {{ form_widget(form.mail, { 'attr': {'id': 'UserMail','class' : 'form-control'} }) }}
+                {{ form_errors(form.mail) }}
+            </div>
         </div>
-    </div>
-    
-    <hr>
-    
-    <div class="control-group">
-        <label class="control-label" for="UserPassword1">Nueva Contraseña</label>
-        <div class="controls">
-            {{ form_widget(form.pass.pass1, { 'attr': {'id': 'UserPassword1', 'autocomplete':'off'} }) }}
-            {{ form_errors(form.pass.pass1) }}
+        
+        <hr>
+        
+        <div class="form-group">
+            <label class="col-sm-4 col-lg-3 control-label" for="UserPassword1">Nueva Contraseña</label>
+            <div class="col-sm-8 col-lg-9">
+                {{ form_widget(form.pass.pass1, { 'attr': {'id': 'UserPassword1', 'autocomplete':'off','class' : 'form-control'} }) }}
+                {{ form_errors(form.pass.pass1) }}
+            </div>
         </div>
-    </div>
-    
-    <div class="control-group">
-        <label class="control-label" for="UserPassword2">Repite Contraseña</label>
-        <div class="controls">
-            {{ form_widget(form.pass.pass2, { 'attr': {'id': 'UserPassword2', 'autocomplete':'off'} }) }}
-            {{ form_errors(form.pass.pass2) }}
+        
+        <div class="form-group">
+            <label class="col-sm-4 col-lg-3 control-label" for="UserPassword2">Repite Contraseña</label>
+            <div class="col-sm-8 col-lg-9">
+                {{ form_widget(form.pass.pass2, { 'attr': {'id': 'UserPassword2', 'autocomplete':'off','class' : 'form-control'} }) }}
+                {{ form_errors(form.pass.pass2) }}
+            </div>
         </div>
-    </div>
-    
-    <hr>
-    
-    <div class="control-group">
-        <label class="control-label" for="UserAvatar">Avatar</label>
-        <div class="controls">
-            {{ form_widget(form.file, { 'attr': {'id': 'UserAvatar'} }) }}
-            {{ form_errors(form.file) }}
-            <br><br><img width="50" height="50" src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}">
+        
+        <hr>
+        
+        <div class="form-group">
+            <label class="col-sm-4 col-lg-3 control-label" for="UserAvatar">Avatar<br></label>
+            <div class="col-sm-8 col-lg-9">
+                <img class="pull-left" style="margin-right: 10px;" width="25" height="25" src="{% if app.user.avatar %}{{ app.user.avatarWebPath }}{% else %}/img/unknown.gif{% endif %}">
+                {{ form_widget(form.file, { 'attr': {'id': 'UserAvatar'} }) }}
+                {{ form_errors(form.file) }}
+            </div>
         </div>
-    </div>
-    
-    {{ form_rest(form) }}
-    
-    <div class="form-actions">
-        <input class="btn btn-primary" type="submit" value="Guardar cambios" />
-    </div>
-</form>
+        
+        {{ form_rest(form) }}
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-sm-offset-4 col-sm-8 col-lg-9">
+                <input class="btn btn-primary" type="submit" value="Guardar cambios" />
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}
 

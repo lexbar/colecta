@@ -1,34 +1,23 @@
 {% extends '::frontend.html.twig' %}
 
-{% block title %}Archivos - {{ parent() }}{% endblock %}
-
-{% block files 'active' %}
+{% block title %}Archivos{% endblock %}
 
 {% block article %}
 
-    <div class="title-block">
-        {% if app.user %} <a href="{{ path('ColectaFileNew') }}" class="btn btn-small btn-primary pull-right">Subir archivo <i class="icon-plus"></i></a> {% endif %}
-        <h2>Archivos{% if page > 1 %} (página {{page}}){% endif %}</h2>
-    </div>
+    {% include '::navigation.html.twig' with {'active': 'file'} %}
+
+    {% if app.user %} <a href="{{ path('ColectaFileNew') }}" class="btn btn-small btn-primary pull-right">Subir archivo <i class="fa fa-plus"></i></a> {% endif %}
+    
+    <h2>Archivos{% if page > 1 %} (página {{page}}){% endif %}</h2>
 
     {% for item in items %}
     <div class="item" id="item{{ item.id}}">
-        {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-        
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
-        
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-        
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse':5 } only %}
     </div>
     {% else %}
-        {% if app.user %}
-            <h3 style="text-align:center">Pulsa ese botón para empezar a compartir <i class="icon-arrow-up icon-2x" style="color:#2F7ED4;margin-left: 50px;"></i></h3>
-        {% else %}
-            <h3>Nadie ha escrito nada... por ahora.</h3>
-        {% endif %}
+        <p class="lead">Nadie ha publicado nada... por ahora.</p>
     {% endfor %}
     {% if page > 1 or thereAreMore %}
         <ul class="pager">

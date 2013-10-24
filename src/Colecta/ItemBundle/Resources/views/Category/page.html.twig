@@ -1,24 +1,21 @@
 {% extends '::frontend.html.twig' %}
 
-{% block categories 'active' %}
+{% block title %}{{ category.name }} | Categorías{% endblock %}
 
 {% block article %}
 
+<a href="{{ path('ColectaCategoryIndex') }}" class="btn btn-default pull-right"><i class="fa fa-angle-double-left"></i> Volver al índice de categorías</a>
+
 <div class="title-block">
-    <h2>Publicado en <em>{{ category.name }}</em></h2>{% if page > 1 %} <span>página {{ page }}</span> | {% endif %}<span><a href="{{ path('ColectaCategoryIndex') }}"><i class="icon-double-angle-left"></i> Volver al índice de categorías</a></span>
+    <h2>Publicado en <em>{{ category.name }}</em></h2>{% if page > 1 %} <span>página {{ page }}</span> | {% endif %}
 </div>
 
 {% for item in items %}
-    {% set typeicon = {'Item/Post':'file','Activity/Event':'calendar','Activity/Route':'globe','Activity/Place':'map-marker','Files/Folder':'folder-open','Files/File':'folder-open'} %}
-    {% set type = item.type %}
-    <h2>
-        <span style="font-size: 14px;" class="icon-stack">
-            <i class="icon-sign-blank icon-stack-base"></i>
-            <i class="icon-{{ typeicon[type] }} icon-fixed-width icon-light"></i>
-        </span> 
-        
-        <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Activity/':'','Files/':'','Colective/':''}) ~ 'View', {'slug':item.slug}) }}">{{ item.name }}</a>
-    </h2>
+<div class="item" id="item{{ item.id}}">
+    {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': item } only %}
+</div>
 {% else %}
     <p class="lead">Ninguna publicación en esta categoría</p>
 {% endfor %}

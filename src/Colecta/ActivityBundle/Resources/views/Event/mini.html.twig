@@ -1,41 +1,57 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
-<div class="event mini">
-     <div class="unity">
-        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
-        <div class="date">
-            <span class="weekday">{{ item.dateini | date('l') | replace ({
-                'Monday':'Lunes',
-                'Tuesday':'Martes',
-                'Wednesday':'Miércoles',
-                'Thursday':'Jueves',
-                'Friday':'Viernes',
-                'Saturday':'Sábado',
-                'Sunday':'Domingo'
-            }) }}</span>
-            <span class="monthday">{{ item.dateini | date('d') }}</span> 
-            <span class="month">{% set month = item.dateini | date('n') | replace({
-                '1':'Enero',
-                '2':'Febrero',
-                '3':'Marzo',
-                '4':'Abril',
-                '5':'Mayo',
-                '6':'Junio',
-                '7':'Julio',
-                '8':'Agosto',
-                '9':'Septiembre',
-                '10':'Octubre',
-                '11':'Noviembre',
-                '12':'Diciembre'
-            }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month | slice(0,3) ~ ' ' ~ item.dateini | date('Y') }}{% endif %}</span>
-            <span class="hour">{{ item.dateini | date('H:i') }}</span>
+<div class="item panel {% if new %}panel-warning{% else %}panel-primary{% endif %}">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-calendar"></i> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
+    
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+
+        <div class="unity">
+            
+            {% set sameday = item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %}
+        
+            
+                <div class="date pull-right">
+                    <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
+                    <span class="weekday">{{ item.dateini | date('l') | replace ({
+                'Monday':'LUN',
+                'Tuesday':'MAR',
+                'Wednesday':'MIÉ',
+                'Thursday':'JUE',
+                'Friday':'VIE',
+                'Saturday':'SÁB',
+                'Sunday':'DOM'
+            }) }} | {% set month = item.dateini | date('n') | replace({
+                '1':'ENE',
+                '2':'FEB',
+                '3':'MAR',
+                '4':'ABR',
+                '5':'MAY',
+                '6':'JUN',
+                '7':'JUL',
+                '8':'AGO',
+                '9':'SEP',
+                '10':'OCT',
+                '11':'NOV',
+                '12':'DIC'
+            }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}</span> 
+                    <span class="monthday">{{ item.dateini | date('d') }}</span> 
+                    <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% endif%}</span> 
+                    </a>
+                </div>
+        
+            <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
         </div>
         
-        <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}{{ item.name }}</h2>
-        
-        </a>
-        
-        <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.description | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.description[item.summary|length:item.description|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
-    </div>
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+    
+    </div>
+    
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+    </div>
 </div>

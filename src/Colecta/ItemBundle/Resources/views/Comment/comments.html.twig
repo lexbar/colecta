@@ -5,7 +5,7 @@
 {% if collapse is defined and commentslength > collapse %}
     <p>
     <button class="btn btn-small" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
-        <i class="icon-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
+        <i class="fa fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
     </button>
     </p>
         
@@ -15,20 +15,14 @@
 {% for comment in comments%}
     <div class="media">
         <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">
-            <img src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> 
+            <img src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':30,'height':30}) }}{% else %}/img/unknown.gif{% endif %}"> 
         </a> 
-
-    
+            
         <div class="media-body{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < comment.date %} new{% endif %}">
         
-            {% if app.user and (app.user == comment.user or app.user.role.userEdit) %}
-            <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="pull-right removeComment" onclick="return confirm('¿Seguro que deseas borrar este comentario?');"><i class="icon-remove"></i></a>
-            {% endif %}
-            
             <p class="media-heading">
-                <strong><a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a></strong>
-        
-                <small>        
+                <strong><a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a></strong> {{ comment.text | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
+            <p class="details">
                 {% set itemtimestamp = comment.date | date('U') %}
                 {% set nowtimestamp =  'now' | date('U') %}
                 {% set secondsago = nowtimestamp - itemtimestamp %}
@@ -47,9 +41,12 @@
                         {{ comment.date | date('j')  }} {% include "::month.html.twig" with{'date':comment.date,'short':1} %} {{ comment.date | date('Y H:i')  }}
                     {% endif %}
                 {% endif %}
-            </small>
+                
+                {% if app.user and (app.user == comment.user or app.user.role.userEdit) %}
+                    <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="removeComment" onclick="return confirm('¿Seguro que deseas borrar este comentario?');"><i class="fa fa-trash-o"></i> Eliminar</a>
+                {% endif %}
             </p>
-            <p>{{ comment.text | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
+            
         </div>
     </div>
     
@@ -60,13 +57,13 @@
 {% if app.user %}
     <div class="media">
         <span class="pull-left">
-            <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
+            <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':30,'height':30}) }}{% else %}/img/unknown.gif{% endif %}" width="30" height="30"> 
         </span>
         
         <div class="media-body form">
             <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST" onSubmit="$('#commentItem{{ item.id }}').attr('disabled','disabled')">
-                <textarea style="height:20px;" onClick="this.style.height = ''; document.getElementById('commentItem{{ item.id }}').style.display = '';" name="comment" class="span6" placeholder="Escribe un comentario…"></textarea><br>
-                <button style="display:none;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i class="icon-comment"></i></button>
+                <textarea class="form-control" rows="1" onClick="this.rows = 3; document.getElementById('commentItem{{ item.id }}').style.display = '';" name="comment" placeholder="Escribe un comentario…"></textarea>
+                <button style="display:none;margin-top:10px;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i class="fa fa-comment"></i></button>
             </form>
         </div>
     </div>

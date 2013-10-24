@@ -1,33 +1,35 @@
 {% extends '::frontend.html.twig' %}
 
-{% block categories 'active' %}
+{% block title %}Categorías{% endblock %}
 
 {% block article %}
 
-<div class="title-block">
-    <h2>Categorías</h2>
-</div>
+{% include '::navigation.html.twig' with {'active': 'category'} %}
 
-<div class="categories">
+<h2>Categorías</h2>
+
+{% set slv = app.session.get('sinceLastVisit') %}
+{% set typeicon = {'posts':'align-left','events':'calendar-o','routes':'bar-chart-o','places':'map-marker','files':'folder-open-o'} %}
+
+<ul class="list-group">
     {% for category in categories %}
-        <div class="pull-right">
-            {% set typeicon = {'posts':'file','events':'calendar','routes':'globe','places':'map-marker','files':'folder-open'}%}
+        <a href="{{ path('ColectaCategoryView',{'slug':category.slug}) }}" class="list-group-item clearfix">
+            <div class="row">
+            <div class="col-sm-8 col-xs-12">
+                <i class="icon-expand-alt"{% if slv and slv != 'dismiss' and slv < category.lastchange%}style="color:orange"{% endif %}></i>
+                <strong>{{ category.name }}</strong>
+            </div>
+            <div class="col-sm-4 col-xs-12">
             {% for type, amount in category.sortedTypes %}
                 {% if amount > 0 %}
                     {% if loop.first %}<span style="font-size:16px;">{% elseif loop.index > 3 %}<span style="font-size:12px;">{% else %}<span> | {% endif %}
-                        <i class="icon-{{ typeicon[type] }}"></i> {{ amount }} 
+                        <i class="fa fa-{{ typeicon[type] }}"></i> {{ amount }} 
                     </span>
                 {% endif %}
             {% endfor %}
-        </div>
-        
-        <h2 class="main">
-            <a href="{{ path('ColectaCategoryView',{'slug':category.slug}) }}">
-                {% set slv = app.session.get('sinceLastVisit') %}
-                <i class="icon-expand-alt"{% if slv and slv != 'dismiss' and slv < category.lastchange%}style="color:orange"{% endif %}></i> 
-                {{ category.name }} 
-            </a>
-        </h2>
+            </div>
+            </div>
+        </a>
     {% endfor %}
-</div>
+</ul>
 {% endblock %}

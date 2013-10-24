@@ -3,152 +3,174 @@
 {% block title web_title %}
 
 {% block body %}
-<div class="navbar navbar-static-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <h1><a class="brand" href="/">{{ web_title }}</a></h1>
-            
-            <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
-                <div class="input-append">
-                    <input type="text" class="input-medium search-query" name="q" value="{{ app.request.get('search') }}">
-                    <button type="submit" class="btn btn-default">Buscar</button>
+    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                    <div class="row">
+                        <div class="navbar-header col-sm-7">
+                            <button type="button" class="btn visible-xs pull-right" onClick="this.className = 'hidden';document.getElementById('searchForm').className = 'navbar-form navbar-right';"><i class="fa fa-search fa-2x"></i></button>
+                            
+                            <a class="navbar-brand" href="/">{{ web_title }}</a>
+                        </div>
+                        
+                        <div class="col-sm-5">
+                            <form id="searchForm" class="navbar-form navbar-right hidden-xs" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="q" value="{{ app.request.get('search') }}">
+                                </div>
+                                <button type="submit" class="btn btn-default">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="container" id="main">
-{% if web_header_img | length %}
-<div class="headimg" style="background-image: url( {{ random(web_header_img) }} );"></div>
-{% endif %}
-<div class="row" id="body">
-<div class="span2" id="sidebar">
-    <ul> 
-        <li><a class="{% block home '' %}" id="homeButton" href="{{ path('ColectaDashboard')}}"><i class="icon-home"></i> <span>Inicio</span></a></li>
-        <li><a class="{% block categories '' %} grey" href="{{ path('ColectaCategoryIndex') }}"><i class="icon-list-ul"></i> <span>Categorías</span></a></li>
-        <li><a class="{% block posts '' %} blue" href="{{ path('ColectaPostIndex') }}"><i class="icon-file-text-alt"></i> <span>Textos</span></a></li>
-        <li><a class="{% block events '' %} orange" href="{{ path('ColectaEventIndex') }}"><i class="icon-calendar"></i> <span>Actividades</span></a></li>  
-        <li><a class="{% block routes '' %} green" href="{{ path('ColectaRouteIndex') }}"><i class="icon-code-fork"></i> <span>Rutas</span></a></li>
-        <li><a class="{% block places '' %} red" href="{{ path('ColectaPlaceIndex') }}"><i class="icon-map-marker"></i> <span>Lugares</span></a></li>
-        <li><a class="{% block files '' %} purple" href="{{ path('ColectaFileIndex') }}"><i class="icon-folder-open"></i> <span>Archivos</span></a></li>
-        {#<li><a class="{% block polls '' %}" href="{{ path('ColectaPollIndex') }}"><i class="icon-tasks"></i> Encuestas</a></li>#}
-        {#<li><a class="{% block contests '' %}" href="{{ path('') }}"><i class="icon-gift"></i> Concursos</a></li>#}
-        {#<li><a class="{% block people '' %}" href="/"><i class="icon-user"></i> Personas</a></li>#}
-    </ul> 
-</div>
-
-<div class="span7" id="stream">
-{% if app.session.hasFlash('error') %}
-    <div class="alert alert-error">
-        <span class="icon-stack">
-            <i class="icon-sign-blank icon-stack-base"></i>
-            <i class="icon-exclamation icon-light"></i>
-        </span> 
-        
-        {{ app.session.flash('error') }}
-    </div>
-{% endif %}
-{% if app.session.hasFlash('success') %}
-    <div class="alert alert-success">
-        <span class="icon-stack">
-            <i class="icon-sign-blank icon-stack-base"></i>
-            <i class="icon-ok icon-light"></i>
-        </span> 
-        
-        {{ app.session.flash('success') }}
-    </div>
-{% endif %}
-
-{% block article %}{% endblock %}
-</div>
-
-<div class="span3" id="userbar">
-    {% if app.user %}
-    
-        <p class="myself">
-            <a href="{{ path('userProfile', { 'id': app.user.id }) }}">
-                <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> 
-                <strong class="name">{{ app.user.name }}</strong>
-            </a>
-            <br>
-            <small><a href="{{ path('userEditProfile') }}">Editar perfil</a></small>
-        </p>
-        
-        {% block navigation %}
-            {% include '::navigation.html.twig' with {'navigation': 'extranet'} %}
-        {% endblock %}
-        
-    
-    {% else %}    
-    
-    <form class="well login" action="{{ path('userLoginCheck') }}" method="post">
-        <p><strong>Iniciar sesión</strong></p>
-        
-        
-        <div class="input-prepend">
-              <span class="add-on"><i class="icon-envelope"></i></span>
-              <input type="text" class="span2" id="username" name="_username" placeholder="Email" value="" onFocus="if(this.value == 'Email') this.value=''">
+            </nav>
+            
+            {% if web_header_img | length %}
+            <div class="col-xs-12 hidden-xs" style="background: url( {{ random(web_header_img) }} ) no-repeat center center; height:140px;background-size: cover;"></div>
+            {% endif %}
         </div>
         
-        <div class="input-prepend">
-              <span class="add-on"><i class="icon-key"></i></span>
-              <input type="password" class="span2" id="password" name="_password" class="input-medium" placeholder="Contraseña" value="" onFocus="if(this.value == 'Contraseña') this.value=''">
+        <div class="row content">
+
+            <div class="col-xs-12 col-md-9 main">
+
+                {% if app.session.hasFlash('error') %}
+                    <div class="alert alert-error">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-exclamation fa-stack-1x fa-inverse"></i>
+                        </span> 
+                        
+                        {{ app.session.flash('error') }}
+                    </div>
+                {% endif %}
+                {% if app.session.hasFlash('success') %}
+                    <div class="alert alert-success">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                        </span> 
+                        
+                        {{ app.session.flash('success') }}
+                    </div>
+                {% endif %}
+
+                {% block article %}{% endblock %}
+            </div>
+            
+            <div class="col-xs-12 col-md-3 sidebar">
+                {% if app.user %}
+                <div class="media self">
+                    <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
+                        <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':50,'height':50}) }}{% else %}/img/unknown.gif{% endif %}" width="50" height="50">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ app.user.name }}</h4>
+                        <div class="btn-group">
+                            <a href="{{ path('userEditProfile') }}" class="btn btn-default btn-xs">Editar perfil</a>
+                            <a href="{{ path('userLogout') }}" class="btn btn-default btn-xs" style="color:darkred;">Salir <span class="fa fa-sign-out"></span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                {% else %}
+                <form class="login" action="{{ path('userLoginCheck') }}" method="post">
+                    <p class="lead">Iniciar sesión</p>
+                    
+                    
+                    <p class="input-group input-group-sm">
+                          <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                          <input type="text" class="form-control" id="username" name="_username" placeholder="Email" value="" onFocus="if(this.value == 'Email') this.value=''">
+                    </p>
+                    
+                    <p class="input-group input-group-sm">
+                          <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                          <input type="password" class="form-control" id="password" name="_password" class="input-medium" placeholder="Contraseña" value="" onFocus="if(this.value == 'Contraseña') this.value=''">
+                    </p>
+                    
+                    <p><label for="remember_me">
+                        <input id="remember_me" name="_remember_me" type="checkbox" checked /> Mantenerme conectado
+                    </label></p>
+                    
+                    <button type="submit" name="login" class="btn btn-success btn-block btn-sm">Acceder</button>
+                    <a href="{{ path('userResetPassword') }}" class="btn btn-block btn-link btn-xs">Olvidé mi contraseña</a>
+                </form>
+                <hr>
+                
+                <script>
+                    var phitest = document.createElement('input');
+                    if(!('placeholder' in phitest)) {
+                        document.getElementById('username').value='Email';
+                        document.getElementById('password').value='Contraseña';
+                    }
+                </script>
+                {% endif %}
+
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="">
+                        <a href="/">
+                            <i class="fa fa-home fa-fw"></i> Inicio 
+                            {#<span class="badge pull-right">42</span>#}
+                        </a>
+                    </li>
+                    {% if app.user %}
+                    <li>
+                        <a href="{{ path('ColectaChatIndex') }}">
+                            <i class="fa fa-unlock-o fa-fw"></i> Privado
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if app.user and app.user.role.siteConfig %}
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-wrench fa-fw"></i> Configuración
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <hr>
+                
+                {% if app.user %}
+                    {% if item is defined %}
+                        {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
+                    {% else %}
+                        {% set notifications = colectauser.notDismissedNotifications %}
+                    {% endif %}
+                    
+                    {% set messages = colectauser.notDismissedMessages %}
+                    
+                <ul class="nav nav-pills nav-stacked">
+                    <li>
+                        <a href="{{ path('userNotifications')}}"><i class="fa fa-bullhorn fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}</a>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="nav nav-pills nav-stacked">
+                    <li>
+                        <a href="{{ path('ColectaContact') }}"><i class="fa fa-envelope-alt fa-fw"></i> Contacto</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('ColectaPostView', {'slug':'acerca-de-nosotros'}) }}"><i class="fa fa-info fa-fw"></i> Acerca de nosotros</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('ColectaPostView', {'slug':'por-que-hacerse-socio'}) }}"><i class="fa fa-question fa-fw"></i> Por qué hacerse socio</a>
+                    </li>   
+                </ul>
+                {% endif %}
+                
+                <hr>
+                
+                {# hide when big calendar is shown #}
+                {% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}
+                {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
+            {% endif %}
+            </div>
         </div>
-        
-        <p><label for="remember_me" class="checkbox">
-            <input id="remember_me" name="_remember_me" type="checkbox" checked /> Recuérdame
-        </label></p>
-        
-        <p><button type="submit" name="login" class="btn btn-success">Acceder</button> <a href="{{ path('userResetPassword') }}" class="btn btn-link btn-mini">Olvidé mi contraseña</a></p>
-    </form> 
-    
-    <script>
-        var phitest = document.createElement('input');
-        if(!('placeholder' in phitest)) {
-            document.getElementById('username').value='Email';
-            document.getElementById('password').value='Contraseña';
-        }
-    </script>
-    
-    <ul class="nav nav-list">        
-        <li>
-        <a style="font-size:18px;padding:10px;margin-top:-5px;text-align:center" href="{{ path('ColectaContact') }}"><i class="icon-envelope-alt"></i> Contacto</a>
-    </li>
-    
-        <li class="divider"></li>
-        <li>
-            <a href="{{ path('ColectaPostView', {'slug':'acerca-de-nosotros'}) }}"><i class="icon-info icon-fixed-width"></i> Acerca de nosotros</a>
-        </li>
-        <li>
-            <a href="{{ path('ColectaPostView', {'slug':'por-que-hacerse-socio'}) }}"><i class="icon-question icon-fixed-width"></i> Por qué hacerse socio</a>
-        </li>        
-    </ul>
-    
-    <div class="ads">
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-0259798523659720";
-/* Ciclubs */
-//google_ad_slot = "5450909105";
-google_ad_width = 200;
-google_ad_height = 200;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-    </div>
-    
-    {% endif %}
-    
-    {% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}
-        {# hide when big calendar is shown #}
-        {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
-    
-        {% render "ColectaActivityBundle:Event:nextEvent" %}
-    {% endif %}
-    
-</div>
-</div>
-</div>
+    </div>             
 {% endblock %}

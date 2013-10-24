@@ -1,6 +1,6 @@
 {% extends '::frontend.html.twig' %}
 
-{% block places 'active' %}
+{% block title %}{{ item.name}} |Lugares{% endblock %}
 
 {% block javascripts %}  
     <script src="/js/jquery.min.js"></script>
@@ -19,19 +19,29 @@
 {% endblock %}
 
 {% block article %}
-<div class="place full" id="item{{ item.id }}">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    <div class="itemcontent">
-        <h2>{{ item.name }}</h2>
-        
+
+<div class="item panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-map-marker"></i> <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
+    
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+
         <div id="map" style="width:auto;height:300px;"></div>
+
     
         <p>{{ item.description | usercontent | raw | nl2br }}</p>
-    </div>
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-    
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item, 'collapse': 10 } only %}
         
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+    </div>
+    
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+    </div>
 </div>
+
+{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+
 {% endblock %}

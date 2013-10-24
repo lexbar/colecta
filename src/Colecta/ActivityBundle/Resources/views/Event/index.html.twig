@@ -1,15 +1,14 @@
 {% extends '::frontend.html.twig' %}
 
-{% block title %}Actividades - {{ parent() }}{% endblock %}
-
-{% block events 'active' %}
+{% block title %}Actividades{% endblock %}
 
 {% block article %}
 
-<div class="title-block">
-    {% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right btn-primary">Crear evento <i class="icon-plus"></i></a> {% endif %}
-    <h2>Actividades{% if page > 1 %} (página {{page}}){% endif %}</h2>
-</div>
+{% include '::navigation.html.twig' with {'active': 'event'} %}
+
+{% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right btn-primary">Crear evento <i class="icon-plus"></i></a> {% endif %}
+
+<h2>Actividades{% if page > 1 %} (página {{page}}){% endif %}</h2>
 
 <div class="bigcalendar">
 {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}

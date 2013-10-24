@@ -19,13 +19,13 @@
         
         function newInputs(inputs) {            
             for(var i = 0; i < inputs.length; i++) {
-                $('#chatstream').prepend('<div class="row"><div class="span1"><img width="40" height="40" src="'+inputs[i].useravatar+'"></div><div class="span6"><strong>'+inputs[i].username+':</strong> '+inputs[i].text+'<br><small class="'+inputs[i].timestamp+'">'+inputs[i].timeago+'</small></div></div>');
+                $('#chatstream').prepend('<li class="list-group-item clearfix"><div class="row"><div class="col-sm-1 col-xs-2"><img width="40" height="40" src="'+inputs[i].useravatar+'"></div><div class="col-sm-11 col-xs-10"><strong>'+inputs[i].username+':</strong> '+inputs[i].text+'<br><small class="'+inputs[i].timestamp+'">'+inputs[i].timeago+'</small></div></div></li>');
             }
         }
         
         function moreInputs(inputs) {            
             for(var i = 0; i < inputs.length; i++) {
-                $('#chatstream').append('<div class="row"><div class="span1"><img width="40" height="40" src="'+inputs[i].useravatar+'"></div><div class="span6"><strong>'+inputs[i].username+':</strong> '+inputs[i].text+'<br><small class="'+inputs[i].timestamp+'">'+inputs[i].timeago+'</small></div></div>');
+                $('#chatstream').append('<li class="list-group-item clearfix"><div class="row"><div class="col-sm-1 col-xs-2"><img width="40" height="40" src="'+inputs[i].useravatar+'"></div><div class="col-sm-11 col-xs-10"><strong>'+inputs[i].username+':</strong> '+inputs[i].text+'<br><small class="'+inputs[i].timestamp+'">'+inputs[i].timeago+'</small></div></div></li>');
             }
         }
         
@@ -102,12 +102,12 @@
     <p><strong>¿Quién está online?</strong></p>
     <p id="whosonline" class="well" style="padding: 10px 20px"></p>
     
-    <div id="chatstream">
+    <ul class="list-group">
     {% for m in messages %}
-        <div class="row"><div class="span1"><img width="40" height="40" src="{% if m.user.avatar %}{{ path('userAvatar',{'uid':m.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"></div><div class="span6"><strong>{{ m.user.name }}:</strong> {{ m.text | usercontent | raw | nl2br }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div>
+        <li class="list-group-item clearfix"><div class="row"><div class="col-sm-1 col-xs-2"><img width="40" height="40" src="{% if m.user.avatar %}{{ path('userAvatar',{'uid':m.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"></div><div class="col-sm-11 col-xs-10"><strong>{{ m.user.name }}:</strong> {{ m.text | usercontent | raw | nl2br }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div></li>
     {% endfor %}
-    </div>
+    </ul>
     
-    <div style="text-align:center"><button class="btn" onClick="loadMore()">Ver más</button></div>
+    <div style="text-align:center;margin-bottom: 20px;"><button class="btn btn-default" onClick="loadMore()">Ver más <i class="fa fa-arrow-down"></i></button></div>
         
 {% endblock%}

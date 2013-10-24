@@ -1,10 +1,21 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
-<div class="post micro" id="item{{ item.id }}">
+<div class="item panel {% if new %}panel-primary{% else %}panel-default{% endif %}">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-align-left"></i> <a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
     
-    <h2>{% if new %}<i class="icon-asterisk" style="color:orange;"></i> {% endif %}<a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a></h2>
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+        
+        <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.text | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.text[item.summary|length:item.text|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
+    </div>
     
-    {% set limit = 120 %}
-    <p>{{ item.text | summarize(limit) | usercontent | raw | nl2br }}{% if item.text | length > limit %}<span id="com-linkrm{{ item.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ item.id }}').style.display = '';document.getElementById('com-linkrm{{ item.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ item.id }}" style="display:none">{{ item.text[limit:item.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
-    
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item, showComments: 1 } only %}
+        
+        <div id="itemcomments{{ item.id }}" style="display:none">
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+        </div>
+    </div>
 </div>

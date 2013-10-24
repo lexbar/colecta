@@ -1,14 +1,14 @@
 {% extends '::frontend.html.twig' %}
 
-{% block home 'active' %}
+{% block title %}Inicio{% endblock %}
 
 {% block article %}
 
-<div class="title-block">
-    <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
-</div>
+{% include '::navigation.html.twig' with {'active': ''} %}
 
-    {% if app.user %}
+    <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
+
+    {% if app.user and 0 %}
         <form id="itemSubmit" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">
             <div class="mainData">
                 <input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título">
@@ -17,12 +17,12 @@
             <div id="itemDetails"></div>
             <ul class="types unstyled">
                 <li class="pull-left text">Publicar: </li>
-                <li class="pull-left post" onClick="loadPostForm();"><i class="icon-file-text-alt"></i> Texto</li>
-                <li class="pull-left event" onClick="loadEventForm();"><i class="icon-calendar"></i> Actividad</li>
-                <li class="pull-left route"> <input type="file" name="file" id="Route"><i class="icon-code-fork"></i> Ruta</li>
-                <li class="pull-left place" onClick="loadPlaceForm();"><i class="icon-map-marker"></i> Lugar</li>
-                <li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivos</li>
-                <li class="pull-left cancel"><button type="button" class="btn btn-small" onclick="cancelType()"><i class="icon-remove"></i> Cancelar</button></li>
+                <li class="pull-left post" onClick="loadPostForm();"><i class="fa fa-file-text-o"></i> Texto</li>
+                <li class="pull-left event" onClick="loadEventForm();"><i class="fa fa-calendar"></i> Actividad</li>
+                <li class="pull-left route"> <input type="file" name="file" id="Route"><i class="fa fa-code-fork"></i> Ruta</li>
+                <li class="pull-left place" onClick="loadPlaceForm();"><i class="fa fa-map-marker"></i> Lugar</li>
+                <li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="fa fa-folder-open"></i> Archivos</li>
+                <li class="pull-left cancel"><button type="button" class="btn btn-small" onclick="cancelType()"><i class="fa fa-remove"></i> Cancelar</button></li>
                 
                 <li class="pull-right">
                     <button class="btn btn-small btn-primary" type="submit" id="itemSubmitButton">
@@ -39,25 +39,19 @@
 {% if slv and slv != 'dismiss' and colectauser.sinceLastVisitItems > 0 %}
     <div class="sys">
         <a class="close pull-right" href="{{ path('ColectaSinceLastVisitDismiss', {date: 'now' | date('c')}) }}">&times;</a>
-        <i class="icon-eye-open pull-left icon-4x"></i>
-        <h2><a href="{{ path('ColectaSinceLastVisit') }}">Ver todo lo que me he perdido desde mi última visita <i class="icon-double-angle-right"></i></a></h2>
+        <i class="fa fa-eye-open pull-left fa-4x"></i>
+        <h2><a href="{{ path('ColectaSinceLastVisit') }}">Ver todo lo que me he perdido desde mi última visita <i class="fa fa-double-angle-right"></i></a></h2>
         <p>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': slv } only %}</p>
     </div>
 {% endif %}
 
 {% set shownItems = [] %}
+
 {% for item in items if item.id not in shownItems %}
-    
-    <div class="item" id="item{{ item.id}}">
-        {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-        
+    <div class="item" id="item{{ item.id}}">        
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
-        
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-        
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
         
         {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     </div>
@@ -67,7 +61,7 @@
         {% set shownItems = shownItems | merge([ri.id]) %}
     {% endfor %}
 {% else %}
-    <h3>Nadie ha publicado nada... por ahora.</h3>
+    <p class="lead">Nadie ha publicado nada... por ahora.</p>
 {% endfor %}
 
 {% if page > 1 or thereAreMore %}

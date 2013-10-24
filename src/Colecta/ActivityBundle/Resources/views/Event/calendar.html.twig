@@ -1,10 +1,11 @@
+{% spaceless %}
 {% set firstWeekDay = ((targetdate | date('Y-m-1')) | date('N')) - 1 %}
 {% set daysOfMonth = targetdate | date('t') %}
 {% set rows = (firstWeekDay + daysOfMonth) // 7 %}
 {% if ((firstWeekDay + daysOfMonth) / 7) > rows %}{% set rows = rows + 1 %}{% endif %}
 {% set dayOfMonth = 1 %}
 
-<span class="calendartitle">
+<p class="calendar-heading">
     {# current Y-m #}
     {% set currentY = targetdateob.format('Y') %}
     {% set currentm = targetdateob.format('m') %}
@@ -34,12 +35,12 @@
         {% endif %}
     {% endif %}
     
-    <a href="{{ path('ColectaEventDate', {'date': previousY ~ '-' ~ previousm }) }}" class="pull-left"><i class="icon-caret-left"></i> {% include '::month.html.twig' with {'date':previousY ~ '-' ~ previousm ~ '-1', 'short':1} %}</a> 
+    <a href="{{ path('ColectaEventDate', {'date': previousY ~ '-' ~ previousm }) }}" class="pull-left"><i class="fa fa-caret-left"></i> {% include '::month.html.twig' with {'date':previousY ~ '-' ~ previousm ~ '-1', 'short':1} %}</a> 
     
     <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm }) }}">{% include '::month.html.twig' with {'date':currentY ~ '-' ~ currentm ~ '-1', 'short':0} %} de {{ currentY }}</a>
     
-    <a href="{{ path('ColectaEventDate', {'date': nextY ~ '-' ~ nextm }) }}" class="pull-right">{% include '::month.html.twig' with {'date':nextY ~ '-' ~ nextm ~ '-1', 'short':1} %} <i class="icon-caret-right"></i></a>     
-</span>
+    <a href="{{ path('ColectaEventDate', {'date': nextY ~ '-' ~ nextm }) }}" class="pull-right">{% include '::month.html.twig' with {'date':nextY ~ '-' ~ nextm ~ '-1', 'short':1} %} <i class="fa fa-caret-right"></i></a>     
+</p>
     
 <table class="table table-condensed calendar">
     <thead><tr><th>lun</th><th>mar</th><th>mie</th><th>jue</th><th>vie</th><th>sáb</th><th>dom</th></tr></thead>
@@ -64,10 +65,16 @@
             {% for i in 0..6 %}
                 {% if events[dayOfMonth] is defined %}{% set hasevents = events[dayOfMonth] | length %}{% else %}{% set hasevents = 0 %}{% endif %}
                 
-                <td class="{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %}today{% endif %}{% if hasevents %} active{% endif %}">
+                <td{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %} class="today"{% elseif  hasevents %} class="active"{% endif %}>
                     {% if dayOfMonth <= daysOfMonth %}
                         {% if hasevents %}
-                            <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm ~ '-' ~ dayOfMonth}) }}">{% endif %}{{ dayOfMonth }}{% if hasevents %}</a>
+                            <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm ~ '-' ~ dayOfMonth}) }}">
+                        {% endif %}
+                        
+                        {{ dayOfMonth }}
+                        
+                        {% if hasevents %}
+                            </a>
                         {% endif %}
                             
                         {% set dayOfMonth = dayOfMonth + 1 %}
@@ -79,3 +86,4 @@
         </tr>
     {% endfor %}
 </table>
+{% endspaceless %}

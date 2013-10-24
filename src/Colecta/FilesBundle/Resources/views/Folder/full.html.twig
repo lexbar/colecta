@@ -1,40 +1,65 @@
 {% extends '::frontend.html.twig' %}
 
-{% block files 'active' %}
+{% block title %}{{ item.name }} | Archivos{% endblock %}
 
 {% block article %}
-<div class="folder full" id="item{{ item.id }}">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    <div class="itemcontent">
-        <h2>{{ item.name }}</h2>
-        
-        <ul class="thumbnails">
-            {% for file in item.files | reverse %}
-                {% if file.filetype in ['jpeg','gif','png'] %}
-                    <li><a class="thumbnail" style="height:160px;width:160px;" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img height="160" width="160" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'160', 'height':'160'}) }}"></a></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        
-        <ul class="filelist unstyled">
-            {% for file in item.files %}
-                {% if file.filetype not in ['jpeg','gif','png'] %}
-                    <li><i class="icon-file icon-2x"></i>
-                    <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
-                    <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-mini pull-right"><i class="icon-download-alt icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        
-        <p>{{ item.summary | usercontent | raw | nl2br }}</p>
+
+<div class="item panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="icon-folder-open"></i> <a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
     </div>
-
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item, 'collapse': 10 } only %}
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
         
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-
+        {% set files = item.isolateLast %}
+        
+        {% set thumbnails = 0 %} {% set listed = 0 %}
+        {% for file in files %}
+            {% if file.filetype in ['jpeg','gif','png'] %}  
+                {% set thumbnails = thumbnails + 1 %}
+            {% else %}
+                {% set listed = listed + 1 %}
+            {% endif %}
+        {% endfor %}
+        
+        {% if thumbnails > 0 %}
+        <div class="row">        
+            {% for file in files | reverse %}
+                {% if file.filetype in ['jpeg','gif','png'] %}                    
+                    <div class="col-sm-6 col-md-3">
+                        <a class="thumbnail" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if listed > 0 %}
+        <ul class="list-group">
+            {% for file in files %}
+                {% if file.filetype not in ['jpeg','gif','png'] %}
+                    <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}" class="list-group-item clearfix">
+                    <strong>{{ file.name }}</strong>
+                    <span class="btn btn-warning btn-xs pull-right"><span style="text-transform: uppercase;">{{ file.filetype }}</span></button>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        {% if item.summary | length > 0 %}
+        <p>{{ item.summary | usercontent | raw | nl2br }}</p>
+        {% endif %}
+    </div>
+    
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
+    </div>
 </div>
+
+{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+
 {% endblock %}

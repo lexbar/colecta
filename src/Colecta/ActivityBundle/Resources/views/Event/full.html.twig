@@ -1,6 +1,6 @@
 {% extends '::frontend.html.twig' %}
 
-{% block events 'active' %}
+{% block title %}{{ item.name }} | Actividades{% endblock %}
 
 {% block javascripts %}    
     <script>
@@ -96,119 +96,140 @@
 {% endblock %}
 
 {% block article %}
-<div class="event full" itemscope itemtype="http://schema.org/Event" id="item{{ item.id }}">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    
-    <div class="itemcontent">
-        <div class="unity">
-            <div class="date" itemprop="startDate">
-                <span class="weekday">{{ item.dateini | date('l') | replace ({
-                    'Monday':'Lunes',
-                    'Tuesday':'Martes',
-                    'Wednesday':'Miércoles',
-                    'Thursday':'Jueves',
-                    'Friday':'Viernes',
-                    'Saturday':'Sábado',
-                    'Sunday':'Domingo'
-                }) }}</span>
-                <span class="monthday">{{ item.dateini | date('d') }}</span> 
-                <span class="month">{% set month = item.dateini | date('n') | replace({
-                    '1':'Enero',
-                    '2':'Febrero',
-                    '3':'Marzo',
-                    '4':'Abril',
-                    '5':'Mayo',
-                    '6':'Junio',
-                    '7':'Julio',
-                    '8':'Agosto',
-                    '9':'Septiembre',
-                    '10':'Octubre',
-                    '11':'Noviembre',
-                    '12':'Diciembre'
-                }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month | slice(0,3) ~ ' ' ~ item.dateini | date('Y') }}{% endif %}</span>
-                <span class="hour">{{ item.dateini | date('H:i') }}</span>
-            </div>
-            
-            <h2 itemprop="name">{{ item.name }}</h2>
-            <p itemprop="description">{{ item.description | usercontent | raw | nl2br }}</p>
-        </div>
-    
-    {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
-    
+
+<div class="item panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-calendar"></i> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
     </div>
     
-    
-    {######## ASSISTANCES ########}
-    
-    {% set canedit = item.canEdit(app.user) %}
-    {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
-    
-    {% if item.assistances | length or item.allowassistances %}
-    
-        {% if canedit %}<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('icon-refresh icon-spin')">{% endif %}
-        
-        <div class="assistances">
-        <h2>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}</h2>
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+
+        <div class="unity">
             
-        <ul class="unstyled">    
-        {% for assistance in item.assistances %}
+            {% set sameday = item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %}
         
-            <li class="{% if loop.index is odd %}odd{% else %}even{% endif %}">
-                <a class="username" href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">
-                <img width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{assistance.user.name}}
-                </a> 
             
-                {% if haspassed %}
-                    {% if canedit %}
-                        <span class="pull-right">
-                            <input type="text" class="span1" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()"> km | 
-                            <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
-                        </span>
-                    {% elseif assistance.confirmed %}
-                        <span class="pull-right">{{ assistance.km }} km <i class="icon-ok"></i></span>
-                    {% endif %}
-                {% endif %}
-            </li>
-            
-        {% else %}
-            <li><em>Ninguna asistencia confirmada</em></li>
-        {% endfor %}
+                <div class="date pull-right">
+                    <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
+                    <span class="weekday">{{ item.dateini | date('l') | replace ({
+                'Monday':'LUN',
+                'Tuesday':'MAR',
+                'Wednesday':'MIÉ',
+                'Thursday':'JUE',
+                'Friday':'VIE',
+                'Saturday':'SÁB',
+                'Sunday':'DOM'
+            }) }} | {% set month = item.dateini | date('n') | replace({
+                '1':'ENE',
+                '2':'FEB',
+                '3':'MAR',
+                '4':'ABR',
+                '5':'MAY',
+                '6':'JUN',
+                '7':'JUL',
+                '8':'AGO',
+                '9':'SEP',
+                '10':'OCT',
+                '11':'NOV',
+                '12':'DIC'
+            }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}</span> 
+                    <span class="monthday">{{ item.dateini | date('d') }}</span> 
+                    <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% endif%}</span> 
+                    </a>
+                </div>
         
-        {% if canedit %}
-            <li>
-                {% if item.allowassistances %}
-                    <p class="lead" style="margin-bottom:10px;">Añadir un usuario:</p>
-                {% endif %}
-                
-                {% if item.allowassistances or item.assistances | length and haspassed %}
-                    <button id="updateBtn" class="btn pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
-                {% endif %}
-                
-                {% if item.allowassistances %}
-                    <div class="input-prepend">
-                        <span class="add-on"><i class="icon-user"></i></span>
-                        <input type="text" class="span2" id="userSearch" name="targetUser" autocomplete="off">
-                    </div> 
-                    
-                    <i id="destinationLoading" class="icon-cog icon-spin hidden"></i>
-                    <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
-                {% endif %}
-            </li>
-        {% endif %}
-        
-        </ul>
-        
+            <p>{{ item.description | usercontent | raw | nl2br }}</p>     
+
         </div>
         
-        {% if canedit %}</form>{% endif %}
+        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
-    {% endif %}
+        {######## ASSISTANCES ########}
     
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-    
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item, 'collapse': 10 } only %}
+        {% set canedit = item.canEdit(app.user) %}
+        {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
         
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+        {% if item.assistances | length or item.allowassistances %}
+        
+            {% if canedit %}<form class="form-inline" action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">{% endif %}
+            
+            <div class="assistances">
+            <h4>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}:</h4>
+                
+            <ul class="list-group assistances">    
+            {% for assistance in item.assistances %}
+            
+                <li class="clearfix list-group-item {% if loop.index is odd %}odd{% else %}even{% endif %}">
+                    <div class="media col-xs-12 col-sm-6">
+                        <img class="username pull-left" width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> 
+                        <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">{{assistance.user.name}}</a>
+                    </div>
+                    
+                    {% if haspassed %}
+                        {% if canedit %}
+                            <div class="col-xs-6 col-sm-3">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()">
+                                    <span class="input-group-addon">km</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-3">
+                                <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
+                            </div>
+                        {% elseif assistance.confirmed %}
+                            <div class="col-xs-12 col-md-6">{{ assistance.km }} km <i class="fa fa-check"></i></div>
+                        {% endif %}
+                    {% endif %}
+                </li>
+                
+            {% else %}
+                <li class="list-group-item"><em>Ninguna asistencia confirmada</em></li>
+            {% endfor %}
+            
+            {% if canedit %}
+                <li class="list-group-item clearfix">
+                    {% if item.allowassistances %}
+                        <p class="lead" style="margin-bottom:10px;">Añadir un usuario</p>
+                    {% endif %}
+                    
+                    <div class="col-xs-12 col-sm-9">
+                    {% if item.allowassistances %}
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                          <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
+                        </div>
+                        
+                        <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
+                        <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
+                    {% endif %}
+                    </div>
+                    
+                    <div class="col-xs-12 col-sm-3">
+                    {% if item.allowassistances or item.assistances | length and haspassed %}
+                        <button id="updateBtn" class="btn btn-block" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+                    {% endif %}   
+                    </div>                 
+                </li>
+            {% endif %}
+            
+            </ul>
+            
+            </div>
+            
+            {% if canedit %}</form>{% endif %}
+        
+        {% endif %}
+    </div>
     
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
+    </div>
 </div>
+
+        
+{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+
 {% endblock %}

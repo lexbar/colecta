@@ -1,50 +1,8 @@
-{% if item is defined %}
-    {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
-{% else %}
-    {% set notifications = colectauser.notDismissedNotifications %}
-{% endif %}
-
-{% set messages = colectauser.notDismissedMessages %}
-
-<ul class="nav nav-list">
-    <li class="nav-header">Navegación</li>
-    
-    <li{% if navigation == 'extranet' %} class="active"{% endif %}>
-        <a href="/"><i class="icon-home icon-fixed-width"></i> Extranet</a>
-    </li>
-    <li{% if navigation == 'intranet' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaChatIndex') }}"><i class="icon-unlock-alt icon-fixed-width"></i> Intranet</a>
-    </li>
-    {% if app.user.role.siteConfig %}
-    <li{% if navigation == 'backend' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaChatIndex') }}"><i class="icon-wrench icon-fixed-width"></i> Configuración</a>
-    </li>
-    {% endif %}
-    
-    <li class="divider"></li>
-    
-    <li{% if navigation == 'messages' %} class="active"{% endif %}>
-        <a href="{{ path('userMessages')}}"><i class="icon-envelope icon-fixed-width"></i>{% if messages | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ messages | length }}</span>{% endif %} Mensajes</a>
-    </li>
-    <li{% if navigation == 'notifications' %} class="active"{% endif %}>
-        <a href="{{ path('userNotifications')}}"><i class="icon-bullhorn icon-fixed-width"></i>{% if notifications | length > 0 %} <span class="label label-warning" style="font-size: 10px;">{{ notifications| length }}</span>{% endif %} Notificaciones</a>
-        </li>
-    <li>
-        <a href="{{ path('userLogout') }}" style="color:darkred"><i class="icon-off icon-fixed-width"></i> Salir</a>
-    </li>
-    
-    <li>
-        <a style="font-size:18px;padding:10px;margin-top:10px;text-align:center" href="{{ path('ColectaContact') }}"><i class="icon-envelope-alt"></i> Contacto</a>
-    </li>
-</ul>
-
-{% if notifications | length > 0 %}
-    <div class="notificationstream">
-        {% if notifications | length > 1 %}
-            <a href="{{ path('userNotificationDismissAll') }}" class="btn btn- btn-warning btn-block">marcar todas como leidas <i class="icon-level-down"></i></a>
-        {% endif %}
-        {% for notification in notifications %}
-           {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'notification': notification} %}
-        {% endfor %}
-    </div>
-{% endif %}
+<p class="btn-group btn-group-justified sections">
+    <a class="btn btn-default{% if active == 'category' %} active{% endif %}" href="{{ path('ColectaCategoryIndex')}}"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Categorías</span></a>
+    <a class="btn btn-default{% if active == 'post' %} active{% endif %}" href="{{ path('ColectaPostIndex')}}"><i class="fa fa-align-left"></i> <span class="hidden-xs">Textos</span></a>
+    <a class="btn btn-default{% if active == 'event' %} active{% endif %}" href="{{ path('ColectaEventIndex')}}"><i class="fa fa-calendar"></i> <span class="hidden-xs">Calendario</span></a>
+    <a class="btn btn-default{% if active == 'route' %} active{% endif %}" href="{{ path('ColectaRouteIndex')}}"><i class="fa fa-bar-chart-o"></i> <span class="hidden-xs">Tracks</span></a>
+    <a class="btn btn-default{% if active == 'file' %} active{% endif %}" href="{{ path('ColectaFileIndex')}}"><i class="fa fa-folder-open"></i> <span class="hidden-xs">Archivos</span></a>
+    <a class="btn btn-default{% if active == 'place' %} active{% endif %}" href="{{ path('ColectaPlaceIndex')}}"><i class="fa fa-map-marker"></i> <span class="hidden-xs">Lugares</span></a>
+</p>

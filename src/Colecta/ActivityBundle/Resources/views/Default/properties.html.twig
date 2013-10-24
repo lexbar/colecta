@@ -1,14 +1,14 @@
-<ul class="properties">
+<ul class="properties list-inline">
     {% if item.distance > 0%}
-    <li{% if item.distance > 999 %} class="small"{% endif %}>Distancia: <strong>{{ item.distance }} km</strong></li>
+    <li{% if item.distance > 999 %} class="small"{% endif %}>Distancia: <br><strong>{{ item.distance }} km</strong></li>
     {% endif %}
     
     {% if item.uphill > 0%}
-    <li{% if item.uphill > 999 %} class="small"{% endif %}>Subida: <strong>{{ item.uphill }} m</strong></li>
+    <li{% if item.uphill > 999 %} class="small"{% endif %}>Subida: <br><strong>{{ item.uphill }} m</strong></li>
     {% endif %}
     
     {% if item.type != 'Activity/Event' and item.downhill > 0%}
-    <li{% if item.downhill > 999 %} class="small"{% endif %}>Bajada: <strong>{{ item.downhill }} m</strong></li>
+    <li{% if item.downhill > 999 %} class="small"{% endif %}>Bajada: <br><strong>{{ item.downhill }} m</strong></li>
     {% endif %}
     
     {% if item.time > 0%}
@@ -29,10 +29,10 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-        <li{% if item.time >= 86400 %} class="small"{% endif %}>Duración: <strong>{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m</strong> </li>
+        <li{% if item.time >= 86400 %} class="small"{% endif %}>Duración: <br><strong>{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m</strong> </li>
     {% endif %}
     {% if item.difficulty != '' %}
-    <li>Dificultad: <strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" title="{% set difficulty = item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) %}{{ difficulty }}" alt="{{ difficulty }}"></strong> </li>
+    <li>Dificultad: <br><strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" title="{% set difficulty = item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) %}{{ difficulty }}" alt="{{ difficulty }}"></strong> </li>
     {% endif%}
     {% if app.user and item.type == 'Activity/Event' and item.allowassistances %}
         {% set haspassed = item.happened %}
@@ -68,15 +68,15 @@
                     {% endif %} 
                     
                     {% if assists %}
-                        <i class="icon-ok"></i>
+                        <i class="fa fa-check"></i>
                     {% else %}
-                        <i class="icon-signin"></i>
+                        <i class="fa fa-sign-in"></i>
                     {% endif %} 
                 
                     {% if assists %}
                         </span>
                         <span class="undo">
-                            Deshacer <i class="icon-trash icon-white"></i>
+                            Deshacer <i class="fa fa-trash-o"></i>
                         </span>
                     {% endif %} 
                 </button>
