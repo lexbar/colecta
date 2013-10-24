@@ -74,8 +74,8 @@ class ItemExtension extends \Twig_Extension
                                     "#(?<=\s|^)\*([^\*]+)\*(?=\s|$)#",
                                     "#(?<=\s|^)_([^_]+)_(?=\s|$)#",
                                 ),array(
-                                    ' <strong>$2</strong> ',
-                                    ' <span style="text-decoration:underline;">$2</span> ',
+                                    ' <strong>$1</strong> ',
+                                    ' <span style="text-decoration:underline;">$1</span> ',
                                 ), $return
         );
         
