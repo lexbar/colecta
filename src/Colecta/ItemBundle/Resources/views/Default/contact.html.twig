@@ -1,37 +1,39 @@
 {% extends '::frontend.html.twig' %}
 
-{% block home 'contact' %}
-
 {% block article %}
 
-<div class="title-block">
-    <h2>Contacto</h2>
-</div>
+<h2>Contacto</h2>
 
-<form action="{{ path('ColectaContact') }}" method="POST" class="form-horizontal well" onSubmit="$('#ContactSubmit').attr('disabled','disabled').addClass('disabled'); $('#ContactSubmitText').html('Enviando...'); $('#ContactSubmitLoading').addClass('icon-refresh icon-spin');">
+<div class="monocontent">
+
+<form action="{{ path('ColectaContact') }}" method="POST" class="form-horizontal" onSubmit="$('#ContactSubmit').attr('disabled','disabled').addClass('disabled'); $('#ContactSubmitText').html('Enviando...'); $('#ContactSubmitLoading').addClass('icon-refresh icon-spin');">
     <fieldset>
-      <div class="control-group">
-        <label class="control-label" for="ContactName">Tu nombre</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge" id="ContactName" name="name" value="{% if app.session.hasFlash('ContactName') %}{{ app.session.flash('ContactName') }}{% elseif app.user %}{{ app.user.name }}{% endif %}">
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="ContactName">Tu nombre</label>
+        <div class="col-sm-9 col-lg-10">
+          <input type="text" class="form-control" id="ContactName" name="name" value="{% if app.session.hasFlash('ContactName') %}{{ app.session.flash('ContactName') }}{% elseif app.user %}{{ app.user.name }}{% endif %}">
         </div>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="ContactEmail">Tu email</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge" id="ContactEmail" name="email" value="{% if app.session.hasFlash('ContactEmail') %}{{ app.session.flash('ContactEmail') }}{% elseif app.user %}{{ app.user.mail }}{% endif %}">
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="ContactEmail">Tu email</label>
+        <div class="col-sm-9 col-lg-10">
+          <input type="text" class="form-control" id="ContactEmail" name="email" value="{% if app.session.hasFlash('ContactEmail') %}{{ app.session.flash('ContactEmail') }}{% elseif app.user %}{{ app.user.mail }}{% endif %}">
         </div>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="ContactText">Texto</label>
-        <div class="controls">
-          <textarea class="input-xlarge" id="ContactText" name="text" rows="3">{{ app.session.flash('ContactText') }}</textarea>
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="ContactText">Texto</label>
+        <div class="col-sm-9 col-lg-10">
+            <textarea class="form-control" id="ContactText" name="text" rows="3">{{ app.session.flash('ContactText') }}</textarea>
         </div>
       </div>
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary" id="ContactSubmit"><i id="ContactSubmitLoading"></i> <span id="ContactSubmitText">Enviar mensaje</span></button>
+      <div class="form-group">
+        <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+            <button type="submit" class="btn btn-primary" id="ContactSubmit"><i id="ContactSubmitLoading"></i> <span id="ContactSubmitText">Enviar mensaje</span></button>
+        </div>
       </div>
     </fieldset>
 </form>
+
+</div>
 
 {% endblock %}
