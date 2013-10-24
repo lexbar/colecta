@@ -15,7 +15,7 @@
 {% for comment in comments%}
     <div class="media">
         <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">
-            <img src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':30,'height':30}) }}{% else %}/img/unknown.gif{% endif %}"> 
+            <img style="width:30px" src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':30,'height':30}) }}{% else %}/img/unknown.gif{% endif %}"> 
         </a> 
             
         <div class="media-body{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < comment.date %} new{% endif %}">
