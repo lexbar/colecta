@@ -78,6 +78,9 @@ textarea {
 .calendar {
     font-size: 12px;
 }
+.bigcalendar .calendar {
+    font-size: 14px;
+}
 .calendar td a {
     display: block;
 }
@@ -94,6 +97,9 @@ textarea {
     padding: 5px;
     text-align: center;
     border-radius: 5px 5px 0 0;
+}
+.bigcalendar .calendar-heading {
+    font-size: 16px;
 }
 .calendar-heading a {
     color: #444;
