@@ -19,6 +19,9 @@ textarea {
     color: #FFF;
     text-decoration: underline;
 }
+.list-group-item.active a.close {
+    text-decoration: none;
+}
 .row.content {
     margin-top: 5px;
 }
