@@ -58,5 +58,10 @@
                 A {{ item.likers[0].name }} le gusta esto.
             {% endif %}
         {% endif%}
+        
+        {% if not app.user and showComments is defined %}
+            {% set n_comments = item.comments | length %}
+            <a href="#" onClick="$('#itemcomments{{ item.id }}').show(); return false;"><i class="fa fa-comment"></i> {{ n_comments }} comentario{% if n_comments != 1 %}s{% endif %}</a>
+        {% endif %}
     </div>
 {% endif %}
