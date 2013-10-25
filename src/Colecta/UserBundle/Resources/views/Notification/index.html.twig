@@ -19,7 +19,7 @@
                 if(data.length) {
                     currentpage++;
                 } else {
-                    $('#notificationstream').append('<p class="lead" style="text-align:center">No hay más notificaciones</p>');
+                    $('#notificationstream').append('<li class="list-group-item"><p class="lead" style="text-align:center">No hay más notificaciones</p></li>');
                     $('#loadMore').hide();
                 }
                 
@@ -37,13 +37,13 @@
 </div>
 
 {% if notifications | length > 0 %}
-    <div class="notificationstream" id="notificationstream">
+    <ul class="list-group" id="notificationstream">
         {% for notification in notifications %}
            {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'notification': notification} %}
         {% endfor %}
-    </div>
+    </ul>
     
-    <div style="text-align:center"><button onclick="loadMore()" class="btn" id="loadMore">Ver más</button></div>
+    <div class="col-sm-offset-2 col-sm-8"><button onclick="loadMore()" class="btn btn-primary btn-block" id="loadMore">Ver más</button></div>
 {% else %}
     <p class="lead">No tienes ninguna notificación</p>
 {% endif %}

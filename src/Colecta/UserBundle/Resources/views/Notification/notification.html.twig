@@ -1,6 +1,6 @@
-<p class="{% if not notification.dismiss %}alert{% else %}well{% endif %} alert-block">
+<li class="list-group-item{% if not notification.dismiss %} active{% endif %}">
     {% if not notification.dismiss %}
-        <a onclick="" href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>
+        <a href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right">×</a>
     {% endif %}
     
     {{ notification.who.name }} 
@@ -24,4 +24,4 @@
     <br>
     
     <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small>
-</p>
+</li>

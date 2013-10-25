@@ -15,6 +15,10 @@ textarea {
 .alert {
     padding: 10px 15px;
 }
+.list-group-item.active a {
+    color: #FFF;
+    text-decoration: underline;
+}
 .row.content {
     margin-top: 5px;
 }
@@ -139,6 +143,17 @@ textarea {
 }
 .item.panel-primary h3 i {
     color: #EEE;
+}
+.item.panel-warning {
+    border-color: #71AC2B;
+}
+.item.panel-warning > .panel-heading {
+    background-color: #31AC2B;
+    border-color: #71AC2B;
+    color: #FFF;
+}
+.item.panel-warning h3 i {
+    color: #FFF;
 }
 .item.panel-default {
     border-color: #BBB;
