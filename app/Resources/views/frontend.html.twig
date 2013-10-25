@@ -63,7 +63,7 @@
                 {% if app.user %}
                 <div class="media self">
                     <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
-                        <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':50,'height':50}) }}{% else %}/img/unknown.gif{% endif %}" width="50" height="50">
+                        <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':50,'height':50}) }}{% else %}/img/unknown.gif{% endif %}" width="50">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">{{ app.user.name }}</h4>

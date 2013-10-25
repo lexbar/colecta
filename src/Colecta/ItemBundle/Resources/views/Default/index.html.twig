@@ -6,7 +6,7 @@
 
 {% include '::navigation.html.twig' with {'active': ''} %}
 
-    <h2>Inicio</h2>{% if page > 1 %} <span>página {{page}}</span>{% endif %}
+    <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
     {% if app.user and 0 %}
         <form id="itemSubmit" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ path('ColectaPostCreate') }}">

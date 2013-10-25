@@ -8,7 +8,7 @@
 
     {% if app.user %} <a href="{{ path('ColectaFileNew') }}" class="btn btn-small btn-primary pull-right">Subir archivo <i class="fa fa-plus"></i></a> {% endif %}
     
-    <h2>Archivos{% if page > 1 %} (página {{page}}){% endif %}</h2>
+    <h2>Archivos{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
     {% for item in items %}
     <div class="item" id="item{{ item.id}}">
