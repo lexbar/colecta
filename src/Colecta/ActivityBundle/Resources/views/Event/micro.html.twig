@@ -53,7 +53,7 @@
         {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item, showComments: 1 } only %}
         
         <div id="itemcomments{{ item.id }}" style="display:none">
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 3 } only %}
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 10 } only %}
         </div>
     </div>
     
