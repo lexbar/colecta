@@ -6,9 +6,7 @@
 
 <a href="{{ path('ColectaCategoryIndex') }}" class="btn btn-default pull-right"><i class="fa fa-angle-double-left"></i> Volver al índice de categorías</a>
 
-<div class="title-block">
-    <h2>Publicado en <em>{{ category.name }}</em></h2>{% if page > 1 %} <span>página {{ page }}</span> | {% endif %}
-</div>
+<h2>Publicado en <em>{{ category.name }}</em>{% if page > 1 %} <small> página {{ page }}</small>{% endif %}</h2>
 
 {% for item in items %}
 <div class="item" id="item{{ item.id}}">
