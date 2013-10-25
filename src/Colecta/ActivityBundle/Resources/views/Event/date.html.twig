@@ -39,7 +39,7 @@
     {% if hiddenset and not item.happened %}
         {% set hiddenset = 0 %}
         </div>
-        <p style="margin:10px 0 20px 45px;"><button onClick="$(this).css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-small"><i class="fa fa-ellipsis-vertical" style="padding:0 5px"></i> Ver eventos pasados</button></p>
+        <div class="row" id="showMoreEvents"><p class="col-sm-3 col-xs-12" style="margin:10px 0 20px"><button onClick="$('#showMoreEvents').css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-sm btn-default btn-block"><i class="fa fa-ellipsis-vertical" style="padding:0 5px"></i> Ver eventos pasados</button></p></div>
     {% endif %}
     
     {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
@@ -56,7 +56,7 @@
 
 {% if hiddenset %}
     </div>
-    <p style="margin:10px 0 20px 45px;"><button onClick="$(this).css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-small"><i class="fa fa-ellipsis-vertical" style="padding:0 5px"></i> Ver eventos pasados</button></p>
+    <div class="row" id="showMoreEvents"><p class="col-sm-3 col-xs-12" style="margin:10px 0 20px"><button onClick="$('#showMoreEvents').css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-sm btn-default btn-block"><i class="fa fa-ellipsis-vertical" style="padding:0 5px"></i> Ver eventos pasados</button></p></div>
 {% endif %}
 
 {% endblock %}
