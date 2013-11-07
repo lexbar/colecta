@@ -144,7 +144,7 @@
                     
                 <ul class="nav nav-pills nav-stacked">
                     <li>
-                        <a href="{{ path('userNotifications')}}"><i class="fa fa-bullhorn fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}</a>
+                        <a href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}</a>
                     </li>
                     <li>
                         <a href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}</a>
