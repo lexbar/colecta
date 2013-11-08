@@ -120,6 +120,12 @@ textarea {
 }
 .sections i {
     font-size: 20px;
+    color: #305938;
+}
+.sections span {
+    color: #555555;
+    font-size: 12px;
+    font-weight: bold;
 }
 .properties li {
     color: #777;
