@@ -40,7 +40,7 @@
 {% endfor %}
 
 {% if not thereAreMore and items | length > 0 %}
-    <p style="margin:20px;text-align:center"><a href="{{ path('ColectaSinceLastVisitDismiss', {date: 'now' | date('c')}) }}" class="btn btn-warning btn-large">Marcar todo como leido <i class="icon-check"></i></a></p>
+    <p style="margin:20px;text-align:center"><a href="{{ path('ColectaSinceLastVisitDismiss', {date: 'now' | date('c')}) }}" class="btn btn-warning btn-large">Marcar todo como leido <i class="fa fa-check"></i></a></p>
 {% endif %}
 
 {% if page > 1 or thereAreMore %}
