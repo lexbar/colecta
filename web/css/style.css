@@ -150,19 +150,43 @@ textarea {
     border-color: #BBB;
 }
 .item.panel-primary > .panel-heading {
-    background-color: #71AC2B;
+    background-color: #3C404B;
     border-color: #999;
+    background-image: -webkit-gradient(
+    	linear,
+    	left top,
+    	left bottom,
+    	color-stop(0, #293D2D),
+    	color-stop(1, #47564A)
+    );
+    background-image: -o-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
+    background-image: -moz-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
+    background-image: -webkit-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
+    background-image: -ms-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
+    background-image: linear-gradient(to top, #293D2D 0%, #47564A 100%);
 }
 .item.panel-primary h3 i {
     color: #EEE;
 }
 .item.panel-warning {
-    border-color: #71AC2B;
+    border-color: #1F4D27;
 }
 .item.panel-warning > .panel-heading {
     background-color: #31AC2B;
     border-color: #71AC2B;
     color: #FFF;
+    background-image: -webkit-gradient(
+    	linear,
+    	left top,
+    	left bottom,
+    	color-stop(0, #1F4D27),
+    	color-stop(1, #305938)
+    );
+    background-image: -o-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
+    background-image: -moz-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
+    background-image: -webkit-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
+    background-image: -ms-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
+    background-image: linear-gradient(to top, #1F4D27 0%, #305938 100%);
 }
 .item.panel-warning h3 i {
     color: #FFF;
@@ -176,11 +200,19 @@ textarea {
     color: #555;
 }
 .relations .item.panel-default > .panel-heading {
-    background-image: linear-gradient(bottom, rgb(250,250,248) 10%, rgb(226,235,214) 100%);
-    background-image: -o-linear-gradient(bottom, rgb(250,250,248) 10%, rgb(226,235,214) 100%);
-    background-image: -moz-linear-gradient(bottom, rgb(250,250,248) 10%, rgb(226,235,214) 100%);
-    background-image: -webkit-linear-gradient(bottom, rgb(250,250,248) 10%, rgb(226,235,214) 100%);
-    background-image: -ms-linear-gradient(bottom, rgb(250,250,248) 10%, rgb(226,235,214) 100%);
+    background-color: #FAFAF8;
+    background-image: -webkit-gradient(
+    	linear,
+    	left top,
+    	left bottom,
+    	color-stop(0, #E8E9E8),
+    	color-stop(1, #FAFAF8)
+    );
+    background-image: -o-linear-gradient(bottom, #E8E9E8 0%, #FAFAF8 100%);
+    background-image: -moz-linear-gradient(bottom, #E8E9E8 0%, #FAFAF8 100%);
+    background-image: -webkit-linear-gradient(bottom, #E8E9E8 0%, #FAFAF8 100%);
+    background-image: -ms-linear-gradient(bottom, #E8E9E8 0%, #FAFAF8 100%);
+    background-image: linear-gradient(to top, #E8E9E8 0%, #FAFAF8 100%);
 }
 .item .details img {
     width:20px;
@@ -282,4 +314,11 @@ textarea {
 }
 .thumbnails div img {
     margin: 0 auto;
+}
+
+.btn .fa-sign-in {
+    transition: margin 0.3s ease 0s;
+}
+.btn:hover .fa-sign-in {
+    margin-left: 5px;
 }
