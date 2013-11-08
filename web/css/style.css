@@ -156,20 +156,20 @@ textarea {
     border-color: #BBB;
 }
 .item.panel-primary > .panel-heading {
-    background-color: #3C404B;
+    background-color: #0f581e;
     border-color: #999;
     background-image: -webkit-gradient(
     	linear,
     	left top,
     	left bottom,
-    	color-stop(0, #293D2D),
-    	color-stop(1, #47564A)
+    	color-stop(0, #0f581e),
+    	color-stop(1, #32693d)
     );
-    background-image: -o-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
-    background-image: -moz-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
-    background-image: -webkit-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
-    background-image: -ms-linear-gradient(bottom, #293D2D 0%, #47564A 100%);
-    background-image: linear-gradient(to top, #293D2D 0%, #47564A 100%);
+    background-image: -o-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
+    background-image: -moz-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
+    background-image: -webkit-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
+    background-image: -ms-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
+    background-image: linear-gradient(to top, #0f581e 0%, #32693d 100%);
 }
 .item.panel-primary h3 i {
     color: #EEE;
@@ -178,21 +178,21 @@ textarea {
     border-color: #71AC2B;
 }
 .item.panel-warning > .panel-heading {
-    background-color: #31AC2B;
+    background-color: #006c13;
     border-color: #71AC2B;
     color: #FFF;
     background-image: -webkit-gradient(
     	linear,
     	left top,
     	left bottom,
-    	color-stop(0, #1F4D27),
-    	color-stop(1, #305938)
+    	color-stop(0, #006c13),
+    	color-stop(1, #00871a)
     );
-    background-image: -o-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
-    background-image: -moz-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
-    background-image: -webkit-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
-    background-image: -ms-linear-gradient(bottom, #1F4D27 0%, #305938 100%);
-    background-image: linear-gradient(to top, #1F4D27 0%, #305938 100%);
+    background-image: -o-linear-gradient(bottom, #006c13 0%, #00871a 100%);
+    background-image: -moz-linear-gradient(bottom, #006c13 0%, #00871a 100%);
+    background-image: -webkit-linear-gradient(bottom, #006c13 0%, #00871a 100%);
+    background-image: -ms-linear-gradient(bottom, #006c13 0%, #00871a 100%);
+    background-image: linear-gradient(to top, #006c13 0%, #00871a 100%);
 }
 .item.panel-warning h3 i {
     color: #FFF;
