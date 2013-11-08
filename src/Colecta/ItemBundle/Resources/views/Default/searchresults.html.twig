@@ -1,38 +1,57 @@
 {% extends '::frontend.html.twig' %}
 
-{% block home 'active' %}
+{% block title %}{{ search }}{% endblock %}
 
 {% block article %}
 
-<div class="title-block">
-    <h2>{{ search }}{% if page > 1 %} (página {{page}}){% endif %} <br><span>Resultados de búsqueda</span></h2>
-</div>
+{% include '::navigation.html.twig' with {'active': ''} %}
 
-{% for item in items %}
-    
-<div class="item">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    
-    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
-    
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-    
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item } only %}
-</div>
-{% else %}
-    <h3>Ningún resultado.</h3>
-    <p>Prueba con otras palabras.</p>
+    <h2>{{ search }}{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+
+{% set shownItems = [] %}
+{% set mainItemsToShow = [] %}
+
+{% for item in items if not item.part %}
+    {% set mainItemsToShow = mainItemsToShow | merge([item.id]) %}
 {% endfor %}
 
-<ul class="pager">
-  <li class="previous{% if page == 1 %} disabled{% endif %}">
-    <a href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search}}{% else %}{% endif %}">&larr; Anteriores</a>
-  </li>
-  <li class="next{% if not thereAreMore %} disabled{% endif %}">
-    <a href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search}}{% else %}{% endif %}">Siguientes &rarr;</a>
-  </li>
-</ul>
+{% for item in items if item.id not in shownItems %}
+    {% if item.part %}
+        {% for relitem in item.related %}
+            {% if not relitem.part %}
+                {% set item = relitem %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="item" id="item{{ item.id}}">        
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+        
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+    </div>
+    
+    {% set shownItems = shownItems | merge([item.id]) %}
+    {% for ri in item.related %}
+        {% set shownItems = shownItems | merge([ri.id]) %}
+    {% endfor %}
+{% else %}
+    <p class="lead">Vaya, no he encontrado nada con esas palabras.</p>
+{% endfor %}
+
+{% if page > 1 or thereAreMore %}
+    <ul class="pager">
+      <li class="previous{% if page == 1 %} disabled{% endif %}">
+        <a href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search}}{% else %}{% endif %}">&larr; Anteriores</a>
+      </li>
+      <li class="next{% if not thereAreMore %} disabled{% endif %}">
+        <a href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search}}{% else %}{% endif %}">Siguientes &rarr;</a>
+      </li>
+    </ul>
+{% endif %}
 
 {% endblock %}
+
+
+
+
