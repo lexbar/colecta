@@ -175,7 +175,7 @@ textarea {
     color: #EEE;
 }
 .item.panel-warning {
-    border-color: #1F4D27;
+    border-color: #71AC2B;
 }
 .item.panel-warning > .panel-heading {
     background-color: #31AC2B;
@@ -219,6 +219,25 @@ textarea {
     background-image: -webkit-linear-gradient(bottom, #E8E9E8 0%, #FAFAF8 100%);
     background-image: -ms-linear-gradient(bottom, #E8E9E8 0%, #FAFAF8 100%);
     background-image: linear-gradient(to top, #E8E9E8 0%, #FAFAF8 100%);
+}
+.relations .item.panel-warning > .panel-heading {
+    color: #586b3f;
+    background-color: #e9eee3;
+    background-image: -webkit-gradient(
+    	linear,
+    	left top,
+    	left bottom,
+    	color-stop(0, #e9eee3),
+    	color-stop(1, #fafbf8)
+    );
+    background-image: -o-linear-gradient(bottom, #e9eee3 0%, #fafbf8 100%);
+    background-image: -moz-linear-gradient(bottom, #e9eee3 0%, #fafbf8 100%);
+    background-image: -webkit-linear-gradient(bottom, #e9eee3 0%, #fafbf8 100%);
+    background-image: -ms-linear-gradient(bottom, #e9eee3 0%, #fafbf8 100%);
+    background-image: linear-gradient(to top, #e9eee3 0%, #fafbf8 100%);
+}
+.relations .item.panel-warning h3 i {
+    color: #586b3f;
 }
 .item .details img {
     width:20px;
