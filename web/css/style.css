@@ -62,6 +62,12 @@ textarea {
 .content .sidebar hr {
     margin: 10px 0;
 }
+.nav > li > a:hover {
+    background-color: #E4F0D5;
+}
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    background-color: #71AC2B;
+}
 .nav, .calendar {
     background-color: #FFF;
     border: 1px solid #EFECE8;
