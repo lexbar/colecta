@@ -201,6 +201,11 @@ class Event extends \Colecta\ItemBundle\Entity\Item
         return 'Activity/Event';
     }
     
+    public function getViewPath()
+    {
+        return 'ColectaEventView';
+    }
+    
     public function happened()
     {
         $now = new \DateTime('now');

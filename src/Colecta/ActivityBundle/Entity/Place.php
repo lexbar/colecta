@@ -119,6 +119,11 @@ class Place extends \Colecta\ItemBundle\Entity\Item
     {
         return 'Activity/Place';
     }
+    
+    public function getViewPath()
+    {
+        return 'ColectaPlaceView';
+    }
 
     /**
      * Set description

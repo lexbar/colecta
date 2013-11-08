@@ -2,104 +2,11 @@
 
 {% block title %}{{ item.name }} | Actividades{% endblock %}
 
-{% block javascripts %}    
-    <script>
-    var xhr;
-    var searchagain = false;
-    
-    function showResults()
-    {
-        if($('#userSearch').val().length < 2) {
-            hideResults();
-            return;
-        }
-        
-        $('#destinationLoading').removeClass('hidden');
-        
-        if(xhr && xhr.readyState != 4) {
-            searchagain = true;
-        } else {        
-            
-            xhr = $.ajax({
-                url: '{{ path('ColectaAjaxUserSearch') }}?search='+$('#userSearch').val(),
-                success: function(json) {
-                    $('#userResults').html('');
-                    $('#userResults').css('display','none');
-                    for(var i = 0; i < json.length; i++) {
-                        $('#userResults').append('<li id="userResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
-                    } 
-                    if(json.length) { $('#userResults').css('display','block'); }
-                    //$('#searchButton').removeAttr("disabled"); 
-                },
-                cache: false
-            }).done(function() { 
-                if(searchagain) 
-                {
-                    searchagain = false;
-                    showResults();
-                }
-                else
-                {
-                    $('#destinationLoading').addClass('hidden');
-                }
-            });
-        }
-    }
-    
-    //Key up
-    $('#userSearch').keyup(function(e){
-        if($('#userResults li').length) {
-            var current = $('#userResults li.active');
-            var currentN = 0;
-            if(current.length) {
-                currentN = parseInt(current.attr('id').substring(10));
-            } 
-            
-            if(e.keyCode == 40){
-                if($('#userResult'+(currentN + 1)).length) {
-                    $('#userResult'+(currentN)).removeClass('active');
-                    $('#userResult'+(currentN + 1)).addClass('active');
-                    return;
-                }
-                return;
-            } else if(e.keyCode == 38){
-                if($('#userResult'+(currentN - 1)).length) {
-                    $('#userResult'+(currentN)).removeClass('active');
-                    $('#userResult'+(currentN - 1)).addClass('active');
-                    return;
-                }
-                return;
-            } else if(e.keyCode == 13){
-                if($('#userResult'+(currentN)).length) {
-                    $('#userResult'+(currentN)+' a').click();
-                    return;
-                }
-                return;
-            }
-        }
-        
-        showResults();
-    });
-    
-    function hideResults() 
-    {
-        $('#userResults').html('');
-        $('#userResults').css('display','none');
-    }
-    
-    function highlightUpdateBtn() 
-    {
-        $('#updateBtn').addClass('btn-primary');
-    }
-    
-    </script>
-{% endblock %}
-
 {% block article %}
 
 <div class="item panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-calendar"></i> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
     </div>
     
     <div class="panel-body">
@@ -232,4 +139,97 @@
         
 {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
 
+{% endblock %}
+
+{% block javascripts %}    
+    <script>
+    var xhr;
+    var searchagain = false;
+    
+    function showResults()
+    {
+        if($('#userSearch').val().length < 2) {
+            hideResults();
+            return;
+        }
+        
+        $('#destinationLoading').removeClass('hidden');
+        
+        if(xhr && xhr.readyState != 4) {
+            searchagain = true;
+        } else {        
+            
+            xhr = $.ajax({
+                url: '{{ path('ColectaAjaxUserSearch') }}?search='+$('#userSearch').val(),
+                success: function(json) {
+                    $('#userResults').html('');
+                    $('#userResults').css('display','none');
+                    for(var i = 0; i < json.length; i++) {
+                        $('#userResults').append('<li id="userResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
+                    } 
+                    if(json.length) { $('#userResults').css('display','block'); }
+                    //$('#searchButton').removeAttr("disabled"); 
+                },
+                cache: false
+            }).done(function() { 
+                if(searchagain) 
+                {
+                    searchagain = false;
+                    showResults();
+                }
+                else
+                {
+                    $('#destinationLoading').addClass('hidden');
+                }
+            });
+        }
+    }
+    
+    //Key up
+    $('#userSearch').keyup(function(e){
+        if($('#userResults li').length) {
+            var current = $('#userResults li.active');
+            var currentN = 0;
+            if(current.length) {
+                currentN = parseInt(current.attr('id').substring(10));
+            } 
+            
+            if(e.keyCode == 40){
+                if($('#userResult'+(currentN + 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN + 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 38){
+                if($('#userResult'+(currentN - 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN - 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 13){
+                if($('#userResult'+(currentN)).length) {
+                    $('#userResult'+(currentN)+' a').click();
+                    return;
+                }
+                return;
+            }
+        }
+        
+        showResults();
+    });
+    
+    function hideResults() 
+    {
+        $('#userResults').html('');
+        $('#userResults').css('display','none');
+    }
+    
+    function highlightUpdateBtn() 
+    {
+        $('#updateBtn').addClass('btn-primary');
+    }
+    
+    </script>
 {% endblock %}

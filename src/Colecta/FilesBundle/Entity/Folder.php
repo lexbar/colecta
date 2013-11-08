@@ -117,6 +117,11 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
         return 'Files/Folder';
     }
     
+    public function getViewPath()
+    {
+        return 'ColectaFolderView';
+    }
+    
     public function __toString()
     {
         return $this->getName();

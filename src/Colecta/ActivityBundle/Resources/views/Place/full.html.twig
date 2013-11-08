@@ -2,27 +2,11 @@
 
 {% block title %}{{ item.name}} |Lugares{% endblock %}
 
-{% block javascripts %}  
-    <script src="/js/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-    <script>
-        var map;
-        var marker;
-        
-        map = new google.maps.Map(document.getElementById('map'), {zoom: 13,center:new google.maps.LatLng({{ item.latitude }},{{ item.longitude }}), mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
-        marker = new google.maps.Marker({
-                        map: map,
-                        position: new google.maps.LatLng({{ item.latitude }},{{ item.longitude }})
-                    });
-        
-    </script>
-{% endblock %}
-
 {% block article %}
 
 <div class="item panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-map-marker"></i> <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
     </div>
     
     <div class="panel-body">
@@ -44,4 +28,20 @@
 
 {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
 
+{% endblock %}
+
+{% block javascripts %}  
+    <script src="/js/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+        var map;
+        var marker;
+        
+        map = new google.maps.Map(document.getElementById('map'), {zoom: 13,center:new google.maps.LatLng({{ item.latitude }},{{ item.longitude }}), mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
+        marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng({{ item.latitude }},{{ item.longitude }})
+                    });
+        
+    </script>
 {% endblock %}

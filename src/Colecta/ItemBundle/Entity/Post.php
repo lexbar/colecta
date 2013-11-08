@@ -45,6 +45,11 @@ class Post extends Item
         return 'Item/Post';
     }
     
+    public function getViewPath()
+    {
+        return 'ColectaPostView';
+    }
+    
     public function __toString()
     {
         return $this->name;

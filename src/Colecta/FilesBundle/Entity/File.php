@@ -133,6 +133,11 @@ class File extends \Colecta\ItemBundle\Entity\Item
         return 'Files/File';
     }
     
+    public function getViewPath()
+    {
+        return 'ColectaFileView';
+    }
+    
     public function getExif()
     {
         return (function_exists('exif_read_data')) ?  exif_read_data( $this->getAbsolutePath() ) : array();

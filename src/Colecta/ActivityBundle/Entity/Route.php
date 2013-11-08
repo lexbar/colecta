@@ -206,6 +206,12 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     {
         return 'Activity/Route';
     }
+    
+    public function getViewPath()
+    {
+        return 'ColectaRouteView';
+    }
+    
     /**
      * Constructor
      */
