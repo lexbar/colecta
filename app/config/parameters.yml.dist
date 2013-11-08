@@ -20,3 +20,10 @@ parameters:
 twig:
     globals:
         web_title: Nombre del club
+        itemIcons:
+            Item/Post: align-left
+            Activity/Event: calendar
+            Activity/Route: code-fork
+            Activity/Place: map-marker
+            Files/File: folder-open
+            Files/Folder: folder-open
