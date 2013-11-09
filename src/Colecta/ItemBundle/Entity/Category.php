@@ -347,11 +347,11 @@ class Category
     public function sortedTypes()
     {
         $types = array(
-                        'posts' => $this->getPosts(),
-                        'events' => $this->getEvents(),
-                        'routes' => $this->getRoutes(),
-                        'places' => $this->getPlaces(),
-                        'files' => $this->getFiles(),
+                        'Item/Post' => $this->getPosts(),
+                        'Activity/Event' => $this->getEvents(),
+                        'Activity/Route' => $this->getRoutes(),
+                        'Activity/Place' => $this->getPlaces(),
+                        'Files/File' => $this->getFiles(),
         );
         
         arsort($types);

@@ -1,7 +1,91 @@
 {% extends '::frontend.html.twig' %}
 
-{% block routes 'active' %}
+{% block title %}{{ item.name}} |Tracks{% endblock %}
 {% block onload 'initialize()' %}
+
+{% block article %}    
+<div class="item panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
+    
+    <div class="panel-body">
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+        
+        <div id="map" style="width:auto;height:300px;"></div>
+        
+        <div id="chart" style="width:auto;height:200px;"></div>
+        
+        <hr>
+            
+        <p>{{ item.description | usercontent | raw | nl2br }}</p>
+    
+        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+    </div>
+    
+    <div class="panel-footer">
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+    </div>
+</div>
+
+{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+
+
+
+
+
+
+
+
+
+
+
+    {#
+    
+    <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small pull-right" type="button"><i class="icon-fullscreen icon-fixed-width"></i></button>
+    
+    <div class="dropdown pull-right">
+        <button class="btn btn-small btn-primary" type="button" onClick="return false;">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
+        <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
+            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
+            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
+            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
+            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Limitado a 500 puntos</a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+        <div id="mapproperties">
+            <button class="btn btn-danger btn-small btn-block" onClick="toggleFullScreen()">Salir <i class="icon-resize-small icon-white"></i></button>
+            
+            <ul class="nav nav-list">
+                <li class="nav-header">Tracks</li>
+                    <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} <br><small>({% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} puntos{% else %}Limitado a {{ item.trackpoints | length }} puntos.{% endif%})</small></a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Puntos</li>
+                    <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
+                    {% for rel in item.related if rel.type == 'Activity/Place' %}
+                        <li><a href="#" onClick="map.panTo(new google.maps.LatLng({{ rel.latitude }}, {{ rel.longitude }})); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#00f;" class="icon-map-marker"></i> {{ rel.name }}</a></li>
+                    {% endfor %}
+            </ul>
+        </div>
+        
+        
+    #}
+        
+{% endblock %}
+
 {% block javascripts %}
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=weather"></script>
     <script src="/js/highcharts.js"></script>
@@ -235,74 +319,4 @@
     
     </script>
     
-{% endblock %}
-
-{% block article %}    
-<div class="route full" id="item{{ item.id }}">
-    {% include 'ColectaItemBundle:Default:itemheader.html.twig' with { 'item': item } only %}
-    
-    <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small pull-right" type="button"><i class="icon-fullscreen icon-fixed-width"></i></button>
-    
-    <div class="dropdown pull-right">
-        <button class="btn btn-small btn-primary" type="button" onClick="return false;">Descargar <i id="ddarrow" class="icon-chevron-down icon-white"></i></button>
-        <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
-            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
-            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
-            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
-            <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
-            <li class="divider"></li>
-            <li class="dropdown-submenu">
-                <a tabindex="-1" href="#">Limitado a 500 puntos</a>
-                <ul class="dropdown-menu">
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    
-    <h2>{{ item.name }}</h2>
-    
-    <div class="unity">
-        <div id="mapproperties">
-            <button class="btn btn-danger btn-small btn-block" onClick="toggleFullScreen()">Salir <i class="icon-resize-small icon-white"></i></button>
-            
-            <ul class="nav nav-list">
-                <li class="nav-header">Tracks</li>
-                    <li><a href="#" onClick="map.fitBounds(bounds); return false;"><i style="color:#f00" class="icon-road"></i> {{ item.name }} <br><small>({% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} puntos{% else %}Limitado a {{ item.trackpoints | length }} puntos.{% endif%})</small></a></li>
-                <li class="divider"></li>
-                <li class="nav-header">Puntos</li>
-                    <li><a href="#" onClick="map.panTo(new google.maps.LatLng(points[0][0], points[0][1])); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#f00;" class="icon-map-marker"></i> Inicio</a></li>
-                    {% for rel in item.related if rel.type == 'Activity/Place' %}
-                        <li><a href="#" onClick="map.panTo(new google.maps.LatLng({{ rel.latitude }}, {{ rel.longitude }})); if(map.getZoom() < 15){ map.setZoom(15);} return false;"><i style="color:#00f;" class="icon-map-marker"></i> {{ rel.name }}</a></li>
-                    {% endfor %}
-            </ul>
-        </div>
-        
-        <div id="map" class="full"></div>
-        
-        {#<div id="submap">{% if item.trackpoints | length < 10000 %}{{ item.trackpoints | length }} coordenadas{% else %}El nº de coordenadas ha sido reducido a {{ item.trackpoints | length }}.{% endif%} <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-mini pull-right" type="button">Ver en pantalla completa <i class="icon-fullscreen"></i></button></div>#}
-        <div id="chart"></div>
-        
-        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
-        
-        <ul class="moreproperties">
-            {% if item.avgspeed > 0 %}<li><strong>Velocidad media:</strong> {{ item.avgspeed }} km/h</li>{% endif %}
-            {% if item.maxspeed > 0 %}<li><strong>Velocidad máxima:</strong> {{ item.maxspeed }} km/h</li>{% endif %}
-            {% if item.minheight > 0 %}<li><strong>Cota inferior:</strong> {{ item.minheight }} m</li>{% endif %}
-            {% if item.maxheight > 0 %}<li><strong>Cota superior:</strong> {{ item.maxheight }} m</li>{% endif %}
-            <li><strong>Circular:</strong> {% if item.isloop %}Sí{% else %}No{% endif %}</li>
-            {% if item.IBP %}<li><strong>IBP:</strong> {{ item.IBP }}</li>{% endif %}
-        </ul>
-        
-        <p>{{ item.description | usercontent | raw | nl2br }}</p>
-    </div>
-    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-    
-    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, item: item, 'collapse': 10 } only %}
-        
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-</div>
 {% endblock %}

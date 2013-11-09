@@ -9,7 +9,6 @@
 <h2>Categorías</h2>
 
 {% set slv = app.session.get('sinceLastVisit') %}
-{% set typeicon = {'posts':'align-left','events':'calendar-o','routes':'bar-chart-o','places':'map-marker','files':'folder-open-o'} %}
 
 <ul class="list-group">
     {% for category in categories %}
@@ -23,7 +22,7 @@
             {% for type, amount in category.sortedTypes %}
                 {% if amount > 0 %}
                     {% if loop.first %}<span style="font-size:16px;">{% elseif loop.index > 3 %}<span style="font-size:12px;">{% else %}<span> | {% endif %}
-                        <i class="fa fa-{{ typeicon[type] }}"></i> {{ amount }} 
+                        <i class="fa fa-{{ itemIcons[type] }}"></i> {{ amount }} 
                     </span>
                 {% endif %}
             {% endfor %}
