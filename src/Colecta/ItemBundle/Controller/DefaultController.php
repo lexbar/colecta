@@ -26,7 +26,7 @@ class DefaultController extends Controller
         //$items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         $query = $em->createQuery(
-            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.date DESC"
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
         )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
         
         $items = $query->getResult();
@@ -81,7 +81,7 @@ class DefaultController extends Controller
             ->from('ColectaItemBundle:Item', 'i')
             ->leftJoin('i.comments', 'c')
             ->where('i.draft = 0 AND i.part = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
-            ->orderBy('i.date', 'ASC')
+            ->orderBy('i.lastInteraction', 'ASC')
             ->getQuery();
         
         $query->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
@@ -213,7 +213,7 @@ class DefaultController extends Controller
             
             $queryString .= " OR i.id IN (SELECT DISTINCT(c.item) FROM ColectaItemBundle:Comment c WHERE c.text LIKE '%".implode("%' OR c.text LIKE '%",$words)."%')";
             
-            $queryString .= ' ORDER BY i.date DESC';
+            $queryString .= ' ORDER BY i.lastInteraction DESC';
             
             $query = $em->createQuery($queryString)->setParameters($parameters)->setMaxResults(($this->ipp + 1))->setFirstResult($page * $this->ipp);
             

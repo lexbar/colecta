@@ -69,6 +69,13 @@ abstract class Item
      * @ORM\Column(name="date", type="datetime")
      */
     protected $date;
+    
+    /**
+     * @var datetime $lastInteraction
+     *
+     * @ORM\Column(name="lastInteraction", type="datetime")
+     */
+    protected $lastInteraction;
 
     /**
      * @var boolean $allowComments
@@ -376,6 +383,7 @@ abstract class Item
     public function prePersist()
     {
         $this->setDate(new \DateTime('now'));
+        $this->setLastInteraction(new \DateTime('now'));
     }
 
 
@@ -540,6 +548,29 @@ abstract class Item
     public function getDate()
     {
         return $this->date;
+    }
+    
+    /**
+     * Set lastInteraction
+     *
+     * @param \DateTime $lastInteraction
+     * @return Item
+     */
+    public function setLastInteraction($lastInteraction)
+    {
+        $this->lastInteraction = $lastInteraction;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastInteraction
+     *
+     * @return \DateTime 
+     */
+    public function getLastInteraction()
+    {
+        return $this->lastInteraction;
     }
 
     /**

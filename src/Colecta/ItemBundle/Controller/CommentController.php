@@ -29,6 +29,7 @@ class CommentController extends Controller
             $comment->setUser($user);
             $comment->setText($post->get('comment'));
             $comment->setDate(new \DateTime('now'));
+            $item->setLastInteraction(new \DateTime('now'));
             
             $em->persist($comment); 
             

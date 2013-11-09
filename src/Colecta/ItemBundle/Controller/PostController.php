@@ -24,7 +24,7 @@ class PostController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         //Pagination
         if(count($items) > $this->ipp) 

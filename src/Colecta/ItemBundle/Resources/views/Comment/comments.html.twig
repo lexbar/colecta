@@ -13,14 +13,16 @@
 {% endif %}
 
 {% for comment in comments%}
+    {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < comment.date %}
+    
     <div class="media">
         <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">
             <img style="width:30px" src="{% if comment.user.avatar %}{{ path('userAvatar',{'uid':comment.user.id,'width':30,'height':30}) }}{% else %}/img/unknown.gif{% endif %}"> 
         </a> 
             
-        <div class="media-body{% if app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < comment.date %} new{% endif %}">
-        
+        <div class="media-body">
             <p class="media-heading">
+                {% if new %}<i class="fa fa-asterisk" style="color:orange"></i>{% endif%}
                 <strong><a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a></strong> {{ comment.text | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
             <p class="details">
                 {% set itemtimestamp = comment.date | date('U') %}
