@@ -1,0 +1,172 @@
+<div class="monocontent">
+    <form action="" method="POST" class="form-horizontal" role="form">
+        <fieldset>
+          <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="ItemSubmitName">Título</label>
+            <div class="col-sm-9 col-lg-10">
+              <input type="text" class="form-control" id="ItemSubmitName" name="name" value="">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="ItemSubmitText">Texto</label>
+            <div class="col-sm-9 col-lg-10">
+              <textarea class="form-control" id="ItemSubmitText" name="text" rows="3"></textarea>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label">Más datos …</label>
+            <div class="col-sm-9 col-lg-10">
+                <button onClick="$('.itemTypeEvent').toggleClass('hidden'); $(this).toggleClass('btn-default'); $(this).toggleClass('btn-success');" type="button" class="btn btn-default"><i class="fa fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</button>
+                <button onClick="$('.itemTypeRoute').toggleClass('hidden'); $(this).toggleClass('btn-default'); $(this).toggleClass('btn-success');" type="button" class="btn btn-default"><i class="fa fa-{{ itemIcons['Activity/Route']}}"></i> Track GPS</button>
+                <button onClick="$('.itemTypeFile').toggleClass('hidden'); $(this).toggleClass('btn-default'); $(this).toggleClass('btn-success');" type="button" class="btn btn-default"><i class="fa fa-{{ itemIcons['Files/File']}}"></i> Archivos/Fotos</button>
+                <button onClick="$('.itemTypePlace').toggleClass('hidden'); $(this).toggleClass('btn-default'); $(this).toggleClass('btn-success');" type="button" class="btn btn-default"><i class="fa fa-{{ itemIcons['Activity/Place']}}"></i> Lugar</button>
+            </div>
+          </div>
+          
+          <div class="itemTypeEvent hidden">
+            <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
+                <div class="col-sm-9 col-lg-10">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+                    
+                        <span class="input-group-addon">a las</span>
+                        
+                        <select class="form-control" id="EventDifficulty" id="EventDateiniHour" name="dateinihour">
+                            {% for hour in 0..23 %}
+                            <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if item is defined and hour == item.dateini | date('G') or item is not defined and hour == 8 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+                            {% endfor %}
+                        </select> 
+                        
+                        <span class="input-group-addon">:</span>
+                        
+                        <select class="form-control" id="EventDifficulty" id="EventDateiniMinute" name="dateiniminute">
+                            {% for minute in ['00','10','20','30','40','50'] %}
+                            <option value="{{ minute }}"{% if item is defined and minute == item.dateini | date('i') or item is not defined and minute == '00' %} selected="selected"{% endif %}>{{ minute }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
+                <div class="col-sm-9 col-lg-10">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+                        
+                        <span class="input-group-addon">a las</span>
+                        
+                        <select class="form-control" id="EventDifficulty" id="EventDateendHour" name="dateendhour">
+                            {% for hour in 0..23 %}
+                            <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if item is defined and hour == item.dateend | date('G') or item is not defined and hour == 14 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <span class="input-group-addon">:</span>
+                        
+                        <select class="form-control" id="EventDifficulty" id="EventDateendMinute" name="dateendminute">
+                            {% for minute in ['00','10','20','30','40','50'] %}
+                            <option value="{{ minute }}"{% if item is defined and minute == item.dateend | date('i') or item is not defined and minute == '00' %} selected="selected"{% endif %}>{{ minute }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="EventName">Distancia</label>
+                <div class="col-sm-9 col-lg-10">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="EventDistance" name="distance" value="{% if item is defined %}{{ item.distance }}{% endif %}"><span class="input-group-addon"> km</span>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="EventName">Desnivel subida</label>
+                <div class="col-sm-9 col-lg-10">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="EventUphill" name="uphill" value="{% if item is defined %}{{ item.uphill }}{% endif %}"><span class="input-group-addon"> metros</span>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="EventName">Dificultad</label>
+                <div class="col-sm-9 col-lg-10">
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item is defined and item.difficulty == '' or item is not defined%} checked{% endif %}>
+                        No indicar
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item is defined and item.difficulty == 'easy' %} checked{% endif %}>
+                        <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                        Fácil
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item is defined and item.difficulty == 'moderate' %} checked{% endif %}>
+                        <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                        Moderado
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item is defined and item.difficulty == 'hard' %} checked{% endif %}>
+                        <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                        Difícil
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item is defined and item.difficulty == 'very hard' %} checked{% endif %}>
+                        <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                        Muy difícil
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item is defined and item.difficulty == 'experts only' %} checked{% endif %}>
+                        <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                        Sólo expertos
+                    </label>
+                </div>
+            </div>
+          </div>
+          
+          <div class="itemTypeRoute hidden">
+            <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Archivo GPS</label>
+                <div class="col-sm-9 col-lg-10">
+                    <input type="file" id="RouteFile" name="file">
+                    <p class="help-block">Selecciona el archivo que contenga el track en tu ordenador (GPX,KML,CRS,...).</p>
+                </div>
+            </div>
+          </div>
+          
+          <div class="itemTypeFile hidden">
+            <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Archivo GPS</label>
+                <div class="col-sm-9 col-lg-10">
+                    <input id="FilesFile" type="file" multiple="multiple" name="file[]">
+                    <p class="help-block">Selecciona uno o varios archivos.</p>
+                </div>
+            </div>
+          </div>
+          
+          <div class="itemTypePlace hidden">
+            
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="ItemSubmitCategory">Categoría</label>
+            <div class="col-sm-9 col-lg-10">
+                {% render 'ColectaItemBundle:Category:formlist' with {'selected' : 0} %}
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                {#<button class="btn">Guardar como borrador</button>#}
+                <button type="submit" class="btn btn-primary">Publicar ahora</button> 
+            </div>
+          </div>
+        </fieldset>
+    </form>    
+</div>

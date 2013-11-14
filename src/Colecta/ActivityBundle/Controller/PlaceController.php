@@ -99,7 +99,7 @@ class PlaceController extends Controller
                 }
             
                 $category->setSlug($catSlug);
-                $category->setDescription('');
+                $category->setText('');
                 $category->setLastchange(new \DateTime('now'));
                 
                 $em->persist($category); 
@@ -134,11 +134,11 @@ class PlaceController extends Controller
             }
             $item->setSlug($slug);
             
-            $item->summarize($request->get('description'));
+            $item->summarize($request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(false);
             $item->setPart(false);
-            $item->setDescription($request->get('description'));
+            $item->setText($request->get('text'));
             $item->setLatitude($request->get('latitude'));
             $item->setLongitude($request->get('longitude'));
             
@@ -172,7 +172,7 @@ class PlaceController extends Controller
         else
         {
             $this->get('session')->setFlash('PlaceName', $request->get('name'));
-            $this->get('session')->setFlash('PlaceDescription', $request->get('description'));
+            $this->get('session')->setFlash('PlaceText', $request->get('text'));
             $this->get('session')->setFlash('PlaceLatitude', $request->get('latitude'));
             $this->get('session')->setFlash('PlaceLongitude', $request->get('longitude'));
             return new RedirectResponse($this->generateUrl('ColectaPlaceNew'));
@@ -225,7 +225,7 @@ class PlaceController extends Controller
                     }
                 
                     $category->setSlug($catSlug);
-                    $category->setDescription('');
+                    $category->setText('');
                     $category->setLastchange(new \DateTime('now'));
                     
                     $em->persist($category); 
@@ -234,15 +234,15 @@ class PlaceController extends Controller
                 $item->setCategory($category);
             }
             
-            if(!$request->get('description'))
+            if(!$request->get('text'))
             {
                 $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             
             $item->setName($request->get('name'));
-            $item->summarize($request->get('description'));
-            $item->setDescription($request->get('description'));
+            $item->summarize($request->get('text'));
+            $item->setText($request->get('text'));
             $item->setLatitude($request->get('latitude'));
             $item->setLongitude($request->get('longitude'));
             

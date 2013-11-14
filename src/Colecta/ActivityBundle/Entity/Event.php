@@ -34,11 +34,11 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     protected $allowassistances;
 
     /**
-     * @var text $description
+     * @var text $text
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="text", type="text")
      */
-    protected $description;
+    protected $text;
 
     /**
      * @var float $distance
@@ -259,26 +259,26 @@ class Event extends \Colecta\ItemBundle\Entity\Item
     }
 
     /**
-     * Set description
+     * Set text
      *
-     * @param string $description
+     * @param string $text
      * @return Event
      */
-    public function setDescription($description)
+    public function setText($text)
     {
-        $this->description = $description;
+        $this->text = $text;
     
         return $this;
     }
 
     /**
-     * Get description
+     * Get text
      *
      * @return string 
      */
-    public function getDescription()
+    public function getText()
     {
-        return $this->description;
+        return $this->text;
     }
 
     /**

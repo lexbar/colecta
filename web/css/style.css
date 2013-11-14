@@ -131,6 +131,7 @@ textarea {
     color: #777;
     padding: 0 7px;
     overflow:hidden;
+    vertical-align: middle;
 }
 .properties li strong {
     font-size: 18px;
@@ -315,10 +316,13 @@ textarea {
 .comments .media:hover .removeComment {
     display: inline;
 }
-.panel .details {
+.panel .details, .list-group .details {
     color: #777777;
     font-size: 12px;
     margin: -5px 0 10px;
+}
+.list-group .details {
+    margin-bottom: 0;
 }
 .panel .details a { 
     font-weight: bold;

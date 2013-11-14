@@ -13,7 +13,7 @@
 {% endif %}
 
 {% for comment in comments%}
-    {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < comment.date %}
+    {% set new = app.user and app.user != comment.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') < comment.date %}
     
     <div class="media">
         <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">

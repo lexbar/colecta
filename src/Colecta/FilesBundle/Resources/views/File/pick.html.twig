@@ -200,7 +200,7 @@
         <div class="control-group">
             <label class="control-label">Descripción</label>
             <div class="controls">
-                <textarea name="description"></textarea>
+                <textarea name="text"></textarea>
             </div>
         </div>
     
@@ -219,7 +219,7 @@
                 <div class="pv" id="UFC{{ loop.index0 }}">
                     <img src="/archivo/XHR/preview/{{ f.token }}" style="width:250px;height:190px;background-color:#AAA">
                     <input type="text" name="file{{ loop.index0 }}Name" placeholder="Nombre..." value="{{ f.name }}">
-                    <textarea name="file{{ loop.index0 }}Description" placeholder="Descripción...">{{ f.description }}</textarea>
+                    <textarea name="file{{ loop.index0 }}Description" placeholder="Descripción...">{{ f.text }}</textarea>
                     <small class="btn btn-link btn-small" onClick="deleteFile({{ loop.index0 }})">(Eliminar archivo)</small>
                     <input type="hidden" name="file{{ loop.index0 }}Token" value="{{ f.token }}">
                     <input type="hidden" name="file{{ loop.index0 }}Delete" value="0" id="file{{ loop.index0 }}Delete">

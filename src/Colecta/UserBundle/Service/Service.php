@@ -71,13 +71,13 @@ class Service
             }
             
             $query = $em->createQueryBuilder('ColectaItemBundle:Item')
-                ->select('COUNT(i)')
+                ->select('i')
                 ->from('ColectaItemBundle:Item', 'i')
                 ->leftJoin('i.comments', 'c')
                 ->where('(i.author != '.$user->getId().' OR c.user != '.$user->getId().') AND i.draft = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
                 ->getQuery();
                 
-            return $query->getSingleScalarResult();
+            return $query->getResult();
         }
     }
     
@@ -123,16 +123,9 @@ class Service
             
         $slv = $this->session->get('sinceLastVisit');
         
-        if(empty($slv))
+        if(empty($slv) || $slv == 'dismiss')
         {
-            if($this->sinceLastVisitItems() > 0)
-            {
-                $this->session->set('sinceLastVisit',$user->getLastAccess());
-            }
-            else
-            {
-                $this->session->set('sinceLastVisit','dismiss');
-            }
+            $this->session->set('sinceLastVisit',$user->getLastAccess());
         }
     }
     

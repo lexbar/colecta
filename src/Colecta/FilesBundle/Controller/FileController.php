@@ -102,7 +102,7 @@ class FileController extends Controller
             $item->setSlug($slug);
             
             $item->setAuthor($user);
-            $item->summarize(strval($request->request->get('description')));
+            $item->summarize(strval($request->request->get('text')));
             $item->setAllowComments(true);
             $item->setDraft(true);
             $item->setPart(false);
@@ -133,7 +133,7 @@ class FileController extends Controller
                 }
             
                 $category->setSlug($catSlug);
-                $category->setDescription('');
+                $category->setText('');
                 $category->setLastchange(new \DateTime('now'));
             }
             
@@ -210,19 +210,19 @@ class FileController extends Controller
                 {
                     if(!$request->request->get('file'.$i.'Delete'))
                     {
-                        $newTheFiles[] = array('name'=>$request->request->get('file'.$i.'Name'),'description'=>$request->request->get('file'.$i.'Description'),'token'=>$f['token']);
+                        $newTheFiles[] = array('name'=>$request->request->get('file'.$i.'Name'),'text'=>$request->request->get('file'.$i.'Text'),'token'=>$f['token']);
                     }
                     
                     $i++;
                 }
                 
-                $newTheFiles[] = array('name'=>'','description'=>'','token'=>$token);
+                $newTheFiles[] = array('name'=>'','text'=>'','token'=>$token);
                 
                 $TheFiles = $newTheFiles;
             }
             else
             {
-                $TheFiles = array(array('name'=>'','description'=>'','token'=>$token));
+                $TheFiles = array(array('name'=>'','text'=>'','token'=>$token));
             }
             
             $this->get('session')->set('TheFiles',$TheFiles);
@@ -382,16 +382,16 @@ class FileController extends Controller
                     
                     $item->setName($name);
                     
-                    if($request->request->get('file'.$i.'Description') == '' || $request->request->get('file'.$i.'Description') == 'Descripción...')
+                    if($request->request->get('file'.$i.'Text') == '' || $request->request->get('file'.$i.'Text') == 'Descripción...')
                     {
-                        $description = '';
+                        $text = '';
                     }
                     else
                     {
-                        $description = strval($request->request->get('file'.$i.'Description'));
+                        $text = strval($request->request->get('file'.$i.'Text'));
                     }
                     
-                    $item->setDescription($description);
+                    $item->setText($text);
                     
                     //Slug generation
                     $slug = $item->generateSlug();
@@ -423,7 +423,7 @@ class FileController extends Controller
                     $item->setSlug($slug);
                     
                     $item->setAuthor($user);
-                    $item->summarize($item->getDescription());
+                    $item->summarize($item->getText());
                     $item->setAllowComments(true);
                     $item->setDraft(false);
                     $item->setDate(new \DateTime('now'));
@@ -487,7 +487,7 @@ class FileController extends Controller
             $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneById($request->request->get('folder'));
             
             $item->setName($request->request->get('name'));
-            $item->setDescription($request->request->get('description'));
+            $item->setText($request->request->get('text'));
             $item->setFolder($folder);
             $item->setCategory($category);
             
@@ -526,7 +526,7 @@ class FileController extends Controller
                         }
                     
                         $category->setSlug($catSlug);
-                        $category->setDescription('');
+                        $category->setText('');
                     }
                     
                     $category->setLastchange(new \DateTime('now'));
@@ -658,7 +658,7 @@ class FileController extends Controller
             $folder = $em->getRepository('ColectaFilesBundle:Folder')->findOneById($request->request->get('folder'));
             
             $item->setName($request->request->get('name'));
-            $item->setDescription($request->request->get('description'));
+            $item->setText($request->request->get('text'));
             $item->setFolder($folder);
             $item->setCategory($category);
             $item->setFile(new UploadedFile($_FILES['files']['tmp_name'][0],$_FILES['files']['name'][0],$_FILES['files']['type'][0],$_FILES['files']['size'][0],$_FILES['files']['error'][0]));
@@ -698,7 +698,7 @@ class FileController extends Controller
                         }
                     
                         $category->setSlug($catSlug);
-                        $category->setDescription('');
+                        $category->setText('');
                     }
                     
                     $category->setLastchange(new \DateTime('now'));
@@ -728,7 +728,7 @@ class FileController extends Controller
                         }
                         $folder->setSlug($slug);
                         // End slug generation
-                        $folder->summarize($item->getDescription());
+                        $folder->summarize($item->getText());
                         $folder->setAllowComments(1);
                         $folder->setDraft(0);
                         $folder->setPart(0);
@@ -777,7 +777,7 @@ class FileController extends Controller
                     $item->setSlug($slug);
                     
                     $item->setAuthor($user);
-                    $item->summarize($item->getDescription());
+                    $item->summarize($item->getText());
                     $item->setAllowComments(true);
                     $item->setDraft(false);
                     
@@ -976,7 +976,7 @@ class FileController extends Controller
         $response->setStatusCode(200);
         $response->setContent(file_get_contents($item->getAbsolutePath()));
         $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
-        $response->headers->set('Content-Description', 'Descarga de '.$item->getName());
+        $response->headers->set('Content-Text', 'Descarga de '.$item->getName());
         $response->headers->set('Content-Disposition', 'attachment; filename='.$item->getSlug().'.'.$type);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
         $response->headers->set('Pragma', 'no-cache');

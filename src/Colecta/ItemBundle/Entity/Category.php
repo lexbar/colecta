@@ -36,11 +36,11 @@ class Category
     protected $slug;
 
     /**
-     * @var text $description
+     * @var text $text
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="text", type="text")
      */
-    protected $description;
+    protected $text;
 
     /**
      * @var datetime $lastchange
@@ -141,23 +141,23 @@ class Category
     }
 
     /**
-     * Set description
+     * Set text
      *
-     * @param text $description
+     * @param text $text
      */
-    public function setDescription($description)
+    public function setText($text)
     {
-        $this->description = $description;
+        $this->text = $text;
     }
 
     /**
-     * Get description
+     * Get text
      *
      * @return text 
      */
-    public function getDescription()
+    public function getText()
     {
-        return $this->description;
+        return $this->text;
     }
 
     /**

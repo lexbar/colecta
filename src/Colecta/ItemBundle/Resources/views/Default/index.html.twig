@@ -35,15 +35,14 @@
         </form>
     {% endif %}
 
+{#
 {% set slv = app.session.get('sinceLastVisit') %}
-{% if slv and slv != 'dismiss' and colectauser.sinceLastVisitItems > 0 %}
-    <div class="sys">
-        <a class="close pull-right" href="{{ path('ColectaSinceLastVisitDismiss', {date: 'now' | date('c')}) }}">&times;</a>
-        <i class="fa fa-eye-open pull-left fa-4x"></i>
-        <h2><a href="{{ path('ColectaSinceLastVisit') }}">Ver todo lo que me he perdido desde mi última visita <i class="fa fa-double-angle-right"></i></a></h2>
-        <p>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': slv } only %}</p>
-    </div>
+{% if slv and colectauser.sinceLastVisitItems | length > 0 %}
+    {% include 'ColectaItemBundle:Default:sincelastvisitcomments.html.twig' with {'items' : colectauser.sinceLastVisitItems, slv: slv} only %}
 {% endif %}
+#}
+
+{% include 'ColectaItemBundle:Default:newItemForm.html.twig' %}
 
 {% set shownItems = [] %}
 {% set mainItemsToShow = [] %}

@@ -67,7 +67,8 @@ class FolderController extends Controller
         $item->setSlug($slug);
         
         $item->setAuthor($user);
-        $item->summarize($request->request->get('description'));
+        $item->summarize($request->request->get('text'));
+        $item->setText($request->request->get('text'));
         $item->setAllowComments(true);
         $item->setDraft(true);
         $item->setPart(false);

@@ -13,6 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Folder extends \Colecta\ItemBundle\Entity\Item
 {
     /**
+     * @var text $text
+     *
+     * @ORM\Column(name="text", type="text")
+     */
+    protected $text = '';
+    
+    /**
      * @var boolean $public
      *
      * @ORM\Column(name="public", type="boolean")
@@ -227,120 +234,35 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
         );
     }
     
-    public function thumbnailSize($base, $index)
-    {
-        if($base == 1)
-        {
-            if($index == 1)
-            {
-                return array('class'=>'one','width'=>500,'height'=>200);
-            }
-        }
-        elseif($base == 2)
-        {
-            if($index == 1)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-            elseif($index == 2)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-        }
-        elseif($base == 3)
-        {
-            if($index == 1)
-            {
-                return array('class'=>'one','width'=>500,'height'=>200);
-            }
-            elseif($index == 2)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-            elseif($index == 3)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-        }
-        elseif($base == 4)
-        {
-            if($index == 1)
-            {
-                return array('class'=>'one','width'=>500,'height'=>200);
-            }
-            elseif($index == 2)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-            elseif($index == 3)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-            elseif($index == 4)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-        }
-        elseif($base == 5)
-        {
-            if($index == 1)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-            elseif($index == 2)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-            elseif($index == 3)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-            elseif($index == 4)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-            elseif($index == 5)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-        }
-        elseif($base == 6)
-        {
-            if($index == 1)
-            {
-                return array('class'=>'one','width'=>500,'height'=>200);
-            }
-            elseif($index == 2)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-            elseif($index == 3)
-            {
-                return array('class'=>'two','width'=>240,'height'=>130);
-            }
-            elseif($index == 4)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-            elseif($index == 5)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-            elseif($index == 6)
-            {
-                return array('class'=>'three','width'=>150,'height'=>130);
-            }
-        }
-        
-        return array('class'=>'three','width'=>150,'height'=>130);
-    }
-    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set text
+     *
+     * @param string $text
+     * @return Route
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string 
+     */
+    public function getText()
+    {
+        return $this->text;
     }
     
     /**

@@ -343,7 +343,7 @@ class RouteController extends Controller
                         }
                     
                         $category->setSlug($catSlug);
-                        $category->setDescription('');
+                        $category->setText('');
                     }
                     
                     $category->setLastchange(new \DateTime('now'));
@@ -352,19 +352,19 @@ class RouteController extends Controller
                     $item->setCategory($category);
                     $item->setAuthor($user);
                     
-                    //if comes from itemSubmit i have to fill name and description
+                    //if comes from itemSubmit i have to fill name and text
                     if($request->get('name'))
                     {
                         $item->setName($request->get('name'));
                     }
                     
-                    if($request->get('description'))
+                    if($request->get('text'))
                     {
-                        $item->setDescription($request->get('description'));
+                        $item->setText($request->get('text'));
                     }
-                    elseif(!$item->getDescription())
+                    elseif(!$item->getText())
                     {
-                        $item->setDescription('');
+                        $item->setText('');
                     }
                     
                     
@@ -403,7 +403,7 @@ class RouteController extends Controller
                     }
                     $item->setSlug($slug);
                     
-                    $item->summarize(strval($item->getDescription()));
+                    $item->summarize(strval($item->getText()));
                     
                     $item->setAllowComments(true);
                     $item->setDraft(false);
@@ -469,8 +469,8 @@ class RouteController extends Controller
                         {
                             $place->setName($item->getName());
                         }
-                        $place->setDescription($point['description']);
-                        $place->summarize($place->getDescription());
+                        $place->setText($point['text']);
+                        $place->summarize($place->getText());
                         $place->setTagwords($item->getTagwords());
                         $place->setAuthor($user);
                         $place->setCategory($category);
@@ -592,7 +592,7 @@ class RouteController extends Controller
                     }
                 
                     $category->setSlug($catSlug);
-                    $category->setDescription('');
+                    $category->setText('');
                     $category->setLastchange(new \DateTime('now'));
                     
                     $em->persist($category); 
@@ -603,7 +603,7 @@ class RouteController extends Controller
             
             $form->bindRequest($request);
             
-            if(!$item->getDescription())
+            if(!$item->getText())
             {
                 $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
                 $persist = false;
@@ -684,7 +684,7 @@ class RouteController extends Controller
                 }
             }
             
-            $item->summarize($item->getDescription());
+            $item->summarize($item->getText());
             $item->setDifficulty($post->get('difficulty'));
             $time = intval($post->get('days')) * 24 * 60 * 60 + intval($post->get('hours')) * 60 * 60 + intval($post->get('minutes')) * 60;
             $item->setTime($time);
@@ -937,7 +937,7 @@ class RouteController extends Controller
 					case 'Latitude': $latitude = $i ; break;
 					case 'Longitude': $longitude = $i ; break;
 					case 'Name': $name = $i ; break;
-					case 'Description': $description = $i ; break;
+					case 'Text': $text = $i ; break;
 					case 'Altitude': $altitude = $i ; break;
 					case 'Date': $date = $i ; break;
 					case 'Time': $time = $i ; break;
@@ -963,7 +963,7 @@ class RouteController extends Controller
 				$point['latitude'] = $l[$latitude];
 				$point['longitude'] = $l[$longitude];
 				$point['name'] = preg_replace('#^\"(.*)\"$#', '$1', $l[$name]);
-				$point['description'] = preg_replace('#^\"(.*)\"$#', '$1', $l[$description]);
+				$point['text'] = preg_replace('#^\"(.*)\"$#', '$1', $l[$text]);
 				if($altitude !== null) { $trackpoint['altitude'] = $l[$altitude];}
 				else { $point['altitude'] = 0; }
 				if($date !== null) { $point['datetime'] = safeDateTime($l[$date],$l[$time]); }

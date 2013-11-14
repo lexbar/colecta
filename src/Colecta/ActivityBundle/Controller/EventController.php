@@ -159,7 +159,7 @@ class EventController extends Controller
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
         }
-        elseif(!$request->get('description'))
+        elseif(!$request->get('text'))
         {
             $this->get('session')->setFlash('error', 'No has escrito ningun texto');
         }
@@ -193,7 +193,7 @@ class EventController extends Controller
                 }
             
                 $category->setSlug($catSlug);
-                $category->setDescription('');
+                $category->setText('');
             }
             
             $category->setLastchange(new \DateTime('now'));
@@ -235,7 +235,7 @@ class EventController extends Controller
             }
             $item->setSlug($slug);
             
-            $item->summarize($request->get('description'));
+            $item->summarize($request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(false);
             $item->setPart(false);
@@ -243,7 +243,7 @@ class EventController extends Controller
             $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
             $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
             $item->setAllowassistances(true);
-            $item->setDescription($request->get('description'));
+            $item->setText($request->get('text'));
             $item->setDistance(str_replace(',','.', $request->get('distance')));
             $item->setUphill($request->get('uphill'));
             $item->setDownhill(0);
@@ -280,7 +280,7 @@ class EventController extends Controller
         else
         {
             $this->get('session')->setFlash('EventName', $request->get('name'));
-            $this->get('session')->setFlash('EventDescription', $request->get('description'));
+            $this->get('session')->setFlash('EventText', $request->get('text'));
             $this->get('session')->setFlash('EventDateini', $request->get('dateini'));
             $this->get('session')->setFlash('EventDateend', $request->get('dateend'));
             $this->get('session')->setFlash('EventDateinihour', $request->get('dateinihour'));
@@ -351,7 +351,7 @@ class EventController extends Controller
                     }
                 
                     $category->setSlug($catSlug);
-                    $category->setDescription('');
+                    $category->setText('');
                     $category->setLastchange(new \DateTime('now'));
                     
                     $em->persist($category); 
@@ -360,21 +360,21 @@ class EventController extends Controller
                 $item->setCategory($category);
             }
             
-            if(!$request->get('description'))
+            if(!$request->get('text'))
             {
                 $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             
             $item->setName($request->get('name'));
-            $item->summarize($request->get('description'));
+            $item->summarize($request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(false);
             $item->setActivity(null);
             $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
             $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
             //$item->setAllowassistances(true);
-            $item->setDescription($request->get('description'));
+            $item->setText($request->get('text'));
             $item->setDistance(str_replace(',','.', $request->get('distance')));
             $item->setUphill($request->get('uphill'));
             $item->setDownhill(0);

@@ -39,6 +39,10 @@
 </div>
 
 {% if notifications | length > 0 %}
+    {% if not notifications[0].dismiss %}
+        <a href="{{ path('userNotificationDismissAll') }}" class="btn btn-primary btn-block">Marcar todas como leídas <i class="fa fa-check"></i></a><br>
+    {% endif %}
+
     <ul class="list-group" id="notificationstream">
         {% for notification in notifications %}
            {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'notification': notification} %}

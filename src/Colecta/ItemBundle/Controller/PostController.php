@@ -60,10 +60,6 @@ class PostController extends Controller
         $request = $this->get('request')->request;
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
-        if($request->get('description'))
-        {
-            $request->set('text', $request->get('description'));
-        }
         
         if($user == 'anon.') 
         {
@@ -107,7 +103,7 @@ class PostController extends Controller
                 }
             
                 $category->setSlug($catSlug);
-                $category->setDescription('');    
+                $category->setText('');    
             }
             
             $category->setLastchange(new \DateTime('now'));
@@ -231,7 +227,7 @@ class PostController extends Controller
                     }
                 
                     $category->setSlug($catSlug);
-                    $category->setDescription('');
+                    $category->setText('');
                     $category->setLastchange(new \DateTime('now'));
                     
                     $em->persist($category); 

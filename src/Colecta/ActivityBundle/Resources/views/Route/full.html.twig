@@ -18,7 +18,7 @@
         
         <hr>
             
-        <p>{{ item.description | usercontent | raw | nl2br }}</p>
+        <p>{{ item.text | usercontent | raw | nl2br }}</p>
     
         {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     </div>

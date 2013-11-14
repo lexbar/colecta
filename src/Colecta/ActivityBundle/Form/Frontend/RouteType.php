@@ -10,7 +10,7 @@ class RouteType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description')
+            ->add('text')
             ->add('distance')
             ->add('uphill')
             ->add('downhill')

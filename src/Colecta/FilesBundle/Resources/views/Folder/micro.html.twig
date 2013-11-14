@@ -50,10 +50,12 @@
     </div>
     
     <div class="panel-footer">
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item, showComments: 1 } only %}
+        {% set hasNewComments = item.comments | length and app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') < item.comments | reverse [0].date %}
         
-        <div id="itemcomments{{ item.id }}" style="display:none">
-            {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 10 } only %}
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item, showComments: 1 } only %}
+        {% set collapse = (10-6*hasNewComments) %}
+        <div id="itemcomments{{ item.id }}" {% if not hasNewComments %}style="display:none"{% endif %}>
+            {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': collapse } only %}
         </div>
     </div>
 </div>
