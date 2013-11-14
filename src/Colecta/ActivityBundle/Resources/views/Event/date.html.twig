@@ -42,12 +42,7 @@
     {% if item.related | length > 0 %}
         <div class="relations">
             {% for relitem in item.related if relitem.draft == 0 %}
-                {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < relitem.date %}
-                <div class="item panel {% if new %}panel-warning{% else %}panel-default{% endif %}">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[relitem.type] }}"></i> <a href="{{ path(relitem.viewPath, { 'slug': relitem.slug }) }}">{{ relitem.name }}</a></h3>
-                    </div>
-                </div>
+                {% include "ColectaItemBundle:Default:onlyHeader.html.twig" with {'item':relitem} only %}
             {% endfor %}
         </div>
     {% endif %}
