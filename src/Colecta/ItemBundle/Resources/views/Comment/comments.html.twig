@@ -4,7 +4,7 @@
 
 {% if collapse is defined and commentslength > collapse %}
     <p>
-    <button class="btn btn-small btn-default" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
+    <button class="btn btn-default" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
         <i class="fa fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
     </button>
     </p>
@@ -23,7 +23,7 @@
         <div class="media-body">
             <p class="media-heading">
                 {% if new %}<i class="fa fa-asterisk" style="color:orange"></i>{% endif%}
-                <strong><a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a></strong> {{ comment.text | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
+                <strong><a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a></strong> {{ comment.text | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-sm" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | usercontent | raw | nl2br }}</span>{% endif %}</p>
             <p class="details">
                 {% set itemtimestamp = comment.date | date('U') %}
                 {% set nowtimestamp =  'now' | date('U') %}
