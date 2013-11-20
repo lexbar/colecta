@@ -13,7 +13,7 @@
         <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
     
     {% if item.filetype in ['jpeg','gif','png'] %}
-        <div class="fullimage" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'480', 'height':'480'}) }}') scroll no-repeat center center #111;">
+        <div class="fullimage" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'700', 'height':'480'}) }}') scroll no-repeat center center #111;">
             {% set next = item.folder.getNextPicture(item) %}
             {% set previous = item.folder.getPreviousPicture(item) %}
             <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-left{% if next %} active{% endif %}"><i class="icon-angle-left icon-4x"></i></a>

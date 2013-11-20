@@ -7,7 +7,7 @@
 {% include '::navigation.html.twig' with {'active': 'event'} %}
 
 <div class="title-block">
-    {% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right btn-primary">Crear evento <i class="fa fa-plus"></i></a> {% endif %}
+    {% if app.user %} <a href="{{ path('ColectaEventNew')}}" class="btn btn-small btn-success pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
     <h2>
     {% if ismonth %}
         {% include "::month.html.twig" with {'date': date, 'short':0} %}
@@ -32,7 +32,7 @@
     {% if hiddenset and not item.happened %}
         {% set hiddenset = 0 %}
         </div>
-        <div class="row" id="showMoreEvents"><p class="col-sm-3 col-xs-12" style="margin:10px 0 20px"><button onClick="$('#showMoreEvents').css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-sm btn-default btn-block"><i class="fa fa-ellipsis-vertical" style="padding:0 5px"></i> Ver eventos pasados</button></p></div>
+        <div class="row" id="showMoreEvents"><p class="col-sm-4 col-xs-12" style="margin:10px 0 20px"><button onClick="$('#showMoreEvents').css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-sm btn-default btn-block"><i style="color:darkgreen;margin-right:2px" class="fa fa-plus-square"></i> Ver eventos pasados de este mes</button></p></div>
     {% endif %}
     
     {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}

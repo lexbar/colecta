@@ -1,89 +1,65 @@
-var itemSubmitType = false;
+var itemSubmitType = 'Post';
 
-function typeChosen(type) {
-    //Set the type of item chosen. Returns true when you can't choose that type
-    $('#itemSubmit').addClass('active');
-    
-    $(window).bind('beforeunload', function(){
+function typeChosen(type) { //Set the type of item chosen    
+    /*$(window).bind('beforeunload', function(){
       return 'Seguro que quieres irte sin publicar?';
     });
-    
     $('#itemSubmit').submit( function(){
         window.onbeforeunload = null;
-    });
+    });*/
     
-    if(itemSubmitType) {
-        if(itemSubmitType == 'file' || itemSubmitType == 'route') {
-            return false;
-        } else {
-            return true;
+    if(itemSubmitType == 'Route') {
+        $('#RouteFile').remove();
+        $('#itemSubmit .itemTypeRoute .form-controls').prepend('<input type="file" id="RouteFile" name="file">');
+        $('#RouteFile').change(RouteChange);
+    }
+    else if(itemSubmitType == 'File') {
+        $('#FilesFile').remove();
+        $('#itemSubmit .itemTypeFile .form-controls').prepend('<input type="file" id="FilesFile" multiple="multiple" name="file[]">');
+        $('#FilesFile').change(FileChange);
+    }
+    
+    if(itemSubmitType == type) {
+        itemSubmitType = 'Post';
+        if(type != 'Post') {
+            $('#itemSubmit .type'+type).removeClass('btn-success').addClass('btn-default');
+            $('#itemSubmit .itemType'+type).addClass('hidden');
         }
+        $('#itemSubmit').attr('action','/crear/texto/');
+        return false;
     } else {
-        $('#itemSubmit .types').addClass('chosen');
-        $('#itemSubmit .types .'+type).addClass('active');
+        if(itemSubmitType != 'Post') {
+            $('#itemSubmit .type'+itemSubmitType).removeClass('btn-success').addClass('btn-default');
+        }
+        $('#itemSubmit .type'+type).removeClass('btn-default').addClass('btn-success');
+        
+        $('.itemType'+itemSubmitType).addClass('hidden');
+        $('.itemType'+type).removeClass('hidden');
+        
         itemSubmitType = type;
         
         switch(type) {
-            case 'file': $('#itemSubmit').attr('action','/archivo/crear/');
+            case 'File': 
+                $('#itemSubmit').attr('action','/archivo/crear/');
+                $('#FilesFile').change(FileChange);
             break;
-            case 'route': $('#itemSubmit').attr('action','/crear/ruta/');
+            case 'Route': 
+                $('#itemSubmit').attr('action','/crear/ruta/');
+                $('#RouteFile').change(RouteChange);
             break;
-            case 'event': $('#itemSubmit').attr('action','/crear/actividad/');
+            case 'Event': 
+                $('#itemSubmit').attr('action','/crear/actividad/');
             break;
-            case 'place': $('#itemSubmit').attr('action','/crear/lugar/');
+            case 'Place': 
+                $('#itemSubmit').attr('action','/crear/lugar/');
+                $('#itemSubmit').submit(searchAction);
+                $('#PlaceMapSearch').focus();
             break;
-            case 'post': $('#itemSubmit').attr('action','/crear/texto/');
+            case 'Post': 
+                $('#itemSubmit').attr('action','/crear/texto/');
             break;
         }
         return false;
-    }
-}
-
-function cancelType() {
-    itemSubmitType = false;
-    
-    window.onbeforeunload = null;
-    
-    $('#itemSubmit').removeClass('active');
-    $('#itemSubmit .types').removeClass('chosen');
-    $('#itemSubmit .types *').removeClass('active');
-    
-    $('#Route').remove();
-    $('#itemSubmit .types .route').prepend('<input type="file" id="Route" name="file">');
-    $('#Route').change(RouteChange);
-    
-    $('#File').remove();
-    $('#itemSubmit .types .file').prepend('<input type="file" id="File" multiple="multiple" name="file[]">');
-    $('#File').change(FileChange);
-    
-    $('#itemDetails').html('');
-}
-
-function ItemAttachForm(id) {
-    var categorylist = $('#itemSubmit .category').first().html();
-    if(typeof categorylist == 'undefined') {
-        var categorylist = '';
-    }
-    
-    $('#itemSubmit').remove();
-    itemSubmitType = false;
-    
-    $('#item'+id+' .itemActions').first().after('<form id="itemSubmit" class="form-horizontal" enctype="multipart/form-data" method="POST" action=""><div class="mainData"><input id="itemSubmitName" type="text" name="name" class="title" placeholder="Título"><textarea id="itemSubmitDescription" name="description" placeholder="Descripción" class="description"></textarea></div><div id="itemDetails"></div><ul class="types unstyled"><li class="pull-left text">Adjuntar: </li><li class="pull-left post" onClick="loadPostForm();"><i class="icon-file-text-alt"></i> Texto</li><li class="pull-left event" onClick="loadEventForm();"><i class="icon-calendar-empty"></i> Actividad</li><li class="pull-left route"> <input type="file" name="file" id="Route"><i class="icon-globe"></i> Ruta</li><li class="pull-left place" onClick="loadPlaceForm();"><i class="icon-map-marker"></i> Lugar</li><li class="pull-left file"> <input type="file" name="file[]" multiple="multiple" id="File"><i class="icon-folder-open"></i> Archivos</li><li class="pull-left cancel"><button type="button" class="btn btn-small" onclick="cancelType()"><i class="icon-remove"></i> Cancelar</button></li><li class="pull-right"><button class="btn btn-small btn-primary" type="submit" id="itemSubmitButton"><i id="itemSubmitButtonLoading"></i> <span id="itemSubmitButtonText">Publicar</span> </button></li><li class="pull-right category">'+categorylist+'</li></ul><input type="hidden" name="attachTo" value="'+id+'"></form>');
-    
-    $('#Route').change(RouteChange);
-    $('#File').change(FileChange);
-    
-    if(categorylist == '') {
-        $('#itemSubmitButton').attr('disabled','disabled').addClass('disabled'); 
-        $('#itemSubmit .category').load('/categorias/formlist/', function(){ $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled');  });
-    }
-}
-
-/* Post Creation */
-
-function loadPostForm() {
-    if(typeChosen('post')) {
-        return;
     }
 }
 
@@ -91,17 +67,6 @@ function loadPostForm() {
 var PCgeocoder;
 var PCmap;
 var PCmarker;
-
-function loadPlaceForm() {
-    if(typeChosen('place')) {
-        return;
-    }
-    
-    $('#itemDetails').html('<p class="lead">Escribe un lugar para buscar en el mapa:</p><div class="input-append"><p><input id="PlaceMapSearch" type="text" placeholder="Dirección..." class="span4"><button type="button" id="mapSearchIcon" class="btn btn-primary"><i class="icon-search"></i> Localizar</button></p></div><ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;width:90%;" class="dropdown-menu hidden" id="mapResults"></ul><div id="ItemSubmitMap" style="display:none"></div><input type="hidden" name="latitude" id="PlaceLatitude"><input type="hidden" name="longitude" id="PlaceLongitude">');
-    
-    $('#itemSubmit').submit(searchAction);
-    $('#mapSearchIcon').click(searchAction);
-}
 
 function searchAction() {
         if(typeof google === 'object' && typeof google.maps === 'object') {
@@ -123,7 +88,7 @@ function searchAction() {
     }
 
 function searchLocation() {
-    $('#mapSearchIcon').removeClass('btn-primary').html('<i class="icon-refresh icon-spin"></i> Localizando...');
+    $('#mapSearchIcon').removeClass('btn-primary').addClass('btn-default').html('<i class="fa fa-refresh fa-spin"></i> Localizando...');
     
     if(!PCgeocoder) {
         PCgeocoder = new google.maps.Geocoder();
@@ -157,13 +122,14 @@ function searchLocation() {
             }
         }
 
-        $('#mapSearchIcon').html('<i class="icon-search"></i> Localizar');
+        $('#mapSearchIcon').html('<i class="fa fa-search"></i> Localizar');
     });
 }
 
 function mapPosition(position) { //google maps latlng object
     //If not active, create map
     if( $('#ItemSubmitMap').css('display') == 'none') {
+        $('.itemTypePlace .help-block').html('<i class="fa fa-location-arrow"></i> Puedes pulsar en otro lugar del mapa para establecer la localización');
         $('#ItemSubmitMap').css('display', 'block');
         PCmap = new google.maps.Map(document.getElementById('ItemSubmitMap'), {zoom: 15,center:position, mapTypeId: google.maps.MapTypeId.TERRAIN, streetViewControl: false});
         google.maps.event.addListener(PCmap, 'click', function(event) {
@@ -188,16 +154,6 @@ function mapPosition(position) { //google maps latlng object
     }
 }
 
-/* Event Creation */
-function loadEventForm() {
-    if(typeChosen('event')) {
-        return;
-    }
-    
-    $('#itemDetails').html('<p class="lead"> <i class="icon-refresh icon-spin"></i> Espere un instante...</p>');
-    $('#itemDetails').load('/actividades/crear/detalles/');
-}
-
 /* RU Route Uploading */
 var RUuploadAddress = '/rutas/XHR/upload/';
 var RUpreviewAddress = '/rutas/XHR/preview/';
@@ -205,15 +161,12 @@ var RUpreviewAddress = '/rutas/XHR/preview/';
 var RUuploading = false;
 
 function RouteChange() {
-    if(typeChosen('route')) {
-        return;
-    }
     var files = this.files;    
-    var fp = $('#itemDetails');
+    
     if(files.length) {        
         //Show the file uloading process
         var f = files[0]
-        fp.append('<div id="RUloading"><p class="lead">Subiendo el archivo <small>'+f.name+'</small></p><div class="progress"><div class="bar" id="RUprogress" style="width: 0%;"></div></div>');
+        $('#RUmessage').append('<p class="lead">Subiendo el archivo <small>'+f.name+'</small></p> <div class="progress"><div class="bar" id="RUprogress" style="width: 0%;"></div>');
         
         //Start upload
         uploadRouteFile(f);
@@ -226,7 +179,7 @@ function uploadRouteFile(file) {
         
         $('#itemSubmitButton').attr('disabled','disabled').addClass('disabled'); 
         $('#itemSubmitButtonText').html('Subiendo...'); 
-        $('#itemSubmitButtonLoading').addClass('icon-refresh icon-spin');
+        $('#itemSubmitButtonLoading').addClass('fa fa-refresh fa-spin');
     
         uploadRoute(file);
     }
@@ -263,32 +216,36 @@ function RUuploadComplete(evt) {
     /* This event is raised when the server send back a response */
     var token = evt.target.responseText;
     
-    $('#itemDetails').html('<p class="lead"> <i class="icon-refresh icon-spin"></i> Procesando archivo...</p>')
-    $('#itemDetails').load(RUpreviewAddress+token);
+    $('#RUmessage').html('');
+    
+    $('#RUaddon').html('<div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10"><p class="lead"> <i class="fa fa-refresh fa-spin"></i> Procesando archivo...</p></div>')
+    $('#RUaddon').load(RUpreviewAddress+token);
     
     RUuploadEnd();
 }
 
 function RUuploadFailed(evt) {
-    $('#itemDetails').html('<p class="lead">Ha ocurrido un fallo en la subida.</p>');
+    $('#RUmessage').html('<p class="lead">Ha ocurrido un fallo en la subida.</p>');
     RUuploadEnd();
 }
 
 function RUuploadCanceled(evt) {
-    $('#itemDetails').html('<p class="lead">La subida del archivo se ha cancelado.</p>');
+    $('#RUmessage').html('<p class="lead">La subida del archivo se ha cancelado.</p>');
     RUuploadEnd();
 }
 
 function RUuploadEnd() {
     RUuploading = false;
     
-    $('#Route').remove();
-    $('#itemSubmit .types .route').prepend('<input type="file" id="Route" name="file">');
-    $('#Route').change(RouteChange);
+    $('#RouteFile').remove();
+    $('#itemSubmit .itemTypeRoute .form-controls').prepend('<input type="file" id="RouteFile" name="file">');
+    $('#RouteFile').change(RouteChange);
+    
+    $('.itemTypePlace .help-block').html('Puedes seleccionar otro archivo diferente.');
     
     $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled'); 
     $('#itemSubmitButtonText').html('Publicar'); 
-    $('#itemSubmitButtonLoading').removeClass('icon-refresh icon-spin');
+    $('#itemSubmitButtonLoading').removeClass('fa fa-refresh fa-spin');
 }
 
 /* FU File Uploading */
@@ -300,19 +257,13 @@ var FUcurrentFileIndex = -1;
 var FUTheFiles = [];
 
 function FileChange() {
-    if(typeChosen('file')) {
-        return;
-    }
     var files = this.files;    
-    var fp = $('#itemDetails');
-    if(files.length) {
-        fp.show();
-        
-        //Show the files
+    var fp = $('#FUaddon');
+    if(files.length) {      
         for(var i = 0; i < files.length; i++) {
             var f = files[i];
             var j = (i + FUTheFiles.length);
-            fp.append('<div class="pv" id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress progress-striped"><div class="bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
+            fp.append('<div class="col-lg-4 col-sm-6" id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress progress-striped"><div class="bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
         }
         
         //Start upload
@@ -330,7 +281,7 @@ function uploadFUTheFiles() {
         
         $('#itemSubmitButton').attr('disabled','disabled').addClass('disabled'); 
         $('#itemSubmitButtonText').html('Subiendo...'); 
-        $('#itemSubmitButtonLoading').addClass('icon-refresh icon-spin');
+        $('#itemSubmitButtonLoading').addClass('fa fa-refresh fa-spin');
     
         uploadNext();
     }
@@ -353,13 +304,13 @@ function uploadNext() {
 function endOfUploads() {
     FUuploading = false;
     
-    $('#File').remove();
-    $('#itemSubmit .types .file').prepend('<input type="file" id="File" multiple="multiple" name="file[]">');
-    $('#File').change(FileChange);
+    $('#FilesFile').remove();
+    $('#itemSubmit .itemTypeFile .form-controls').prepend('<input type="file" id="FilesFile" multiple="multiple" name="file[]">');
+    $('#FilesFile').change(FileChange);
     
     $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled'); 
     $('#itemSubmitButtonText').html('Publicar'); 
-    $('#itemSubmitButtonLoading').removeClass('icon-refresh icon-spin');
+    $('#itemSubmitButtonLoading').removeClass('fa fa-refresh fa-spin');
 }
 function uploadFile(file) {
     var fd = new FormData();
@@ -395,7 +346,7 @@ function FUuploadComplete(evt) {
     if(res.length > 180) {
         FUuploadFailed();
     } else {
-        $('#UFC'+FUcurrentFileIndex).html('<img src="'+FUpreviewAddress + $.trim(res)+'" style="width:250px;height:190px;background-color:#AAA"><input type="text" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..." onFocus="if(this.value == \'Nombre...\') this.value=\'\'"><textarea name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..." onFocus="if($(this).val(\'Descripción...\')) $(this).val(\'\')"></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete">');
+        $('#UFC'+FUcurrentFileIndex).html('<img src="'+FUpreviewAddress + $.trim(res)+'" class="img-responsive"><input type="text" class="form-control" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..." onFocus="if(this.value == \'Nombre...\') this.value=\'\'"><textarea class="form-control" name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..." onFocus="if($(this).val(\'Descripción...\')) $(this).val(\'\')"></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete">');
         
         //Placeholder problems
         var phitest = document.createElement('input');
@@ -429,28 +380,7 @@ function process() {
     $('#FileControlGroup').remove();
     $('#FileSubmit').attr('disabled','disabled').addClass('disabled'); 
     $('#FileSubmitText').html('Enviando...'); 
-    $('#FileSubmitLoading').addClass('icon-refresh icon-spin');
+    $('#FileSubmitLoading').addClass('fa fa-refresh fa-spin');
     
     $('#ProcessForm').attr('action','').attr('onSubmit','').submit();
 }
-
-/* Category form */
-
-function toggleCategoryCreate() {
-    var nc = $('#NewCategory');
-    if(nc.css('display') == 'none') {
-        $('#Category').hide();
-        $('#NewCategory').show().focus();
-        $('#categoryCreateButton').show();
-    } else {
-        $('#Category').show();
-        $('#Category option:first-child').attr('selected','selected');
-        $('#NewCategory').hide().attr('value','');
-        $('#categoryCreateButton').hide();
-    }
-}
-
-$(document).ready(function() {
-      $('#File').change(FileChange);
-      $('#Route').change(RouteChange);
-});

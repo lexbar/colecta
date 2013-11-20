@@ -24,9 +24,9 @@
         {% endif %}
         
         {# FILE #}
-        {% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}
+        {#{% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}
             <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="fa fa-plus"></i> Agregar archivos</a>
-        {% endif %}
+        {% endif %}#}
         
         {# EDIT #}
         {% if item.canEdit(app.user) %}
@@ -35,7 +35,7 @@
         
         {# ATTACH #}
         {% if app.user and not item.part %}
-            <a href="#item{{ item.id}}" onClick="ItemAttachForm({{ item.id}}); return false;" title="Adjuntar"><i class="fa fa-share"></i> Adjuntar</a>
+            <a href="{{ path('ColectaItemAttach',{'id':item.id}) }}"><i class="fa fa-share"></i> Adjuntar</a>
         {% endif %}
         
     </div>

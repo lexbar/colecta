@@ -1,12 +1,13 @@
-<div class="control-group">
-    <label class="control-label" for="Folder">Carpeta</label>
-    <div class="controls">
-            <select name="folder" id="Folder"{% if firstwrite %} style="display: none;"{% endif %}>
-                {% for folder in folders %}
-                    <option value="{{ folder.id }}"{% if folder.id == selected %}selected="selected"{% endif %}>{{ folder.name }}</option>
-                {% endfor %}
-            </select>
-        <input type="text" id="NewFolder" name="newFolder"{% if not firstwrite  %} style="display:none"{% endif %} placeholder="Nombre" onKeyUp="var name = document.getElementById('FileName'); if(name.value == '' || name.value == this.value.slice(0,-1)){name.value = this.value}">
-        <button class="btn{% if not firstwrite  %} newfolder{% endif %}" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="icon-{% if firstwrite %}th-list{% else %}plus-sign{% endif %}"></i> {% if firstwrite  %}Seleccionar{% else %}Nueva carpeta{% endif %}</button>
+<div class="row">
+    <div class="col-sm-4">
+        <select name="folder" id="Folder"{% if firstwrite %} style="display: none;"{% endif %} class="form-control">
+            {% for folder in folders %}
+                <option value="{{ folder.id }}"{% if folder.id == selected %}selected="selected"{% endif %}>{{ folder.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" class="form-control" id="NewFolder" name="newFolder"{% if not firstwrite  %} style="display:none"{% endif %} placeholder="Nombre" onKeyUp="var name = document.getElementById('FileName'); if(name.value == '' || name.value == this.value.slice(0,-1)){name.value = this.value}">
+    </div>
+    <div class="col-sm-4">
+        <button class="btn btn-default{% if not firstwrite  %} newfolder{% endif %}" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="fa fa-{% if firstwrite %}th-list{% else %}plus{% endif %}"></i> {% if firstwrite  %}Seleccionar{% else %}Nueva carpeta{% endif %}</button>
     </div>
 </div>

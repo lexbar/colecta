@@ -16,6 +16,12 @@ ColectaAjaxSearch:
 ColectaItemRelate:
     pattern:  /item/{id}/relate/
     defaults: { _controller: ColectaItemBundle:Default:relate }
+ColectaItemNew:
+    pattern:  /nuevo/
+    defaults: { _controller: ColectaItemBundle:Default:new }
+ColectaItemAttach:
+    pattern:  /attach/{id}/
+    defaults: { _controller: ColectaItemBundle:Default:attach }
 ColectaComment:
     pattern:  /comment/{slug}/
     defaults: { _controller: ColectaItemBundle:Comment:comment }

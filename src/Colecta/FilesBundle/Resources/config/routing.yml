@@ -18,7 +18,7 @@ ColectaFilePage:
     defaults: { _controller: ColectaFilesBundle:File:page }
 ColectaFileNew:
     pattern:  /archivo/crear/
-    defaults: { _controller: ColectaFilesBundle:File:new }
+    defaults: { _controller: ColectaFilesBundle:Folder:new }
 ColectaFilePick:
     pattern:  /archivo/crear/{slug}/
     defaults: { _controller: ColectaFilesBundle:File:pick }

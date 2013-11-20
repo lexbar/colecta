@@ -6,8 +6,7 @@
 
     {% include '::navigation.html.twig' with {'active': 'place'} %}
 
-    {% if app.user %} <a href="{{ path('ColectaPlaceNew') }}" class="btn btn-small btn-primary pull-right">Crear lugar <i class="fa fa-plus"></i></a> {% endif %}
-    
+    {% if app.user %} <a href="{{ path('ColectaPlaceNew')}}" class="btn btn-small btn-success pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
     <h2>Lugares{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
     {% for item in items %}

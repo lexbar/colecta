@@ -54,10 +54,7 @@ class EventController extends Controller
     }
     public function newAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
-        
-        return $this->render('ColectaActivityBundle:Event:new.html.twig', array('categories' => $categories));
+        return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Event'));
     }
     public function dateAction($date)
     {

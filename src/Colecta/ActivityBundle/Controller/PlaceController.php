@@ -51,10 +51,7 @@ class PlaceController extends Controller
     }
     public function newAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
-        
-        return $this->render('ColectaActivityBundle:Place:new.html.twig', array('categories' => $categories));
+        return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Place'));
     }
     public function createAction()
     {
@@ -298,7 +295,7 @@ class PlaceController extends Controller
         
         if(count($json['results']))
         {
-            $firstresult = $json['results'][0]['address_components'][0]['long_name'];
+            $firstresult = $json['results'][0]['address_components'];
             
             foreach($firstresult as $r)
             {
@@ -308,7 +305,7 @@ class PlaceController extends Controller
                 }
             }
             
-            return $firstresult[0]['long_name'];
+            return $firstresult['long_name'];
         }
         else
         {

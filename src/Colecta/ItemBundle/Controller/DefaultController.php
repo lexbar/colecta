@@ -15,7 +15,17 @@ class DefaultController extends Controller
     {
         return $this->dashboardPageAction(1);
     }
-    
+    public function newAction()
+    {
+        return $this->render('ColectaItemBundle:Default:newItem.html.twig');
+    }
+    public function attachAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();        
+        $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($id);
+        
+        return $this->render('ColectaItemBundle:Default:attach.html.twig', array('item' => $item));
+    }
     public function dashboardPageAction($page)
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable

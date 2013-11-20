@@ -12,6 +12,10 @@ h2 {
 textarea {
     resize: vertical;
 }
+span.form-control {
+    cursor: default;
+    background-color: #EEE;
+}
 .alert {
     padding: 10px 15px;
 }

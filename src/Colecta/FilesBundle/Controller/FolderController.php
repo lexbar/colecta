@@ -27,6 +27,10 @@ class FolderController extends Controller
         
         return $this->render('ColectaFilesBundle:Folder:full.html.twig', array('item' => $item));
     }
+    public function newAction()
+    {
+        return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'File'));
+    }
     public function createAction()
     {
         $em = $this->getDoctrine()->getEntityManager();

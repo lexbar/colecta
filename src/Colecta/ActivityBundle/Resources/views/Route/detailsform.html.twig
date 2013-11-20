@@ -61,104 +61,127 @@
     }
 </script>
 
-    <div id="ItemSubmitMap"></div>
+    <div id="ItemSubmitMap" style="height:200px;margin-bottom: 20px" class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10"></div>
 
-      <div class="control-group">
-        <label class="control-label" for="RouteName">Distancia</label>
-        <div class="controls">
-          <div class="input-append">
-            {{ form_widget(form.distance, {'attr':{'class':'input-small','value': trackdata.distance}}) }}<span class="add-on"> km</span>
-          </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteDistance">Distancia</label>
+        <div class="col-sm-9 col-lg-10">
+            <div class="input-group">
+            {{ form_widget(form.distance, {'attr':{'class':'form-control','value': trackdata.distance,'id':'RouteDistance'}}) }}<span class="input-group-addon"> km</span>
+            </div>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Subida</label>
-        <div class="controls">
-          <div class="input-append">
-            {{ form_widget(form.uphill, {'attr':{'class':'input-small','value': trackdata.uphill}}) }}<span class="add-on"> metros</span>
-          </div>
+    </div>
+        
+    <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteUpHill">Subida</label>
+        <div class="col-sm-9 col-lg-10">
+            <div class="input-group">
+            {{ form_widget(form.uphill, {'attr':{'class':'form-control','value': trackdata.uphill,'id':'RouteUpHill'}}) }}<span class="input-group-addon"> metros</span>
+            </div>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Bajada</label>
-        <div class="controls">
-          <div class="input-append">
-            {{ form_widget(form.downhill, {'attr':{'class':'input-small','value': trackdata.downhill}}) }}<span class="add-on"> metros</span>
-          </div>
+    </div>
+      
+    <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteDownHill">Bajada</label>
+        <div class="col-sm-9 col-lg-10">
+            <div class="input-group">
+            {{ form_widget(form.downhill, {'attr':{'class':'form-control','value': trackdata.downhill,'id':'RouteDownHill'}}) }}<span class="input-group-addon"> metros</span>
+            </div>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Tiempo</label>
-        <div class="controls">
-          {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
-          {% if trackdata.time < 60 %}
-            {% set secconds = trackdata.time %}
-          {% else %}
-            {% set minutes = trackdata.time // 60 %}
-            {% set secconds = trackdata.time - minutes * 60 %}
-            
-            {% if minutes >= 60 %}
-                {% set hours = minutes // 60 %}
-                {% set minutes = minutes - hours * 60 %}
+    </div>
+      
+    <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Tiempo</label>
+        <div class="col-sm-9 col-lg-10">
+            {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
+            {% if trackdata.time < 60 %}
+                {% set secconds = trackdata.time %}
+            {% else %}
+                {% set minutes = trackdata.time // 60 %}
+                {% set secconds = trackdata.time - minutes * 60 %}
                 
-                {% if hours >= 24 %}
-                    {% set days = hours // 24 %}
-                    {% set hours = hours - days * 24 %}
+                {% if minutes >= 60 %}
+                    {% set hours = minutes // 60 %}
+                    {% set minutes = minutes - hours * 60 %}
+                
+                    {% if hours >= 24 %}
+                        {% set days = hours // 24 %}
+                        {% set hours = hours - days * 24 %}
+                    {% endif %}
                 {% endif %}
             {% endif %}
-          {% endif %}
-            <input type="text" class="spanhalf" name="days" value="{{ days }}"> dias,  
-            
-            <select name="hours" style="width:auto">
-            {% for hour in 0..23 %}
-                <option value="{{ hour }}"{% if hour == hours %}selected="selected"{% endif%}>{{ hour }}</option>
-            {% endfor %}
-            </select>            
-             horas y 
-            
-            <select name="minutes" style="width:auto">
-            {% for minute in 0..59 %}
-                <option value="{{ minute }}"{% if minute == minutes %}selected="selected"{% endif%}>{{ minute }}</option>
-            {% endfor %}
-            </select>
-             minutos 
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="days" value="{{ days }}"> 
+                        <span class="input-group-addon">dias</span>
+                    </div>
+                </div>
+                
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <select name="hours" class="form-control">
+                            {% for hour in 0..23 %}
+                                <option value="{{ hour }}"{% if hour == hours %}selected="selected"{% endif%}>{{ hour }}</option>
+                            {% endfor %}
+                        </select>            
+                        <span class="input-group-addon">horas</span>
+                    </div>
+                </div>
+                
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <select name="minutes" class="form-control">
+                            {% for minute in 0..59 %}
+                                <option value="{{ minute }}"{% if minute == minutes %}selected="selected"{% endif%}>{{ minute }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="input-group-addon">minutos </span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Velocidad media</label>
-        <div class="controls">
-          <div class="input-append">
-            {{ form_widget(form.avgspeed, {'attr':{'value': trackdata.avgspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.avgspeed }}</span><span class="add-on"> km/h</span>
+    </div>
+      
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Velocidad media</label>
+        <div class="col-sm-9 col-lg-10">
+          <div class="input-group">
+            <span class="form-control">{{ trackdata.avgspeed }}</span>{{ form_widget(form.avgspeed, {'attr':{'value': trackdata.avgspeed }}) }}<span class="input-group-addon"> km/h</span>
           </div>
         </div>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Velocidad máxima</label>
-        <div class="controls">
-          <div class="input-append">
-            {{ form_widget(form.maxspeed, {'attr':{'value': trackdata.maxspeed}}) }}<span class="input-small uneditable-input">{{ trackdata.maxspeed }}</span><span class="add-on"> km/h</span>
+      
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Velocidad máxima</label>
+        <div class="col-sm-9 col-lg-10">
+          <div class="input-group">
+            <span class="form-control">{{ trackdata.maxspeed }}</span>{{ form_widget(form.maxspeed, {'attr':{'value': trackdata.maxspeed }}) }}<span class="input-group-addon"> km/h</span>
           </div>
         </div>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Cota inferior</label>
-        <div class="controls">
-          <div class="input-append">
-            {{ form_widget(form.minheight, {'attr':{'class':'input-small','value': trackdata.minheight}}) }}<span class="add-on"> metros</span>
+      
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Cota inferior</label>
+        <div class="col-sm-9 col-lg-10">
+          <div class="input-group">
+            {{ form_widget(form.minheight, {'attr':{'class':'form-control','value': trackdata.minheight}}) }}<span class="input-group-addon"> metros</span>
           </div>
         </div>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteFile">Cota superior</label>
-        <div class="controls">
-          <div class="input-append">
-            {{ form_widget(form.maxheight, {'attr':{'class':'input-small','value': trackdata.maxheight}}) }}<span class="add-on"> metros</span>
+      
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Cota superior</label>
+        <div class="col-sm-9 col-lg-10">
+          <div class="input-group">
+            {{ form_widget(form.maxheight, {'attr':{'class':'form-control','value': trackdata.maxheight}}) }}<span class="input-group-addon"> metros</span>
           </div>
         </div>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="RouteName">Dificultad</label>
-        <div class="controls">
+      
+      <div class="form-group">
+        <label class="col-sm-3 col-lg-2 control-label" for="RouteName">Dificultad</label>
+        <div class="col-sm-9 col-lg-10">
             <label class="radio">
                 <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy" checked>
                 <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">

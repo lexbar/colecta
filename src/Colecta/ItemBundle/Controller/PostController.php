@@ -48,10 +48,8 @@ class PostController extends Controller
         return $this->render('ColectaItemBundle:Post:full.html.twig', array('item' => $item));
     }
     public function newAction()
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        return $this->render('ColectaItemBundle:Post:new.html.twig');
+    {        
+        return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Post'));
     }
     public function createAction()
     {

@@ -1,24 +1,13 @@
-{% if not simplified %}
-    <div class="row">
-        <div class="col-sm-3">
-            <select id="Category" name="category" class="form-control">
-            {% for category in categories %}
-                <option value="{{ category.id }}"{% if category.id == selected %}selected="selected"{% endif %}>{{ category.name }}</option>
-            {% endfor %}
-            </select>
-            <input class="form-control" type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre">
-        </div>
-        <div class="col-sm-3">
-            <button class="btn newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton"><i class="fa fa-plus"></i> Nueva categoría</button>
-        </div>
-    </div>
-{% else %}
-    <select id="Category" name="category" onChange="if(this.value == 0) toggleCategoryCreate()">
+<div class="row">
+    <div class="col-sm-4">
+        <select id="Category" name="category" class="form-control">
         {% for category in categories %}
             <option value="{{ category.id }}"{% if category.id == selected %}selected="selected"{% endif %}>{{ category.name }}</option>
         {% endfor %}
-        <option value="0" class="new">Nueva Categoría</option>
-    </select>
-    <input type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre Categoría">
-    <button class="btn btn-small" type="button" onClick="toggleCategoryCreate()" style="display:none" id="categoryCreateButton"><i class="fa fa-th-list"></i></button>
-{% endif %}
+        </select>
+        <input class="form-control" type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre">
+    </div>
+    <div class="col-sm-4">
+        <button class="btn btn-default newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton"><i class="fa fa-plus"></i> Nueva categoría</button>
+    </div>
+</div>

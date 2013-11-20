@@ -99,10 +99,7 @@ class RouteController extends Controller
     }
     public function newAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
-        
-        return $this->render('ColectaActivityBundle:Route:new.html.twig');
+        return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route'));
     }
     public function uploadAction()
     {
@@ -931,7 +928,7 @@ class RouteController extends Controller
 		
 		if(count($csvheader)) {
 			$i = 0;
-			$latitude = $longitude = $name = $altitude = $date = $time = null;
+			$latitude = $longitude = $name = $altitude = $date = $time = $text = null;
 			foreach($csvheader as $row) {
 				switch(trim($row)) {
 					case 'Latitude': $latitude = $i ; break;
@@ -962,9 +959,9 @@ class RouteController extends Controller
 				
 				$point['latitude'] = $l[$latitude];
 				$point['longitude'] = $l[$longitude];
-				$point['name'] = preg_replace('#^\"(.*)\"$#', '$1', $l[$name]);
-				$point['text'] = preg_replace('#^\"(.*)\"$#', '$1', $l[$text]);
-				if($altitude !== null) { $trackpoint['altitude'] = $l[$altitude];}
+				$point['name'] = $name === null ? '' : preg_replace('#^\"(.*)\"$#', '$1', $l[$name]);
+				$point['text'] = $text === null ? '' : preg_replace('#^\"(.*)\"$#', '$1', $l[$text]);
+				if($altitude !== null) { $point['altitude'] = $l[$altitude];}
 				else { $point['altitude'] = 0; }
 				if($date !== null) { $point['datetime'] = safeDateTime($l[$date],$l[$time]); }
 				else { $point['datetime'] = new \DateTime('today'); }

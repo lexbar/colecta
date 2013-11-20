@@ -1,18 +1,18 @@
 {% if app.user %}
-<form action="{{ formaction }}" method="POST" class="form-horizontal well" enctype="multipart/form-data" onSubmit="$('#FileSubmit').attr('disabled','disabled').addClass('disabled'); $('#FileSubmitText').html('Enviando...'); $('#FileSubmitLoading').addClass('icon-refresh icon-spin');">
+<div class="monocontent">
+<form action="{{ formaction }}" method="POST" class="form-horizontal" enctype="multipart/form-data" onSubmit="$('#FileSubmit').attr('disabled','disabled').addClass('disabled'); $('#FileSubmitText').html('Enviando...'); $('#FileSubmitLoading').addClass('icon-refresh icon-spin');">
     <fieldset>
-        
-        <div class="control-group">
-        <label class="control-label" for="FileFile">Archivo</label>
-        <div class="controls">
-            {% if item.filename %}
-                <a href="{{ path( "ColectaFileDelete", {'slug':item.slug}) }}" class="btn btn-danger"><i class="icon-trash"></i> Eliminar archivo</a><br>
-                {% if item.filetype in ['jpeg','gif','png'] %}<img class="thumbnail" height="100" width="100" src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'160', 'height':'160'}) }}">{% endif %}
-            {% else %}
-            <input type="file" {#onchange="previewImage(this,130,32)"#} multiple="multiple" required="required" name="files[]">  <i class="icon-spinner icon-spin icon-2x hidden" id="fileLoading"></i>
-            <ul class="imagePreview thumbnails"></ul>
-            {% endif %}
-        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="FileFile">Archivo</label>
+            <div class="col-sm-9 col-lg-10">
+                {% if item.filename %}
+                    <a href="{{ path( "ColectaFileDelete", {'slug':item.slug}) }}" class="btn btn-danger"><i class="icon-trash"></i> Eliminar archivo</a><br>
+                    {% if item.filetype in ['jpeg','gif','png'] %}<img class="thumbnail" height="100" width="100" src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'160', 'height':'160'}) }}">{% endif %}
+                {% else %}
+                <input type="file" {#onchange="previewImage(this,130,32)"#} multiple="multiple" required="required" name="files[]">  <i class="icon-spinner icon-spin icon-2x hidden" id="fileLoading"></i>
+                <ul class="imagePreview thumbnails"></ul>
+                {% endif %}
+            </div>
         </div>
         
         {% if item.folder.id is defined %}
@@ -21,19 +21,24 @@
         {% else %}
             {% set folder = 0 %}
         {% endif %}
-        {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':folder, 'firstwrite':firstwrite} %}
+        <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="Folder">Carpeta</label>
+            <div class="col-sm-9 col-lg-10">
+                {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':folder, 'firstwrite':firstwrite} %}
+            </div>
+        </div>
         
-        <div class="control-group">
-            <label class="control-label" for="FileName">Título</label>
-            <div class="controls">
-                <input id="FileName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}">
+        <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="FileName">Título</label>
+            <div class="col-sm-9 col-lg-10">
+                <input id="FileName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}" class="form-control">
             </div>
         </div>
       
-        <div class="control-group">
-            <label class="control-label" for="FileText">Texto</label>
-            <div class="controls">
-              <textarea id="FileText" name="text">{{ item.text }}</textarea>
+        <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="FileText">Texto</label>
+            <div class="col-sm-9 col-lg-10">
+              <textarea id="FileText" name="text" class="form-control" rows="5">{{ item.text }}</textarea>
             </div>
         </div>
         
@@ -42,14 +47,23 @@
         {% else %}
             {% set category = 0 %}
         {% endif %}
-        {% render 'ColectaItemBundle:Category:formlist' with {'selected':category} %}
         
-        <div class="form-actions">
-            <button class="btn disabled" disabled="disabled">Guardar como borrador</button>
-            <button type="submit" class="btn btn-primary" id="FileSubmit"><i id="FileSubmitLoading"></i> <span id="FileSubmitText">Publicar ahora</span></button>
+        <div class="form-group">
+            <label class="col-sm-3 col-lg-2 control-label" for="Category">Categoría</label>
+            <div class="col-sm-9 col-lg-10">
+                {% render 'ColectaItemBundle:Category:formlist' with {'selected':category} %}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                {#<button class="btn disabled" disabled="disabled">Guardar como borrador</button>#}
+                <button type="submit" class="btn btn-primary" id="FileSubmit"><i id="FileSubmitLoading"></i> <span id="FileSubmitText">Publicar ahora</span></button>
+            </div>
         </div>
     </fieldset>
 </form>
+</div>
 {% else %}
 <div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
 {% endif %}
