@@ -166,7 +166,7 @@ function RouteChange() {
     if(files.length) {        
         //Show the file uloading process
         var f = files[0]
-        $('#RUmessage').append('<p class="lead">Subiendo el archivo <small>'+f.name+'</small></p> <div class="progress"><div class="bar" id="RUprogress" style="width: 0%;"></div>');
+        $('#RUmessage').append('<p class="lead">Subiendo el archivo <small>'+f.name+'</small></p> <div class="progress"><div class="progress-bar" id="RUprogress" style="width: 0%;"></div>');
         
         //Start upload
         uploadRouteFile(f);
@@ -263,7 +263,7 @@ function FileChange() {
         for(var i = 0; i < files.length; i++) {
             var f = files[i];
             var j = (i + FUTheFiles.length);
-            fp.append('<div class="col-lg-4 col-sm-6" id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress progress-striped"><div class="bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
+            fp.append('<div class="col-lg-4 col-sm-6" id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress"><div role="progressbar"  class="progress-bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
         }
         
         //Start upload
