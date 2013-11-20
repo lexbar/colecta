@@ -360,3 +360,9 @@ span.form-control {
 .btn:hover .fa-sign-in {
     margin-left: 5px;
 }
+.dropdown-menu {
+    margin: 0;
+}
+.dropdown:hover .dropdown-menu {
+    display: block !important;
+}
