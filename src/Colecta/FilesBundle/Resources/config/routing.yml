@@ -20,7 +20,7 @@ ColectaFileCreate:
     pattern:  /archivo/crear/
     defaults: { _controller: ColectaFilesBundle:File:new }
 ColectaFileNew:
-    pattern:  /archivo/crear/
+    pattern:  /archivo/nuevo/
     defaults: { _controller: ColectaFilesBundle:Folder:new }
 ColectaFilePick:
     pattern:  /archivo/crear/{slug}/

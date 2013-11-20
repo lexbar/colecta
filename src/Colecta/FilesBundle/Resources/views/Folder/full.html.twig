@@ -48,8 +48,8 @@
         </ul>
         {% endif %}
         
-        {% if item.summary | length > 0 %}
-        <p>{{ item.summary | usercontent | raw | nl2br }}</p>
+        {% if item.text | length > 0 %}
+        <p>{{ item.text | usercontent | raw | nl2br }}</p>
         {% endif %}
     </div>
     

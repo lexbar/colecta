@@ -103,6 +103,7 @@ class FileController extends Controller
             
             $item->setAuthor($user);
             $item->summarize(strval($request->request->get('text')));
+            $item->setText($request->request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(true);
             $item->setPart(false);
