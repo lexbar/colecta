@@ -160,12 +160,6 @@ class PostController extends Controller
                     $item->setLinkTitle($title);
                 }
                 
-                $title = preg_match('!<title>(.*?)</title>!i', $html, $matches) ? $matches[1] : '';
-                if($title)
-                {
-                    $item->setLinkImage($title);
-                }
-                
                 $excerpt = preg_match('!<meta .*name="description" .*content="(.*)"!i', $html, $matches) ? $matches[1] : '';
                 if($excerpt)
                 {
@@ -275,6 +269,31 @@ class PostController extends Controller
             $item->setName($request->get('name'));
             $item->setText($request->get('text'));
             $item->summarize($request->get('text'));
+            $item->setLinkURL('');
+            $item->setLinkImage('');
+            $item->setLinkExcerpt('');
+            $item->setLinkTitle('');
+            
+            
+            if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
+            {
+                $html = getContent($url[0]);
+                //$crawler = new Crawler($html);
+                
+                $item->setLinkURL($url[0]);
+                
+                $title = preg_match('!<title>(.*?)</title>!i', $html, $matches) ? $matches[1] : '';
+                if($title)
+                {
+                    $item->setLinkTitle($title);
+                }
+                
+                $excerpt = preg_match('!<meta .*name="description" .*content="(.*)"!i', $html, $matches) ? $matches[1] : '';
+                if($excerpt)
+                {
+                    $item->setLinkExcerpt($excerpt);
+                }
+            }
             
             if($persist)
             {
