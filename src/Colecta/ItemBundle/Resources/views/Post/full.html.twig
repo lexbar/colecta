@@ -15,7 +15,7 @@
         <p>{{ item.text | videodetect | usercontent | video2viewer | raw | nl2br }}</p>
         
         {% if item.linkTitle != '' %}
-        <p class="well well-sm"><strong><a href="{{ item.linkURL }}">{{ item.linkTitle }}</a></strong><br><small>{{ item.linkURL }}</small><br> {{ item.linkExcerpt }}</p>
+        <p class="well well-sm"><strong><a href="{{ item.linkURL }}">{{ item.linkTitle | raw }}</a></strong><br><small>{{ item.linkURL }}</small><br> {{ item.linkExcerpt }}</p>
         {% endif %}
     </div>
     
