@@ -19,6 +19,35 @@ class Post extends Item
      * @ORM\Column(name="text", type="text")
      */
     protected $text;
+    
+    /**
+     * @var string $image
+     *
+     * @ORM\Column(name="image", type="string", length=255)
+     */
+    protected $linkImage;
+    
+    /**
+     * @var string $linkURL
+     *
+     * @ORM\Column(name="linkURL", type="string", length=255)
+     */
+    protected $linkURL;
+    
+    /**
+     * @var string $linkTitle
+     *
+     * @ORM\Column(name="linkTitle", type="string", length=255)
+     */
+    protected $linkTitle;
+    
+    /**
+     * @var string $linkExcerpt
+     *
+     * @ORM\Column(name="linkExcerpt", type="string", length=255)
+     */
+    protected $linkExcerpt;
+
 
     /**
      * Set text
@@ -38,6 +67,98 @@ class Post extends Item
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Set linkImage
+     *
+     * @param string $linkImage
+     * @return Post
+     */
+    public function setLinkImage($linkImage)
+    {
+        $this->linkImage = $linkImage;
+    
+        return $this;
+    }
+
+    /**
+     * Get linkImage
+     *
+     * @return string 
+     */
+    public function getLinkImage()
+    {
+        return $this->linkImage;
+    }
+
+    /**
+     * Set linkURL
+     *
+     * @param string $linkURL
+     * @return Post
+     */
+    public function setLinkURL($linkURL)
+    {
+        $this->linkURL = $linkURL;
+    
+        return $this;
+    }
+
+    /**
+     * Get linkURL
+     *
+     * @return string 
+     */
+    public function getLinkURL()
+    {
+        return $this->linkURL;
+    }
+
+    /**
+     * Set linkTitle
+     *
+     * @param string $linkTitle
+     * @return Post
+     */
+    public function setLinkTitle($linkTitle)
+    {
+        $this->linkTitle = $linkTitle;
+    
+        return $this;
+    }
+
+    /**
+     * Get linkTitle
+     *
+     * @return string 
+     */
+    public function getLinkTitle()
+    {
+        return $this->linkTitle;
+    }
+
+    /**
+     * Set linkExcerpt
+     *
+     * @param string $linkExcerpt
+     * @return Post
+     */
+    public function setLinkExcerpt($linkExcerpt)
+    {
+        $this->linkExcerpt = $linkExcerpt;
+    
+        return $this;
+    }
+
+    /**
+     * Get linkExcerpt
+     *
+     * @return string 
+     */
+    public function getLinkExcerpt()
+    {
+        return $this->linkExcerpt;
     }
     
     public function getType()
@@ -549,5 +670,33 @@ class Post extends Item
     public function getComments()
     {
         return $this->comments;
+    }
+    /**
+     * @var \DateTime
+     */
+    protected $lastInteraction;
+
+
+    /**
+     * Set lastInteraction
+     *
+     * @param \DateTime $lastInteraction
+     * @return Post
+     */
+    public function setLastInteraction($lastInteraction)
+    {
+        $this->lastInteraction = $lastInteraction;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastInteraction
+     *
+     * @return \DateTime 
+     */
+    public function getLastInteraction()
+    {
+        return $this->lastInteraction;
     }
 }

@@ -4,6 +4,7 @@ namespace Colecta\ItemBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\DomCrawler\Crawler;
 use Colecta\ItemBundle\Entity\Post;
 use Colecta\ItemBundle\Entity\Relation;
 use Colecta\ItemBundle\Entity\Category;
@@ -140,6 +141,37 @@ class PostController extends Controller
             $item->setDraft(false);
             $item->setPart(false);
             $item->setText($request->get('text'));
+            $item->setLinkURL('');
+            $item->setLinkImage('');
+            $item->setLinkExcerpt('');
+            $item->setLinkTitle('');
+            
+            
+            if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
+            {
+                $html = getContent($url[0]);
+                //$crawler = new Crawler($html);
+                
+                $item->setLinkURL($url[0]);
+                
+                $title = preg_match('!<title>(.*?)</title>!i', $html, $matches) ? $matches[1] : '';
+                if($title)
+                {
+                    $item->setLinkTitle($title);
+                }
+                
+                $title = preg_match('!<title>(.*?)</title>!i', $html, $matches) ? $matches[1] : '';
+                if($title)
+                {
+                    $item->setLinkImage($title);
+                }
+                
+                $excerpt = preg_match('!<meta .*name="description" .*content="(.*)"!i', $html, $matches) ? $matches[1] : '';
+                if($excerpt)
+                {
+                    $item->setLinkExcerpt($excerpt);
+                }
+            }
             
             if($request->get('attachTo'))
             {
@@ -286,4 +318,27 @@ class PostController extends Controller
         
         return new RedirectResponse($this->generateUrl('ColectaDashboard'));
     }
+}
+
+function getContent($url) {
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url );
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); //Needed because redirection is used on the app
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+	$content = curl_exec($ch); //return result 
+	
+	if(curl_getinfo($ch, CURLINFO_HTTP_CODE) === 403) {
+		return null;
+	}
+	
+	if (curl_errno($ch)) {
+		return null; //this stops the execution under a Curl failure
+	}
+	
+	curl_close($ch); //close connection_aborted()
+	
+	return $content;
 }

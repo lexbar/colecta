@@ -165,6 +165,9 @@ span.form-control {
 .item.panel-primary {
     border-color: #BBB;
 }
+.item .panel-body .well {
+    margin: 0;
+}
 .item.panel-primary > .panel-heading {
     background-color: #0f581e;
     border-color: #999;
