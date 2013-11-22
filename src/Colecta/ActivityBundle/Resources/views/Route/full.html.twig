@@ -12,30 +12,33 @@
     <div class="panel-body">
         <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
         
+        <div class="clearfix mapcontrols">
+            <div class="dropdown pull-right">
+                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" onClick="return false;">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
+                <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
+                    <li role="presentation" class="dropdown-header">Track completo</li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
+                    <li class="divider"></li>
+                    <li role="presentation" class="dropdown-header">Track simplificado</li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
+                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
+                </ul>
+            </div>
+            
+            <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-default btn-sm pull-right" type="button"><i class="fa fa-arrows-alt fa-fw"></i></button>
+        </div>
+        
         <div id="map" style="width:auto;height:300px;"></div>
         
         <div id="chart" style="width:auto;height:200px;"></div>
         
         <hr>
         
-            
-        <div class="dropdown pull-right">
-            <button class="btn btn-primary dropdown-toggle" type="button" onClick="return false;">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
-            <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
-                <li role="presentation" class="dropdown-header">Track completo</li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
-                <li class="divider"></li>
-                <li role="presentation" class="dropdown-header">Track simplificado</li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
-            </ul>
-        </div>
-            
         <p>{{ item.text | usercontent | raw | nl2br }}</p>
     
         {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
@@ -52,17 +55,9 @@
 
 
 
-
-
-
-
-
-
-
-
     {#
     
-    <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-small pull-right" type="button"><i class="icon-fullscreen icon-fixed-width"></i></button>
+    
     
         <div id="mapproperties">
             <button class="btn btn-danger btn-small btn-block" onClick="toggleFullScreen()">Salir <i class="icon-resize-small icon-white"></i></button>
@@ -85,7 +80,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=weather"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=weather"></script>
     <script src="/js/highcharts.js"></script>
     <script>
      
@@ -280,7 +275,6 @@
         if(isFullScreen)
         {
             $('#map').removeClass('fullscreen').addClass('full'); 
-            $('#map').css('position','relative');
             $('#mapproperties').removeClass('fullscreen');
             $('#chart').removeClass('fullscreen');
             
@@ -289,7 +283,6 @@
         else
         {
             $('#map').removeClass('full').addClass('fullscreen'); 
-            $('#map').css('position','absolute');
             $('#mapproperties').addClass('fullscreen');
             $('#chart').addClass('fullscreen');
             
@@ -308,7 +301,7 @@
             weatherLayer.setMap(null);
             $('#weather').removeClass('disabled');
         } else {
-            if(!isFullScreen){toggleFullScreen();} 
+            //if(!isFullScreen){toggleFullScreen();} 
             if(map.getZoom() > 12){map.setZoom(11);} 
             weatherLayer.setMap(map);
             $('#weather').addClass('disabled');

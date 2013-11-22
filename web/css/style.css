@@ -369,3 +369,34 @@ span.form-control {
 .dropdown:hover .dropdown-menu {
     display: block !important;
 }
+#map .control {
+    background-color: #FFFFFF;
+    margin: 6px -5px 0 0;
+    padding: 1px 4px;
+    cursor: pointer;
+}
+#map.fullscreen {
+    background-color: #E5E3DF;
+    bottom: 200px;
+    height: auto !important;
+    left: 0;
+    overflow: hidden;
+    position: fixed !important;
+    right: 0;
+    top: 0;
+    width: auto;
+    z-index: 1100;
+}
+#chart.fullscreen {
+    bottom: 0;
+    height: 200px;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    position: fixed !important;
+    width: auto;
+    z-index: 1100;
+}
+.mapcontrols .btn {
+    margin: 0 0 5px 5px;
+}
