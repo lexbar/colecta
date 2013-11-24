@@ -85,14 +85,14 @@ class Service
     {
         if(!$this->lastAccessDone)
         {
-            $em = $this->doctrine->getEntityManager();
-            
             if($this->securityContext->getToken())
             {
                 $user = $this->securityContext->getToken()->getUser();
             
                 if($user != 'anon.')
                 {
+                    $em = $this->doctrine->getEntityManager();
+                    
                     $user->setLastAccess(new \DateTime('now'));
                 
                     $em->persist($user); 

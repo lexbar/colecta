@@ -2,21 +2,22 @@
 
 {% block rank 'active' %}
 
-{% block content %}  
-    <div class="title-block">
-        <h2>Ranking</h2>
-    </div>
+{% block content %} 
+    {% include '::intranetNavigation.html.twig' with {'active': 'rank'} %}
     
-    <table class="table table-condensed table-hover">
-    <thead><tr><th style="width: 100px;">Total</th><th style="width: 150px;">Nombre</th><th class="span7">Ranking</th></tr></thead>
-    {% set maxkm = kms[users[0].id] %}
-    {% for user in users %}
-        <tr>
-            <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
-            <td><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">{{ user.name }}</a></td>
-            <td><div class="progress"><div class="bar" style="width: {% if maxkm > 0 %}{{ (kms[user.id] / maxkm * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div></div></td>
-        </tr>
-    {% endfor %}
-    </table>
-
+    <h2>Ranking</h2>
+    
+    <div class="monocontent">
+        <table class="table table-condensed table-hover">
+        <thead><tr><th style="width: 100px;">Total</th><th style="width: 150px;">Nombre</th><th class="span7">Ranking</th></tr></thead>
+        {% set maxkm = kms[users[0].id] %}
+        {% for user in users %}
+            <tr>
+                <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
+                <td><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">{{ user.name }}</a></td>
+                <td><div class="progress"><div class="progress-bar progress-bar-success" style="width: {% if maxkm > 0 %}{{ (kms[user.id] / maxkm * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div></div></td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
 {% endblock%}

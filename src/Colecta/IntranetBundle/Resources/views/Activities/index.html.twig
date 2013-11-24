@@ -2,6 +2,37 @@
 
 {% block activities 'active' %}
 
+{% block content %}    
+
+    {% include '::intranetNavigation.html.twig' with {'active': 'activities'} %}
+    
+    <h2>Rendimiento</h2>
+    
+    <div class="monocontent">    
+        <div id="chart" style="height:270px"></div>
+        
+        <table class="table table-condensed table-hover">
+        <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distancia</th></tr></thead>
+        
+        {% set accumulated = 0 %}
+        {% set lastyearmonth = '' %}
+        
+        {% for asssistance in asssistances %}
+            <tr{% if lastyearmonth != '' and lastyearmonth != asssistance.event.dateini | date('Ym') %} style="border-top: 2px solid #CCC;"{% endif %}>
+                <td>{{ asssistance.event.dateini | date('d') }} {% include '::month.html.twig' with {'date':asssistance.event.dateini, 'short':1} %} {{ asssistance.event.dateini | date('Y') }}</td>
+                <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
+                <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
+            </tr>
+            {% set accumulated = accumulated + asssistance.km %}
+            {% set lastyearmonth = asssistance.event.dateini | date('Ym') %}
+        {% endfor %}
+        
+        <tr><td></td><td style="text-align:right"><strong>TOTAL</strong></td><td>{{ accumulated | number_format(1,'.',',')}} km</td></tr>
+        
+        </table>
+    </div>
+{% endblock%}
+
 {% block javascripts %}    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <script src="/js/highcharts.js"></script>
@@ -94,31 +125,3 @@
     });
     </script>
 {% endblock %}
-
-{% block content %}    
-    <div class="title-block">
-        <h2>Rendimiento</h2>
-    </div>
-    <div id="chart"></div>
-    
-    <table class="table table-condensed table-hover">
-    <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distancia</th></tr></thead>
-    
-    {% set accumulated = 0 %}
-    {% set lastyearmonth = '' %}
-    
-    {% for asssistance in asssistances %}
-        <tr{% if lastyearmonth != '' and lastyearmonth != asssistance.event.dateini | date('Ym') %} style="border-top: 2px solid #0088CC;"{% endif %}>
-            <td>{{ asssistance.event.dateini | date('d') }} {% include '::month.html.twig' with {'date':asssistance.event.dateini, 'short':1} %} {{ asssistance.event.dateini | date('Y') }}</td>
-            <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
-            <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
-        </tr>
-        {% set accumulated = accumulated + asssistance.km %}
-        {% set lastyearmonth = asssistance.event.dateini | date('Ym') %}
-    {% endfor %}
-    
-    <tr><td></td><td style="text-align:right"><strong>TOTAL</strong></td><td>{{ accumulated | number_format(1,'.',',')}} km</td></tr>
-    
-    </table>
-    
-{% endblock%}

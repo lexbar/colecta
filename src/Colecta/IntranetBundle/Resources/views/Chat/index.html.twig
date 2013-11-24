@@ -2,6 +2,32 @@
 
 {% block chat 'active' %}
 
+{% block content %}
+
+    {% include '::intranetNavigation.html.twig' with {'active': 'chat'} %}
+    
+    <h2>Chat</h2>
+    
+    <form method="post" action="{{ path('ColectaChatPost', {'method':'html'}) }}" id="chatform" onSubmit="$.post('{{ path('ColectaChatPost', {'method':'json'}) }}', {text:$('#chatText').val()});$('#chatText').val('');return false;">
+        <div class="row">
+            <div class="col-sm-10"><textarea name="text" id="chatText" class="form-control" rows="2"></textarea></div>
+            <div class="col-sm-2"><button class="btn btn-primary btn-block">Enviar</button></div>
+        </div>
+    </form>
+    
+    <p><strong>¿Quién está online?</strong></p>
+    <p id="whosonline" class="well" style="padding: 10px 20px"></p>
+    
+    <ul class="list-group" id="chatstream">
+    {% for m in messages %}
+        <li class="list-group-item clearfix"><div class="row"><div class="col-sm-1 col-xs-2"><img width="40" height="40" src="{% if m.user.avatar %}{{ path('userAvatar',{'uid':m.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"></div><div class="col-sm-11 col-xs-10"><strong>{{ m.user.name }}:</strong> {{ m.text | usercontent | raw | nl2br }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div></li>
+    {% endfor %}
+    </ul>
+    
+    <div style="text-align:center;margin-bottom: 20px;"><button class="btn btn-default" onClick="loadMore()">Ver más <i class="fa fa-arrow-down"></i></button></div>
+        
+{% endblock%}
+
 {% block javascripts %}
     <script>
         var lastInputId = {% if messages | length > 0 %}{{ messages[0].id }}{% else %}0{% endif %};
@@ -13,7 +39,7 @@
             $('#whosonline').html('');
             
             for(var i = 0; i < users.length; i++) {
-                $('#whosonline').append(' <i class="icon-user"></i> '+users[i].name);
+                $('#whosonline').append(' <i class="fa fa-user"></i> '+users[i].name);
             }
         }
         
@@ -88,26 +114,3 @@
         });
     </script>
 {% endblock %}
-
-{% block content %}
-    <div class="title-block">
-        <h2>Chat</h2>
-    </div>
-    
-    <form method="post" action="{{ path('ColectaChatPost', {'method':'html'}) }}" id="chatform" onSubmit="$.post('{{ path('ColectaChatPost', {'method':'json'}) }}', {text:$('#chatText').val()});$('#chatText').val('');return false;">
-        <div class="span6"><textarea name="text" id="chatText"></textarea></div>
-        <button class="btn btn-primary span1">Enviar</button>
-    </form>
-    
-    <p><strong>¿Quién está online?</strong></p>
-    <p id="whosonline" class="well" style="padding: 10px 20px"></p>
-    
-    <ul class="list-group">
-    {% for m in messages %}
-        <li class="list-group-item clearfix"><div class="row"><div class="col-sm-1 col-xs-2"><img width="40" height="40" src="{% if m.user.avatar %}{{ path('userAvatar',{'uid':m.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"></div><div class="col-sm-11 col-xs-10"><strong>{{ m.user.name }}:</strong> {{ m.text | usercontent | raw | nl2br }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div></li>
-    {% endfor %}
-    </ul>
-    
-    <div style="text-align:center;margin-bottom: 20px;"><button class="btn btn-default" onClick="loadMore()">Ver más <i class="fa fa-arrow-down"></i></button></div>
-        
-{% endblock%}
