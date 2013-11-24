@@ -7,7 +7,7 @@
 {% include '::navigation.html.twig' with {'active': 'event'} %}
 
 <div class="title-block">
-    {% if app.user %} <a href="{{ path('ColectaEventNew')}}" class="btn btn-small btn-success pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
+    {% if app.user %} <a href="{{ path('ColectaEventNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
     <h2>
     {% if ismonth %}
         {% include "::month.html.twig" with {'date': date, 'short':0} %}
