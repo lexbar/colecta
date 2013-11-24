@@ -43,7 +43,7 @@ class ActivitiesController extends Controller
             $newusers = array(); //the new array of users, that will be sorted by total kms
             foreach($users as $u)
             {
-                if($u->getRole()->getName() != 'ROLE_BANNED')
+                if($u->getRole() && $u->getRole()->getName() != 'ROLE_BANNED')
                 {
                     $k = 0;
                 
