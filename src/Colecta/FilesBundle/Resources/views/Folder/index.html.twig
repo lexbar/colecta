@@ -4,18 +4,7 @@
 
 {% block article %}
 
-<p class="btn-group btn-group-justified sections">
-    <a class="btn btn-default"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Categorías</span></a>
-    <a class="btn btn-default" href="{{ path('ColectaPostIndex')}}"><i class="fa fa-align-left"></i> <span class="hidden-xs">Textos</span></a>
-    <a class="btn btn-default" href="{{ path('ColectaEventIndex')}}"><i class="fa fa-calendar"></i> <span class="hidden-xs">Calendario</span></a>
-    <a class="btn btn-default" href="{{ path('ColectaRouteIndex')}}"><i class="fa fa-bar-chart-o"></i> <span class="hidden-xs">Tracks</span></a>
-    <a class="btn btn-default active" href="{{ path('ColectaFileIndex')}}"><i class="fa fa-folder-open"></i> <span class="hidden-xs">Archivos</span></a>
-    <a class="btn btn-default" href="{{ path('ColectaPlaceIndex')}}"><i class="fa fa-map-marker"></i> <span class="hidden-xs">Lugares</span></a>
-</p>
-
-<div class="title-block">
-    <h2>Archivos</h2>
-</div>
+<h2>Archivos</h2>
 
 {% for item in items %}
 <div class="item" id="item{{ item.id}}">    
