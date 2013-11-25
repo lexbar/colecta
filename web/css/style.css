@@ -400,3 +400,12 @@ span.form-control {
 .mapcontrols .btn {
     margin: 0 0 5px 5px;
 }
+.fullimage a {
+    height: 480px;
+    padding: 0 10px;
+    color: #FFF;
+    line-height: 480px;
+}
+.fullimage .right {
+    text-align: right;
+}
