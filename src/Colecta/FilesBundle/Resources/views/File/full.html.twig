@@ -27,6 +27,37 @@
     <p>{{ item.text | usercontent | raw | nl2br }}</p>
     {% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
     
+    {# more items on this folder #}
+    
+    {% set folderlength = item.folder.files | length %}
+    {% if folderlength > 1 %}
+        
+        <div class="row">
+        
+        {% set itemIndex = item.folder.files.indexOf(item) %}
+        
+        {% for i in itemIndex-2..itemIndex+2 %}
+            {% if i < 0 %} {# negative index #}
+                <div class="col-xs-6 col-sm-3"></div>
+            {% elseif i == itemIndex %} {# current item #}
+                
+            {% elseif i >= folderlength %} {# out of bounds #}
+                
+            {% else %}
+                <div class="col-xs-6 col-sm-3">
+                    {% set thisitem = item.folder.files[i] %}
+                    {% if thisitem.filetype in ['jpeg','gif','png'] %}
+                        <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':thisitem.slug, 'width':200, 'height':200}) }}"></a>
+                    {% else %}
+                        <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}">{{ thisitem.name }}</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        
+        </div>
+        
+    {% endif %}
     </div>
     
     <div class="panel-footer">
