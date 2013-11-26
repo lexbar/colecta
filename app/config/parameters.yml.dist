@@ -23,7 +23,7 @@ twig:
         itemIcons:
             Item/Post: align-left
             Activity/Event: calendar
-            Activity/Route: code-fork
+            Activity/Route: flag-checkered
             Activity/Place: map-marker
             Files/File: folder-open
             Files/Folder: folder-open
