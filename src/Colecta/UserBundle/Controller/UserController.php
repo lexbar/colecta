@@ -184,6 +184,7 @@ class UserController extends Controller
     public function avatarAction($uid,$width,$height)
     {
         $this->get('request')->setRequestFormat('image');
+        
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/avatar-' . $uid . '_' . $width . 'x' . $height ;
         
         $response = new Response();
@@ -247,11 +248,6 @@ class UserController extends Controller
                 $image->setImagePage(0, 0, 0, 0);
                 //fill out the cache
                 file_put_contents($cachePath, $image);
-            }
-            
-            if($width != 40 || $height != 40) 
-            {
-                unlink($cachePath);
             }
             
             $response->setStatusCode(200);
