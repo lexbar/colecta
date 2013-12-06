@@ -189,9 +189,13 @@ class UserController extends Controller
         
         $response = new Response();
         
-        if(file_exists($cachePath) && filemtime($cachePath))
+        if(@filemtime($cachePath))
         {
-            $response->setLastModified(new \DateTime(date("F d Y H:i:s.",filemtime($cachePath))));
+            $response->setLastModified(new \DateTime(date("Y-m-d\TH:i:sP",filemtime($cachePath))));
+        }
+        else
+        {
+            $response->setLastModified(new \DateTime('now'));
         }
         
         $response->setPublic();
@@ -219,7 +223,7 @@ class UserController extends Controller
             
             if(!$user)
             {
-                throw $this->createNotFoundException('El archivo no existe');
+                throw $this->createNotFoundException();
             }
             
             $imagefile = __DIR__ . '/../../../../web' . $user->getUploadDir() . '/' .$user->getAvatar();

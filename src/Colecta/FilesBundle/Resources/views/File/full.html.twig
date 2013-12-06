@@ -1,4 +1,4 @@
-{% extends '::frontend.html.twig' %}
+    {% extends '::frontend.html.twig' %}
 
 {% block title %}{{ item.name }} | Archivos{% endblock %}
 
@@ -48,7 +48,7 @@
                     {% if thisitem.filetype in ['jpeg','gif','png'] %}
                         <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':thisitem.slug, 'width':200, 'height':200}) }}"></a>
                     {% else %}
-                        <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}">{{ thisitem.name }}</a>
+                        <a class="btn btn-warning btn-block" href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}">{{ thisitem.name }}</a>
                     {% endif %}
                 </div>
             {% endif %}
