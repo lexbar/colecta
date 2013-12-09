@@ -207,9 +207,7 @@ class UserController extends Controller
         if(file_exists($cachePath))
         {
             $image = file_get_contents($cachePath);
-            
-            $response = new Response($image);
-            
+            $response->setContent($image);
             $response->headers->set('Content-Type', mime_content_type($cachePath) );
             
             return $response;

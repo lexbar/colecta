@@ -925,7 +925,7 @@ class FileController extends Controller
         {
             $image = file_get_contents($cachePath);
             
-            $response = new Response($image);
+            $response->setContent($image);
             
             $response->headers->set('Content-Type', mime_content_type($cachePath) );
             
