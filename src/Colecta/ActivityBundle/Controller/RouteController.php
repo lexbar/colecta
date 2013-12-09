@@ -61,9 +61,30 @@ class RouteController extends Controller
         
         $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id ;
         
+        $response = new Response();
+        
+        if(@filemtime($cachePath))
+        {
+            $response->setLastModified(new \DateTime(date("Y-m-d\TH:i:sP",filemtime($cachePath))));
+        }
+        else
+        {
+            $response->setLastModified(new \DateTime('now'));
+        }
+        
+        $response->setPublic();
+        
+        if ($response->isNotModified($this->getRequest())) {
+            return $response; // this will return the 304 if the cache is OK
+        } 
+        
         if(file_exists($cachePath))
         {
             $image = file_get_contents($cachePath);
+            $response->setContent($image);
+            $response->headers->set('Content-Type','image/png');
+            
+            return $response;
         }
         else
         {
@@ -93,7 +114,7 @@ class RouteController extends Controller
             }
         }
         
-        $response = new Response($image);
+        $response->setContent($image);
         $response->headers->set('Content-Type', 'image/png');
         return $response;
     }
