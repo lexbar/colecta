@@ -49,17 +49,17 @@
         <ul class="list-group">
             <li class="list-group-item active">
                 <div class="row">
-                    <div class="col-sm-3 col-xs-12">
-                        Usuario
+                    <div class="col-sm-3 col-xs-6">
+                        Usuario <span class="visible-xs"> / </span>
                     </div>
                     <div class="col-sm-3 col-xs-6">
-                        ha vendido
+                        papeletas <span class="visible-xs"> / </span>
                     </div>
                     <div class="col-sm-3 col-xs-6">
                         importe jugado
                     </div>
                     <div class="col-sm-3 col-xs-6">
-                        beneficios
+                        beneficio
                     </div>
                 </div>
             </li>
@@ -75,11 +75,11 @@
                     
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col-sm-3 col-xs-12">
+                        <div class="col-sm-3 col-xs-6">
                             <a href="{{ path('ColectaBackendLotteryUser', {'user_id':user[0].user.id}) }}">{{ user[0].user.name }}</a>
                         </div>
                         <div class="col-sm-3 col-xs-6">
-                            {{ total }}
+                            {{ total }} ( {{ total * lotteryCampaign.ticketPrice }}€ )
                         </div>
                         <div class="col-sm-3 col-xs-6">
                             {{ (lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit ) * total }}€
