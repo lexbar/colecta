@@ -1,60 +1,126 @@
-{% if app.user %}
+{% if app.user and app.user.role.siteConfig %}
 {% extends '::base.html.twig' %}
 
-{% block title 'Club Mountain Bike Turyciclo' %}
+{% block title web_title %}
 
 {% block body %}
-<div class="navbar navbar-static-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <h1><a class="brand" href="/">Club Mountain Bike Turyciclo</a></h1>
-            
-            <form action={{ path('ColectaSearch')}} method="GET" class="form-search pull-right">
-                <div class="input-append">
-                    <input type="text" class="input-medium search-query" name="q" value="{{ app.request.get('search') }}">
-                    <button type="submit" class="btn">Buscar</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="navbar navbar-default navbar-static-top" role="navigation">
+                    <div class="container">
+                        <div class="row">
+                            <div class="navbar-header col-sm-6">                                
+                                <a class="navbar-brand" href="/">{{ web_title }}</a>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <form id="searchForm" class="navbar-form navbar-right" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+                                    <div class="col-xs-8">
+                                        <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('search') }}">
+                                    </div>
+                                    <button type="submit" class="btn btn-default col-xs-4">Buscar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
+                
+                {% if web_header_img | length %}
+                <div class="col-xs-12 hidden-xs" style="background: url( {{ random(web_header_img) }} ) no-repeat center center; height:140px;background-size: cover;"></div>
+                {% endif %}
+            </div>
         </div>
-    </div>
-</div>
+        
+        <div class="row content">
 
-<div class="container" id="main">
-<div class="row" id="body">
-<div class="span2" id="sidebar">
-    <ul> 
-        <li><a class="{% block chat '' %} blue" href="{{ path('ColectaChatIndex') }}"><i class="icon-cogs"></i> <span>Ajustes</span></a></li>
-        <li><a class="{% block activities '' %} orange" href="{{ path('ColectaActivitiesIndex') }}"><i class="icon-male"></i> <span>Usuarios</span></a></li>
-        <li><a class="{% block rank '' %} green" href="{{ path('ColectaActivitiesRank') }}"><i class="icon-file-text"></i> <span>Páginas</span></a></li>  
-        <li><a class="{% block payment '' %}" href="{{ path('ColectaPaymentIndex') }}"><i class="icon-bar-chart"></i> <span>Estadísticas</span></a></li>
-        <li><a class="{% block lottery '' %}" href="{{ path('ColectaLotteryIndex') }}"><i class="icon-dashboard"></i> <span>Plan</span></a></li>
-    </ul> 
-</div>
+            <div class="col-xs-12 col-md-9 main">
 
-<div class="span7" id="stream">
-{% if app.session.hasFlash('error') %}
-    <div class="alert alert-error">
-        {{ app.session.flash('error') }}
-    </div>
-{% endif %}
-{% if app.session.hasFlash('success') %}
-    <div class="alert alert-success">
-        {{ app.session.flash('success') }}
-    </div>
-{% endif %}
+                {% if app.session.hasFlash('error') %}
+                    <div class="alert alert-danger">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-exclamation fa-stack-1x fa-inverse"></i>
+                        </span> 
+                        
+                        {{ app.session.flash('error') }}
+                    </div>
+                {% endif %}
+                {% if app.session.hasFlash('success') %}
+                    <div class="alert alert-success">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                        </span> 
+                        
+                        {{ app.session.flash('success') }}
+                    </div>
+                {% endif %}
 
-{% block content %}{% endblock %}
-</div>
+                {% block content %}{% endblock %}
+            </div>
+            
+            <div class="col-xs-12 col-md-3 sidebar">
 
-<div class="span3" id="userbar">
+                <div class="media self">
+                    <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
+                        <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':50,'height':50}) }}{% else %}/img/unknown.gif{% endif %}" width="50">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ app.user.name }}</h4>
+                        <div class="btn-group">
+                            <a href="{{ path('userEditProfile') }}" class="btn btn-default btn-xs">Editar perfil</a>
+                            <a href="{{ path('userLogout') }}" class="btn btn-default btn-xs" style="color:darkred;">Salir <span class="fa fa-sign-out"></span></a>
+                        </div>
+                    </div>
+                </div>
     
-    <p class="myself"><img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}" width="40" height="40"> <strong class="name">{{ app.user.name }}</strong><br><a href="{{ path('userEditProfile') }}">Editar perfil</a></p>
-    
-    {% block navigation %}
-        {% include '::navigation.html.twig' with {'navigation': 'backend'} %}
-    {% endblock %}
-</div>
-</div>
-</div>
+                <hr>
+                
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="">
+                        <a href="/">
+                            <i class="fa fa-home fa-fw"></i> Inicio 
+                            {#<span class="badge pull-right">42</span>#}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('ColectaChatIndex') }}">
+                            <i class="fa fa-unlock fa-fw"></i> Privado
+                        </a>
+                    </li>                    
+                    <li class="active">
+                        <a href="{{ path('ColectaBackendLotteryIndex') }}">
+                            <i class="fa fa-wrench fa-fw"></i> Configuración
+                        </a>
+                    </li>
+                </ul>
+                
+                <hr>
+                
+                {% if item is defined %}
+                    {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
+                {% else %}
+                    {% set notifications = colectauser.notDismissedNotifications %}
+                {% endif %}
+                
+                {% set messages = colectauser.notDismissedMessages %}
+                    
+                <ul class="nav nav-pills nav-stacked">
+                    <li>
+                        <a href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}</a>
+                    </li>
+                </ul>
+                
+                <hr>
+
+                {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
+                
+            </div>
+        </div>
+    </div>   
 {% endblock %}
 {% endif %}

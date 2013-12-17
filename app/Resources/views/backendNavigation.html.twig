@@ -1,0 +1,8 @@
+<p class="btn-group btn-group-justified sections">
+    <a class="clearfix btn btn-default{% if active == 'settings' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-cogs"></i> <span class="hidden-xs">Ajustes</span></a>
+    <a class="clearfix btn btn-default{% if active == 'users' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-male"></i> <span class="hidden-xs">Usuarios</span></a>
+    <a class="clearfix btn btn-default{% if active == 'pages' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-file-text"></i> <span class="hidden-xs">Páginas</span></a>
+    <a class="clearfix btn btn-default{% if active == 'lottery' %} active{% endif %}" href="{{ path('ColectaBackendLotteryIndex') }}"><i class="fa fa-ticket"></i> <span class="hidden-xs">Lotería</span></a>
+    <a class="clearfix btn btn-default{% if active == 'stats' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-bar-chart-o"></i> <span class="hidden-xs">Estadísticas</span></a>
+    <a class="clearfix btn btn-default{% if active == 'plan' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-dashboard"></i> <span class="hidden-xs">Plan</span></a>
+</p>

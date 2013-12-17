@@ -34,6 +34,20 @@ class LotteryCampaign
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     * @var float $ticketPrice
+     *
+     * @ORM\Column(name="ticketPrice", type="float")
+     */
+    private $ticketPrice;
+    
+    /**
+     * @var float $ticketBenefit
+     *
+     * @ORM\Column(name="ticketBenefit", type="float")
+     */
+    private $ticketBenefit;
 
     /**
      * @ORM\OneToMany(targetEntity="LotteryShred", mappedBy="lotteryCampaign_id")
@@ -89,6 +103,46 @@ class LotteryCampaign
     public function getDate()
     {
         return $this->date;
+    }
+    
+    /**
+     * Set ticketPrice
+     *
+     * @param float $ticketPrice
+     */
+    public function setTicketPrice($ticketPrice)
+    {
+        $this->ticketPrice = $ticketPrice;
+    }
+
+    /**
+     * Get ticketPrice
+     *
+     * @return float 
+     */
+    public function getTicketPrice()
+    {
+        return $this->ticketPrice;
+    }
+    
+    /**
+     * Set ticketBenefit
+     *
+     * @param float $ticketBenefit
+     */
+    public function setTicketBenefit($ticketBenefit)
+    {
+        $this->ticketBenefit = $ticketBenefit;
+    }
+
+    /**
+     * Get ticketBenefit
+     *
+     * @return float 
+     */
+    public function getTicketBenefit()
+    {
+        return $this->ticketBenefit;
     }
 
     /**

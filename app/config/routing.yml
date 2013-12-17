@@ -1,3 +1,7 @@
+colecta_backend:
+    resource: "@ColectaBackendBundle/Resources/config/routing.yml"
+    prefix:   /
+
 stats:
     resource: "@StatsBundle/Resources/config/routing.yml"
     prefix:   /

@@ -1,0 +1,15 @@
+ColectaBackendLotteryIndex:
+    pattern:  /back/lottery/
+    defaults: { _controller: ColectaBackendBundle:Lottery:index }
+ColectaBackendLotteryUser:
+    pattern:  /back/lottery/user/{user_id}
+    defaults: { _controller: ColectaBackendBundle:Lottery:user }
+ColectaBackendLotteryAddShred:
+    pattern:  /back/lottery/addShred/
+    defaults: { _controller: ColectaBackendBundle:Lottery:addShred }
+ColectaBackendLotteryRemoveShred:
+    pattern:  /back/lottery/removeShred/{shred_id}
+    defaults: { _controller: ColectaBackendBundle:Lottery:removeShred }
+ColectaBackendLotteryReturnShred:
+    pattern:  /back/lottery/returnShred/{shred_id}
+    defaults: { _controller: ColectaBackendBundle:Lottery:returnShred }

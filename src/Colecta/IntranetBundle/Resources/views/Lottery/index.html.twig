@@ -1,13 +1,54 @@
 {% extends '::intranet.html.twig' %}
 
-{% block lottery 'active' %}
+{% block chat 'active' %}
 
 {% block content %}
 
-<p><strong>2010-12-18</strong> recogida papeletas de 220 a 270</p>
-<p><strong>2010-12-27</strong> devueltas papeletas de 256 a 270</p>
-<p><strong>2011-12-18</strong> recogida papeletas de 180 a 230 <input type="button" class="btn btn-mini" value="devolver papeletas"></p>
-<hr>
-<h2>Generar una transacción de lotería</h2>
-<form>Papeletas numeradas de <input type="text" class="span1"> a  <input type="text" class="span1"> <input type="submit" class="btn btn-success" value="Generar"></form>
+    {% include '::intranetNavigation.html.twig' with {'active': 'lottery'} %}
+    
+    <h2>{{ lotteryCampaign.name }}</h2>
+    
+    <div class="monocontent">
+        {% set total = 0 %}
+        
+        <ul class="list-group">
+            {% for ls in lotteryShreds %}
+                <li class="list-group-item">
+                    <span class="badge">{{ ls.end - ls.start }}</span>
+                    
+                    {% if ls.returned %}
+                        <span class="label label-danger">Devueltas</span>
+                        {% set total = total - ls.end + ls.start %}
+                    {% else %}
+                        {% if ls.paid %}
+                            <span class="label label-primary">Recogida</span>
+                        {% else %}
+                            <span class="label label-warning">Pendiente de pago</span>
+                        {% endif %}
+                        {% set total = total + ls.end - ls.start %}
+                    {% endif %}
+                    
+                    papeletas de la {{ ls.start }} a la {{ ls.end }} {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': ls.date } only %}
+                </li>
+            {% endfor %}
+        </ul>
+        
+        <div class="row well well-sm">
+            <div class="col-sm-3 col-xs-6">
+                <h4>Papeletas: <span class="label label-primary">{{ total }}</span></h4>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <h4>Jugado: <span class="label label-primary">{{ (lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit ) * total }}€</span></h4>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <h4>Décimos: <span class="label label-primary">{{ (lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit ) * total / 20 }}</span></h4>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <h4>Beneficio: <span class="label label-primary">{{ lotteryCampaign.ticketBenefit * total }}€</span></h4>
+            </div>
+        </div>
+        
+        <p style="color:#777">*Precio papeleta: {{ lotteryCampaign.ticketPrice }}€ | Beneficio por papeleta: {{ lotteryCampaign.ticketBenefit }}€ | Importe jugado por papeleta: {{ lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit }}€</p>
+    </div>
+        
 {% endblock%}

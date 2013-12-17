@@ -1,0 +1,211 @@
+{% extends '::backend.html.twig' %}
+
+{% block chat 'active' %}
+
+{% block content %}
+
+    {% include '::backendNavigation.html.twig' with {'active': 'lottery'} %}
+    
+    <h2>{{ lotteryCampaign.name }}</h2>
+    
+    <div class="monocontent">
+        <form action="{{ path('ColectaBackendLotteryAddShred') }}" method="post">
+            <h3>Nueva entrega de papeletas</h3>
+            <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Usuario</span>
+                        <input id="userSearch" autocomplete="off" type="text" class="form-control" name="user">
+                    </div>
+                    <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
+                </div>
+                <div class="col-sm-2 col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">de</span>
+                        <input type="text" class="form-control" name="start">
+                    </div>
+                </div>
+                <div class="col-sm-2 col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">a</span>
+                        <input type="text" class="form-control" name="end">
+                    </div>
+                </div>
+                <div class="col-sm-2 col-xs-12">
+                    <label style="font-weight: normal;padding-top:5px">
+                        <input type="checkbox" name="paid" checked="checked"> Pagadas
+                    </label>
+                </div>
+                <div class="col-sm-2 col-xs-12">
+                    <button type="submit" class="btn btn-success btn-block">Enviar</button>
+                </div>
+            </div>
+        </form>
+        
+        <hr>
+        
+        {% set grandtotal = 0 %}
+        
+        <ul class="list-group">
+            <li class="list-group-item active">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-12">
+                        Usuario
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        ha vendido
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        importe jugado
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        beneficios
+                    </div>
+                </div>
+            </li>
+            {% for user in lotteryShreds %}
+                {% set total = 0 %}
+                {% for ls in user %}
+                    {% if ls.returned %}
+                        {% set total = total - ls.end + ls.start %}
+                    {% else %}
+                        {% set total = total + ls.end - ls.start %}
+                    {% endif %}
+                {% endfor %}
+                    
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12">
+                            <a href="{{ path('ColectaBackendLotteryUser', {'user_id':user[0].user.id}) }}">{{ user[0].user.name }}</a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            {{ total }}
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            {{ (lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit ) * total }}€
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            {{ lotteryCampaign.ticketBenefit * total }}€
+                        </div>
+                    </div>
+                </li>
+                {% set grandtotal = grandtotal + total %}
+            {% endfor %}
+        </ul>
+        
+        <div class="row well well-sm">
+            <div class="col-sm-3 col-xs-6">
+                <h4>Papeletas: <span class="label label-primary">{{ grandtotal }}</span></h4>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <h4>Jugado: <span class="label label-primary">{{ (lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit ) * grandtotal }}€</span></h4>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <h4>Décimos: <span class="label label-primary">{{ (lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit ) * grandtotal / 20 }}</span></h4>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <h4>Beneficio: <span class="label label-primary">{{ lotteryCampaign.ticketBenefit * grandtotal }}€</span></h4>
+            </div>
+        </div>
+        
+        <p style="color:#777">*Precio papeleta: {{ lotteryCampaign.ticketPrice }}€ | Beneficio por papeleta: {{ lotteryCampaign.ticketBenefit }}€ | Importe jugado por papeleta: {{ lotteryCampaign.ticketPrice - lotteryCampaign.ticketBenefit }}€</p>
+    </div>
+        
+{% endblock%}
+
+{% block javascripts %}    
+    <script>
+    var xhr;
+    var searchagain = false;
+    
+    function showResults()
+    {
+        if($('#userSearch').val().length < 2) {
+            hideResults();
+            return;
+        }
+        
+        $('#destinationLoading').removeClass('hidden');
+        
+        if(xhr && xhr.readyState != 4) {
+            searchagain = true;
+        } else {        
+            
+            xhr = $.ajax({
+                url: '{{ path('ColectaAjaxUserSearch') }}?search='+$('#userSearch').val(),
+                success: function(json) {
+                    $('#userResults').html('');
+                    $('#userResults').css('display','none');
+                    for(var i = 0; i < json.length; i++) {
+                        $('#userResults').append('<li id="userResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
+                    } 
+                    if(json.length) { $('#userResults').css('display','block'); }
+                    //$('#searchButton').removeAttr("disabled"); 
+                },
+                cache: false
+            }).done(function() { 
+                if(searchagain) 
+                {
+                    searchagain = false;
+                    showResults();
+                }
+                else
+                {
+                    $('#destinationLoading').addClass('hidden');
+                }
+            });
+        }
+    }
+    
+    //Key up
+    $('#userSearch').keyup(function(e){
+        if($('#userResults li').length) {
+            var current = $('#userResults li.active');
+            var currentN = 0;
+            if(current.length) {
+                currentN = parseInt(current.attr('id').substring(10));
+            } 
+            
+            if(e.keyCode == 40){
+                if($('#userResult'+(currentN + 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN + 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 38){
+                if($('#userResult'+(currentN - 1)).length) {
+                    $('#userResult'+(currentN)).removeClass('active');
+                    $('#userResult'+(currentN - 1)).addClass('active');
+                    return;
+                }
+                return;
+            } else if(e.keyCode == 13){
+                if($('#userResult'+(currentN)).length) {
+                    $('#userResult'+(currentN)+' a').click();
+                    return;
+                }
+                return;
+            }
+        }
+        
+        showResults();
+    });
+    
+    function hideResults() 
+    {
+        $('#userResults').html('');
+        $('#userResults').css('display','none');
+    }
+    
+    function highlightUpdateBtn() 
+    {
+        $('#updateBtn').addClass('btn-primary');
+    }
+    
+    $(document).ready(function() {
+        {% if userTo is defined %} $('#MessageText').focus(); {% else %} $('#userSearch').focus(); {% endif %}  
+    });
+    
+    </script>
+{% endblock %}
