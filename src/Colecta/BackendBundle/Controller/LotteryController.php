@@ -170,8 +170,14 @@ class LotteryController extends Controller
         
         $this->get('session')->setFlash('success', 'Eliminada correctamente.');
         
-        $login = $this->generateUrl('ColectaBackendLotteryIndex');
-        return new RedirectResponse($login);
+        $referer = $this->get('request')->headers->get('referer');
+        
+        if(empty($referer))
+        {
+            $referer = $this->generateUrl('ColectaBackendLotteryIndex');
+        }
+        
+        return new RedirectResponse($referer);
     }
     
     public function returnShredAction($shred_id)
@@ -213,7 +219,13 @@ class LotteryController extends Controller
         
         $this->get('session')->setFlash('success', 'Devolución realizada.');
         
-        $login = $this->generateUrl('ColectaBackendLotteryIndex');
-        return new RedirectResponse($login);
+        $referer = $this->get('request')->headers->get('referer');
+        
+        if(empty($referer))
+        {
+            $referer = $this->generateUrl('ColectaBackendLotteryIndex');
+        }
+        
+        return new RedirectResponse($referer);
     }
 }
