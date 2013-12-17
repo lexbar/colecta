@@ -14,18 +14,18 @@
         <ul class="list-group">
             {% for ls in lotteryShreds %}
                 <li class="list-group-item">
-                    <span class="badge">{{ ls.end - ls.start }}</span>
+                    <span class="badge">{{ ls.end - ls.start + 1 }}</span>
                     
                     {% if ls.returned %}
                         <span class="label label-danger">Devueltas</span>
-                        {% set total = total - ls.end + ls.start %}
+                        {% set total = total - ls.end + ls.start - 1 %}
                     {% else %}
                         {% if ls.paid %}
                             <span class="label label-primary">Recogida</span>
                         {% else %}
                             <span class="label label-warning">Pendiente de pago</span>
                         {% endif %}
-                        {% set total = total + ls.end - ls.start %}
+                        {% set total = total + ls.end - ls.start + 1 %}
                     {% endif %}
                     
                     papeletas de la {{ ls.start }} a la {{ ls.end }} {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': ls.date } only %}

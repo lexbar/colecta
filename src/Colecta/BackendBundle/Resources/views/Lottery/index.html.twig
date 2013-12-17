@@ -67,9 +67,9 @@
                 {% set total = 0 %}
                 {% for ls in user %}
                     {% if ls.returned %}
-                        {% set total = total - ls.end + ls.start %}
+                        {% set total = total - ls.end + ls.start - 1 %}
                     {% else %}
-                        {% set total = total + ls.end - ls.start %}
+                        {% set total = total + ls.end - ls.start + 1 %}
                     {% endif %}
                 {% endfor %}
                     
