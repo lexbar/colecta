@@ -13,3 +13,9 @@ ColectaBackendLotteryRemoveShred:
 ColectaBackendLotteryReturnShred:
     pattern:  /back/lottery/returnShred/{shred_id}
     defaults: { _controller: ColectaBackendBundle:Lottery:returnShred }
+ColectaBackendLotteryPaidShred:
+    pattern:  /back/lottery/paidShred/{shred_id}
+    defaults: { _controller: ColectaBackendBundle:Lottery:paidShred }
+ColectaBackendLotteryUnpaidShred:
+    pattern:  /back/lottery/unpaidShred/{shred_id}
+    defaults: { _controller: ColectaBackendBundle:Lottery:unpaidShred }
