@@ -44,14 +44,6 @@ class Role
     // access granted to the site in general
 
     /**
-     * @var boolean $site_config
-     *
-     * @ORM\Column(name="site_config", type="boolean")
-     */
-    protected $site_config;
-    // access to the configuration backend of the site
-
-    /**
      * @var boolean $item_post_create
      *
      * @ORM\Column(name="item_post_create", type="boolean")
@@ -418,6 +410,54 @@ class Role
      */
     protected $message_send;
     // send and reply to private messages
+    
+    /**
+     * @var boolean $site_config_settings
+     *
+     * @ORM\Column(name="site_config_settings", type="boolean")
+     */
+    protected $site_config_settings;
+    // change site settings
+    
+    /**
+     * @var boolean $site_config_users
+     *
+     * @ORM\Column(name="site_config_users", type="boolean")
+     */
+    protected $site_config_users;
+    // access to users backend. user_create must be active to create new users. user_edit must be active to edit accounts
+    
+    /**
+     * @var boolean $site_config_pages
+     *
+     * @ORM\Column(name="site_config_pages", type="boolean")
+     */
+    protected $site_config_pages;
+    // create, edit and delete site static pages
+    
+    /**
+     * @var boolean $site_config_lottery
+     *
+     * @ORM\Column(name="site_config_lottery", type="boolean")
+     */
+    protected $site_config_lottery;
+    // manage lottery shreds
+    
+    /**
+     * @var boolean $site_config_stats
+     *
+     * @ORM\Column(name="site_config_stats", type="boolean")
+     */
+    protected $site_config_stats;
+    // access and control over page stats
+    
+    /**
+     * @var boolean $site_config_plan
+     *
+     * @ORM\Column(name="site_config_plan", type="boolean")
+     */
+    protected $site_config_plan;
+    // access and control over the plan purchased
 
     /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="role")
@@ -493,26 +533,6 @@ class Role
     public function getSiteAccess()
     {
         return $this->site_access;
-    }
-
-    /**
-     * Set site_config
-     *
-     * @param boolean $siteConfig
-     */
-    public function setSiteConfig($siteConfig)
-    {
-        $this->site_config = $siteConfig;
-    }
-
-    /**
-     * Get site_config
-     *
-     * @return boolean 
-     */
-    public function getSiteConfig()
-    {
-        return $this->site_config;
     }
 
     /**
@@ -1477,5 +1497,153 @@ class Role
     public function removeUser(\Colecta\UserBundle\Entity\User $users)
     {
         $this->users->removeElement($users);
+    }
+
+    /**
+     * Set site_config_settings
+     *
+     * @param boolean $siteConfigSettings
+     * @return Role
+     */
+    public function setSiteConfigSettings($siteConfigSettings)
+    {
+        $this->site_config_settings = $siteConfigSettings;
+    
+        return $this;
+    }
+
+    /**
+     * Get site_config_settings
+     *
+     * @return boolean 
+     */
+    public function getSiteConfigSettings()
+    {
+        return $this->site_config_settings;
+    }
+
+    /**
+     * Set site_config_users
+     *
+     * @param boolean $siteConfigUsers
+     * @return Role
+     */
+    public function setSiteConfigUsers($siteConfigUsers)
+    {
+        $this->site_config_users = $siteConfigUsers;
+    
+        return $this;
+    }
+
+    /**
+     * Get site_config_users
+     *
+     * @return boolean 
+     */
+    public function getSiteConfigUsers()
+    {
+        return $this->site_config_users;
+    }
+
+    /**
+     * Set site_config_pages
+     *
+     * @param boolean $siteConfigPages
+     * @return Role
+     */
+    public function setSiteConfigPages($siteConfigPages)
+    {
+        $this->site_config_pages = $siteConfigPages;
+    
+        return $this;
+    }
+
+    /**
+     * Get site_config_pages
+     *
+     * @return boolean 
+     */
+    public function getSiteConfigPages()
+    {
+        return $this->site_config_pages;
+    }
+
+    /**
+     * Set site_config_lottery
+     *
+     * @param boolean $siteConfigLottery
+     * @return Role
+     */
+    public function setSiteConfigLottery($siteConfigLottery)
+    {
+        $this->site_config_lottery = $siteConfigLottery;
+    
+        return $this;
+    }
+
+    /**
+     * Get site_config_lottery
+     *
+     * @return boolean 
+     */
+    public function getSiteConfigLottery()
+    {
+        return $this->site_config_lottery;
+    }
+
+    /**
+     * Set site_config_stats
+     *
+     * @param boolean $siteConfigStats
+     * @return Role
+     */
+    public function setSiteConfigStats($siteConfigStats)
+    {
+        $this->site_config_stats = $siteConfigStats;
+    
+        return $this;
+    }
+
+    /**
+     * Get site_config_stats
+     *
+     * @return boolean 
+     */
+    public function getSiteConfigStats()
+    {
+        return $this->site_config_stats;
+    }
+
+    /**
+     * Set site_config_plan
+     *
+     * @param boolean $siteConfigPlan
+     * @return Role
+     */
+    public function setSiteConfigPlan($siteConfigPlan)
+    {
+        $this->site_config_plan = $siteConfigPlan;
+    
+        return $this;
+    }
+
+    /**
+     * Get site_config_plan
+     *
+     * @return boolean 
+     */
+    public function getSiteConfigPlan()
+    {
+        return $this->site_config_plan;
+    }
+    
+    /**
+     * Get site_config
+     *
+     * @return boolean 
+     */
+    public function getSiteConfig()
+    {
+        return $this->site_config_settings || $this->site_config_users || $this->site_config_pages || $this->site_config_lottery || $this->site_config_stats || $this->site_config_plan; 
     }
 }
