@@ -1,0 +1,53 @@
+{% extends '::backend.html.twig' %}
+
+{% block chat 'active' %}
+
+{% block content %}
+
+    {% include '::backendNavigation.html.twig' with {'active': 'settings'} %}
+    
+    <h2>Ajustes</h2>
+    
+    <div class="monocontent">
+        <form action="" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label for="web_title" class="col-sm-4 control-label">
+                    <strong>Título de la web:</strong>
+                </label>
+                <div class="col-sm-8">
+                    <input type="text" value="{{ web_title }}" class="form-control" id="web_title">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="web_description" class="col-sm-4 control-label">
+                    <strong>Descripción para buscadores:</strong>
+                </label>
+                <div class="col-sm-8">
+                    <textarea rows="3" class="form-control" id="web_description"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="web_members" class="col-sm-4 control-label">
+                    <strong>Miembros:</strong>
+                </label>
+                <div class="col-sm-8">
+                    <input type="checkbox" id="web_members"/> Cualquiera puede registrarse
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="web_default_role" class="col-sm-4 control-label">
+                    <strong>Rol predeterminado:</strong>
+                </label>
+                <div class="col-sm-8">
+                    <select id="web_default_role" class="form-control">
+                        <option value="">Socio</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+        
+{% endblock%}

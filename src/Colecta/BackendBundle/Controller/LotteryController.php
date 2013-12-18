@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\IntranetBundle\Entity\LotteryCampaign;
 use Colecta\IntranetBundle\Entity\LotteryShred;
+
 class LotteryController extends Controller
 {    
     public function indexAction()
