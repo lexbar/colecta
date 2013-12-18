@@ -1,3 +1,7 @@
+ColectaBackendIndex:
+    pattern:  /back/
+    defaults: { _controller: ColectaBackendBundle:Default:index }
+
 ColectaBackendSettingsIndex:
     pattern:  /back/settings/
     defaults: { _controller: ColectaBackendBundle:Settings:index }
