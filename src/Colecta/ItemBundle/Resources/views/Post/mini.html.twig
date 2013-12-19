@@ -13,7 +13,7 @@
             {% if item.text | length > 200 %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
         </div>
         
-        {% if item.text | length > item.summary | length %}
+        {% if item.text | length > 200 %}
             <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
         {% endif %}
         
