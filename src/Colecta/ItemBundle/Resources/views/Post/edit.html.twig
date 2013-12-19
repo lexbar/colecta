@@ -2,16 +2,6 @@
 
 {% block title %}Editar {{ item.name }} | Textos{% endblock %}
 
-{% block javascripts %}    
-    <script>
-    
-{% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
-        
-{% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
-    
-    </script>
-{% endblock %}
-
 {% block article %}
 
 {% if item.canEdit(app.user) %}
@@ -25,7 +15,7 @@
     </div>
     
     <div class="monocontent">
-        <form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal" role="form">
+        <form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal" role="form" onSubmit="return postForm();">
             <fieldset>
               <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label" for="PostName">Título</label>
@@ -37,7 +27,7 @@
               <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label" for="PostText">Texto</label>
                 <div class="col-sm-9 col-lg-10">
-                  <textarea class="form-control" id="PostText" name="text" rows="5">{{ item.text }}</textarea>
+                  <textarea class="form-control" id="PostText" name="text" rows="5">{% spaceless %}{{ item.text | nl2br| nonl |raw }}{% endspaceless %}</textarea>
                 </div>
               </div>
               
@@ -63,4 +53,40 @@
     </div>
 {% endif %}
 
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/summernote.css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/summernote.min.js"></script>
+
+<script>    
+    {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
+        
+    {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+
+    $(document).ready(function() {
+        $('#PostText').summernote({
+            height: 180,
+            toolbar: [
+            //['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            //['fontsize', ['fontsize']],
+            //['color', ['color']],
+            ['para', ['ul', 'ol']],
+            //['height', ['height']],
+            ['insert', [/*'picture',*/ 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            ['help', ['help']] //no help button
+            ]
+        });
+    });
+    
+    var postForm = function() {
+        var content = $('textarea[name="text"]').html($('#PostText').code());
+    }
+</script>
 {% endblock %}

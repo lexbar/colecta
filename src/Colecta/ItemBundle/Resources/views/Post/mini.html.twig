@@ -8,7 +8,14 @@
     <div class="panel-body">
         <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
         
-        <p>{{ item.summary | usercontent | raw | nl2br }}{% if item.text | length > item.summary | length %}<span id="linkrm-{{ item.slug }}"><button type="button" class="btn btn-link btn-small" onClick="document.getElementById('readmore-{{ item.slug }}').style.display = '';document.getElementById('linkrm-{{ item.slug }}').style.display = 'none';return false;">( ... leer más )</button></span> <span id="readmore-{{ item.slug }}" style="display:none">{{ item.text[item.summary|length:item.text|length -item.summary|length] | usercontent | raw | nl2br }} </span>{% endif %}</p>
+        <div id="summary-{{ item.slug }}">
+            {{ item.text[0:200] | striptags(allowed_tags) | cleancode | raw | nl2br }}
+            {% if item.text | length > 200 %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+        </div>
+        
+        {% if item.text | length > item.summary | length %}
+            <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+        {% endif %}
         
         {% if item.linkTitle != '' %}
         <p class="well well-sm"><strong><a href="{{ item.linkURL }}">{{ item.linkTitle }}</a></strong><br><small>{{ item.linkURL }}</small><br> {{ item.linkExcerpt }}</p>

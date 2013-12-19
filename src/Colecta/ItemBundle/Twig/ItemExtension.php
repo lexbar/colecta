@@ -16,11 +16,32 @@ class ItemExtension extends \Twig_Extension
     {
         return array(
             'usercontent' => new \Twig_Filter_Method($this, 'usercontentFilter'),
+            'cleancode' => new \Twig_Filter_Method($this, 'cleanCode'),
+            'nonl' => new \Twig_Filter_Method($this, 'nonl'),
             'itemlinkable' => new \Twig_Filter_Method($this, 'itemlinkableFilter'),
             'videodetect' => new \Twig_Filter_Method($this, 'videodetectFilter'),
             'video2viewer' => new \Twig_Filter_Method($this, 'video2viewerFilter'),
             'summarize' => new \Twig_Filter_Method($this, 'summarizeFilter'),
         );
+    }
+    
+    public function nonl($text)
+    {
+        return trim(preg_replace('/\s+/', ' ', $text));
+    }
+    
+    public function cleanCode($text)
+    {
+        $doc = new \DOMDocument();
+        @$doc->loadHTML("$text");
+        $text = $doc->saveHTML();
+        $text = trim(str_replace(
+            array('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">',
+                '<html><body>',
+                '</body></html>')
+            ,'',
+            $text));
+        return $text;
     }
 
     public function usercontentFilter($text, $addslashes = false)

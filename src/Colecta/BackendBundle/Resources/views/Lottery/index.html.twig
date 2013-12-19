@@ -15,20 +15,20 @@
                 <div class="col-sm-4 col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon">Usuario</span>
-                        <input id="userSearch" autocomplete="off" type="text" class="form-control" name="user">
+                        <input id="userSearch" autocomplete="off" type="text" class="form-control" name="user" data-toggle="tooltip" data-original-title="Escribe el nombre del usuario">
                     </div>
                     <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
                 </div>
                 <div class="col-sm-2 col-xs-6">
                     <div class="input-group">
                         <span class="input-group-addon">de</span>
-                        <input type="text" class="form-control" name="start">
+                        <input id="shredStart" type="text" class="form-control" name="start" data-toggle="tooltip" data-original-title="Inicio de la serie entregada">
                     </div>
                 </div>
                 <div class="col-sm-2 col-xs-6">
                     <div class="input-group">
                         <span class="input-group-addon">a</span>
-                        <input type="text" class="form-control" name="end">
+                        <input id="shredEnd" type="text" class="form-control" name="end" data-toggle="tooltip" data-original-title="Final de la serie entregada">
                     </div>
                 </div>
                 <div class="col-sm-2 col-xs-12">
@@ -118,6 +118,7 @@
 {% endblock%}
 
 {% block javascripts %}    
+    <script src="/js/bootstrap.min.js"></script>
     <script>
     var xhr;
     var searchagain = false;
@@ -208,7 +209,10 @@
     }
     
     $(document).ready(function() {
-        {% if userTo is defined %} $('#MessageText').focus(); {% else %} $('#userSearch').focus(); {% endif %}  
+        $('#userSearch').focus();
+        $('#userSearch').tooltip({placement:'bottom', container: 'body'});
+        $('#shredStart').tooltip({placement:'bottom', container: 'body'});
+        $('#shredEnd').tooltip({placement:'bottom', container: 'body'});
     });
     
     </script>

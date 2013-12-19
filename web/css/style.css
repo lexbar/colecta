@@ -409,3 +409,6 @@ span.form-control {
 .fullimage .right {
     text-align: right;
 }
+.note-editable {
+    background-color: #FFF;
+}

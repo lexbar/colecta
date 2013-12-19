@@ -332,7 +332,10 @@ abstract class Item
     }
     
     public function summarize($text)
-    {
+    {        
+        //Remove tags
+        $text = strip_tags(preg_replace('/(<\/[^>]+?>)(<[^>\/][^>]*?>)/', '$1 $2', $text));
+        
         //Fill the Summary field, first 255 characters
         if(strlen($text) > 255)
         {
