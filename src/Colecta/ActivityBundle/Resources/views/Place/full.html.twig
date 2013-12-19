@@ -15,7 +15,7 @@
         <div id="map" style="width:auto;height:300px;margin-bottom:20px"></div>
 
     
-        <p>{{ item.text | striptags(allowed_tags) | raw | nl2br }}</p>
+        <p>{{ item.text | usercontent | striptags(allowed_tags) | raw | nl2br }}</p>
         
     </div>
     

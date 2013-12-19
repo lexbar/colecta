@@ -24,7 +24,7 @@
         <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
     
-    <p>{{ item.text | striptags(allowed_tags) | raw | nl2br }}
+    <p>{{ item.text  | usercontent| striptags(allowed_tags) | raw | nl2br }}
     {% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
     
     {# more items on this folder #}

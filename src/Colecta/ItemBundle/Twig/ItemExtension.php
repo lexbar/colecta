@@ -46,6 +46,7 @@ class ItemExtension extends \Twig_Extension
 
     public function usercontentFilter($text, $addslashes = false)
     {
+        
         //As I'm going to convert any URL into a link, I first want to get rid of existing links. Later I will bring them back.        
         preg_match_all("/(<a[^>]*>(.*?)<\/a>)/", $text, $matches);
         
@@ -60,7 +61,10 @@ class ItemExtension extends \Twig_Extension
             }
         }
         
+        
+        
         $return = htmlEscapeAndLinkUrls($text);
+        
         
         //Now I bring back all anchors
         if(count($replacedAnchors))
@@ -347,7 +351,7 @@ function htmlEscapeAndLinkUrls($text)
     }
 
     // Add the remainder of the text.
-    $html .= htmlspecialchars(substr($text, $position));
+    $html .= (substr($text, $position)); // removed htmlspecialchars for Colecta usage
     return $html;
 }
 

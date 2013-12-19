@@ -18,7 +18,7 @@
             </div>
             
             {% if item.text | length > summary_max_length %}
-                <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+                <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
             {% endif %}
         </div>
     
