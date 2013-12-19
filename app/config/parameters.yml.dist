@@ -20,7 +20,7 @@ parameters:
 twig:
     globals:
         web_title: Nombre del club
-        allowed_tags: <span><a><ol><ul><li><br>
+        allowed_tags: <span><a><ol><ul><li><img><br>
         summary_max_length: 200
         itemIcons:
             Item/Post: align-left

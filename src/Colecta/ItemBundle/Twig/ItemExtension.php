@@ -46,17 +46,30 @@ class ItemExtension extends \Twig_Extension
 
     public function usercontentFilter($text, $addslashes = false)
     {
+        //As I'm going to convert any URL into a link, I first want to get rid of existing links. Later I will bring them back.        
+        preg_match_all("/(<a[^>]*>(.*?)<\/a>)/", $text, $matches);
+        
+        $replacedAnchors = array();
+        if(count($matches[0]))
+        {
+            foreach($matches[0] as $link)
+            {
+                $key = '#'.md5($link).'#';
+                $text = str_replace($link, $key, $text);
+                $replacedAnchors[$key] = $link;
+            }
+        }
+        
         $return = htmlEscapeAndLinkUrls($text);
         
-        $return = preg_replace(
-                                array(  
-                                    "#\*([^\*]+)\*#",
-                                    "#_([^_]+)_#",
-                                ),array(
-                                    ' <strong>$1</strong> ',
-                                    ' <span style="text-decoration:underline;">$1</span> ',
-                                ), $return
-        );
+        //Now I bring back all anchors
+        if(count($replacedAnchors))
+        {
+            foreach($replacedAnchors as $key=>$link)
+            {
+                $return = str_replace($key, $link, $return);
+            }
+        }
         
         $icons = array(
                 ':)'    =>  '<img src="/img/smileys/smiling.png" alt=":)" class="smiley" />',
@@ -271,7 +284,7 @@ function htmlEscapeAndLinkUrls($text)
         list($url, $urlPosition) = $match[0];
 
         // Add the text leading up to the URL.
-        $html .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
+        $html .= (substr($text, $position, $urlPosition - $position)); // removed htmlspecialchars for Colecta usage
 
         $scheme      = $match[1][0];
         $username    = $match[2][0];
@@ -306,11 +319,11 @@ function htmlEscapeAndLinkUrls($text)
             {
                 // Prepend http:// if no scheme is specified
                 $completeUrl = $scheme ? $url : "http://$url";
-                $linkText = "$domain$port$path";
+                $linkText = "$domain$afterDomain";
             }
             
-            if(strlen($linkText) > 28) {
-                $linkText = substr($linkText, 0, 26) . '...';
+            if(strlen($linkText) > 35) {
+                $linkText = substr($linkText, 0, 35) . '...';
             }
 
             $linkHtml = '<a href="' . htmlspecialchars($completeUrl) . '">'

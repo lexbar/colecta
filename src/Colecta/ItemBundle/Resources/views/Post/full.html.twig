@@ -12,7 +12,7 @@
     <div class="panel-body">
         <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
         
-        {{ item.text | striptags(allowed_tags) | raw | nl2br }}
+        {{ item.text | usercontent | striptags(allowed_tags)  | raw | nl2br }}
         
         {% if item.linkTitle != '' %}
         <p class="well well-sm"><strong><a href="{{ item.linkURL }}">{{ item.linkTitle | raw }}</a></strong><br><small>{{ item.linkURL }}</small><br> {{ item.linkExcerpt }}</p>
