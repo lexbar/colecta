@@ -20,6 +20,7 @@ parameters:
 twig:
     globals:
         web_title: Nombre del club
+        allowed_tags: <span><a><ol><ul><li><br>
         itemIcons:
             Item/Post: align-left
             Activity/Event: calendar

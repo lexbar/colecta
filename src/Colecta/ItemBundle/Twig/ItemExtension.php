@@ -33,7 +33,7 @@ class ItemExtension extends \Twig_Extension
     public function cleanCode($text)
     {
         $doc = new \DOMDocument();
-        @$doc->loadHTML("$text");
+        @$doc->loadHTML(utf8_decode("$text"));
         $text = $doc->saveHTML();
         $text = trim(str_replace(
             array('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">',
@@ -41,7 +41,7 @@ class ItemExtension extends \Twig_Extension
                 '</body></html>')
             ,'',
             $text));
-        return $text;
+        return ($text);
     }
 
     public function usercontentFilter($text, $addslashes = false)
