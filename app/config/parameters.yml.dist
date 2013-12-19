@@ -21,6 +21,7 @@ twig:
     globals:
         web_title: Nombre del club
         allowed_tags: <span><a><ol><ul><li><br>
+        summary_max_length: 200
         itemIcons:
             Item/Post: align-left
             Activity/Event: calendar

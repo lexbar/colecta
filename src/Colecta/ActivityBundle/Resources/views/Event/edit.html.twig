@@ -2,45 +2,6 @@
 
 {% block title %}Editar {{ item.name }} | Actividades{% endblock %}
 
-{% block javascripts %}    
-    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
-    <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
-    <script>
-        $('head').append('<link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" type="text/css" />');
-        
-    	$.datepicker.regional['es'] = {
-    		closeText: 'Cerrar',
-    		prevText: 'Anterior',
-    		nextText: 'Siguiente',
-    		currentText: 'Hoy',
-    		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-    		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-    		monthNamesShort: ['Ene','Feb.','Mar','Abr','May','Jun',
-    		'Jul.','Ago','Sep','Oct','Nov','Dic'],
-    		dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
-    		dayNamesShort: ['Dom.','Lun.','Mar.','Mie.','Jue.','Vie.','Sáb.'],
-    		dayNamesMin: ['D','L','M','X','J','V','S'],
-    		weekHeader: 'Sem.',
-    		dateFormat: 'dd-mm-yy',
-    		firstDay: 1,
-    		isRTL: false,
-    		showMonthAfterYear: false,
-    		yearSuffix: ''};
-    	$.datepicker.setDefaults($.datepicker.regional['es']);
-    	
-        $( "#EventDateini" ).datepicker({onSelect : function(text,obj){
-                    $( "#EventDateend" ).val($( "#EventDateini" ).val());
-                    $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
-        }});
-        
-        $( "#EventDateend" ).datepicker();
-        
-{% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
-  
-{% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
-    
-    </script>
-{% endblock %}
 {% block article %}
     
 {% if item.canEdit(app.user) %}
@@ -54,7 +15,7 @@
     </div>
     
     <div class="monocontent">
-        <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal">
+        <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal" onSubmit="return postForm();">
             <fieldset>
                 <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
@@ -114,9 +75,9 @@
                 </div>
               
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventDescription">Descripción</label>
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventText">Descripción</label>
                     <div class="col-sm-9 col-lg-10">
-                        <textarea class="form-control" id="EventDescription" name="text" rows="5">{{ item.text }}</textarea>
+                        <textarea class="form-control" id="EventText" name="text" rows="5">{{ item.text | nl2br| nonl |raw }}</textarea>
                     </div>
                 </div>
               
@@ -193,4 +154,70 @@
     </div>
 {% endif %}
 
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/summernote.css" />
+    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/summernote.min.js"></script>
+    <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
+    <script>
+        $('head').append('<link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" type="text/css" />');
+        
+    	$.datepicker.regional['es'] = {
+    		closeText: 'Cerrar',
+    		prevText: 'Anterior',
+    		nextText: 'Siguiente',
+    		currentText: 'Hoy',
+    		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+    		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+    		monthNamesShort: ['Ene','Feb.','Mar','Abr','May','Jun',
+    		'Jul.','Ago','Sep','Oct','Nov','Dic'],
+    		dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
+    		dayNamesShort: ['Dom.','Lun.','Mar.','Mie.','Jue.','Vie.','Sáb.'],
+    		dayNamesMin: ['D','L','M','X','J','V','S'],
+    		weekHeader: 'Sem.',
+    		dateFormat: 'dd-mm-yy',
+    		firstDay: 1,
+    		isRTL: false,
+    		showMonthAfterYear: false,
+    		yearSuffix: ''};
+    	$.datepicker.setDefaults($.datepicker.regional['es']);
+    	
+        $( "#EventDateini" ).datepicker({onSelect : function(text,obj){
+                    $( "#EventDateend" ).val($( "#EventDateini" ).val());
+                    $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
+        }});
+        
+        $( "#EventDateend" ).datepicker();
+        
+    {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
+      
+    {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+
+    $(document).ready(function() {
+        $('#EventText').summernote({
+            height: 180,
+            toolbar: [
+            //['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            //['fontsize', ['fontsize']],
+            //['color', ['color']],
+            ['para', ['ul', 'ol']],
+            //['height', ['height']],
+            ['insert', [/*'picture',*/ 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            ['help', ['help']] //no help button
+            ]
+        });
+    });
+    
+    var postForm = function() {
+        var content = $('textarea[name="text"]').html($('#EventText').code());
+    }
+</script>
 {% endblock %}

@@ -46,7 +46,7 @@
                     </a>
                 </div>
         
-            <p>{{ item.text | usercontent | raw | nl2br }}</p>     
+            <p>{{ item.text | striptags(allowed_tags) | raw | nl2br }}   
 
         </div>
         
@@ -58,6 +58,7 @@
         {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
         
         {% if item.assistances | length or item.allowassistances %}
+            <hr>
         
             {% if canedit %}<form class="form-inline" action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">{% endif %}
             
