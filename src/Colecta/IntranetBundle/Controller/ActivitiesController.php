@@ -42,6 +42,11 @@ class ActivitiesController extends Controller
     
     public function rankAction()
     {
+        return $this->yearRankAction(date('Y'));
+    }
+    
+    public function yearRankAction($year)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
@@ -50,6 +55,8 @@ class ActivitiesController extends Controller
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
         }
+        
+        $year = min( intval(date('Y')), max( 1990, intval($year) ) );
         
         $users = $em->getRepository('ColectaUserBundle:User')->findAll();
         
@@ -63,7 +70,7 @@ class ActivitiesController extends Controller
                 {
                     $k = 0;
                 
-                    $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 ORDER BY e.dateini ASC')->setParameter('user', $u)->getResult();
+                    $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\' ORDER BY e.dateini ASC')->setParameter('user', $u)->getResult();
                     
                     if(count($assistances))
                     {
@@ -91,6 +98,13 @@ class ActivitiesController extends Controller
             $users = $newusers2;
         }
         
-        return $this->render('ColectaIntranetBundle:Activities:rank.html.twig', array('users'=>$users, 'kms'=>$kms));
+        $stmt = $em  
+               ->getConnection()  
+               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e WHERE  e.dateend <= \''.date('Y').'-12-31 00:00\' ORDER BY e.dateini ASC');
+               
+        $stmt->execute();  
+        $years = $stmt->fetchAll();
+        
+        return $this->render('ColectaIntranetBundle:Activities:rank.html.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'years'=>$years));
     }
 }
