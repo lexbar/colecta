@@ -31,7 +31,7 @@ class ActivitiesController extends Controller
         
         $stmt = $em  
                ->getConnection()  
-               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e, EventAssistance a WHERE e.id = a.event_id AND a.user_id = :user_id AND e.dateend <= \''.date('Y').'-12-31 00:00\' ORDER BY e.dateini ASC');
+               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e INNER JOIN EventAssistance a ON e.id = a.event_id WHERE e.id = a.event_id AND a.user_id = :user_id AND e.dateend <= \''.date('Y').'-12-31 00:00:00\' ORDER BY e.dateini ASC');
                
         $stmt->bindValue('user_id', $user->getId());  
         $stmt->execute();  
@@ -100,7 +100,7 @@ class ActivitiesController extends Controller
         
         $stmt = $em  
                ->getConnection()  
-               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e WHERE  e.dateend <= \''.date('Y').'-12-31 00:00\' ORDER BY e.dateini ASC');
+               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e WHERE  e.dateend <= \''.date('Y').'-12-31 00:00:00\' ORDER BY e.dateini ASC');
                
         $stmt->execute();  
         $years = $stmt->fetchAll();
