@@ -4,12 +4,17 @@ namespace Colecta\IntranetBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
+use Doctrine\ORM\Query\ResultSetMapping;
 
 class ActivitiesController extends Controller
 {
     
     public function indexAction()
+    {
+        return $this->yearPerformanceAction(date('Y'));
+    }
+    
+    public function yearPerformanceAction($year)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -20,10 +25,21 @@ class ActivitiesController extends Controller
             return new RedirectResponse($login);
         }
         
-        $asssistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 ORDER BY e.dateini ASC')->setParameter('user', $user)->getResult();
+        $year = min( intval(date('Y')), max( 1990, intval($year) ) );
         
-        return $this->render('ColectaIntranetBundle:Activities:index.html.twig', array('asssistances'=>$asssistances));
+        $asssistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\' ORDER BY e.dateini ASC')->setParameter('user',$user)->getResult();
+        
+        $stmt = $em  
+               ->getConnection()  
+               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e, EventAssistance a WHERE e.id = a.event_id AND a.user_id = :user_id AND e.dateend <= \''.date('Y').'-12-31 00:00\' ORDER BY e.dateini ASC');
+               
+        $stmt->bindValue('user_id', $user->getId());  
+        $stmt->execute();  
+        $years = $stmt->fetchAll();
+        
+        return $this->render('ColectaIntranetBundle:Activities:index.html.twig', array('asssistances'=>$asssistances, 'year'=>$year, 'years'=>$years));
     }
+    
     public function rankAction()
     {
         $em = $this->getDoctrine()->getEntityManager();

@@ -13,6 +13,9 @@ ColectaChatMore:
 ColectaActivitiesIndex:
     pattern:  /actividades/
     defaults: { _controller: ColectaIntranetBundle:Activities:index }
+ColectaActivitiesYearPerformance:
+    pattern:  /actividades/{year}
+    defaults: { _controller: ColectaIntranetBundle:Activities:yearPerformance }
 ColectaActivitiesRank:
     pattern:  /actividades/rank/
     defaults: { _controller: ColectaIntranetBundle:Activities:rank }
