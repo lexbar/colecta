@@ -12,7 +12,7 @@
         <a class="clearfix btn btn-default{% if active == 'lottery' %} active{% endif %}" href="{{ path('ColectaBackendLotteryIndex') }}"><i class="fa fa-ticket"></i> <span class="hidden-xs">Lotería</span></a>
     {% endif %}
     {% if app.user.role.SiteConfigStats %}
-        <a class="clearfix btn btn-default{% if active == 'stats' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-bar-chart-o"></i> <span class="hidden-xs">Estadísticas</span></a>
+        <a class="clearfix btn btn-default{% if active == 'stats' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-book"></i> <span class="hidden-xs">Contabilidad</span></a>
     {% endif %}
     {% if app.user.role.SiteConfigPlan %}
         <a class="clearfix btn btn-default{% if active == 'plan' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-dashboard"></i> <span class="hidden-xs">Plan</span></a>

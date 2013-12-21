@@ -1,0 +1,24 @@
+{% extends '::intranet.html.twig' %}
+
+{% block rank 'active' %}
+
+{% block content %} 
+    {% include '::intranetNavigation.html.twig' with {'active': 'users'} %}
+    
+    <h2>Listado de usuarios</h2>
+    
+    <div class="monocontent">
+        <table class="table table-condensed table-hover">
+        <thead><tr><th>Nombre</th><th>Total</th><th>Jefe de Ruta</th></tr></thead>
+        {% for user in users %}
+            <tr>
+                <td><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">{{ user.name }}</a></td>
+                <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
+                <td>
+                    {{ jefesruta[user.id] | length }}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endblock%}

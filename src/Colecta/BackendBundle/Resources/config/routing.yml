@@ -6,6 +6,10 @@ ColectaBackendSettingsIndex:
     pattern:  /back/settings/
     defaults: { _controller: ColectaBackendBundle:Settings:index }
     
+ColectaBackendUserIndex:
+    pattern:  /back/user/
+    defaults: { _controller: ColectaBackendBundle:User:index }
+    
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/
     defaults: { _controller: ColectaBackendBundle:Lottery:index }
