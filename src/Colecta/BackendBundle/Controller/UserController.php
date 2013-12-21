@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class UserController extends Controller
 {
-    public function indexAction()
+    public function indexAction($format)
     {
         $year = 2013;
         
@@ -69,10 +69,15 @@ class UserController extends Controller
             $users = $newusers2;
         }
         
+        if($format == 'csv')
+        {
+            return $this->render('ColectaBackendBundle:User:index.csv.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
+
+        }
+        else
+        {
+            return $this->render('ColectaBackendBundle:User:index.html.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
+        }
         
-        
-        
-        
-        return $this->render('ColectaBackendBundle:User:index.html.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
     }
 }

@@ -1,0 +1,3 @@
+Nombre,Kilometros,Jefe de Ruta
+{% for user in users %}{{ user.name }},{{ kms[user.id] | number_format(0,'','') }},{{ jefesruta[user.id] | length }}
+{% endfor %}

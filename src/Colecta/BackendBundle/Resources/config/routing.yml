@@ -8,7 +8,10 @@ ColectaBackendSettingsIndex:
     
 ColectaBackendUserIndex:
     pattern:  /back/user/
-    defaults: { _controller: ColectaBackendBundle:User:index }
+    defaults: { _controller: ColectaBackendBundle:User:index, format:html }
+ColectaBackendUserIndex:
+    pattern:  /back/user/csv/
+    defaults: { _controller: ColectaBackendBundle:User:index, format:csv }
     
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/
