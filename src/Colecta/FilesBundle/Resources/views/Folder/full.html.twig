@@ -25,7 +25,7 @@
         
         {% if thumbnails > 0 %}
         <div class="row">        
-            {% for file in files | reverse %}
+            {% for file in files %}
                 {% if file.filetype in ['jpeg','gif','png'] %}                    
                     <div class="col-sm-6 col-md-3">
                         <a class="thumbnail" href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>

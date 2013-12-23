@@ -13,9 +13,9 @@
         <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
     
     {% if item.filetype in ['jpeg','gif','png'] %}
-        <div class="fullimage row" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'850', 'height':'480'}) }}') scroll no-repeat center center #111;">
-            {% set next = item.folder.getNextPicture(item) %}
-            {% set previous = item.folder.getPreviousPicture(item) %}
+        {% set next = item.folder.getNextPicture(item) %}
+        {% set previous = item.folder.getPreviousPicture(item) %}
+        <div class="fullimage row" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'850', 'height':'480'}) }}') scroll no-repeat center center #111; background-size: contain;">
             <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="left{% if next %} active{% endif %} col-xs-6"><i class="fa fa-angle-left fa-4x"></i></a>
             <a href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="right{% if previous %} active{% endif %} col-xs-6"><i class="fa fa-angle-right fa-4x"></i></a>
         </div>
@@ -36,8 +36,9 @@
         
         {% set itemIndex = item.folder.files.indexOf(item) %}
         
-        {% for i in itemIndex+2..itemIndex-2 %}
+        {% for i in itemIndex-2..itemIndex+2 %}
             {% if i < 0 %} {# negative index #}
+                <div class="col-xs-6 col-sm-3"></div>
             {% elseif i == itemIndex %} {# current item #}
                 
             {% elseif i >= folderlength %} {# out of bounds #}
