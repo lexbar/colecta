@@ -18,7 +18,6 @@
         
             
                 <div class="date pull-right">
-                    <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
                     <span class="weekday">{{ item.dateini | date('l') | replace ({
                 'Monday':'LUN',
                 'Tuesday':'MAR',
@@ -43,7 +42,7 @@
             }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}</span> 
                     <span class="monthday">{{ item.dateini | date('d') }}</span> 
                     <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% endif%}</span> 
-                    </a>
+                    {% if not sameday %}<span class="label label-default">+{% if item.daysDistance > 0 %}{{ item.daysDistance }} días{% else %}{{ item.hoursDistance }} horas{% endif %}</span>{% endif %}
                 </div>
         
             <p>{{ item.text | usercontent | striptags(allowed_tags) | raw | nl2br }}   

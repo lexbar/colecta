@@ -181,6 +181,18 @@ class Event extends \Colecta\ItemBundle\Entity\Item
         return $this->getDateend()->format('U') - $this->getDateini()->format('U');
     }
     
+    public function getDaysDistance()
+    {
+        $interval = $this->getDateini()->diff($this->getDateend());
+        return $interval->format('%a');
+    }
+    
+    public function getHoursDistance()
+    {
+        $interval = $this->getDateini()->diff($this->getDateend());
+        return $interval->format('%h');
+    }
+    
     /**
      * Has assistances
      *
