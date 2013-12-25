@@ -139,7 +139,7 @@ class User implements UserInterface
      protected $assistances;
      
      /**
-     * @ORM\OneToOne(targetEntity="userProfile")
+     * @ORM\OneToOne(targetEntity="UserProfile")
      */
     protected $profile;
 
