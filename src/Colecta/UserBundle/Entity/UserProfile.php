@@ -73,7 +73,7 @@ class UserProfile
     /**
      * @var integer
      *
-     * @ORM\Column(name="partnerId", type="integer", nullable=true)
+     * @ORM\Column(name="partnerId", type="integer", nullable=true, unique=true)
      */
     protected $partnerId;
     
