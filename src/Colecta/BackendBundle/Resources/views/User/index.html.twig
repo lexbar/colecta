@@ -1,23 +1,20 @@
-{% extends '::intranet.html.twig' %}
-
-{% block rank 'active' %}
+{% extends '::backend.html.twig' %}
 
 {% block content %} 
-    {% include '::intranetNavigation.html.twig' with {'active': 'users'} %}
+    {% include '::backendNavigation.html.twig' with {'active': 'users'} %}
     
     <h2>Listado de usuarios</h2>
     
     <div class="monocontent">
         <table class="table table-condensed table-hover">
-        <thead><tr><th>Nombre</th><th>Total</th><th>Jefe de Ruta</th></tr></thead>
+        <thead><tr><th>Nombre</th><th>Tipo</th><th>Registrado</th><th>Acciones</th></tr></thead>
         {% for user in users %}
             <tr>
                 <td><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">{{ user.name }}</a></td>
-                <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
-                <td>
-                    {{ jefesruta[user.id] | length }}
-                </td>
-            </tr>
+                <td><span class="label label-{% if not user.role.siteAccess %}danger{% elseif not user.role.contribute %}warning{% elseif user.role.siteConfig %}primary{% else %}default{% endif %}">{{ user.role.description }}</span></td>
+                <td>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': user.registered } only %}</td>
+                <td> <a class="btn btn-xs btn-primary" href="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">Editar Perfil <i class="fa fa-user"></i> <i class="fa fa-caret-right"></i></a> <a class="btn btn-xs btn-default" href="{{ path('userMessageNewTo', {'user_id':user.id}) }}">Enviar mensaje <i class="fa fa-envelope"></i> <i class="fa fa-caret-right"></i></a></td>
+            </tr> 
         {% endfor %}
         </table>
     </div>

@@ -137,6 +137,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="Colecta\ActivityBundle\Entity\EventAssistance", mappedBy="user")
      */    
      protected $assistances;
+     
+     /**
+     * @ORM\OneToOne(targetEntity="userProfile")
+     */
+    protected $profile;
 
 
     /**
@@ -799,5 +804,28 @@ class User implements UserInterface
     public function unserialize($data)
     {
       $this->id = unserialize($data);
+    }
+
+    /**
+     * Set profile
+     *
+     * @param \Colecta\UserBundle\Entity\userProfile $profile
+     * @return User
+     */
+    public function setProfile(\Colecta\UserBundle\Entity\userProfile $profile = null)
+    {
+        $this->profile = $profile;
+    
+        return $this;
+    }
+
+    /**
+     * Get profile
+     *
+     * @return \Colecta\UserBundle\Entity\userProfile 
+     */
+    public function getProfile()
+    {
+        return $this->profile;
     }
 }

@@ -5,13 +5,19 @@ ColectaBackendIndex:
 ColectaBackendSettingsIndex:
     pattern:  /back/settings/
     defaults: { _controller: ColectaBackendBundle:Settings:index }
-    
+
 ColectaBackendUserIndex:
     pattern:  /back/user/
-    defaults: { _controller: ColectaBackendBundle:User:index, format:html }
-ColectaBackendUserIndex:
-    pattern:  /back/user/csv/
-    defaults: { _controller: ColectaBackendBundle:User:index, format:csv }
+    defaults: { _controller: ColectaBackendBundle:User:index } 
+ColectaBackendUserProfile:
+    pattern:  /back/user/profile/{user_id}/
+    defaults: { _controller: ColectaBackendBundle:User:profile }    
+ColectaBackendUserActivityReport:
+    pattern:  /back/user/report/activity/
+    defaults: { _controller: ColectaBackendBundle:User:activityReport, format:html }
+ColectaBackendUserActivityReportCSV:
+    pattern:  /back/user/report/activity/csv/
+    defaults: { _controller: ColectaBackendBundle:User:activityReport, format:csv }
     
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/

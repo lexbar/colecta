@@ -1,0 +1,67 @@
+{% extends '::backend.html.twig' %}
+
+{% block content %} 
+    {% include '::backendNavigation.html.twig' with {'active': 'users'} %}
+    
+    <h2>Perfil de {{ user.name }}</h2>
+    
+    <div class="monocontent">
+        <form class="form-horizontal" method="post" action="">
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="UserName">Nombre de usuario</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="userName" id="UserName" class="form-control" value="{{ user.name }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="UserMail">Email</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="userMail" id="UserMail" class="form-control" value="{{ user.mail }}">
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileName">Nombre</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="name" id="ProfileName" class="form-control" value="{{ user.profile.name }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileSurame">Apellido(s)</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="surname" id="ProfileSurame" class="form-control" value="{{ user.profile.surname }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileSex">Sexo</label>
+                <div class="col-sm-4 col-lg-3">
+                    <select name="sex" id="ProfileSex" class="form-control">
+                        <option value="" {% if user.profile.sex == '' %}selected="selected"{% endif %}>No especificar</option>
+                        <option value="man" {% if user.profile.sex == 'man' %}selected="selected"{% endif %}>Mujer</option>
+                        <option value="woman" {% if user.profile.sex == 'woman' %}selected="selected"{% endif %}>Hombre</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileBirthDate">Fecha de nacimiento<br><small>[AAAA-MM-DD]</small></label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="birthDate" id="ProfileBirthDate" class="form-control" value="{{ user.profile.birthDate is empty ? "" : user.profile.birthDate | date('Y-m-d') }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileAddress">Dirección postal</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="address" id="ProfileAddress" class="form-control" value="{{ user.profile.address }}">
+                </div>
+            </div>
+            
+        </form>
+    </div>
+{% endblock%}

@@ -1646,4 +1646,14 @@ class Role
     {
         return $this->site_config_settings || $this->site_config_users || $this->site_config_pages || $this->site_config_lottery || $this->site_config_stats || $this->site_config_plan; 
     }
+    
+    /**
+     * Get contribute
+     *
+     * @return boolean 
+     */
+    public function getContribute()
+    {
+        return $this->item_post_create || $this->item_event_create || $this->item_route_create || $this->item_place_create || $this->item_file_create; 
+    }
 }

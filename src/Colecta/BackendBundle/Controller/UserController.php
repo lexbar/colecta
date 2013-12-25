@@ -6,19 +6,45 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class UserController extends Controller
 {
-    public function indexAction($format)
+    public function indexAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $users = $em->getRepository('ColectaUserBundle:User')->findBy(array(),array('name'=>'ASC'));
+        
+        return $this->render('ColectaBackendBundle:User:index.html.twig', array('users'=>$users));
+    }
+    public function profileAction($user_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $user = $em->getRepository('ColectaUserBundle:User')->findOneById($user_id);
+        
+        return $this->render('ColectaBackendBundle:User:profile.html.twig', array('user'=>$user));
+    }
+    public function activityReportAction($format)
     {
         $year = 2013;
         
         $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
         {
-            $login = $this->generateUrl('userLogin');
-            return new RedirectResponse($login);
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
-        
-        $em = $this->getDoctrine()->getEntityManager();
         
         $year = min( intval(date('Y')), max( 1990, intval($year) ) );
         
@@ -71,12 +97,12 @@ class UserController extends Controller
         
         if($format == 'csv')
         {
-            return $this->render('ColectaBackendBundle:User:index.csv.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
+            return $this->render('ColectaBackendBundle:User:activityReport.csv.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
 
         }
         else
         {
-            return $this->render('ColectaBackendBundle:User:index.html.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
+            return $this->render('ColectaBackendBundle:User:activityReport.html.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
         }
         
     }

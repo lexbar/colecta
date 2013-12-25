@@ -3,7 +3,7 @@
         <a class="clearfix btn btn-default{% if active == 'settings' %} active{% endif %}" href="{{ path('ColectaBackendSettingsIndex') }}"><i class="fa fa-cogs"></i> <span class="hidden-xs">Ajustes</span></a>
     {% endif %}
     {% if app.user.role.SiteConfigUsers %}
-        <a class="clearfix btn btn-default{% if active == 'users' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-male"></i> <span class="hidden-xs">Usuarios</span></a>
+        <a class="clearfix btn btn-default{% if active == 'users' %} active{% endif %}" href="{{ path('ColectaBackendUserIndex') }}"><i class="fa fa-male"></i> <span class="hidden-xs">Usuarios</span></a>
     {% endif %}
     {% if app.user.role.SiteConfigPages %}
         <a class="clearfix btn btn-default{% if active == 'pages' %} active{% endif %}" href="#{#{ path('Colecta') }#}"><i class="fa fa-file-text"></i> <span class="hidden-xs">Páginas</span></a>
