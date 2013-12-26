@@ -66,7 +66,7 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $profile->setPartnerId(empty($request->get('partnerId')) ? null : $request->get('partnerId'));
+                    $profile->setPartnerId($request->get('partnerId'));
                 }
             }
             
