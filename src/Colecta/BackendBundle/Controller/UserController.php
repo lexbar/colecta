@@ -45,7 +45,13 @@ class UserController extends Controller
             $profile->setName($request->get('name'));
             $profile->setSurname($request->get('surname'));
             $profile->setSex($request->get('sex'));
-            $profile->setBirthDate(empty($request->get('birthDate')) ? null : new \DateTime($request->get('birthDate')));
+            
+            if(!empty($request->get('birthDate'))
+            {
+                $birthDateTime = new \DateTime($request->get('birthDate'));
+                $profile->setBirthDate($birthDateTime);
+            }
+            
             $profile->setAddress($request->get('address'));
             $profile->setPhone($request->get('phone'));
             $profile->setIdNumber($request->get('idNumber'));
