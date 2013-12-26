@@ -6,7 +6,7 @@
     <h2>Perfil de {{ user.name }}</h2>
     
     <div class="monocontent">
-        <form class="form-horizontal" method="post" action="">
+        <form class="form-horizontal" method="post" action="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">
             <div class="form-group">
                 <label class="col-sm-4 col-lg-3 control-label" for="UserName">Nombre de usuario</label>
                 <div class="col-sm-8 col-lg-9">
@@ -18,6 +18,17 @@
                 <label class="col-sm-4 col-lg-3 control-label" for="UserMail">Email</label>
                 <div class="col-sm-8 col-lg-9">
                     <input type="text" name="userMail" id="UserMail" class="form-control" value="{{ user.mail }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="UserRole">Tipo</label>
+                <div class="col-sm-4 col-lg-3">
+                    <select name="userRole" id="UserRole" class="form-control">
+                        {% for role in roles %}
+                        <option value="{{ role.id }}" {% if user.role.id == role.id %}selected="selected"{% endif %}>{{ role.description }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             
@@ -42,8 +53,8 @@
                 <div class="col-sm-4 col-lg-3">
                     <select name="sex" id="ProfileSex" class="form-control">
                         <option value="" {% if user.profile.sex == '' %}selected="selected"{% endif %}>No especificar</option>
-                        <option value="man" {% if user.profile.sex == 'man' %}selected="selected"{% endif %}>Mujer</option>
-                        <option value="woman" {% if user.profile.sex == 'woman' %}selected="selected"{% endif %}>Hombre</option>
+                        <option value="man" {% if user.profile.sex == 'female' %}selected="selected"{% endif %}>Mujer</option>
+                        <option value="woman" {% if user.profile.sex == 'male' %}selected="selected"{% endif %}>Hombre</option>
                     </select>
                 </div>
             </div>
@@ -87,6 +98,12 @@
                 <label class="col-sm-4 col-lg-3 control-label" for="ProfileComments">Comentarios de administración</label>
                 <div class="col-sm-8 col-lg-9">
                     <textarea rows="5" name="comments" id="ProfileComments" class="form-control">{{ user.profile.comments }}</textarea>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-lg-offset-3 col-sm-offset-4 col-sm-8 col-lg-9">
+                    <input type="submit" value="Guardar cambios" class="btn btn-primary">
                 </div>
             </div>
         </form>

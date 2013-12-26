@@ -32,7 +32,49 @@ class UserController extends Controller
         
         $user = $em->getRepository('ColectaUserBundle:User')->findOneById($user_id);
         
-        return $this->render('ColectaBackendBundle:User:profile.html.twig', array('user'=>$user));
+        if ($this->get('request')->getMethod() == 'POST') 
+        {
+            $request = $this->get('request')->request;
+            $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($request->get('userRole'));
+            $profile = $user->getProfile();
+            
+            $user->setName($request->get('userName'));
+            $user->setMail($request->get('userMail'));
+            $user->setRole($role);
+            
+            $profile->setName($request->get('name'));
+            $profile->setSurname($request->get('surname'));
+            $profile->setSex($request->get('sex'));
+            $profile->setBirthDate(empty($request->get('birthDate')) ? null : new \DateTime($request->get('birthDate')));
+            $profile->setAddress($request->get('address'));
+            $profile->setPhone($request->get('phone'));
+            $profile->setIdNumber($request->get('idNumber'));
+            
+            if(!empty($request->get('partnerId')))
+            {
+                $partnerIdUser = $em->getRepository('ColectaUserBundle:UserProfile')->findOneByPartnerId($request->get('partnerId'));
+                
+                if($partnerIdUser && $partnerIdUser->getUser() != $user)
+                {
+                    $this->get('session')->setFlash('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
+                }
+                else
+                {
+                    $profile->setPartnerId(empty($request->get('partnerId')) ? null : $request->get('partnerId'));
+                }
+            }
+            
+            $profile->setComments($request->get('comments'));
+            
+            $em->persist($user); 
+            $em->persist($profile); 
+            $em->flush();
+            $this->get('session')->setFlash('success', 'Modificado correctamente');
+        }
+        
+        $roles = $em->getRepository('ColectaUserBundle:Role')->findAll();
+        
+        return $this->render('ColectaBackendBundle:User:profile.html.twig', array('user'=>$user, 'roles'=>$roles));
     }
     public function activityReportAction($format)
     {

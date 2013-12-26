@@ -17,11 +17,11 @@ userResetPasswordCode:
     defaults: { _controller: ColectaUserBundle:Default:newPassword }
     
 userProfile:
-    pattern:  /usuario/{id}
+    pattern:  /usuario/{id}/
     defaults: { _controller: ColectaUserBundle:User:profile }
     
 userItems:
-    pattern:  /usuario/{id}/pagina/{page}
+    pattern:  /usuario/{id}/pagina/{page}/
     defaults: { _controller: ColectaUserBundle:User:items }
     
 ColectaUserAssistances:
