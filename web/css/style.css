@@ -408,6 +408,19 @@ span.form-control {
 .fullimage .right {
     text-align: right;
 }
+.fullimage a {
+    opacity: 0;
+    transition: opacity .5s;
+}
+.fullimage:hover a {
+    opacity: .2;
+}
+.fullimage:hover a.active {
+    opacity: .6;
+}
+.fullimage a.active:hover {
+    opacity: 1;
+}
 .note-editable {
     background-color: #FFF;
 }

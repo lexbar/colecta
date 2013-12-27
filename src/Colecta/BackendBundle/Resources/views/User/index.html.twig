@@ -1,9 +1,17 @@
 {% extends '::backend.html.twig' %}
 
 {% block content %} 
+
     {% include '::backendNavigation.html.twig' with {'active': 'users'} %}
-    
-    <h2>Listado de usuarios</h2>
+
+    <div class="row">
+        <div class="col-sm-9">
+            <h2>Listado de usuarios</h2>
+        </div>
+        <div class="col-sm-3">
+            <a href="" class="btn btn-default btn-block">Gestionar permisos <i class="fa fa-flag"></i></a>
+        </div>
+    </div>
     
     <div class="monocontent">
         <table class="table table-condensed table-hover">
