@@ -22,6 +22,8 @@ twig:
         web_title: Nombre del club
         allowed_tags: <span><a><ol><ul><li><img><br>
         summary_max_length: 200
+#        googleAnalyticsID: UA-XXXXXXXX-X
+#        googleAnalyticsName:
         itemIcons:
             Item/Post: align-left
             Activity/Event: calendar
