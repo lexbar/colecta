@@ -69,6 +69,10 @@ class UserController extends Controller
                     $profile->setPartnerId($request->get('partnerId'));
                 }
             }
+            else
+            {
+                $profile->setPartnerId(null);
+            }
             
             $profile->setComments($request->get('comments'));
             
