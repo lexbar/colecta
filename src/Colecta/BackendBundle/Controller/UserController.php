@@ -46,7 +46,7 @@ class UserController extends Controller
             $profile->setSurname($request->get('surname'));
             $profile->setSex($request->get('sex'));
             
-            if(!$request->get('birthDate'))
+            if($request->get('birthDate'))
             {
                 $birthDateTime = new \DateTime($request->get('birthDate'));
                 $profile->setBirthDate($birthDateTime);
@@ -56,7 +56,7 @@ class UserController extends Controller
             $profile->setPhone($request->get('phone'));
             $profile->setIdNumber($request->get('idNumber'));
             
-            if(!$request->get('partnerId'))
+            if($request->get('partnerId'))
             {
                 $partnerIdUser = $em->getRepository('ColectaUserBundle:UserProfile')->findOneByPartnerId($request->get('partnerId'));
                 
