@@ -60,9 +60,15 @@
             </div>
             
             <div class="form-group">
-                <label class="col-sm-4 col-lg-3 control-label" for="ProfileBirthDate">Fecha de nacimiento<br><small>[AAAA-MM-DD]</small></label>
-                <div class="col-sm-8 col-lg-9">
-                    <input type="text" name="birthDate" id="ProfileBirthDate" class="form-control" value="{{ user.profile.birthDate is empty ? "" : user.profile.birthDate | date('Y-m-d') }}">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileBirthDateDay">Fecha de nacimiento<br><small>(día/mes/año)</small></label>
+                <div class="col-sm-2 col-lg-1">
+                    <input type="text" name="birthDateDay" id="ProfileBirthDateDay" class="form-control" value="{{ user.profile.birthDate is empty ? "" : user.profile.birthDate | date('d') }}">
+                </div>
+                <div class="col-sm-2 col-lg-1">
+                    <input type="text" name="birthDateMonth" class="form-control" value="{{ user.profile.birthDate is empty ? "" : user.profile.birthDate | date('m') }}">
+                </div>
+                <div class="col-sm-3 col-lg-2">
+                    <input type="text" name="birthDateYear" class="form-control" value="{{ user.profile.birthDate is empty ? "" : user.profile.birthDate | date('Y') }}">
                 </div>
             </div>
             

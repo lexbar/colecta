@@ -46,10 +46,21 @@ class UserController extends Controller
             $profile->setSurname($request->get('surname'));
             $profile->setSex($request->get('sex'));
             
-            if($request->get('birthDate'))
+            if($request->get('birthDateYear') && $request->get('birthDateMonth') && $request->get('birthDateDay'))
             {
-                $birthDateTime = new \DateTime($request->get('birthDate'));
-                $profile->setBirthDate($birthDateTime);
+                $year = intval($request->get('birthDateYear'));
+                $month = intval($request->get('birthDateMonth'));
+                $day = intval($request->get('birthDateDay'));
+                
+                if(1900 < $year  && $year <= intval(date('Y')) && 1 <= $month && $month <= 12 && 1 <= $day && $day <= 31)
+                {
+                    $birthDateTime = new \DateTime($year.'-'.$month.'-'.$day.' 00:00:00');
+                    $profile->setBirthDate($birthDateTime);
+                }
+                else
+                {
+                    $this->get('session')->setFlash('error', 'La fecha de nacimiento '."".' no tiene un valor aceptable.');
+                }
             }
             
             $profile->setAddress($request->get('address'));
