@@ -1,5 +1,5 @@
 <div class="monocontent">
-    <form action="{{ path('ColectaPostCreate') }}" method="POST" class="form-horizontal" role="form" id="itemSubmit">
+    <form action="{{ path('ColectaPostCreate') }}" method="POST" class="form-horizontal" role="form" id="itemSubmit" onSubmit="return postForm();">
         <fieldset>
           <div class="form-group">
             <label class="col-sm-3 col-lg-2 control-label" for="ItemSubmitName">Título</label>
