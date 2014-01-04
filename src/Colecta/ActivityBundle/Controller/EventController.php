@@ -9,6 +9,7 @@ use Colecta\ActivityBundle\Entity\EventAssistance;
 use Colecta\ItemBundle\Entity\Category;
 use Colecta\ItemBundle\Entity\Relation;
 use Colecta\UserBundle\Entity\Notification;
+use Colecta\UserBundle\Entity\Points;
 
 
 class EventController extends Controller
@@ -50,7 +51,16 @@ class EventController extends Controller
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
-        return $this->render('ColectaActivityBundle:Event:full.html.twig', array('item' => $item));
+        //Points
+        $points = array();
+        $pointsResult = $em->getRepository('ColectaUserBundle:Points')->findByItem($item);
+        
+        foreach($pointsResult as $point)
+        {
+            $points[$point->getUser()->getId()] = $point;
+        }
+        
+        return $this->render('ColectaActivityBundle:Event:full.html.twig', array('item' => $item, 'points'=>$points));
     }
     public function newAction()
     {
@@ -639,16 +649,35 @@ class EventController extends Controller
                 foreach($assistances as $ass)
                 {
                     $id = $ass->getUser()->getId().'';
+                    $ass->setKm(str_replace(',','.', $request->get('user'.$id.'km')));
+                    
                     if($request->get('user'.$id.'confirmed'))
                     {
                         $ass->setConfirmed(true);
+                        
+                        $points = $this->getPointsHandler($ass, true);
+                        if($request->get('user'.$id.'points'))
+                        {
+                            $points->setPoints(str_replace(',','.', $request->get('user'.$id.'points')));
+                        }
+                        else
+                        {
+                            $points->setPoints($ass->getKm());
+                        }
+                        
+                        
+                        $em->persist($points); 
                     }
                     else
                     {
                         $ass->setConfirmed(false);
+                        
+                        $points = $this->getPointsHandler($ass, false);
+                        if($points)
+                        {
+                            $em->remove($points);
+                        }
                     }
-                    
-                    $ass->setKm(str_replace(',','.', $request->get('user'.$id.'km')));
                     
                     $em->persist($ass); 
                     $em->flush();
@@ -674,12 +703,26 @@ class EventController extends Controller
                     else
                     {
                         $assistance = new EventAssistance();
-                        $assistance->setConfirmed(1);
+                        $assistance->setConfirmed(0);
                         $assistance->setKm($item->getDistance());
                         $assistance->setUser($targetUser);
                         $assistance->setEvent($item);
                         
                         $em->persist($assistance); 
+                        
+                        $now = new \DateTime('now');
+                        //If this is an event that has already happened
+                        if($item->getDateend() <= $now) 
+                        {
+                            $assistance->setConfirmed(1); //Confirm the assistance
+                            
+                            //set points for assistance
+                            $points = $this->getPointsHandler($assistance, true);
+                            $points->setPoints($item->getDistance());
+                            
+                            $em->persist($points); 
+                        }
+                        
                         $em->flush();
                     }                
                 }
@@ -694,6 +737,34 @@ class EventController extends Controller
         }
         
         return new RedirectResponse($referer);
+    }
+    
+    protected function getPointsHandler(\Colecta\ActivityBundle\Entity\EventAssistance $assistance, $createIfNotExists = false)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $pointsResult = $em->getRepository('ColectaUserBundle:Points')->findBy(array('user'=>$assistance->getUser(), 'item'=>$assistance->getEvent()));
+        
+        if(count($pointsResult) == 0)
+        {
+            if($createIfNotExists)
+            {
+                $points = new Points();
+                $points->setUser($assistance->getUser());
+                $points->setItem($assistance->getEvent());
+                $points->setDate(new \DateTime('now'));
+                
+                return $points;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return $pointsResult[0];
+        }
     }
     
     public function calendarAction($date)

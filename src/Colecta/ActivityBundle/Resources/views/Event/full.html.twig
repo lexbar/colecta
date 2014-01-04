@@ -68,26 +68,38 @@
             {% for assistance in item.assistances %}
             
                 <li class="clearfix list-group-item {% if loop.index is odd %}odd{% else %}even{% endif %}">
-                    <div class="media col-xs-12 col-sm-6">
-                        <img class="username pull-left" width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> 
-                        <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">{{assistance.user.name}}</a>
-                    </div>
-                    
-                    {% if haspassed %}
-                        {% if canedit %}
-                            <div class="col-xs-6 col-sm-3">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()">
-                                    <span class="input-group-addon">km</span>
+                    <div class="row">
+                        <div class="media col-xs-12 col-sm-4">
+                            <img class="username pull-left" width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> 
+                            <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">{{assistance.user.name}}</a>
+                        </div>
+                        
+                        {% if haspassed %}
+                            {% if canedit %}
+                                {% if assistance.confirmed %}
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" name="user{{assistance.user.id}}points" value="{% if points[assistance.user.id] is defined %}{{ points[assistance.user.id].points }}{% endif %}" onKeyUp="highlightUpdateBtn()">
+                                        <span class="input-group-addon">puntos</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
-                            </div>
-                        {% elseif assistance.confirmed %}
-                            <div class="col-xs-12 col-md-6">{{ assistance.km }} km <i class="fa fa-check"></i></div>
+                                {% endif %}
+                                
+                                <div class="col-xs-6 col-sm-3{% if not assistance.confirmed %} col-sm-offset-3{% endif %}">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()">
+                                        <span class="input-group-addon">km</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-12 col-sm-2">
+                                    <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
+                                </div>
+                            {% elseif assistance.confirmed %}
+                                <div class="col-xs-12 col-md-6">{{ assistance.km }} km <i class="fa fa-check"></i></div>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
+                    </div>
                 </li>
                 
             {% else %}
