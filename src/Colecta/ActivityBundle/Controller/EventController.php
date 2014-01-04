@@ -663,6 +663,9 @@ class EventController extends Controller
                         else
                         {
                             $points->setPoints($ass->getKm());
+                            
+                            $conditions = $em->getRepository('ColectaUserBundle:PointsCondition')->findBy(array(), array('priority'=>'DESC'));
+                            $points->applyConditions($conditions);
                         }
                         
                         

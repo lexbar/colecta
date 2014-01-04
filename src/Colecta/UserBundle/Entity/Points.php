@@ -150,4 +150,45 @@ class Points
     {
         return $this->item;
     }
+    
+    //Apply conditions in the order they arrrive here
+    public function applyConditions($conditions)
+    {
+        if(count($conditions) == 0)
+        {
+            return null;
+        }
+        
+        foreach($conditions as $condition)
+        {
+            if( //satisfies condition
+                $condition->getRequirement() == 'any'
+                || $condition->getRequirement() == 'activity' && in_array($this->getItem()->getType(), array('Activity/Event', 'Activity/Route')) && $this->getItem()->getActivity() == $condition->getActivity()
+                || $condition->getRequirement() == 'author' && $this->getItem()->getAuthor() == $this->getUser()
+                || $condition->getRequirement() == 'role' && $this->getUser()->getRole() == $condition->getRole()
+            )
+            {
+                switch($condition->getOperator())
+                {
+                    case '+':
+                        $this->setPoints($this->getPoints() + $condition->getValue());
+                    break;
+                    
+                    case '*':
+                        $this->setPoints($this->getPoints() * $condition->getValue());
+                    break;
+                    
+                    case '=':
+                        $this->setPoints($condition->getValue());
+                    break;
+                }
+                
+                //STOP checking for more conditions
+                if(!$condition->getGather())
+                {
+                    break;
+                }
+            }
+        }
+    }
 }

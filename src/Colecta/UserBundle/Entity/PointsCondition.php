@@ -30,11 +30,13 @@ class PointsCondition
 
     /**
     * @ORM\ManyToOne(targetEntity="Colecta\ActivityBundle\Entity\Activity")
+    * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", nullable=true)
     */
     private $activity;
 
     /**
     * @ORM\ManyToOne(targetEntity="Role")
+    * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=true)
     */
     private $role;
 
