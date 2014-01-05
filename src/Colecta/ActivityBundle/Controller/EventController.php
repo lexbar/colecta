@@ -656,7 +656,7 @@ class EventController extends Controller
                         $ass->setConfirmed(true);
                         
                         $points = $this->getPointsHandler($ass, true);
-                        if($request->get('user'.$id.'points'))
+                        if($request->get('user'.$id.'points') != "")
                         {
                             $points->setPoints(str_replace(',','.', $request->get('user'.$id.'points')));
                         }
