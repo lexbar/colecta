@@ -96,7 +96,7 @@
                                     <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
                                 </div>
                             {% elseif assistance.confirmed %}
-                                <div class="col-xs-12 col-md-6">{{ assistance.km }} km{% if points[assistance.user.id] is defined %} / {{ points[assistance.user.id].points }} puntos{% endif %} <i class="fa fa-check"></i></div>
+                                <div class="col-xs-12 col-md-8">{{ assistance.km }} km{% if points[assistance.user.id] is defined %} / {{ points[assistance.user.id].points }} <i class="fa fa-star" style="color:green; font-size: 10px;"></i>{% endif %} <i class="fa fa-check pull-right"></i></div>
                             {% endif %}
                         {% endif %}
                     </div>
