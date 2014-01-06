@@ -21,7 +21,7 @@ ColectaActivitiesRank:
     defaults: { _controller: ColectaIntranetBundle:Activities:rank }
 ColectaActivitiesYearRank:
     pattern:  /actividades/rank/{year}
-    defaults: { _controller: ColectaIntranetBundle:Activities:yearRank }
+    defaults: { _controller: ColectaIntranetBundle:Activities:yearPointsRank }
 ColectaPaymentIndex:
     pattern:  /pagos/
     defaults: { _controller: ColectaIntranetBundle:Payment:index }
