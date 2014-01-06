@@ -120,7 +120,7 @@ class ActivitiesController extends Controller
         
         $year = min( intval(date('Y')), max( 1990, intval($year) ) );
         
-        $users = $em->getRepository('ColectaUserBundle:User')->findAll();
+        $users = $em->getRepository('ColectaUserBundle:User')->findBy(array(),array('name'=>'ASC'));
         
         $points = array(1=>'',2=>'');
         $kms = array(1=>'',2=>'');
