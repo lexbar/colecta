@@ -15,11 +15,11 @@
         
         <div class="row">
             <div class="col-sm-12">
-                <div class="btn-group btn-group-justified">
-                    <a class="btn btn-sm btn-default active" href="{{ path('userProfile', {'id':user.id}) }}">Historial</a> 
-                    <a class="btn btn-sm btn-default" href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Asistencias</a> 
-                    {% if app.user and app.user.id != user.id and user.role.name != 'ROLE_BANNED' %}<a class="btn btn-sm btn-default" href="{{ path('userMessageNewTo', {'user_id':user.id}) }}">Enviar Mensaje</a>{% endif %}
-                </div>
+                <ul class="nav nav-pills" id="myTab">
+                    <li class="active"><a href="{{ path('userProfile', {'id':user.id}) }}" data-toggle="tab">Publicaciones <i class="fa fa-pencil-square-o"></i></a></li>
+                    <li><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}" data-toggle="tab">Rendimiento <i class="fa fa-bar-chart-o"></i></a></li>
+                    {% if app.user and app.user.id != user.id and user.role.name != 'ROLE_BANNED' %}<li><a href="{{ path('userMessageNewTo', {'user_id':user.id}) }}">Enviar Mensaje <i class="fa fa-envelope-o"></i></a></li>{% endif %}
+                </ul>
             </div>
         </div>
     </div>
