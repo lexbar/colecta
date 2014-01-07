@@ -155,6 +155,8 @@
 
 {% endblock %}
 
+
+{% if item.canEdit(app.user) and (item.allowassistances or item.assistances | length and haspassed) %}
 {% block stylesheets %}
     <style>
     .twitter-typeahead {
@@ -415,3 +417,4 @@
 #}
     </script>
 {% endblock %}
+{% endif %}
