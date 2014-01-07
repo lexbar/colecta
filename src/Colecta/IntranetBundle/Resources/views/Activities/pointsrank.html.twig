@@ -15,7 +15,7 @@
             <tr>
                 <td>{{ points[user.id] | number_format(0) }} <i class="fa fa-star" style="color:green; font-size: 10px;"></i></td>
                 <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
-                <td><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">{{ user.name }}</a></td>
+                <td><a href="{{ path('ColectaUserAssistancesYear', {'id':user.id, year: year}) }}">{{ user.name }}</a></td>
                 <td><div class="progress"><div class="progress-bar progress-bar-success" style="width: {% if maxpoints > 0 %}{{ (points[user.id] / maxpoints * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div></div></td>
             </tr>
         {% endfor %}
