@@ -16,6 +16,13 @@ parameters:
     
     from.mail:         { example@gmail.com : Nombre remitente }
     admin.mail:        example@gmail.com
+    welcomeText: |
+        Hola %N!
+        
+        Ya puedes acceder a tu cuenta en ---web_title---
+        
+        Simplemente tienes que seguir el siguiente enlace:
+        %L
 
 twig:
     globals:
