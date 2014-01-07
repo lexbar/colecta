@@ -27,7 +27,7 @@ class ActivitiesController extends Controller
         
         $year = min( intval(date('Y')), max( 1990, intval($year) ) );
         
-        $asssistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\' ORDER BY e.dateini ASC')->setParameter('user',$user)->getResult();
+        $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\' ORDER BY e.dateini ASC')->setParameter('user',$user)->getResult();
         
         $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p WHERE p.user = :user AND p.date >= \''.$year.'-01-01 00:00:00\' AND p.date <= \''.$year.'-12-31 23:59:59\'')->setParameter('user',$user)->getResult();
         
@@ -45,7 +45,7 @@ class ActivitiesController extends Controller
         $stmt->execute();  
         $years = $stmt->fetchAll();
         
-        return $this->render('ColectaIntranetBundle:Activities:index.html.twig', array('asssistances'=>$asssistances, 'points'=>$points, 'year'=>$year, 'years'=>$years));
+        return $this->render('ColectaIntranetBundle:Activities:index.html.twig', array('assistances'=>$assistances, 'points'=>$points, 'year'=>$year, 'years'=>$years));
     }
     
     public function rankAction()

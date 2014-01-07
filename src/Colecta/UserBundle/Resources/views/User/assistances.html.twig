@@ -33,15 +33,15 @@
     {% set totalpoints = 0 %}
     {% set lastyearmonth = '' %}
     
-    {% for asssistance in assistances %}
-        <tr{% if lastyearmonth != '' and lastyearmonth != asssistance.event.dateini | date('Ym') %} style="border-top: 2px solid #CCC;"{% endif %}>
-            <td>{{ asssistance.event.dateini | date('d') }} {% include '::month.html.twig' with {'date':asssistance.event.dateini, 'short':1} %} {{ asssistance.event.dateini | date('Y') }}</td>
-            <td><a href="{{ path('ColectaEventView', { 'slug': asssistance.event.slug }) }}">{{ asssistance.event.name }}</a></td>
-            <td>{{ asssistance.km | number_format(1,'.',',')}} km</td>
-            <td>{% if points[asssistance.event.id] is defined %}{{ points[asssistance.event.id].points }} <i class="fa fa-star" style="font-size:10px; color:green;"></i>{% set totalpoints = totalpoints + points[asssistance.event.id].points %}{% endif %}</td>
+    {% for assistance in assistances %}
+        <tr{% if lastyearmonth != '' and lastyearmonth != assistance.event.dateini | date('Ym') %} style="border-top: 2px solid #CCC;"{% endif %}>
+            <td>{{ assistance.event.dateini | date('d') }} {% include '::month.html.twig' with {'date':assistance.event.dateini, 'short':1} %} {{ assistance.event.dateini | date('Y') }}</td>
+            <td><a href="{{ path('ColectaEventView', { 'slug': assistance.event.slug }) }}">{{ assistance.event.name }}</a></td>
+            <td>{{ assistance.km | number_format(1,'.',',')}} km</td>
+            <td>{% if points[assistance.event.id] is defined %}{{ points[assistance.event.id].points }} <i class="fa fa-star" style="font-size:10px; color:green;"></i>{% set totalpoints = totalpoints + points[assistance.event.id].points %}{% endif %}</td>
         </tr>
-        {% set accumulated = accumulated + asssistance.km %}
-        {% set lastyearmonth = asssistance.event.dateini | date('Ym') %}
+        {% set accumulated = accumulated + assistance.km %}
+        {% set lastyearmonth = assistance.event.dateini | date('Ym') %}
     {% endfor %}
     
     <tr><td></td><td style="text-align:right"><strong>TOTAL</strong></td><td>{{ accumulated | number_format(1,'.',',')}} km</td><td>{{ totalpoints }} <i class="fa fa-star" style="font-size:10px; color:green;"></i></td></tr>
@@ -63,17 +63,19 @@
         {% set printyear = false %}
     {% endif %}
     
+    {% set monthsNames = {'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'} %}
+    
     {% set categories = '' %}
     {% set data = '' %}
     {% set lastMonthName, thisMonthName = '', '' %}
-    {% set lastMonthValue = 0 %}
+    {% set lastMonthValue, lastMonthNumber = 0, 0 %}
     
-    {% for asssistance in assistances %}
+    {% for assistance in assistances %}
     
         {# NOMBRE DEL MES #}
-        {% set thisMonthName = asssistance.event.dateini | date('m') | replace({'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'}) %}
+        {% set thisMonthName = assistance.event.dateini | date('m') | replace(monthsNames) %}
         {% if printyear %}
-            {% set thisMonthName = thisMonthName ~ ' ' ~ asssistance.event.dateini | date('Y') %}
+            {% set thisMonthName = thisMonthName ~ ' ' ~ assistance.event.dateini | date('Y') %}
         {% endif %}
         
         {% if lastMonthName != thisMonthName %}
@@ -83,12 +85,21 @@
                 
                 {% set categories = categories ~ "'" ~ lastMonthName ~ "'" %}
                 {% set data = data ~ lastMonthValue  %}
+                
+                {% if lastMonthNumber + 1 < assistance.event.dateini | date('m') %}
+                    {% for i in range(lastMonthNumber + 1, assistance.event.dateini | date('m') -1 ) %}
+                        {% if i < 10 %}{% set i = '0' ~ i %}{% endif %}
+                        {% set categories = categories ~ ",'" ~ (i | replace(monthsNames)) ~ "'" %}
+                        {% set data = data ~ ',0'  %}
+                    {% endfor %}
+                {% endif %}
             {% endif %}
             {% set lastMonthName = thisMonthName %}
             {% set lastMonthValue = 0 %}
+            {% set lastMonthNumber = assistance.event.dateini | date('m') %}
         {% endif %}
         
-        {% set lastMonthValue = lastMonthValue + asssistance.km %}
+        {% set lastMonthValue = lastMonthValue + assistance.km %}
     {% endfor %}
     
     {# LAST CHANCE #}
