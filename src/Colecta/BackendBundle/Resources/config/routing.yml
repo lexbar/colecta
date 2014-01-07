@@ -12,6 +12,9 @@ ColectaBackendUserIndex:
 ColectaBackendUserProfile:
     pattern:  /back/user/profile/{user_id}/
     defaults: { _controller: ColectaBackendBundle:User:profile }    
+ColectaBackendNewUser:
+    pattern:  /back/user/new/
+    defaults: { _controller: ColectaBackendBundle:User:newUser }    
 ColectaBackendUserActivityReport:
     pattern:  /back/user/report/activity/
     defaults: { _controller: ColectaBackendBundle:User:activityReport, format:html }
