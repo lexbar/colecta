@@ -181,6 +181,19 @@ class UserController extends Controller
         return $response;
     }
     
+    public function ajaxUserListAction()
+    {
+        $this->get('request')->setRequestFormat('json');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $users = $em->getRepository('ColectaUserBundle:User')->findBy(array(), array('name'=>'ASC'));
+        
+        $response = new Response($this->renderView('ColectaUserBundle:User:usersDatum.json.twig', array('users' => $users)),200);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
     public function avatarAction($uid,$width,$height)
     {
         $this->get('request')->setRequestFormat('image');

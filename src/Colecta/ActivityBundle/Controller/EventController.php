@@ -701,7 +701,7 @@ class EventController extends Controller
                     
                     if($assistance)
                     {
-                        $this->get('session')->setFlash('error', 'El usuario ya ha marcado su asistencia');
+                        $this->get('session')->setFlash('error', $targetUser->getName().' ya está en la lista de asistentes.');
                     }
                     else
                     {

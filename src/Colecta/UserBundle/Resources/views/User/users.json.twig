@@ -1,1 +1,1 @@
-[{% for user in users %}{"name":"{{ user.name }}","id":"{{ user.id }}"}{% if not loop.last %},{% endif %}{% endfor %}]
+[{% for user in users %}{% if user.role.contribute %}{"name":"{{ user.name }}","id":"{{ user.id }}"}{% if not loop.last %},{% endif %}{% endif%}{% endfor %}]

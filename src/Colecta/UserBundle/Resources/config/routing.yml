@@ -75,3 +75,7 @@ userMessageResponse:
 ColectaAjaxUserSearch:
     pattern:  /ajaxusersearch/
     defaults: { _controller: ColectaUserBundle:User:ajaxsearch }
+
+ColectaAjaxUserList:
+    pattern:  /ajaxuserlist/
+    defaults: { _controller: ColectaUserBundle:User:ajaxUserList }
