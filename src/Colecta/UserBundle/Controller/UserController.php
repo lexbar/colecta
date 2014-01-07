@@ -67,14 +67,38 @@ class UserController extends Controller
         
         return $this->render('ColectaUserBundle:User:items.html.twig', array('user' => $user, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
+    
     public function assistancesAction($id)
+    {
+        return $this->assistancesYearAction($id, date('Y'));
+    }
+    
+    public function assistancesYearAction($id, $year)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         
-        $assistances = $em->createQuery("SELECT a FROM ColectaActivityBundle:EventAssistance a, ColectaActivityBundle:Event e WHERE e = a.event AND a.user = :user AND a.confirmed = true ORDER BY e.dateini DESC")->setParameters(array('user'=>$user->getId()))->setMaxResults(100)->getResult();
+        $year = min( intval(date('Y')), max( 1990, intval($year) ) );
         
-        return $this->render('ColectaUserBundle:User:assistances.html.twig', array('user' => $user, 'assistances' => $assistances));
+        $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\' ORDER BY e.dateini ASC')->setParameter('user',$user)->getResult();
+        
+        $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p WHERE p.user = :user AND p.date >= \''.$year.'-01-01 00:00:00\' AND p.date <= \''.$year.'-12-31 23:59:59\'')->setParameter('user',$user)->getResult();
+        
+        $points = array();
+        foreach($pointsRequest as $p)
+        {
+            $points[$p->getItem()->getId()] = $p;
+        }
+        
+        $stmt = $em  
+               ->getConnection()  
+               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e INNER JOIN EventAssistance a ON e.id = a.event_id WHERE e.id = a.event_id AND a.user_id = :user_id AND e.dateend <= \''.date('Y').'-12-31 00:00:00\' ORDER BY e.dateini ASC');
+               
+        $stmt->bindValue('user_id', $user->getId());  
+        $stmt->execute();  
+        $years = $stmt->fetchAll();
+        
+        return $this->render('ColectaUserBundle:User:assistances.html.twig', array('user'=>$user, 'assistances'=>$assistances, 'points'=>$points, 'year'=>$year, 'years'=>$years));
     }
     
     public function editProfileAction() 

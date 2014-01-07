@@ -27,6 +27,9 @@ userItems:
 ColectaUserAssistances:
     pattern:  /usuario/{id}/asistencias/
     defaults: { _controller: ColectaUserBundle:User:assistances }
+ColectaUserAssistancesYear:
+    pattern:  /usuario/{id}/asistencias/{year}/
+    defaults: { _controller: ColectaUserBundle:User:assistancesYear }
     
 userAvatar:
     pattern:  /avatar/{uid}/{width}/{height}/
