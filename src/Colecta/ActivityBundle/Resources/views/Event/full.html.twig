@@ -320,8 +320,8 @@
     <script>
     $('#userSearch').typeahead({
         name: 'ColectaUsers',
-        local: ['alejandro', 'anibal']
-        /*prefetch: '{{ path('ColectaAjaxUserSearch') }}'*/
+        local: {% render 'ColectaUserBundle:User:AjaxUserList' %}
+        /*prefetch: 'http://colecta.dev{{ path('ColectaAjaxUserList') }}'*/
     });
     
     function highlightUpdateBtn() 
