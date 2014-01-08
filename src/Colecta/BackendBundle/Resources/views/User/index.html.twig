@@ -9,7 +9,7 @@
             <h2>Listado de usuarios</h2>
         </div>
         <div class="col-xs-6 col-sm-3">
-            <a href="" class="btn btn-default btn-block">Gestionar permisos <i class="fa fa-flag"></i></a>
+            <a href="" class="btn btn-default btn-block">Gestionar perfiles <i class="fa fa-flag"></i></a>
             
         </div>
         <div class="col-xs-6 col-sm-3">
@@ -19,14 +19,12 @@
     
     <div class="monocontent">
         <table class="table table-condensed table-hover">
-        <thead><tr><th>Nombre</th><th>Edad</th><th>Teléfono(s)</th><th>Permisos</th><th>Registrado</th><th>Acciones</th></tr></thead>
+        <thead><tr><th>Nombre</th><th>Perfil</th><th class="hidden-xs">Registrado</th><th>Acciones</th></tr></thead>
         {% for user in users %}
             <tr>
-                <td><a href="{{ path('userProfile', {'id':user.id}) }}">{{ user.name }}</a> {% if user.profile and user.profile.sex %}{% if user.profile.sex == 'female' %} <i style="color:#FF9CF8" class="fa fa-female"></i>{% else %} <i style="color:#8DDCF2" class="fa fa-male"></i>{% endif %}{% endif%}</td>
-                <td>{% if user.profile and user.profile.birthDate is not empty %}{{ (( "now" | date('U') - user.profile.birthDate | date('U') ) / (60*60*24*365)) // 1 | number_format(0) }}{% endif %}</td>
-                <td>{% if user.profile %}{{ user.profile.phone }}{% endif %}</td>
+                <td><a href="{{ path('userProfile', {'id':user.id}) }}">{{ user.name }}</a></td>
                 <td><span class="label label-{% if not user.role.siteAccess %}danger{% elseif not user.role.contribute %}warning{% elseif user.role.siteConfig %}primary{% else %}default{% endif %}">{{ user.role.description }}</span></td>
-                <td>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': user.registered } only %}</td>
+                <td class="hidden-xs">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': user.registered } only %}</td>
                 <td> <a class="btn btn-xs btn-success" href="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">Editar <i class="fa fa-pencil"></i></a> <a class="btn btn-xs btn-default" href="{{ path('userMessageNewTo', {'user_id':user.id}) }}">Mensaje <i class="fa fa-envelope"></i></a></td>
             </tr> 
         {% endfor %}
