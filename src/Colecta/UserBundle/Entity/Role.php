@@ -26,7 +26,7 @@ class Role
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    protected $name;
+    protected $name = 'ROLE_CUSTOM';
 
     /**
      * @var string $description

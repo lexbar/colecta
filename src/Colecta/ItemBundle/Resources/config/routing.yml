@@ -74,7 +74,13 @@ ColectaSinceLastVisitDismiss:
     pattern:  /ultimavisita/dismiss/{date}
     defaults: { _controller: ColectaItemBundle:Default:dismissSinceLastVisit }
 
-
 ColectaSinceLastVisitPage:
     pattern:  /ultimavisita/{page}/
     defaults: { _controller: ColectaItemBundle:Default:sinceLastVisitPage }
+    
+LinkPreviewHighlightUrls:
+    pattern: /linkPreview/highlightUrls/
+    defaults: { _controller: ColectaItemBundle:linkPreview:highlightUrls }
+LinkPreviewTextCrawler:
+    pattern: /linkPreview/textCrawler/
+    defaults: { _controller: ColectaItemBundle:linkPreview:textCrawler }

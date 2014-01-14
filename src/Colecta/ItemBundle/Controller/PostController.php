@@ -146,7 +146,28 @@ class PostController extends Controller
             $item->setLinkExcerpt('');
             $item->setLinkTitle('');
             
+            $linkPreview = (stripcslashes($this->forward('ColectaItemBundle:linkPreview:textCrawler', array(
+                'imagequantity'  => 0,
+                'text' => $item->getText(),
+            ))->getContent()));
             
+            if($linkPreview && $linkPreview[0] == '"')
+            {
+                $linkPreview = substr($linkPreview, 1, -1);
+            }
+            
+            $linkPreview = json_decode($linkPreview, true);
+            
+            if($linkPreview && isset($linkPreview['pageUrl'])) 
+            {
+                $item->setLinkURL($linkPreview['pageUrl']);
+                $item->setLinkImage($linkPreview['images']);
+                $item->setLinkTitle($linkPreview['title']);
+                $item->setLinkExcerpt($linkPreview['description']);
+                
+            }
+            
+            /*
             if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
             {
                 $html = getContent($url[0]);
@@ -165,7 +186,7 @@ class PostController extends Controller
                 {
                     $item->setLinkExcerpt($excerpt);
                 }
-            }
+            }*/
             
             if($request->get('attachTo'))
             {
@@ -274,8 +295,28 @@ class PostController extends Controller
             $item->setLinkExcerpt('');
             $item->setLinkTitle('');
             
+            $linkPreview = (stripcslashes($this->forward('ColectaItemBundle:linkPreview:textCrawler', array(
+                'imagequantity'  => 0,
+                'text' => $item->getText(),
+            ))->getContent()));
             
-            if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
+            if($linkPreview && $linkPreview[0] == '"')
+            {
+                $linkPreview = substr($linkPreview, 1, -1);
+            }
+            
+            $linkPreview = json_decode($linkPreview, true);
+            
+            if($linkPreview && isset($linkPreview['pageUrl'])) 
+            {
+                $item->setLinkURL($linkPreview['pageUrl']);
+                $item->setLinkImage($linkPreview['images']);
+                $item->setLinkTitle($linkPreview['title']);
+                $item->setLinkExcerpt($linkPreview['description']);
+                
+            }
+            
+            /*if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
             {
                 $html = getContent($url[0]);
                 //$crawler = new Crawler($html);
@@ -293,7 +334,7 @@ class PostController extends Controller
                 {
                     $item->setLinkExcerpt($excerpt);
                 }
-            }
+            }*/
             
             if($persist)
             {

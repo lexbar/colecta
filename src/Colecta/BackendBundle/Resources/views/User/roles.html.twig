@@ -1,0 +1,35 @@
+{% extends '::backend.html.twig' %}
+
+{% block title %}Gestionar perfiles{% endblock %}
+
+{% block content %} 
+
+    {% include '::backendNavigation.html.twig' with {'active': 'users'} %}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <h2>Gestionar perfiles</h2>
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <a href="{{ path('ColectaBackendUserIndex') }}" class="btn btn-default btn-block"><i class="fa fa-angle-left"></i> Listado de usuarios <i class="fa fa-list"></i></a>
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <a href="{{ path('ColectaBackendUserIndex') }}" class="btn btn-primary btn-block">Crear nuevo perfil <i class="fa fa-flag"></i></a>
+        </div>
+    </div>
+    
+    <div class="monocontent">
+        <table class="table table-condensed table-hover">
+        <thead><tr><th>Nombre</th><th>Usuarios</th><th>Acciones</th></tr></thead>
+        {% for role in roles %}
+            {% set amount = role['amount'] %}
+            {% set role = role[0] %}
+            <tr>
+                <td><span class="label label-{% if not role.siteAccess %}danger{% elseif not role.contribute %}warning{% elseif role.siteConfig %}primary{% else %}default{% endif %}">{{ role.description }}</span></td>
+                <td>{{ amount }}</td>
+                <td>{% if role.name == 'ROLE_CUSTOM' %}<a class="btn btn-xs btn-success" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">Editar <i class="fa fa-pencil"></i></a>{% else %}<span class="label label-default"><i class="fa fa-lock"></i> perfil bloqueado</span>{% endif %}</td>
+            </tr> 
+        {% endfor %}
+        </table>
+    </div>
+{% endblock%}

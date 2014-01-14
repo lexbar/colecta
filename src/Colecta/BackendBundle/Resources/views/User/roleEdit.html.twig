@@ -6,7 +6,7 @@
     
     <div class="row">
         <div class="col-xs-6 col-sm-9">
-            <h2>Cuenta de {{ user.name }}</h2>
+            <h2>Editar perfil {{ role.description }}</h2>
         </div>
         <div class="col-xs-6 col-sm-3">
             <a href="{{ path('ColectaBackendUserIndex') }}" class="btn btn-primary btn-block"><i class="fa fa-angle-left"></i> Listado de usuarios <i class="fa fa-list"></i></a>
@@ -16,9 +16,9 @@
     <div class="monocontent">
         <form class="form-horizontal" method="post" action="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">
             <div class="form-group">
-                <label class="col-sm-4 col-lg-3 control-label" for="UserName">Nombre de usuario</label>
+                <label class="col-sm-4 col-lg-3 control-label" for="RoleName">Nombre</label>
                 <div class="col-sm-8 col-lg-9">
-                    <input type="text" name="userName" id="UserName" class="form-control" value="{{ user.name }}">
+                    <input type="text" name="name" id="RoleName" class="form-control" value="{{ role.name }}">
                 </div>
             </div>
             

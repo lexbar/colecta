@@ -21,6 +21,12 @@ ColectaBackendUserActivityReport:
 ColectaBackendUserActivityReportCSV:
     pattern:  /back/user/report/activity/csv/
     defaults: { _controller: ColectaBackendBundle:User:activityReport, format:csv }
+ColectaBackendRolesIndex:
+    pattern:  /back/roles/
+    defaults: { _controller: ColectaBackendBundle:User:roles } 
+ColectaBackendRoleEdit:
+    pattern:  /back/roles/{role_id}/
+    defaults: { _controller: ColectaBackendBundle:User:roleEdit } 
     
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/

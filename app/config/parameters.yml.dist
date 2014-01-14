@@ -28,7 +28,7 @@ twig:
     globals:
         web_title: Nombre del club
         allowed_tags: <span><a><ol><ul><li><img><br>
-        summary_max_length: 200
+        summary_max_length: 600
 #        googleAnalyticsID: UA-XXXXXXXX-X
 #        googleAnalyticsName:
         itemIcons:

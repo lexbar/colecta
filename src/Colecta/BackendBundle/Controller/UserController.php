@@ -23,6 +23,20 @@ class UserController extends Controller
         
         return $this->render('ColectaBackendBundle:User:index.html.twig', array('users'=>$users));
     }
+    public function rolesAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $roles = $em->createQuery('SELECT r, (SELECT COUNT(u) FROM ColectaUserBundle:User u WHERE u.role = r) amount FROM ColectaUserBundle:Role r ')->getResult();
+        
+        return $this->render('ColectaBackendBundle:User:roles.html.twig', array('roles'=>$roles));
+    }
     public function profileAction($user_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
@@ -248,6 +262,44 @@ class UserController extends Controller
         
         return $this->render('ColectaBackendBundle:User:newUser.html.twig', array('user'=>$user, 'roles'=>$roles, 'welcomeText'=>$welcomeText));
     }
+    public function roleEditAction($role_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($role_id);
+        
+        if($role->getName() != 'ROLE_CUSTOM') //Only custom roles can be edited
+        {
+            $this->get('request')->SetMethod("GET"); // Set request method to Get before redirection 
+            return new RedirectResponse($this->generateUrl('ColectaBackendRolesIndex'));
+        }
+        
+        if ($this->get('request')->getMethod() == 'POST') 
+        {
+            $request = $this->get('request')->request;
+            
+            $role->set(checkbox($request->get('')));
+            
+            if($request->get('description') != "")
+            {
+                $em->persist($role); 
+                $em->flush();
+                $this->get('session')->setFlash('success', 'Modificado correctamente');
+            }
+            else
+            {
+                $this->get('session')->setFlash('error', 'Debes indicar un nombre al perfil');
+            }
+        }
+        
+        return $this->render('ColectaBackendBundle:User:roleEdit.html.twig', array('role'=>$role));
+    }
     public function activityReportAction($format) //Special report for Turyciclo
     {
         $year = 2013;
@@ -320,4 +372,9 @@ class UserController extends Controller
         }
         
     }
+}
+
+function checkbox($value) //convert the value of a checkbox (on/off) to a boolean value (true/false)
+{
+    return $value == 'on' ? true : false;
 }
