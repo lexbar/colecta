@@ -74,9 +74,9 @@ class linkPreviewController extends Controller
         $request = $this->get('request');
         
         $text = $request->query->get("text");
-        $imageQuantity = $request->query->get("imagequantity");
+        $imagequantity = $request->query->get("imagequantity");
         
-        return $this->textCrawler($text, $imagequantity);
+        return $this->textCrawlerAction($text, $imagequantity);
     }
     public function textCrawlerAction($text, $imagequantity)
     {

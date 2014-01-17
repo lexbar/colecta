@@ -83,4 +83,4 @@ LinkPreviewHighlightUrls:
     defaults: { _controller: ColectaItemBundle:linkPreview:highlightUrls }
 LinkPreviewTextCrawler:
     pattern: /linkPreview/textCrawler/
-    defaults: { _controller: ColectaItemBundle:linkPreview:textCrawler }
+    defaults: { _controller: ColectaItemBundle:linkPreview:getTextCrawler }
