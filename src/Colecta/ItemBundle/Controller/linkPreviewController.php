@@ -74,11 +74,11 @@ class linkPreviewController extends Controller
         $request = $this->get('request');
         
         $text = $request->query->get("text");
-        $imagequantity = $request->query->get("imagequantity");
+        $imageQuantity = $request->query->get("imagequantity");
         
-        return $this->textCrawlerAction($text, $imagequantity);
+        return $this->textCrawlerAction($text, $imageQuantity);
     }
-    public function textCrawlerAction($text, $imagequantity)
+    public function textCrawlerAction($text, $imageQuantity)
     {
         //error_reporting(false);
 
@@ -523,7 +523,7 @@ class linkPreviewController extends Controller
 
         $images = "";
         for ($i = 0; $i < count($content); $i++) {
-                $size = getimagesize($content[$i]);
+                $size = @getimagesize($content[$i]);
                 if ($size[0] > 100 && $size[1] > 15) {// avoids getting very small images
                         $images .= $content[$i] . "|";
                         $maxImages--;
