@@ -145,9 +145,11 @@ class linkPreviewController extends Controller
                             $description = $tempDescription;
                     else
                             $description = $this->crawlCode($raw);
-    
+                    
                     if ($description != "")
                             $descriptionUnderstood = true;
+                    else
+                            $descriptionUnderstood = false;
     
                     if (($descriptionUnderstood == false && strlen($title) > strlen($description) && !preg_match($urlRegex, $description) && $description != "" && !preg_match('/[A-Z]/', $description)) || $title == $description) {
                             $title = $description;
@@ -281,7 +283,15 @@ class linkPreviewController extends Controller
         }
         if ($content == "") {
                 preg_match($pattern, $string, $matches);
-                $content = $matches[0];
+                if(isset($matches[0]))
+                {
+                    $content = $matches[0];
+                }
+                else
+                {
+                    $content = "";
+                }
+                
         }
         return str_replace("&nbsp;", "", $content);
     }
