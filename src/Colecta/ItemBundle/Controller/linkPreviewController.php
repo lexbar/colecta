@@ -569,7 +569,16 @@ class linkPreviewController extends Controller
         if(count($match) == 0){
             preg_match("/content='(.*?)'/i", $raw, $match);
         }
-        return $match[1];
+        
+        if( isset($match[1]))
+        {
+            return $match[1];
+        }
+        else
+        {
+            return '';
+        }
+        
         // htmlentities($match[1]);
     }
     
