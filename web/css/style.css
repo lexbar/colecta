@@ -171,18 +171,6 @@ span.form-control {
 .item.panel-primary > .panel-heading {
     background-color: #2A702B;
     border-color: #999;
-    background-image: -webkit-gradient(
-    	linear,
-    	left top,
-    	left bottom,
-    	color-stop(0, #0f581e),
-    	color-stop(1, #32693d)
-    );
-    background-image: -o-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
-    background-image: -moz-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
-    background-image: -webkit-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
-    background-image: -ms-linear-gradient(bottom, #0f581e 0%, #32693d 100%);
-    background-image: linear-gradient(to top, #0f581e 0%, #32693d 100%);
 }
 .item.panel-primary h3 i {
     color: #EEE;
