@@ -160,11 +160,19 @@ class PostController extends Controller
             
             if($linkPreview && isset($linkPreview['pageUrl'])) 
             {
+                if(isset($linkPreview['images'])) 
+                { 
+                    $images = explode('|', $linkPreview['images']) ;
+                }
+                else
+                {
+                    $images = array('');
+                }
+                
                 $item->setLinkURL($linkPreview['pageUrl']);
-                $item->setLinkImage($linkPreview['images']);
+                $item->setLinkImage($images[0]);
                 $item->setLinkTitle($linkPreview['title']);
                 $item->setLinkExcerpt($linkPreview['description']);
-                
             }
             
             /*
@@ -309,11 +317,19 @@ class PostController extends Controller
             
             if($linkPreview && isset($linkPreview['pageUrl'])) 
             {
+                if(isset($linkPreview['images'])) 
+                { 
+                    $images = explode('|', $linkPreview['images']) ;
+                }
+                else
+                {
+                    $images = array('');
+                }
+                
                 $item->setLinkURL($linkPreview['pageUrl']);
-                $item->setLinkImage($linkPreview['images']);
+                $item->setLinkImage($images[0]);
                 $item->setLinkTitle($linkPreview['title']);
                 $item->setLinkExcerpt($linkPreview['description']);
-                
             }
             
             /*if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
