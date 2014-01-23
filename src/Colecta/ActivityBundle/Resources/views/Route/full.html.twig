@@ -33,10 +33,10 @@
             <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-default btn-sm pull-right" type="button"><i class="fa fa-arrows-alt fa-fw"></i></button>
         </div>
         
-        <div id="map" style="width:auto;height:300px;"></div>
-        
-        <div id="chart" style="width:auto;height:200px;"></div>
-        
+        <div class="row">
+            <div id="map" style="width:auto;height:300px;"></div>
+            <div id="chart" style="width:auto;height:170px;"></div>
+        </div>
         <hr>
         
         <p>{{ item.text | usercontent | striptags(allowed_tags) | raw | nl2br }}</p>

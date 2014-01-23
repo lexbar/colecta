@@ -6,22 +6,23 @@
     </div>
     
     <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
-
-        <div class="unity">
-        
-            <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="pull-right"><img class="" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
-            
-            <div id="summary-{{ item.slug }}">
-                {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-                {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+        <div class="row">
+            <div class="col-sm-9">
+                <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+                
+                <div id="summary-{{ item.slug }}">
+                    {{ item.text[0:summary_max_length] | striptags(allowed_tags) | cleancode | raw | nl2br }}
+                    {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+                </div>
+                
+                {% if item.text | length > summary_max_length %}
+                    <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+                {% endif %}
             </div>
-            
-            {% if item.text | length > summary_max_length %}
-                <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-            {% endif %}
+            <div class="col-sm-3">
+                <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img style="width:100%" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
+            </div>
         </div>
-    
         {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     </div>
     
