@@ -147,7 +147,7 @@ class PostController extends Controller
             $item->setLinkTitle('');
             
             $linkPreview = (stripcslashes($this->forward('ColectaItemBundle:linkPreview:textCrawler', array(
-                'imagequantity'  => 0,
+                'imageQuantity'  => 0,
                 'text' => $item->getText(),
             ))->getContent()));
             
