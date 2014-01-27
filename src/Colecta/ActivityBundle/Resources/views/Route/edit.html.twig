@@ -2,16 +2,6 @@
 
 {% block title %}Editar {{ item.name }} | Rutas{% endblock %}
 
-{% block javascripts %}    
-    <script>
-
-{% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
-    
-{% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
-    
-    </script>
-{% endblock %}
-
 {% block article %}
 
 {% if item.canEdit(app.user) %}
@@ -213,4 +203,14 @@
 
 {% endif %}
 
+{% endblock %}
+
+{% block javascripts %}    
+    <script>
+
+{% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
+    
+{% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+    
+    </script>
 {% endblock %}
