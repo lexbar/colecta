@@ -1,7 +1,4 @@
-<hr>
 <form action="{{ path('ColectaItemRelate', {id: item.id }) }}" method="POST" class="form-horizontal" onSubmit="if($('#itemResults .active a').length) return false;">
-
-<h3>Enlazar con otros contenidos</h3>
     {% set relateds = '' %}
     <div id="showRelateds">
     {% for related in item.related%}
@@ -11,7 +8,9 @@
     </div>
     <input type="hidden" id="relateds" name="relateds" value="{{relateds}}">
     
-    <hr>
+    {% if item.related | length > 0 %}
+        <hr>
+    {% endif %}
     
     <label for="searchItem">Buscar otro contenido para relacionar</label>
     <div class="row">

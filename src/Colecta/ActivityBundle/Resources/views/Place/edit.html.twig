@@ -2,6 +2,80 @@
 
 {% block title %}Editar {{ item.name }} | Lugares{% endblock %}
 
+{% block article %}
+
+    <div class="row">
+        <div class="col-sm-8 col-lg-9">
+            <h2>Editar {{ item.name }}</h2>
+        </div>
+        <div class="col-sm-4 col-lg-3">
+            <a class="btn btn-default btn-block" href="{{ path('ColectaPlaceView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al mapa</a>
+        </div>
+    </div>
+
+    <div class="monocontent">
+        <div class="col-lg-offset-2">
+            <form action="" method="get" onSubmit="searchLocation(); return false;">        
+                <div class="input-group">
+                    <input class="form-control" id="PlaceMapSearch" type="text" placeholder="Nombre del lugar...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" onClick="searchLocation();"><i class="fa fa-search" id="mapSearchIcon"></i> Ubicar en el mapa</button>
+                    </span>
+                </div>
+            </form>
+            
+            <ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;" class="dropdown-menu hidden" id="mapResults"></ul>
+            
+            <div id="map" style="height:200px;margin:15px 0"></div>
+            
+            <div class="alert alert-info" id="PlaceInfo2">
+                <i class="fa fa-info-circle fa-lg"></i> <strong>Información: </strong> Haz click en el mapa para cambiar la localización.
+            </div>
+        </div>
+                
+        <hr>
+              
+        <form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceEdit', {'slug':item.slug}) }}" method="POST" class="form-horizontal" id="PlaceForm">
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="PlaceName">Nombre</label>
+                <div class="col-sm-9 col-lg-10">
+                  <input type="text" class="form-control" id="PlaceName" name="name" value="{{ item.name }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 col-lg-2 control-label" for="PlaceDescription">Descripción</label>
+                <div class="col-sm-9 col-lg-10">
+                  <textarea class="form-control" id="PlaceDescription" name="text" rows="5">{{ item.text }}</textarea>
+                </div>
+              </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="PostText">Categoría</label>
+                    <div class="col-sm-9 col-lg-10">
+                        {% render 'ColectaItemBundle:Category:formlist' with {'selected':item.category.id} %}
+                    </div>
+                </div>
+              
+              <div class="form-group">
+                <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                    <input type="hidden" name="latitude" id="PlaceLatitude" value="{{ item.latitude }}">
+                    <input type="hidden" name="longitude" id="PlaceLongitude" value="{{ item.longitude }}">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <a href="{{ path('ColectaPlaceDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
+                </div>
+              </div>
+            </fieldset>
+        </form>
+    </div>
+    
+    <h3>Enlazar con otros contenidos</h3>
+    <div class="monocontent">
+        {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
+    </div>
+
+{% endblock %}
+
 {% block javascripts %}    
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
@@ -84,80 +158,4 @@
         mapPosition(new google.maps.LatLng( {{ item.latitude }}, {{ item.longitude }} ));
     });
     </script>
-{% endblock %}
-
-{% block article %}
-
-{% if item.canEdit(app.user) %}
-
-    <div class="row">
-        <div class="col-sm-8 col-lg-9">
-            <h2>Editar {{ item.name }}</h2>
-        </div>
-        <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block" href="{{ path('ColectaPlaceView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al mapa</a>
-        </div>
-    </div>
-
-    <div class="monocontent">
-        <div class="col-lg-offset-2">
-            <form action="" method="get" onSubmit="searchLocation(); return false;">        
-                <div class="input-group">
-                    <input class="form-control" id="PlaceMapSearch" type="text" placeholder="Nombre del lugar...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" onClick="searchLocation();"><i class="fa fa-search" id="mapSearchIcon"></i> Ubicar en el mapa</button>
-                    </span>
-                </div>
-            </form>
-            
-            <ul aria-labelledby="dropdownMenu" role="menu" style="position: static; float: none; display: block;margin-bottom: 20px;" class="dropdown-menu hidden" id="mapResults"></ul>
-            
-            <div id="map" style="height:200px;margin:15px 0"></div>
-            
-            <div class="alert alert-info" id="PlaceInfo2">
-                <i class="fa fa-info-circle fa-lg"></i> <strong>Información: </strong> Haz click en el mapa para cambiar la localización.
-            </div>
-        </div>
-                
-        <hr>
-              
-        <form onSubmit="if(document.getElementById('map').className != 'active'){searchLocation(); return false;}" action="{{ path('ColectaPlaceEdit', {'slug':item.slug}) }}" method="POST" class="form-horizontal" id="PlaceForm">
-            <fieldset>
-              <div class="form-group">
-                <label class="col-sm-3 col-lg-2 control-label" for="PlaceName">Nombre</label>
-                <div class="col-sm-9 col-lg-10">
-                  <input type="text" class="form-control" id="PlaceName" name="name" value="{{ item.name }}">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-3 col-lg-2 control-label" for="PlaceDescription">Descripción</label>
-                <div class="col-sm-9 col-lg-10">
-                  <textarea class="form-control" id="PlaceDescription" name="text" rows="5">{{ item.text }}</textarea>
-                </div>
-              </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="PostText">Categoría</label>
-                    <div class="col-sm-9 col-lg-10">
-                        {% render 'ColectaItemBundle:Category:formlist' with {'selected':item.category.id} %}
-                    </div>
-                </div>
-              
-              <div class="form-group">
-                <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
-                    <input type="hidden" name="latitude" id="PlaceLatitude" value="{{ item.latitude }}">
-                    <input type="hidden" name="longitude" id="PlaceLongitude" value="{{ item.longitude }}">
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
-                    <a href="{{ path('ColectaPlaceDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
-                </div>
-              </div>
-            </fieldset>
-        </form>
-        
-        {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
-        
-    </div>
-
-{% endif %}
-
 {% endblock %}
