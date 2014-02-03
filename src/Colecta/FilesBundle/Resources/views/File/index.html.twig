@@ -16,7 +16,11 @@
         {% include path with { 'item': item } only %}
     </div>
     {% else %}
-        <p class="lead">Nadie ha publicado nada... por ahora.</p>
+         <div class="monocontent text-center">
+            <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-4x"></i>
+            <h2>Ésta es la página de Archivos</h2>
+            <p>Se irá llenando de contenido conforme los vayas publicando</p>
+        </div>
     {% endfor %}
     {% if page > 1 or thereAreMore %}
         <ul class="pager">

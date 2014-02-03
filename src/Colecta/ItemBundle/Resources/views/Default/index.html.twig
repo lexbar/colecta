@@ -37,7 +37,11 @@
         {% set shownItems = shownItems | merge([ri.id]) %}
     {% endfor %}
 {% else %}
-    <p class="lead">Nadie ha publicado nada... por ahora.</p>
+    <div class="monocontent text-center">
+        <i class="fa fa-home fa-4x"></i>
+        <h2>Ésta es la página de inicio</h2>
+        <p>Se irá llenando de contenido conforme los vayas publicando</p>
+    </div>
 {% endfor %}
 
 {% if page > 1 or thereAreMore %}

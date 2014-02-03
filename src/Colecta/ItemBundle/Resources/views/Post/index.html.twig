@@ -4,30 +4,34 @@
 
 {% block article %}
 
-{% include '::navigation.html.twig' with {'active': 'post'} %}
-
-{% if app.user %} <a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-<h2>Textos{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
-
-{% for item in items %}
-<div class="item" id="item{{ item.id}}">
-    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
-</div>
-{% else %}
-    <p class="lead">Nadie ha publicado nada... por ahora.</p>
-{% endfor %}
-
-{% if page > 1 or thereAreMore %}
-    <ul class="pager">
-      <li class="previous{% if page == 1 %} disabled{% endif %}">
-        <a href="{% if page > 1 %}{{ path('ColectaPostPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-      </li>
-      <li class="next{% if not thereAreMore %} disabled{% endif %}">
-        <a href="{% if thereAreMore %}{{ path('ColectaPostPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-      </li>
-    </ul>
-{% endif %}
+    {% include '::navigation.html.twig' with {'active': 'post'} %}
+    
+    {% if app.user %} <a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
+    <h2>Textos{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    
+    {% for item in items %}
+    <div class="item" id="item{{ item.id}}">
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+    </div>
+    {% else %}
+        <div class="monocontent text-center">
+            <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-4x"></i>
+            <h2>Ésta es la página de Textos</h2>
+            <p>Se irá llenando de contenido conforme los vayas publicando</p>
+        </div>
+    {% endfor %}
+    
+    {% if page > 1 or thereAreMore %}
+        <ul class="pager">
+          <li class="previous{% if page == 1 %} disabled{% endif %}">
+            <a href="{% if page > 1 %}{{ path('ColectaPostPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+          </li>
+          <li class="next{% if not thereAreMore %} disabled{% endif %}">
+            <a href="{% if thereAreMore %}{{ path('ColectaPostPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+          </li>
+        </ul>
+    {% endif %}
 
 {% endblock %}
