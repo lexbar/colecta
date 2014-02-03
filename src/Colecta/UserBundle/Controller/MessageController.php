@@ -118,6 +118,18 @@ class MessageController extends Controller
                 $em->persist($message); 
                 $em->flush();
                 
+                //Send mail notification
+                
+                $mailer = $this->get('mailer');
+                $configmail = $this->container->getParameter('mail');
+                
+                $message = \Swift_Message::newInstance();
+			    $message->setSubject('Mensaje de '.$user->getName())
+			        ->setFrom($configmail['from'])
+			        ->setTo($destinationUser->getMail())
+			        ->setBody($this->renderView('ColectaUserBundle:Message:mailAlert.txt.twig', array('from'=>$user, 'to'=>$destinationUser)), 'text/plain');
+			    $mailer->send($message);
+                
                 $this->get('session')->setFlash('success', 'Mensaje enviado.');
                 
                 return new RedirectResponse($this->generateUrl('userSentMessages'));
@@ -207,6 +219,18 @@ class MessageController extends Controller
                 
                 $em->persist($message); 
                 $em->flush();
+                
+                //Send mail notification
+                
+                $mailer = $this->get('mailer');
+                $configmail = $this->container->getParameter('mail');
+                
+                $message = \Swift_Message::newInstance();
+			    $message->setSubject('Respuesta de '.$user->getName())
+			        ->setFrom($configmail['from'])
+			        ->setTo($destinationUser->getMail())
+			        ->setBody($this->renderView('ColectaUserBundle:Message:mailAlert.txt.twig', array('from'=>$user, 'to'=>$destinationUser)), 'text/plain');
+			    $mailer->send($message);
                 
                 $this->get('session')->setFlash('success', 'Mensaje enviado.');
                 
