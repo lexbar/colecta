@@ -24,12 +24,13 @@
     {% endfor %}
     </ul>
     
-    <div style="text-align:center;margin-bottom: 20px;"><button class="btn btn-default" onClick="loadMore()">Ver más <i class="fa fa-arrow-down"></i></button></div>
+    <div style="text-align:center;margin-bottom: 20px;"><button class="btn btn-default" onClick="loadMore()" id="loadMore">Ver más <i class="fa fa-arrow-down"></i></button></div>
         
 {% endblock%}
 
 {% block javascripts %}
     <script>
+        var loading = 0;
         var lastInputId = {% if messages | length > 0 %}{{ messages[0].id }}{% else %}0{% endif %};
         var moreInputId = {% if messages | length > 0 %}{{ messages[messages | length - 1].id }}{% else %}0{% endif %};
         var now = new Date();
@@ -56,12 +57,23 @@
         }
         
         function loadMore() {
+            if(loading) return;
+            loading = 1;
+            var prevtext = $('#loadMore').html();
+            $('#loadMore').html('<i class="icon-refresh icon-spin"></i> Cargando…');
+            
             $.getJSON('more/'+moreInputId, function(data) {
                 moreInputs(data.inputs);
                 
                 if(data.inputs.length) {
                     moreInputId = data.inputs[data.inputs.length - 1].id;
+                } else {
+                    $('#chatstream').append('<li class="list-group-item"><p class="lead" style="text-align:center">No hay más mensajes</p></li>');
+                    $('#loadMore').hide();
                 }
+                
+                loading = 0;
+                $('#loadMore').html(prevtext);
             });
         }
         
