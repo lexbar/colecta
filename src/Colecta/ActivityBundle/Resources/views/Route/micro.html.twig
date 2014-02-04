@@ -20,7 +20,7 @@
                 {% endif %}
             </div>
             <div class="col-sm-3">
-                <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}" class="pull-right"><img style="width:100%" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
+                <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img style="width:100%" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
             </div>
         </div>
         {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
