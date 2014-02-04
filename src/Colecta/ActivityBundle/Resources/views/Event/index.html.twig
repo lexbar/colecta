@@ -6,7 +6,7 @@
 
 {% include '::navigation.html.twig' with {'active': 'event'} %}
 
-{% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right btn-primary">Crear evento <i class="icon-plus"></i></a> {% endif %}
+{% if app.user %} <a href="{{ path('ColectaEventNew') }}" class="btn btn-small pull-right btn-success">Crear evento <i class="icon-plus"></i></a> {% endif %}
 
 <h2>Actividades{% if page > 1 %} (página {{page}}){% endif %}</h2>
 
