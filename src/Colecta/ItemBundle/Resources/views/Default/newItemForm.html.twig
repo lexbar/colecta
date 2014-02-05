@@ -31,13 +31,13 @@
                 <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
                 <div class="col-sm-9 col-lg-10">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-lg-3 col-md-4 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
                                 <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-5 col-sm-6">
+                        <div class="col-lg-6 col-md-7 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
                                 
@@ -64,13 +64,13 @@
                 <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
                 <div class="col-sm-9 col-lg-10">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-lg-3 col-md-4 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
                                 <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-5 col-sm-6">
+                        <div class="col-lg-6 col-md-7 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
                                 
