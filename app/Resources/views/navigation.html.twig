@@ -1,3 +1,9 @@
+{% set where = app.request.attributes.get("_controller") | split('\\') %}
+
+{% set bun = where[1] %}
+{% set con = (where[3] | split('::'))[0] %}
+{% set act = (where[3] | split('::'))[1] %}
+
 {% if app.user %}
     <div class="media self">
         <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
@@ -13,7 +19,7 @@
     </div>
     
     <hr>
-{% else %}
+{% elseif not(bun == 'UserBundle' and act == 'loginAction') %}
     <form class="login" action="{{ path('userLoginCheck') }}" method="post">
         <p class="lead">Iniciar sesión</p>
         
@@ -45,12 +51,6 @@
         }
     </script>
 {% endif %}
-
-{% set where = app.request.attributes.get("_controller") | split('\\') %}
-
-{% set bun = where[1] %}
-{% set con = (where[3] | split('::'))[0] %}
-{% set act = (where[3] | split('::'))[1] %}
 
 {#{ bun }}, {{ con }}, {{ act }#}
 
@@ -212,7 +212,7 @@
 </ul>
 {% else %}
 <ul class="nav nav-pills nav-stacked">
-    <li>
+    <li{% if bun == 'ItemBundle' and act == 'contactAction' %} class="active"{% endif %}>
         <a href="{{ path('ColectaContact') }}"><i class="fa fa-envelope-o fa-fw"></i> Contacto</a>
     </li>
     <li>
