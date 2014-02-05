@@ -33,7 +33,7 @@
         
         <div class="row content">
 
-            <div class="col-xs-12 col-md-9 main">
+            <div class="col-xs-12 col-md-9 col-sm-8 main">
 
                 {% if app.session.hasFlash('error') %}
                     <div class="alert alert-danger">
@@ -59,7 +59,7 @@
                 {% block article %}{% endblock %}
             </div>
             
-            <div class="col-xs-12 col-md-3 sidebar">
+            <div class="col-xs-12 col-md-3 col-sm-4 sidebar">
                 {% include '::navigation.html.twig' %}
             </div>
         </div>
