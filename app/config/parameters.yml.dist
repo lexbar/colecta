@@ -26,11 +26,23 @@ parameters:
 
 twig:
     globals:
+        ##### LAYOUT #####
         web_title: Nombre del club
+        theme_css: style
+        theme_sidebar: right
         allowed_tags: <span><a><ol><ul><li><img><br>
         summary_max_length: 600
-#        googleAnalyticsID: UA-XXXXXXXX-X
-#        googleAnalyticsName:
+        web_header_img:
+            - http://turyciclo.com/img/bg/00.jpg
+            - http://turyciclo.com/img/bg/01.jpg
+            - http://turyciclo.com/img/bg/02.jpg
+            - http://turyciclo.com/img/bg/03.jpg
+            - http://turyciclo.com/img/bg/04.jpg
+            - http://turyciclo.com/img/bg/05.jpg
+            - http://turyciclo.com/img/bg/06.jpg
+            - http://turyciclo.com/img/bg/08.jpg
+            - http://turyciclo.com/img/bg/07.jpg
+            - http://turyciclo.com/img/bg/09.jpg
         itemIcons:
             Item/Post: align-left
             Activity/Event: calendar
@@ -38,3 +50,8 @@ twig:
             Activity/Place: map-marker
             Files/File: folder-open
             Files/Folder: folder-open
+            
+        
+        ##### ANALYTICS #####
+        #googleAnalyticsID: UA-XXXXXXXX-X
+        #googleAnalyticsName: ciclubs.com

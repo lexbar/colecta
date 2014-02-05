@@ -68,6 +68,7 @@ span.form-control {
     height:120px;
     background-size: 100%;
     background-repeat: no-repeat;
+    background-position: center center;
     background-size: cover;
 }
 .navbar-static-top {
