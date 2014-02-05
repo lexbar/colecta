@@ -4,8 +4,6 @@
 
 {% block article %}
 
-{% include '::navigation.html.twig' with {'active': ''} %}
-
     <h2>{{ search }}{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
 {% set shownItems = [] %}
