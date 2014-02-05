@@ -362,9 +362,14 @@ span.form-control {
     padding: 1px 4px;
     cursor: pointer;
 }
+#map .control.big {
+    margin-right: 5px;
+    font-size: 15px;
+    background-color: rgba(255,255,255,.7)
+}
 #map.fullscreen {
     background-color: #E5E3DF;
-    bottom: 200px;
+    bottom: 170px;
     height: auto !important;
     left: 0;
     overflow: hidden;
@@ -386,6 +391,9 @@ span.form-control {
 }
 .mapcontrols .btn {
     margin: 0 0 5px 5px;
+}
+.panel-heading .dropdown {
+    margin: -6px -10px;
 }
 .fullimage a {
     height: 480px;

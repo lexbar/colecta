@@ -6,32 +6,27 @@
 {% block article %}    
 <div class="item panel panel-primary">
     <div class="panel-heading">
+        <div class="dropdown pull-right">
+            <button class="btn btn-success btn-sm dropdown-toggle" type="button" onClick="return false;">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
+            <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
+                <li role="presentation" class="dropdown-header">Track completo</li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
+                <li class="divider"></li>
+                <li role="presentation" class="dropdown-header">Track simplificado</li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
+                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
+            </ul>
+        </div>
         <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
     </div>
     
     <div class="panel-body">
         <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
-        
-        <div class="clearfix mapcontrols">
-            <div class="dropdown pull-right">
-                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" onClick="return false;">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
-                <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
-                    <li role="presentation" class="dropdown-header">Track completo</li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
-                    <li class="divider"></li>
-                    <li role="presentation" class="dropdown-header">Track simplificado</li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
-                    <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
-                </ul>
-            </div>
-            
-            <button id="fullscreen" onClick="toggleFullScreen()" class="btn btn-default btn-sm pull-right" type="button"><i class="fa fa-arrows-alt fa-fw"></i></button>
-        </div>
         
         <div class="row">
             <div id="map" style="width:auto;height:300px;"></div>
@@ -124,6 +119,7 @@
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
         map.fitBounds(bounds);
         
+        /* Weather control button */
         var weatherDIV = document.createElement('div');
         weatherDIV.className = 'control';
         weatherDIV.innerHTML = 'Meteorología';
@@ -131,6 +127,16 @@
             toggleWeather();
         });
         map.controls[google.maps.ControlPosition.TOP_RIGHT].push(weatherDIV);
+        
+        /* Fullscreen control button*/
+        var fullscreenDIV = document.createElement('div');
+        fullscreenDIV.className = 'control big';
+        fullscreenDIV.innerHTML = '<i class="fa fa-arrows-alt fa-fw"></i>';
+        fullscreenDIV.index = 0;
+        google.maps.event.addDomListener(fullscreenDIV, 'click', function() {
+            toggleFullScreen();
+        });
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(fullscreenDIV);
         
         positionMarker = new google.maps.Marker({
             position: new google.maps.LatLng(points[0][0], points[0][1]),
