@@ -71,6 +71,11 @@ span.form-control {
     background-position: center center;
     background-size: cover;
 }
+@media (max-width: 768px) {
+    #headerimg {
+        height: auto;
+    }
+}
 .navbar-static-top {
     background-color: rgba(255, 255, 255, 0.7); 
     border-bottom: 0 none;
