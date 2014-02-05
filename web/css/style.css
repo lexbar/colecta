@@ -426,3 +426,6 @@ span.form-control {
 .item .col-xs-1, .item .col-xs-2, .item .col-xs-3, .item .col-xs-4, .item .col-xs-5, .item .col-xs-6, .item .col-xs-7, .item .col-xs-8, .item .col-xs-9, .item .col-xs-10, .item .col-xs-11, .item .col-xs-12 {
     padding-bottom: 4px;
 }
+.well-link {
+    background-color: #FFF;
+}
