@@ -64,6 +64,12 @@ span.form-control {
 .login p {
     margin-bottom: 4px;
 }
+#headerimg {
+    height:120px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 .navbar-static-top {
     background-color: rgba(255, 255, 255, 0.7); 
     border-bottom: 0 none;
