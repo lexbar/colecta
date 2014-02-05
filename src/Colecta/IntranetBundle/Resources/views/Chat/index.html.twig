@@ -3,15 +3,13 @@
 {% block chat 'active' %}
 
 {% block content %}
-
-    {% include '::intranetNavigation.html.twig' with {'active': 'chat'} %}
     
     <h2>Chat</h2>
     
     <form class="monocontent" method="post" action="{{ path('ColectaChatPost', {'method':'html'}) }}" id="chatform" onSubmit="$.post('{{ path('ColectaChatPost', {'method':'json'}) }}', {text:$('#chatText').val()});$('#chatText').val('');return false;">
         <div class="row">
             <div class="col-sm-10"><textarea name="text" id="chatText" class="form-control" rows="2"></textarea></div>
-            <div class="col-sm-2"><button style="height:52px" class="btn btn-primary btn-block">Enviar</button></div>
+            <div class="col-sm-2"><button style="height:52px" class="btn btn-success btn-block">Enviar</button></div>
         </div>
     </form>
     

@@ -1,8 +1,232 @@
-<p class="btn-group btn-group-justified sections">
-    <a class="clearfix btn btn-default{% if active == 'category' %} active{% endif %}" href="{{ path('ColectaCategoryIndex')}}"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Categorías</span></a>
-    <a class="clearfix btn btn-default{% if active == 'post' %} active{% endif %}" href="{{ path('ColectaPostIndex')}}"><i class="fa fa-{{ itemIcons['Item/Post'] }}"></i> <span class="hidden-xs">Textos</span></a>
-    <a class="clearfix btn btn-default{% if active == 'event' %} active{% endif %}" href="{{ path('ColectaEventIndex')}}"><i class="fa fa-{{ itemIcons['Activity/Event'] }}"></i> <span class="hidden-xs">Calendario</span></a>
-    <a class="clearfix btn btn-default{% if active == 'route' %} active{% endif %}" href="{{ path('ColectaRouteIndex')}}"><i class="fa fa-{{ itemIcons['Activity/Route'] }}"></i> <span class="hidden-xs">Tracks</span></a>
-    <a class="clearfix btn btn-default{% if active == 'file' %} active{% endif %}" href="{{ path('ColectaFileIndex')}}"><i class="fa fa-{{ itemIcons['Files/Folder'] }}"></i> <span class="hidden-xs">Archivos</span></a>
-    <a class="clearfix btn btn-default{% if active == 'place' %} active{% endif %}" href="{{ path('ColectaPlaceIndex')}}"><i class="fa fa-{{ itemIcons['Activity/Place'] }}"></i> <span class="hidden-xs">Lugares</span></a>
-</p>
+{% if app.user %}
+    <div class="media self">
+        <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
+            <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':50,'height':50}) }}{% else %}/img/unknown.gif{% endif %}" width="50">
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">{{ app.user.name }}</h4>
+            <div class="btn-group">
+                <a href="{{ path('userEditProfile') }}" class="btn btn-default btn-xs">Editar perfil</a>
+                <a href="{{ path('userLogout') }}" class="btn btn-default btn-xs" style="color:darkred;">Salir <span class="fa fa-sign-out"></span></a>
+            </div>
+        </div>
+    </div>
+    
+    <hr>
+{% else %}
+    <form class="login" action="{{ path('userLoginCheck') }}" method="post">
+        <p class="lead">Iniciar sesión</p>
+        
+        
+        <p class="input-group input-group-sm">
+              <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+              <input  type="email" required class="form-control" id="username" name="_username" placeholder="Email" value="" onFocus="if(this.value == 'Email') this.value=''">
+        </p>
+        
+        <p class="input-group input-group-sm">
+              <span class="input-group-addon"><i class="fa fa-key"></i></span>
+              <input type="password" required class="form-control" id="password" name="_password" class="input-medium" placeholder="Contraseña" value="" onFocus="if(this.value == 'Contraseña') this.value=''">
+        </p>
+        
+        <p><label for="remember_me">
+            <input id="remember_me" name="_remember_me" type="checkbox" checked /> Mantenerme conectado
+        </label></p>
+        
+        <button type="submit" name="login" class="btn btn-primary btn-block btn-sm">Acceder</button>
+        <a href="{{ path('userResetPassword') }}" class="btn btn-block btn-link btn-xs">Olvidé mi contraseña</a>
+    </form>
+    <hr>
+    
+    <script>
+        var phitest = document.createElement('input');
+        if(!('placeholder' in phitest)) {
+            document.getElementById('username').value='Email';
+            document.getElementById('password').value='Contraseña';
+        }
+    </script>
+{% endif %}
+
+{% set where = app.request.attributes.get("_controller") | split('\\') %}
+
+{% set bun = where[1] %}
+{% set con = (where[3] | split('::'))[0] %}
+{% set act = (where[3] | split('::'))[1] %}
+
+{#{ bun }}, {{ con }}, {{ act }#}
+
+<ul class="nav nav-pills nav-stacked">
+    <li{% if bun == 'ItemBundle' and con == 'DefaultController' and act == 'dashboardAction' %} class="active"{% endif %}>
+        <a href="/">
+            <i class="fa fa-home fa-fw"></i> Inicio 
+            {#<span class="badge pull-right">42</span>#}
+        </a>
+    </li>
+    {% if app.user %}
+    <li>
+        <a href="{{ path('ColectaChatIndex') }}">
+            <i class="fa fa-unlock fa-fw"></i> Privado
+        </a>
+    </li>
+    {% endif %}
+    {% if app.user and app.user.role.siteConfig %}
+    <li>
+        <a href="{{ path('ColectaBackendIndex') }}">
+            <i class="fa fa-wrench fa-fw"></i> Administración
+        </a>
+    </li>
+    {% endif %}
+</ul>
+
+{% if bun == 'IntranetBundle' %}
+
+<ul class="nav nav-pills nav-stacked">
+    <li{% if con == 'ChatController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaChatIndex') }}">
+            <i class="fa fa-comments fa-fw"></i> Chat
+        </a>
+    </li>
+    <li{% if con == 'ActivitiesController' and (act == 'indexAction' or act == 'yearPerformanceAction') %} class="active"{% endif %}>
+        <a href="{{ path('ColectaActivitiesIndex') }}">
+            <i class="fa fa-bar-chart-o fa-fw"></i> Rendimiento
+        </a>
+    </li>
+    <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
+        <a href="{{ path('ColectaActivitiesRank') }}"> 
+            <i class="fa fa-trophy fa-fw"></i>  Ranking
+        </a>
+    </li>
+    {#<li{% if con == 'LotteryController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaLotteryIndex') }}">
+            <i class="fa fa-ticket fa-fw"></i> Lotería
+        </a>
+    </li>#}
+</ul>
+
+{% elseif bun == 'BackendBundle' %}
+
+<ul class="nav nav-pills nav-stacked">
+    {% if app.user.role.SiteConfigSettings %}
+        <li{% if con == 'SettingsController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaBackendSettingsIndex') }}">
+                <i class="fa fa-cogs fa-fw"></i> Ajustes
+            </a>
+        </li>
+    {% endif %}
+    {% if app.user.role.SiteConfigUsers %}
+        <li{% if con == 'UserController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaBackendUserIndex') }}">
+                <i class="fa fa-male fa-fw"></i> Usuarios
+            </a>
+        </li>
+    {% if app.user.role.SiteConfigPages %}
+    {% endif %}
+        <li{% if con == 'StaticController' %} class="active"{% endif %}>
+            <a href="#{#{ path('Colecta') }#}"> 
+                <i class="fa fa-file-text fa-fw"></i>  Páginas
+            </a>
+        </li>
+    {% endif %}
+    {% if app.user.role.SiteConfigLottery %}
+        <li{% if con == 'LotteryController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaBackendLotteryIndex') }}">
+                <i class="fa fa-ticket fa-fw"></i> Lotería
+            </a>
+        </li>
+    {% endif %}
+    {% if app.user.role.SiteConfigStats %}
+        <li{% if con == 'Controller' %} class="active"{% endif %}>
+            <a href="#{#{ path('Colecta') }#}">
+                <i class="fa fa-book fa-fw"></i> Contabilidad
+            </a>
+        </li>
+    {% endif %}
+    {% if app.user.role.SiteConfigPlan %}
+        <li{% if con == 'Controller' %} class="active"{% endif %}>
+            <a href="#{#{ path('Colecta') }#}">
+                <i class="fa fa-dashboard fa-fw"></i> Plan
+            </a>
+        </li>
+    {% endif %}
+</ul>
+
+
+{% else %}
+
+<ul class="nav nav-pills nav-stacked">
+    <li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaCategoryIndex') }}">
+            <i class="fa fa-list-ul fa-fw"></i> Categorías
+        </a>
+    </li>
+    <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaPostIndex') }}">
+            <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-fw"></i> Textos
+        </a>
+    </li>
+    <li{% if bun == 'ActivityBundle' and con == 'EventController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaEventIndex') }}"> 
+            <i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i>  Calendario
+        </a>
+    </li>
+    <li{% if bun == 'ActivityBundle' and con == 'RouteController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaRouteIndex') }}">
+            <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Tracks
+        </a>
+    </li>
+    <li{% if bun == 'FilesBundle' and con == 'FileController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaFileIndex') }}">
+            <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-fw"></i> Archivos
+        </a>
+    </li>
+    <li{% if bun == 'ActivityBundle' and con == 'PlaceController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaPlaceIndex') }}">
+            <i class="fa fa-{{ itemIcons['Activity/Place'] }} fa-fw"></i> Lugares
+        </a>
+    </li>
+</ul>
+
+{% endif %}
+
+<hr>
+
+{% if app.user %}
+    {% if item is defined %}
+        {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
+    {% else %}
+        {% set notifications = colectauser.notDismissedNotifications %}
+    {% endif %}
+    
+    {% set messages = colectauser.notDismissedMessages %}
+    
+<ul class="nav nav-pills nav-stacked">
+    <li{% if bun == 'UserBundle' and con == 'NotificationController' %} class="active"{% endif %}>
+        <a href="{{ path('userNotifications')}}">
+            <i class="fa fa-bell fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}
+        </a>
+    </li>
+    <li{% if bun == 'UserBundle' and con == 'MessageController' %} class="active"{% endif %}>
+        <a href="{{ path('userMessages')}}">
+            <i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}
+        </a>
+    </li>
+</ul>
+{% else %}
+<ul class="nav nav-pills nav-stacked">
+    <li>
+        <a href="{{ path('ColectaContact') }}"><i class="fa fa-envelope-o fa-fw"></i> Contacto</a>
+    </li>
+    <li>
+        <a href="{{ path('ColectaPostView', {'slug':'acerca-de-nosotros'}) }}"><i class="fa fa-info fa-fw"></i> Acerca de nosotros</a>
+    </li>
+    <li>
+        <a href="{{ path('ColectaPostView', {'slug':'por-que-hacerse-socio'}) }}"><i class="fa fa-question fa-fw"></i> Por qué hacerse socio</a>
+    </li>   
+</ul>
+{% endif %}
+
+<hr>
+
+{# hide when big calendar is shown #}
+{% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}
+{% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
+{% endif %}

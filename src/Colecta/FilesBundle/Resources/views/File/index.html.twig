@@ -4,8 +4,6 @@
 
 {% block article %}
 
-    {% include '::navigation.html.twig' with {'active': 'file'} %}
-
     {% if app.user %} <a href="{{ path('ColectaFileNew')}}" class="btn btn-small btn-success pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
     <h2>Archivos{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 

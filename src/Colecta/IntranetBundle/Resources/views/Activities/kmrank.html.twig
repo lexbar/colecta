@@ -3,7 +3,6 @@
 {% block rank 'active' %}
 
 {% block content %} 
-    {% include '::intranetNavigation.html.twig' with {'active': 'rank'} %}
     
     <h2>Ranking {{ year }}{% if years | length > 1 or years | length == 1 and years[0].year != year %}<br> {% for y in years %}<a href="{{ path('ColectaActivitiesYearRank',{year:y.year}) }}" class="btn btn-xs {% if y.year == year %}btn-success{% else %}btn-default{% endif %}">{{ y.year }}</a> {% endfor %}</small>{% endif %}</h2>
     

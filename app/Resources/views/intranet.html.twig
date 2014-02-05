@@ -61,68 +61,7 @@
             </div>
             
             <div class="col-xs-12 col-md-3 sidebar">
-
-                <div class="media self">
-                    <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
-                        <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':50,'height':50}) }}{% else %}/img/unknown.gif{% endif %}" width="50">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">{{ app.user.name }}</h4>
-                        <div class="btn-group">
-                            <a href="{{ path('userEditProfile') }}" class="btn btn-default btn-xs">Editar perfil</a>
-                            <a href="{{ path('userLogout') }}" class="btn btn-default btn-xs" style="color:darkred;">Salir <span class="fa fa-sign-out"></span></a>
-                        </div>
-                    </div>
-                </div>
-    
-                <hr>
-                
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="">
-                        <a href="/">
-                            <i class="fa fa-home fa-fw"></i> Inicio 
-                            {#<span class="badge pull-right">42</span>#}
-                        </a>
-                    </li>
-                    {% if app.user %}
-                    <li class="active">
-                        <a href="{{ path('ColectaChatIndex') }}">
-                            <i class="fa fa-unlock fa-fw"></i> Privado
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if app.user and app.user.role.siteConfig %}
-                    <li>
-                        <a href="{{ path('ColectaBackendIndex') }}">
-                            <i class="fa fa-wrench fa-fw"></i> Administración
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-                
-                <hr>
-                
-                {% if item is defined %}
-                    {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
-                {% else %}
-                    {% set notifications = colectauser.notDismissedNotifications %}
-                {% endif %}
-                
-                {% set messages = colectauser.notDismissedMessages %}
-                    
-                <ul class="nav nav-pills nav-stacked">
-                    <li>
-                        <a href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}</a>
-                    </li>
-                </ul>
-                
-                <hr>
-
-                {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
-                
+                {% include '::navigation.html.twig' %}
             </div>
         </div>
     </div>   
