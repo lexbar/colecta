@@ -169,7 +169,7 @@ span.form-control {
     margin: 0;
 }
 .item.panel-primary > .panel-heading {
-    background-color: #2A702B;
+    background-color: #00871A;
     border-color: #999;
 }
 .item.panel-primary h3 i {
@@ -179,21 +179,9 @@ span.form-control {
     border-color: #71AC2B;
 }
 .item.panel-warning > .panel-heading {
-    background-color: #006c13;
+    background-color: #5CB85C;
     border-color: #71AC2B;
     color: #FFF;
-    background-image: -webkit-gradient(
-    	linear,
-    	left top,
-    	left bottom,
-    	color-stop(0, #006c13),
-    	color-stop(1, #00871a)
-    );
-    background-image: -o-linear-gradient(bottom, #006c13 0%, #00871a 100%);
-    background-image: -moz-linear-gradient(bottom, #006c13 0%, #00871a 100%);
-    background-image: -webkit-linear-gradient(bottom, #006c13 0%, #00871a 100%);
-    background-image: -ms-linear-gradient(bottom, #006c13 0%, #00871a 100%);
-    background-image: linear-gradient(to top, #006c13 0%, #00871a 100%);
 }
 .item.panel-warning h3 i {
     color: #FFF;
