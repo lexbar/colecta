@@ -43,12 +43,12 @@
         {% endif %}
         
         {% if listed > 0 %}
-        <ul class="filelist unstyled">
+        <ul class="filelist list-group">
             {% for file in files %}
                 {% if file.filetype not in ['jpeg','gif','png'] %}
-                    <li><i class="icon-file icon-2x"></i>
-                    <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
-                    <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-mini pull-right"><i class="icon-download-alt icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
+                    <li class="list-group-item"<i class="icon-file icon-2x"></i>
+                        <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
+                        <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-xs pull-right"><i class="fa fa-download icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
                     </li>
                 {% endif %}
             {% endfor %}
