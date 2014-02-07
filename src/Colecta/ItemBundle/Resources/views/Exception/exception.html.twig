@@ -1,0 +1,14 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title %}Error {{ exception.statusCode }}{% endblock %}
+
+{% block article %}
+
+    <h2>No, aquí no está.</h2>
+
+    <div class="monocontent">
+        <p class="lead">La página que buscas no existe.</p>
+        <p>Si crees que se debe a un error puedes <a href="{{ path('ColectaContact') }}">ponerte en contacto</a> con nosotros y trataremos de solucionarlo.</p>
+    </div>
+
+{% endblock %}

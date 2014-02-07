@@ -1,8 +1,12 @@
 {% set where = app.request.attributes.get("_controller") | split('\\') %}
 
-{% set bun = where[1] %}
-{% set con = (where[3] | split('::'))[0] %}
-{% set act = (where[3] | split('::'))[1] %}
+{% if where | length > 1 %}
+    {% set bun = where[1] %}
+    {% set con = (where[3] | split('::'))[0] %}
+    {% set act = (where[3] | split('::'))[1] %}
+{% else %}
+    {% set bun, con, act = '', '', ''%}
+{% endif %}
 
 <div id="sidebarButton" class="visible-xs">
     <button onClick="document.getElementById('sidebarButton').className = 'hidden'; document.getElementById('sidebarComplete').className = ''" class="btn btn-default btn-block btn-lg" style="text-align:left;padding-left:15px; padding-right:15px;margin-bottom:10px"><i class="fa fa-bars pull-right"></i> Menú</button>
