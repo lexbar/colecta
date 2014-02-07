@@ -27,7 +27,7 @@
     </div>
     
     <hr>
-{% elseif not(bun == 'UserBundle' and act == 'loginAction') %}
+{% elseif not(bun == 'UserBundle' and act == 'loginAction') and bun != '' %}
     <form class="login" action="{{ path('userLoginCheck') }}" method="post">
         <p class="lead">Iniciar sesión</p>
         
