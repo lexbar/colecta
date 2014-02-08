@@ -18,7 +18,7 @@
         {% endif %}
         
         {# COMMENTS #}
-        {% if showComments is defined %}
+        {% if showCommentsLink is defined %}
             {% set n_comments = item.comments | length %}
             <a href="#" onClick="$('#itemcomments{{ item.id }}').show(); return false;"><i class="fa fa-comment"></i> {{ n_comments }} comentario{% if n_comments != 1 %}s{% endif %}</a>
         {% endif %}

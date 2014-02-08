@@ -1,4 +1,5 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+{% set hideComments = not ( item.comments | length and app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') < item.comments | reverse [0].date ) %}
 
 <div class="item panel {% if new %}panel-warning{% else %}panel-default{% endif %}">
     <div class="panel-heading">
@@ -27,9 +28,9 @@
     </div>
     
     <div class="panel-footer">
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item, showComments: 1 } only %}
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item, showCommentsLink: hideComments } only %}
         
-        <div id="itemcomments{{ item.id }}" style="display:none">
+        <div id="itemcomments{{ item.id }}" {% if hideComments %}style="display:none"{% endif %}>
             {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 10 } only %}
         </div>
     </div>
