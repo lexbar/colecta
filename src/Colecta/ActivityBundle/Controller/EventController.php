@@ -286,28 +286,17 @@ class EventController extends Controller
         }
         else
         {
-            $this->get('session')->setFlash('EventName', $request->get('name'));
-            $this->get('session')->setFlash('EventText', $request->get('text'));
-            $this->get('session')->setFlash('EventDateini', $request->get('dateini'));
-            $this->get('session')->setFlash('EventDateend', $request->get('dateend'));
-            $this->get('session')->setFlash('EventDateinihour', $request->get('dateinihour'));
-            $this->get('session')->setFlash('EventDateiniminute', $request->get('dateiniminute'));
-            $this->get('session')->setFlash('EventDateendhour', $request->get('dateendhour'));
-            $this->get('session')->setFlash('EventDateendminute', $request->get('dateendminute'));
-            $this->get('session')->setFlash('EventDistance', $request->get('distance'));
-            $this->get('session')->setFlash('EventUphill', $request->get('uphill'));
-            $this->get('session')->setFlash('EventDifficulty', $request->get('difficulty'));
-            $this->get('session')->setFlash('EventAttachTo', $request->get('attachTo'));
-            if($request->get('newCategory'))
-            {
-                $this->get('session')->setFlash('EventCategory', 0);
-            }
-            else
-            {
-                $this->get('session')->setFlash('EventCategory', $request->get('category'));
-            }
+            $item = new Event();
+            $item->setText($request->get('text'));
+            $item->setName($request->get('name'));
+            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
+            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
+            $item->setDistance(str_replace(',','.', $request->get('distance')));
+            $item->setUphill($request->get('uphill'));
+            $item->setDifficulty($request->get('difficulty'));
+            //$item->setAttachTo($request->get('attachTo'));
             
-            return new RedirectResponse($this->generateUrl('ColectaEventNew'));
+            return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Event', 'item'=>$item));
         }
     }
     public function editAction($slug)

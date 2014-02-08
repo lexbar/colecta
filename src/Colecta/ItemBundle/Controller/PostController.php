@@ -70,7 +70,7 @@ class PostController extends Controller
         }
         elseif(!$request->get('text'))
         {
-            $this->get('session')->setFlash('error', 'No has escrito ningun texto');
+            $this->get('session')->setFlash('error', 'No has escrito ningún texto');
         }
         elseif(!$request->get('newCategory') && !$category)
         {
@@ -175,27 +175,6 @@ class PostController extends Controller
                 $item->setLinkExcerpt($linkPreview['description']);
             }
             
-            /*
-            if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
-            {
-                $html = getContent($url[0]);
-                //$crawler = new Crawler($html);
-                
-                $item->setLinkURL($url[0]);
-                
-                $title = preg_match('!<title>(.*?)</title>!i', $html, $matches) ? $matches[1] : '';
-                if($title)
-                {
-                    $item->setLinkTitle($title);
-                }
-                
-                $excerpt = preg_match('!<meta .*name="description" .*content="(.*)"!i', $html, $matches) ? $matches[1] : '';
-                if($excerpt)
-                {
-                    $item->setLinkExcerpt($excerpt);
-                }
-            }*/
-            
             if($request->get('attachTo'))
             {
                 $itemRelated = $em->getRepository('ColectaItemBundle:Item')->findOneById($request->get('attachTo'));
@@ -226,10 +205,11 @@ class PostController extends Controller
         }
         else
         {
-            $this->get('session')->setFlash('PostName', $request->get('name'));
-            $this->get('session')->setFlash('PostText', $request->get('text'));
-            $this->get('session')->setFlash('PostCategory', $request->get('category'));
-            return new RedirectResponse($this->generateUrl('ColectaPostNew'));
+            $item = new Post();
+            $item->setText($request->get('text'));
+            $item->setName($request->get('name'));
+            
+            return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Post', 'item'=>$item));
         }
     }
     public function editAction($slug)
