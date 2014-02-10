@@ -64,9 +64,6 @@ ColectaCategoryIndex:
 ColectaItemLike:
     pattern:  /like/{slug}/
     defaults: { _controller: ColectaItemBundle:Default:like }
-ColectaContact:
-    pattern:  /contacto/
-    defaults: { _controller: ColectaItemBundle:Default:contact }
 ColectaSinceLastVisit:
     pattern:  /ultimavisita/
     defaults: { _controller: ColectaItemBundle:Default:sinceLastVisit }

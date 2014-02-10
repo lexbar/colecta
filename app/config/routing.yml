@@ -1,3 +1,7 @@
+colecta_site:
+    resource: "@ColectaSiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
 colecta_backend:
     resource: "@ColectaBackendBundle/Resources/config/routing.yml"
     prefix:   /

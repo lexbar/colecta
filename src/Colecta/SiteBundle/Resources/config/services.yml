@@ -1,0 +1,9 @@
+parameters:
+#    colecta_site.example.class: Colecta\SiteBundle\Example
+
+services:
+    kernel.listener.colecta_exception_lstener:
+        class: Colecta\SiteBundle\Listener\ExceptionListener
+        arguments: [@templating, @kernel]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }

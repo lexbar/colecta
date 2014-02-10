@@ -1,0 +1,3 @@
+ColectaContact:
+    pattern:  /contacto/
+    defaults: { _controller: ColectaSiteBundle:Default:contact }

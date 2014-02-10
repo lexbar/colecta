@@ -7,9 +7,3 @@ services:
         arguments: [@doctrine, @router]
         tags:
             - { name: twig.extension }
-            
-    kernel.listener.colecta_exception_lstener:
-        class: Colecta\ItemBundle\Listener\ExceptionListener
-        arguments: [@templating, @kernel]
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }

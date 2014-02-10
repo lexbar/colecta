@@ -385,48 +385,4 @@ class DefaultController extends Controller
         
         return new Response($this->renderView('ColectaItemBundle:Default:likes.json.twig', array('item' => $item)),200);
     }
-    function contactAction()
-    {
-        if ($this->get('request')->getMethod() == 'POST') 
-        {
-            $request = $this->get('request');
-            $name = $request->request->get('name');
-            $email = $request->request->get('email');
-            $text = $request->request->get('text');
-            
-            if(empty($name) || empty($email) || empty($text))
-            {
-                $this->get('session')->setFlash('ContactName', $name);
-                $this->get('session')->setFlash('ContactEmail', $email);
-                $this->get('session')->setFlash('ContactText', $text);
-                
-                $this->get('session')->setFlash('error', 'No puedes dejar ningún campo vacío');
-            }
-            elseif(preg_match("#^[^@]+@[^\.]+\.[^ ]+$#",$email) == 0)
-            {
-                $this->get('session')->setFlash('ContactName', $name);
-                $this->get('session')->setFlash('ContactEmail', $email);
-                $this->get('session')->setFlash('ContactText', $text);
-                
-                $this->get('session')->setFlash('error', 'El email no parece estar bien escrito');
-            }
-            else
-            {
-                $mailer = $this->get('mailer');
-                $configmail = $this->container->getParameter('mail');
-                
-                $message = \Swift_Message::newInstance();
-    		    $message->setSubject('Contacto en Ciclubs')
-    		        ->setFrom($configmail['from'])
-    		        ->setReplyTo(array($email => $name))
-    		        ->setTo($configmail['admin'])
-    		        ->setBody($this->renderView('ColectaItemBundle:Default:contactmail.txt.twig', array('name'=>$name, 'email'=>$email, 'text'=>$text)), 'text/plain');
-    		    $mailer->send($message);
-    		    
-    		    $this->get('session')->setFlash('success', 'Mensaje enviado correctamente');
-            }
-        }
-        
-        return $this->render('ColectaItemBundle:Default:contact.html.twig');
-    }
 }

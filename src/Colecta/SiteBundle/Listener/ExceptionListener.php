@@ -1,5 +1,5 @@
 <?php
-namespace Colecta\ItemBundle\Listener;
+namespace Colecta\SiteBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +29,7 @@ class ExceptionListener
 
             // set response content
             $response->setContent(
-                $this->templating->render('ColectaItemBundle:Exception:exception.html.twig', array('exception' => $exception))
+                $this->templating->render('ColectaSiteBundle:Exception:exception.html.twig', array('exception' => $exception))
             );
 
             // HttpExceptionInterface is a special type of exception that
