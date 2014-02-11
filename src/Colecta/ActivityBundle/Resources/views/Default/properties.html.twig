@@ -47,7 +47,7 @@
         <li class="assistance">
             <button 
                 onClick="window.location='{% if assists %}{{ path('ColectaEventUnasist',{'slug':item.slug}) }}{% else %}{{ path('ColectaEventAsist',{'slug':item.slug}) }}{% endif%}'" 
-                class="btn btn-medium{% if not haspassed and not assists %} btn-primary{% else %} btn-default{% endif %}" 
+                class="btn btn-medium{% if not haspassed and not assists %} btn-success{% else %} btn-default{% endif %}" 
                 type="button">
                     {% if assists %}
                         <span class="done">
