@@ -90,8 +90,13 @@ span.form-control {
 .nav > li > a:hover {
     background-color: #E4F0D5;
 }
-.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
-    background-color: #5CB85C;
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
+    background-color: #E4F0D5;
+    color: #000;
+}
+.nav-pills > li.active > a:hover{
+    background-color: #D7E6C5;
+    color: #000;
 }
 .nav, .calendar {
     background-color: #FFF;
@@ -185,7 +190,7 @@ span.form-control {
     margin: 0;
 }
 .item.panel-primary > .panel-heading {
-    background-color: #00871A;
+    background-color: #60AD47;
     border-color: #999;
 }
 .item.panel-primary h3 i {
@@ -195,12 +200,27 @@ span.form-control {
     border-color: #71AC2B;
 }
 .item.panel-warning > .panel-heading {
-    background-color: #5CB85C;
-    border-color: #71AC2B;
+    background-color: #60AD47;
+    border-color: #60AD47;
     color: #FFF;
 }
 .item.panel-warning h3 i {
     color: #FFF;
+}
+.item.panel-warning .panel-body{
+    background-color: #e4f5de;
+    background-image: -webkit-gradient(
+    	linear,
+    	left top,
+    	left bottom,
+    	color-stop(.75, #FFF),
+    	color-stop(1, #e4f5de)
+    );
+    background-image: -o-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
+    background-image: -moz-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
+    background-image: -webkit-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
+    background-image: -ms-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
+    background-image: linear-gradient(to top, #FFF 75%, #e4f5de 100%);
 }
 .item.panel-default {
     border-color: #BBB;
