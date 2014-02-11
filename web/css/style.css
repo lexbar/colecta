@@ -198,7 +198,11 @@ span.form-control {
 }
 .item.panel-primary .btn-success {
     background-color: #E4F0D5;
+    border: #D7E6C5;
     color: #444444;
+}
+.item.panel-primary .btn-success:hover {
+    background-color: #D7E6C5;
 }
 .item.panel-warning {
     border-color: #71AC2B;
