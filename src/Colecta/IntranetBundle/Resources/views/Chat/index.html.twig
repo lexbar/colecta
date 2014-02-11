@@ -4,7 +4,7 @@
 
 {% block content %}
     
-    <h2>Chat</h2>
+    <h2><i class="fa fa-comments fa-fw"></i> Chat</h2>
     
     <form class="monocontent" method="post" action="{{ path('ColectaChatPost', {'method':'html'}) }}" id="chatform" onSubmit="$.post('{{ path('ColectaChatPost', {'method':'json'}) }}', {text:$('#chatText').val()});$('#chatText').val('');return false;">
         <div class="row">

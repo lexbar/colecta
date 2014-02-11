@@ -2,6 +2,28 @@
 
 {% block title %}Notificaciones{% endblock %}
 
+{% block article %}
+
+<h2><i class="fa fa-bell fa-fw"></i> Notificaciones</h2>
+
+{% if notifications | length > 0 %}
+    {% if not notifications[0].dismiss %}
+        <a href="{{ path('userNotificationDismissAll') }}" class="btn btn-primary btn-block">Marcar todas como leídas <i class="fa fa-check"></i></a><br>
+    {% endif %}
+
+    <ul class="list-group" id="notificationstream">
+        {% for notification in notifications %}
+           {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'notification': notification} %}
+        {% endfor %}
+    </ul>
+    
+    <div style="text-align:center;margin-bottom: 20px;"><button onclick="loadMore()" class="btn btn-default" id="loadMore">Ver más <i class="fa fa-arrow-down"></i></button></div>
+{% else %}
+    <p class="lead">No tienes ninguna notificación</p>
+{% endif %}
+
+{% endblock %}
+
 {% block javascripts %}
 <script>
     var currentpage = 0;
@@ -30,32 +52,4 @@
         });
     } 
 </script>
-{% endblock %}
-
-{% block article %}
-
-<div class="title-block">
-    <h2>Notificaciones</h2>
-</div>
-
-{% if notifications | length > 0 %}
-    {% if not notifications[0].dismiss %}
-        <a href="{{ path('userNotificationDismissAll') }}" class="btn btn-primary btn-block">Marcar todas como leídas <i class="fa fa-check"></i></a><br>
-    {% endif %}
-
-    <ul class="list-group" id="notificationstream">
-        {% for notification in notifications %}
-           {% include 'ColectaUserBundle:Notification:notification.html.twig' with {'notification': notification} %}
-        {% endfor %}
-    </ul>
-    
-    <div style="text-align:center;margin-bottom: 20px;"><button onclick="loadMore()" class="btn btn-default" id="loadMore">Ver más <i class="fa fa-arrow-down"></i></button></div>
-{% else %}
-    <p class="lead">No tienes ninguna notificación</p>
-{% endif %}
-
-{% endblock %}
-
-{% block navigation %}
-    {% include '::navigation.html.twig' with {'navigation': 'notifications'} %}
 {% endblock %}
