@@ -208,19 +208,22 @@ span.form-control {
     color: #FFF;
 }
 .item.panel-warning .panel-body{
-    background-color: #e4f5de;
+    background-color: #FFF;
     background-image: -webkit-gradient(
     	linear,
     	left top,
     	left bottom,
     	color-stop(.75, #FFF),
-    	color-stop(1, #e4f5de)
+    	color-stop(1, #E4F5DE)
     );
-    background-image: -o-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
-    background-image: -moz-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
-    background-image: -webkit-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
-    background-image: -ms-linear-gradient(bottom, #FFF 75%, #e4f5de 100%);
-    background-image: linear-gradient(to top, #FFF 75%, #e4f5de 100%);
+    background-image: -o-linear-gradient(bottom, #FFF 75%, #E4F5DE 100%);
+    background-image: -moz-linear-gradient(bottom, #FFF 75%, #E4F5DE 100%);
+    background-image: -webkit-linear-gradient(bottom, #FFF 75%, #E4F5DE 100%);
+    background-image: -ms-linear-gradient(bottom, #FFF 75%, #E4F5DE 100%);
+    background-image: linear-gradient(to top, #FFF 75%, #E4F5DE 100%);
+}
+.item.panel-warning .panel-footer {
+    background-color: #E4F5DE;
 }
 .item.panel-default {
     border-color: #BBB;
