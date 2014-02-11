@@ -196,12 +196,12 @@ span.form-control {
 .item.panel-primary h3 i {
     color: #EEE;
 }
-.item.panel-primary .btn-success {
+.item.panel .btn-success {
     background-color: #E4F0D5;
     border: 1px solid #D7E6C5;
     color: #444444;
 }
-.item.panel-primary .btn-success:hover {
+.item.panel .btn-success:hover {
     background-color: #D7E6C5;
 }
 .item.panel-warning {
