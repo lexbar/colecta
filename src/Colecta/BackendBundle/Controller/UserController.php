@@ -124,7 +124,30 @@ class UserController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        $user = new User();
+        // New user handler
+        $newUser = new User();
+        
+        /* Check if the limit of users is exceeded */
+        $users_active_max = $this->container->getParameter('users_active_max');
+        
+        $roles = $em->getRepository('ColectaUserBundle:Role')->findAll();
+        $active_roles = array();
+        
+        foreach($roles as $r)
+        {
+            if($r->getContribute()) //if this role allows user to contribute, the user is active
+            {
+                $active_roles[] = $r->getId();
+            }
+        }
+        
+        $active_users = $em->createQuery('SELECT COUNT(u) FROM ColectaUserBundle:User u WHERE u.role IN ('.implode(',',$active_roles).')')->getSingleScalarResult();
+        
+        if($users_active_max <= $active_users)
+        {
+            $this->get('session')->setFlash('error', 'Se ha superado el límite de usuarios activos permitidos ('.$users_active_max.').');
+            return new RedirectResponse($this->generateUrl('ColectaBackendUserIndex'));
+        }
         
         if ($this->get('request')->getMethod() == 'POST') 
         {
@@ -132,7 +155,7 @@ class UserController extends Controller
             
             if($request->get('userName'))
             {
-                $user->setName($request->get('userName'));
+                $newUser->setName($request->get('userName'));
             }
             else
             {
@@ -141,7 +164,7 @@ class UserController extends Controller
             
             if($request->get('userMail'))
             {
-                $user->setMail($request->get('userMail'));
+                $newUser->setMail($request->get('userMail'));
             }
             else
             {
@@ -149,10 +172,10 @@ class UserController extends Controller
             }
             
             $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($request->get('userRole'));
-            $user->setRole($role);
+            $newUser->setRole($role);
             
             $profile = new UserProfile();
-            $user->setProfile($profile);
+            $newUser->setProfile($profile);
             
             $profile->setName($request->get('name'));
             $profile->setSurname($request->get('surname'));
@@ -183,7 +206,7 @@ class UserController extends Controller
             {
                 $partnerIdUser = $em->getRepository('ColectaUserBundle:UserProfile')->findOneByPartnerId($request->get('partnerId'));
                 
-                if($partnerIdUser && $partnerIdUser->getUser() != $user)
+                if($partnerIdUser && $partnerIdUser->getUser() != $newUser)
                 {
                     $this->get('session')->setFlash('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
                 }
@@ -202,22 +225,22 @@ class UserController extends Controller
             //Welcome Text
             $welcomeText = $request->get('welcomeText');
             
-            if($user->getName() && $user->getMail())
+            if($newUser->getName() && $newUser->getMail())
             {
-                $user->setPass('');
-                $user->setAvatar('');
-                $user->setRegistered(new \DateTime('now'));
-                $user->setLastAccess(new \DateTime('now'));
+                $newUser->setPass('');
+                $newUser->setAvatar('');
+                $newUser->setRegistered(new \DateTime('now'));
+                $newUser->setLastAccess(new \DateTime('now'));
                 
                 $salt = md5(time());
-                $user->setSalt($salt);
+                $newUser->setSalt($salt);
                 
                 $code = substr(md5($salt.$this->container->getParameter('secret')),5,18);
                 
-                $em->persist($user);
+                $em->persist($newUser);
                 $em->persist($profile); 
                 $em->flush();
-                $this->get('session')->setFlash('success', 'Usuario '. $user->getName() .' creado correctamente');
+                $this->get('session')->setFlash('success', 'Usuario '. $newUser->getName() .' creado correctamente');
                 
                 if($request->get('notificateUser') == 'on')
                 {
@@ -232,20 +255,20 @@ class UserController extends Controller
                     $webTitle = $globals['web_title'];
                     
                     //Welcome Text
-                    $welcomeText = str_replace(array('%N', '%L'), array($user->getName(), $this->get('router')->generate('userResetPasswordCode', array('uid'=>$user->getId(), 'code'=>$code), true)), $welcomeText);
+                    $welcomeText = str_replace(array('%N', '%L'), array($newUser->getName(), $this->get('router')->generate('userResetPasswordCode', array('uid'=>$newUser->getId(), 'code'=>$code), true)), $welcomeText);
                     
                     $message = \Swift_Message::newInstance();
                     //$logo = $message->embed(\Swift_Image::fromPath($this->get('kernel')->getRootDir().'/../web/logo.png'));
     			    $message->setSubject('Cuenta creada en '.$webTitle)
     			        ->setFrom($configmail['from'])
-    			        ->setTo($user->getMail())
+    			        ->setTo($newUser->getMail())
     			        //->addPart($this->renderView('::foo.txt.twig', array(), 'text/plain')
     			        ->setBody($welcomeText);
     			    $mailer->send($message);
                 }
                 
                 $this->get('request')->SetMethod("GET"); // Set request method to Get before redirection 
-                return new RedirectResponse($this->generateUrl('ColectaBackendUserProfile', array('user_id'=>$user->getId()))); //User profile edit page
+                return new RedirectResponse($this->generateUrl('ColectaBackendUserProfile', array('user_id'=>$newUser->getId()))); //User profile edit page
             }
         }
         else
@@ -258,9 +281,7 @@ class UserController extends Controller
             $welcomeText = str_replace('---web_title---', $webTitle, $this->container->getParameter('welcomeText'));
         }
         
-        $roles = $em->getRepository('ColectaUserBundle:Role')->findAll();
-        
-        return $this->render('ColectaBackendBundle:User:newUser.html.twig', array('user'=>$user, 'roles'=>$roles, 'welcomeText'=>$welcomeText));
+        return $this->render('ColectaBackendBundle:User:newUser.html.twig', array('user'=>$newUser, 'roles'=>$roles, 'welcomeText'=>$welcomeText));
     }
     public function roleEditAction($role_id)
     {

@@ -25,7 +25,7 @@
                     <img width="40" height="40" src="{% if message.origin.avatar %}{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}">
                 </div>
                 
-                <div class="col-sm-9 col-xs-10">
+                <div class="col-sm-11 col-xs-10">
             
                     <p><strong>{{ message.origin.name }}</strong> {{ message.text | usercontent | raw | nl2br }}</p>
             

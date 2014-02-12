@@ -14,8 +14,9 @@ parameters:
     locale:            es
     secret:            ThisTokenIsNotSoSecretChangeIt
     
-    from.mail:         { example@gmail.com : Nombre remitente }
-    admin.mail:        example@gmail.com
+    mail:
+        from: { foo@bar.com : Nombre del remitente }
+        admin: [foo1@bar.com, foo2@bar.com]
     welcomeText: |
         Hola %N!
         
@@ -23,6 +24,11 @@ parameters:
         
         Simplemente tienes que seguir el siguiente enlace:
         %L
+        
+    #Limits for the account
+    files_monthly_max: 10000 # number of files
+    space_monthly_max: 4000  # MB
+    users_active_max: 200    # users with role that allows interaction
 
 twig:
     globals:
