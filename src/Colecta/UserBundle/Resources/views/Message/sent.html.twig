@@ -22,12 +22,12 @@
         <li class="list-group-item">
             <div class="row">
                 <div class="col-sm-1 col-xs-2">
-                    <img width="40" height="40" src="{% if message.origin.avatar %}{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}">
+                    <img width="40" height="40" src="{{ path('userAvatar',{'uid':message.destination.id,'width':40,'height':40}) }}">
                 </div>
                 
                 <div class="col-sm-11 col-xs-10">
             
-                    <p><strong>{{ message.origin.name }}</strong> {{ message.text | usercontent | raw | nl2br }}</p>
+                    <p>A <strong>{{ message.destination.name }}</strong> {{ message.text | usercontent | raw | nl2br }}</p>
             
                     {% if message.responseto %}
                         <br><small>En respuesta a:</small>

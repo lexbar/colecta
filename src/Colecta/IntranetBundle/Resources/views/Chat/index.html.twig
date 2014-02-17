@@ -18,7 +18,7 @@
     
     <ul class="list-group" id="chatstream">
     {% for m in messages %}
-        <li class="list-group-item clearfix"><div class="row"><div class="col-sm-1 col-xs-2"><img width="40" height="40" src="{% if m.user.avatar %}{{ path('userAvatar',{'uid':m.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"></div><div class="col-sm-11 col-xs-10"><strong>{{ m.user.name }}:</strong> {{ m.text | usercontent | raw | nl2br }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div></li>
+        <li class="list-group-item clearfix"><div class="row"><div class="col-sm-1 col-xs-2"><img width="40" height="40" src="{{ path('userAvatar',{'uid':m.user.id,'width':40,'height':40}) }}"></div><div class="col-sm-11 col-xs-10"><strong>{{ m.user.name }}:</strong> {{ m.text | usercontent | raw | nl2br }}<br><small class="{{ m.date | date('U') }}">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': m.date } only %}</small></div></div></li>
     {% endfor %}
     </ul>
     

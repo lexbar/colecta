@@ -263,6 +263,11 @@ class UserController extends Controller
             
             $imagefile = __DIR__ . '/../../../../web' . $user->getUploadDir() . '/' .$user->getAvatar();
             
+            if($user->getAvatar() == '' || !file_exists($imagefile))
+            {
+                $imagefile = __DIR__ . '/../Resources/views/User/anonymous.png';
+            }
+            
             $image = new \Imagick($imagefile);
             
             $format = $image->getImageFormat();

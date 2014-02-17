@@ -10,7 +10,7 @@
     </div>
     
     <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{% if item.author.avatar %}{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
 
         <div class="unity">
             
@@ -70,7 +70,7 @@
                 <li class="clearfix list-group-item {% if loop.index is odd %}odd{% else %}even{% endif %}">
                     <div class="row">
                         <div class="media col-xs-12  col-sm-12 col-md-4">
-                            <img class="username pull-left" width="20" height="20" src="{% if assistance.user.avatar %}{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}{% else %}/img/unknown.gif{% endif %}"> 
+                            <img class="username pull-left" width="20" height="20" src="{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}"> 
                             <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">{{assistance.user.name}}</a>
                         </div>
                         
