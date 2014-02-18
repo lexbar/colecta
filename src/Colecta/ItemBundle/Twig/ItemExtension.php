@@ -25,7 +25,7 @@ class ItemExtension extends \Twig_Extension
         );
     }
     
-    public function nonl($text)
+    public function nonl($text) //remove all "new line" symbols
     {
         return trim(preg_replace('/\s+/', ' ', $text));
     }

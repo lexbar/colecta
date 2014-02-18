@@ -36,7 +36,7 @@ twig:
         web_title: Nombre del club
         theme_css: style
         theme_sidebar: right
-        allowed_tags: #<span><a><ol><ul><li><img><br>
+        allowed_tags: <br><img>#<span><a><ol><ul><li>
         rich_text_editor: 0
         summary_max_length: 600
         web_header_img:

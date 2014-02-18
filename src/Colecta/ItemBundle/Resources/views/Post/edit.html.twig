@@ -27,7 +27,7 @@
               <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label" for="PostText">Texto</label>
                 <div class="col-sm-9 col-lg-10">
-                  <textarea class="form-control" id="PostText" name="text" rows="5">{% spaceless %}{{ item.text | nl2br| nonl |raw }}{% endspaceless %}</textarea>
+                  <textarea class="form-control" id="PostText" name="text" rows="5">{% if rich_text_editor %}{% spaceless %}{{ item.text | nl2br| nonl | raw }}{% endspaceless %}{% else %}{{ item.text | striptags(allowed_tags) }}{% endif %}</textarea>
                 </div>
               </div>
               

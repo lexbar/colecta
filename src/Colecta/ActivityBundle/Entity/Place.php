@@ -133,9 +133,8 @@ class Place extends \Colecta\ItemBundle\Entity\Item
      */
     public function setText($text)
     {
+        $text = str_replace(array("<br>","<br />"),"\n",str_replace("\n",'',$text));
         $this->text = $text;
-    
-        return $this;
     }
 
     /**
