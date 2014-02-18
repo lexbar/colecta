@@ -621,12 +621,6 @@ class RouteController extends Controller
             
             $form->bindRequest($request);
             
-            if(!$item->getText())
-            {
-                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
-                $persist = false;
-            }
-            
             //File replacement
             if ($persist && isset($_FILES['file']) && $_FILES['file']['tmp_name'])
             {

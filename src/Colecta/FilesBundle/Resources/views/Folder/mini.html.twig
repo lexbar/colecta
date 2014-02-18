@@ -10,6 +10,10 @@
         
         {% set files = item.isolateLast %}
         
+        {% if files | length == 0 %}
+            {% set files = item.files %}
+        {% endif %}
+        
         {% set thumbnails = 0 %} {% set listed = 0 %}
         {% for file in files %}
             {% if file.filetype in ['jpeg','gif','png'] %}  

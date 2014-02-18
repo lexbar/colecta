@@ -1,8 +1,34 @@
 {% extends '::frontend.html.twig' %}
 
-{% block files 'active' %}
+{% block title %}Editar {{ item.name }} | Archivos{% endblock %}
+
+{% block article %}
+
+    <div class="row">
+        <div class="col-sm-8 col-lg-9">
+            <h2>Editar {{ item.name }}</h2>
+        </div>
+        <div class="col-sm-4 col-lg-3">
+            <a class="btn btn-default btn-block" href="{{ path('ColectaFileView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al archivo</a>
+        </div>
+    </div>
+
+{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug}),'firstwrite':0} %}
+
+{% endblock %}
+
+{% block stylesheets %}
+    {% if rich_text_editor %}
+        <link rel="stylesheet" href="/css/summernote.css" />
+    {% endif %}
+{% endblock %}
 
 {% block javascripts %}  
+    {% if rich_text_editor %}
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/summernote.min.js"></script>
+    {% endif %}
+    
     <script src="/js/filepreview.js"></script>
     <script>        
         {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
@@ -21,20 +47,28 @@
                 $('#NewFolder').hide().attr('value','');
             }
         }
+
+    {% if rich_text_editor %}
+        $(document).ready(function() {
+            $('#FileText').summernote({
+                height: 180,
+                toolbar: [
+                //['style', ['style']], // no style button
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                //['fontsize', ['fontsize']],
+                //['color', ['color']],
+                ['para', ['ul', 'ol']],
+                //['height', ['height']],
+                ['insert', [/*'picture',*/ 'link']], // no insert buttons
+                //['table', ['table']], // no table button
+                ['help', ['help']] //no help button
+                ]
+            });
+        });
+        
+        var postForm = function() {
+            var content = $('textarea[name="text"]').html($('#FileText').code());
+        }
+    {% endif %}
     </script>
-{% endblock %}
-
-{% block article %}
-
-    <div class="row">
-        <div class="col-sm-8 col-lg-9">
-            <h2>Editar {{ item.name }}</h2>
-        </div>
-        <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block" href="{{ path('ColectaFileView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al archivo</a>
-        </div>
-    </div>
-
-{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug}),'firstwrite':0} %}
-
 {% endblock %}

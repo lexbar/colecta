@@ -10,14 +10,14 @@ class RouteType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('text')
-            ->add('distance')
-            ->add('uphill')
-            ->add('downhill')
+            ->add('text', null,array('required' => false))
+            ->add('distance', null,array('required' => false))
+            ->add('uphill', null,array('required' => false))
+            ->add('downhill', null,array('required' => false))
             ->add('maxspeed', 'hidden', array('required' => false))
             ->add('avgspeed', 'hidden', array('required' => false))
-            ->add('minheight')
-            ->add('maxheight');
+            ->add('minheight', null,array('required' => false))
+            ->add('maxheight', null,array('required' => false));
     }
     
     public function getName()

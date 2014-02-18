@@ -15,7 +15,7 @@
     </div>
     
     <div class="monocontent">
-        <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal" onSubmit="return postForm();">
+        <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal"{% if rich_text_editor %} onSubmit="return postForm();"{% endif %}>
             <fieldset>
                 <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
@@ -160,17 +160,22 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/css/summernote.css" />
-    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
+    {% if rich_text_editor %}
+        <link rel="stylesheet" href="/css/summernote.css" />
+    {% endif %}
+    
+    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" type="text/css" />
 {% endblock %}
 
 {% block javascripts %}
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/summernote.min.js"></script>
+    
+    {% if rich_text_editor %}
+        <script src="/js/summernote.min.js"></script>
+    {% endif %}
+    
     <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
-    <script>
-        $('head').append('<link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" type="text/css" />');
-        
+    <script>        
     	$.datepicker.regional['es'] = {
     		closeText: 'Cerrar',
     		prevText: 'Anterior',
@@ -202,25 +207,27 @@
       
     {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
 
-    $(document).ready(function() {
-        $('#EventText').summernote({
-            height: 180,
-            toolbar: [
-            //['style', ['style']], // no style button
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            //['fontsize', ['fontsize']],
-            //['color', ['color']],
-            ['para', ['ul', 'ol']],
-            //['height', ['height']],
-            ['insert', [/*'picture',*/ 'link']], // no insert buttons
-            //['table', ['table']], // no table button
-            ['help', ['help']] //no help button
-            ]
+    {% if rich_text_editor %}
+        $(document).ready(function() {
+            $('#EventText').summernote({
+                height: 180,
+                toolbar: [
+                //['style', ['style']], // no style button
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                //['fontsize', ['fontsize']],
+                //['color', ['color']],
+                ['para', ['ul', 'ol']],
+                //['height', ['height']],
+                ['insert', [/*'picture',*/ 'link']], // no insert buttons
+                //['table', ['table']], // no table button
+                ['help', ['help']] //no help button
+                ]
+            });
         });
-    });
-    
-    var postForm = function() {
-        var content = $('textarea[name="text"]').html($('#EventText').code());
-    }
+        
+        var postForm = function() {
+            var content = $('textarea[name="text"]').html($('#EventText').code());
+        }
+    {% endif %}
 </script>
 {% endblock %}

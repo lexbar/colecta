@@ -15,7 +15,7 @@
     </div>
     
     <div class="monocontent">
-        <form action="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal" role="form" onSubmit="$('#RouteSubmit').attr('disabled','disabled').addClass('disabled'); $('#RouteSubmitText').html('Enviando...'); $('#RouteSubmitLoading').addClass('icon-refresh icon-spin');" action="{{ path('ColectaRouteUpload') }}" enctype="multipart/form-data">
+        <form action="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal" role="form" onSubmit="{% if rich_text_editor %}postForm();{% endif %}$('#RouteSubmit').attr('disabled','disabled').addClass('disabled'); $('#RouteSubmitText').html('Enviando...'); $('#RouteSubmitLoading').addClass('icon-refresh icon-spin');" action="{{ path('ColectaRouteUpload') }}" enctype="multipart/form-data" id="RouteForm">
             <fieldset>
                 <div class="form-group">
                     <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Modificar track</label>
@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-lg-2 control-label" for="RouteText">Descripción</label>
                     <div class="col-sm-9 col-lg-10">
-                        {{ form_widget(form.text, { 'attr': {'class' : 'form-control'} }) }}
+                        {{ form_widget(form.text, { 'id': 'RouteText', 'attr': {'class' : 'form-control', 'rows': '5'} }) }}
                     </div>
                 </div>
               
@@ -205,12 +205,45 @@
 
 {% endblock %}
 
+{% block stylesheets %}
+    {% if rich_text_editor %}
+        <link rel="stylesheet" href="/css/summernote.css" />
+    {% endif %}
+{% endblock %}
+
 {% block javascripts %}    
+    {% if rich_text_editor %}
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/summernote.min.js"></script>
+    {% endif %}
+    
     <script>
 
-{% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
-    
-{% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
-    
+    {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
+        
+    {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+
+    {% if rich_text_editor %}
+        $(document).ready(function() {
+            $('#RouteText').summernote({
+                height: 180,
+                toolbar: [
+                //['style', ['style']], // no style button
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                //['fontsize', ['fontsize']],
+                //['color', ['color']],
+                ['para', ['ul', 'ol']],
+                //['height', ['height']],
+                ['insert', [/*'picture',*/ 'link']], // no insert buttons
+                //['table', ['table']], // no table button
+                ['help', ['help']] //no help button
+                ]
+            });
+        });
+        
+        var postForm = function() {
+            var content = $('textarea[id="RouteText"]').html($('#RouteText').code());
+        }
+    {% endif %}
     </script>
 {% endblock %}

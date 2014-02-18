@@ -582,9 +582,6 @@ class FileController extends Controller
                         }
                     }
                     
-                    $item->getFolder()->setDate(new \DateTime('now'));
-                    $item->setPart(true);
-                    
                     $category->setLastchange(new \DateTime('now'));
                     $em->persist($category);                     
                     
@@ -596,12 +593,11 @@ class FileController extends Controller
                 
                     $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
                     
-                    $this->get('session')->setFlash('success', 'Archivo modificado correctamente');
-                    return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));                  
+                    $this->get('session')->setFlash('success', 'Archivo modificado correctamente');             
                 }
                 else
                 {
-                    $uplmaxsize = ini_get('upload_max_filesize');
+                    //$uplmaxsize = ini_get('upload_max_filesize');
                     $this->get('session')->setFlash('error', 'El formulario no es válido.');
                 }
             }
