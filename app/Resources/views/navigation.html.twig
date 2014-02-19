@@ -27,6 +27,29 @@
     </div>
     
     <hr>
+    
+    {% if item is defined %}
+        {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
+    {% else %}
+        {% set notifications = colectauser.notDismissedNotifications %}
+    {% endif %}
+    
+    {% set messages = colectauser.notDismissedMessages %}
+    
+    <ul class="nav nav-pills nav-stacked">
+        <li{% if bun == 'UserBundle' and con == 'NotificationController' %} class="active"{% endif %}>
+            <a href="{{ path('userNotifications')}}">
+                <i class="fa fa-bell fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}
+            </a>
+        </li>
+        <li{% if bun == 'UserBundle' and con == 'MessageController' %} class="active"{% endif %}>
+            <a href="{{ path('userMessages')}}">
+                <i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}
+            </a>
+        </li>
+    </ul>
+    
+    <hr>
 {% elseif not(bun == 'UserBundle' and act == 'loginAction') and bun != '' %}
     <form class="login" action="{{ path('userLoginCheck') }}" method="post">
         <p class="lead">Iniciar sesión</p>
@@ -174,28 +197,7 @@
 
 <hr>
 
-{% if app.user %}
-    {% if item is defined %}
-        {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
-    {% else %}
-        {% set notifications = colectauser.notDismissedNotifications %}
-    {% endif %}
-    
-    {% set messages = colectauser.notDismissedMessages %}
-    
-<ul class="nav nav-pills nav-stacked">
-    <li{% if bun == 'UserBundle' and con == 'NotificationController' %} class="active"{% endif %}>
-        <a href="{{ path('userNotifications')}}">
-            <i class="fa fa-bell fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}
-        </a>
-    </li>
-    <li{% if bun == 'UserBundle' and con == 'MessageController' %} class="active"{% endif %}>
-        <a href="{{ path('userMessages')}}">
-            <i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}
-        </a>
-    </li>
-</ul>
-{% else %}
+{% if not app.user %}
 <ul class="nav nav-pills nav-stacked">
     <li{% if bun == 'ItemBundle' and act == 'contactAction' %} class="active"{% endif %}>
         <a href="{{ path('ColectaContact') }}"><i class="fa fa-envelope-o fa-fw"></i> Contacto</a>
