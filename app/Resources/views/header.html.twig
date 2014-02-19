@@ -23,7 +23,7 @@
                     <button type="submit" class="btn btn-default col-xs-4">Buscar</button>
                 </form>
                 
-                {% if app.user or app.user.role.siteConfig %}
+                {% if app.user or app.user and app.user.role.siteConfig %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if app.user %}
                     <li{% if bun == 'IntranetBundle' %} class="active"{% endif %}>
