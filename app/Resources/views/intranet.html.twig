@@ -9,9 +9,12 @@
         {% include '::header.html.twig' %}
         
         <div class="row content">
-
-            <div class="col-xs-12 col-md-9 col-sm-8 main">
-
+            
+            <div class="col-xs-12 col-md-3 col-sm-4 {% if theme_sidebar == 'right' %}pull-right{% endif %} sidebar">
+                {% include '::navigation.html.twig' %}
+            </div>
+            
+            <div class="col-xs-12 col-md-9 col-sm-8 {% if theme_sidebar == 'right' %}pull-left{% endif %} main">
                 {% if app.session.hasFlash('error') %}
                     <div class="alert alert-danger">
                         <span class="fa-stack fa-lg">
@@ -34,10 +37,6 @@
                 {% endif %}
 
                 {% block content %}{% endblock %}
-            </div>
-            
-            <div class="col-xs-12 col-md-3 col-sm-4 sidebar">
-                {% include '::navigation.html.twig' %}
             </div>
         </div>
     </div>   

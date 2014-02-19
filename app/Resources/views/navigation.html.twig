@@ -62,29 +62,6 @@
 
 {#{ bun }}, {{ con }}, {{ act }#}
 
-<ul class="nav nav-pills nav-stacked">
-    <li{% if bun == 'ItemBundle' and con == 'DefaultController' and act == 'dashboardAction' %} class="active"{% endif %}>
-        <a href="/">
-            <i class="fa fa-home fa-fw"></i> Inicio 
-            {#<span class="badge pull-right">42</span>#}
-        </a>
-    </li>
-    {% if app.user %}
-    <li>
-        <a href="{{ path('ColectaChatIndex') }}">
-            <i class="fa fa-unlock fa-fw"></i> Privado
-        </a>
-    </li>
-    {% endif %}
-    {% if app.user and app.user.role.siteConfig %}
-    <li>
-        <a href="{{ path('ColectaBackendIndex') }}">
-            <i class="fa fa-wrench fa-fw"></i> Administración
-        </a>
-    </li>
-    {% endif %}
-</ul>
-
 {% if bun == 'IntranetBundle' %}
 
 <ul class="nav nav-pills nav-stacked">

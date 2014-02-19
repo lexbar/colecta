@@ -98,7 +98,7 @@ span.form-control {
     background-color: #D7E6C5;
     color: #000;
 }
-.nav, .calendar {
+.sidebar .nav, .calendar {
     background-color: #FFF;
     border: 1px solid #EFECE8;
     border-bottom-width: 2px;
@@ -107,7 +107,7 @@ span.form-control {
     -webkit-border-radius: 5px;
     -ms-border-radius: 5px;
 }
-.nav > li > a{
+.sidebar .nav > li > a{
     padding: 7px 12px;
     color: #333;
 }
