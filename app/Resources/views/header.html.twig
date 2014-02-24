@@ -25,17 +25,17 @@
                 
                 {% if app.user or app.user and app.user.role.siteConfig %}
                 <ul class="nav navbar-nav navbar-right">
-                    {% if app.user %}
-                    <li{% if bun == 'IntranetBundle' %} class="active"{% endif %}>
-                        <a href="{{ path('ColectaChatIndex') }}">
-                            <i class="fa fa-unlock fa-fw"></i> Zona Privada
-                        </a>
-                    </li>
-                    {% endif %}
                     {% if app.user and app.user.role.siteConfig %}
                     <li{% if bun == 'BackendBundle' %} class="active"{% endif %}>
                         <a href="{{ path('ColectaBackendIndex') }}">
                             <i class="fa fa-wrench fa-fw"></i> Administración
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if app.user %}
+                    <li{% if bun == 'IntranetBundle' %} class="active"{% endif %}>
+                        <a href="{{ path('ColectaChatIndex') }}">
+                            <i class="fa fa-unlock fa-fw"></i> Zona Privada
                         </a>
                     </li>
                     {% endif %}
