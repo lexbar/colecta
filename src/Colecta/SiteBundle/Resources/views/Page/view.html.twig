@@ -6,7 +6,43 @@
     <h2><i class="fa fa-{{ page.icon }}"></i> {{ page.name }}</h2>
     
     <div class="monocontent">
-        {{ page.text }}
+        {{ page.text | raw }}
+    
+        {% if page.contact %}
+            <hr>
+            <form action="{{ path('ColectaContact') }}" method="POST" class="form-horizontal" onSubmit="$('#ContactSubmit').attr('disabled','disabled').addClass('disabled'); $('#ContactSubmitText').html('Enviando...'); $('#ContactSubmitLoading').addClass('icon-refresh icon-spin');">
+                <fieldset>
+                
+                  {% for key,field in page.contactData %}
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label" for="Contact{{ key }}">{{ field['title'] }}</label>
+                    <div class="col-sm-9">
+                        {% if field['type'] == 'textarea' %}
+                            <textarea class="form-control" id="Contact{{ key }}" name="field{{ key }}" rows="5"></textarea>
+                        {% elseif field['type'] == 'checkbox' %}
+                            <input type="checkbox" id="Contact{{ key }}" name="field{{ key }}" value="">
+                        {% else %}
+                            <input type="text" class="form-control" id="Contact{{ key }}" name="field{{ key }}" value="">
+                        {% endif %}
+                        
+                        {% if field['help'] is defined %}
+                            <p class="help-block">{{ field['help'] }}</p>
+                        {% endif %}
+                    </div>
+                  </div>
+                  
+                  {% endfor %}
+                  
+                  <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-success" id="ContactSubmit"><i id="ContactSubmitLoading"></i> <span id="ContactSubmitText">Enviar</span></button>
+                    </div>
+                  </div>
+                  
+                </fieldset>
+            </form>
+        {% endif %}
+    
     </div>
-
 {% endblock %}
