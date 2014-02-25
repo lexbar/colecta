@@ -419,4 +419,34 @@ class Page
     {
         return $this->targetRoles;
     }
+    
+    public function validContactData()
+    {
+        /* 
+            required structure:
+            array('fields'=>array('type'=>(string text|textarea|checkbox|list),'title'=>(string title) [, 'default'=>(string defaultValue)] [, 'help'=>(string helpText)]) [, 'expiration'=>(string expirationDate) [, 'expirationText'=>(string expirationText) ] ]);
+        */
+        
+        $cd = $this->getContactData();
+        
+        if( !is_array($cd) )
+        {
+            return false;
+        }
+        
+        if( !isset($cd['fields']) or count($cd['fields']) < 1 )
+        {
+            return false;
+        }
+        
+        foreach($cd['fields'] as $field)
+        {
+            if( !isset($field['type']) or !in_array($field['type'], array('text', 'textarea', 'checkbox', 'list')))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 }

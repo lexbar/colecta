@@ -3,6 +3,7 @@
 namespace Colecta\SiteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Colecta\SiteBundle\Entity\ContactRequest;
 
 class PageController extends Controller
 {
@@ -18,21 +19,72 @@ class PageController extends Controller
         if($user == 'anon.')
         {
             $role = 0;
+            $contactRequestUser = null;
         }
         else
         {
             $role = $user->getRole()->getId();
+            $contactRequestUser = $user;
         }
         
         /* If the user role is allowed to access the page */
         if(in_array($role, $page->getTargetRoles()))
         {
+            $contactRequest = new ContactRequest();
             
-            return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page));
+            if($this->get('request')->getMethod() == 'POST' and $page->getContact() )
+            {
+                $request = $this->get('request')->request;
+                $contactRequest->setPage($page);
+                $contactRequest->setUser($contactRequestUser);
+                $contactRequest->setDate(new \DateTime('now'));
+                
+                $data = array();
+                $contactData = $page->getContactData();
+                foreach($contactData['fields'] as $key=>$field)
+                {
+                    $data[$key] = $this->validateFormType($field['type'], $request->get('field'.$key));
+                }
+                
+                $contactRequest->setData($data);
+                
+                $em->persist($contactRequest); 
+                $em->flush();
+                
+                $this->get('session')->setFlash('success', 'El formulario se ha enviado correctamente.');
+                $this->get('session')->setFlash('pageFormSent','1');
+                
+                /* Send mail to admin */
+                /*$mailer = $this->get('mailer');
+                $configmail = $this->container->getParameter('mail');
+                
+                $message = \Swift_Message::newInstance();
+    		    $message->setSubject('Formulario ['. $page->getName() .']')
+    		        ->setFrom($configmail['from'])
+    		        ->setReplyTo(array($email => $name))
+    		        ->setTo($configmail['admin'])
+    		        ->setBody($this->renderView('ColectaSiteBundle:Default:contactmail.txt.twig', array('name'=>'FIX', 'email'=>'FIX', 'text'=>'FIX')), 'text/plain');
+    		    $mailer->send($message);*/
+            }
+            
+            return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page, 'contactRequest' => $contactRequest));
         }
         else
         {
             throw $this->createNotFoundException('No tienes permisos para visualizar la página.');
+        }
+    }
+    
+    public function validateFormType($type, $text)
+    {
+        switch($type)
+        {
+            case 'checkbox':
+                return $text == 'on' ? true : false;
+            break;
+            default:
+                return $text;
+            break;
         }
     }
     
