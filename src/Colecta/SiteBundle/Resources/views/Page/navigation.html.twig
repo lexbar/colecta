@@ -1,0 +1,11 @@
+{% if pages | length > 0 %}
+<ul class="nav nav-pills nav-stacked">
+    {% for page in pages %}
+    <li {#class="active"#}>
+        <a href="{{ path('ColectaPage', { slug: page.slug } ) }}">
+            <i class="fa fa-{{ page.icon }} fa-fw"></i> {{ page.name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

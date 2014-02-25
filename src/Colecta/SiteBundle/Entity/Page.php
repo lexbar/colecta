@@ -77,10 +77,11 @@ class Page
     protected $sidebarOrder;
     
     /**
-    * @ORM\ManyToOne(targetEntity="Colecta\UserBundle\Entity\Role")
-    * @ORM\JoinColumn(name="role_id", referencedColumnName="id") 
-    */
-    protected $roleTarget;
+     * @var array
+     *
+     * @ORM\Column(name="targetRoles", type="array")
+     */
+    protected $targetRoles;
     
     /**
      * @var boolean
@@ -101,7 +102,14 @@ class Page
      *
      * @ORM\Column(name="context", type="string", length=20)
      */
-    protected $context; //extranet, intranet, backend, all
+    protected $context; //extranet, intranet, backend
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", length=20)
+     */
+    protected $icon; //based on Font Awesome, fa-* (without the 'fa-' part)
     
     /**
      * Get id
@@ -344,29 +352,6 @@ class Page
     }
 
     /**
-     * Set roleTarget
-     *
-     * @param \Colecta\SiteBundle\Entity\Role $roleTarget
-     * @return Page
-     */
-    public function setRoleTarget(\Colecta\SiteBundle\Entity\Role $roleTarget = null)
-    {
-        $this->roleTarget = $roleTarget;
-    
-        return $this;
-    }
-
-    /**
-     * Get roleTarget
-     *
-     * @return \Colecta\SiteBundle\Entity\Role 
-     */
-    public function getRoleTarget()
-    {
-        return $this->roleTarget;
-    }
-
-    /**
      * Set context
      *
      * @param string $context
@@ -387,5 +372,51 @@ class Page
     public function getContext()
     {
         return $this->context;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     * @return Page
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+    
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string 
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * Set targetRoles
+     *
+     * @param array $targetRoles
+     * @return Page
+     */
+    public function setTargetRoles($targetRoles)
+    {
+        $this->targetRoles = $targetRoles;
+    
+        return $this;
+    }
+
+    /**
+     * Get targetRoles
+     *
+     * @return array 
+     */
+    public function getTargetRoles()
+    {
+        return $this->targetRoles;
     }
 }

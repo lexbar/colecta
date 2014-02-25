@@ -110,6 +110,8 @@
     </li>#}
 </ul>
 
+{% render "ColectaSiteBundle:Page:navigation" with {context:'intranet'} %}
+
 {% elseif bun == 'BackendBundle' %}
 
 <ul class="nav nav-pills nav-stacked">
@@ -157,6 +159,7 @@
     {% endif %}
 </ul>
 
+{% render "ColectaSiteBundle:Page:navigation" with {context:'backend'} %}
 
 {% else %}
 
@@ -192,6 +195,8 @@
         </a>
     </li>
 </ul>
+
+{% render "ColectaSiteBundle:Page:navigation" with {context:'extranet'} %}
 
 {% endif %}
 

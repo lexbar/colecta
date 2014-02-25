@@ -1,0 +1,12 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title %}{{ page.name }}{% endblock %}
+
+{% block article %}
+    <h2><i class="fa fa-{{ page.icon }}"></i> {{ page.name }}</h2>
+    
+    <div class="monocontent">
+        {{ page.text }}
+    </div>
+
+{% endblock %}
