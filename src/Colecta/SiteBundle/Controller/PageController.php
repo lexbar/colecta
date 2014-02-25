@@ -14,6 +14,7 @@ class PageController extends Controller
         
         $user = $this->get('security.context')->getToken()->getUser();
         
+        /* Get the user role id, if annonymous role id = 0 */
         if($user == 'anon.')
         {
             $role = 0;
@@ -23,8 +24,10 @@ class PageController extends Controller
             $role = $user->getRole()->getId();
         }
         
+        /* If the user role is allowed to access the page */
         if(in_array($role, $page->getTargetRoles()))
         {
+            
             return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page));
         }
         else
@@ -36,7 +39,14 @@ class PageController extends Controller
     public function navigationAction($context)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        if($this->get('security.context')->getToken())
+        {
+            $user = $this->get('security.context')->getToken()->getUser();
+        }
+        else
+        {
+            $user = 'anon.';
+        }
         
         //Get all the pages that are not draftsand are ment to be on the sidebar
         $pages = $em->getRepository('ColectaSiteBundle:Page')->findBy(array('draft'=>0, 'sidebarShow'=>1, 'context'=>$context), array('sidebarOrder'=>'ASC'));
