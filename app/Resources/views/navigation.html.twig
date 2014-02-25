@@ -202,22 +202,6 @@
 
 <hr>
 
-{% if not app.user %}
-<ul class="nav nav-pills nav-stacked">
-    <li{% if bun == 'ItemBundle' and act == 'contactAction' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaContact') }}"><i class="fa fa-envelope-o fa-fw"></i> Contacto</a>
-    </li>
-    <li>
-        <a href="{{ path('ColectaPostView', {'slug':'acerca-de-nosotros'}) }}"><i class="fa fa-info fa-fw"></i> Acerca de nosotros</a>
-    </li>
-    <li>
-        <a href="{{ path('ColectaPostView', {'slug':'por-que-hacerse-socio'}) }}"><i class="fa fa-question fa-fw"></i> Por qué hacerse socio</a>
-    </li>   
-</ul>
-{% endif %}
-
-<hr>
-
 {# hide when big calendar is shown #}
 {% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}
 {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
