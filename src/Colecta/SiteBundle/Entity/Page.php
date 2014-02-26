@@ -424,7 +424,7 @@ class Page
     {
         /* 
             required structure:
-            array('fields'=>array('type'=>(string text|textarea|checkbox|list),'title'=>(string title) [, 'default'=>(string defaultValue)] [, 'help'=>(string helpText)]) [, 'expiration'=>(string expirationDate) [, 'expirationText'=>(string expirationText) ] ]);
+            array('fields'=>array(array('type'=>(string text|textarea|checkbox|list),'title'=>(string title) [, 'default'=>(string defaultValue)] [, 'help'=>(string helpText)]), ...) [, 'expiration'=>(string expirationDate) [, 'expirationText'=>(string expirationText) ] ]);
         */
         
         $cd = $this->getContactData();
