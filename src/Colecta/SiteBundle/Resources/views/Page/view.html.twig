@@ -6,7 +6,7 @@
     <h2><i class="fa fa-{{ page.icon }}"></i> {{ page.name }}</h2>
     
     <div class="monocontent">
-        {{ page.text | nl2br | raw }}
+        {{ page.text | usercontent | raw | nl2br }}
     
         {% if page.contact and page.contactData is iterable and not app.session.flash('pageFormSent') %}
             <hr>
