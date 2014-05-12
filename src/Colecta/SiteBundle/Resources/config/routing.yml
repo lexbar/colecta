@@ -5,5 +5,5 @@ ColectaPagesNavigation:
     pattern:  /pagesnavigation/{context}/
     defaults: { _controller: ColectaSiteBundle:Page:navigation }
 ColectaPage:
-    pattern:  /pagina/{slug}/
+    pattern:  /static/{slug}/
     defaults: { _controller: ColectaSiteBundle:Page:view }
