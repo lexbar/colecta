@@ -5,7 +5,7 @@
 {% block article %}
     
     {% if app.user %} <a href="{{ path('ColectaRouteNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-    <h2><i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Rutas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    <h2>Rutas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
     {% for item in items %}
     <div class="item" id="item{{ item.id}}">
@@ -15,7 +15,7 @@
     </div>
     {% else %}
          <div class="monocontent text-center">
-            <i class="fa fa-{{ itemIcons['Activities/Route'] }} fa-4x"></i>
+            <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-4x"></i>
             <h2>Ésta es la página de Rutas</h2>
             <p>Se irá llenando de contenido conforme los vayas publicando</p>
         </div>

@@ -5,7 +5,7 @@
 {% block article %}
 
     {% if app.user %} <a href="{{ path('ColectaFileNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-    <h2><i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-fw"></i> Archivos{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    <h2>Archivos{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
     {% for item in items %}
     <div class="item" id="item{{ item.id}}">
@@ -17,7 +17,7 @@
          <div class="monocontent text-center">
             <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-4x"></i>
             <h2>Ésta es la página de Archivos</h2>
-            <p>Se irá llenando de contenido conforme los vayas publicando</p>
+            <p>Aquí podrás consultar todos los archivos que se hayan publicado.</p>
         </div>
     {% endfor %}
     {% if page > 1 or thereAreMore %}

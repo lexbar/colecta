@@ -13,21 +13,6 @@
 </div>
 <div id="sidebarComplete" class="hidden-xs">
 {% if app.user %}
-    <div class="media self">
-        <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
-            <img src="{% if app.user.avatar %}{{ path('userAvatar',{'uid':app.user.id,'width':50,'height':50}) }}{% else %}/img/unknown.gif{% endif %}" width="50">
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading">{{ app.user.name }}</h4>
-            <div class="btn-group">
-                <a href="{{ path('userEditProfile') }}" class="btn btn-default btn-xs">Editar perfil</a>
-                <a href="{{ path('userLogout') }}" class="btn btn-default btn-xs" style="color:darkred;">Salir <span class="fa fa-sign-out"></span></a>
-            </div>
-        </div>
-    </div>
-    
-    <hr>
-    
     {% if item is defined %}
         {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
     {% else %}
@@ -36,43 +21,41 @@
     
     {% set messages = colectauser.notDismissedMessages %}
     
-    <ul class="nav nav-pills nav-stacked">
-        <li{% if bun == 'UserBundle' and con == 'NotificationController' %} class="active"{% endif %}>
-            <a href="{{ path('userNotifications')}}">
-                <i class="fa fa-bell fa-fw"></i> Notificaciones{% if notifications | length > 0 %} <span class="badge pull-right">{{ notifications | length }}</span>{% endif %}
-            </a>
-        </li>
-        <li{% if bun == 'UserBundle' and con == 'MessageController' %} class="active"{% endif %}>
-            <a href="{{ path('userMessages')}}">
-                <i class="fa fa-envelope fa-fw"></i> Mensajes{% if messages | length > 0 %} <span class="badge pull-right">{{ messages | length }}</span>{% endif %}
-            </a>
-        </li>
-    </ul>
-    
-    <hr>
+    <div id="self" class="clearfix">
+        <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="pull-left">
+            <img src="{{ path('userAvatar',{'uid':app.user.id,'width':20,'height':20}) }}" width="20">
+            <strong>{{ app.user.name }}</strong>
+        </a>
+        <ul class="list-inline pull-right">
+            <li><a href="{{ path('userMessages')}}"><span class="hidden">Mensajes </span><i class="fa fa-envelope"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %}</a></li>
+            <li><a href="{{ path('userNotifications')}}"><span class="hidden">Notificaciones </span><i class="fa fa-bell"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %}</a></li>
+        </ul>
+    </div>
 {% elseif not(bun == 'UserBundle' and act == 'loginAction') and bun != '' %}
     <form class="login" action="{{ path('userLoginCheck') }}" method="post">
-        <p class="lead">Iniciar sesión</p>
+        <p><a class="lead" href="#" onClick="$('#singinform').toggle()"> <i class="fa fa-sign-in"></i> Iniciar sesión</a></p>
         
+        <div id="singinform" style="display:none;">
+            <p class="input-group input-group-sm">
+                  <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                  <input  type="email" required class="form-control" id="username" name="_username" placeholder="Email" value="" onFocus="if(this.value == 'Email') this.value=''">
+            </p>
         
-        <p class="input-group input-group-sm">
-              <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-              <input  type="email" required class="form-control" id="username" name="_username" placeholder="Email" value="" onFocus="if(this.value == 'Email') this.value=''">
-        </p>
-        
-        <p class="input-group input-group-sm">
-              <span class="input-group-addon"><i class="fa fa-key"></i></span>
-              <input type="password" required class="form-control" id="password" name="_password" class="input-medium" placeholder="Contraseña" value="" onFocus="if(this.value == 'Contraseña') this.value=''">
-        </p>
-        
-        <p><label for="remember_me">
-            <input id="remember_me" name="_remember_me" type="checkbox" checked /> Mantenerme conectado
-        </label></p>
-        
-        <button type="submit" name="login" class="btn btn-primary btn-block btn-sm">Acceder</button>
-        <a href="{{ path('userResetPassword') }}" class="btn btn-block btn-link btn-xs">Olvidé mi contraseña</a>
+            <p class="input-group input-group-sm">
+                  <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                  <input type="password" required class="form-control" id="password" name="_password" class="input-medium" placeholder="Contraseña" value="" onFocus="if(this.value == 'Contraseña') this.value=''">
+            </p>
+            
+            <p><label for="remember_me">
+                <small><input id="remember_me" name="_remember_me" type="checkbox" checked /> Mantenerme conectado</small>
+            </label></p>
+            
+            <button type="submit" name="login" class="btn btn-primary btn-block btn-sm">Acceder</button>
+            <a href="{{ path('userResetPassword') }}" class="btn btn-block btn-link btn-xs">Olvidé mi contraseña</a>
+            
+            <hr>
+        </div>
     </form>
-    <hr>
     
     <script>
         var phitest = document.createElement('input');
@@ -83,6 +66,15 @@
     </script>
 {% endif %}
 
+    <form id="searchForm" class="" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+        <div class="inner-addon right-addon">
+            <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('search') }}">
+            <i class="fa fa-search"></i>
+        </div>
+    </form>
+    
+    <hr>
+    
 {#{ bun }}, {{ con }}, {{ act }#}
 
 {% if bun == 'IntranetBundle' %}

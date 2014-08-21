@@ -5,7 +5,7 @@
 {% if ((firstWeekDay + daysOfMonth) / 7) > rows %}{% set rows = rows + 1 %}{% endif %}
 {% set dayOfMonth = 1 %}
 
-<p class="calendar-heading">
+<p class="calendar-heading text-center">
     {# current Y-m #}
     {% set currentY = targetdateob.format('Y') %}
     {% set currentm = targetdateob.format('m') %}

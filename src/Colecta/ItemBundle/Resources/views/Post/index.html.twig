@@ -5,7 +5,7 @@
 {% block article %}
     
     {% if app.user %} <a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-    <h2><i class="fa fa-{{ itemIcons['Item/Post'] }} fa-fw"></i> Discusión{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    <h2>Discusión{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
     {% for item in items %}
     <div class="item" id="item{{ item.id}}">
@@ -17,7 +17,7 @@
         <div class="monocontent text-center">
             <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-4x"></i>
             <h2>Ésta es la página de Textos</h2>
-            <p>Se irá llenando de contenido conforme los vayas publicando</p>
+            <p>Aquí podrás consultar todos los textos que se hayan publicado.</p>
         </div>
     {% endfor %}
     

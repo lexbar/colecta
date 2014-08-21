@@ -5,7 +5,7 @@
 {% block article %}
 
     {% if app.user %} <a href="{{ path('ColectaItemNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-    <h2><i class="fa fa-home"></i> Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
 {% set shownItems = [] %}
 {% set mainItemsToShow = [] %}
@@ -38,7 +38,7 @@
     <div class="monocontent text-center">
         <i class="fa fa-home fa-4x"></i>
         <h2>Ésta es la página de inicio</h2>
-        <p>Se irá llenando de contenido conforme los vayas publicando</p>
+        <p>Aquí aparecerán las publicaciones más recientes.</p>
     </div>
 {% endfor %}
 
