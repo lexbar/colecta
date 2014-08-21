@@ -124,9 +124,13 @@ h2{
 }
 .calendar tbody tr td {
     text-align: center;
+    border: 2px solid #FFF;
 }
 .calendar tbody tr td a {
     display: block;
+}
+.calendar tbody tr td.today {
+    background-color: #EEE;
 }
 
 .item .date {
@@ -160,6 +164,6 @@ h2{
         position: relative;
         top: auto;
         padding: 15px 0 20px;
-        border-top: 1px solid #CCC;
+        border-top: 1px solid #DDD;
     }
 }

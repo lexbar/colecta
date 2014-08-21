@@ -37,7 +37,7 @@
     
     <a href="{{ path('ColectaEventDate', {'date': previousY ~ '-' ~ previousm }) }}" class="pull-left"><i class="fa fa-caret-left"></i> {% include '::month.html.twig' with {'date':previousY ~ '-' ~ previousm ~ '-1', 'short':1} %}</a> 
     
-    <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm }) }}">{% include '::month.html.twig' with {'date':currentY ~ '-' ~ currentm ~ '-1', 'short':0} %} de {{ currentY }}</a>
+    <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm }) }}">{% include '::month.html.twig' with {'date':currentY ~ '-' ~ currentm ~ '-1', 'short':0} %} {{ currentY }}</a>
     
     <a href="{{ path('ColectaEventDate', {'date': nextY ~ '-' ~ nextm }) }}" class="pull-right">{% include '::month.html.twig' with {'date':nextY ~ '-' ~ nextm ~ '-1', 'short':1} %} <i class="fa fa-caret-right"></i></a>     
 </p>

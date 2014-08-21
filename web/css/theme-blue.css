@@ -6,6 +6,11 @@ h2 {
     color: #1383A0;
 }
 
+.btn-primary{
+    background-color: #009BDB;
+    border-color: #1383A0;
+}
+
 .navbar-default {
     background-color: #1383A0;
     padding: 25px 10px;
@@ -40,6 +45,10 @@ h2 {
 .calendar tbody tr td.active a {
     color: #FFF;
 }
+.calendar tbody tr td.today a {
+    color: #009BDB;
+}
+
 .sidebar .calendar-heading i {
     color: #009BDB;
 }
@@ -78,20 +87,23 @@ h2 {
     color: #111;
 }
 
+.item .itemActions i {
+    color: #009BDB;
+}
 .item .itemActions a i {
     color: #999;
 }
 
 .item .properties {
     padding: 0;
-    border-top: 1px solid #CCC;
+    border-top: 1px solid #DDD;
     margin-bottom: 0;
 }
 .item .properties li {
     padding: 10px 0;
 }
 .item .properties li {
-    border-right: 1px solid #CCC;
+    border-right: 1px solid #DDD;
 }
 .item .properties li:last-child {
     border: none;
