@@ -164,10 +164,15 @@ h2{
 }
 
 @media (max-width: 767px) { /* Small devices */
-    .item .date, .item .mapcaption {
+    .item .date {
         position: static;
         top: auto;
         padding: 15px 0 20px;
         border-top: 1px solid #DDD;
+    }
+    .item .mapcaption {
+        position: static;
+        top: auto;
+        padding: 5px 0 10px;
     }
 }
