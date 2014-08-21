@@ -1,47 +1,91 @@
+{% set canAssist = item.type == 'Activity/Event' and item.allowassistances %}
+{% set canAttach = not item.part %}
 {% if app.user %}
     {% set userLikes = item.userLikes(app.user) %}
     
-    <div class="itemActions">
+    <div class="itemActions row text-center">
     
         {# LIKE #}
-        <span id="itemLikes{{ item.id }}" class="like">
-        {% if userLikes %}
-            <span><i class="fa fa-thumbs-o-up"></i> Te gusta</span>
-        {% else %}
-            <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
-        {% endif%}
-        </span>
+        <div class="{% if canAttach %}{% if canAssist %}col-xs-4{% else %}col-xs-6{% endif %}{% else %}{% if canAssist %}col-xs-6{% else %}col-xs-12{% endif %}{% endif %}">
+            <span id="itemLikes{{ item.id }}" class="like">
+            {% if userLikes %}
+                <span><i class="fa fa-thumbs-o-up"></i> Te gusta</span>
+            {% else %}
+                <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
+            {% endif%}
+            </span>
+        </div>
         
         {# ASSISTANCE #}
-        {% if item.type == 'Activity/Event' and item.allowassistances %}
-            <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="fa fa-user"></i> {% if item.assistances | length > 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Han asistido{% else %}Van a asistir{% endif %} {{ item.assistances | length }} personas {% elseif item.assistances | length == 1 %}{% if item.dateini | date('U') < 'now' | date('U') %}Ha asistido{% else %}Va a asistir{% endif %} 1 persona{% else %}Nadie se ha apuntado{% endif %}</a>
+        {% if canAssist %}
+            {% set haspassed = item.happened %}
+            {% set assists = false %}
+            {% for a in item.assistances %}
+                {% if a.user == app.user %}
+                    {% set assists = true %}
+                {% endif %}
+            {% endfor %}
+            
+            {% spaceless %}
+            <div class="{% if canAttach %}col-xs-4{% else %}col-x-6{% endif%}">
+                <a href="{% if assists %}{{ path('ColectaEventUnasist',{'slug':item.slug}) }}{% else %}{{ path('ColectaEventAsist',{'slug':item.slug}) }}{% endif%}">
+                    {% if assists %}
+                        <span class="done">
+                    {% endif %}
+                    
+                    {% if assists %}
+                        <i class="fa fa-check-square"></i>
+                    {% else %}
+                        <i class="fa fa-check-square-o"></i>
+                    {% endif %} 
+                    
+                    {% if not haspassed %}
+                        {% if assists %}
+                            Vas a asistir
+                        {% else %}
+                            Asistiré
+                        {% endif %}
+                    {% else %}
+                        {% if assists %}
+                            Has asistido
+                        {% else %}
+                            Asistí
+                        {% endif %}
+                    {% endif %} 
+                
+                    {% if assists %}
+                        </span>
+                        <span class="undo hidden">
+                            Deshacer <i class="fa fa-trash-o"></i>
+                        </span>
+                    {% endif %} 
+                </a>
+            </div>
+            {% endspaceless %}
         {% endif %}
         
-        {# COMMENTS #}
+        {# COMMENTS 
         {% if showCommentsLink is defined %}
             {% set n_comments = item.comments | length %}
             <a href="#" onClick="$('#itemcomments{{ item.id }}').show(); return false;"><i class="fa fa-comment"></i> {{ n_comments }} comentario{% if n_comments != 1 %}s{% endif %}</a>
-        {% endif %}
+        {% endif %}#}
         
         {# FILE #}
         {#{% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}
             <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="fa fa-plus"></i> Agregar archivos</a>
         {% endif %}#}
         
-        {# EDIT #}
-        {% if item.canEdit(app.user) %}
-            <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
-        {% endif %}
-        
         {# ATTACH #}
-        {% if app.user and not item.part %}
-            <a href="{{ path('ColectaItemAttach',{'id':item.id}) }}"><i class="fa fa-share"></i> Adjuntar</a>
+        {% if canAttach %}
+            <div class="col-xs-4">
+                <a href="{{ path('ColectaItemAttach',{'id':item.id}) }}"><i class="fa fa-share"></i> Adjuntar</a>
+            </div>
         {% endif %}
         
     </div>
 {% endif %}
 
-{% if item.likers | length > 0 and not (app.user and item.likers | length == 1 and userLikes) %}
+{# if item.likers | length > 0 and not (app.user and item.likers | length == 1 and userLikes) %}
     <div class="whoLikes{% if not app.user %} only{% endif%}">
         {% if app.user and userLikes %}
             {% if item.likers | length > 3 %}
@@ -64,4 +108,4 @@
             <a href="#" onClick="$('#itemcomments{{ item.id }}').show(); return false;"><i class="fa fa-comment"></i> {{ n_comments }} comentario{% if n_comments != 1 %}s{% endif %}</a>
         {% endif %}
     </div>
-{% endif %}
+{% endif #}

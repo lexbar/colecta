@@ -1,19 +1,32 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 
-<div class="item panel {% if new %}panel-warning{% else %}panel-primary{% endif %}">
+<div class="item panel {% if new %}panel-primary{% else %}panel-default{% endif %}">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+        <h3 class="panel-title">
+            <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a> 
+            {% if item.canEdit(app.user) %}
+                <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+            {% endif %}
+        </h3>
     </div>
     
     <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':20,'height':20}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
 
-        <div class="unity">
+        <div class="row">
+            <div class="col-xs-12 col-sm-9 col-md-10">        
+                <div id="summary-{{ item.slug }}">
+                    {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+                    {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+                </div>
+                
+                {% if item.text | length > summary_max_length %}
+                    <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+                {% endif %}
+            </div>
             
             {% set sameday = item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %}
-        
-            
-                <div class="date pull-right">
+            <div class="date col-xs-12 col-sm-3 col-md-2 ">
                     <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
                     <span class="weekday">{{ item.dateini | date('l') | replace ({
                 'Monday':'LUN',
@@ -41,25 +54,15 @@
                     <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% endif%}</span> 
                     {% if not sameday %}<span class="label label-default">+{% if item.daysDistance > 0 %}{{ item.daysDistance }} días{% else %}{{ item.hoursDistance }} horas{% endif %}</span>{% endif %}
                     </a>
-                </div>
-        
-            <div id="summary-{{ item.slug }}">
-                {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-                {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
             </div>
-            
-            {% if item.text | length > summary_max_length %}
-                <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-            {% endif %}
         </div>
         
     {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
     
+    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     </div>
     
     <div class="panel-footer">
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-        
         {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
     </div>
 </div>

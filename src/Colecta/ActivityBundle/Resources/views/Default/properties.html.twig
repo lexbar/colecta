@@ -1,17 +1,12 @@
-<ul class="properties list-inline">
-    {% if item.distance > 0%}
-    <li{% if item.distance > 999 %} class="small"{% endif %}>Distancia: <br><strong>{{ item.distance }} km</strong></li>
-    {% endif %}
+{% set isRoute = item.type == 'Activity/Route' %}
+<ul class="properties row text-center list-unstyled">
+    <li class="{% if isRoute %}col-xs-6 col-sm-4 col-md-2{% else %}col-xs-6 col-sm-3{% endif %}">Distancia: <br><strong>{% if item.distance > 0 %}{{ item.distance }} km{% else %}--{% endif %}</strong></li>
     
-    {% if item.uphill > 0%}
-    <li{% if item.uphill > 999 %} class="small"{% endif %}>Subida: <br><strong>{{ item.uphill }} m</strong></li>
-    {% endif %}
     
-    {% if item.type != 'Activity/Event' and item.downhill > 0%}
-    <li{% if item.downhill > 999 %} class="small"{% endif %}>Bajada: <br><strong>{{ item.downhill }} m</strong></li>
-    {% endif %}
+    <li class="{% if isRoute %}col-xs-6 col-sm-4 col-md-2{% else %}col-xs-6 col-sm-3{% endif %}">Desnivel: <br><strong>{% if item.uphill > 0 %}{{ item.uphill }} m{% else %}--{% endif%}</strong></li>
     
-    {% if item.time > 0%}
+    
+    {% if item.time > 0 %}
         {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
         {% if item.time < 60 %}
             {% set secconds = item.time %}
@@ -29,58 +24,14 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-        <li{% if item.time >= 86400 %} class="small"{% endif %}>Duración: <br><strong>{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m</strong> </li>
     {% endif %}
-    {% if item.difficulty != '' %}
-    <li>Dificultad: <br><strong><img src="/img/difficulty/{{ item.difficulty | replace({' ':'-'}) }}.gif" width="70" height="12" title="{% set difficulty = item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) %}{{ difficulty }}" alt="{{ difficulty }}"></strong> </li>
-    {% endif%}
-    {% if app.user and item.type == 'Activity/Event' and item.allowassistances %}
-        {% set haspassed = item.happened %}
-        {% set assists = false %}
-        {% for a in item.assistances %}
-            {% if a.user == app.user %}
-                {% set assists = true %}
-            {% endif %}
-        {% endfor %}
-        
-        {% spaceless %}
-        <li class="assistance">
-            <button 
-                onClick="window.location='{% if assists %}{{ path('ColectaEventUnasist',{'slug':item.slug}) }}{% else %}{{ path('ColectaEventAsist',{'slug':item.slug}) }}{% endif%}'" 
-                class="btn btn-medium{% if not haspassed and not assists %} btn-success{% else %} btn-default{% endif %}" 
-                type="button">
-                    {% if assists %}
-                        <span class="done">
-                    {% endif %}
-                    
-                    {% if not haspassed %}
-                        {% if assists %}
-                            Vas a asistir
-                        {% else %}
-                            Asistiré
-                        {% endif %}
-                    {% else %}
-                        {% if assists %}
-                            Has asistido
-                        {% else %}
-                            Asistí
-                        {% endif %}
-                    {% endif %} 
-                    
-                    {% if assists %}
-                        <i class="fa fa-check"></i>
-                    {% else %}
-                        <i class="fa fa-sign-in"></i>
-                    {% endif %} 
-                
-                    {% if assists %}
-                        </span>
-                        <span class="undo">
-                            Deshacer <i class="fa fa-trash-o"></i>
-                        </span>
-                    {% endif %} 
-                </button>
-            </li>
-        {% endspaceless %}
+    
+    <li class="{% if isRoute %}col-xs-6 col-sm-4 col-md-2{% else %}col-xs-6 col-sm-3{% endif %}">Duración: <br><strong>{% if item.time > 0 %}{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m{% else %}--{% endif%}</strong> </li>
+    
+    <li class="{% if isRoute %}col-xs-6 col-sm-4 col-md-2{% else %}col-xs-6 col-sm-3{% endif %}">Dificultad: <br><strong>{% if item.difficulty != '' %}{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}{% else %}--{% endif %}</strong> </li>
+    
+    {% if isRoute %}
+        <li class="col-xs-12 col-sm-8 col-md-4">perfil</li>
     {% endif %}
+    
 </ul>

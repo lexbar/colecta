@@ -154,3 +154,12 @@ h2{
     padding-right: 0;
     padding-left: 0;
 }
+
+@media (max-width: 767px) { /* Small devices */
+    .item .date {
+        position: relative;
+        top: auto;
+        padding: 15px 0 20px;
+        border-top: 1px solid #CCC;
+    }
+}
