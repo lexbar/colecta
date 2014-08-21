@@ -196,6 +196,17 @@ h2{
     color: #444;
 }
 
+.item .well {
+    border-width: 1px 0 0;
+}
+
+.relations {
+    margin: -14px 0 20px;
+}
+.relations .panel {
+    margin-bottom: 6px;
+}
+
 @media (max-width: 767px) { /* Small devices */
     .navbar-default {
         padding: 5px;

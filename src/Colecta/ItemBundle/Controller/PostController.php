@@ -172,7 +172,7 @@ class PostController extends Controller
                 $item->setLinkURL($linkPreview['pageUrl']);
                 $item->setLinkImage($images[0]);
                 $item->setLinkTitle($linkPreview['title']);
-                $item->setLinkExcerpt($linkPreview['description']);
+                $item->setLinkExcerpt(substr($linkPreview['description'], 0, 225));
             }
             
             if($request->get('attachTo'))
