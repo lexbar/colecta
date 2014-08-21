@@ -56,6 +56,11 @@ h2{
 .navbar-default {
     padding: 25px 10px;
 }
+.navbar-default a.navbar-brand {
+    font-weight: bold;
+    font-size: 22px;
+    height: auto;
+}
 .sidebardisplay {
     position: absolute;
     top: 0;
@@ -188,6 +193,9 @@ h2{
     .navbar-default {
         padding: 5px;
         margin: 0 -15px 10px;
+    }
+    .navbar-default a.navbar-brand {
+        font-size: 20px;
     }
     .item .date {
         padding: 15px 0 20px;

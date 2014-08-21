@@ -16,9 +16,6 @@ h2 {
 }
 .navbar-default a.navbar-brand {
     color: #FFF;
-    font-weight: bold;
-    font-size: 22px;
-    height: auto;
 }
 .navbar-default a.navbar-brand:hover {
     color: #B2E0EA;
