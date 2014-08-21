@@ -134,8 +134,7 @@ h2{
 }
 
 .item .date {
-    position: relative;
-    top: -30px;
+    padding-bottom: 10px;
 }
 .item .date a {
     color: #222;
@@ -153,9 +152,9 @@ h2{
 .item .date .hour {
     font-size: 14px;
 }
+
 .item .mapcaption {
-    position: relative;
-    top: -30px;
+    padding-bottom: 10px;
 }
 
 .row.itemActions div {
@@ -165,14 +164,10 @@ h2{
 
 @media (max-width: 767px) { /* Small devices */
     .item .date {
-        position: static;
-        top: auto;
         padding: 15px 0 20px;
         border-top: 1px solid #DDD;
     }
     .item .mapcaption {
-        position: static;
-        top: auto;
-        padding: 5px 0 10px;
+        padding: 5px 5px 10px;
     }
 }
