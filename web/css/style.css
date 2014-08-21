@@ -153,6 +153,10 @@ h2{
 .item .date .hour {
     font-size: 14px;
 }
+.item .mapcaption {
+    position: relative;
+    top: -30px;
+}
 
 .row.itemActions div {
     padding-right: 0;
@@ -160,8 +164,8 @@ h2{
 }
 
 @media (max-width: 767px) { /* Small devices */
-    .item .date {
-        position: relative;
+    .item .date, .item .mapcaption {
+        position: static;
         top: auto;
         padding: 15px 0 20px;
         border-top: 1px solid #DDD;

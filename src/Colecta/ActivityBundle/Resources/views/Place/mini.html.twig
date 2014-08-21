@@ -27,7 +27,7 @@
                     <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
                 {% endif %}
             </div>
-            <div class="col-xs-12 col-sm-3 col-md-2 ">
+            <div class="mapcaption col-xs-12 col-sm-3 col-md-2 ">
                 <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}"><img style="width:100%" src="http://maps.google.com/maps/api/staticmap?center={{ item.latitude ~ ',' ~ item.longitude }}&zoom=12&size={{ mapwidth }}x{{ mapheight }}&maptype=terrain&markers=color:red%7C{{ item.latitude ~ ',' ~ item.longitude }}&sensor=false"></a>
             </div>
         </div>

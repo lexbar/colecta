@@ -24,7 +24,7 @@
                     <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
                 {% endif %}
             </div>
-            <div class="col-xs-12 col-sm-3 col-md-2 ">
+            <div class="mapcaption col-xs-12 col-sm-3 col-md-2 ">
                 <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img style="width:100%" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
             </div>
         </div>
