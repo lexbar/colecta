@@ -3,13 +3,8 @@
         <div><i class="fa fa-bars fa-2x"></i></div>
     </div>
     <div class="col-xs-12">
-        <div class="navbar navbar-default navbar-static-top" role="navigation">                            
+        <div class="navbar navbar-default navbar-static-top" role="navigation" {% if web_header_img | length %}style="background-image: url( {{ random(web_header_img) }} );"{% endif %}>                            
             <a class="navbar-brand" href="/">{{ web_title }}</a>
         </div>
-        
-        {# if web_header_img | length %}
-            <div id="headerimg" style="background-image: url( {{ random(web_header_img) }} );"></div>
-        {% endif #}
-        
     </div>
 </div>
