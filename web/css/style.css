@@ -53,6 +53,23 @@ h1, h2, h3, h4, h5, h6 {
 h2{
     margin: 0 0 8px;
 }
+.navbar-default {
+    padding: 25px 10px;
+}
+.sidebardisplay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    z-index: 9999;
+    background-color: #FFF;
+    padding: 15px 0;
+    cursor: pointer;
+}
+.sidebardisplay div {
+    width: 60px;
+    text-align:center;
+}
 
 /* LEFT/RIGHT ICON ADDON */
 /* enable absolute positioning */
@@ -132,7 +149,12 @@ h2{
 .calendar tbody tr td.today {
     background-color: #EEE;
 }
+/* END SIDEBAR */
 
+/* ITEMS */
+.item .panel-body {
+    padding-bottom: 0;
+}
 .item .date {
     padding-bottom: 15px;
 }
@@ -163,6 +185,10 @@ h2{
 }
 
 @media (max-width: 767px) { /* Small devices */
+    .navbar-default {
+        padding: 5px;
+        margin: 0 -15px 10px;
+    }
     .item .date {
         padding: 15px 0 20px;
         border-top: 1px solid #DDD;

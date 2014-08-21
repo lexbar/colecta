@@ -7,11 +7,6 @@
 {% else %}
     {% set bun, con, act = '', '', ''%}
 {% endif %}
-
-<div id="sidebarButton" class="visible-xs">
-    <button onClick="document.getElementById('sidebarButton').className = 'hidden'; document.getElementById('sidebarComplete').className = ''" class="btn btn-default btn-block btn-lg" style="text-align:left;padding-left:15px; padding-right:15px;margin-bottom:10px"><i class="fa fa-bars pull-right"></i> Menú</button>
-</div>
-<div id="sidebarComplete" class="hidden-xs">
 {% if app.user %}
     {% if item is defined %}
         {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
@@ -198,4 +193,3 @@
 {% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}
 {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
 {% endif %}
-</div>

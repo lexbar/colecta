@@ -13,7 +13,6 @@ h2 {
 
 .navbar-default {
     background-color: #1383A0;
-    padding: 25px 10px;
 }
 .navbar-default a.navbar-brand {
     color: #FFF;
@@ -80,7 +79,6 @@ h2 {
 .item .itemActions {
     border-top: 1px solid #CCC;
     padding: 12px 0;
-    margin-bottom: -15px;
     background-color: #F1F8FD;
 }
 .item .itemActions a {
