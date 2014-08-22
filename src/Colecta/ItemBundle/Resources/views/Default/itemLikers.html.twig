@@ -1,0 +1,29 @@
+{% if app.user %}
+    {% set userLikes = item.userLikes(app.user) %}
+{% else %}
+    {% set userLikes = false %}
+{% endif %}
+{% if item.likers | length > 0 and not (app.user and item.likers | length == 1 and userLikes) %}
+    <p class="whoLikes{% if not app.user %} only{% endif%}">
+        {% if app.user and userLikes %}
+            {% if item.likers | length > 3 %}
+                A {{ item.likers | length - 1 }} personas y a ti os gusta esto.
+            {% else %}
+                A {% for u in item.likers %}{% if u != app.user %}{% if not loop.first and item.likers[0] != app.user %}, {% endif %}{{ u.name }}{%endif%}{% endfor %} y a ti os gusta esto.
+            {% endif %}
+        {% else %}
+            {% if item.likers | length > 3 %}
+                A {{ item.likers | length }} personas les gusta esto.
+            {% elseif item.likers | length > 1 %}
+                A {% for u in item.likers[0:item.likers | length - 1] %}{% if not loop.first %}, {% endif %}{{ u.name }}{% endfor %} y {{ item.likers[item.likers | length - 1].name }} les gusta esto.
+            {% elseif item.likers | length > 0 %}
+                A {{ item.likers[0].name }} le gusta esto.
+            {% endif %}
+        {% endif%}
+        
+        {% if not app.user and showComments is defined and item.comments | length %}
+            {% set n_comments = item.comments | length %}
+            <a href="#" onClick="$('#itemcomments{{ item.id }}').show(); return false;"><i class="fa fa-comment"></i> {{ n_comments }} comentario{% if n_comments != 1 %}s{% endif %}</a>
+        {% endif %}
+    </p>
+{% endif %}

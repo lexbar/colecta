@@ -1,73 +1,35 @@
-{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+{% extends 'ColectaItemBundle:Default:itemMini.html.twig' %}
 
-<div class="item panel {% if new %}panel-primary{% else %}panel-default{% endif %}">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <a href="{{ path('ColectaFolderView', { 'slug': item.slug }) }}">{{ item.name }}</a>
-            {% if app.user and item.canEdit(app.user) %}
-                <a href="{{ path('Colecta' ~ item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) ~ 'Edit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
-            {% endif %}
-        </h3>
-    </div>
+{% block itemContent %}
+    {% set files = item.isolateLast %}
     
-    <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':20,'height':20}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
-        
-        {% set files = item.isolateLast %}
-        
-        {% if files | length == 0 %}
-            {% set files = item.files %}
+    {% if files | length == 0 %}
+        {% set files = item.files %}
+    {% endif %}
+    
+    {% set thumbnails = 0 %} {% set listed = 0 %}
+    {% for file in files %}
+        {% if file.filetype in ['jpeg','gif','png'] %}  
+            {% set thumbnails = thumbnails + 1 %}
+        {% else %}
+            {% set listed = listed + 1 %}
         {% endif %}
-        
-        {% set thumbnails = 0 %} {% set listed = 0 %}
-        {% for file in files %}
-            {% if file.filetype in ['jpeg','gif','png'] %}  
-                {% set thumbnails = thumbnails + 1 %}
-            {% else %}
-                {% set listed = listed + 1 %}
+    {% endfor %}
+    
+    {# Thumbnails are viewable files #}
+    
+    {% if thumbnails > 0 %}
+    <div class="row thumbnails">        
+        {% for file in files | slice(0,8) %}
+            {% if file.filetype in ['jpeg','gif','png'] %}                    
+                <div class="col-xs-6 col-sm-3">
+                    <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+                </div>
             {% endif %}
         {% endfor %}
         
-        {# Thumbnails are viewable files #}
-        
-        {% if thumbnails > 0 %}
-        <div class="row thumbnails">        
-            {% for file in files | slice(0,8) %}
-                {% if file.filetype in ['jpeg','gif','png'] %}                    
-                    <div class="col-xs-6 col-sm-3">
-                        <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
-                    </div>
-                {% endif %}
-            {% endfor %}
-            
-            {# The folder consists of only one image #}
-            {% if thumbnails == 1 and listed == 0 %}
-                <div id="summary-{{ item.slug }}">
-                    {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-                    {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
-                </div>
-                
-                {% if item.text | length > summary_max_length %}
-                    <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-                {% endif %}
-            {% endif %}
-        </div>
-        {% endif %}
-        
-        {% if listed > 0 %}
-        <ul class="filelist list-group">
-            {% for file in files %}
-                {% if file.filetype not in ['jpeg','gif','png'] %}
-                    <li class="list-group-item"<i class="icon-file icon-2x"></i>
-                        <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
-                        <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-xs pull-right"><i class="fa fa-download icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        {% endif %}
-        
-        {% if thumbnails != 1 or listed > 0 %}
+        {# The folder consists of only one image #}
+        {% if thumbnails == 1 and listed == 0 %}
             <div id="summary-{{ item.slug }}">
                 {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
                 {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
@@ -77,11 +39,30 @@
                 <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
             {% endif %}
         {% endif %}
-        
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     </div>
+    {% endif %}
     
-    <div class="panel-footer">
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
-    </div>
-</div>
+    {% if listed > 0 %}
+    <ul class="filelist list-group">
+        {% for file in files %}
+            {% if file.filetype not in ['jpeg','gif','png'] %}
+                <li class="list-group-item"<i class="icon-file icon-2x"></i>
+                    <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
+                    <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-xs pull-right"><i class="fa fa-download icon-large"></i> Descargar fichero <span style="text-transform: uppercase;">{{ file.filetype }}</span></a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    {% if thumbnails != 1 or listed > 0 %}
+        <div id="summary-{{ item.slug }}">
+            {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+            {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+        </div>
+        
+        {% if item.text | length > summary_max_length %}
+            <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
