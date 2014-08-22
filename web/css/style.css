@@ -142,6 +142,9 @@ h2{
 .calendar-heading a {
     color: #000;
 }
+.calendar {
+    background-color: #FFF;
+}
 .calendar thead tr th {
     text-transform: uppercase;
     text-align: center;
@@ -196,8 +199,15 @@ h2{
     color: #444;
 }
 
-.item .well {
-    border-width: 1px 0 0;
+.comments .username {
+    font-size: 14px;
+}
+.comments .media .removeComment {
+    display: none;
+    color: darkred;
+}
+.comments .media:hover .removeComment {
+    display: inline;
 }
 
 .relations {

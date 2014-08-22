@@ -23,7 +23,7 @@
         <div class="media-body">
             <p class="media-heading">
                 {% if new %}<i class="fa fa-asterisk" style="color:orange"></i>{% endif%}
-                <a href="{{ path('userProfile', { 'id': comment.user.id }) }}">{{comment.user.name}}</a> 
+                <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="username">{{comment.user.name}}</a> 
                 
                 <span class="details">
                 {% set itemtimestamp = comment.date | date('U') %}
