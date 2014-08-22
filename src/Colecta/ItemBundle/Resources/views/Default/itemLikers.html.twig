@@ -4,7 +4,7 @@
     {% set userLikes = false %}
 {% endif %}
 {% if item.likers | length > 0 and not (app.user and item.likers | length == 1 and userLikes) %}
-    <p class="whoLikes{% if not app.user %} only{% endif%}">
+    <p class="likers">
         {% if app.user and userLikes %}
             {% if item.likers | length > 3 %}
                 A {{ item.likers | length - 1 }} personas y a ti os gusta esto.
