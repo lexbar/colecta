@@ -1,4 +1,6 @@
 {% if pages | length > 0 %}
+<hr>
+
 <ul class="nav nav-pills nav-stacked">
     {% for page in pages %}
     <li {% if app.request.uri == url('ColectaPage',{slug:page.slug}) %}class="active"{% endif %}>
