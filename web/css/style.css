@@ -194,6 +194,9 @@ h2{
 .item .mapcaption {
     padding-bottom: 15px;
 }
+.item .thumbnails {
+    margin-bottom: 15px;
+}
 
 .row.itemActions div {
     padding-right: 0;
