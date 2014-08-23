@@ -17,6 +17,7 @@ class ItemExtension extends \Twig_Extension
         return array(
             'usercontent' => new \Twig_Filter_Method($this, 'usercontentFilter'),
             'cleancode' => new \Twig_Filter_Method($this, 'cleanCode'),
+            'urlHost' => new \Twig_Filter_Method($this, 'urlHost'),
             'nonl' => new \Twig_Filter_Method($this, 'nonl'),
             'itemlinkable' => new \Twig_Filter_Method($this, 'itemlinkableFilter'),
             'videodetect' => new \Twig_Filter_Method($this, 'videodetectFilter'),
@@ -42,6 +43,11 @@ class ItemExtension extends \Twig_Extension
             ,'',
             $text));
         return (($text));
+    }
+    
+    public function urlHost($url)
+    {
+        return parse_url($url, PHP_URL_HOST);
     }
 
     public function usercontentFilter($text, $addslashes = false)
