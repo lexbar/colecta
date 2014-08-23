@@ -18,7 +18,20 @@
     
     {# Thumbnails are viewable files #}
     
-    {% if thumbnails > 0 %}
+    {% if thumbnails == 1 and listed == 0 %} {# The folder consists of only one image #}
+        <div class="col-xs-12 col-sm-3 pull-right">
+            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+        </div>
+        
+        <div id="summary-{{ item.slug }}">
+            {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+            {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+        </div>
+        
+        {% if item.text | length > summary_max_length %}
+            <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+        {% endif %}
+    {% elseif thumbnails > 0 %}
     <div class="row thumbnails">        
         {% for file in files | slice(0,8) %}
             {% if file.filetype in ['jpeg','gif','png'] %}                    
@@ -27,18 +40,6 @@
                 </div>
             {% endif %}
         {% endfor %}
-        
-        {# The folder consists of only one image #}
-        {% if thumbnails == 1 and listed == 0 %}
-            <div id="summary-{{ item.slug }}">
-                {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-                {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
-            </div>
-            
-            {% if item.text | length > summary_max_length %}
-                <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-            {% endif %}
-        {% endif %}
     </div>
     {% endif %}
     
