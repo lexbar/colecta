@@ -1,0 +1,38 @@
+{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+{% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
+
+<div class="item panel {% if new %}panel-primary{% else %}panel-default{% endif %}">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% block itemTitle %}
+                <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
+                {% if app.user and item.canEdit(app.user) %}
+                    <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+                {% endif %}
+            {% endblock %}
+        </h3>
+    </div>
+    
+    <div class="panel-body">
+        {% block itemBody %}
+            {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+            
+            {% block itemContent %}
+                <p>{{ item.summary }}</p>
+            {% endblock %}
+        {% endblock %}
+        
+        {% block itemActions %}
+            {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+        {% endblock %}
+    </div>
+    
+    {% block itemFooter %}
+        {% if app.user or item.comments | length > 0 or item.likers | length > 0 %} {# only if theres something to show #}
+            <div class="panel-footer">
+                {% include 'ColectaItemBundle:Default:itemLikers.html.twig' with { 'item': item } only %}
+                {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+            </div>
+        {% endif %}
+    {% endblock %}
+</div>
