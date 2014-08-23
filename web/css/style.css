@@ -194,7 +194,7 @@ h2{
 .item .preview {
     padding-bottom: 15px;
 }
-.item .thumbnails {
+.item .thumbnails div {
     margin-bottom: 15px;
 }
 
