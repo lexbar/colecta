@@ -19,6 +19,7 @@
     {# Thumbnails are viewable files #}
     
     {% if thumbnails == 1 and listed == 0 %} {# The folder consists of only one image #}
+        {% set file = files[0] %}
         <div class="col-xs-12 col-sm-3 pull-right">
             <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
         </div>
