@@ -14,8 +14,8 @@
                 <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
             {% endif %}
         </div>
-        <div class="mapcaption col-xs-12 col-sm-4 ">
-            <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img style="width:100%" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
+        <div class="preview col-xs-12 col-sm-4 ">
+            <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
         </div>
     </div>
     

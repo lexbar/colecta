@@ -46,7 +46,7 @@
                 {% endif %}
             </div>
             
-            <div class="col-xs-12 col-sm-3">
+            <div class="preview col-xs-12 col-sm-3 ">
                 {% set file = files[0] %}
                 <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
             </div>
