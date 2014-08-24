@@ -118,3 +118,22 @@ h2 {
 .item .likers a {
     color: #000;
 }
+
+.profileHeader h2 {
+    color: #111;
+    font-size: 22px;
+}
+.profileHeader .nav-pills li {
+    margin-right: 5px;
+}
+.profileHeader .nav-pills li a {
+    background-color: #FFF;
+    color: #222;
+    border: 1px solid #EEE;
+}
+.profileHeader .nav-pills li.active a {
+    color: #009BDB;
+}
+.profileHeader .nav-pills li a:hover {
+    background-color: #EEE;
+}

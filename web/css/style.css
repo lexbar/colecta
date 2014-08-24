@@ -285,6 +285,18 @@ h2{
     margin: 0 0 5px 5px;
 }
 
+.profileHeader img {
+    margin: 0 10px 10px 0;
+}
+.profileHeader div {
+    margin: 0 0 10px 0;
+}
+
+.monocontent {
+    background-color: #FFF;
+    padding: 15px 10px;
+}
+
 @media (max-width: 767px) { /* Small devices */
     .navbar-default {
         padding: 5px;
@@ -302,5 +314,8 @@ h2{
     }
     .item .mapcaption {
         padding: 0 10px 10px;
+    }
+    .profileHeader .pull-left, .profileHeader .nav-pills>li {
+        float: none !important;
     }
 }
