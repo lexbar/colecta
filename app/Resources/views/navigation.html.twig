@@ -189,6 +189,6 @@
 
 {# hide when big calendar is shown #}
 {% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}
-    {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
     <hr>
+    {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
 {% endif %}

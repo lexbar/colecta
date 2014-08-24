@@ -1,37 +1,40 @@
-{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
-{% set hideComments = not ( item.comments | length and app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') < item.comments | reverse [0].date ) %}
+{% extends 'ColectaItemBundle:Default:itemMicro.html.twig' %}
 
-<div class="item panel {% if new %}panel-warning{% else %}panel-default{% endif %}">
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
-    </div>
-    
-    <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
-    
-        {% if item.filetype in ['jpeg','gif','png'] %}
-            <a class="thumbnail one" href="{{ path('ColectaFileView', { 'slug': item.slug }) }}" class=""><img src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'500', 'height':'200'}) }}"></a>
-        {% else %}
-            <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
-        {% endif %}
+{% block itemBody %}
+    {% if item.filetype in ['jpeg','gif','png'] %}
+        <div class="row">
+            <div class="col-xs-12 col-sm-9">
+                {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+                
+                <div id="summary-{{ item.slug }}">
+                    {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+                    {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+                </div>
+                
+                {% if item.text | length > summary_max_length %}
+                    <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+                {% endif %}
+            </div>
+            
+            <div class="preview col-xs-12 col-sm-3 ">
+                <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileResize', {'slug':item.slug, 'width':'180', 'height':'350'}) }}"></a>
+            </div>
+        </div>
+    {% else %}
+        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
         
         <div id="summary-{{ item.slug }}">
-            {{ item.text[0:summary_max_length] | striptags(allowed_tags) | cleancode | raw | nl2br }}
+            {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
             {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
         </div>
         
         {% if item.text | length > summary_max_length %}
             <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
         {% endif %}
-        
-        {% if item.folder %}<p style="clear:both">Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
-    </div>
+
+        <p><a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a></p>
+    {% endif %}
     
-    <div class="panel-footer">
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item, showCommentsLink: hideComments } only %}
-        
-        <div id="itemcomments{{ item.id }}" {% if hideComments %}style="display:none"{% endif %}>
-            {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 10 } only %}
-        </div>
-    </div>
-</div>
+    <p>{% if item.folder %}<p style="clear:both">Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}</p>
+
+{% endblock %}
