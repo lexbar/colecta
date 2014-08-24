@@ -1,68 +1,73 @@
-    {% extends '::frontend.html.twig' %}
+{% extends '::frontend.html.twig' %}
 
 {% block title %}{{ item.name }} | Archivos{% endblock %}
 
 {% block article %}
 
-<div class="item panel panel-primary">
+<div class="item panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+        <h3 class="panel-title">
+            <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}">{{ item.name }}</a>
+            {% if app.user and item.canEdit(app.user) %}
+                <a href="{{ path('ColectaFileEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+            {% endif %}
+        </h3>
     </div>
     
     <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     
-    {% if item.filetype in ['jpeg','gif','png'] %}
-        {% set next = item.folder.getNextPicture(item) %}
-        {% set previous = item.folder.getPreviousPicture(item) %}
-        <div class="fullimage row" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'850', 'height':'480'}) }}') scroll no-repeat center center #111; background-size: contain;">
-            <a href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="left{% if previous %} active{% endif %} col-xs-3"><i class="fa fa-angle-left fa-4x"></i></a>
-            <a href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="right{% if next %} active{% endif %} col-xs-9"><i class="fa fa-angle-right fa-4x"></i></a>
-        </div>
-        <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="fa fa-download"></i></small></a>
-    {% else %}
-        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
-    {% endif %}
-    
-    <p>{{ item.text  | usercontent| striptags(allowed_tags) | raw | nl2br }}
-    {% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
-    
-    {# more items on this folder #}
-    
-    {% set folderlength = item.folder.files | length %}
-    {% if folderlength > 1 %}
+        {% if item.filetype in ['jpeg','gif','png'] %}
+            {% set next = item.folder.getNextPicture(item) %}
+            {% set previous = item.folder.getPreviousPicture(item) %}
+            <div class="fullimage row" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'850', 'height':'480'}) }}') scroll no-repeat center center #111; background-size: contain;">
+                <a style="height:480px" href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-left{% if previous %} active{% endif %} col-xs-3"><i class="fa fa-angle-left fa-4x"></i></a>
+                <a style="height:480px" href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-right text-right{% if next %} active{% endif %} col-xs-9"><i class="fa fa-angle-right fa-4x"></i></a>
+            </div>
+            <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="fa fa-download"></i></small></a>
+        {% else %}
+            <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
+        {% endif %}
         
-        <div class="row">
+        {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+        <p>{% if item.folder %}<p>Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}
         
-        {% set itemIndex = item.folder.files.indexOf(item) %}
+        {# more items on this folder #}
         
-        {% for i in itemIndex-2..itemIndex+2 %}
-            {% if i < 0 %} {# negative index #}
-                <div class="col-xs-6 col-sm-3"></div>
-            {% elseif i == itemIndex %} {# current item #}
-                
-            {% elseif i >= folderlength %} {# out of bounds #}
-                
-            {% else %}
-                <div class="col-xs-6 col-sm-3">
-                    {% set thisitem = item.folder.files[i] %}
-                    {% if thisitem.filetype in ['jpeg','gif','png'] %}
-                        <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':thisitem.slug, 'width':200, 'height':200}) }}"></a>
-                    {% else %}
-                        <a class="btn btn-warning btn-block" href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}">{{ thisitem.name }}</a>
-                    {% endif %}
-                </div>
-            {% endif %}
-        {% endfor %}
+        {% set folderlength = item.folder.files | length %}
+        {% if folderlength > 1 %}
+            
+            <div class="row">
+            
+            {% set itemIndex = item.folder.files.indexOf(item) %}
+            
+            {% for i in itemIndex-2..itemIndex+2 %}
+                {% if i < 0 %} {# negative index #}
+                    <div class="col-xs-6 col-sm-3"></div>
+                {% elseif i == itemIndex %} {# current item #}
+                    
+                {% elseif i >= folderlength %} {# out of bounds #}
+                    
+                {% else %}
+                    <div class="col-xs-6 col-sm-3">
+                        {% set thisitem = item.folder.files[i] %}
+                        {% if thisitem.filetype in ['jpeg','gif','png'] %}
+                            <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':thisitem.slug, 'width':200, 'height':200}) }}"></a>
+                        {% else %}
+                            <a class="btn btn-warning btn-block" href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}">{{ thisitem.name }}</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            
+            </div>
+            
+        {% endif %}
         
-        </div>
-        
-    {% endif %}
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     </div>
     
     <div class="panel-footer">
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-        
         {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
     </div>
 </div>

@@ -4,31 +4,35 @@
 
 {% block article %}
 
-<div class="item panel panel-primary">
+<div class="item panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+        <h3 class="panel-title">
+            <a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a>
+            {% if app.user and item.canEdit(app.user) %}
+                <a href="{{ path('ColectaPostEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+            {% endif %}
+        </h3>
     </div>
     
     <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
+        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
         
-        {{ item.text | usercontent | striptags(allowed_tags) | raw | nl2br }}
+        {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
         
         {% if item.linkTitle != '' %}
-        <p class="well well-sm well-link clearfix">
-            {% if item.linkImage != '' %}
-                <a href="{{ item.linkURL }}"><img src="{{ item.linkImage }}" class="pull-left" style="height:100px;max-width:300px;margin-right:10px;"></a>
-            {% endif %}
-            <strong><a href="{{ item.linkURL }}">{{ item.linkTitle | raw }}</a></strong><br><small>{{ item.linkURL }}</small>
-            <br> {{ item.linkExcerpt }}
-        </p>
+            <p class="well well-sm well-link clearfix">
+                {% if item.linkImage != '' %}
+                    <a href="{{ item.linkURL }}"><img src="{{ item.linkImage }}" class="pull-left" style="height:100px;max-width:300px;margin-right:10px;"></a>
+                {% endif %}
+                <strong><a href="{{ item.linkURL }}">{{ item.linkTitle | raw }}</a></strong><br><small class="text-muted">{{ item.linkURL | urlHost }}</small>
+                <br> {{ item.linkExcerpt }}
+            </p>
         {% endif %}
         
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     </div>
     
     <div class="panel-footer">
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-        
         {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
     </div>
 </div>

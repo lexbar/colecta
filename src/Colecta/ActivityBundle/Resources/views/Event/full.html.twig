@@ -4,20 +4,26 @@
 
 {% block article %}
 
-<div class="item panel panel-primary">
+<div class="item panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+        <h3 class="panel-title">
+            <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a>
+            {% if app.user and item.canEdit(app.user) %}
+                <a href="{{ path('ColectaEventEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+            {% endif %}
+        </h3>
     </div>
     
     <div class="panel-body">
-        <p class="details"><a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}"> {{item.author.name}}</a> {% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</p>
-
-        <div class="unity">
+        <div class="row">
+            <div class="col-xs-12 col-sm-9 col-md-10">   
+                {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+                     
+                {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+            </div>
             
             {% set sameday = item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %}
-        
-            
-                <div class="date pull-right">
+            <div class="date col-xs-12 col-sm-3 col-md-2 ">
                     <span class="weekday">{{ item.dateini | date('l') | replace ({
                 'Monday':'LUN',
                 'Tuesday':'MAR',
@@ -43,14 +49,10 @@
                     <span class="monthday">{{ item.dateini | date('d') }}</span> 
                     <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% endif%}</span> 
                     {% if not sameday %}<span class="label label-default">+{% if item.daysDistance > 0 %}{{ item.daysDistance }} días{% else %}{{ item.hoursDistance }} horas{% endif %}</span>{% endif %}
-                </div>
-        
-            <p>{{ item.text | usercontent | striptags(allowed_tags) | raw | nl2br }}   
-
+            </div>
         </div>
         
-        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
-    
+        
         {######## ASSISTANCES ########}
     
         {% set canedit = item.canEdit(app.user) %}
@@ -141,11 +143,15 @@
             {% if canedit %}</form>{% endif %}
         
         {% endif %}
+        
+        {######## END ASSISTANCES ########}
+        
+        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+        
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     </div>
     
     <div class="panel-footer">
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-        
         {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
     </div>
 </div>

@@ -20,20 +20,22 @@
         {% if canAssist %}
             {% set haspassed = item.happened %}
             {% set assists = false %}
+            {% set confirmed = false %}
             {% for a in item.assistances %}
                 {% if a.user == app.user %}
                     {% set assists = true %}
+                    {% set confirmed = a.confirmed %}
                 {% endif %}
             {% endfor %}
             
             {% spaceless %}
             <div class="{% if canAttach %}col-xs-4{% else %}col-x-6{% endif%}">
-                <a href="{% if assists %}{{ path('ColectaEventUnasist',{'slug':item.slug}) }}{% else %}{{ path('ColectaEventAsist',{'slug':item.slug}) }}{% endif%}">
+                <a href="{% if assists %}{{ path('ColectaEventUnasist',{'slug':item.slug}) }}{% else %}{{ path('ColectaEventAsist',{'slug':item.slug}) }}{% endif%}"{% if assists and (not haspassed or haspassed and confirmed) %}class="confirmed"{% endif %}>
                     {% if assists %}
                         <span class="done">
                     {% endif %}
                     
-                    {% if assists %}
+                    {% if haspassed and assists %}
                         <i class="fa fa-check-square"></i>
                     {% else %}
                         <i class="fa fa-check-square-o"></i>

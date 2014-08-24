@@ -91,6 +91,9 @@ h2 {
 .item .itemActions a i {
     color: #999;
 }
+.item .itemActions a.confirmed i {
+    color: #009BDB;
+}
 
 .item .properties {
     padding: 0;

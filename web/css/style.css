@@ -198,7 +198,7 @@ h2{
     margin-bottom: 15px;
 }
 
-.row.itemActions div {
+.item .row.itemActions div {
     padding-right: 0;
     padding-left: 0;
 }
@@ -223,6 +223,26 @@ h2{
 }
 .relations .panel {
     margin-bottom: 6px;
+}
+
+.fullimage a {
+    height: 480px;
+    padding: 0 10px;
+    color: #FFF;
+    line-height: 480px;
+}
+.fullimage a {
+    opacity: 0;
+    transition: opacity .5s;
+}
+.fullimage:hover a {
+    opacity: .2;
+}
+.fullimage:hover a.active {
+    opacity: .6;
+}
+.fullimage a.active:hover {
+    opacity: 1;
 }
 
 @media (max-width: 767px) { /* Small devices */
