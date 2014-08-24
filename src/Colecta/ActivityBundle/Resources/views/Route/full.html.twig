@@ -6,8 +6,12 @@
 {% block article %}    
 <div class="item panel panel-primary">
     <div class="panel-heading">
+        <h3 class="panel-title"><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+    </div>
+    
+    <div class="panel-body">
         <div class="dropdown pull-right">
-            <button class="btn btn-success btn-sm dropdown-toggle" type="button" onClick="return false;">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
+            <button class="btn btn-success btn-xs dropdown-toggle" type="button" onClick="return false;">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
             <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
                 <li role="presentation" class="dropdown-header">Track completo</li>
                 <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
@@ -22,10 +26,7 @@
                 <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
             </ul>
         </div>
-        <h3 class="panel-title"><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
-    </div>
-    
-    <div class="panel-body">
+        
         {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
         
         <div class="row">
