@@ -1,4 +1,4 @@
-{% extends 'ColectaItemBundle:Default:itemMicro.html.twig' %}
+{% extends 'ColectaItemBundle:Default:itemMini.html.twig' %}
 
 {% block itemBody %}
     <div class="row">
@@ -6,13 +6,14 @@
             {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
             
             <div id="summary-{{ item.slug }}">
-                {{ item.text[0:summary_max_length] | striptags(allowed_tags) | cleancode | raw | nl2br }}
+                {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
                 {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
             </div>
             
             {% if item.text | length > summary_max_length %}
                 <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
             {% endif %}
+
         </div>
         <div class="preview col-xs-12 col-sm-4 ">
             <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
