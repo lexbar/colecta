@@ -3,49 +3,31 @@
 {% block title %}Publicaciones de {{ user.name }}{% endblock %}
 
 {% block article %}
-
-<div class="row" style="margin-bottom:10px">
-    <div class="col-sm-2 hidden-xs">
-        <img class="img-responsive" src="{{ path('userAvatar',{'uid':user.id,'width':100,'height':100}) }}">
-    </div>
+    {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'items' } %}
     
-    <div class="col-sm-10 col-xs-12">
-        <h2>{{ user.name }}</h2>
-        <div class="row">
-            <div class="col-sm-12">
-                <ul class="nav nav-pills">
-                    <li class="active"><a href="{{ path('userProfile', {'id':user.id}) }}" data-toggle="tab">Publicaciones <i class="fa fa-pencil-square-o"></i></a></li>
-                    <li><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}" data-toggle="tab">Rendimiento <i class="fa fa-bar-chart-o"></i></a></li>
-                    {% if app.user and app.user.id != user.id and user.role.name != 'ROLE_BANNED' %}<li><a href="{{ path('userMessageNewTo', {'user_id':user.id}) }}">Enviar Mensaje <i class="fa fa-envelope-o"></i></a></li>{% endif %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
+    <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
 
-<h3>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h3>
-
-{% for item in items %}
-    
-    <div class="item" id="item{{ item.id}}">        
-        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}
+    {% for item in items %}
         
-        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-    </div>
-
-{% else %}
-    <h3>No ha publicado nada... por ahora.</h3>
-{% endfor %}
-
-<ul class="pager">
-  <li class="previous{% if page == 1 %} disabled{% endif %}">
-    <a href="{% if page > 1 %}{{ path('userItems', {'id': user.id, 'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-  </li>
-  <li class="next{% if not thereAreMore %} disabled{% endif %}">
-    <a href="{% if thereAreMore %}{{ path('userItems', {'id': user.id, 'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-  </li>
-</ul>
+        <div class="item" id="item{{ item.id}}">        
+            {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+            {% set path = path | replace({'/':'Bundle:'}) %}
+            {% include path with { 'item': item } only %}
+            
+            {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+        </div>
+    
+    {% else %}
+        <h3>No ha publicado nada... por ahora.</h3>
+    {% endfor %}
+    
+    <ul class="pager">
+      <li class="previous{% if page == 1 %} disabled{% endif %}">
+        <a href="{% if page > 1 %}{{ path('userItems', {'id': user.id, 'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+      </li>
+      <li class="next{% if not thereAreMore %} disabled{% endif %}">
+        <a href="{% if thereAreMore %}{{ path('userItems', {'id': user.id, 'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+      </li>
+    </ul>
 
 {% endblock %}
