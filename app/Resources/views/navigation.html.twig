@@ -151,11 +151,11 @@
 {% else %}
 
 <ul class="nav nav-pills nav-stacked">
-    <li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
+    {#<li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
         <a href="{{ path('ColectaCategoryIndex') }}">
             <i class="fa fa-list-ul fa-fw"></i> Categorías
         </a>
-    </li>
+    </li>#}
     <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
         <a href="{{ path('ColectaPostIndex') }}">
             <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-fw"></i> Discusión
@@ -168,10 +168,17 @@
     </li>
     <li{% if bun == 'ActivityBundle' and con == 'RouteController' %} class="active"{% endif %}>
         <a href="{{ path('ColectaRouteIndex') }}">
-            <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Tracks
+            <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Mapas
         </a>
     </li>
-    <li{% if bun == 'FilesBundle' and con == 'FileController' %} class="active"{% endif %}>
+    {% if app.user %}
+    <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
+        <a href="{{ path('ColectaActivitiesRank') }}"> 
+            <i class="fa fa-sort-amount-desc fa-fw"></i>  Ranking
+        </a>
+    </li>
+    {% endif %}
+    {#<li{% if bun == 'FilesBundle' and con == 'FileController' %} class="active"{% endif %}>
         <a href="{{ path('ColectaFileIndex') }}">
             <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-fw"></i> Archivos
         </a>
@@ -180,7 +187,7 @@
         <a href="{{ path('ColectaPlaceIndex') }}">
             <i class="fa fa-{{ itemIcons['Activity/Place'] }} fa-fw"></i> Lugares
         </a>
-    </li>
+    </li>#}
 </ul>
 
 {% render "ColectaSiteBundle:Page:navigation" with {context:'extranet'} %}
