@@ -1,4 +1,4 @@
-{% extends '::intranet.html.twig' %}
+{% extends '::frontend.html.twig' %}
 
 {% block rank 'active' %}
 
@@ -14,7 +14,7 @@
             <tr>
                 <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
                 <td><a href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">{{ user.name }}</a></td>
-                <td><div class="progress"><div class="progress-bar progress-bar-success" style="width: {% if maxkm > 0 %}{{ (kms[user.id] / maxkm * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div></div></td>
+                <td><div class="progress"><div class="progress-bar progress-bar-primary" style="width: {% if maxkm > 0 %}{{ (kms[user.id] / maxkm * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div></div></td>
             </tr>
         {% endfor %}
         </table>

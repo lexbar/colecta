@@ -70,129 +70,48 @@
     
     <hr>
     
-{#{ bun }}, {{ con }}, {{ act }#}
-
-{% if bun == 'IntranetBundle' %}
-
-<ul class="nav nav-pills nav-stacked">
-    <li{% if con == 'ChatController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaChatIndex') }}">
-            <i class="fa fa-comments fa-fw"></i> Chat
-        </a>
-    </li>
-    <li{% if con == 'ActivitiesController' and (act == 'indexAction' or act == 'yearPerformanceAction') %} class="active"{% endif %}>
-        <a href="{{ path('ColectaActivitiesIndex') }}">
-            <i class="fa fa-bar-chart-o fa-fw"></i> Rendimiento
-        </a>
-    </li>
-    <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
-        <a href="{{ path('ColectaActivitiesRank') }}"> 
-            <i class="fa fa-trophy fa-fw"></i>  Ranking
-        </a>
-    </li>
-    {#<li{% if con == 'LotteryController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaLotteryIndex') }}">
-            <i class="fa fa-ticket fa-fw"></i> Lotería
-        </a>
-    </li>#}
-</ul>
-
-{% render "ColectaSiteBundle:Page:navigation" with {context:'intranet'} %}
-
-{% elseif bun == 'BackendBundle' %}
-
-<ul class="nav nav-pills nav-stacked">
-    {% if app.user.role.SiteConfigSettings %}
-        <li{% if con == 'SettingsController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaBackendSettingsIndex') }}">
-                <i class="fa fa-cogs fa-fw"></i> Ajustes
+    <ul class="nav nav-pills nav-stacked">
+        {#<li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaCategoryIndex') }}">
+                <i class="fa fa-list-ul fa-fw"></i> Categorías
+            </a>
+        </li>#}
+        <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaPostIndex') }}">
+                <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-fw"></i> Discusión
             </a>
         </li>
-    {% endif %}
-    {% if app.user.role.SiteConfigUsers %}
-        <li{% if con == 'UserController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaBackendUserIndex') }}">
-                <i class="fa fa-male fa-fw"></i> Usuarios
+        <li{% if bun == 'ActivityBundle' and con == 'EventController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaEventIndex') }}"> 
+                <i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i>  Calendario
             </a>
         </li>
-    {% if app.user.role.SiteConfigPages %}
-    {% endif %}
-        <li{% if con == 'StaticController' %} class="active"{% endif %}>
-            <a href="#{#{ path('Colecta') }#}"> 
-                <i class="fa fa-file-text fa-fw"></i>  Páginas
+        <li{% if bun == 'ActivityBundle' and con == 'RouteController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaRouteIndex') }}">
+                <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Mapas
             </a>
         </li>
-    {% endif %}
-    {% if app.user.role.SiteConfigLottery %}
-        <li{% if con == 'LotteryController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaBackendLotteryIndex') }}">
-                <i class="fa fa-ticket fa-fw"></i> Lotería
+        {% if app.user %}
+        <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
+            <a href="{{ path('ColectaActivitiesRank') }}"> 
+                <i class="fa fa-sort-amount-desc fa-fw"></i>  Ranking
             </a>
         </li>
-    {% endif %}
-    {% if app.user.role.SiteConfigStats %}
-        <li{% if con == 'Controller' %} class="active"{% endif %}>
-            <a href="#{#{ path('Colecta') }#}">
-                <i class="fa fa-book fa-fw"></i> Contabilidad
+        {% endif %}
+        {#<li{% if bun == 'FilesBundle' and con == 'FileController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaFileIndex') }}">
+                <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-fw"></i> Archivos
             </a>
         </li>
-    {% endif %}
-    {% if app.user.role.SiteConfigPlan %}
-        <li{% if con == 'Controller' %} class="active"{% endif %}>
-            <a href="#{#{ path('Colecta') }#}">
-                <i class="fa fa-dashboard fa-fw"></i> Plan
+        <li{% if bun == 'ActivityBundle' and con == 'PlaceController' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaPlaceIndex') }}">
+                <i class="fa fa-{{ itemIcons['Activity/Place'] }} fa-fw"></i> Lugares
             </a>
-        </li>
-    {% endif %}
-</ul>
+        </li>#}
+    </ul>
+    
+    {% render "ColectaSiteBundle:Page:navigation" with {context:'extranet'} %}
 
-{% render "ColectaSiteBundle:Page:navigation" with {context:'backend'} %}
-
-{% else %}
-
-<ul class="nav nav-pills nav-stacked">
-    {#<li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaCategoryIndex') }}">
-            <i class="fa fa-list-ul fa-fw"></i> Categorías
-        </a>
-    </li>#}
-    <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaPostIndex') }}">
-            <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-fw"></i> Discusión
-        </a>
-    </li>
-    <li{% if bun == 'ActivityBundle' and con == 'EventController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaEventIndex') }}"> 
-            <i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i>  Calendario
-        </a>
-    </li>
-    <li{% if bun == 'ActivityBundle' and con == 'RouteController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaRouteIndex') }}">
-            <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Mapas
-        </a>
-    </li>
-    {% if app.user %}
-    <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
-        <a href="{{ path('ColectaActivitiesRank') }}"> 
-            <i class="fa fa-sort-amount-desc fa-fw"></i>  Ranking
-        </a>
-    </li>
-    {% endif %}
-    {#<li{% if bun == 'FilesBundle' and con == 'FileController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaFileIndex') }}">
-            <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-fw"></i> Archivos
-        </a>
-    </li>
-    <li{% if bun == 'ActivityBundle' and con == 'PlaceController' %} class="active"{% endif %}>
-        <a href="{{ path('ColectaPlaceIndex') }}">
-            <i class="fa fa-{{ itemIcons['Activity/Place'] }} fa-fw"></i> Lugares
-        </a>
-    </li>#}
-</ul>
-
-{% render "ColectaSiteBundle:Page:navigation" with {context:'extranet'} %}
-
-{% endif %}
 
 {# hide when big calendar is shown #}
 {% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}

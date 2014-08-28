@@ -13,6 +13,7 @@
 
     {% include 'ColectaFilesBundle:Folder:form.html.twig' with { 'item': item, 'formaction': path('ColectaFolderEdit', {'slug':item.slug}),'firstwrite':0} %}
     
+    <hr>
     <h3>Enlazar con otros contenidos</h3>
     <div class="monocontent">
         {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}

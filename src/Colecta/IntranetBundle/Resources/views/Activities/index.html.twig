@@ -1,8 +1,8 @@
-{% extends '::intranet.html.twig' %}
+{% extends '::frontend.html.twig' %}
 
 {% block content %}    
 
-    <h2><i class="fa fa-bar-chart-o fa-fw"></i> Rendimiento {{ year }}{% if years | length > 1 or years | length == 1 and years[0].year != year %}<br> {% for y in years %}<a href="{{ path('ColectaActivitiesYearPerformance',{year:y.year}) }}" class="btn btn-xs {% if y.year == year %}btn-success{% else %}btn-default{% endif %}">{{ y.year }}</a> {% endfor %}</small>{% endif %}</h2>
+    <h2>Rendimiento {{ year }}{% if years | length > 1 or years | length == 1 and years[0].year != year %}<br> {% for y in years %}<a href="{{ path('ColectaActivitiesYearPerformance',{year:y.year}) }}" class="btn btn-xs {% if y.year == year %}btn-success{% else %}btn-default{% endif %}">{{ y.year }}</a> {% endfor %}</small>{% endif %}</h2>
     
     <div class="monocontent">    
         <div id="chart" style="height:270px"></div>

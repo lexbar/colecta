@@ -41,6 +41,11 @@ h2 {
 .nav-pills>li {
     font-size: 18px;
 }
+.calendar-heading {
+    margin: 0;
+    background-color: #FFF;
+    padding: 5px 2px 10px;
+}
 .calendar tbody tr td.active {
     background-color: #009BDB;
 }
@@ -136,6 +141,7 @@ h2 {
 }
 .profileHeader .nav-pills li.active a {
     color: #009BDB;
+    border-color: #009BDB;
 }
 .profileHeader .nav-pills li a:hover {
     background-color: #EEE;

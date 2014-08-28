@@ -8,11 +8,7 @@
     </div>
     <input type="hidden" id="relateds" name="relateds" value="{{relateds}}">
     
-    {% if item.related | length > 0 %}
-        <hr>
-    {% endif %}
-    
-    <label for="searchItem">Buscar otro contenido para relacionar</label>
+    <label for="searchItem"><p class="lead">Buscar contenido para relacionar</p></label>
     <div class="row">
         <div class="col-sm-4">
             <input type="text" name="search" id="searchItem" class="form-control" autocomplete="off">
@@ -22,7 +18,7 @@
         </div>
         
         <div class="col-sm-3">
-            <button type="submit" class="btn btn-primary btn-block">Guardar enlaces</button>
+            <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
         </div>
     </div>
     

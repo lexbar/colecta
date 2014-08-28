@@ -1,10 +1,8 @@
-{% extends '::intranet.html.twig' %}
+{% extends '::frontend.html.twig' %}
 
-{% block rank 'active' %}
-
-{% block content %} 
+{% block article %} 
     
-    <h2><i class="fa fa-trophy fa-fw"></i> Ranking {{ year }}{% if years | length > 1 or years | length == 1 and years[0].year != year %}<br> {% for y in years %}<a href="{{ path('ColectaActivitiesYearRank',{year:y.year}) }}" class="btn btn-xs {% if y.year == year %}btn-success{% else %}btn-default{% endif %}">{{ y.year }}</a> {% endfor %}</small>{% endif %}</h2>
+    <h2>Ranking {{ year }}{% if years | length > 1 or years | length == 1 and years[0].year != year %}<br> {% for y in years %}<a href="{{ path('ColectaActivitiesYearRank',{year:y.year}) }}" class="btn btn-xs {% if y.year == year %}btn-success{% else %}btn-default{% endif %}">{{ y.year }}</a> {% endfor %}</small>{% endif %}</h2>
     
     <div class="monocontent">
         <table class="table table-condensed table-hover">
@@ -12,10 +10,10 @@
         {% set maxpoints = points[users[0].id] %}
         {% for user in users %}
             <tr>
-                <td>{{ points[user.id] | number_format(0) }} <i class="fa fa-star" style="color:green; font-size: 10px;"></i></td>
+                <td>{{ points[user.id] | number_format(0) }} p</td>
                 <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
                 <td><a href="{{ path('ColectaUserAssistancesYear', {'id':user.id, year: year}) }}">{{ user.name }}</a></td>
-                <td><div class="progress"><div class="progress-bar progress-bar-success" style="width: {% if maxpoints > 0 %}{{ (points[user.id] / maxpoints * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div></div></td>
+                <td><div class="progress"><div class="progress-bar progress-bar-primary" style="width: {% if maxpoints > 0 %}{{ (points[user.id] / maxpoints * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div></div></td>
             </tr>
         {% endfor %}
         </table>
