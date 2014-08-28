@@ -1,6 +1,9 @@
 /app/config/parameters.yml
 /app/cache/*
 /app/logs/*
+#/web/apple-touch-icon*
+#/web/favicon*
+#/web/mstile*
 /web/uploads/files/*
 /web/uploads/avatars/*
 /web/uploads/routes/*
