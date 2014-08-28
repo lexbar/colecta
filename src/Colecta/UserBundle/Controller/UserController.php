@@ -82,7 +82,7 @@ class UserController extends Controller
         
         $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\' ORDER BY e.dateini ASC')->setParameter('user',$user)->getResult();
         
-        $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p WHERE p.user = :user AND p.date >= \''.$year.'-01-01 00:00:00\' AND p.date <= \''.$year.'-12-31 23:59:59\'')->setParameter('user',$user)->getResult();
+        $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\'')->setParameter('user',$user)->getResult();
         
         $points = array();
         foreach($pointsRequest as $p)

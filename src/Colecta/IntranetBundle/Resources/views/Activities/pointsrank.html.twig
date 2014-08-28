@@ -2,7 +2,20 @@
 
 {% block article %} 
     
-    <h2>Ranking {{ year }}{% if years | length > 1 or years | length == 1 and years[0].year != year %}<br> {% for y in years %}<a href="{{ path('ColectaActivitiesYearRank',{year:y.year}) }}" class="btn btn-xs {% if y.year == year %}btn-success{% else %}btn-default{% endif %}">{{ y.year }}</a> {% endfor %}</small>{% endif %}</h2>
+    <h2>Ranking {{ year }}</h2>
+    {% if years | length > 1 or years | length == 1 and years[0].year != year %}
+        <p class="text-muted">
+            {% for y in years %}
+                {% if y.year != year %}
+                    <a href="{{ path('ColectaActivitiesYearRank',{year:y.year}) }}" class="">{{ y.year }}</a> 
+                {% else %}
+                    {{ y.year }}
+                {% endif %}
+                
+                {% if not loop.last %} | {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
     
     <div class="monocontent">
         <table class="table table-condensed table-hover">
