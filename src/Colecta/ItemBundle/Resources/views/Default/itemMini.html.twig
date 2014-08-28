@@ -1,12 +1,13 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
+{% set canEdit = app.user and item.canEdit(app.user) %}
 
-<div class="item panel {% if new %}panel-primary{% else %}panel-default{% endif %}">
+<div class="item panel {% if new %}panel-primary{% else %}panel-default{% endif %}{% if canEdit %} editable{% endif %}" id="item{{ item.id}}">
     <div class="panel-heading">
         <h3 class="panel-title">
             {% block itemTitle %}
                 <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
-                {% if app.user and item.canEdit(app.user) %}
+                {% if canEdit %}
                     <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
                 {% endif %}
             {% endblock %}

@@ -22,14 +22,12 @@
                 {% set item = relitem %}
             {% endif %}
         {% endfor %}
-    {% endif %}
-    <div class="item" id="item{{ item.id}}">        
+    {% endif %}   
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
         
         {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-    </div>
     
     {% set shownItems = shownItems | merge([item.id]) %}
     {% for ri in item.related %}

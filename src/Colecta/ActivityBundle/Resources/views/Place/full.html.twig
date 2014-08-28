@@ -4,11 +4,13 @@
 
 {% block article %}
 
-<div class="item panel panel-default">
+{% set canEdit = app.user and item.canEdit(app.user) %}
+
+<div class="item panel panel-default{% if canEdit %} editable{% endif %}">
     <div class="panel-heading">
         <h3 class="panel-title">
             <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a>
-            {% if app.user and item.canEdit(app.user) %}
+            {% if canEdit %}
                 <a href="{{ path('ColectaPlaceEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
             {% endif %}
         </h3>

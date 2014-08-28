@@ -4,9 +4,16 @@
 {% block onload 'initialize()' %}
 
 {% block article %}    
-<div class="item panel panel-default">
+{% set canEdit = app.user and item.canEdit(app.user) %}
+
+<div class="item panel panel-default{% if canEdit %} editable{% endif %}">
     <div class="panel-heading">
-        <h3 class="panel-title"><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
+        <h3 class="panel-title">
+            <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a>
+            {% if canEdit %}
+                <a href="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+            {% endif %}
+        </h3>
     </div>
     
     <div class="panel-body">
