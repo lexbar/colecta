@@ -251,8 +251,8 @@ class EventController extends Controller
             $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
             $item->setAllowassistances(true);
             $item->setText($request->get('text'));
-            $item->setDistance(str_replace(',','.', $request->get('distance')));
-            $item->setUphill($request->get('uphill'));
+            $item->setDistance(floatval(str_replace(',','.', $request->get('distance'))));
+            $item->setUphill(intval($request->get('uphill')));
             $item->setDownhill(0);
             $item->setDifficulty($request->get('difficulty'));
             $item->setStatus('');
