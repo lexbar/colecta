@@ -342,6 +342,16 @@ h2, h4 {
         padding: 15px 0 20px;
         border-top: 1px solid #DDD;
     }
+    .relations .date span {
+        font-size: 12px;
+    }
+    .relations .date .monthday {
+        font-size: 30px;
+        line-height: 30px;
+    }
+    .relations .date .hour {
+        font-size: 11px;
+    }
     .item .mapcaption {
         padding: 0 10px 10px;
     }
