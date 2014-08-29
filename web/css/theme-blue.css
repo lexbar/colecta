@@ -147,11 +147,11 @@ h2 {
     background-color: #EEE;
 }
 
-.relations h4 a {
+.micro h4 a {
     color: #111;
     text-decoration: underline;
 }
-.relations .new h4 a {
+.micro.new h4 a {
     color: #009BDB;
     text-decoration: underline;
 }

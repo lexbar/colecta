@@ -10,6 +10,8 @@
     {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
     
+    <hr>
+    
     {% include 'ColectaItemBundle:Default:newItemForm.html.twig' with {'attachto':item.id} only %}
 
 {% endblock %}
