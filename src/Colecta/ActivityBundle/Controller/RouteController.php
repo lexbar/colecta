@@ -144,10 +144,6 @@ class RouteController extends Controller
         if(file_exists($cachePath))
         {
             $image = file_get_contents($cachePath);
-            $response->setContent($image);
-            $response->headers->set('Content-Type','image/png');
-            
-            return $response;
         }
         else
         {
