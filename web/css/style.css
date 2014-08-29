@@ -342,14 +342,14 @@ h2, h4 {
         padding: 15px 0 20px;
         border-top: 1px solid #DDD;
     }
-    .relations .date span {
+    .micro .date span {
         font-size: 12px;
     }
-    .relations .date .monthday {
+    .micro .date .monthday {
         font-size: 30px;
         line-height: 30px;
     }
-    .relations .date .hour {
+    .micro .date .hour {
         font-size: 11px;
     }
     .item .mapcaption {

@@ -1,7 +1,7 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
 
-<div class="row{% if new %} new{% endif %}">
+<div class="micro row{% if new %} new{% endif %}">
     <div class="col-xs-3 col-lg-2">
         {% block thumbnail %}
             
