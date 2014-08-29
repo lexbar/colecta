@@ -59,7 +59,7 @@ class RouteController extends Controller
     {
         $this->get('request')->setRequestFormat('image');
         
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id ;
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id .'.png';
         
         $response = new Response();
         
@@ -126,7 +126,7 @@ class RouteController extends Controller
         
         $response = new Response();
         
-        /*if(@filemtime($cachePath))
+        if(@filemtime($cachePath))
         {
             $response->setLastModified(new \DateTime(date("Y-m-d\TH:i:sP",filemtime($cachePath))));
         }
@@ -150,7 +150,7 @@ class RouteController extends Controller
             return $response;
         }
         else
-        {*/
+        {
             $em = $this->getDoctrine()->getEntityManager();
             
             
@@ -194,7 +194,7 @@ class RouteController extends Controller
             $image = $this->renderView('ColectaActivityBundle:Route:profile.svg.twig', array('coordinates' => $coordinates, 'maxheight' => $maxheight, 'maxwidth' => $maxwidth));
             
             file_put_contents($cachePath, $image);
-        //}
+        }
         
         $response->setContent($image);
         $response->headers->set('Content-Type', 'image/svg+xml');
