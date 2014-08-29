@@ -11,7 +11,7 @@
         {% block text %}
             <h4><a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a></h4>
             {% if item.summary %}
-                <p>{{ item.summary }}</p>
+                <p>{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}</p>
             {% endif %}
         {% endblock %}
     </div>

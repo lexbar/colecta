@@ -31,9 +31,10 @@
         <div class="row" id="showMoreEvents"><p class="col-sm-4 col-xs-12" style="margin:10px 0 20px"><button onClick="$('#showMoreEvents').css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-sm btn-default btn-block"><i style="color:darkgreen;margin-right:2px" class="fa fa-plus-square"></i> Ver eventos pasados de este mes</button></p></div>
     {% endif %}
     
-    {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
     {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     
     {% if item.related | length > 0 %}
         <div class="relations">
