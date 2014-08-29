@@ -47,8 +47,10 @@
             </div>
             
             <div class="preview col-xs-12 col-sm-3 ">
+                {% if files | length > 0 %}
                 {% set file = files[0] %}
                 <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+                {% endif %}
             </div>
         </div>
     {% elseif thumbnails > 0 %}
