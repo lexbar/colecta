@@ -103,3 +103,6 @@ ColectaRouteDelete:
 ColectaRouteMap:
     pattern:  /routemap/{id}
     defaults: { _controller: ColectaActivityBundle:Route:map }
+ColectaRouteProfile:
+    pattern:  /routeprofile/{id}
+    defaults: { _controller: ColectaActivityBundle:Route:profile }

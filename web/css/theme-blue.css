@@ -85,8 +85,6 @@ h2 {
     border-radius: 0;
 }
 .item .itemActions {
-    border-top: 1px solid #CCC;
-    padding: 12px 0;
     background-color: #F1F8FD;
 }
 .item .itemActions a {

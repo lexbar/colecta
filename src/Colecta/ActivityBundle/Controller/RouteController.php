@@ -118,6 +118,88 @@ class RouteController extends Controller
         $response->headers->set('Content-Type', 'image/png');
         return $response;
     }
+    public function profileAction($id)
+    {
+        $this->get('request')->setRequestFormat('image');
+        
+        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id .'-profile.svg' ;
+        
+        $response = new Response();
+        
+        /*if(@filemtime($cachePath))
+        {
+            $response->setLastModified(new \DateTime(date("Y-m-d\TH:i:sP",filemtime($cachePath))));
+        }
+        else
+        {
+            $response->setLastModified(new \DateTime('now'));
+        }
+        
+        $response->setPublic();
+        
+        if ($response->isNotModified($this->getRequest())) {
+            return $response; // this will return the 304 if the cache is OK
+        } 
+        
+        if(file_exists($cachePath))
+        {
+            $image = file_get_contents($cachePath);
+            $response->setContent($image);
+            $response->headers->set('Content-Type','image/png');
+            
+            return $response;
+        }
+        else
+        {*/
+            $em = $this->getDoctrine()->getEntityManager();
+            
+            
+            $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
+            $track = $item->getTrackpoints();
+            
+            $coordinates = array();
+            
+            $n = count($track);
+            if($n > 100) 
+            { 
+                $step = floor($n / 60);
+            }
+            else
+            {
+                $step = 1;
+            }
+            
+            $distance = $avgheight = $maxheight = 0;
+            
+            for($i = 0; $i < $n-1; $i++)
+            {
+                $j = $i +1;
+                // Distance
+                $distance += distance(
+                    $track[$i]->getLatitude(), $track[$i]->getLongitude(), $track[$i]->getAltitude(),
+                    $track[$j]->getLatitude(), $track[$j]->getLongitude(), $track[$j]->getAltitude()
+                );
+                
+                $avgheight += $track[$i]->getAltitude();
+                
+                if($i != 0 && $i % $step == 0)
+                {
+                    $avgheight = $avgheight / $step;
+                    $coordinates[] = array($distance, $avgheight);
+                    
+                    $maxheight = max($avgheight, $maxheight);
+                    $maxwidth = $distance;
+                }
+            }
+            $image = $this->renderView('ColectaActivityBundle:Route:profile.svg.twig', array('coordinates' => $coordinates, 'maxheight' => $maxheight, 'maxwidth' => $maxwidth));
+            
+            file_put_contents($cachePath, $image);
+        //}
+        
+        $response->setContent($image);
+        $response->headers->set('Content-Type', 'image/svg+xml');
+        return $response;
+    }
     public function newAction()
     {
         return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route'));

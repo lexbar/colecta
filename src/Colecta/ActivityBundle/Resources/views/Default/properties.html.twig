@@ -31,7 +31,7 @@
     <li class="{% if isRoute %}col-xs-6 col-sm-4 col-md-2{% else %}col-xs-6 col-sm-3{% endif %}">Dificultad: <br><strong>{% if item.difficulty != '' %}{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderado', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}{% else %}--{% endif %}</strong> </li>
     
     {% if isRoute %}
-        <li class="col-xs-12 col-sm-8 col-md-4">perfil</li>
+        <li class="col-xs-12 col-sm-8 col-md-4"><img class="profile" src="{{ path('ColectaRouteProfile', { 'id' : item.id }) }}"></li>
     {% endif %}
     
 </ul>
