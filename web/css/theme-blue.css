@@ -146,3 +146,12 @@ h2 {
 .profileHeader .nav-pills li a:hover {
     background-color: #EEE;
 }
+
+.relations h4 a {
+    color: #111;
+    text-decoration: underline;
+}
+.relations .new h4 a {
+    color: #009BDB;
+    text-decoration: underline;
+}

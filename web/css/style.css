@@ -79,6 +79,26 @@ h2{
     text-align:center;
 }
 
+.date {
+    padding-bottom: 15px;
+}
+.date a {
+    color: #222;
+    text-decoration: none;
+}
+.date span {
+    display: block; 
+    text-align: center;
+}
+.date .monthday {
+    font-size: 58px;
+    font-weight: lighter;
+    line-height: 50px;
+}
+.date .hour {
+    font-size: 14px;
+}
+
 /* LEFT/RIGHT ICON ADDON */
 /* enable absolute positioning */
 .inner-addon { 
@@ -173,25 +193,6 @@ h2{
 .item .panel-body {
     padding-bottom: 0;
 }
-.item .date {
-    padding-bottom: 15px;
-}
-.item .date a {
-    color: #222;
-    text-decoration: none;
-}
-.item .date span {
-    display: block; 
-    text-align: center;
-}
-.item .date .monthday {
-    font-size: 58px;
-    font-weight: lighter;
-    line-height: 50px;
-}
-.item .date .hour {
-    font-size: 14px;
-}
 
 .item .preview {
     padding-bottom: 15px;
@@ -211,10 +212,16 @@ h2{
 
 .comments .media img {
     width:40px;
+}
+.comments .comment img {
     margin-top: 4px;
 }
 .comments .username {
     font-size: 14px;
+}
+.comments .media textarea {
+    font-size: 16px;
+    padding: 8px 12px;
 }
 .comments .media .removeComment {
     display: none;
@@ -302,6 +309,23 @@ h2{
     background-color: #FFF;
     padding: 15px 10px;
 }
+
+.relations h4 {
+    margin-top: 0;
+}
+.relations p {
+    font-size: 14px;
+}
+.relations img {
+    margin-bottom: 10px;
+}
+.relations .col-xs-9.col-lg-10 {
+    padding-left: 0;
+}
+.relations .date {
+    padding-bottom: 10px;
+}
+
 
 @media (max-width: 767px) { /* Small devices */
     .navbar-default {

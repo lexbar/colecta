@@ -1,40 +1,9 @@
 {% extends 'ColectaItemBundle:Default:itemMicro.html.twig' %}
 
-{% block itemBody %}
+{% block thumbnail %}
     {% if item.filetype in ['jpeg','gif','png'] %}
-        <div class="row">
-            <div class="col-xs-12 col-sm-9">
-                {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-                
-                <div id="summary-{{ item.slug }}">
-                    {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-                    {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
-                </div>
-                
-                {% if item.text | length > summary_max_length %}
-                    <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-                {% endif %}
-            </div>
-            
-            <div class="preview col-xs-12 col-sm-3 ">
-                <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileResize', {'slug':item.slug, 'width':'180', 'height':'350'}) }}"></a>
-            </div>
-        </div>
+        <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileResize', {'slug':item.slug, 'width':'150', 'height':'150'}) }}"></a>
     {% else %}
-        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-        
-        <div id="summary-{{ item.slug }}">
-            {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-            {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
-        </div>
-        
-        {% if item.text | length > summary_max_length %}
-            <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-        {% endif %}
-
-        <p><a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a></p>
+        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong style="text-transform: uppercase;">{{ item.filetype }}</strong></a>
     {% endif %}
-    
-    <p>{% if item.folder %}<p style="clear:both">Pertenece a la carpeta: <a href="{{ path('ColectaFolderView', { 'slug': item.folder.slug }) }}">{{ item.folder.name }}</a></p>{% endif %}</p>
-
 {% endblock %}

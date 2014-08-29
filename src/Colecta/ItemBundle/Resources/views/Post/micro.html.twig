@@ -1,22 +1,9 @@
 {% extends 'ColectaItemBundle:Default:itemMicro.html.twig' %}
 
-{% block itemContent %}
-    <div id="summary-{{ item.slug }}">
-        {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-        {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
-    </div>
-    
-    {% if item.text | length > summary_max_length %}
-        <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-    {% endif %}
-    
-    {% if item.linkTitle != '' %}
-        <p class="well well-sm well-link clearfix">
-            {% if item.linkImage != '' %}
-                <a href="{{ item.linkURL }}"><img src="{{ item.linkImage }}" class="pull-left" style="height:100px;max-width:300px;margin-right:10px;"></a>
-            {% endif %}
-            <strong><a target="_blank" href="{{ item.linkURL }}">{{ item.linkTitle | raw }}</a></strong><br><small class="text-muted">{{ item.linkURL | urlHost }}</small>
-            <br> {{ item.linkExcerpt }}
-        </p>
+{% block thumbnail %}
+    {% if item.linkImage %}
+        <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}"><img src="{{ item.linkImage }}" class="img-responsive pull-right"></a>
+    {% else %}
+        <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" class="img-responsive pull-right"></a>
     {% endif %}
 {% endblock %}
