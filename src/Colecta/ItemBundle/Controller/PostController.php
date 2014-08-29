@@ -24,8 +24,9 @@ class PostController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         
-        //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        //Get ALL the posts and folders that are not drafts
+        $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) AND i.draft = 0 ORDER BY i.date DESC")->getResult();
+        //$items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         //Pagination
         if(count($items) > $this->ipp) 

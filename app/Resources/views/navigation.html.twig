@@ -86,8 +86,8 @@
                 <i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i>  Calendario
             </a>
         </li>
-        <li{% if bun == 'ActivityBundle' and con == 'RouteController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaRouteIndex') }}">
+        <li{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} class="active"{% endif %}>
+            <a href="{{ path('ColectaMapIndex') }}">
                 <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Mapas
             </a>
         </li>

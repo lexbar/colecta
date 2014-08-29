@@ -1,3 +1,9 @@
+ColectaMapIndex:
+    pattern:  /mapas/
+    defaults: { _controller: ColectaActivityBundle:Default:index }
+ColectaMapPage:
+    pattern:  /mapas/pagina/{page}
+    defaults: { _controller: ColectaActivityBundle:Default:page }
 ColectaPlaceCreate:
     pattern:  /crear/lugar/
     defaults: { _controller: ColectaActivityBundle:Place:create }
