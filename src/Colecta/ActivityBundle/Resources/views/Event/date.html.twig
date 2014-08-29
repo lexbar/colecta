@@ -34,18 +34,8 @@
     {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
     {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %} 
     
-    {% if item.related | length > 0 %}
-        <div class="relations">
-            {% for relitem in item.related if relitem.draft == 0 %}
-                {% include "ColectaItemBundle:Default:onlyHeader.html.twig" with {'item':relitem} only %}
-            {% endfor %}
-        </div>
-    {% endif %}
-    
-    
-        
 {% else %}
     
     <div class="alert alert-info">

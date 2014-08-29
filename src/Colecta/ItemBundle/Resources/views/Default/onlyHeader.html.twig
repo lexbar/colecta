@@ -1,6 +1,0 @@
-{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
-<div class="item panel {% if new %}panel-warning{% else %}panel-default{% endif %}">
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-{{ itemIcons[item.type] }}"></i> <a href="{{ path(item.viewPath, { 'slug': item.slug }) }}">{{ item.name }}</a></h3>
-    </div>
-</div>
