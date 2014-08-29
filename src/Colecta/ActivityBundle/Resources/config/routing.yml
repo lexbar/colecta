@@ -25,6 +25,9 @@ ColectaEventCreate:
 ColectaEventIndex:
     pattern:  /actividades/
     defaults: { _controller: ColectaActivityBundle:Event:index }
+ColectaEventICS:
+    pattern:  /calendar.ics
+    defaults: { _controller: ColectaActivityBundle:Event:ics }
 ColectaEventNew:
     pattern:  /actividades/crear/
     defaults: { _controller: ColectaActivityBundle:Event:new }

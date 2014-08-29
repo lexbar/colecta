@@ -803,6 +803,14 @@ class EventController extends Controller
         return $this->render('ColectaActivityBundle:Event:calendar.html.twig', array('events' => $ev, 'targetdate'=>$date, 'targetdateob'=>$dateOb));
     }
     
+    public function icsAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 ORDER BY e.dateini DESC')->getResult();
+        
+        return $this->render('ColectaActivityBundle:Event:calendar.ics.twig', array('events' => $items));
+    }
+    
     public function nextEventAction()
     {
         $now = new \DateTime();
