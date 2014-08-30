@@ -94,7 +94,8 @@ class PostController extends Controller
                 {
                     if($n > 2)
                     {
-                        $catSlug = substr($catSlug,0,-2);
+                        $subtract = $num_length = strlen((string)$n) + 1 ;
+                        $catSlug = substr($slug,0,-$subtract);
                     }
                     
                     $catSlug .= '-'.$n;
@@ -128,7 +129,8 @@ class PostController extends Controller
             {
                 if($n > 2)
                 {
-                    $slug = substr($slug,0,-2);
+                    $subtract = $num_length = strlen((string)$n) + 1 ;
+                    $slug = substr($slug,0,-$subtract);
                 }
                 
                 $slug .= '-'.$n;
@@ -252,7 +254,8 @@ class PostController extends Controller
                     {
                         if($n > 2)
                         {
-                            $catSlug = substr($catSlug,0,-2);
+                            $subtract = $num_length = strlen((string)$n) + 1 ;
+                            $catSlug = substr($slug,0,-$subtract);
                         }
                         
                         $catSlug .= '-'.$n;

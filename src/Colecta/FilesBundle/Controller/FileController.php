@@ -92,7 +92,8 @@ class FileController extends Controller
             {
                 if($n > 2)
                 {
-                    $slug = substr($slug,0,-2);
+                    $subtract = $num_length = strlen((string)$n) + 1 ;
+                    $slug = substr($slug,0,-$subtract);
                 }
                 
                 $slug .= '-'.$n;
@@ -400,21 +401,10 @@ class FileController extends Controller
                     
                     while($em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug)) 
                     {
-                        if($n > 2 && $n < 10)
+                        if($n > 2)
                         {
-                            $slug = substr($slug,0,-2);
-                        }
-                        elseif($n < 100)
-                        {
-                            $slug = substr($slug,0,-3);
-                        }
-                        elseif($n < 1000)
-                        {
-                            $slug = substr($slug,0,-4);
-                        }
-                        else
-                        {
-                            $slug = substr($slug,0,-5);
+                            $subtract = $num_length = strlen((string)$n) + 1 ;
+                            $slug = substr($slug,0,-$subtract);
                         }
                         
                         $slug .= '-'.$n;
@@ -548,7 +538,8 @@ class FileController extends Controller
                         {
                             if($n > 2)
                             {
-                                $slug = substr($slug,0,-2);
+                                $subtract = $num_length = strlen((string)$n) + 1 ;
+                                $slug = substr($slug,0,-$subtract);
                             }
                             
                             $slug .= '-'.$n;
@@ -716,7 +707,8 @@ class FileController extends Controller
                         {
                             if($n > 2)
                             {
-                                $slug = substr($slug,0,-2);
+                                $subtract = $num_length = strlen((string)$n) + 1 ;
+                                $slug = substr($slug,0,-$subtract);
                             }
                             
                             $slug .= '-'.$n;
@@ -764,7 +756,8 @@ class FileController extends Controller
                     {
                         if($n > 2)
                         {
-                            $slug = substr($slug,0,-2);
+                            $subtract = $num_length = strlen((string)$n) + 1 ;
+                            $slug = substr($slug,0,-$subtract);
                         }
                         
                         $slug .= '-'.$n;
@@ -795,7 +788,8 @@ class FileController extends Controller
                             {
                                 if($n > 2)
                                 {
-                                    $slug = substr($slug,0,-2);
+                                    $subtract = $num_length = strlen((string)$n) + 1 ;
+                                    $slug = substr($slug,0,-$subtract);
                                 }
                                 
                                 $slug .= '-'.$n;
