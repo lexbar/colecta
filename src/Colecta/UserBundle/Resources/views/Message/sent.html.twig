@@ -4,7 +4,6 @@
 
 {% block article %}
 
-
 <div class="row title">
     <div class="col-sm-6">
         <h2>Mensajes Enviados</h2>
@@ -21,11 +20,11 @@
     {% for message in messages %}
         <li class="list-group-item">
             <div class="row">
-                <div class="col-sm-1 col-xs-2">
-                    <img width="40" height="40" src="{{ path('userAvatar',{'uid':message.destination.id,'width':40,'height':40}) }}">
+                <div class="col-md-1 col-sm-2 hidden-xs">
+                    <img class="img-responsive" src="{{ path('userAvatar',{'uid':message.destination.id,'width':40,'height':40}) }}">
                 </div>
                 
-                <div class="col-sm-11 col-xs-10">
+                <div class="col-md-11 col-sm-10 col-xs-12">
             
                     <p>Para <strong>{{ message.destination.name }}</strong> <small class="text-muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
                     

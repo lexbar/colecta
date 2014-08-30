@@ -20,11 +20,11 @@
     {% for message in messages %}
         <li class="list-group-item">
             <div class="row">
-                <div class="col-md-1 col-xs-2">
+                <div class="col-md-1 col-sm-2 hidden-xs">
                     <img class="img-responsive" src="{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}">
                 </div>
                 
-                <div class="col-md-9 col-xs-10">
+                <div class="col-md-9 col-sm-10 col-xs-12">
             
                     <p><strong>{{ message.origin.name }}</strong> <small class="text-muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
                     
