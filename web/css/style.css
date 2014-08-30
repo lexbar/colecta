@@ -338,6 +338,9 @@ h2, h4 {
     width: 90%;
 }
 
+.messages {
+    word-break: break-word;
+}
 .messages .btn-block {
     display: inline-block;
 }
