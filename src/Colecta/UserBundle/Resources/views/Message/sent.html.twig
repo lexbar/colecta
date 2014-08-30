@@ -5,19 +5,19 @@
 {% block article %}
 
 
-<div class="row">
+<div class="row title">
     <div class="col-sm-6">
-        <h2><i class="fa fa-envelope fa-fw"></i> Mensajes Enviados</h2>
+        <h2>Mensajes Enviados</h2>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Mensajes recibidos <i class="fa fa-inbox"></i></a>
+        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Recibidos <i class="fa fa-inbox"></i></a>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-success btn-block" href="{{ path('userMessageNew')}}">Nuevo mensaje <i class="fa fa-plus"></i></a>
+        <a class="btn btn-success btn-block" href="{{ path('userMessageNew')}}">Nuevo <i class="fa fa-plus"></i></a>
     </div>
 </div>
 
-<ul class="list-group">
+<ul class="messages list-group">
     {% for message in messages %}
         <li class="list-group-item">
             <div class="row">
@@ -27,16 +27,14 @@
                 
                 <div class="col-sm-11 col-xs-10">
             
-                    <p>A <strong>{{ message.destination.name }}</strong> {{ message.text | usercontent | raw | nl2br }}</p>
-            
+                    <p><strong>{{ message.origin.name }}</strong> <small class="text-muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
+                    
                     {% if message.responseto %}
-                        <br><small>En respuesta a:</small>
-                        <blockquote>
-                            {{ message.responseto.text | usercontent | raw | nl2br }}
-                        </blockquote>
+                        <p class="text-muted">{{ message.responseto.text | usercontent | raw | nl2br }}</p>
+                        <hr>
                     {% endif %}
-            
-                    <small class="muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
+                    
+                    <p>{{ message.text | usercontent | raw | nl2br }}</p>
                 </div>
             </div>
         </li>

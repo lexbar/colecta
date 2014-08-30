@@ -4,15 +4,15 @@
 
 {% block article %}
 
-<div class="row">
+<div class="row title">
     <div class="col-sm-6">
-        <h2><i class="fa fa-envelope fa-fw"></i> Nuevo mensaje</h2>
+        <h2>Nuevo mensaje</h2>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Mensajes recibidos <i class="fa fa-inbox"></i></a>
+        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Recibidos <i class="fa fa-inbox"></i></a>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-default btn-block" href="{{ path('userSentMessages') }}">Mensajes enviados <i class="fa fa-plane"></i></a>
+        <a class="btn btn-default btn-block" href="{{ path('userSentMessages') }}">Enviados <i class="fa fa-plane"></i></a>
     </div>
 </div>
 

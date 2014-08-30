@@ -338,6 +338,10 @@ h2, h4 {
     width: 90%;
 }
 
+.messages .btn-block {
+    display: inline-block;
+}
+
 @media (max-width: 767px) { /* Small devices */
     .navbar-default {
         padding: 5px;
