@@ -24,7 +24,11 @@ class UserController extends Controller
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         //Get ALL the items that are not drafts
         $page = 0;
-        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('author'=>$id), array('date'=>'DESC'),$this->ipp + 1, $page * $this->ipp);
+        $query = $em->createQuery(
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.author = $id AND i.draft = 0 AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
+        )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
+        
+        $items = $query->getResult();
         $count = count($items);
         
         //Pagination
