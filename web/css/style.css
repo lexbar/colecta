@@ -130,6 +130,7 @@ h2, h4 {
 }
 #self a.myname {
     margin-bottom: 15px;
+    margin-right: 60px;
 }
 #self a strong {
     font-weight: lighter;
@@ -139,9 +140,13 @@ h2, h4 {
 }
 #self .fa-caret-down {
     font-size: 12px;
+    padding-left: 6px;
 }
 #self ul.notifications {
     margin-bottom: 0;
+    position: absolute;
+    top: 0;
+    right: 10px;
 }
 #self ul.notifications li {
     position: relative;

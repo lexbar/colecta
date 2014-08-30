@@ -24,7 +24,7 @@
             </ul>
             <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="myname pull-left" onClick="$('#userOptions').toggle(); return false;">
                 <img src="{{ path('userAvatar',{'uid':app.user.id,'width':20,'height':20}) }}" width="20">
-                <strong>{{ app.user.name }} <i class="fa fa-caret-down"></i></strong>
+                <strong>{{ app.user.name }}<i class="fa fa-caret-down"></i></strong>
             </a>
         </div>
         
