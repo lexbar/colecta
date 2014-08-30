@@ -7,7 +7,7 @@
     <h2><i class="fa fa-trophy fa-fw"></i> Ranking {{ year }}{% if years | length > 1 or years | length == 1 and years[0].year != year %}<br> {% for y in years %}<a href="{{ path('ColectaActivitiesYearRank',{year:y.year}) }}" class="btn btn-xs {% if y.year == year %}btn-success{% else %}btn-default{% endif %}">{{ y.year }}</a> {% endfor %}</small>{% endif %}</h2>
     
     <div class="monocontent">
-        <table class="table table-condensed table-hover">
+        <table class="rank table table-condensed table-hover">
         <thead><tr><th style="width: 100px;">Total</th><th style="width: 150px;">Nombre</th><th>Ranking</th></tr></thead>
         {% set maxkm = kms[users[0].id] %}
         {% for user in users %}

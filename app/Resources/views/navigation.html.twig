@@ -63,7 +63,7 @@
 
     <form id="searchForm" class="" role="search" action="{{ path('ColectaSearch') }}" method="GET">
         <div class="inner-addon right-addon">
-            <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('search') }}">
+            <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
             <i class="fa fa-search"></i>
         </div>
     </form>

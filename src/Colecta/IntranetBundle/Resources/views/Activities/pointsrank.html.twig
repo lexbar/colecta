@@ -18,11 +18,11 @@
     {% endif %}
     
     <div class="monocontent">
-        <table class="table table-condensed table-hover">
+        <table class="rank table table-condensed table-hover">
         <thead><tr><th style="width: 75px;">Puntos</th><th style="width: 100px;">Acumulado</th><th style="width: 150px;">Nombre</th><th>Ranking</th></tr></thead>
         {% set maxpoints = points[users[0].id] %}
         {% for user in users %}
-            <tr>
+            <tr{% if app.user and user == app.user %} class="self"{% endif %}>
                 <td>{{ points[user.id] | number_format(0) }} p</td>
                 <td>{{ kms[user.id] | number_format(1,'.',',') }} km</td>
                 <td><a href="{{ path('ColectaUserAssistancesYear', {'id':user.id, year: year}) }}">{{ user.name }}</a></td>
