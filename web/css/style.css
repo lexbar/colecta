@@ -125,30 +125,40 @@ h2, h4 {
 
 /* SIDEBAR */
 
-#self {
-
-}
-#self *{
+#self .clearfix *{
     vertical-align: middle;
+}
+#self a.myname {
+    margin-bottom: 15px;
 }
 #self a strong {
     font-weight: lighter;
-    font-size: 20px;
+    font-size: 18px;
+    line-height: 20px;
     color: #000;
 }
-#self ul li {
+#self .fa-caret-down {
+    font-size: 12px;
+}
+#self ul.notifications {
+    margin-bottom: 0;
+}
+#self ul.notifications li {
     position: relative;
 }
-#self ul i {
+#self ul.notifications i {
     font-size: 18px;
-    margin: 6px 4px;
+    margin: 4px 0 4px 4px;
 }
-#self ul li .badge {
+#self ul.notifications li .badge {
     background-color: #A01127;
     color: #FFF;
     position: absolute;
     top: -4px;
     right: -5px;
+}
+#self #userOptions {
+    margin-bottom: 15px;
 }
 
 #searchForm i {
