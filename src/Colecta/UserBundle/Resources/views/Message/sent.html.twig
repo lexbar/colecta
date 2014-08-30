@@ -27,7 +27,7 @@
                 
                 <div class="col-sm-11 col-xs-10">
             
-                    <p><strong>{{ message.origin.name }}</strong> <small class="text-muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
+                    <p>Para <strong>{{ message.destination.name }}</strong> <small class="text-muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
                     
                     {% if message.responseto %}
                         <p class="text-muted">{{ message.responseto.text | usercontent | raw | nl2br }}</p>
