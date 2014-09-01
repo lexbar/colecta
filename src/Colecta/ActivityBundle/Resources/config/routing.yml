@@ -67,6 +67,9 @@ ColectaEventUnasist:
 ColectaEventUpdateAsist:
     pattern:  /actividades/{slug}/updateasist/
     defaults: { _controller: ColectaActivityBundle:Event:updateAssistances }
+ColectaEventAboutics:
+    pattern:  /icsinfo.html
+    defaults: { _controller: ColectaActivityBundle:Event:aboutics }
 ColectaRouteUpload:
     pattern:  /upload/rutas/
     defaults: { _controller: ColectaActivityBundle:Route:upload }

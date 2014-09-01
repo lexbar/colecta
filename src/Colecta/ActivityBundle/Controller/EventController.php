@@ -822,4 +822,9 @@ class EventController extends Controller
         
         return $this->render('ColectaActivityBundle:Event:nextEvent.html.twig', array('events' => $items));
     }
+    
+    public function abouticsAction()
+    {
+        return $this->render('ColectaActivityBundle:Event:aboutics.html.twig');
+    }
 }

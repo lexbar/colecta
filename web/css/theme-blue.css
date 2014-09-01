@@ -13,6 +13,13 @@ h2 {
     background-color: #009BDB;
     border-color: #1383A0;
 }
+.alert {
+    border-width: 1px 1px 4px 1px;
+}
+.alert-blank {
+    background-color: #FFF;
+    border-color: #EEE;
+}
 
 .row.title {
     margin-bottom: 10px;
@@ -70,13 +77,6 @@ h2 {
 }
 .panel-default .panel-heading {
     background-color: #FFF;
-}
-.panel-heading .panel-title .pull-right {
-    font-size: 14px;
-    position: absolute;
-    right: 0px;
-    top: 0;
-    padding: 5px;
 }
 
 .item .details {

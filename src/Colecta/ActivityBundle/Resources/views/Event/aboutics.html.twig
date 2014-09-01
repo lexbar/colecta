@@ -1,0 +1,43 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title %}Sincronizar calendario{% endblock %}
+
+{% block article %}
+
+<h2>Suscripción al calendario online</h2>
+<div class="monocontent">
+    <p>Para <strong>suscribirte</strong> al calendario puedes utilizar la siguiente dirección:</p>
+    
+    <input class="form-control" onClick="this.select();" value="http://{{ app.request.host ~ path('ColectaEventICS') }}">
+    
+    <hr>
+    
+    <h3>Usuarios de Outlook</h3>
+    <ol>
+        <li>Inicia sesión con tu cuenta de Windows Live</li>
+        <li>En la página <em>Calendario</em>, haz clic en <em>Suscribir</em> y, a continuación, haz clic en <em>Suscribirse a un calendario público</em>.</li>
+        <li>En el cuadro de texto Dirección URL del calendario escribe: <strong>http://{{ app.request.host ~ path('ColectaEventICS') }}</strong></li>
+        <li>Escribe un nombre para el calendario.</li>
+        <li>Haz clic en <em>Suscribirse al calendario.</em></li>
+    </ol>
+    
+    <h3>Usuarios de iCal para Mac</h3>
+    <ol>
+        <li>Abre el programa iCal a través del Dock o de tu carpeta de Aplicaciones</li>
+        <li>En el menú <em>Archivo</em> pulsa en <em>Nueva suscripción a calendario...</em> o alternativamente usando el teclado pulsa <em>Alt + Cmd + S</em></li>
+        <li>En el cuadro de texto <em>URL del calendario</em> escribe: <strong>http://{{ app.request.host ~ path('ColectaEventICS') }}</strong> y pulsa en <em>Suscribirse</em>.</li>
+        <li>Escribe un nombre para el calendario y completa el resto de preferencias del calendario.</li>
+        <li>Haz clic en <em>Aceptar</em></li>
+    </ol>
+    
+        <h3>Usuarios de Google Calendar</h3>
+    <ol>
+        <li>Inicia sesión con tu cuenta de Google</li>
+        <li>En la página de <em>Calendar</em> pulsa en el icono <i class="fa fa-caret-square-o-down"></i> junto a <em>"Otros calendarios"</em> y a continuación <em>"Añadir por URL"</em></li>
+        <li>En el cuadro de texto <em>URL</em> escribe: <strong>http://{{ app.request.host ~ path('ColectaEventICS') }}</strong> y pulsa en <em>Añadir calendario</em>.</li>
+    </ol>
+    
+    <p>Si utilizas otro programa para gestionar calendarios y tiene la opción de suscripción a calendario probablemente siga unos pasos muy similares a los descritos anteriormente. También puedes buscar en la sección de Ayuda de tu programa o buscar una solución en internet.</p>
+</div>
+
+{% endblock %}
