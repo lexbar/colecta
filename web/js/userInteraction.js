@@ -346,14 +346,7 @@ function FUuploadComplete(evt) {
     if(res.length > 180) {
         FUuploadFailed();
     } else {
-        $('#UFC'+FUcurrentFileIndex).html('<img src="'+FUpreviewAddress + $.trim(res)+'" class="img-responsive"><input type="text" class="form-control" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..." onFocus="if(this.value == \'Nombre...\') this.value=\'\'"><textarea class="form-control" name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..." onFocus="if($(this).val(\'Descripción...\')) $(this).val(\'\')"></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete">');
-        
-        //Placeholder problems
-        var phitest = document.createElement('input');
-        if(!('placeholder' in phitest)) {
-            $('#UFC'+FUcurrentFileIndex+' input[type=text]').val('Nombre...')
-            $('#UFC'+FUcurrentFileIndex+' textarea').val('Descripción...')
-        }
+        $('#UFC'+FUcurrentFileIndex).html('<img src="'+FUpreviewAddress + $.trim(res)+'" class="img-responsive"><input type="text" class="form-control" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..."><textarea class="form-control" name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..."></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete">');
         
         uploadNext();
     }
