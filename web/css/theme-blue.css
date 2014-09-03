@@ -88,6 +88,9 @@ h2 {
     background-color: #FFF;
     border-radius: 0;
 }
+.item .list-group-item {
+    border: 1px dashed #eaeaea;
+}
 .item .itemActions {
     background-color: #F1F8FD;
 }
