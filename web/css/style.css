@@ -377,6 +377,9 @@ h2, h4 {
     font-weight: bold;
 }
 
+.list-group-item .pull-right {
+    margin-left: 10px;
+}
 @media (max-width: 767px) { /* Small devices */
     .navbar-default {
         padding: 5px;
