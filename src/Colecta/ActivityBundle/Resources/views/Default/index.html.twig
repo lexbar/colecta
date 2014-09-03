@@ -14,9 +14,8 @@
         {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     {% else %}
         <div class="monocontent text-center">
-            <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-4x"></i>
-            <h2>Ésta es la página de Mapas</h2>
-            <p>Las rutas y lugares que se añadan aparecerán aquí.</p>
+            <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-4x"></i>
+            <p class="lead">Las rutas y lugares que se añadan aparecerán aquí.</p>
         </div>
     {% endfor %}
     

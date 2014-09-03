@@ -1,11 +1,11 @@
 {% extends '::frontend.html.twig' %}
 
-{% block title %}Capetas{% endblock %}
+{% block title %}Albumes{% endblock %}
 
 {% block article %}
 
     {% if app.user %} <a href="{{ path('ColectaFileNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-    <h2>Capetas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    <h2>Albumes{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
     {% for item in items %}
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
@@ -15,8 +15,7 @@
     {% else %}
          <div class="monocontent text-center">
             <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-4x"></i>
-            <h2>Ésta es la página de Carpetas</h2>
-            <p>Las carpetas que se añadan aparecerán aquí.</p>
+            <p class="lead">Los albumes que se añadan aparecerán aquí.</p>
         </div>
     {% endfor %}
     {% if page > 1 or thereAreMore %}
