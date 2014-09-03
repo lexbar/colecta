@@ -36,7 +36,8 @@
             zoom: 3,
             center: bounds.getCenter(),
             mapTypeId: google.maps.MapTypeId.TERRAIN, 
-            streetViewControl: false
+            streetViewControl: false,
+            scrollwheel: false
         };
         
         map = new google.maps.Map(document.getElementById('ItemSubmitMap'), mapOptions);
