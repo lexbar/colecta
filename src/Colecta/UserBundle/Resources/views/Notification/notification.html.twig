@@ -5,6 +5,8 @@
         <a href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right"> <i class="fa fa-archive fa-fw"></i></a>
     {% endif %}
     
+    <small class="text-muted pull-right">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small>
+    
     <i class="fa fa-{{ notificationsIcons[notification.what] }}"></i>
     
     {{ notification.who.name }} 
