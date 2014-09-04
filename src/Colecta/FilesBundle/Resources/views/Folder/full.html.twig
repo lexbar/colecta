@@ -55,7 +55,7 @@
             </div>
         {% elseif thumbnails > 0 %}
             <div class="row thumbnails">        
-                {% for file in files | slice(0,8) %}
+                {% for file in files %}
                     {% if file.filetype in ['jpeg','gif','png'] %}                    
                         <div class="col-xs-6 col-sm-3">
                             <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
