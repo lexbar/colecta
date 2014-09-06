@@ -32,8 +32,8 @@ h2 {
     color: #FFF;
 }
 .navbar-default a.navbar-brand:hover {
-    color: #DDD;
-    opacity: .7;
+    color: #FFF;
+    opacity: .8;
 } 
 
 .sidebar a {
