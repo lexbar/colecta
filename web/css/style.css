@@ -271,7 +271,7 @@ h2, h4 {
     line-height: 480px;
 }
 .fullimage a {
-    opacity: 0;
+    opacity: .1;
     transition: opacity .5s;
 }
 .fullimage:hover a {
