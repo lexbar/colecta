@@ -334,6 +334,7 @@ h2, h4 {
 .monocontent {
     background-color: #FFF;
     padding: 15px 10px;
+    border: 1px solid #eee;
 }
 
 .relations h4 {
