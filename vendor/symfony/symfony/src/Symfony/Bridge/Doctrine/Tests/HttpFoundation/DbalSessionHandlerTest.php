@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Bridge\Doctrine\HttpFoundation;
+namespace Symfony\Bridge\Doctrine\Tests\HttpFoundation;
 
 use Symfony\Bridge\Doctrine\HttpFoundation\DbalSessionHandler;
 
@@ -29,9 +29,7 @@ class DbalSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $this->connection = $this->getMock('Doctrine\DBAL\Driver\Connection');
-        $mock = $this->getMockBuilder('Symfony\Bridge\Doctrine\HttpFoundation\DbalSessionHandler');
-        $mock->setConstructorArgs(array($this->connection));
-        $this->driver = $mock->getMock();
+        $connection = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
+        $handler = new DbalSessionHandler($connection);
     }
 }

@@ -29,6 +29,7 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     protected $addIfNotSet;
     protected $performDeepMerging;
     protected $ignoreExtraKeys;
+    protected $normalizeKeys;
 
     /**
      * Constructor.
@@ -47,6 +48,41 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         $this->addIfNotSet = false;
         $this->allowNewKeys = true;
         $this->performDeepMerging = true;
+        $this->normalizeKeys = true;
+    }
+
+    public function setNormalizeKeys($normalizeKeys)
+    {
+        $this->normalizeKeys = (bool) $normalizeKeys;
+    }
+
+    /**
+     * Normalizes keys between the different configuration formats.
+     *
+     * Namely, you mostly have foo_bar in YAML while you have foo-bar in XML.
+     * After running this method, all keys are normalized to foo_bar.
+     *
+     * If you have a mixed key like foo-bar_moo, it will not be altered.
+     * The key will also not be altered if the target key already exists.
+     *
+     * @param mixed $value
+     *
+     * @return array The value with normalized keys
+     */
+    protected function preNormalize($value)
+    {
+        if (!$this->normalizeKeys || !is_array($value)) {
+            return $value;
+        }
+
+        foreach ($value as $k => $v) {
+            if (false !== strpos($k, '-') && false === strpos($k, '_') && !array_key_exists($normalizedKey = str_replace('-', '_', $k), $value)) {
+                $value[$normalizedKey] = $v;
+                unset($value[$k]);
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -73,51 +109,51 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
      * Sets whether to add default values for this array if it has not been
      * defined in any of the configuration files.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      */
     public function setAddIfNotSet($boolean)
     {
-        $this->addIfNotSet = (Boolean) $boolean;
+        $this->addIfNotSet = (bool) $boolean;
     }
 
     /**
      * Sets whether false is allowed as value indicating that the array should be unset.
      *
-     * @param Boolean $allow
+     * @param bool    $allow
      */
     public function setAllowFalse($allow)
     {
-        $this->allowFalse = (Boolean) $allow;
+        $this->allowFalse = (bool) $allow;
     }
 
     /**
      * Sets whether new keys can be defined in subsequent configurations.
      *
-     * @param Boolean $allow
+     * @param bool    $allow
      */
     public function setAllowNewKeys($allow)
     {
-        $this->allowNewKeys = (Boolean) $allow;
+        $this->allowNewKeys = (bool) $allow;
     }
 
     /**
      * Sets if deep merging should occur.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      */
     public function setPerformDeepMerging($boolean)
     {
-        $this->performDeepMerging = (Boolean) $boolean;
+        $this->performDeepMerging = (bool) $boolean;
     }
 
     /**
      * Whether extra keys should just be ignore without an exception.
      *
-     * @param Boolean $boolean To allow extra keys
+     * @param bool    $boolean To allow extra keys
      */
     public function setIgnoreExtraKeys($boolean)
     {
-        $this->ignoreExtraKeys = (Boolean) $boolean;
+        $this->ignoreExtraKeys = (bool) $boolean;
     }
 
     /**
@@ -133,7 +169,7 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     /**
      * Checks if the node has a default value.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasDefaultValue()
     {
@@ -174,7 +210,7 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     public function addChild(NodeInterface $node)
     {
         $name = $node->getName();
-        if (empty($name)) {
+        if (!strlen($name)) {
             throw new \InvalidArgumentException('Child nodes must be named.');
         }
         if (isset($this->children[$name])) {
@@ -255,6 +291,8 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
      * @param mixed $value The value to normalize
      *
      * @return mixed The normalized value
+     *
+     * @throws InvalidConfigurationException
      */
     protected function normalizeValue($value)
     {
@@ -265,9 +303,9 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         $value = $this->remapXml($value);
 
         $normalized = array();
-        foreach ($this->children as $name => $child) {
-            if (array_key_exists($name, $value)) {
-                $normalized[$name] = $child->normalize($value[$name]);
+        foreach ($value as $name => $val) {
+            if (isset($this->children[$name])) {
+                $normalized[$name] = $this->children[$name]->normalize($val);
                 unset($value[$name]);
             }
         }

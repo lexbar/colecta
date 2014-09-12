@@ -13,7 +13,6 @@ namespace Symfony\Component\Form\Extension\Core\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
  * Transforms between a number type and a localized number with grouping
@@ -56,12 +55,12 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     /**
      * Transforms a number type into localized number.
      *
-     * @param integer|float $value Number value.
+     * @param int|float $value Number value.
      *
      * @return string Localized value.
      *
-     * @throws UnexpectedTypeException if the given value is not numeric
-     * @throws TransformationFailedException if the value can not be transformed
+     * @throws TransformationFailedException If the given value is not numeric
+     *                                       or if the value can not be transformed.
      */
     public function transform($value)
     {
@@ -70,7 +69,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
         }
 
         if (!is_numeric($value)) {
-            throw new UnexpectedTypeException($value, 'numeric');
+            throw new TransformationFailedException('Expected a numeric.');
         }
 
         $formatter = $this->getNumberFormatter();
@@ -80,6 +79,9 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
             throw new TransformationFailedException($formatter->getErrorMessage());
         }
 
+        // Convert fixed spaces to normal ones
+        $value = str_replace("\xc2\xa0", ' ', $value);
+
         return $value;
     }
 
@@ -88,25 +90,26 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
      *
      * @param string $value The localized value
      *
-     * @return integer|float The numeric value
+     * @return int|float The numeric value
      *
-     * @throws UnexpectedTypeException if the given value is not a string
-     * @throws TransformationFailedException if the value can not be transformed
+     * @throws TransformationFailedException If the given value is not a string
+     *                                       or if the value can not be transformed.
      */
     public function reverseTransform($value)
     {
         if (!is_string($value)) {
-            throw new UnexpectedTypeException($value, 'string');
+            throw new TransformationFailedException('Expected a string.');
         }
 
         if ('' === $value) {
-            return null;
+            return;
         }
 
         if ('NaN' === $value) {
             throw new TransformationFailedException('"NaN" is not a valid number');
         }
 
+        $position = 0;
         $formatter = $this->getNumberFormatter();
         $groupSep = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
         $decSep = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
@@ -119,17 +122,39 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
             $value = str_replace(',', $decSep, $value);
         }
 
-        $value = $formatter->parse($value);
+        $result = $formatter->parse($value, \NumberFormatter::TYPE_DOUBLE, $position);
 
         if (intl_is_failure($formatter->getErrorCode())) {
             throw new TransformationFailedException($formatter->getErrorMessage());
         }
 
-        if ($value >= INF || $value <= -INF) {
+        if ($result >= PHP_INT_MAX || $result <= -PHP_INT_MAX) {
             throw new TransformationFailedException('I don\'t have a clear idea what infinity looks like');
         }
 
-        return $value;
+        if (function_exists('mb_detect_encoding') && false !== $encoding = mb_detect_encoding($value)) {
+            $length = mb_strlen($value, $encoding);
+            $remainder = mb_substr($value, $position, $length, $encoding);
+        } else {
+            $length = strlen($value);
+            $remainder = substr($value, $position, $length);
+        }
+
+        // After parsing, position holds the index of the character where the
+        // parsing stopped
+        if ($position < $length) {
+            // Check if there are unrecognized characters at the end of the
+            // number (excluding whitespace characters)
+            $remainder = trim($remainder, " \t\n\r\0\x0b\xc2\xa0");
+
+            if ('' !== $remainder) {
+                throw new TransformationFailedException(
+                    sprintf('The number contains unrecognized characters: "%s"', $remainder)
+                );
+            }
+        }
+
+        return $result;
     }
 
     /**

@@ -20,18 +20,18 @@
     <div class="monocontent">
         <form action="{{ path('userMessageNew') }}" method="POST" class="form-horizontal" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">
             <fieldset>
-              <div class="form-group{% if app.session.flash('MessageDestinationError') %} error{% endif %}">
+              <div class="form-group{% if app.session.flashbag.get('MessageDestinationError') %} has-error{% endif %}">
                 <label class="col-sm-3 col-lg-2 control-label" for="MessageName">Para:</label>
                 <div class="col-sm-9 col-lg-10">
-                  <input type="text" class="form-control" id="userSearch" name="destination" autocomplete="off" value="{% if userTo is defined %}{{userTo.name}}{% else %}{{ app.session.flash('MessageDestination') }}{% endif %}"> <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
+                  <input type="text" class="form-control" id="userSearch" name="destination" autocomplete="off" value="{% if userTo is defined %}{{userTo.name}}{% else %}{% for MessageDestination in app.session.flashbag.get('MessageDestination') %}{{ MessageDestination }}{% endfor %}{% endif %}"> <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
                   <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
                 </div>
               </div>
               
-              <div class="form-group{% if app.session.flash('MessageTextError') %} error{% endif %}">
+              <div class="form-group{% if app.session.flashbag.get('MessageTextError') %} has-error{% endif %}">
                 <label class="col-sm-3 col-lg-2 control-label" for="MessageText">Texto</label>
                 <div class="col-sm-9 col-lg-10">
-                  <textarea class="form-control" id="MessageText" name="text" rows="4">{{ app.session.flash('MessageText') }}</textarea>
+                  <textarea class="form-control" id="MessageText" name="text" rows="4">{% for MessageText in app.session.flashbag.get('MessageText') %}{{ MessageText }}{% endfor %}</textarea>
                 </div>
               </div>
               

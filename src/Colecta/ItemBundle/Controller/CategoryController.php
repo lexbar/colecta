@@ -10,7 +10,7 @@ class CategoryController extends Controller
     
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $query = $em->createQuery(
             'SELECT c FROM ColectaItemBundle:Category c ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
@@ -28,7 +28,7 @@ class CategoryController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneBySlug($slug);
         $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft' => 0, 'category' => $category->getId()), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
@@ -49,7 +49,7 @@ class CategoryController extends Controller
     
     public function formlistAction($selected, $simplified = false)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         

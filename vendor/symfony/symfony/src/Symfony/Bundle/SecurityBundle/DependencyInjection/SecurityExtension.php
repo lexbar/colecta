@@ -13,6 +13,7 @@ namespace Symfony\Bundle\SecurityBundle\DependencyInjection;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\UserProvider\UserProviderFactoryInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -183,7 +184,7 @@ class SecurityExtension extends Extension
                 $access['path'],
                 $access['host'],
                 $access['methods'],
-                $access['ip']
+                $access['ips']
             );
 
             $container->getDefinition('security.access_map')
@@ -227,7 +228,7 @@ class SecurityExtension extends Extension
         $mapDef->replaceArgument(1, $map);
 
         // add authentication providers to authentication manager
-        $authenticationProviders = array_map(function($id) {
+        $authenticationProviders = array_map(function ($id) {
             return new Reference($id);
         }, array_values(array_unique($authenticationProviders)));
         $container
@@ -239,7 +240,6 @@ class SecurityExtension extends Extension
     private function createFirewall(ContainerBuilder $container, $id, $firewall, &$authenticationProviders, $providerIds)
     {
         // Matcher
-        $i = 0;
         $matcher = null;
         if (isset($firewall['request_matcher'])) {
             $matcher = new Reference($firewall['request_matcher']);
@@ -413,7 +413,7 @@ class SecurityExtension extends Extension
         }
 
         if (false === $hasListeners) {
-            throw new \LogicException(sprintf('No authentication listener registered for firewall "%s".', $id));
+            throw new InvalidConfigurationException(sprintf('No authentication listener registered for firewall "%s".', $id));
         }
 
         return array($listeners, $defaultEntryPoint);
@@ -449,16 +449,35 @@ class SecurityExtension extends Extension
             );
         }
 
-        // message digest encoder
-        $arguments = array(
-            $config['algorithm'],
-            $config['encode_as_base64'],
-            $config['iterations'],
-        );
+        // pbkdf2 encoder
+        if ('pbkdf2' === $config['algorithm']) {
+            return array(
+                'class'     => new Parameter('security.encoder.pbkdf2.class'),
+                'arguments' => array(
+                    $config['hash_algorithm'],
+                    $config['encode_as_base64'],
+                    $config['iterations'],
+                    $config['key_length'],
+                ),
+            );
+        }
 
+        // bcrypt encoder
+        if ('bcrypt' === $config['algorithm']) {
+            return array(
+                'class'     => new Parameter('security.encoder.bcrypt.class'),
+                'arguments' => array($config['cost']),
+            );
+        }
+
+        // message digest encoder
         return array(
-            'class' => new Parameter('security.encoder.digest.class'),
-            'arguments' => $arguments,
+            'class'     => new Parameter('security.encoder.digest.class'),
+            'arguments' => array(
+                $config['algorithm'],
+                $config['encode_as_base64'],
+                $config['iterations'],
+            ),
         );
     }
 

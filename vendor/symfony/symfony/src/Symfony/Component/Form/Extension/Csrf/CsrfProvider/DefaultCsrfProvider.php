@@ -41,7 +41,7 @@ class DefaultCsrfProvider implements CsrfProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generateCsrfToken($intention)
     {
@@ -49,7 +49,7 @@ class DefaultCsrfProvider implements CsrfProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isCsrfTokenValid($intention, $token)
     {
@@ -65,7 +65,11 @@ class DefaultCsrfProvider implements CsrfProviderInterface
      */
     protected function getSessionId()
     {
-        if (!session_id()) {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            if (PHP_SESSION_NONE === session_status()) {
+                session_start();
+            }
+        } elseif (!session_id()) {
             session_start();
         }
 

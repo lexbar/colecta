@@ -18,11 +18,11 @@ class MessageController extends Controller
         
         if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $messages = $em->getRepository('ColectaUserBundle:Message')->findBy(array('destination'=>$user->getId()), array('date'=>'DESC'),30,0);
         
@@ -37,7 +37,7 @@ class MessageController extends Controller
                     
                     $em->flush();
                     
-                    $this->get('session')->setFlash('message'.$messages[$i]->getId() , 'unread');
+                    $this->get('session')->getFlashBag()->add('message'.$messages[$i]->getId() , 'unread');
                 }
             }
         }
@@ -51,11 +51,11 @@ class MessageController extends Controller
         
         if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $messages = $em->getRepository('ColectaUserBundle:Message')->findBy(array('origin'=>$user->getId()), array('date'=>'DESC'),30,0);
         
@@ -65,12 +65,12 @@ class MessageController extends Controller
     public function newAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request');
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -83,24 +83,26 @@ class MessageController extends Controller
             
             if(empty($destination))
             {
-                $this->get('session')->setFlash('MessageDestinationError',true);
-                $this->get('session')->setFlash('error', 'Debes indicar un destinatario');
+                $this->get('session')->getFlashBag()->add('MessageDestinationError',true);
+                $this->get('session')->getFlashBag()->add('error', 'Debes indicar un destinatario');
                 $persist = false;
             }
-            
-            $destinationUser = $em->getRepository('ColectaUserBundle:User')->findOneByName($destination);
-            
-            if(!$destinationUser)
+            else
             {
-                $this->get('session')->setFlash('MessageDestinationError',true);
-                $this->get('session')->setFlash('error', 'No existe el usuario en la base de datos');
-                $persist = false;
+                $destinationUser = $em->getRepository('ColectaUserBundle:User')->findOneByName($destination);
+                
+                if(!$destinationUser)
+                {
+                    $this->get('session')->getFlashBag()->add('MessageDestinationError',true);
+                    $this->get('session')->getFlashBag()->add('error', 'No existe el usuario en la base de datos');
+                    $persist = false;
+                }
             }
             
             if(empty($text))
             {
-                $this->get('session')->setFlash('MessageTextError',true);
-                $this->get('session')->setFlash('error', 'No puedes dejar el texto vacío');
+                $this->get('session')->getFlashBag()->add('MessageTextError',true);
+                $this->get('session')->getFlashBag()->add('error', 'No puedes dejar el texto vacío');
                 $persist = false;
             }
             
@@ -130,14 +132,14 @@ class MessageController extends Controller
 			        ->setBody($this->renderView('ColectaUserBundle:Message:mailAlert.txt.twig', array('from'=>$user, 'to'=>$destinationUser)), 'text/plain');
 			    $mailer->send($message);
                 
-                $this->get('session')->setFlash('success', 'Mensaje enviado.');
+                $this->get('session')->getFlashBag()->add('success', 'Mensaje enviado.');
                 
                 return new RedirectResponse($this->generateUrl('userSentMessages'));
             }
             else
             {
-                $this->get('session')->setFlash('MessageDestination',$destination);
-                $this->get('session')->setFlash('MessageText',$text);
+                $this->get('session')->getFlashBag()->add('MessageDestination',$destination);
+                $this->get('session')->getFlashBag()->add('MessageText',$text);
                 
                 return $this->render('ColectaUserBundle:Message:new.html.twig');
             }
@@ -150,12 +152,12 @@ class MessageController extends Controller
     public function newToAction($user_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $userTo = $em->getRepository('ColectaUserBundle:User')->find($user_id);
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         elseif(!$userTo)
@@ -168,12 +170,12 @@ class MessageController extends Controller
     public function responseAction($responseto)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request');
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -181,7 +183,7 @@ class MessageController extends Controller
         
         if(!$responsetoMessage)
         {
-            $this->get('session')->setFlash('error', 'No se ha encontrado la conversación');
+            $this->get('session')->getFlashBag()->add('error', 'No se ha encontrado la conversación');
             return new RedirectResponse($this->generateUrl('userMessages'));
         }
         
@@ -194,15 +196,15 @@ class MessageController extends Controller
             
             if(!$destinationUser)
             {
-                $this->get('session')->setFlash('MessageDestinationError',true);
-                $this->get('session')->setFlash('error', 'No existe el usuario en la base de datos');
+                $this->get('session')->getFlashBag()->add('MessageDestinationError',true);
+                $this->get('session')->getFlashBag()->add('error', 'No existe el usuario en la base de datos');
                 $persist = false;
             }
             
             if(empty($text))
             {
-                $this->get('session')->setFlash('MessageTextError',true);
-                $this->get('session')->setFlash('error', 'No puedes dejar el texto vacío');
+                $this->get('session')->getFlashBag()->add('MessageTextError',true);
+                $this->get('session')->getFlashBag()->add('error', 'No puedes dejar el texto vacío');
                 $persist = false;
             }
             
@@ -232,14 +234,14 @@ class MessageController extends Controller
 			        ->setBody($this->renderView('ColectaUserBundle:Message:mailAlert.txt.twig', array('from'=>$user, 'to'=>$destinationUser)), 'text/plain');
 			    $mailer->send($message);
                 
-                $this->get('session')->setFlash('success', 'Mensaje enviado.');
+                $this->get('session')->getFlashBag()->add('success', 'Mensaje enviado.');
                 
                 return new RedirectResponse($this->generateUrl('userMessages'));
             }
             else
             {
-                $this->get('session')->setFlash('MessageDestination',$destination);
-                $this->get('session')->setFlash('MessageText',$text);
+                $this->get('session')->getFlashBag()->add('MessageDestination',$destinationUser->getName());   
+                $this->get('session')->getFlashBag()->add('MessageText',$text);
                 
                 return $this->render('ColectaUserBundle:Message:response.html.twig', array('originalMessage'=>$responsetoMessage, 'destination'=>$responsetoMessage->getOrigin()->getName()));
             }

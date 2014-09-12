@@ -26,7 +26,7 @@ class EventController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the items that are not drafts
         $items = $em->getRepository('ColectaActivityBundle:Event')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
@@ -47,7 +47,7 @@ class EventController extends Controller
     }
     public function viewAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
@@ -68,7 +68,7 @@ class EventController extends Controller
     }
     public function dateAction($date)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         try 
         {
@@ -103,7 +103,7 @@ class EventController extends Controller
     
     public function date2Action($date)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         try 
         {
@@ -156,7 +156,7 @@ class EventController extends Controller
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
@@ -168,11 +168,11 @@ class EventController extends Controller
         }
         elseif(!$request->get('text'))
         {
-            $this->get('session')->setFlash('error', 'No has escrito ningun texto');
+            $this->get('session')->getFlashBag()->add('error', 'No has escrito ningun texto');
         }
         elseif(!$category && !$request->get('newCategory'))
         {
-            $this->get('session')->setFlash('error', 'No existe la categoria');
+            $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
         }
         else
         {
@@ -304,7 +304,7 @@ class EventController extends Controller
     public function editAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
@@ -322,7 +322,7 @@ class EventController extends Controller
         
             if(!$category)
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
                 $persist = false;
             }
             else
@@ -361,7 +361,7 @@ class EventController extends Controller
             
             if(!$request->get('text'))
             {
-                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
+                $this->get('session')->getFlashBag()->add('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             
@@ -384,7 +384,7 @@ class EventController extends Controller
             {
                 $em->persist($item); 
                 $em->flush();
-                $this->get('session')->setFlash('success', 'Modificado con éxito.');
+                $this->get('session')->getFlashBag()->add('success', 'Modificado con éxito.');
                 
                 // Update all categories. 
                 // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
@@ -400,7 +400,7 @@ class EventController extends Controller
     public function deleteAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
@@ -419,7 +419,7 @@ class EventController extends Controller
         $em->remove($item);
         $em->flush();
         
-        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        $this->get('session')->getFlashBag()->add('success', '"'.$name.'" ha sido eliminado.');
         
         return new RedirectResponse($this->generateUrl('ColectaDashboard'));
     }
@@ -432,7 +432,7 @@ class EventController extends Controller
     */
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
@@ -443,7 +443,7 @@ class EventController extends Controller
         }
         elseif(!$item)
         {
-            $this->get('session')->setFlash('error', 'No existe el evento');
+            $this->get('session')->getFlashBag()->add('error', 'No existe el evento');
         }
         else
         {
@@ -451,7 +451,7 @@ class EventController extends Controller
             
             if($assistance)
             {
-                $this->get('session')->setFlash('error', 'Ya has marcado tu asistencia');
+                $this->get('session')->getFlashBag()->add('error', 'Ya has marcado tu asistencia');
             }
             else
             {
@@ -528,7 +528,7 @@ class EventController extends Controller
     */
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
@@ -539,7 +539,7 @@ class EventController extends Controller
         }
         elseif(!$item)
         {
-            $this->get('session')->setFlash('error', 'No existe el evento');
+            $this->get('session')->getFlashBag()->add('error', 'No existe el evento');
         }
         else
         {
@@ -547,7 +547,7 @@ class EventController extends Controller
             
             if(!$assistance)
             {
-                $this->get('session')->setFlash('error', 'No habías marcado tu asistencia');
+                $this->get('session')->getFlashBag()->add('error', 'No habías marcado tu asistencia');
             }
             else
             {
@@ -582,7 +582,7 @@ class EventController extends Controller
                     $em->persist($notification); 
                 }
                 
-                $this->get('session')->setFlash('success', 'Has desmarcado tu asistencia al evento.');
+                $this->get('session')->getFlashBag()->add('success', 'Has desmarcado tu asistencia al evento.');
             }
         }
         
@@ -616,7 +616,7 @@ class EventController extends Controller
     {
         $request = $this->get('request')->request;
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
@@ -627,11 +627,11 @@ class EventController extends Controller
         }
         elseif(!$item)
         {
-            $this->get('session')->setFlash('error', 'No existe el evento');
+            $this->get('session')->getFlashBag()->add('error', 'No existe el evento');
         }
         elseif(!$item->canEdit($user))
         {
-            $this->get('session')->setFlash('error', 'No tienes permiso para gestionar las asistencias de este evento');
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permiso para gestionar las asistencias de este evento');
         }
         else
         {
@@ -684,7 +684,7 @@ class EventController extends Controller
                 $targetUser = $em->getRepository('ColectaUserBundle:User')->findOneByName($request->get('targetUser'));
                 if(! $targetUser)
                 {
-                    $this->get('session')->setFlash('error', 'No hemos encontrado al usuario que indicas');
+                    $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado al usuario que indicas');
                 }
                 else
                 {
@@ -693,7 +693,7 @@ class EventController extends Controller
                     
                     if($assistance)
                     {
-                        $this->get('session')->setFlash('error', $targetUser->getName().' ya está en la lista de asistentes.');
+                        $this->get('session')->getFlashBag()->add('error', $targetUser->getName().' ya está en la lista de asistentes.');
                     }
                     else
                     {
@@ -736,7 +736,7 @@ class EventController extends Controller
     
     protected function getPointsHandler(\Colecta\ActivityBundle\Entity\EventAssistance $assistance, $createIfNotExists = false)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $pointsResult = $em->getRepository('ColectaUserBundle:Points')->findBy(array('user'=>$assistance->getUser(), 'item'=>$assistance->getEvent()));
         
@@ -765,7 +765,7 @@ class EventController extends Controller
     public function calendarAction($date)
     {
         $dateOb = new \DateTime($date);
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini <= \''.$dateOb->format('Y-m-t 23:59:59').'\' AND e.dateend >= \''.$dateOb->format('Y-m-1 00:00:00').'\' ORDER BY e.dateini ASC')->getResult();
         
         //array of each day of the month prepared with empty arrays
@@ -808,7 +808,7 @@ class EventController extends Controller
     
     public function icsAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 ORDER BY e.dateini DESC')->getResult();
         
         return $this->render('ColectaActivityBundle:Event:calendar.ics.twig', array('events' => $items));
@@ -817,7 +817,7 @@ class EventController extends Controller
     public function nextEventAction()
     {
         $now = new \DateTime();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini >= \''.$now->format('Y-m-d H:i:s').'\' ORDER BY e.dateini ASC')->setMaxResults(3)->getResult();
         
         return $this->render('ColectaActivityBundle:Event:nextEvent.html.twig', array('events' => $items));

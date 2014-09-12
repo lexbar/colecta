@@ -13,7 +13,7 @@ namespace Symfony\Component\Routing;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\ConfigCache;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\ConfigurableRequirementsInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
@@ -26,13 +26,44 @@ use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
  */
 class Router implements RouterInterface
 {
+    /**
+     * @var UrlMatcherInterface|null
+     */
     protected $matcher;
+
+    /**
+     * @var UrlGeneratorInterface|null
+     */
     protected $generator;
+
+    /**
+     * @var RequestContext
+     */
     protected $context;
+
+    /**
+     * @var LoaderInterface
+     */
     protected $loader;
+
+    /**
+     * @var RouteCollection|null
+     */
     protected $collection;
+
+    /**
+     * @var mixed
+     */
     protected $resource;
-    protected $options;
+
+    /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
+     * @var LoggerInterface|null
+     */
     protected $logger;
 
     /**
@@ -94,7 +125,7 @@ class Router implements RouterInterface
         }
 
         if ($invalid) {
-            throw new \InvalidArgumentException(sprintf('The Router does not support the following options: "%s".', implode('\', \'', $invalid)));
+            throw new \InvalidArgumentException(sprintf('The Router does not support the following options: "%s".', implode('", "', $invalid)));
         }
     }
 
@@ -171,9 +202,9 @@ class Router implements RouterInterface
     /**
      * {@inheritdoc}
      */
-    public function generate($name, $parameters = array(), $absolute = false)
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
-        return $this->getGenerator()->generate($name, $parameters, $absolute);
+        return $this->getGenerator()->generate($name, $parameters, $referenceType);
     }
 
     /**
@@ -201,7 +232,7 @@ class Router implements RouterInterface
 
         $class = $this->options['matcher_cache_class'];
         $cache = new ConfigCache($this->options['cache_dir'].'/'.$class.'.php', $this->options['debug']);
-        if (!$cache->isFresh($class)) {
+        if (!$cache->isFresh()) {
             $dumper = new $this->options['matcher_dumper_class']($this->getRouteCollection());
 
             $options = array(
@@ -233,7 +264,7 @@ class Router implements RouterInterface
         } else {
             $class = $this->options['generator_cache_class'];
             $cache = new ConfigCache($this->options['cache_dir'].'/'.$class.'.php', $this->options['debug']);
-            if (!$cache->isFresh($class)) {
+            if (!$cache->isFresh()) {
                 $dumper = new $this->options['generator_dumper_class']($this->getRouteCollection());
 
                 $options = array(

@@ -58,6 +58,10 @@ class TwigEngine extends BaseEngine implements EngineInterface
             return 'js';
         }
 
+        if ('txt' === $format) {
+            return false;
+        }
+
         return 'html';
     }
 
@@ -71,6 +75,7 @@ class TwigEngine extends BaseEngine implements EngineInterface
      *
      * @throws \InvalidArgumentException if the template does not exist
      * @throws \RuntimeException         if the template cannot be rendered
+     * @throws \Twig_Error
      */
     public function render($name, array $parameters = array())
     {

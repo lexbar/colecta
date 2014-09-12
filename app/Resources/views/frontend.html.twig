@@ -14,21 +14,18 @@
             </div>
             
             <div class="col-xs-12 col-md-9 col-sm-8 {% if theme_sidebar == 'right' %}pull-left{% endif %} main">
-                {% if app.session.hasFlash('error') %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
                     <div class="alert alert-danger">
-                        <i class="fa fa-exclamation-circle"></i> {{ app.session.flash('error') }}
+                        <i class="fa fa-exclamation-circle"></i> 
+                        {{ flashMessage }}
                     </div>
-                {% endif %}
-                {% if app.session.hasFlash('success') %}
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('success') %}
                     <div class="alert alert-success">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-square fa-stack-2x"></i>
-                            <i class="fa fa-check fa-stack-1x fa-inverse"></i>
-                        </span> 
-                        
-                        {{ app.session.flash('success') }}
+                        <i class="fa fa-check-square"></i> 
+                        {{ flashMessage }}
                     </div>
-                {% endif %}
+                {% endfor %}
 
                 {% block article %}{% endblock %}
             </div>

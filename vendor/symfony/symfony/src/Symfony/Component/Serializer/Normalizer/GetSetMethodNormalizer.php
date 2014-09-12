@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Serializer\Normalizer;
 
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 
 /**
@@ -37,17 +38,20 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
 {
     protected $callbacks = array();
     protected $ignoredAttributes = array();
+    protected $camelizedAttributes = array();
 
     /**
      * Set normalization callbacks
      *
      * @param array $callbacks help normalize the result
+     *
+     * @throws InvalidArgumentException if a non-callable callback is set
      */
     public function setCallbacks(array $callbacks)
     {
         foreach ($callbacks as $attribute => $callback) {
             if (!is_callable($callback)) {
-                throw new \InvalidArgumentException(sprintf('The given callback for attribute "%s" is not callable.', $attribute));
+                throw new InvalidArgumentException(sprintf('The given callback for attribute "%s" is not callable.', $attribute));
             }
         }
         $this->callbacks = $callbacks;
@@ -64,9 +68,19 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
     }
 
     /**
+     * Set attributes to be camelized on denormalize
+     *
+     * @param array $camelizedAttributes
+     */
+    public function setCamelizedAttributes(array $camelizedAttributes)
+    {
+        $this->camelizedAttributes = $camelizedAttributes;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null)
+    public function normalize($object, $format = null, array $context = array())
     {
         $reflectionObject = new \ReflectionObject($object);
         $reflectionMethods = $reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -98,8 +112,20 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null)
+    public function denormalize($data, $class, $format = null, array $context = array())
     {
+        if (is_array($data) || is_object($data) && $data instanceof \ArrayAccess) {
+            $normalizedData = $data;
+        } elseif (is_object($data)) {
+            $normalizedData = array();
+
+            foreach ($data as $attribute => $value) {
+                $normalizedData[$attribute] = $value;
+            }
+        } else {
+            $normalizedData = array();
+        }
+
         $reflectionClass = new \ReflectionClass($class);
         $constructor = $reflectionClass->getConstructor();
 
@@ -108,13 +134,15 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
 
             $params = array();
             foreach ($constructorParameters as $constructorParameter) {
-                $paramName = lcfirst($constructorParameter->name);
+                $paramName = lcfirst($this->formatAttribute($constructorParameter->name));
 
-                if (isset($data[$paramName])) {
-                    $params[] = $data[$paramName];
+                if (isset($normalizedData[$paramName])) {
+                    $params[] = $normalizedData[$paramName];
                     // don't run set for a parameter passed to the constructor
-                    unset($data[$paramName]);
-                } elseif (!$constructorParameter->isOptional()) {
+                    unset($normalizedData[$paramName]);
+                } elseif ($constructorParameter->isOptional()) {
+                    $params[] = $constructorParameter->getDefaultValue();
+                } else {
                     throw new RuntimeException(
                         'Cannot create an instance of '.$class.
                         ' from serialized data because its constructor requires '.
@@ -125,11 +153,12 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
 
             $object = $reflectionClass->newInstanceArgs($params);
         } else {
-            $object = new $class;
+            $object = new $class();
         }
 
-        foreach ($data as $attribute => $value) {
-            $setter = 'set'.$attribute;
+        foreach ($normalizedData as $attribute => $value) {
+            $setter = 'set'.$this->formatAttribute($attribute);
+
             if (method_exists($object, $setter)) {
                 $object->$setter($value);
             }
@@ -139,7 +168,28 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
     }
 
     /**
-     * {@inheritDoc}
+     * Format attribute name to access parameters or methods
+     * As option, if attribute name is found on camelizedAttributes array
+     * returns attribute name in camelcase format
+     *
+     * @param string $attributeName
+     * @return string
+     */
+    protected function formatAttribute($attributeName)
+    {
+        if (in_array($attributeName, $this->camelizedAttributes)) {
+            return preg_replace_callback(
+                '/(^|_|\.)+(.)/', function ($match) {
+                    return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
+                }, $attributeName
+            );
+        }
+
+        return $attributeName;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null)
     {
@@ -147,7 +197,7 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
@@ -158,7 +208,8 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
      * Checks if the given class has any get{Property} method.
      *
      * @param string $class
-     * @return Boolean
+     *
+     * @return bool
      */
     private function supports($class)
     {
@@ -178,7 +229,7 @@ class GetSetMethodNormalizer extends SerializerAwareNormalizer implements Normal
      *
      * @param \ReflectionMethod $method the method to check
      *
-     * @return Boolean whether the method is a getter.
+     * @return bool    whether the method is a getter.
      */
     private function isGetMethod(\ReflectionMethod $method)
     {

@@ -19,7 +19,7 @@ class UserController extends Controller
     */
     public function profileAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         //Get ALL the items that are not drafts
@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         
@@ -84,7 +84,7 @@ class UserController extends Controller
     
     public function assistancesYearAction($id, $year)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         
         $year = min( intval(date('Y')), max( 1990, intval($year) ) );
@@ -116,7 +116,10 @@ class UserController extends Controller
         
         if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                'Error, debes iniciar sesion'
+            );
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -141,9 +144,9 @@ class UserController extends Controller
             ->add('file',   'file',     array('label'=>'Avatar:',       'required'=>false))
             ->getForm()
         ;
-    
+        
         if ($this->getRequest()->getMethod() === 'POST') {
-            $form->bindRequest($this->getRequest());
+            $form->bind($this->getRequest());
             if ($form->isValid()) {
                 
                 if(!$user->getPass()) 
@@ -162,12 +165,12 @@ class UserController extends Controller
                     $token = new UsernamePasswordToken($user, null, 'main', array('ROLE_USER'));
                     $this->get('security.context')->setToken($token);
                 } 
-                
+                /*
                 //Upload avatar
                 $user->upload();
                 
                 
-                $em = $this->getDoctrine()->getEntityManager();
+                $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
                 
@@ -185,14 +188,20 @@ class UserController extends Controller
                         }
                     }
                     closedir($handle);
-                }
+                }*/
                 
-                $this->get('session')->setFlash('success', 'Datos modificados correctamente');
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    'Datos modificados correctamente'
+                );
                 $this->redirect($this->generateUrl('userEditProfile'));
             }
             else
             {
-                $this->get('session')->setFlash('error', 'Ha ocurrido un error y no se han guardado los cambios');
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    'Ha ocurrido un error y no se han guardado los cambios'
+                );
             }
         }
         
@@ -205,7 +214,7 @@ class UserController extends Controller
         
         $search = trim($this->get('request')->query->get('search'));
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $users = $em->createQuery("SELECT u FROM ColectaUserBundle:User u WHERE u.name LIKE :search AND u.role != 3")->setParameters(array('search'=>'%'.$search.'%'))->setMaxResults(12)->getResult();
         
@@ -218,7 +227,7 @@ class UserController extends Controller
     {
         $this->get('request')->setRequestFormat('json');
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $users = $em->getRepository('ColectaUserBundle:User')->findBy(array(), array('name'=>'ASC'));
         
@@ -261,7 +270,7 @@ class UserController extends Controller
         else
         {   
             
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             
             $user = $em->getRepository('ColectaUserBundle:User')->find($uid);
             

@@ -13,14 +13,14 @@ class CommentController extends Controller
     public function commentAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $post = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug);
     
         if(!$item || $user == 'anon.' || !$post->get('comment')) 
         {
-            $this->get('session')->setFlash('error', 'Error escribiendo el comentario');
+            $this->get('session')->getFlashBag()->add('error', 'Error escribiendo el comentario');
         }
         else
         {
@@ -153,11 +153,11 @@ class CommentController extends Controller
     function removeAction($id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
         }
         else
         {
@@ -165,18 +165,18 @@ class CommentController extends Controller
             
             if(!$comment)
             {
-                $this->get('session')->setFlash('error', 'El comentario no existe');
+                $this->get('session')->getFlashBag()->add('error', 'El comentario no existe');
             }
             elseif($comment->getUser() != $user && !$user->getRole()->getUserEdit()) //if user can edit any other user, means he can change any of their data (including comments)
             {
-                $this->get('session')->setFlash('error', 'No tienes permiso para borrar este comentario');
+                $this->get('session')->getFlashBag()->add('error', 'No tienes permiso para borrar este comentario');
             }
             else
             {
                 $em->remove($comment);
                 $em->flush();
                 
-                $this->get('session')->setFlash('sucess', 'Mensaje eliminado');
+                $this->get('session')->getFlashBag()->add('sucess', 'Mensaje eliminado');
             }
         }
         

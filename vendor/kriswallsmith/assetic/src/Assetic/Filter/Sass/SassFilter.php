@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,10 @@ namespace Assetic\Filter\Sass;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Exception\FilterException;
+use Assetic\Factory\AssetFactory;
 use Assetic\Filter\BaseProcessFilter;
+use Assetic\Filter\DependencyExtractorInterface;
+use Assetic\Util\CssUtils;
 
 /**
  * Loads SASS files.
@@ -21,7 +24,7 @@ use Assetic\Filter\BaseProcessFilter;
  * @link http://sass-lang.com/
  * @author Kris Wallsmith <kris.wallsmith@gmail.com>
  */
-class SassFilter extends BaseProcessFilter
+class SassFilter extends BaseProcessFilter implements DependencyExtractorInterface
 {
     const STYLE_NESTED     = 'nested';
     const STYLE_EXPANDED   = 'expanded';
@@ -76,6 +79,11 @@ class SassFilter extends BaseProcessFilter
     public function setLineNumbers($lineNumbers)
     {
         $this->lineNumbers = $lineNumbers;
+    }
+
+    public function setLoadPaths(array $loadPaths)
+    {
+        $this->loadPaths = $loadPaths;
     }
 
     public function addLoadPath($loadPath)
@@ -162,7 +170,7 @@ class SassFilter extends BaseProcessFilter
         $code = $proc->run();
         unlink($input);
 
-        if (0 < $code) {
+        if (0 !== $code) {
             throw FilterException::fromProcess($proc)->setInput($asset->getContent());
         }
 
@@ -171,5 +179,75 @@ class SassFilter extends BaseProcessFilter
 
     public function filterDump(AssetInterface $asset)
     {
+    }
+
+    public function getChildren(AssetFactory $factory, $content, $loadPath = null)
+    {
+        $loadPaths = $this->loadPaths;
+        if ($loadPath) {
+            array_unshift($loadPaths, $loadPath);
+        }
+
+        if (!$loadPaths) {
+            return array();
+        }
+
+        $children = array();
+        foreach (CssUtils::extractImports($content) as $reference) {
+            if ('.css' === substr($reference, -4)) {
+                // skip normal css imports
+                // todo: skip imports with media queries
+                continue;
+            }
+
+            // the reference may or may not have an extension or be a partial
+            if (pathinfo($reference, PATHINFO_EXTENSION)) {
+                $needles = array(
+                    $reference,
+                    self::partialize($reference),
+                );
+            } else {
+                $needles = array(
+                    $reference.'.scss',
+                    $reference.'.sass',
+                    self::partialize($reference).'.scss',
+                    self::partialize($reference).'.sass',
+                );
+            }
+
+            foreach ($loadPaths as $loadPath) {
+                foreach ($needles as $needle) {
+                    if (file_exists($file = $loadPath.'/'.$needle)) {
+                        $coll = $factory->createAsset($file, array(), array('root' => $loadPath));
+                        foreach ($coll as $leaf) {
+                            $leaf->ensureFilter($this);
+                            $children[] = $leaf;
+                            goto next_reference;
+                        }
+                    }
+                }
+            }
+
+            next_reference:
+        }
+
+        return $children;
+    }
+
+    private static function partialize($reference)
+    {
+        $parts = pathinfo($reference);
+
+        if ('.' === $parts['dirname']) {
+            $partial = '_'.$parts['filename'];
+        } else {
+            $partial = $parts['dirname'].DIRECTORY_SEPARATOR.'_'.$parts['filename'];
+        }
+
+        if (isset($parts['extension'])) {
+            $partial .= '.'.$parts['extension'];
+        }
+
+        return $partial;
     }
 }

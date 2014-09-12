@@ -138,27 +138,27 @@ abstract class BaseNode implements NodeInterface
     /**
      * Set this node as required.
      *
-     * @param Boolean $boolean Required node
+     * @param bool    $boolean Required node
      */
     public function setRequired($boolean)
     {
-        $this->required = (Boolean) $boolean;
+        $this->required = (bool) $boolean;
     }
 
     /**
      * Sets if this node can be overridden.
      *
-     * @param Boolean $allow
+     * @param bool    $allow
      */
     public function setAllowOverwrite($allow)
     {
-        $this->allowOverwrite = (Boolean) $allow;
+        $this->allowOverwrite = (bool) $allow;
     }
 
     /**
      * Sets the closures used for normalization.
      *
-     * @param array $closures An array of Closures used for normalization
+     * @param \Closure[] $closures An array of Closures used for normalization
      */
     public function setNormalizationClosures(array $closures)
     {
@@ -168,7 +168,7 @@ abstract class BaseNode implements NodeInterface
     /**
      * Sets the closures used for final validation.
      *
-     * @param array $closures An array of Closures used for final validation
+     * @param \Closure[] $closures An array of Closures used for final validation
      */
     public function setFinalValidationClosures(array $closures)
     {
@@ -178,7 +178,7 @@ abstract class BaseNode implements NodeInterface
     /**
      * Checks if this node is required.
      *
-     * @return Boolean
+     * @return bool
      */
     public function isRequired()
     {
@@ -247,6 +247,8 @@ abstract class BaseNode implements NodeInterface
      */
     final public function normalize($value)
     {
+        $value = $this->preNormalize($value);
+
         // run custom normalization closures
         foreach ($this->normalizationClosures as $closure) {
             $value = $closure($value);
@@ -267,11 +269,26 @@ abstract class BaseNode implements NodeInterface
     }
 
     /**
+     * Normalizes the value before any other normalization is applied.
+     *
+     * @param $value
+     *
+     * @return $value The normalized array value
+     */
+    protected function preNormalize($value)
+    {
+        return $value;
+    }
+
+    /**
      * Finalizes a value, applying all finalization closures.
      *
      * @param mixed $value The value to finalize
      *
      * @return mixed The finalized value
+     *
+     * @throws Exception
+     * @throws InvalidConfigurationException
      */
     final public function finalize($value)
     {

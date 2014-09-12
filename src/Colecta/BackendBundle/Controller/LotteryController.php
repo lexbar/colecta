@@ -18,7 +18,7 @@ class LotteryController extends Controller
             return new RedirectResponse($login);
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $campaign = $em->createQuery('SELECT c FROM ColectaIntranetBundle:LotteryCampaign c ORDER BY c.date DESC')->getSingleResult();
         $shreds = $em->createQuery('SELECT s FROM ColectaIntranetBundle:LotteryShred s WHERE s.lotteryCampaign = :campaign ORDER BY s.date ASC')->setParameters(array('campaign'=>$campaign))->getResult();
@@ -47,7 +47,7 @@ class LotteryController extends Controller
             return new RedirectResponse($login);
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $campaign = $em->createQuery('SELECT c FROM ColectaIntranetBundle:LotteryCampaign c ORDER BY c.date DESC')->getSingleResult();
         $targetUser = $em->createQuery('SELECT u FROM ColectaUserBundle:User u WHERE u.id = :id')->setParameter('id',$user_id)->getSingleResult();
@@ -76,7 +76,7 @@ class LotteryController extends Controller
             $end = intval($request->get('start'));
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $targetUser = $em->createQuery('SELECT u FROM ColectaUserBundle:User u WHERE u.name = :uname')->setParameter('uname',$request->get('user'))->getResult();
         if(!count($targetUser))
@@ -178,7 +178,7 @@ class LotteryController extends Controller
             return new RedirectResponse($login);
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $shred = $em->createQuery('SELECT s FROM ColectaIntranetBundle:LotteryShred s WHERE s.id = :id ORDER BY s.date ASC')->setParameter('id',$shred_id)->getResult();
         
@@ -225,7 +225,7 @@ class LotteryController extends Controller
             $end = intval($request->get('start'));
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $shred = $em->createQuery('SELECT s FROM ColectaIntranetBundle:LotteryShred s WHERE s.id = :id AND s.returned = 0 ORDER BY s.date DESC')->setParameter('id',$shred_id)->getResult();
         
@@ -313,7 +313,7 @@ class LotteryController extends Controller
             return new RedirectResponse($login);
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $shred = $em->createQuery('SELECT s FROM ColectaIntranetBundle:LotteryShred s WHERE s.id = :id AND s.returned = 0 ORDER BY s.date DESC')->setParameter('id',$shred_id)->getResult();
         
@@ -361,7 +361,7 @@ class LotteryController extends Controller
             return new RedirectResponse($login);
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $shred = $em->createQuery('SELECT s FROM ColectaIntranetBundle:LotteryShred s WHERE s.id = :id AND s.returned = 0 ORDER BY s.date DESC')->setParameter('id',$shred_id)->getResult();
         

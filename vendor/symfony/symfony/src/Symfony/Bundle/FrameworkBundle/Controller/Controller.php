@@ -11,16 +11,18 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controller is a simple implementation of a Controller.
@@ -34,15 +36,17 @@ class Controller extends ContainerAware
     /**
      * Generates a URL from the given parameters.
      *
-     * @param string  $route      The name of the route
-     * @param mixed   $parameters An array of parameters
-     * @param Boolean $absolute   Whether to generate an absolute URL
+     * @param string         $route         The name of the route
+     * @param mixed          $parameters    An array of parameters
+     * @param bool|string    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      *
      * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
      */
-    public function generateUrl($route, $parameters = array(), $absolute = false)
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        return $this->container->get('router')->generate($route, $parameters, $absolute);
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
     /**
@@ -56,14 +60,17 @@ class Controller extends ContainerAware
      */
     public function forward($controller, array $path = array(), array $query = array())
     {
-        return $this->container->get('http_kernel')->forward($controller, $path, $query);
+        $path['_controller'] = $controller;
+        $subRequest = $this->container->get('request')->duplicate($query, null, $path);
+
+        return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 
     /**
      * Returns a RedirectResponse to the given URL.
      *
      * @param string  $url    The URL to redirect to
-     * @param integer $status The status code to use for the Response
+     * @param int     $status The status code to use for the Response
      *
      * @return RedirectResponse
      */
@@ -211,11 +218,11 @@ class Controller extends ContainerAware
         }
 
         if (null === $token = $this->container->get('security.context')->getToken()) {
-            return null;
+            return;
         }
 
         if (!is_object($user = $token->getUser())) {
-            return null;
+            return;
         }
 
         return $user;
@@ -226,7 +233,7 @@ class Controller extends ContainerAware
      *
      * @param string $id The service id
      *
-     * @return Boolean true if the service id is defined, false otherwise
+     * @return bool    true if the service id is defined, false otherwise
      */
     public function has($id)
     {

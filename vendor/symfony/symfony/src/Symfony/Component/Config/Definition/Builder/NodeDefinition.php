@@ -12,6 +12,7 @@
 namespace Symfony\Component\Config\Definition\Builder;
 
 use Symfony\Component\Config\Definition\NodeInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 
 /**
  * This class provides a fluent interface for defining a node.
@@ -31,6 +32,9 @@ abstract class NodeDefinition implements NodeParentInterface
     protected $nullEquivalent;
     protected $trueEquivalent;
     protected $falseEquivalent;
+    /**
+     * @var NodeParentInterface|NodeInterface
+     */
     protected $parent;
     protected $attributes = array();
 
@@ -116,7 +120,7 @@ abstract class NodeDefinition implements NodeParentInterface
     /**
      * Creates the node.
      *
-     * @param Boolean $forceRootNode Whether to force this node as the root node
+     * @param bool    $forceRootNode Whether to force this node as the root node
      *
      * @return NodeInterface
      */
@@ -278,7 +282,7 @@ abstract class NodeDefinition implements NodeParentInterface
     /**
      * Sets whether the node can be overwritten.
      *
-     * @param Boolean $deny Whether the overwriting is forbidden or not
+     * @param bool    $deny Whether the overwriting is forbidden or not
      *
      * @return NodeDefinition
      */
@@ -336,7 +340,7 @@ abstract class NodeDefinition implements NodeParentInterface
      *
      * @return NodeInterface $node The node instance
      *
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidDefinitionException When the definition is invalid
+     * @throws InvalidDefinitionException When the definition is invalid
      */
     abstract protected function createNode();
 

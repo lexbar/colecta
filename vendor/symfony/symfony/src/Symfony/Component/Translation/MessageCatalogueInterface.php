@@ -70,7 +70,7 @@ interface MessageCatalogueInterface
      * @param string $id     The message id
      * @param string $domain The domain name
      *
-     * @return Boolean true if the message has a translation, false otherwise
+     * @return bool    true if the message has a translation, false otherwise
      *
      * @api
      */
@@ -82,7 +82,7 @@ interface MessageCatalogueInterface
      * @param string $id     The message id
      * @param string $domain The domain name
      *
-     * @return Boolean true if the message has a translation, false otherwise
+     * @return bool    true if the message has a translation, false otherwise
      *
      * @api
      */
@@ -103,7 +103,7 @@ interface MessageCatalogueInterface
     /**
      * Sets translations for a given domain.
      *
-     * @param string $messages An array of translations
+     * @param array  $messages An array of translations
      * @param string $domain   The domain name
      *
      * @api
@@ -113,7 +113,7 @@ interface MessageCatalogueInterface
     /**
      * Adds translations for a given domain.
      *
-     * @param string $messages An array of translations
+     * @param array  $messages An array of translations
      * @param string $domain   The domain name
      *
      * @api
@@ -146,7 +146,7 @@ interface MessageCatalogueInterface
     /**
      * Gets the fallback catalogue.
      *
-     * @return MessageCatalogueInterface A MessageCatalogueInterface instance
+     * @return MessageCatalogueInterface|null A MessageCatalogueInterface instance or null when no fallback has been set
      *
      * @api
      */

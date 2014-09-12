@@ -36,7 +36,7 @@ class LogoutListener implements ListenerInterface
     private $csrfProvider;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param SecurityContextInterface      $securityContext
      * @param HttpUtils                     $httpUtils       An HttpUtilsInterface instance
@@ -75,8 +75,9 @@ class LogoutListener implements ListenerInterface
      * validate the request.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
-     * @throws InvalidCsrfTokenException if the CSRF token is invalid
-     * @throws RuntimeException if the LogoutSuccessHandlerInterface instance does not return a response
+     *
+     * @throws LogoutException if the CSRF token is invalid
+     * @throws \RuntimeException if the LogoutSuccessHandlerInterface instance does not return a response
      */
     public function handle(GetResponseEvent $event)
     {
@@ -120,7 +121,7 @@ class LogoutListener implements ListenerInterface
      *
      * @param Request $request
      *
-     * @return Boolean
+     * @return bool
      */
     protected function requiresLogout(Request $request)
     {

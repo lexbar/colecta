@@ -12,7 +12,7 @@
 namespace Symfony\Bridge\Doctrine\Form\Type;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Symfony\Component\Form\Exception\FormException;
+use Symfony\Component\Form\Exception\RuntimeException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityChoiceList;
@@ -22,6 +22,8 @@ use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 abstract class DoctrineType extends AbstractType
 {
@@ -35,9 +37,15 @@ abstract class DoctrineType extends AbstractType
      */
     private $choiceListCache = array();
 
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var PropertyAccessorInterface
+     */
+    private $propertyAccessor;
+
+    public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor = null)
     {
         $this->registry = $registry;
+        $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -54,17 +62,16 @@ abstract class DoctrineType extends AbstractType
     {
         $choiceListCache =& $this->choiceListCache;
         $registry = $this->registry;
+        $propertyAccessor = $this->propertyAccessor;
         $type = $this;
 
         $loader = function (Options $options) use ($type) {
             if (null !== $options['query_builder']) {
                 return $type->getLoader($options['em'], $options['query_builder'], $options['class']);
             }
-
-            return null;
         };
 
-        $choiceList = function (Options $options) use (&$choiceListCache, &$time) {
+        $choiceList = function (Options $options) use (&$choiceListCache, $propertyAccessor) {
             // Support for closures
             $propertyHash = is_object($options['property'])
                 ? spl_object_hash($options['property'])
@@ -80,6 +87,13 @@ abstract class DoctrineType extends AbstractType
                 array_walk_recursive($choiceHashes, function (&$value) {
                     $value = spl_object_hash($value);
                 });
+            } elseif ($choiceHashes instanceof \Traversable) {
+                $hashes = array();
+                foreach ($choiceHashes as $value) {
+                    $hashes[] = spl_object_hash($value);
+                }
+
+                $choiceHashes = $hashes;
             }
 
             $preferredChoiceHashes = $options['preferred_choices'];
@@ -118,7 +132,8 @@ abstract class DoctrineType extends AbstractType
                     $options['loader'],
                     $options['choices'],
                     $options['preferred_choices'],
-                    $options['group_by']
+                    $options['group_by'],
+                    $propertyAccessor
                 );
             }
 
@@ -134,7 +149,7 @@ abstract class DoctrineType extends AbstractType
             $em = $registry->getManagerForClass($options['class']);
 
             if (null === $em) {
-                throw new FormException(sprintf(
+                throw new RuntimeException(sprintf(
                     'Class "%s" seems not to be a managed Doctrine entity. ' .
                     'Did you forget to map it?',
                     $options['class']

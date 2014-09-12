@@ -48,7 +48,7 @@ class PrototypedArrayNode extends ArrayNode
      * Sets the minimum number of elements that a prototype based node must
      * contain. By default this is zero, meaning no elements.
      *
-     * @param integer $number
+     * @param int     $number
      */
     public function setMinNumberOfElements($number)
     {
@@ -77,7 +77,7 @@ class PrototypedArrayNode extends ArrayNode
      * array, then you can set the second argument of this method to false.
      *
      * @param string  $attribute The name of the attribute which value is to be used as a key
-     * @param Boolean $remove    Whether or not to remove the key
+     * @param bool    $remove    Whether or not to remove the key
      */
     public function setKeyAttribute($attribute, $remove = true)
     {
@@ -114,7 +114,7 @@ class PrototypedArrayNode extends ArrayNode
     /**
      * Checks if the node has a default value.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasDefaultValue()
     {
@@ -124,7 +124,7 @@ class PrototypedArrayNode extends ArrayNode
     /**
      * Adds default children when none are set.
      *
-     * @param integer|string|array|null $children The number of children|The child name|The children names to be added
+     * @param int|string|array|null     $children The number of children|The child name|The children names to be added
      */
     public function setAddChildrenIfNoneSet($children = array('defaults'))
     {
@@ -183,7 +183,7 @@ class PrototypedArrayNode extends ArrayNode
      *
      * @param NodeInterface $node The child node to add
      *
-     * @throws \RuntimeException Prototyped array nodes can't have concrete children.
+     * @throws Exception
      */
     public function addChild(NodeInterface $node)
     {
@@ -233,6 +233,9 @@ class PrototypedArrayNode extends ArrayNode
      * @param mixed $value The value to normalize
      *
      * @return mixed The normalized value
+     *
+     * @throws InvalidConfigurationException
+     * @throws DuplicateKeyException
      */
     protected function normalizeValue($value)
     {

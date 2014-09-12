@@ -70,7 +70,7 @@ class UniversalClassLoader
      * Turns on searching the include for class files. Allows easy loading
      * of installed PEAR packages
      *
-     * @param Boolean $useIncludePath
+     * @param bool    $useIncludePath
      */
     public function useIncludePath($useIncludePath)
     {
@@ -81,7 +81,7 @@ class UniversalClassLoader
      * Can be used to check if the autoloader uses the include path to check
      * for classes.
      *
-     * @return Boolean
+     * @return bool
      */
     public function getUseIncludePath()
     {
@@ -229,7 +229,7 @@ class UniversalClassLoader
     /**
      * Registers this instance as an autoloader.
      *
-     * @param Boolean $prepend Whether to prepend the autoloader or not
+     * @param bool    $prepend Whether to prepend the autoloader or not
      *
      * @api
      */
@@ -242,11 +242,15 @@ class UniversalClassLoader
      * Loads the given class or interface.
      *
      * @param string $class The name of the class
+     *
+     * @return bool|null    True, if loaded
      */
     public function loadClass($class)
     {
         if ($file = $this->findFile($class)) {
             require $file;
+
+            return true;
         }
     }
 
@@ -259,10 +263,6 @@ class UniversalClassLoader
      */
     public function findFile($class)
     {
-        if ('\\' == $class[0]) {
-            $class = substr($class, 1);
-        }
-
         if (false !== $pos = strrpos($class, '\\')) {
             // namespaced class name
             $namespace = substr($class, 0, $pos);

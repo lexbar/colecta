@@ -39,7 +39,7 @@ class JsonEncoder implements EncoderInterface, DecoderInterface
     /**
      * Returns the last encoding error (if any)
      *
-     * @return integer
+     * @return int
      */
     public function getLastEncodingError()
     {
@@ -49,7 +49,7 @@ class JsonEncoder implements EncoderInterface, DecoderInterface
     /**
      * Returns the last decoding error (if any)
      *
-     * @return integer
+     * @return int
      */
     public function getLastDecodingError()
     {
@@ -59,17 +59,17 @@ class JsonEncoder implements EncoderInterface, DecoderInterface
     /**
      * {@inheritdoc}
      */
-    public function encode($data, $format)
+    public function encode($data, $format, array $context = array())
     {
-        return $this->encodingImpl->encode($data, self::FORMAT);
+        return $this->encodingImpl->encode($data, self::FORMAT, $context);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function decode($data, $format)
+    public function decode($data, $format, array $context = array())
     {
-        return $this->decodingImpl->decode($data, self::FORMAT);
+        return $this->decodingImpl->decode($data, self::FORMAT, $context);
     }
 
     /**

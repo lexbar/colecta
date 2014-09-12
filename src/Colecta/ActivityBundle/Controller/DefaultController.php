@@ -28,7 +28,7 @@ class DefaultController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the routes and places that are not drafts
         $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ActivityBundle\Entity\Route OR i INSTANCE OF Colecta\ActivityBundle\Entity\Place) AND i.draft = 0 ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();

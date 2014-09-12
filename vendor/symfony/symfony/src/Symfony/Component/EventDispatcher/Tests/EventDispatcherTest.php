@@ -23,6 +23,9 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
     const preBar = 'pre.bar';
     const postBar = 'post.bar';
 
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher
+     */
     private $dispatcher;
 
     private $listener;
@@ -238,11 +241,57 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
     public function testEventReceivesTheDispatcherInstance()
     {
         $test = $this;
+        $dispatcher = null;
         $this->dispatcher->addListener('test', function ($event) use (&$dispatcher) {
             $dispatcher = $event->getDispatcher();
         });
         $this->dispatcher->dispatch('test');
         $this->assertSame($this->dispatcher, $dispatcher);
+    }
+
+    /**
+     * @see https://bugs.php.net/bug.php?id=62976
+     *
+     * This bug affects:
+     *  - The PHP 5.3 branch for versions < 5.3.18
+     *  - The PHP 5.4 branch for versions < 5.4.8
+     *  - The PHP 5.5 branch is not affected
+     */
+    public function testWorkaroundForPhpBug62976()
+    {
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener('bug.62976', new CallableClass());
+        $dispatcher->removeListener('bug.62976', function () {});
+        $this->assertTrue($dispatcher->hasListeners('bug.62976'));
+    }
+
+    public function testHasListenersWhenAddedCallbackListenerIsRemoved()
+    {
+        $listener = function () {};
+        $this->dispatcher->addListener('foo', $listener);
+        $this->dispatcher->removeListener('foo', $listener);
+        $this->assertFalse($this->dispatcher->hasListeners());
+    }
+
+    public function testGetListenersWhenAddedCallbackListenerIsRemoved()
+    {
+        $listener = function () {};
+        $this->dispatcher->addListener('foo', $listener);
+        $this->dispatcher->removeListener('foo', $listener);
+        $this->assertSame(array(), $this->dispatcher->getListeners());
+    }
+
+    public function testHasListenersWithoutEventsReturnsFalseAfterHasListenersWithEventHasBeenCalled()
+    {
+        $this->assertFalse($this->dispatcher->hasListeners('foo'));
+        $this->assertFalse($this->dispatcher->hasListeners());
+    }
+}
+
+class CallableClass
+{
+    public function __invoke()
+    {
     }
 }
 

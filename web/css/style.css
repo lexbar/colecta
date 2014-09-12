@@ -79,6 +79,9 @@ h2, h4 {
     text-align:center;
 }
 
+.login p {
+    margin-bottom: 13px;
+}
 .date {
     padding-bottom: 15px;
 }
@@ -129,7 +132,7 @@ h2, h4 {
     vertical-align: middle;
 }
 #self a.myname {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     margin-right: 60px;
 }
 #self a strong {

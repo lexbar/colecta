@@ -30,7 +30,7 @@ class DefaultController extends Controller
     public function registerAction() 
     {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager(); 
+        $em = $this->getDoctrine()->getManager(); 
         
         $user = new User();
         
@@ -51,7 +51,7 @@ class DefaultController extends Controller
         
         if ($request->getMethod() == 'POST') 
         {
-            $form->bindRequest($request);
+            $form->bind($request);
             
             $code = $request->request->get('code');
             $error = '';
@@ -105,7 +105,7 @@ class DefaultController extends Controller
         
         if($request->getMethod() == 'POST')
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             
             $email = $request->request->get('email');
             $user = $em->getRepository('ColectaUserBundle:User')->findOneBy(array('mail'=>$email));
@@ -129,28 +129,26 @@ class DefaultController extends Controller
                 $configmail = $this->container->getParameter('mail');
                 
                 $message = \Swift_Message::newInstance();
-                //$logo = $message->embed(\Swift_Image::fromPath($this->get('kernel')->getRootDir().'/../web/logo.png'));
 			    $message->setSubject('Regenerar contraseña - Ciclubs')
 			        ->setFrom($configmail['from'])
 			        ->setTo($user->getMail())
-			        //->addPart($this->renderView('CaucesTiendaBundle:Mail:regalo.txt.twig', array('request'=>$r, 'payment'=>$payment)), 'text/plain')
 			        ->setBody($this->renderView('ColectaUserBundle:Default:resetPasswordMail.txt.twig', array('user'=>$user, 'code'=>$code)), 'text/plain');
 			    $mailer->send($message);
 			    
-			    $this->get('session')->setFlash('resetmailsuccess', 'Te hemos enviado un email. Revisa tu bandeja de entrada, y la de spam por si acaso.');
+			    $this->get('session')->getFlashBag()->add('resetmailsuccess', 'Te hemos enviado un email. Revisa tu bandeja de entrada, y la de spam por si acaso.');
 			    return $this->render('ColectaUserBundle:Default:resetPassword.html.twig');
             }
             else
             {
-                $this->get('session')->setFlash('resetmailerror', 'El email no está en nuestra base de datos');
-                $this->get('session')->setFlash('email', $email);
+                $this->get('session')->getFlashBag()->add('resetmailerror', 'El email no está en nuestra base de datos');
+                $this->get('session')->getFlashBag()->add('email', $email);
             }
         }
         return $this->render('ColectaUserBundle:Default:resetPassword.html.twig');
     }
     public function newPasswordAction($uid, $code)
     {        
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $user = $em->getRepository('ColectaUserBundle:User')->find($uid);
         
@@ -167,7 +165,7 @@ class DefaultController extends Controller
                 {
                     if( $request->request->get('pass1') != $request->request->get('pass2') )
                     {
-                        $this->get('session')->setFlash('error', 'Las contraseñas no coinciden.');
+                        $this->get('session')->getFlashBag()->add('error', 'Las contraseñas no coinciden.');
                     }
                     else
                     {
@@ -195,13 +193,13 @@ class DefaultController extends Controller
             }
             else
             {
-                $this->get('session')->setFlash('error', 'El código no es correcto.');
+                $this->get('session')->getFlashBag()->add('error', 'El código no es correcto.');
                 return $this->render('ColectaUserBundle:Default:resetPassword.html.twig');
             }
         }
         else
         {
-            $this->get('session')->setFlash('error', 'El usuario no está en nuestra base de datos.');
+            $this->get('session')->getFlashBag()->add('error', 'El usuario no está en nuestra base de datos.');
         }
             
         return $this->render('ColectaUserBundle:Default:resetPassword.html.twig');

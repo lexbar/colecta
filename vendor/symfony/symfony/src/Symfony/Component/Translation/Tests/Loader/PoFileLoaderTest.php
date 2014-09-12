@@ -56,6 +56,16 @@ class PoFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(new FileResource($resource)), $catalogue->getResources());
     }
 
+    /**
+     * @expectedException \Symfony\Component\Translation\Exception\NotFoundResourceException
+     */
+    public function testLoadNonExistingResource()
+    {
+        $loader = new PoFileLoader();
+        $resource = __DIR__.'/../fixtures/non-existing.po';
+        $loader->load($resource, 'en', 'domain1');
+    }
+
     public function testLoadEmptyTranslation()
     {
         $loader = new PoFileLoader();
@@ -65,5 +75,29 @@ class PoFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('foo' => ''), $catalogue->all('domain1'));
         $this->assertEquals('en', $catalogue->getLocale());
         $this->assertEquals(array(new FileResource($resource)), $catalogue->getResources());
+    }
+
+    public function testEscapedId()
+    {
+        $loader = new PoFileLoader();
+        $resource = __DIR__.'/../fixtures/escaped-id.po';
+        $catalogue = $loader->load($resource, 'en', 'domain1');
+
+        $messages = $catalogue->all('domain1');
+        $this->assertArrayHasKey('escaped "foo"', $messages);
+        $this->assertEquals('escaped "bar"', $messages['escaped "foo"']);
+    }
+
+    public function testEscapedIdPlurals()
+    {
+        $loader = new PoFileLoader();
+        $resource = __DIR__.'/../fixtures/escaped-id-plurals.po';
+        $catalogue = $loader->load($resource, 'en', 'domain1');
+
+        $messages = $catalogue->all('domain1');
+        $this->assertArrayHasKey('escaped "foo"', $messages);
+        $this->assertArrayHasKey('escaped "foos"', $messages);
+        $this->assertEquals('escaped "bar"', $messages['escaped "foo"']);
+        $this->assertEquals('escaped "bar"|escaped "bars"', $messages['escaped "foos"']);
     }
 }

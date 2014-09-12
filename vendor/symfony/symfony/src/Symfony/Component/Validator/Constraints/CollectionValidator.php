@@ -14,7 +14,6 @@ namespace Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Constraints\Collection\Optional;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -24,7 +23,7 @@ use Symfony\Component\Validator\Constraints\Collection\Optional;
 class CollectionValidator extends ConstraintValidator
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function validate($value, Constraint $constraint)
     {
@@ -36,9 +35,7 @@ class CollectionValidator extends ConstraintValidator
             throw new UnexpectedTypeException($value, 'array or Traversable and ArrayAccess');
         }
 
-        $walker = $this->context->getGraphWalker();
         $group = $this->context->getGroup();
-        $propertyPath = $this->context->getPropertyPath();
 
         foreach ($constraint->fields as $field => $fieldConstraint) {
             if (
@@ -46,12 +43,10 @@ class CollectionValidator extends ConstraintValidator
                 (is_array($value) && array_key_exists($field, $value)) ||
                 ($value instanceof \ArrayAccess && $value->offsetExists($field))
             ) {
-                foreach ($fieldConstraint->constraints as $constr) {
-                    $walker->walkConstraint($constr, $value[$field], $group, $propertyPath.'['.$field.']');
-                }
+                $this->context->validateValue($value[$field], $fieldConstraint->constraints, '['.$field.']', $group);
             } elseif (!$fieldConstraint instanceof Optional && !$constraint->allowMissingFields) {
-                $this->context->addViolationAtSubPath('['.$field.']', $constraint->missingFieldsMessage, array(
-                    '{{ field }}' => $field
+                $this->context->addViolationAt('['.$field.']', $constraint->missingFieldsMessage, array(
+                    '{{ field }}' => $this->formatValue($field)
                 ), null);
             }
         }
@@ -59,8 +54,8 @@ class CollectionValidator extends ConstraintValidator
         if (!$constraint->allowExtraFields) {
             foreach ($value as $field => $fieldValue) {
                 if (!isset($constraint->fields[$field])) {
-                    $this->context->addViolationAtSubPath('['.$field.']', $constraint->extraFieldsMessage, array(
-                        '{{ field }}' => $field
+                    $this->context->addViolationAt('['.$field.']', $constraint->extraFieldsMessage, array(
+                        '{{ field }}' => $this->formatValue($field)
                     ), $fieldValue);
                 }
             }

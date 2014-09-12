@@ -12,6 +12,10 @@
 namespace Symfony\Bundle\FrameworkBundle\Templating;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * GlobalVariables is the entry point for Symfony global variables in Twig templates.
@@ -22,6 +26,9 @@ class GlobalVariables
 {
     protected $container;
 
+    /**
+     * @param ContainerInterface $container The DI container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -30,7 +37,7 @@ class GlobalVariables
     /**
      * Returns the security context service.
      *
-     * @return Symfony\Component\Security\Core\SecurityContext|void The security context
+     * @return SecurityContext|null The security context
      */
     public function getSecurity()
     {
@@ -42,9 +49,9 @@ class GlobalVariables
     /**
      * Returns the current user.
      *
-     * @return mixed|void
+     * @return mixed
      *
-     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     * @see TokenInterface::getUser()
      */
     public function getUser()
     {
@@ -67,7 +74,7 @@ class GlobalVariables
     /**
      * Returns the current request.
      *
-     * @return Symfony\Component\HttpFoundation\Request|void The http request object
+     * @return Request|null The HTTP request object
      */
     public function getRequest()
     {
@@ -79,7 +86,7 @@ class GlobalVariables
     /**
      * Returns the current session.
      *
-     * @return Symfony\Component\HttpFoundation\Session\Session|void The session
+     * @return Session|null The session
      */
     public function getSession()
     {
@@ -101,10 +108,10 @@ class GlobalVariables
     /**
      * Returns the current app debug mode.
      *
-     * @return Boolean The current debug mode
+     * @return bool    The current debug mode
      */
     public function getDebug()
     {
-        return (Boolean) $this->container->getParameter('kernel.debug');
+        return (bool) $this->container->getParameter('kernel.debug');
     }
 }

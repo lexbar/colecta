@@ -22,19 +22,19 @@ class DefaultController extends Controller
             
             if(empty($name) || empty($email) || empty($text))
             {
-                $this->get('session')->setFlash('ContactName', $name);
-                $this->get('session')->setFlash('ContactEmail', $email);
-                $this->get('session')->setFlash('ContactText', $text);
+                $this->get('session')->getFlashBag()->add('ContactName', $name);
+                $this->get('session')->getFlashBag()->add('ContactEmail', $email);
+                $this->get('session')->getFlashBag()->add('ContactText', $text);
                 
-                $this->get('session')->setFlash('error', 'No puedes dejar ningún campo vacío');
+                $this->get('session')->getFlashBag()->add('error', 'No puedes dejar ningún campo vacío');
             }
             elseif(preg_match("#^[^@]+@[^\.]+\.[^ ]+$#",$email) == 0)
             {
-                $this->get('session')->setFlash('ContactName', $name);
-                $this->get('session')->setFlash('ContactEmail', $email);
-                $this->get('session')->setFlash('ContactText', $text);
+                $this->get('session')->getFlashBag()->add('ContactName', $name);
+                $this->get('session')->getFlashBag()->add('ContactEmail', $email);
+                $this->get('session')->getFlashBag()->add('ContactText', $text);
                 
-                $this->get('session')->setFlash('error', 'El email no parece estar bien escrito');
+                $this->get('session')->getFlashBag()->add('error', 'El email no parece estar bien escrito');
             }
             else
             {
@@ -49,7 +49,7 @@ class DefaultController extends Controller
     		        ->setBody($this->renderView('ColectaSiteBundle:Default:contactmail.txt.twig', array('name'=>$name, 'email'=>$email, 'text'=>$text)), 'text/plain');
     		    $mailer->send($message);
     		    
-    		    $this->get('session')->setFlash('success', 'Mensaje enviado correctamente');
+    		    $this->get('session')->getFlashBag()->add('success', 'Mensaje enviado correctamente');
             }
         }
         

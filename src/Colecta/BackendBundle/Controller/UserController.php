@@ -12,7 +12,7 @@ class UserController extends Controller
     public function indexAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
         {
@@ -26,7 +26,7 @@ class UserController extends Controller
     public function rolesAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
         {
@@ -40,7 +40,7 @@ class UserController extends Controller
     public function profileAction($user_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
         {
@@ -117,7 +117,7 @@ class UserController extends Controller
     public function newUserAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
         {
@@ -286,7 +286,7 @@ class UserController extends Controller
     public function roleEditAction($role_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
         {
@@ -326,7 +326,7 @@ class UserController extends Controller
         $year = 2013;
         
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
         {

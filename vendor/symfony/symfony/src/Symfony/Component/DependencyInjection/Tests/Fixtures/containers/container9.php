@@ -15,7 +15,7 @@ $container->
     setFactoryClass('FooClass')->
     setFactoryMethod('getInstance')->
     setArguments(array('foo', new Reference('foo.baz'), array('%foo%' => 'foo is %foo%', 'foobar' => '%foo%'), true, new Reference('service_container')))->
-    setProperties(array('foo' => 'bar', 'moo' => new Reference('foo.baz')))->
+    setProperties(array('foo' => 'bar', 'moo' => new Reference('foo.baz'), 'qux' => array('%foo%' => 'foo is %foo%', 'foobar' => '%foo%')))->
     addMethodCall('setBar', array(new Reference('bar')))->
     addMethodCall('initialize')->
     setConfigurator('sc_configure')
@@ -43,6 +43,7 @@ $container->getParameterBag()->add(array(
     'foo' => 'bar',
 ));
 $container->setAlias('alias_for_foo', 'foo');
+$container->setAlias('alias_for_alias', 'alias_for_foo');
 $container->
     register('method_call1', 'FooClass')->
     setFile(realpath(__DIR__.'/../includes/foo.php'))->
@@ -70,6 +71,15 @@ $container
 $container
     ->register('baz', 'Baz')
     ->addMethodCall('setFoo', array(new Reference('foo_with_inline')))
+;
+$container
+    ->register('request', 'Request')
+    ->setSynthetic(true)
+    ->setSynchronized(true)
+;
+$container
+    ->register('depends_on_request', 'stdClass')
+    ->addMethodCall('setRequest', array(new Reference('request', ContainerInterface::NULL_ON_INVALID_REFERENCE, false)))
 ;
 
 return $container;

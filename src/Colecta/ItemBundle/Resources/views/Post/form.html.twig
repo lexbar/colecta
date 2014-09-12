@@ -14,7 +14,7 @@
         </div>
       </div>
       
-      {% render 'ColectaItemBundle:Category:formlist' with {'selected':app.session.flash('PostCategory')} %}
+      {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':app.session.flash('PostCategory')})) }}
       
       <div class="form-actions">
         <button class="btn disabled" disabled="disabled">Guardar como borrador</button>

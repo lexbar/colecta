@@ -139,7 +139,7 @@ class ItemExtension extends \Twig_Extension
     
     public function itemlinkableFilter($text)
     {
-        $em = $this->doctrine->getEntityManager();
+        $em = $this->doctrine->getManager();
         
         $return = '';
         $position = 0;

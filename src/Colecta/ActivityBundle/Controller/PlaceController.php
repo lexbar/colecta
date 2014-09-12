@@ -22,7 +22,7 @@ class PlaceController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the items that are not drafts
         $items = $em->getRepository('ColectaActivityBundle:Place')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
@@ -43,7 +43,7 @@ class PlaceController extends Controller
     }
     public function viewAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
         
@@ -56,7 +56,7 @@ class PlaceController extends Controller
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
@@ -68,7 +68,7 @@ class PlaceController extends Controller
         }
         elseif(!$category && !$request->get('newCategory'))
         {
-            $this->get('session')->setFlash('error', 'No existe la categoria');
+            $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
         }
         else
         {
@@ -170,17 +170,17 @@ class PlaceController extends Controller
         }
         else
         {
-            $this->get('session')->setFlash('PlaceName', $request->get('name'));
-            $this->get('session')->setFlash('PlaceText', $request->get('text'));
-            $this->get('session')->setFlash('PlaceLatitude', $request->get('latitude'));
-            $this->get('session')->setFlash('PlaceLongitude', $request->get('longitude'));
+            $this->get('session')->getFlashBag()->add('PlaceName', $request->get('name'));
+            $this->get('session')->getFlashBag()->add('PlaceText', $request->get('text'));
+            $this->get('session')->getFlashBag()->add('PlaceLatitude', $request->get('latitude'));
+            $this->get('session')->getFlashBag()->add('PlaceLongitude', $request->get('longitude'));
             return new RedirectResponse($this->generateUrl('ColectaPlaceNew'));
         }
     }
     public function editAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
@@ -197,7 +197,7 @@ class PlaceController extends Controller
         
             if(!$category)
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
                 $persist = false;
             }
             else
@@ -236,7 +236,7 @@ class PlaceController extends Controller
             
             if(!$request->get('text'))
             {
-                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
+                $this->get('session')->getFlashBag()->add('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             
@@ -250,7 +250,7 @@ class PlaceController extends Controller
             {
                 $em->persist($item); 
                 $em->flush();
-                $this->get('session')->setFlash('success', 'Modificado con éxito.');
+                $this->get('session')->getFlashBag()->add('success', 'Modificado con éxito.');
                 
                 // Update all categories. 
                 // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
@@ -266,7 +266,7 @@ class PlaceController extends Controller
     public function deleteAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
         
@@ -285,7 +285,7 @@ class PlaceController extends Controller
         $em->remove($item);
         $em->flush();
         
-        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        $this->get('session')->getFlashBag()->add('success', '"'.$name.'" ha sido eliminado.');
         
         return new RedirectResponse($this->generateUrl('ColectaDashboard'));
     }

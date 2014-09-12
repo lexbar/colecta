@@ -24,7 +24,7 @@
         <div class="form-group">
             <label class="col-sm-3 col-lg-2 control-label" for="Folder">Carpeta</label>
             <div class="col-sm-9 col-lg-10">
-                {% render 'ColectaFilesBundle:Folder:formlist' with {'selected':folder, 'firstwrite':firstwrite} %}
+                {{ render(controller('ColectaFilesBundle:Folder:formlist', {'selected':folder, 'firstwrite':firstwrite})) }}
             </div>
         </div>
         
@@ -51,7 +51,7 @@
         <div class="form-group">
             <label class="col-sm-3 col-lg-2 control-label" for="Category">Categoría</label>
             <div class="col-sm-9 col-lg-10">
-                {% render 'ColectaItemBundle:Category:formlist' with {'selected':category} %}
+                {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':category})) }}
             </div>
         </div>
         

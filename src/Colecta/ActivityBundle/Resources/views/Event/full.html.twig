@@ -330,7 +330,7 @@
     <script>
     $('#userSearch').typeahead({
         name: 'ColectaUsers',
-        local: {% render 'ColectaUserBundle:User:AjaxUserList' %}
+        local: {{ render(controller('ColectaUserBundle:User:AjaxUserList')) }}
         /*prefetch: 'http://colecta.dev{{ path('ColectaAjaxUserList') }}'*/
     });
     

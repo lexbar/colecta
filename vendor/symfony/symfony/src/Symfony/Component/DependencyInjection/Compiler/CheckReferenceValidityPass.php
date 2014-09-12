@@ -72,8 +72,8 @@ class CheckReferenceValidityPass implements CompilerPassInterface
                 $this->currentScopeChildren = array_keys($scopes);
                 $this->currentScopeAncestors = array();
             } elseif (ContainerInterface::SCOPE_PROTOTYPE !== $scope) {
-                $this->currentScopeChildren = $children[$scope];
-                $this->currentScopeAncestors = $ancestors[$scope];
+                $this->currentScopeChildren = isset($children[$scope]) ? $children[$scope] : array();
+                $this->currentScopeAncestors = isset($ancestors[$scope]) ? $ancestors[$scope] : array();
             }
 
             $this->validateReferences($definition->getArguments());
@@ -159,7 +159,7 @@ class CheckReferenceValidityPass implements CompilerPassInterface
     private function getDefinition($id)
     {
         if (!$this->container->hasDefinition($id)) {
-            return null;
+            return;
         }
 
         return $this->container->getDefinition($id);

@@ -12,7 +12,7 @@ class FolderController extends Controller
 {
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the items that are not drafts
         $items = $em->getRepository('ColectaFilesBundle:Folder')->findBy(array('draft'=>0), array('date'=>'DESC'),10,0);
@@ -21,7 +21,7 @@ class FolderController extends Controller
     }
     public function viewAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
         
@@ -33,18 +33,18 @@ class FolderController extends Controller
     }
     public function createAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         elseif(! $request->request->get('name'))
         {
-            $this->get('session')->setFlash('error', 'No has indicado el nombre de la carpeta');
+            $this->get('session')->getFlashBag()->add('error', 'No has indicado el nombre de la carpeta');
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
         }
         
@@ -117,7 +117,7 @@ class FolderController extends Controller
     }
     public function editAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         
@@ -137,7 +137,7 @@ class FolderController extends Controller
             
             if(!$request->get('newCategory') && !$category)
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
             }
             else
             {
@@ -180,7 +180,7 @@ class FolderController extends Controller
             
                 $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
                 
-                $this->get('session')->setFlash('success', 'Carpeta modificada correctamente');
+                $this->get('session')->getFlashBag()->add('success', 'Carpeta modificada correctamente');
                 return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));     
             }
         }
@@ -189,12 +189,12 @@ class FolderController extends Controller
     }
     public function formlistAction($selected, $firstwrite)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -256,12 +256,12 @@ class FolderController extends Controller
     
     public function chooseAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         

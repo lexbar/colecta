@@ -14,6 +14,8 @@ namespace Symfony\Component\Console\Tester;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Eases the testing of console commands.
@@ -48,7 +50,7 @@ class CommandTester
      * @param array $input   An array of arguments and options
      * @param array $options An array of options
      *
-     * @return integer The command exit code
+     * @return int     The command exit code
      */
     public function execute(array $input, array $options = array())
     {
@@ -71,13 +73,21 @@ class CommandTester
     /**
      * Gets the display returned by the last execution of the command.
      *
+     * @param bool    $normalize Whether to normalize end of lines to \n or not
+     *
      * @return string The display
      */
-    public function getDisplay()
+    public function getDisplay($normalize = false)
     {
         rewind($this->output->getStream());
 
-        return stream_get_contents($this->output->getStream());
+        $display = stream_get_contents($this->output->getStream());
+
+        if ($normalize) {
+            $display = str_replace(PHP_EOL, "\n", $display);
+        }
+
+        return $display;
     }
 
     /**

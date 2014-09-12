@@ -188,7 +188,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Validator\Exception\GroupDefinitionException
+     * @expectedException \Symfony\Component\Validator\Exception\GroupDefinitionException
      */
     public function testGroupSequenceFailsIfGroupSequenceProviderIsSet()
     {
@@ -198,7 +198,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Validator\Exception\GroupDefinitionException
+     * @expectedException \Symfony\Component\Validator\Exception\GroupDefinitionException
      */
     public function testGroupSequenceProviderFailsIfGroupSequenceIsSet()
     {
@@ -208,7 +208,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Validator\Exception\GroupDefinitionException
+     * @expectedException \Symfony\Component\Validator\Exception\GroupDefinitionException
      */
     public function testGroupSequenceProviderFailsIfDomainClassIsInvalid()
     {
@@ -221,5 +221,21 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
         $metadata = new ClassMetadata(self::PROVIDERCLASS);
         $metadata->setGroupSequenceProvider(true);
         $this->assertTrue($metadata->isGroupSequenceProvider());
+    }
+
+    /**
+     * https://github.com/symfony/symfony/issues/11604
+     */
+    public function testGetMemberMetadatasReturnsEmptyArrayWithoutConfiguredMetadata()
+    {
+        $this->assertCount(0, $this->metadata->getMemberMetadatas('foo'), '->getMemberMetadatas() returns an empty collection if no metadata is configured for the given property');
+    }
+
+    /**
+     * https://github.com/symfony/symfony/issues/11604
+     */
+    public function testGetPropertyMetadataReturnsEmptyArrayWithoutConfiguredMetadata()
+    {
+        $this->assertCount(0, $this->metadata->getPropertyMetadata('foo'), '->getPropertyMetadata() returns an empty collection if no metadata is configured for the given property');
     }
 }

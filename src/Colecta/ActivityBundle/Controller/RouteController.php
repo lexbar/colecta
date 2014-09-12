@@ -28,7 +28,7 @@ class RouteController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the items that are not drafts
         $items = $em->getRepository('ColectaActivityBundle:Route')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
@@ -49,7 +49,7 @@ class RouteController extends Controller
     }
     public function viewAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         
@@ -88,7 +88,7 @@ class RouteController extends Controller
         }
         else
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             
             
             $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
@@ -147,7 +147,7 @@ class RouteController extends Controller
         }
         else
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             
             
             $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
@@ -206,20 +206,20 @@ class RouteController extends Controller
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
         }
         else
         {
             if (!$_FILES['file'] || ($file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'])) === null) 
             {
-                $this->get('session')->setFlash('error', 'Ha ocurrido un error al subir el archivo.');
+                $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error al subir el archivo.');
             }
             
             $extension = $this->extension($file->getClientOriginalName());
             
             if(!$extension) //Extension not accepted
             {
-                $this->get('session')->setFlash('error', 'El archivo no tiene una extensión correcta.');
+                $this->get('session')->getFlashBag()->add('error', 'El archivo no tiene una extensión correcta.');
             }
             else
             {
@@ -235,7 +235,7 @@ class RouteController extends Controller
                                 
                 if(!$fulltrack)
                 {
-                    $this->get('session')->setFlash('error', 'No se ha podido leer correctamente el archivo.');
+                    $this->get('session')->getFlashBag()->add('error', 'No se ha podido leer correctamente el archivo.');
                 }
                 else
                 {
@@ -260,7 +260,7 @@ class RouteController extends Controller
                     
                     $itemdata = $this->getRouteData($fulltrack);
                     
-                    $categories = $this->getDoctrine()->getEntityManager()->getRepository('ColectaItemBundle:Category')->findAll();
+                    $categories = $this->getDoctrine()->getManager()->getRepository('ColectaItemBundle:Category')->findAll();
                     
                     return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView(), 'categories' => $categories));
                 }
@@ -393,7 +393,7 @@ class RouteController extends Controller
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request');
         $post = $request->request;
         
@@ -403,11 +403,11 @@ class RouteController extends Controller
         
             if(!$user) 
             {
-                $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+                $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             }
             elseif(!$category && !$request->get('newCategory'))
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
             }
             else
             {
@@ -617,7 +617,7 @@ class RouteController extends Controller
                 }
                 else
                 {
-                    $this->get('session')->setFlash('error', 'Revisa los campos');
+                    $this->get('session')->getFlashBag()->add('error', 'Revisa los campos');
                     
                     $filename = $post->get('filename');
                     $rootdir = $this->getUploadDir();
@@ -645,7 +645,7 @@ class RouteController extends Controller
     public function editAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request');
         $post = $request->request;
         
@@ -664,7 +664,7 @@ class RouteController extends Controller
             
             if(!$category)
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
                 $persist = false;
             }
             else
@@ -708,7 +708,7 @@ class RouteController extends Controller
             {
                 if(($file = new UploadedFile($_FILES['file']['tmp_name'],$_FILES['file']['name'])) === null)
                 {
-                    $this->get('session')->setFlash('error', 'No se ha podido subir el archivo.');
+                    $this->get('session')->getFlashBag()->add('error', 'No se ha podido subir el archivo.');
                     $persist = false;
                 }
                 else
@@ -717,7 +717,7 @@ class RouteController extends Controller
             
                     if(!$extension) //Extension not accepted
                     {
-                        $this->get('session')->setFlash('error', 'El archivo no tiene una extensión correcta.');
+                        $this->get('session')->getFlashBag()->add('error', 'El archivo no tiene una extensión correcta.');
                         $persist = false;
                     }
                     else
@@ -734,7 +734,7 @@ class RouteController extends Controller
                                         
                         if(!$track)
                         {
-                            $this->get('session')->setFlash('error', 'No se ha podido leer correctamente el archivo.');
+                            $this->get('session')->getFlashBag()->add('error', 'No se ha podido leer correctamente el archivo.');
                             $persist = false;
                         }
                         else
@@ -787,7 +787,7 @@ class RouteController extends Controller
             {
                 $em->persist($item); 
                 $em->flush();
-                $this->get('session')->setFlash('success', 'Modificado con éxito.');
+                $this->get('session')->getFlashBag()->add('success', 'Modificado con éxito.');
                 
                 // Update all categories. 
                 // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
@@ -803,7 +803,7 @@ class RouteController extends Controller
     public function deleteAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         
@@ -822,7 +822,7 @@ class RouteController extends Controller
         $em->remove($item);
         $em->flush();
         
-        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        $this->get('session')->getFlashBag()->add('success', '"'.$name.'" ha sido eliminado.');
         
         return new RedirectResponse($this->generateUrl('ColectaDashboard'));
     }
@@ -831,7 +831,7 @@ class RouteController extends Controller
     {
         $this->get('request')->setRequestFormat($extension);
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         
         $oformat = $this->acceptedExtensions($extension);

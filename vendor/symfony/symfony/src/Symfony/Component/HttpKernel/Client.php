@@ -11,15 +11,15 @@
 
 namespace Symfony\Component\HttpKernel;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\BrowserKit\Client as BaseClient;
 use Symfony\Component\BrowserKit\Request as DomRequest;
 use Symfony\Component\BrowserKit\Response as DomResponse;
 use Symfony\Component\BrowserKit\Cookie as DomCookie;
 use Symfony\Component\BrowserKit\History;
 use Symfony\Component\BrowserKit\CookieJar;
-use Symfony\Component\HttpKernel\TerminableInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Client simulates a browser and makes requests to a Kernel object.
@@ -50,6 +50,26 @@ class Client extends BaseClient
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return Request|null A Request instance
+     */
+    public function getRequest()
+    {
+        return parent::getRequest();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Response|null A Response instance
+     */
+    public function getResponse()
+    {
+        return parent::getResponse();
+    }
+
+    /**
      * Makes a request.
      *
      * @param Request $request A Request instance
@@ -71,35 +91,51 @@ class Client extends BaseClient
      * Returns the script to execute when the request must be insulated.
      *
      * @param Request $request A Request instance
+     *
+     * @return string
      */
     protected function getScript($request)
     {
         $kernel = str_replace("'", "\\'", serialize($this->kernel));
         $request = str_replace("'", "\\'", serialize($request));
 
-        $r = new \ReflectionClass('\\Symfony\\Component\\ClassLoader\\UniversalClassLoader');
+        $r = new \ReflectionClass('\\Symfony\\Component\\ClassLoader\\ClassLoader');
         $requirePath = str_replace("'", "\\'", $r->getFileName());
-
         $symfonyPath = str_replace("'", "\\'", realpath(__DIR__.'/../../..'));
 
-        return <<<EOF
+        $code = <<<EOF
 <?php
 
 require_once '$requirePath';
 
-\$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
-\$loader->registerNamespaces(array('Symfony' => '$symfonyPath'));
+\$loader = new Symfony\Component\ClassLoader\ClassLoader();
+\$loader->addPrefix('Symfony', '$symfonyPath');
 \$loader->register();
 
 \$kernel = unserialize('$kernel');
-echo serialize(\$kernel->handle(unserialize('$request')));
+\$request = unserialize('$request');
+EOF;
+
+        return $code.$this->getHandleScript();
+    }
+
+    protected function getHandleScript()
+    {
+        return <<<'EOF'
+$response = $kernel->handle($request);
+
+if ($kernel instanceof Symfony\Component\HttpKernel\TerminableInterface) {
+    $kernel->terminate($request, $response);
+}
+
+echo serialize($response);
 EOF;
     }
 
     /**
      * Converts the BrowserKit request to a HttpKernel request.
      *
-     * @param DomRequest $request A Request instance
+     * @param DomRequest $request A DomRequest instance
      *
      * @return Request A Request instance
      */
@@ -107,7 +143,9 @@ EOF;
     {
         $httpRequest = Request::create($request->getUri(), $request->getMethod(), $request->getParameters(), $request->getCookies(), $request->getFiles(), $request->getServer(), $request->getContent());
 
-        $httpRequest->files->replace($this->filterFiles($httpRequest->files->all()));
+        foreach ($this->filterFiles($httpRequest->files->all()) as $key => $value) {
+            $httpRequest->files->set($key, $value);
+        }
 
         return $httpRequest;
     }
@@ -153,8 +191,6 @@ EOF;
                         true
                     );
                 }
-            } else {
-                $filtered[$key] = $value;
             }
         }
 
@@ -166,7 +202,7 @@ EOF;
      *
      * @param Response $response A Response instance
      *
-     * @return Response A Response instance
+     * @return DomResponse A DomResponse instance
      */
     protected function filterResponse($response)
     {

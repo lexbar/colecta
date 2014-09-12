@@ -23,7 +23,7 @@ class FileFormField extends FormField
     /**
      * Sets the PHP error code associated with the field.
      *
-     * @param integer $error The error code (one of UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE, UPLOAD_ERR_PARTIAL, UPLOAD_ERR_NO_FILE, UPLOAD_ERR_NO_TMP_DIR, UPLOAD_ERR_CANT_WRITE, or UPLOAD_ERR_EXTENSION)
+     * @param int     $error The error code (one of UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE, UPLOAD_ERR_PARTIAL, UPLOAD_ERR_NO_FILE, UPLOAD_ERR_NO_TMP_DIR, UPLOAD_ERR_CANT_WRITE, or UPLOAD_ERR_EXTENSION)
      *
      * @throws \InvalidArgumentException When error code doesn't exist
      */
@@ -59,11 +59,17 @@ class FileFormField extends FormField
         if (null !== $value && is_readable($value)) {
             $error = UPLOAD_ERR_OK;
             $size = filesize($value);
-            $name = basename($value);
+            $info = pathinfo($value);
+            $name = $info['basename'];
 
             // copy to a tmp location
-            $tmp = tempnam(sys_get_temp_dir(), 'upload');
-            unlink($tmp);
+            $tmp = sys_get_temp_dir().'/'.sha1(uniqid(mt_rand(), true));
+            if (array_key_exists('extension', $info)) {
+                $tmp .= '.'.$info['extension'];
+            }
+            if (is_file($tmp)) {
+                unlink($tmp);
+            }
             copy($value, $tmp);
             $value = $tmp;
         } else {
@@ -77,17 +83,27 @@ class FileFormField extends FormField
     }
 
     /**
+     * Sets path to the file as string for simulating HTTP request
+     *
+     * @param string $path The path to the file
+     */
+    public function setFilePath($path)
+    {
+        parent::setValue($path);
+    }
+
+    /**
      * Initializes the form field.
      *
      * @throws \LogicException When node type is incorrect
      */
     protected function initialize()
     {
-        if ('input' != $this->node->nodeName) {
+        if ('input' !== $this->node->nodeName) {
             throw new \LogicException(sprintf('A FileFormField can only be created from an input tag (%s given).', $this->node->nodeName));
         }
 
-        if ('file' != $this->node->getAttribute('type')) {
+        if ('file' !== strtolower($this->node->getAttribute('type'))) {
             throw new \LogicException(sprintf('A FileFormField can only be created from an input tag with a type of file (given type is %s).', $this->node->getAttribute('type')));
         }
 

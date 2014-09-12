@@ -36,6 +36,8 @@ class Definition
     private $public;
     private $synthetic;
     private $abstract;
+    private $synchronized;
+    private $lazy;
 
     protected $arguments;
 
@@ -56,6 +58,8 @@ class Definition
         $this->tags = array();
         $this->public = true;
         $this->synthetic = false;
+        $this->synchronized = false;
+        $this->lazy = false;
         $this->abstract = false;
         $this->properties = array();
     }
@@ -236,12 +240,12 @@ class Definition
     /**
      * Sets a specific argument
      *
-     * @param integer $index
+     * @param int     $index
      * @param mixed   $argument
      *
      * @return Definition The current instance
      *
-     * @throws \OutOfBoundsException When the replaced argument does not exist
+     * @throws OutOfBoundsException When the replaced argument does not exist
      *
      * @api
      */
@@ -271,11 +275,11 @@ class Definition
     /**
      * Gets an argument to pass to the service constructor/factory method.
      *
-     * @param integer $index
+     * @param int     $index
      *
      * @return mixed The argument value
      *
-     * @throws \OutOfBoundsException When the argument does not exist
+     * @throws OutOfBoundsException When the argument does not exist
      *
      * @api
      */
@@ -355,7 +359,7 @@ class Definition
      *
      * @param string $method The method name to search for
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -373,7 +377,7 @@ class Definition
     /**
      * Gets the methods to call after service initialization.
      *
-     * @return  array An array of method calls
+     * @return array An array of method calls
      *
      * @api
      */
@@ -446,7 +450,7 @@ class Definition
      *
      * @param string $name
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -544,7 +548,7 @@ class Definition
     /**
      * Sets the visibility of this service.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      *
      * @return Definition The current instance
      *
@@ -552,7 +556,7 @@ class Definition
      */
     public function setPublic($boolean)
     {
-        $this->public = (Boolean) $boolean;
+        $this->public = (bool) $boolean;
 
         return $this;
     }
@@ -560,7 +564,7 @@ class Definition
     /**
      * Whether this service is public facing
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -570,10 +574,62 @@ class Definition
     }
 
     /**
+     * Sets the synchronized flag of this service.
+     *
+     * @param bool    $boolean
+     *
+     * @return Definition The current instance
+     *
+     * @api
+     */
+    public function setSynchronized($boolean)
+    {
+        $this->synchronized = (bool) $boolean;
+
+        return $this;
+    }
+
+    /**
+     * Whether this service is synchronized.
+     *
+     * @return bool
+     *
+     * @api
+     */
+    public function isSynchronized()
+    {
+        return $this->synchronized;
+    }
+
+    /**
+     * Sets the lazy flag of this service.
+     *
+     * @param bool    $lazy
+     *
+     * @return Definition The current instance
+     */
+    public function setLazy($lazy)
+    {
+        $this->lazy = (bool) $lazy;
+
+        return $this;
+    }
+
+    /**
+     * Whether this service is lazy.
+     *
+     * @return bool
+     */
+    public function isLazy()
+    {
+        return $this->lazy;
+    }
+
+    /**
      * Sets whether this definition is synthetic, that is not constructed by the
      * container, but dynamically injected.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      *
      * @return Definition the current instance
      *
@@ -581,7 +637,7 @@ class Definition
      */
     public function setSynthetic($boolean)
     {
-        $this->synthetic = (Boolean) $boolean;
+        $this->synthetic = (bool) $boolean;
 
         return $this;
     }
@@ -590,7 +646,7 @@ class Definition
      * Whether this definition is synthetic, that is not constructed by the
      * container, but dynamically injected.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -603,7 +659,7 @@ class Definition
      * Whether this definition is abstract, that means it merely serves as a
      * template for other definitions.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      *
      * @return Definition the current instance
      *
@@ -611,7 +667,7 @@ class Definition
      */
     public function setAbstract($boolean)
     {
-        $this->abstract = (Boolean) $boolean;
+        $this->abstract = (bool) $boolean;
 
         return $this;
     }
@@ -620,7 +676,7 @@ class Definition
      * Whether this definition is abstract, that means it merely serves as a
      * template for other definitions.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */

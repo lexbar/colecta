@@ -32,7 +32,15 @@ class ChainUserProvider implements UserProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return array
+     */
+    public function getProviders()
+    {
+        return $this->providers;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function loadUserByUsername($username)
     {
@@ -44,11 +52,13 @@ class ChainUserProvider implements UserProviderInterface
             }
         }
 
-        throw new UsernameNotFoundException(sprintf('There is no user with name "%s".', $username));
+        $ex = new UsernameNotFoundException(sprintf('There is no user with name "%s".', $username));
+        $ex->setUsername($username);
+        throw $ex;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function refreshUser(UserInterface $user)
     {
@@ -66,14 +76,16 @@ class ChainUserProvider implements UserProviderInterface
         }
 
         if ($supportedUserFound) {
-            throw new UsernameNotFoundException(sprintf('There is no user with name "%s".', $user->getUsername()));
+            $ex = new UsernameNotFoundException(sprintf('There is no user with name "%s".', $user->getUsername()));
+            $ex->setUsername($user->getUsername());
+            throw $ex;
         } else {
             throw new UnsupportedUserException(sprintf('The account "%s" is not supported.', get_class($user)));
         }
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supportsClass($class)
     {

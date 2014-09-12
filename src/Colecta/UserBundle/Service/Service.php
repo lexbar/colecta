@@ -19,7 +19,7 @@ class Service
     
     public function notDismissedNotifications($item = 0) //if item is set means this is called from the view of the item 
     {
-        $em = $this->doctrine->getEntityManager();
+        $em = $this->doctrine->getManager();
         $query = $em->createQuery('SELECT n FROM ColectaUserBundle:Notification n WHERE n.user = :uid AND n.dismiss = 0 ORDER BY n.date DESC');
         $query->setParameter('uid', $this->securityContext->getToken()->getUser()->getId());
         
@@ -47,7 +47,7 @@ class Service
     
     public function notDismissedMessages() 
     {
-        $em = $this->doctrine->getEntityManager();
+        $em = $this->doctrine->getManager();
         $query = $em->createQuery('SELECT m FROM ColectaUserBundle:Message m WHERE m.destination = :uid AND m.dismiss = 0 ORDER BY m.date DESC');
         $query->setParameter('uid', $this->securityContext->getToken()->getUser()->getId());
         
@@ -62,7 +62,7 @@ class Service
         }
         else
         {
-            $em = $this->doctrine->getEntityManager();
+            $em = $this->doctrine->getManager();
             $slv = $this->session->get('sinceLastVisit');
             $user = $this->securityContext->getToken()->getUser();
             
@@ -91,7 +91,7 @@ class Service
             
                 if($user != 'anon.')
                 {
-                    $em = $this->doctrine->getEntityManager();
+                    $em = $this->doctrine->getManager();
                     
                     $user->setLastAccess(new \DateTime('now'));
                 
@@ -133,7 +133,7 @@ class Service
     {
         if(!$this->visitDone)
         {
-            $em = $this->doctrine->getEntityManager();
+            $em = $this->doctrine->getManager();
             
             if($this->securityContext->getToken())
             {

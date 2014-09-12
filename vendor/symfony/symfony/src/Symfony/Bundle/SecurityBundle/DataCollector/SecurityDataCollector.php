@@ -39,6 +39,7 @@ class SecurityDataCollector extends DataCollector
             $this->data = array(
                 'enabled'       => false,
                 'authenticated' => false,
+                'token_class'   => null,
                 'user'          => '',
                 'roles'         => array(),
             );
@@ -46,6 +47,7 @@ class SecurityDataCollector extends DataCollector
             $this->data = array(
                 'enabled'       => true,
                 'authenticated' => false,
+                'token_class'   => null,
                 'user'          => '',
                 'roles'         => array(),
             );
@@ -53,8 +55,9 @@ class SecurityDataCollector extends DataCollector
             $this->data = array(
                 'enabled'       => true,
                 'authenticated' => $token->isAuthenticated(),
+                'token_class'   => get_class($token),
                 'user'          => $token->getUsername(),
-                'roles'         => array_map(function ($role){ return $role->getRole();}, $token->getRoles()),
+                'roles'         => array_map(function ($role) { return $role->getRole();}, $token->getRoles()),
             );
         }
     }
@@ -62,7 +65,7 @@ class SecurityDataCollector extends DataCollector
     /**
      * Checks if security is enabled.
      *
-     * @return Boolean true if security is enabled, false otherwise
+     * @return bool    true if security is enabled, false otherwise
      */
     public function isEnabled()
     {
@@ -92,11 +95,21 @@ class SecurityDataCollector extends DataCollector
     /**
      * Checks if the user is authenticated or not.
      *
-     * @return Boolean true if the user is authenticated, false otherwise
+     * @return bool    true if the user is authenticated, false otherwise
      */
     public function isAuthenticated()
     {
         return $this->data['authenticated'];
+    }
+
+    /**
+     * Get the class name of the security token.
+     *
+     * @return string The token
+     */
+    public function getTokenClass()
+    {
+        return $this->data['token_class'];
     }
 
     /**

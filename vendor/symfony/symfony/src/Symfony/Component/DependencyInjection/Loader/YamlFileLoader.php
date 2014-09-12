@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Parser as YamlParser;
 
 /**
  * YamlFileLoader loads YAML files service definitions.
@@ -29,6 +29,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlFileLoader extends FileLoader
 {
+    private $yamlParser;
+
     /**
      * Loads a Yaml file.
      *
@@ -49,7 +51,7 @@ class YamlFileLoader extends FileLoader
         }
 
         // imports
-        $this->parseImports($content, $file);
+        $this->parseImports($content, $path);
 
         // parameters
         if (isset($content['parameters'])) {
@@ -71,7 +73,7 @@ class YamlFileLoader extends FileLoader
      * @param mixed  $resource A resource
      * @param string $type     The resource type
      *
-     * @return Boolean true if this class supports the given resource, false otherwise
+     * @return bool    true if this class supports the given resource, false otherwise
      */
     public function supports($resource, $type = null)
     {
@@ -92,7 +94,7 @@ class YamlFileLoader extends FileLoader
 
         foreach ($content['imports'] as $import) {
             $this->setCurrentDir(dirname($file));
-            $this->import($import['resource'], null, isset($import['ignore_errors']) ? (Boolean) $import['ignore_errors'] : false, $file);
+            $this->import($import['resource'], null, isset($import['ignore_errors']) ? (bool) $import['ignore_errors'] : false, $file);
         }
     }
 
@@ -129,7 +131,7 @@ class YamlFileLoader extends FileLoader
 
             return;
         } elseif (isset($service['alias'])) {
-            $public = !array_key_exists('public', $service) || (Boolean) $service['public'];
+            $public = !array_key_exists('public', $service) || (bool) $service['public'];
             $this->container->setAlias($id, new Alias($service['alias'], $public));
 
             return;
@@ -151,6 +153,14 @@ class YamlFileLoader extends FileLoader
 
         if (isset($service['synthetic'])) {
             $definition->setSynthetic($service['synthetic']);
+        }
+
+        if (isset($service['synchronized'])) {
+            $definition->setSynchronized($service['synchronized']);
+        }
+
+        if (isset($service['lazy'])) {
+            $definition->setLazy($service['lazy']);
         }
 
         if (isset($service['public'])) {
@@ -232,10 +242,24 @@ class YamlFileLoader extends FileLoader
      * @param string $file
      *
      * @return array The file content
+     *
+     * @throws InvalidArgumentException when the given file is not a local file or when it does not exist
      */
     protected function loadFile($file)
     {
-        return $this->validate(Yaml::parse($file), $file);
+        if (!stream_is_local($file)) {
+            throw new InvalidArgumentException(sprintf('This is not a local file "%s".', $file));
+        }
+
+        if (!file_exists($file)) {
+            throw new InvalidArgumentException(sprintf('The service file "%s" is not valid.', $file));
+        }
+
+        if (null === $this->yamlParser) {
+            $this->yamlParser = new YamlParser();
+        }
+
+        return $this->validate($this->yamlParser->parse(file_get_contents($file)), $file);
     }
 
     /**
@@ -290,7 +314,10 @@ class YamlFileLoader extends FileLoader
         if (is_array($value)) {
             $value = array_map(array($this, 'resolveServices'), $value);
         } elseif (is_string($value) &&  0 === strpos($value, '@')) {
-            if (0 === strpos($value, '@?')) {
+            if (0 === strpos($value, '@@')) {
+                $value = substr($value, 1);
+                $invalidBehavior = null;
+            } elseif (0 === strpos($value, '@?')) {
                 $value = substr($value, 2);
                 $invalidBehavior = ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
             } else {
@@ -305,7 +332,9 @@ class YamlFileLoader extends FileLoader
                 $strict = true;
             }
 
-            $value = new Reference($value, $invalidBehavior, $strict);
+            if (null !== $invalidBehavior) {
+                $value = new Reference($value, $invalidBehavior, $strict);
+            }
         }
 
         return $value;

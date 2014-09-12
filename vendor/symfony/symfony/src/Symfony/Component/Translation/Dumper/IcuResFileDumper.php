@@ -21,7 +21,7 @@ use Symfony\Component\Translation\MessageCatalogue;
 class IcuResFileDumper implements DumperInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function dump(MessageCatalogue $messages, $options = array())
     {
@@ -49,7 +49,7 @@ class IcuResFileDumper implements DumperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function format(MessageCatalogue $messages, $domain = 'messages')
     {
@@ -68,17 +68,17 @@ class IcuResFileDumper implements DumperInterface
             $resources .= pack('V', $this->getPosition($data));
 
             $data .= pack('V', strlen($target))
-                  .  mb_convert_encoding($target."\0", 'UTF-16LE', 'UTF-8')
-                  .  $this->writePadding($data)
+                .mb_convert_encoding($target."\0", 'UTF-16LE', 'UTF-8')
+                .$this->writePadding($data)
                   ;
         }
 
         $resOffset = $this->getPosition($data);
 
         $data .= pack('v', count($messages))
-              .  $indexes
-              .  $this->writePadding($data)
-              .  $resources
+            .$indexes
+            .$this->writePadding($data)
+            .$resources
               ;
 
         $bundleTop = $this->getPosition($data);
@@ -103,8 +103,8 @@ class IcuResFileDumper implements DumperInterface
         );
 
         $output = $header
-                . $root
-                . $data;
+               .$root
+               .$data;
 
         return $output;
     }
@@ -126,7 +126,7 @@ class IcuResFileDumper implements DumperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getExtension()
     {

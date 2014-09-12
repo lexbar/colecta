@@ -12,9 +12,9 @@
 /**
  * Adds an exists() method for loaders.
  *
- * @package    twig
- * @author     Florin Patan <florinpatan@gmail.com>
- * @deprecated since 1.12 (to be removed in 2.0)
+ * @author Florin Patan <florinpatan@gmail.com>
+ *
+ * @deprecated since 1.12 (to be removed in 3.0)
  */
 interface Twig_ExistsLoaderInterface
 {
@@ -23,7 +23,7 @@ interface Twig_ExistsLoaderInterface
      *
      * @param string $name The name of the template to check if we can load
      *
-     * @return boolean If the template source code is handled by this loader or not
+     * @return bool    If the template source code is handled by this loader or not
      */
     public function exists($name);
 }

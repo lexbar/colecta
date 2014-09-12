@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     /**
      * @var integer $id
@@ -495,7 +495,7 @@ class User implements UserInterface
     
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user)
     {
-        return $this->getMail() == $user->getMail();
+        return $this->getMail() == $user->getMail() && $this->getName() == $user->getName();
     }
     
     public function eraseCredentials()

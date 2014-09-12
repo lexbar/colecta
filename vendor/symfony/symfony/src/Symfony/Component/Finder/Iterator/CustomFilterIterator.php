@@ -28,6 +28,8 @@ class CustomFilterIterator extends FilterIterator
      *
      * @param \Iterator $iterator The Iterator to filter
      * @param array     $filters  An array of PHP callbacks
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(\Iterator $iterator, array $filters)
     {
@@ -44,7 +46,7 @@ class CustomFilterIterator extends FilterIterator
     /**
      * Filters the iterator values.
      *
-     * @return Boolean true if the value should be kept, false otherwise
+     * @return bool    true if the value should be kept, false otherwise
      */
     public function accept()
     {

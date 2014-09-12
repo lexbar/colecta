@@ -36,6 +36,9 @@ class AccessMap implements AccessMapInterface
         $this->map[] = array($requestMatcher, $roles, $channel);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPatterns(Request $request)
     {
         foreach ($this->map as $elements) {

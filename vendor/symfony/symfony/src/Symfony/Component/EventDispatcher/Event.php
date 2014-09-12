@@ -30,7 +30,7 @@ namespace Symfony\Component\EventDispatcher;
 class Event
 {
     /**
-     * @var Boolean Whether no further event listeners should be triggered
+     * @var bool    Whether no further event listeners should be triggered
      */
     private $propagationStopped = false;
 
@@ -48,7 +48,7 @@ class Event
      * Returns whether further event listeners should be triggered.
      *
      * @see Event::stopPropagation
-     * @return Boolean Whether propagation was already stopped for this event.
+     * @return bool    Whether propagation was already stopped for this event.
      *
      * @api
      */
@@ -74,11 +74,11 @@ class Event
     /**
      * Stores the EventDispatcher that dispatches this Event
      *
-     * @param EventDispatcher $dispatcher
+     * @param EventDispatcherInterface $dispatcher
      *
      * @api
      */
-    public function setDispatcher(EventDispatcher $dispatcher)
+    public function setDispatcher(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
@@ -86,7 +86,7 @@ class Event
     /**
      * Returns the EventDispatcher that dispatches this Event
      *
-     * @return EventDispatcher
+     * @return EventDispatcherInterface
      *
      * @api
      */

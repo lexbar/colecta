@@ -19,7 +19,7 @@ class NotificationController extends Controller
             return new RedirectResponse($this->generateUrl('UserLogin'));
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $notifications = $em->getRepository('ColectaUserBundle:Notification')->findBy(array('user'=>$user->getId()), array('date'=>'DESC'),20,0);
         
@@ -34,7 +34,7 @@ class NotificationController extends Controller
             return new RedirectResponse($this->generateUrl('UserLogin'));
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $notifications = $em->getRepository('ColectaUserBundle:Notification')->findBy(array('user'=>$user->getId()), array('date'=>'DESC'),20,20 * intval($page));
         
@@ -45,17 +45,17 @@ class NotificationController extends Controller
     public function dismissAction($id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $notification = $em->getRepository('ColectaUserBundle:Notification')->findOneBy(array('user'=>$user->getId(), 'id'=>$id));
         
         if(!$user) 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
         }
         elseif(!$notification)
         {
-            $this->get('session')->setFlash('error', 'No existe la notificación');
+            $this->get('session')->getFlashBag()->add('error', 'No existe la notificación');
         }
         else 
         {
@@ -77,11 +77,11 @@ class NotificationController extends Controller
     public function dismissAllAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if(!$user) 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
         }
         else 
         {

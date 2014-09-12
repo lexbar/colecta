@@ -15,6 +15,9 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\Scope;
 
 /**
  * GraphvizDumper dumps a service container as a graphviz file.
@@ -121,7 +124,7 @@ class GraphvizDumper extends Dumper
      *
      * @param string  $id        The service id used to find edges
      * @param array   $arguments An array of arguments
-     * @param Boolean $required
+     * @param bool    $required
      * @param string  $name
      *
      * @return array An array of edges
@@ -130,7 +133,7 @@ class GraphvizDumper extends Dumper
     {
         $edges = array();
         foreach ($arguments as $argument) {
-            if (is_object($argument) && $argument instanceof Parameter) {
+            if ($argument instanceof Parameter) {
                 $argument = $this->container->hasParameter($argument) ? $this->container->getParameter($argument) : null;
             } elseif (is_string($argument) && preg_match('/^%([^%]+)%$/', $argument, $match)) {
                 $argument = $this->container->hasParameter($match[1]) ? $this->container->getParameter($match[1]) : null;
@@ -159,7 +162,7 @@ class GraphvizDumper extends Dumper
     {
         $nodes = array();
 
-        $container = clone $this->container;
+        $container = $this->cloneContainer();
 
         foreach ($container->getDefinitions() as $id => $definition) {
             $nodes[$id] = array('class' => str_replace('\\', '\\\\', $this->container->getParameterBag()->resolveValue($definition->getClass())), 'attributes' => array_merge($this->options['node.definition'], array('style' => ContainerInterface::SCOPE_PROTOTYPE !== $definition->getScope() ? 'filled' : 'dotted')));
@@ -175,11 +178,30 @@ class GraphvizDumper extends Dumper
             }
 
             if (!$container->hasDefinition($id)) {
-                $nodes[$id] = array('class' => str_replace('\\', '\\\\', get_class($service)), 'attributes' => $this->options['node.instance']);
+                $class = ('service_container' === $id) ? get_class($this->container) : get_class($service);
+                $nodes[$id] = array('class' => str_replace('\\', '\\\\', $class), 'attributes' => $this->options['node.instance']);
             }
         }
 
         return $nodes;
+    }
+
+    private function cloneContainer()
+    {
+        $parameterBag = new ParameterBag($this->container->getParameterBag()->all());
+
+        $container = new ContainerBuilder($parameterBag);
+        $container->setDefinitions($this->container->getDefinitions());
+        $container->setAliases($this->container->getAliases());
+        $container->setResources($this->container->getResources());
+        foreach ($this->container->getScopes() as $scope => $parentScope) {
+            $container->addScope(new Scope($scope, $parentScope));
+        }
+        foreach ($this->container->getExtensions() as $extension) {
+            $container->registerExtension($extension);
+        }
+
+        return $container;
     }
 
     /**

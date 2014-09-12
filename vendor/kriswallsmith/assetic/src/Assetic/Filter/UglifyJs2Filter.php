@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,6 +27,9 @@ class UglifyJs2Filter extends BaseNodeFilter
     private $compress;
     private $beautify;
     private $mangle;
+    private $screwIe8;
+    private $comments;
+    private $wrap;
 
     public function __construct($uglifyjsBin = '/usr/bin/uglifyjs', $nodeBin = null)
     {
@@ -47,6 +50,21 @@ class UglifyJs2Filter extends BaseNodeFilter
     public function setMangle($mangle)
     {
         $this->mangle = $mangle;
+    }
+
+    public function setScrewIe8($screwIe8)
+    {
+        $this->screwIe8 = $screwIe8;
+    }
+
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+    
+    public function setWrap($wrap)
+    {
+        $this->wrap = $wrap;
     }
 
     public function filterLoad(AssetInterface $asset)
@@ -71,6 +89,18 @@ class UglifyJs2Filter extends BaseNodeFilter
             $pb->add('--mangle');
         }
 
+        if ($this->screwIe8) {
+            $pb->add('--screw-ie8');
+        }
+
+        if ($this->comments) {
+            $pb->add('--comments')->add(true === $this->comments ? 'all' : $this->comments);
+        }
+        
+        if ($this->wrap) {
+            $pb->add('--wrap')->add($this->wrap);
+        }
+
         // input and output files
         $input = tempnam(sys_get_temp_dir(), 'input');
         $output = tempnam(sys_get_temp_dir(), 'output');
@@ -82,7 +112,7 @@ class UglifyJs2Filter extends BaseNodeFilter
         $code = $proc->run();
         unlink($input);
 
-        if (0 < $code) {
+        if (0 !== $code) {
             if (file_exists($output)) {
                 unlink($output);
             }

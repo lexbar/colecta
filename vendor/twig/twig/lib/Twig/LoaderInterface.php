@@ -12,8 +12,7 @@
 /**
  * Interface all loaders must implement.
  *
- * @package    twig
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 interface Twig_LoaderInterface
 {
@@ -45,7 +44,7 @@ interface Twig_LoaderInterface
      * @param string    $name The template name
      * @param timestamp $time The last modification time of the cached template
      *
-     * @return Boolean true if the template is fresh, false otherwise
+     * @return bool    true if the template is fresh, false otherwise
      *
      * @throws Twig_Error_Loader When $name is not found
      */

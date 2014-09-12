@@ -11,47 +11,40 @@
 
 namespace Symfony\Component\Validator\Tests\Constraints;
 
+use Symfony\Component\Intl\Util\IntlTestHelper;
 use Symfony\Component\Validator\Constraints\Locale;
 use Symfony\Component\Validator\Constraints\LocaleValidator;
 
-class LocaleValidatorTest extends LocalizedTestCase
+class LocaleValidatorTest extends AbstractConstraintValidatorTest
 {
-    protected $context;
-    protected $validator;
+    protected function createValidator()
+    {
+        return new LocaleValidator();
+    }
 
     protected function setUp()
     {
+        IntlTestHelper::requireIntl($this);
+
         parent::setUp();
-
-        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
-        $this->validator = new LocaleValidator();
-        $this->validator->initialize($this->context);
-    }
-
-    protected function tearDown()
-    {
-        $this->context = null;
-        $this->validator = null;
     }
 
     public function testNullIsValid()
     {
-        $this->context->expects($this->never())
-            ->method('addViolation');
-
         $this->validator->validate(null, new Locale());
+
+        $this->assertNoViolation();
     }
 
     public function testEmptyStringIsValid()
     {
-        $this->context->expects($this->never())
-            ->method('addViolation');
-
         $this->validator->validate('', new Locale());
+
+        $this->assertNoViolation();
     }
 
     /**
-     * @expectedException Symfony\Component\Validator\Exception\UnexpectedTypeException
+     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      */
     public function testExpectsStringCompatibleType()
     {
@@ -63,14 +56,9 @@ class LocaleValidatorTest extends LocalizedTestCase
      */
     public function testValidLocales($locale)
     {
-        if (!class_exists('Symfony\Component\Locale\Locale')) {
-            $this->markTestSkipped('The "Locale" component is not available');
-        }
-
-        $this->context->expects($this->never())
-            ->method('addViolation');
-
         $this->validator->validate($locale, new Locale());
+
+        $this->assertNoViolation();
     }
 
     public function getValidLocales()
@@ -89,21 +77,15 @@ class LocaleValidatorTest extends LocalizedTestCase
      */
     public function testInvalidLocales($locale)
     {
-        if (!class_exists('Symfony\Component\Locale\Locale')) {
-            $this->markTestSkipped('The "Locale" component is not available');
-        }
-
         $constraint = new Locale(array(
             'message' => 'myMessage'
         ));
 
-        $this->context->expects($this->once())
-            ->method('addViolation')
-            ->with('myMessage', array(
-                '{{ value }}' => $locale,
-            ));
-
         $this->validator->validate($locale, $constraint);
+
+        $this->assertViolation('myMessage', array(
+            '{{ value }}' => '"'.$locale.'"',
+        ));
     }
 
     public function getInvalidLocales()

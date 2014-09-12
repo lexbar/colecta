@@ -26,7 +26,7 @@ class EncoderFactory implements EncoderFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getEncoder($user)
     {
@@ -51,6 +51,8 @@ class EncoderFactory implements EncoderFactoryInterface
      * @param array $config
      *
      * @return PasswordEncoderInterface
+     *
+     * @throws \InvalidArgumentException
      */
     private function createEncoder(array $config)
     {

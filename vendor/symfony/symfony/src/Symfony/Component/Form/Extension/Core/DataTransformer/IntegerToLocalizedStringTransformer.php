@@ -12,7 +12,6 @@
 namespace Symfony\Component\Form\Extension\Core\DataTransformer;
 
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
  * Transforms between an integer and a localized number with grouping
@@ -23,16 +22,16 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 class IntegerToLocalizedStringTransformer extends NumberToLocalizedStringTransformer
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function reverseTransform($value)
     {
         if (!is_string($value)) {
-            throw new UnexpectedTypeException($value, 'string');
+            throw new TransformationFailedException('Expected a string.');
         }
 
         if ('' === $value) {
-            return null;
+            return;
         }
 
         if ('NaN' === $value) {

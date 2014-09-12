@@ -74,6 +74,10 @@ class YamlDumper extends Dumper
             $code .= sprintf("        class: %s\n", $definition->getClass());
         }
 
+        if (!$definition->isPublic()) {
+            $code .= "        public: false\n";
+        }
+
         $tagsCode = '';
         foreach ($definition->getTags() as $name => $tags) {
             foreach ($tags as $attributes) {
@@ -92,6 +96,22 @@ class YamlDumper extends Dumper
 
         if ($definition->getFile()) {
             $code .= sprintf("        file: %s\n", $definition->getFile());
+        }
+
+        if ($definition->isSynthetic()) {
+            $code .= sprintf("        synthetic: true\n");
+        }
+
+        if ($definition->isSynchronized()) {
+            $code .= sprintf("        synchronized: true\n");
+        }
+
+        if ($definition->getFactoryClass()) {
+            $code .= sprintf("        factory_class: %s\n", $definition->getFactoryClass());
+        }
+
+        if ($definition->isLazy()) {
+            $code .= sprintf("        lazy: true\n");
         }
 
         if ($definition->getFactoryMethod()) {
@@ -120,7 +140,7 @@ class YamlDumper extends Dumper
 
         if ($callable = $definition->getConfigurator()) {
             if (is_array($callable)) {
-                if (is_object($callable[0]) && $callable[0] instanceof Reference) {
+                if ($callable[0] instanceof Reference) {
                     $callable = array($this->getServiceCall((string) $callable[0], $callable[0]), $callable[1]);
                 } else {
                     $callable = array($callable[0], $callable[1]);
@@ -166,7 +186,11 @@ class YamlDumper extends Dumper
             $code .= $this->addService($id, $definition);
         }
 
-        foreach ($this->container->getAliases() as $alias => $id) {
+        $aliases = $this->container->getAliases();
+        foreach ($aliases as $alias => $id) {
+            while (isset($aliases[(string) $id])) {
+                $id = $aliases[(string) $id];
+            }
             $code .= $this->addServiceAlias($alias, $id);
         }
 
@@ -184,11 +208,7 @@ class YamlDumper extends Dumper
             return '';
         }
 
-        if ($this->container->isFrozen()) {
-            $parameters = $this->prepareParameters($this->container->getParameterBag()->all());
-        } else {
-            $parameters = $this->container->getParameterBag()->all();
-        }
+        $parameters = $this->prepareParameters($this->container->getParameterBag()->all(), $this->container->isFrozen());
 
         return $this->dumper->dump(array('parameters' => $parameters), 2);
     }
@@ -211,9 +231,9 @@ class YamlDumper extends Dumper
             }
 
             return $code;
-        } elseif (is_object($value) && $value instanceof Reference) {
+        } elseif ($value instanceof Reference) {
             return $this->getServiceCall((string) $value, $value);
-        } elseif (is_object($value) && $value instanceof Parameter) {
+        } elseif ($value instanceof Parameter) {
             return $this->getParameterCall((string) $value);
         } elseif (is_object($value) || is_resource($value)) {
             throw new RuntimeException('Unable to dump a service container if a parameter is an object or a resource.');
@@ -252,26 +272,27 @@ class YamlDumper extends Dumper
     }
 
     /**
-     * Prepares parameters
+     * Prepares parameters.
      *
-     * @param array $parameters
+     * @param array   $parameters
+     * @param bool    $escape
      *
      * @return array
      */
-    private function prepareParameters($parameters)
+    private function prepareParameters($parameters, $escape = true)
     {
         $filtered = array();
         foreach ($parameters as $key => $value) {
             if (is_array($value)) {
-                $value = $this->prepareParameters($value);
-            } elseif ($value instanceof Reference) {
+                $value = $this->prepareParameters($value, $escape);
+            } elseif ($value instanceof Reference || is_string($value) && 0 === strpos($value, '@')) {
                 $value = '@'.$value;
             }
 
             $filtered[$key] = $value;
         }
 
-        return $this->escape($filtered);
+        return $escape ? $this->escape($filtered) : $filtered;
     }
 
     /**

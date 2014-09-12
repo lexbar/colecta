@@ -74,7 +74,7 @@ class EventDispatcher implements EventDispatcherInterface
             }
         }
 
-        return $this->sorted;
+        return array_filter($this->sorted);
     }
 
     /**
@@ -82,7 +82,7 @@ class EventDispatcher implements EventDispatcherInterface
      */
     public function hasListeners($eventName = null)
     {
-        return (Boolean) count($this->getListeners($eventName));
+        return (bool) count($this->getListeners($eventName));
     }
 
     /**
@@ -106,7 +106,7 @@ class EventDispatcher implements EventDispatcherInterface
         }
 
         foreach ($this->listeners[$eventName] as $priority => $listeners) {
-            if (false !== ($key = array_search($listener, $listeners))) {
+            if (false !== ($key = array_search($listener, $listeners, true))) {
                 unset($this->listeners[$eventName][$priority][$key], $this->sorted[$eventName]);
             }
         }

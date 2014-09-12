@@ -21,7 +21,7 @@ class DefaultController extends Controller
     }
     public function attachAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();        
+        $em = $this->getDoctrine()->getManager();        
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($id);
         
         return $this->render('ColectaItemBundle:Default:attach.html.twig', array('item' => $item));
@@ -30,7 +30,7 @@ class DefaultController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the items that are not drafts
         //$items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
@@ -64,7 +64,7 @@ class DefaultController extends Controller
         
         if($user == 'anon.')
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -77,7 +77,7 @@ class DefaultController extends Controller
         
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the items that are not drafts
         //$items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
@@ -185,7 +185,7 @@ class DefaultController extends Controller
             
         if(count($words))
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             
             $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE ';
             
@@ -243,22 +243,22 @@ class DefaultController extends Controller
     public function relateAction($id) 
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($id);
     
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
         }
         elseif(!$item)
         {
-            $this->get('session')->setFlash('error', 'No existe el item');
+            $this->get('session')->getFlashBag()->add('error', 'No existe el item');
         }
         elseif(!$user->getRole()->getItemRelateAny() && !($item->canEdit($user) && $user->getRole()->getItemRelateOwn()))
         {
-            $this->get('session')->setFlash('error', 'No eres propietario');
+            $this->get('session')->getFlashBag()->add('error', 'No eres propietario');
         }
         else
         {
@@ -329,7 +329,7 @@ class DefaultController extends Controller
             $em->persist($item); 
             $em->flush();
             
-            $this->get('session')->setFlash('success', 'Los enlaces se han guardado con éxito');
+            $this->get('session')->getFlashBag()->add('success', 'Los enlaces se han guardado con éxito');
         }
         
         $referer = $this->get('request')->headers->get('referer');
@@ -344,7 +344,7 @@ class DefaultController extends Controller
     public function likeAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.')
         {

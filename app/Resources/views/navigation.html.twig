@@ -108,23 +108,13 @@
             </a>
         </li>
         {% endif %}
-        {#<li{% if bun == 'FilesBundle' and con == 'FileController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaFileIndex') }}">
-                <i class="fa fa-{{ itemIcons['Files/Folder'] }} fa-fw"></i> Archivos
-            </a>
-        </li>
-        <li{% if bun == 'ActivityBundle' and con == 'PlaceController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaPlaceIndex') }}">
-                <i class="fa fa-{{ itemIcons['Activity/Place'] }} fa-fw"></i> Lugares
-            </a>
-        </li>#}
     </ul>
     
-    {% render "ColectaSiteBundle:Page:navigation" with {context:'extranet'} %}
+    {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
 
 
 {# hide when big calendar is shown #}
 {% if app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::indexAction' and app.request.attributes.get("_controller") != 'Colecta\\ActivityBundle\\Controller\\EventController::dateAction' %}
     <hr>
-    {% render "ColectaActivityBundle:Event:calendar" with {'date':'today'} %}
+    {{ render(controller('ColectaActivityBundle:Event:calendar', {'date':'today'})) }}
 {% endif %}

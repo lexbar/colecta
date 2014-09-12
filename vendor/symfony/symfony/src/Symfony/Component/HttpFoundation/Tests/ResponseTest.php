@@ -14,7 +14,7 @@ namespace Symfony\Component\HttpFoundation\Tests;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends ResponseTestCase
 {
     public function testCreate()
     {
@@ -284,6 +284,16 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
         $response->headers->set('Vary', 'Accept-Language,User-Agent,    X-Foo');
         $this->assertEquals(array('Accept-Language', 'User-Agent', 'X-Foo'), $response->getVary(), '->getVary() parses multiple header name values separated by commas');
+
+        $vary = array('Accept-Language', 'User-Agent', 'X-foo');
+
+        $response = new Response();
+        $response->headers->set('Vary', $vary);
+        $this->assertEquals($vary, $response->getVary(), '->getVary() parses multiple header name values in arrays');
+
+        $response = new Response();
+        $response->headers->set('Vary', 'Accept-Language, User-Agent, X-foo');
+        $this->assertEquals($vary, $response->getVary(), '->getVary() parses multiple header name values in arrays');
     }
 
     public function testSetVary()
@@ -296,7 +306,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('Accept-Language', 'User-Agent'), $response->getVary(), '->setVary() replace the vary header by default');
 
         $response->setVary('X-Foo', false);
-        $this->assertEquals(array('Accept-Language', 'User-Agent'), $response->getVary(), '->setVary() doesn\'t change the Vary header if replace is set to false');
+        $this->assertEquals(array('Accept-Language', 'User-Agent', 'X-Foo'), $response->getVary(), '->setVary() doesn\'t wipe out earlier Vary headers if replace is set to false');
     }
 
     public function testDefaultContentType()
@@ -364,6 +374,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response->prepare($request);
 
         $this->assertEquals('', $response->getContent());
+        $this->assertTrue($response->headers->has('Content-Type'));
+        $this->assertFalse($response->headers->has('Content-Length'));
     }
 
     public function testPrepareSetsPragmaOnHttp10Only()
@@ -568,7 +580,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testIsEmpty()
     {
-        foreach (array(201, 204, 304) as $code) {
+        foreach (array(204, 304) as $code) {
             $response = new Response('', $code);
             $this->assertTrue($response->isEmpty());
         }
@@ -634,7 +646,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @dataProvider invalidContentProvider
      */
     public function testSetContentInvalid($content)
@@ -652,7 +664,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'setCharset' => 'UTF-8',
             'setPublic' => null,
             'setPrivate' => null,
-            'setDate' => new \DateTime,
+            'setDate' => new \DateTime(),
             'expire' => null,
             'setMaxAge' => 1,
             'setSharedMaxAge' => 1,
@@ -668,7 +680,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function validContentProvider()
     {
         return array(
-            'obj'    => array(new StringableObject),
+            'obj'    => array(new StringableObject()),
             'string' => array('Foo'),
             'int'    => array(2),
         );
@@ -677,7 +689,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function invalidContentProvider()
     {
         return array(
-            'obj'   => array(new \stdClass),
+            'obj'   => array(new \stdClass()),
             'array' => array(array()),
             'bool'   => array(true, '1'),
         );
@@ -700,6 +712,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function createDateTimeNow()
     {
         return new \DateTime();
+    }
+
+    protected function provideResponse()
+    {
+        return new Response();
     }
 }
 

@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * An implementation of BundleInterface that adds a few conventions
@@ -63,6 +64,8 @@ abstract class Bundle extends ContainerAware implements BundleInterface
      * Returns the bundle's container extension.
      *
      * @return ExtensionInterface|null The container extension
+     *
+     * @throws \LogicException
      *
      * @api
      */
@@ -138,7 +141,6 @@ abstract class Bundle extends ContainerAware implements BundleInterface
      */
     public function getParent()
     {
-        return null;
     }
 
     /**
@@ -157,7 +159,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
         $name = get_class($this);
         $pos = strrpos($name, '\\');
 
-        return $this->name = false === $pos ? $name :  substr($name, $pos + 1);
+        return $this->name = false === $pos ? $name : substr($name, $pos + 1);
     }
 
     /**
@@ -186,7 +188,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
                 $ns .= '\\'.strtr($relativePath, '/', '\\');
             }
             $r = new \ReflectionClass($ns.'\\'.$file->getBasename('.php'));
-            if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract()) {
+            if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract() && !$r->getConstructor()->getNumberOfRequiredParameters()) {
                 $application->add($r->newInstance());
             }
         }

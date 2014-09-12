@@ -12,7 +12,7 @@
 namespace Symfony\Component\DomCrawler;
 
 /**
- * Link represents an HTML link (an HTML a tag).
+ * Link represents an HTML link (an HTML a or area tag).
  *
  * @author Fabien Potencier <fabien@symfony.com>
  *
@@ -24,10 +24,12 @@ class Link
      * @var \DOMNode A \DOMNode instance
      */
     protected $node;
+
     /**
      * @var string The method to use for the link
      */
     protected $method;
+
     /**
      * @var string The URI of the page where the link is embedded (or the base href)
      */
@@ -46,7 +48,7 @@ class Link
      */
     public function __construct(\DOMNode $node, $currentUri, $method = 'GET')
     {
-        if (!in_array(substr($currentUri, 0, 4), array('http', 'file'))) {
+        if (!in_array(strtolower(substr($currentUri, 0, 4)), array('http', 'file'))) {
             throw new \InvalidArgumentException(sprintf('Current URI must be an absolute URL ("%s").', $currentUri));
         }
 
@@ -89,7 +91,7 @@ class Link
         $uri = trim($this->getRawUri());
 
         // absolute URL?
-        if (0 === strpos($uri, 'http')) {
+        if (null !== parse_url($uri, PHP_URL_SCHEME)) {
             return $uri;
         }
 
@@ -98,39 +100,38 @@ class Link
             return $this->currentUri;
         }
 
-        // only an anchor
+        // an anchor
         if ('#' === $uri[0]) {
-            $baseUri = $this->currentUri;
-            if (false !== $pos = strpos($baseUri, '#')) {
-                $baseUri = substr($baseUri, 0, $pos);
-            }
-
-            return $baseUri.$uri;
+            return $this->cleanupAnchor($this->currentUri).$uri;
         }
 
-        // only a query string
+        $baseUri = $this->cleanupUri($this->currentUri);
+
         if ('?' === $uri[0]) {
-            $baseUri = $this->currentUri;
-
-            // remove the query string from the current uri
-            if (false !== $pos = strpos($baseUri, '?')) {
-                $baseUri = substr($baseUri, 0, $pos);
-            }
-
             return $baseUri.$uri;
         }
+
+        // absolute URL with relative schema
+        if (0 === strpos($uri, '//')) {
+            return preg_replace('#^([^/]*)//.*$#', '$1', $baseUri).$uri;
+        }
+
+        $baseUri = preg_replace('#^(.*?//[^/]*)(?:\/.*)?$#', '$1', $baseUri);
 
         // absolute path
         if ('/' === $uri[0]) {
-            return preg_replace('#^(.*?//[^/]+)(?:\/.*)?$#', '$1', $this->currentUri).$uri;
+            return $baseUri.$uri;
         }
 
         // relative path
-        return substr($this->currentUri, 0, strrpos($this->currentUri, '/') + 1).$uri;
+        $path = parse_url(substr($this->currentUri, strlen($baseUri)), PHP_URL_PATH);
+        $path = $this->canonicalizePath(substr($path, 0, strrpos($path, '/')).'/'.$uri);
+
+        return $baseUri.('' === $path || '/' !== $path[0] ? '/' : '').$path;
     }
 
     /**
-     * Returns raw uri data
+     * Returns raw URI data.
      *
      * @return string
      */
@@ -140,7 +141,37 @@ class Link
     }
 
     /**
-     * Sets current \DOMNode instance
+     * Returns the canonicalized URI path (see RFC 3986, section 5.2.4)
+     *
+     * @param string $path URI path
+     *
+     * @return string
+     */
+    protected function canonicalizePath($path)
+    {
+        if ('' === $path || '/' === $path) {
+            return $path;
+        }
+
+        if ('.' === substr($path, -1)) {
+            $path = $path.'/';
+        }
+
+        $output = array();
+
+        foreach (explode('/', $path) as $segment) {
+            if ('..' === $segment) {
+                array_pop($output);
+            } elseif ('.' !== $segment) {
+                array_push($output, $segment);
+            }
+        }
+
+        return implode('/', $output);
+    }
+
+    /**
+     * Sets current \DOMNode instance.
      *
      * @param \DOMNode $node A \DOMNode instance
      *
@@ -148,10 +179,54 @@ class Link
      */
     protected function setNode(\DOMNode $node)
     {
-        if ('a' != $node->nodeName) {
+        if ('a' !== $node->nodeName && 'area' !== $node->nodeName) {
             throw new \LogicException(sprintf('Unable to click on a "%s" tag.', $node->nodeName));
         }
 
         $this->node = $node;
+    }
+
+    /**
+     * Removes the query string and the anchor from the given uri.
+     *
+     * @param string $uri The uri to clean
+     *
+     * @return string
+     */
+    private function cleanupUri($uri)
+    {
+        return $this->cleanupQuery($this->cleanupAnchor($uri));
+    }
+
+    /**
+     * Remove the query string from the uri.
+     *
+     * @param string $uri
+     *
+     * @return string
+     */
+    private function cleanupQuery($uri)
+    {
+        if (false !== $pos = strpos($uri, '?')) {
+            return substr($uri, 0, $pos);
+        }
+
+        return $uri;
+    }
+
+    /**
+     * Remove the anchor from the uri.
+     *
+     * @param string $uri
+     *
+     * @return string
+     */
+    private function cleanupAnchor($uri)
+    {
+        if (false !== $pos = strpos($uri, '#')) {
+            return substr($uri, 0, $pos);
+        }
+
+        return $uri;
     }
 }

@@ -17,12 +17,10 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Sets the session in the request.
- *
- * This will also start the session if it was already started during a previous
- * request.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */

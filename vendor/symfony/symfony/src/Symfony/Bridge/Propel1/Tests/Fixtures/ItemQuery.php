@@ -22,6 +22,18 @@ class ItemQuery
         'updated_at'    => \PropelColumnTypes::TIMESTAMP,
     );
 
+    public static $result = array();
+
+    public function find()
+    {
+        return self::$result;
+    }
+
+    public function filterById($id)
+    {
+        return $this;
+    }
+
     public function getTableMap()
     {
         // Allows to define methods in this class
@@ -31,7 +43,11 @@ class ItemQuery
 
     public function getPrimaryKeys()
     {
-        return array('id');
+        $cm = new \ColumnMap('id', new \TableMap());
+        $cm->setType('INTEGER');
+        $cm->setPhpName('Id');
+
+        return array('id' => $cm);
     }
 
     /**
@@ -50,8 +66,6 @@ class ItemQuery
         if ($this->hasColumn($column)) {
             return new Column($column, $this->map[$column]);
         }
-
-        return null;
     }
 
     /**
@@ -59,6 +73,30 @@ class ItemQuery
      */
     public function getRelations()
     {
-        return array();
+        // table maps
+        $authorTable = new \TableMap();
+        $authorTable->setClassName('\Foo\Author');
+
+        $resellerTable = new \TableMap();
+        $resellerTable->setClassName('\Foo\Reseller');
+
+        // relations
+        $mainAuthorRelation = new \RelationMap('MainAuthor');
+        $mainAuthorRelation->setType(\RelationMap::MANY_TO_ONE);
+        $mainAuthorRelation->setForeignTable($authorTable);
+
+        $authorRelation = new \RelationMap('Author');
+        $authorRelation->setType(\RelationMap::ONE_TO_MANY);
+        $authorRelation->setForeignTable($authorTable);
+
+        $resellerRelation = new \RelationMap('Reseller');
+        $resellerRelation->setType(\RelationMap::MANY_TO_MANY);
+        $resellerRelation->setLocalTable($resellerTable);
+
+        return array(
+            $mainAuthorRelation,
+            $authorRelation,
+            $resellerRelation
+        );
     }
 }

@@ -19,25 +19,30 @@ class ServerParams
     /**
      * Returns maximum post size in bytes.
      *
-     * @return null|integer The maximum post size in bytes
+     * @return null|int     The maximum post size in bytes
      */
     public function getPostMaxSize()
     {
-        $iniMax = $this->getNormalizedIniPostMaxSize();
+        $iniMax = strtolower($this->getNormalizedIniPostMaxSize());
 
         if ('' === $iniMax) {
-            return null;
+            return;
         }
 
-        $max = (int) $iniMax;
+        $max = ltrim($iniMax, '+');
+        if (0 === strpos($max, '0x')) {
+            $max = intval($max, 16);
+        } elseif (0 === strpos($max, '0')) {
+            $max = intval($max, 8);
+        } else {
+            $max = intval($max);
+        }
 
         switch (substr($iniMax, -1)) {
-            case 'G':
-                $max *= 1024;
-            case 'M':
-                $max *= 1024;
-            case 'K':
-                $max *= 1024;
+            case 't': $max *= 1024;
+            case 'g': $max *= 1024;
+            case 'm': $max *= 1024;
+            case 'k': $max *= 1024;
         }
 
         return $max;

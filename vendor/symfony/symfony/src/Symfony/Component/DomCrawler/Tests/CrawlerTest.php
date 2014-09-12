@@ -54,6 +54,15 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testAddInvalidNode()
+    {
+        $crawler = new Crawler();
+        $crawler->add(1);
+    }
+
+    /**
      * @covers Symfony\Component\DomCrawler\Crawler::addHtmlContent
      */
     public function testAddHtmlContent()
@@ -83,6 +92,18 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Symfony\Component\DomCrawler\Crawler::addHtmlContent
      */
+    public function testAddHtmlContentInvalidBaseTag()
+    {
+        $crawler = new Crawler(null, 'http://symfony.com');
+
+        $crawler->addHtmlContent('<html><head><base target="_top"></head><a href="/contact"></a></html>', 'UTF-8');
+
+        $this->assertEquals('http://symfony.com/contact', current($crawler->filterXPath('//a')->links())->getUri(), '->addHtmlContent() correctly handles a non-existent base tag href attribute');
+    }
+
+    /**
+     * @covers Symfony\Component\DomCrawler\Crawler::addHtmlContent
+     */
     public function testAddHtmlContentUnsupportedCharset()
     {
         $crawler = new Crawler();
@@ -94,9 +115,21 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Symfony\Component\DomCrawler\Crawler::addHtmlContent
      */
+    public function testAddHtmlContentCharsetGbk()
+    {
+        $crawler = new Crawler();
+        //gbk encode of <html><p>中文</p></html>
+        $crawler->addHtmlContent(base64_decode('PGh0bWw+PHA+1tDOxDwvcD48L2h0bWw+'), 'gbk');
+
+        $this->assertEquals('中文', $crawler->filterXPath('//p')->text());
+    }
+
+    /**
+     * @covers Symfony\Component\DomCrawler\Crawler::addHtmlContent
+     */
     public function testAddHtmlContentWithErrors()
     {
-        libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(true);
 
         $crawler = new Crawler();
         $crawler->addHtmlContent(<<<EOF
@@ -116,7 +149,7 @@ EOF
         $this->assertEquals("Tag nav invalid\n", $errors[0]->message);
 
         libxml_clear_errors();
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($internalErrors);
     }
 
     /**
@@ -146,7 +179,7 @@ EOF
      */
     public function testAddXmlContentWithErrors()
     {
-        libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(true);
 
         $crawler = new Crawler();
         $crawler->addXmlContent(<<<EOF
@@ -164,7 +197,7 @@ EOF
         $this->assertTrue(count(libxml_get_errors()) > 1);
 
         libxml_clear_errors();
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($internalErrors);
     }
 
     /**
@@ -195,6 +228,14 @@ EOF
         $crawler = new Crawler();
         $crawler->addContent('foo bar', 'text/plain');
         $this->assertCount(0, $crawler, '->addContent() does nothing if the type is not (x|ht)ml');
+
+        $crawler = new Crawler();
+        $crawler->addContent('<html><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><span>中文</span></html>');
+        $this->assertEquals('中文', $crawler->filterXPath('//span')->text(), '->addContent() guess wrong charset');
+
+        $crawler = new Crawler();
+        $crawler->addContent(mb_convert_encoding('<html><head><meta charset="Shift_JIS"></head><body>日本語</body></html>', 'SJIS', 'UTF-8'));
+        $this->assertEquals('日本語', $crawler->filterXPath('//body')->text(), '->addContent() can recognize "Shift_JIS" in html5 meta charset tag');
     }
 
     /**
@@ -265,7 +306,7 @@ EOF
     public function testEach()
     {
         $data = $this->createTestCrawler()->filterXPath('//ul[1]/li')->each(function ($node, $i) {
-            return $i.'-'.$node->nodeValue;
+            return $i.'-'.$node->text();
         });
 
         $this->assertEquals(array('0-One', '1-Two', '2-Three'), $data, '->each() executes an anonymous function on each node of the list');
@@ -307,6 +348,20 @@ EOF
         }
     }
 
+    public function testHtml()
+    {
+        $this->assertEquals('<img alt="Bar">', $this->createTestCrawler()->filterXPath('//a[5]')->html());
+        $this->assertEquals('<input type="text" value="TextValue" name="TextName"><input type="submit" value="FooValue" name="FooName" id="FooId"><input type="button" value="BarValue" name="BarName" id="BarId"><button value="ButtonValue" name="ButtonName" id="ButtonId"></button>'
+            , trim($this->createTestCrawler()->filterXPath('//form[@id="FooFormId"]')->html()));
+
+        try {
+            $this->createTestCrawler()->filterXPath('//ol')->html();
+            $this->fail('->html() throws an \InvalidArgumentException if the node list is empty');
+        } catch (\InvalidArgumentException $e) {
+            $this->assertTrue(true, '->html() throws an \InvalidArgumentException if the node list is empty');
+        }
+    }
+
     public function testExtract()
     {
         $crawler = $this->createTestCrawler()->filterXPath('//ul[1]/li');
@@ -315,6 +370,29 @@ EOF
         $this->assertEquals(array(array('One', 'first'), array('Two', ''), array('Three', '')), $crawler->extract(array('_text', 'class')), '->extract() returns an array of extracted data from the node list');
 
         $this->assertEquals(array(), $this->createTestCrawler()->filterXPath('//ol')->extract('_text'), '->extract() returns an empty array if the node list is empty');
+    }
+
+    public function testFilterXpathComplexQueries()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//body');
+
+        $this->assertCount(0, $crawler->filterXPath('/input'));
+        $this->assertCount(0, $crawler->filterXPath('/body'));
+        $this->assertCount(1, $crawler->filterXPath('/_root/body'));
+        $this->assertCount(1, $crawler->filterXPath('./body'));
+        $this->assertCount(1, $crawler->filterXPath('.//body'));
+        $this->assertCount(5, $crawler->filterXPath('.//input'));
+        $this->assertCount(4, $crawler->filterXPath('//form')->filterXPath('//button | //input'));
+        $this->assertCount(1, $crawler->filterXPath('body'));
+        $this->assertCount(6, $crawler->filterXPath('//button | //input'));
+        $this->assertCount(1, $crawler->filterXPath('//body'));
+        $this->assertCount(1, $crawler->filterXPath('descendant-or-self::body'));
+        $this->assertCount(1, $crawler->filterXPath('//div[@id="parent"]')->filterXPath('./div'), 'A child selection finds only the current div');
+        $this->assertCount(3, $crawler->filterXPath('//div[@id="parent"]')->filterXPath('descendant::div'), 'A descendant selector matches the current div and its child');
+        $this->assertCount(3, $crawler->filterXPath('//div[@id="parent"]')->filterXPath('//div'), 'A descendant selector matches the current div and its child');
+        $this->assertCount(5, $crawler->filterXPath('(//a | //div)//img'));
+        $this->assertCount(7, $crawler->filterXPath('((//a | //div)//img | //ul)'));
+        $this->assertCount(7, $crawler->filterXPath('( ( //a | //div )//img | //ul )'));
     }
 
     /**
@@ -327,8 +405,110 @@ EOF
         $this->assertInstanceOf('Symfony\\Component\\DomCrawler\\Crawler', $crawler, '->filterXPath() returns a new instance of a crawler');
 
         $crawler = $this->createTestCrawler()->filterXPath('//ul');
-
         $this->assertCount(6, $crawler->filterXPath('//li'), '->filterXPath() filters the node list with the XPath expression');
+
+        $crawler = $this->createTestCrawler();
+        $this->assertCount(3, $crawler->filterXPath('//body')->filterXPath('//button')->parents(), '->filterXpath() preserves parents when chained');
+    }
+
+    public function testFilterXPathWithFakeRoot()
+    {
+        $crawler = $this->createTestCrawler();
+        $this->assertCount(0, $crawler->filterXPath('.'), '->filterXPath() returns an empty result if the XPath references the fake root node');
+        $this->assertCount(0, $crawler->filterXPath('/_root'), '->filterXPath() returns an empty result if the XPath references the fake root node');
+        $this->assertCount(0, $crawler->filterXPath('self::*'), '->filterXPath() returns an empty result if the XPath references the fake root node');
+        $this->assertCount(0, $crawler->filterXPath('self::_root'), '->filterXPath() returns an empty result if the XPath references the fake root node');
+    }
+
+    public function testFilterXPathWithAncestorAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//form');
+
+        $this->assertCount(0, $crawler->filterXPath('ancestor::*'), 'The fake root node has no ancestor nodes');
+    }
+
+    public function testFilterXPathWithAncestorOrSelfAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//form');
+
+        $this->assertCount(0, $crawler->filterXPath('ancestor-or-self::*'), 'The fake root node has no ancestor nodes');
+    }
+
+    public function testFilterXPathWithAttributeAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//form');
+
+        $this->assertCount(0, $crawler->filterXPath('attribute::*'), 'The fake root node has no attribute nodes');
+    }
+
+    public function testFilterXPathWithAttributeAxisAfterElementAxis()
+    {
+        $this->assertCount(3, $this->createTestCrawler()->filterXPath('//form/button/attribute::*'), '->filterXPath() handles attribute axes properly when they are preceded by an element filtering axis');
+    }
+
+    public function testFilterXPathWithChildAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//div[@id="parent"]');
+
+        $this->assertCount(1, $crawler->filterXPath('child::div'), 'A child selection finds only the current div');
+    }
+
+    public function testFilterXPathWithFollowingAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//a');
+
+        $this->assertCount(0, $crawler->filterXPath('following::div'), 'The fake root node has no following nodes');
+    }
+
+    public function testFilterXPathWithFollowingSiblingAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//a');
+
+        $this->assertCount(0, $crawler->filterXPath('following-sibling::div'), 'The fake root node has no following nodes');
+    }
+
+    public function testFilterXPathWithNamespaceAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//button');
+
+        $this->assertCount(0, $crawler->filterXPath('namespace::*'), 'The fake root node has no namespace nodes');
+    }
+
+    public function testFilterXPathWithNamespaceAxisAfterElementAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//div[@id="parent"]/namespace::*');
+
+        $this->assertCount(0, $crawler->filterXPath('namespace::*'), 'Namespace axes cannot be requested');
+    }
+
+    public function testFilterXPathWithParentAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//button');
+
+        $this->assertCount(0, $crawler->filterXPath('parent::*'), 'The fake root node has no parent nodes');
+    }
+
+    public function testFilterXPathWithPrecedingAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//form');
+
+        $this->assertCount(0, $crawler->filterXPath('preceding::*'), 'The fake root node has no preceding nodes');
+    }
+
+    public function testFilterXPathWithPrecedingSiblingAxis()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//form');
+
+        $this->assertCount(0, $crawler->filterXPath('preceding-sibling::*'), 'The fake root node has no preceding nodes');
+    }
+
+    public function testFilterXPathWithSelfAxes()
+    {
+        $crawler = $this->createTestCrawler()->filterXPath('//a');
+
+        $this->assertCount(0, $crawler->filterXPath('self::a'), 'The fake root node has no "real" element name');
+        $this->assertCount(0, $crawler->filterXPath('self::a/img'), 'The fake root node has no "real" element name');
+        $this->assertCount(9, $crawler->filterXPath('self::*/a'));
     }
 
     /**
@@ -381,6 +561,51 @@ EOF
         $this->assertEquals(1, $crawler->selectButton('BarValue')->count(), '->selectButton() selects buttons');
         $this->assertEquals(1, $crawler->selectButton('BarName')->count(), '->selectButton() selects buttons');
         $this->assertEquals(1, $crawler->selectButton('BarId')->count(), '->selectButton() selects buttons');
+
+        $this->assertEquals(1, $crawler->selectButton('FooBarValue')->count(), '->selectButton() selects buttons with form attribute too');
+        $this->assertEquals(1, $crawler->selectButton('FooBarName')->count(), '->selectButton() selects buttons with form attribute too');
+    }
+
+    public function testSelectButtonWithSingleQuotesInNameAttribute()
+    {
+        $html = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div id="action">
+        <a href="/index.php?r=site/login">Login</a>
+    </div>
+    <form id="login-form" action="/index.php?r=site/login" method="post">
+        <button type="submit" name="Click 'Here'">Submit</button>
+    </form>
+</body>
+</html>
+HTML;
+
+        $crawler = new Crawler($html);
+
+        $this->assertCount(1, $crawler->selectButton('Click \'Here\''));
+    }
+
+    public function testSelectButtonWithDoubleQuotesInNameAttribute()
+    {
+        $html = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div id="action">
+        <a href="/index.php?r=site/login">Login</a>
+    </div>
+    <form id="login-form" action="/index.php?r=site/login" method="post">
+        <button type="submit" name='Click "Here"'>Submit</button>
+    </form>
+</body>
+</html>
+HTML;
+
+        $crawler = new Crawler($html);
+
+        $this->assertCount(1, $crawler->selectButton('Click "Here"'));
     }
 
     public function testLink()
@@ -401,6 +626,44 @@ EOF
         }
     }
 
+    public function testSelectLinkAndLinkFiltered()
+    {
+        $html = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div id="action">
+        <a href="/index.php?r=site/login">Login</a>
+    </div>
+    <form id="login-form" action="/index.php?r=site/login" method="post">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+HTML;
+
+        $crawler = new Crawler($html);
+        $filtered = $crawler->filterXPath("descendant-or-self::*[@id = 'login-form']");
+
+        $this->assertCount(0, $filtered->selectLink('Login'));
+        $this->assertCount(1, $filtered->selectButton('Submit'));
+
+        $filtered = $crawler->filterXPath("descendant-or-self::*[@id = 'action']");
+
+        $this->assertCount(1, $filtered->selectLink('Login'));
+        $this->assertCount(0, $filtered->selectButton('Submit'));
+
+        $this->assertCount(1, $crawler->selectLink('Login')->selectLink('Login'));
+        $this->assertCount(1, $crawler->selectButton('Submit')->selectButton('Submit'));
+    }
+
+    public function testChaining()
+    {
+        $crawler = new Crawler('<div name="a"><div name="b"><div name="c"></div></div></div>');
+
+        $this->assertEquals('a', $crawler->filterXPath('//div')->filterXPath('div')->filterXPath('div')->attr('name'));
+    }
+
     public function testLinks()
     {
         $crawler = $this->createTestCrawler('http://example.com/bar/')->selectLink('Foo');
@@ -415,10 +678,17 @@ EOF
 
     public function testForm()
     {
-        $crawler = $this->createTestCrawler('http://example.com/bar/')->selectButton('FooValue');
+        $testCrawler = $this->createTestCrawler('http://example.com/bar/');
+        $crawler = $testCrawler->selectButton('FooValue');
+        $crawler2 = $testCrawler->selectButton('FooBarValue');
         $this->assertInstanceOf('Symfony\\Component\\DomCrawler\\Form', $crawler->form(), '->form() returns a Form instance');
+        $this->assertInstanceOf('Symfony\\Component\\DomCrawler\\Form', $crawler2->form(), '->form() returns a Form instance');
 
-        $this->assertEquals(array('FooName' => 'FooBar'), $crawler->form(array('FooName' => 'FooBar'))->getValues(), '->form() takes an array of values to submit as its first argument');
+        $this->assertEquals($crawler->form()->getFormNode()->getAttribute('id'), $crawler2->form()->getFormNode()->getAttribute('id'), '->form() works on elements with form attribute');
+
+        $this->assertEquals(array('FooName' => 'FooBar', 'TextName' => 'TextValue', 'FooTextName' => 'FooTextValue'), $crawler->form(array('FooName' => 'FooBar'))->getValues(), '->form() takes an array of values to submit as its first argument');
+        $this->assertEquals(array('FooName' => 'FooValue', 'TextName' => 'TextValue', 'FooTextName' => 'FooTextValue'), $crawler->form()->getValues(), '->getValues() returns correct form values');
+        $this->assertEquals(array('FooBarName' => 'FooBarValue', 'TextName' => 'TextValue', 'FooTextName' => 'FooTextValue'), $crawler2->form()->getValues(), '->getValues() returns correct form values');
 
         try {
             $this->createTestCrawler()->filterXPath('//ol')->form();
@@ -524,6 +794,14 @@ EOF
         } catch (\InvalidArgumentException $e) {
             $this->assertTrue(true, '->children() throws an \InvalidArgumentException if the node list is empty');
         }
+
+        try {
+            $crawler = new Crawler('<p></p>');
+            $crawler->filter('p')->children();
+            $this->assertTrue(true, '->children() does not trigger a notice if the node has no children');
+        } catch (\PHPUnit_Framework_Error_Notice $e) {
+            $this->fail('->children() does not trigger a notice if the node has no children');
+        }
     }
 
     public function testParents()
@@ -546,6 +824,18 @@ EOF
         }
     }
 
+    public function testBaseTag()
+    {
+        $crawler = new Crawler('<html><base href="http://base.com"><a href="link"></a></html>');
+        $this->assertEquals('http://base.com/link', $crawler->filterXPath('//a')->link()->getUri());
+
+        $crawler = new Crawler('<html><base href="//base.com"><a href="link"></a></html>', 'https://domain.com');
+        $this->assertEquals('https://base.com/link', $crawler->filterXPath('//a')->link()->getUri(), '<base> tag can use a schema-less URL');
+
+        $crawler = new Crawler('<html><base href="path/"><a href="link"></a></html>', 'https://domain.com');
+        $this->assertEquals('https://domain.com/path/link', $crawler->filterXPath('//a')->link()->getUri(), '<base> tag can set a path');
+    }
+
     public function createTestCrawler($uri = null)
     {
         $dom = new \DOMDocument();
@@ -564,11 +854,15 @@ EOF
 
                     <a href="?get=param">GetLink</a>
 
-                    <form action="foo">
+                    <form action="foo" id="FooFormId">
+                        <input type="text" value="TextValue" name="TextName" />
                         <input type="submit" value="FooValue" name="FooName" id="FooId" />
                         <input type="button" value="BarValue" name="BarName" id="BarId" />
                         <button value="ButtonValue" name="ButtonName" id="ButtonId" />
                     </form>
+
+                    <input type="submit" value="FooBarValue" name="FooBarName" form="FooFormId" />
+                    <input type="text" value="FooTextValue" name="FooTextName" form="FooFormId" />
 
                     <ul class="first">
                         <li class="first">One</li>
@@ -580,6 +874,11 @@ EOF
                         <li>Two Bis</li>
                         <li>Three Bis</li>
                     </ul>
+                    <div id="parent">
+                        <div id="child"></div>
+                        <div id="child2" xmlns:foo="http://example.com"></div>
+                    </div>
+                    <div id="sibling"><img /></div>
                 </body>
             </html>
         ');

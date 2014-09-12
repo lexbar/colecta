@@ -16,7 +16,7 @@ class ActivitiesController extends Controller
     
     public function yearPerformanceAction($year)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.')
@@ -55,7 +55,7 @@ class ActivitiesController extends Controller
     
     public function yearKmRankAction($year)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.')
@@ -117,7 +117,7 @@ class ActivitiesController extends Controller
     }
     public function yearPointsRankAction($year)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.')

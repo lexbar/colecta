@@ -22,7 +22,7 @@ class Service
     {
         if($this->request->get('_route') != '_internal')
         {
-            $em = $this->doctrine->getEntityManager();
+            $em = $this->doctrine->getManager();
             
             $visit = new Visit();
             

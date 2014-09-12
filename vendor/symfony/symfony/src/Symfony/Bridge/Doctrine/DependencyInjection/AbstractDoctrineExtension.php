@@ -42,6 +42,8 @@ abstract class AbstractDoctrineExtension extends Extension
     /**
      * @param array            $objectManager A configured object manager.
      * @param ContainerBuilder $container     A ContainerBuilder instance
+     *
+     * @throws \InvalidArgumentException
      */
     protected function loadMappingInformation(array $objectManager, ContainerBuilder $container)
     {
@@ -49,7 +51,10 @@ abstract class AbstractDoctrineExtension extends Extension
             // automatically register bundle mappings
             foreach (array_keys($container->getParameter('kernel.bundles')) as $bundle) {
                 if (!isset($objectManager['mappings'][$bundle])) {
-                    $objectManager['mappings'][$bundle] = null;
+                    $objectManager['mappings'][$bundle] = array(
+                        'mapping'   => true,
+                        'is_bundle' => true,
+                    );
                 }
             }
         }
@@ -119,6 +124,8 @@ abstract class AbstractDoctrineExtension extends Extension
      *
      * @param array  $mappingConfig
      * @param string $mappingName
+     *
+     * @throws \InvalidArgumentException
      */
     protected function setMappingDriverConfig(array $mappingConfig, $mappingName)
     {
@@ -228,6 +235,8 @@ abstract class AbstractDoctrineExtension extends Extension
      *
      * @param array  $mappingConfig
      * @param string $objectManagerName
+     *
+     * @throws \InvalidArgumentException
      */
     protected function assertValidMappingConfiguration(array $mappingConfig, $objectManagerName)
     {
@@ -242,7 +251,7 @@ abstract class AbstractDoctrineExtension extends Extension
         if (!in_array($mappingConfig['type'], array('xml', 'yml', 'annotation', 'php', 'staticphp'))) {
             throw new \InvalidArgumentException(sprintf('Can only configure "xml", "yml", "annotation", "php" or '.
                 '"staticphp" through the DoctrineBundle. Use your own bundle to configure other metadata drivers. '.
-                'You can register them by adding a a new driver to the '.
+                'You can register them by adding a new driver to the '.
                 '"%s" service definition.', $this->getObjectManagerElementName($objectManagerName.'.metadata_driver')
             ));
         }
@@ -282,8 +291,6 @@ abstract class AbstractDoctrineExtension extends Extension
         if (is_dir($dir.'/'.$this->getMappingObjectDefaultName())) {
             return 'annotation';
         }
-
-        return null;
     }
 
     /**
@@ -298,7 +305,7 @@ abstract class AbstractDoctrineExtension extends Extension
     protected function loadObjectManagerCacheDriver(array $objectManager, ContainerBuilder $container, $cacheName)
     {
         $cacheDriver = $objectManager[$cacheName.'_driver'];
-        $cacheDriverService = $this->getObjectManagerElementName($objectManager['name'] . '_' . $cacheName);
+        $cacheDriverService = $this->getObjectManagerElementName($objectManager['name'].'_'.$cacheName);
 
         switch ($cacheDriver['type']) {
             case 'service':
@@ -369,6 +376,7 @@ abstract class AbstractDoctrineExtension extends Extension
      * @example $name is 'entity_manager' then the result would be 'doctrine.orm.entity_manager'
      *
      * @param string $name
+     *
      * @return string
      */
     abstract protected function getObjectManagerElementName($name);

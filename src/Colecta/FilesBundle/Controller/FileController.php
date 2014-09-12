@@ -26,7 +26,7 @@ class FileController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the items that are not drafts
         $items = $em->getRepository('ColectaFilesBundle:Folder')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
@@ -47,7 +47,7 @@ class FileController extends Controller
     }
     public function viewAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
         
@@ -56,11 +56,11 @@ class FileController extends Controller
     public function newAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -174,12 +174,12 @@ class FileController extends Controller
     }
     public function pickAction($slug) //slug of the destiny folder
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -187,12 +187,12 @@ class FileController extends Controller
         
         if(!$folder)
         {
-            $this->get('session')->setFlash('error', 'No existe la carpeta indicada.');
+            $this->get('session')->getFlashBag()->add('error', 'No existe la carpeta indicada.');
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
         }
         elseif($folder->getAuthor() != $user && ($folder->getPersonal() || $folder->getDraft()))
         {
-            $this->get('session')->setFlash('error', 'No puedes publicar en esta carpeta.');
+            $this->get('session')->getFlashBag()->add('error', 'No puedes publicar en esta carpeta.');
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
         }
         
@@ -317,12 +317,12 @@ class FileController extends Controller
     }
     public function XHRProcessAction($slug) 
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Debes iniciar sesión');
+            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
@@ -330,12 +330,12 @@ class FileController extends Controller
         
         if(!$folder )
         {
-            $this->get('session')->setFlash('error', 'No existe la carpeta indicada.');
+            $this->get('session')->getFlashBag()->add('error', 'No existe la carpeta indicada.');
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
         }
         elseif($folder->getPublic() == false || $folder->getAuthor() != $user && ($folder->getPersonal() || $folder->getDraft()))
         {
-            $this->get('session')->setFlash('error', 'No puedes publicar en esta carpeta.');
+            $this->get('session')->getFlashBag()->add('error', 'No puedes publicar en esta carpeta.');
             return new RedirectResponse($this->generateUrl('ColectaFileNew'));
         }
         
@@ -345,7 +345,7 @@ class FileController extends Controller
         {
             if(! $request->request->get('file0Token') )
             {
-                $this->get('session')->setFlash('error', 'Ha ocurrido un error enviando el formulario.');
+                $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error enviando el formulario.');
                 return new RedirectResponse($this->generateUrl('ColectaFilePick', array('slug'=>$slug)));
             }
             
@@ -453,7 +453,7 @@ class FileController extends Controller
         }
         else
         {
-            $this->get('session')->setFlash('error', 'Ha ocurrido un error enviando el formulario.');
+            $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error enviando el formulario.');
             return new RedirectResponse($this->generateUrl('ColectaFilePick', array('slug'=>$slug)));
         }
         
@@ -461,7 +461,7 @@ class FileController extends Controller
     }
     public function editAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         
@@ -484,11 +484,11 @@ class FileController extends Controller
             
             if(!$request->get('newCategory') && !$category)
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
             }
             elseif(!$request->get('newFolder') && !$folder)
             {
-                $this->get('session')->setFlash('error', 'No existe la carpeta');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la carpeta');
             }
             else
             {
@@ -584,12 +584,12 @@ class FileController extends Controller
                 
                     $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
                     
-                    $this->get('session')->setFlash('success', 'Archivo modificado correctamente');             
+                    $this->get('session')->getFlashBag()->add('success', 'Archivo modificado correctamente');             
                 }
                 else
                 {
                     //$uplmaxsize = ini_get('upload_max_filesize');
-                    $this->get('session')->setFlash('error', 'El formulario no es válido.');
+                    $this->get('session')->getFlashBag()->add('error', 'El formulario no es válido.');
                 }
             }
         }
@@ -601,7 +601,7 @@ class FileController extends Controller
     }
     public function deleteAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
@@ -635,7 +635,7 @@ class FileController extends Controller
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         
         $item = new File();
@@ -653,11 +653,11 @@ class FileController extends Controller
             
             if(!$request->get('newCategory') && !$category)
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
             }
             elseif(!$request->get('newFolder') && !$folder)
             {
-                $this->get('session')->setFlash('error', 'No existe la carpeta');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la carpeta');
             }
             else
             {
@@ -825,7 +825,7 @@ class FileController extends Controller
                 else
                 {
                     $uplmaxsize = ini_get('upload_max_filesize');
-                    $this->get('session')->setFlash('error', 'El formulario no es válido.');
+                    $this->get('session')->getFlashBag()->add('error', 'El formulario no es válido.');
                 }
             }
         }
@@ -866,7 +866,7 @@ class FileController extends Controller
         else
         {   
             
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
             
             if(!$item)
@@ -924,7 +924,7 @@ class FileController extends Controller
         else
         {   
             
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             
             $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
             
@@ -953,7 +953,7 @@ class FileController extends Controller
     }
     public function downloadAction($slug,$type)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
         

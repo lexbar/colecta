@@ -27,7 +27,7 @@ as it becomes available:
 
     $process = new Process('ls -lsa');
     $process->run(function ($type, $buffer) {
-        if ('err' === $type) {
+        if (Process::ERR === $type) {
             echo 'ERR > '.$buffer;
         } else {
             echo 'OUT > '.$buffer;
@@ -42,4 +42,6 @@ Resources
 
 You can run the unit tests with the following command:
 
-    phpunit
+    $ cd path/to/Symfony/Component/Process/
+    $ composer.phar install
+    $ phpunit

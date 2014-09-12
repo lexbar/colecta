@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Translation\Loader;
 
+use Symfony\Component\Translation\Exception\InvalidResourceException;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Config\Resource\FileResource;
 
 /**
@@ -21,6 +23,14 @@ class PoFileLoader extends ArrayLoader implements LoaderInterface
 {
     public function load($resource, $locale, $domain = 'messages')
     {
+        if (!stream_is_local($resource)) {
+            throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
+        }
+
+        if (!file_exists($resource)) {
+            throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
+        }
+
         $messages = $this->parse($resource);
 
         // empty file
@@ -30,7 +40,7 @@ class PoFileLoader extends ArrayLoader implements LoaderInterface
 
         // not an array
         if (!is_array($messages)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" must contain a valid po file.', $resource));
+            throw new InvalidResourceException(sprintf('The file "%s" must contain a valid po file.', $resource));
         }
 
         $catalogue = parent::load($messages, $locale, $domain);
@@ -124,7 +134,7 @@ class PoFileLoader extends ArrayLoader implements LoaderInterface
                 $item['ids']['plural'] = substr($line, 14, -1);
             } elseif (substr($line, 0, 7) === 'msgstr[') {
                 $size = strpos($line, ']');
-                $item['translated'][(integer) substr($line, 7, 1)] = substr($line, $size + 3, -1);
+                $item['translated'][(int) substr($line, 7, 1)] = substr($line, $size + 3, -1);
             }
 
         }
@@ -136,7 +146,7 @@ class PoFileLoader extends ArrayLoader implements LoaderInterface
     }
 
     /**
-     * Save a translation item to the messeages.
+     * Save a translation item to the messages.
      *
      * A .po file could contain by error missing plural indexes. We need to
      * fix these before saving them.
@@ -147,7 +157,7 @@ class PoFileLoader extends ArrayLoader implements LoaderInterface
     private function addMessage(array &$messages, array $item)
     {
         if (is_array($item['translated'])) {
-            $messages[$item['ids']['singular']] = stripslashes($item['translated'][0]);
+            $messages[stripcslashes($item['ids']['singular'])] = stripcslashes($item['translated'][0]);
             if (isset($item['ids']['plural'])) {
                 $plurals = $item['translated'];
                 // PO are by definition indexed so sort by index.
@@ -159,10 +169,10 @@ class PoFileLoader extends ArrayLoader implements LoaderInterface
                 $empties = array_fill(0, $count+1, '-');
                 $plurals += $empties;
                 ksort($plurals);
-                $messages[$item['ids']['plural']] = stripcslashes(implode('|', $plurals));
+                $messages[stripcslashes($item['ids']['plural'])] = stripcslashes(implode('|', $plurals));
             }
         } elseif (!empty($item['ids']['singular'])) {
-              $messages[$item['ids']['singular']] = stripslashes($item['translated']);
+              $messages[stripcslashes($item['ids']['singular'])] = stripcslashes($item['translated']);
         }
     }
 }

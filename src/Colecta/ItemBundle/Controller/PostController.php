@@ -22,7 +22,7 @@ class PostController extends Controller
     {
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         //Get ALL the posts and folders that are not drafts
         $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) AND i.draft = 0 ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
@@ -43,7 +43,7 @@ class PostController extends Controller
     }
     public function viewAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
         
@@ -56,26 +56,26 @@ class PostController extends Controller
     public function createAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
         
         if($user == 'anon.') 
         {
-            $this->get('session')->setFlash('error', 'Error, debes iniciar sesion');
+            $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
         }
         elseif(!$request->get('name'))
         {
-            $this->get('session')->setFlash('error', 'Debes escribir un título');
+            $this->get('session')->getFlashBag()->add('error', 'Debes escribir un título');
         }
         elseif(!$request->get('text'))
         {
-            $this->get('session')->setFlash('error', 'No has escrito ningún texto');
+            $this->get('session')->getFlashBag()->add('error', 'No has escrito ningún texto');
         }
         elseif(!$request->get('newCategory') && !$category)
         {
-            $this->get('session')->setFlash('error', 'No existe la categoria');
+            $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
         }
         else
         {
@@ -218,7 +218,7 @@ class PostController extends Controller
     public function editAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
@@ -236,7 +236,7 @@ class PostController extends Controller
         
             if(!$category)
             {
-                $this->get('session')->setFlash('error', 'No existe la categoria');
+                $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
                 $persist = false;
             }
             else
@@ -275,7 +275,7 @@ class PostController extends Controller
             
             if(!$request->get('text'))
             {
-                $this->get('session')->setFlash('error', 'No puedes dejar vacío el texto');
+                $this->get('session')->getFlashBag()->add('error', 'No puedes dejar vacío el texto');
                 $persist = false;
             }
             
@@ -340,7 +340,7 @@ class PostController extends Controller
             {
                 $em->persist($item); 
                 $em->flush();
-                $this->get('session')->setFlash('success', 'Modificado con éxito.');
+                $this->get('session')->getFlashBag()->add('success', 'Modificado con éxito.');
                 
                 // Update all categories. 
                 // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
@@ -355,7 +355,7 @@ class PostController extends Controller
     public function deleteAction($slug)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
         
@@ -374,7 +374,7 @@ class PostController extends Controller
         $em->remove($item);
         $em->flush();
         
-        $this->get('session')->setFlash('success', '"'.$name.'" ha sido eliminado.');
+        $this->get('session')->getFlashBag()->add('success', '"'.$name.'" ha sido eliminado.');
         
         return new RedirectResponse($this->generateUrl('ColectaDashboard'));
     }

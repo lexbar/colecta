@@ -11,11 +11,14 @@
 
 namespace Symfony\Component\Validator\Mapping;
 
+use Symfony\Component\Validator\ValidationVisitorInterface;
+use Symfony\Component\Validator\ClassBasedInterface;
+use Symfony\Component\Validator\PropertyMetadataInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 
-abstract class MemberMetadata extends ElementMetadata
+abstract class MemberMetadata extends ElementMetadata implements PropertyMetadataInterface, ClassBasedInterface
 {
     public $class;
     public $name;
@@ -23,7 +26,7 @@ abstract class MemberMetadata extends ElementMetadata
     public $cascaded = false;
     public $collectionCascaded = false;
     public $collectionCascadedDeeply = false;
-    private $reflMember;
+    private $reflMember = array();
 
     /**
      * Constructor.
@@ -39,8 +42,17 @@ abstract class MemberMetadata extends ElementMetadata
         $this->property = $property;
     }
 
+    public function accept(ValidationVisitorInterface $visitor, $value, $group, $propertyPath, $propagatedGroup = null)
+    {
+        $visitor->visit($this, $value, $group, $propertyPath);
+
+        if ($this->isCascaded()) {
+            $visitor->validate($value, $propagatedGroup ?: $group, $propertyPath, $this->isCollectionCascaded(), $this->isCollectionCascadedDeeply());
+        }
+    }
+
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConstraint(Constraint $constraint)
     {
@@ -74,7 +86,9 @@ abstract class MemberMetadata extends ElementMetadata
             'class',
             'name',
             'property',
-            'cascaded', // TESTME
+            'cascaded',
+            'collectionCascaded',
+            'collectionCascadedDeeply',
         ));
     }
 
@@ -111,37 +125,43 @@ abstract class MemberMetadata extends ElementMetadata
     /**
      * Returns whether this member is public
      *
-     * @return Boolean
+     * @param object|string $objectOrClassName The object or the class name
+     *
+     * @return bool
      */
-    public function isPublic()
+    public function isPublic($objectOrClassName)
     {
-        return $this->getReflectionMember()->isPublic();
+        return $this->getReflectionMember($objectOrClassName)->isPublic();
     }
 
     /**
      * Returns whether this member is protected
      *
-     * @return Boolean
+     * @param object|string $objectOrClassName The object or the class name
+     *
+     * @return bool
      */
-    public function isProtected()
+    public function isProtected($objectOrClassName)
     {
-        return $this->getReflectionMember()->isProtected();
+        return $this->getReflectionMember($objectOrClassName)->isProtected();
     }
 
     /**
      * Returns whether this member is private
      *
-     * @return Boolean
+     * @param object|string $objectOrClassName The object or the class name
+     *
+     * @return bool
      */
-    public function isPrivate()
+    public function isPrivate($objectOrClassName)
     {
-        return $this->getReflectionMember()->isPrivate();
+        return $this->getReflectionMember($objectOrClassName)->isPrivate();
     }
 
     /**
      * Returns whether objects stored in this member should be validated
      *
-     * @return Boolean
+     * @return bool
      */
     public function isCascaded()
     {
@@ -152,7 +172,7 @@ abstract class MemberMetadata extends ElementMetadata
      * Returns whether arrays or traversable objects stored in this member
      * should be traversed and validated in each entry
      *
-     * @return Boolean
+     * @return bool
      */
     public function isCollectionCascaded()
     {
@@ -163,7 +183,7 @@ abstract class MemberMetadata extends ElementMetadata
      * Returns whether arrays or traversable objects stored in this member
      * should be traversed recursively for inner arrays/traversable objects
      *
-     * @return Boolean
+     * @return bool
      */
     public function isCollectionCascadedDeeply()
     {
@@ -171,32 +191,28 @@ abstract class MemberMetadata extends ElementMetadata
     }
 
     /**
-     * Returns the value of this property in the given object
-     *
-     * @param object $object The object
-     *
-     * @return mixed The property value
-     */
-    abstract public function getValue($object);
-
-    /**
      * Returns the Reflection instance of the member
+     *
+     * @param object|string $objectOrClassName The object or the class name
      *
      * @return object
      */
-    public function getReflectionMember()
+    public function getReflectionMember($objectOrClassName)
     {
-        if (!$this->reflMember) {
-            $this->reflMember = $this->newReflectionMember();
+        $className = is_string($objectOrClassName) ? $objectOrClassName : get_class($objectOrClassName);
+        if (!isset($this->reflMember[$className])) {
+            $this->reflMember[$className] = $this->newReflectionMember($objectOrClassName);
         }
 
-        return $this->reflMember;
+        return $this->reflMember[$className];
     }
 
     /**
      * Creates a new Reflection instance for the member
      *
-     * @return object
+     * @param object|string $objectOrClassName The object or the class name
+     *
+     * @return mixed Reflection class
      */
-    abstract protected function newReflectionMember();
+    abstract protected function newReflectionMember($objectOrClassName);
 }

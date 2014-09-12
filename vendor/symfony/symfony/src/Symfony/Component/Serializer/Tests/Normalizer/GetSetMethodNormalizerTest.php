@@ -15,19 +15,25 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 class GetSetMethodNormalizerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var GetSetMethodNormalizer
+     */
+    private $normalizer;
+
     protected function setUp()
     {
-        $this->normalizer = new GetSetMethodNormalizer;
+        $this->normalizer = new GetSetMethodNormalizer();
         $this->normalizer->setSerializer($this->getMock('Symfony\Component\Serializer\Serializer'));
     }
 
     public function testNormalize()
     {
-        $obj = new GetSetDummy;
+        $obj = new GetSetDummy();
         $obj->setFoo('foo');
         $obj->setBar('bar');
+        $obj->setCamelCase('camelcase');
         $this->assertEquals(
-            array('foo' => 'foo', 'bar' => 'bar', 'fooBar' => 'foobar'),
+            array('foo' => 'foo', 'bar' => 'bar', 'fooBar' => 'foobar', 'camelCase' => 'camelcase'),
             $this->normalizer->normalize($obj, 'any')
         );
     }
@@ -43,11 +49,81 @@ class GetSetMethodNormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $obj->getBar());
     }
 
+    public function testDenormalizeWithObject()
+    {
+        $data = new \stdClass();
+        $data->foo = 'foo';
+        $data->bar = 'bar';
+        $data->fooBar = 'foobar';
+        $obj = $this->normalizer->denormalize($data, __NAMESPACE__.'\GetSetDummy', 'any');
+        $this->assertEquals('foo', $obj->getFoo());
+        $this->assertEquals('bar', $obj->getBar());
+    }
+
+    public function testDenormalizeOnCamelCaseFormat()
+    {
+        $this->normalizer->setCamelizedAttributes(array('camel_case'));
+        $obj = $this->normalizer->denormalize(
+            array('camel_case' => 'camelCase'),
+            __NAMESPACE__.'\GetSetDummy'
+        );
+        $this->assertEquals('camelCase', $obj->getCamelCase());
+    }
+
+    public function testDenormalizeNull()
+    {
+        $this->assertEquals(new GetSetDummy(), $this->normalizer->denormalize(null, __NAMESPACE__.'\GetSetDummy'));
+    }
+
+    /**
+     * @dataProvider attributeProvider
+     */
+    public function testFormatAttribute($attribute, $camelizedAttributes, $result)
+    {
+        $r = new \ReflectionObject($this->normalizer);
+        $m = $r->getMethod('formatAttribute');
+        $m->setAccessible(true);
+
+        $this->normalizer->setCamelizedAttributes($camelizedAttributes);
+        $this->assertEquals($m->invoke($this->normalizer, $attribute, $camelizedAttributes), $result);
+    }
+
+    public function attributeProvider()
+    {
+        return array(
+            array('attribute_test', array('attribute_test'),'AttributeTest'),
+            array('attribute_test', array('any'),'attribute_test'),
+            array('attribute', array('attribute'),'Attribute'),
+            array('attribute', array(), 'attribute'),
+        );
+    }
+
     public function testConstructorDenormalize()
     {
         $obj = $this->normalizer->denormalize(
             array('foo' => 'foo', 'bar' => 'bar', 'fooBar' => 'foobar'),
             __NAMESPACE__.'\GetConstructorDummy', 'any');
+        $this->assertEquals('foo', $obj->getFoo());
+        $this->assertEquals('bar', $obj->getBar());
+    }
+
+    public function testConstructorDenormalizeWithMissingOptionalArgument()
+    {
+        $obj = $this->normalizer->denormalize(
+            array('foo' => 'test', 'baz' => array(1, 2, 3)),
+            __NAMESPACE__.'\GetConstructorOptionalArgsDummy', 'any');
+        $this->assertEquals('test', $obj->getFoo());
+        $this->assertEquals(array(), $obj->getBar());
+        $this->assertEquals(array(1, 2, 3), $obj->getBaz());
+    }
+
+    public function testConstructorWithObjectDenormalize()
+    {
+        $data = new \stdClass();
+        $data->foo = 'foo';
+        $data->bar = 'bar';
+        $data->fooBar = 'foobar';
+        $obj = $this->normalizer->denormalize($data, __NAMESPACE__.'\GetConstructorDummy', 'any');
         $this->assertEquals('foo', $obj->getFoo());
         $this->assertEquals('bar', $obj->getBar());
     }
@@ -82,9 +158,9 @@ class GetSetMethodNormalizerTest extends \PHPUnit_Framework_TestCase
 
     public function testIgnoredAttributes()
     {
-        $this->normalizer->setIgnoredAttributes(array('foo', 'bar'));
+        $this->normalizer->setIgnoredAttributes(array('foo', 'bar', 'camelCase'));
 
-        $obj = new GetSetDummy;
+        $obj = new GetSetDummy();
         $obj->setFoo('foo');
         $obj->setBar('bar');
 
@@ -110,7 +186,7 @@ class GetSetMethodNormalizerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'bar' => function ($bar) {
-                        return null;
+                        return;
                     },
                 ),
                 'baz',
@@ -160,6 +236,7 @@ class GetSetDummy
 {
     protected $foo;
     private $bar;
+    protected $camelCase;
 
     public function getFoo()
     {
@@ -183,7 +260,17 @@ class GetSetDummy
 
     public function getFooBar()
     {
-        return $this->foo . $this->bar;
+        return $this->foo.$this->bar;
+    }
+
+    public function getCamelCase()
+    {
+        return $this->camelCase;
+    }
+
+    public function setCamelCase($camelCase)
+    {
+        $this->camelCase = $camelCase;
     }
 
     public function otherMethod()
@@ -211,6 +298,40 @@ class GetConstructorDummy
     public function getBar()
     {
         return $this->bar;
+    }
+
+    public function otherMethod()
+    {
+        throw new \RuntimeException("Dummy::otherMethod() should not be called");
+    }
+}
+
+class GetConstructorOptionalArgsDummy
+{
+    protected $foo;
+    private $bar;
+    private $baz;
+
+    public function __construct($foo, $bar = array(), $baz = array())
+    {
+        $this->foo = $foo;
+        $this->bar = $bar;
+        $this->baz = $baz;
+    }
+
+    public function getFoo()
+    {
+        return $this->foo;
+    }
+
+    public function getBar()
+    {
+        return $this->bar;
+    }
+
+    public function getBaz()
+    {
+        return $this->baz;
     }
 
     public function otherMethod()

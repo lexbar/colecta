@@ -74,7 +74,7 @@ class Swift_Mime_SimpleHeaderSet implements Swift_Mime_HeaderSet
      * Add a new Date header using $timestamp (UNIX time).
      *
      * @param string  $name
-     * @param integer $timestamp
+     * @param int     $timestamp
      */
     public function addDateHeader($name, $timestamp = null)
     {
@@ -103,9 +103,7 @@ class Swift_Mime_SimpleHeaderSet implements Swift_Mime_HeaderSet
      */
     public function addParameterizedHeader($name, $value = null, $params = array())
     {
-        $this->_storeHeader($name,
-            $this->_factory->createParameterizedHeader($name, $value,
-            $params));
+        $this->_storeHeader($name, $this->_factory->createParameterizedHeader($name, $value, $params));
     }
 
     /**
@@ -136,16 +134,15 @@ class Swift_Mime_SimpleHeaderSet implements Swift_Mime_HeaderSet
      * If multiple headers match, the actual one may be specified by $index.
      *
      * @param string  $name
-     * @param integer $index
+     * @param int     $index
      *
-     * @return boolean
+     * @return bool
      */
     public function has($name, $index = 0)
     {
         $lowerName = strtolower($name);
 
-        return array_key_exists($lowerName, $this->_headers)
-            && array_key_exists($index, $this->_headers[$lowerName]);
+        return array_key_exists($lowerName, $this->_headers) && array_key_exists($index, $this->_headers[$lowerName]);
     }
 
     /**
@@ -158,7 +155,7 @@ class Swift_Mime_SimpleHeaderSet implements Swift_Mime_HeaderSet
      * offset.
      *
      * @param Swift_Mime_Header $header
-     * @param integer           $index
+     * @param int               $index
      */
     public function set(Swift_Mime_Header $header, $index = 0)
     {
@@ -172,7 +169,7 @@ class Swift_Mime_SimpleHeaderSet implements Swift_Mime_HeaderSet
      * Returns NULL if none present.
      *
      * @param string  $name
-     * @param integer $index
+     * @param int     $index
      *
      * @return Swift_Mime_Header
      */
@@ -212,12 +209,27 @@ class Swift_Mime_SimpleHeaderSet implements Swift_Mime_HeaderSet
     }
 
     /**
+     * Return the name of all Headers
+     *
+     * @return array
+     */
+    public function listAll()
+    {
+        $headers = $this->_headers;
+        if ($this->_canSort()) {
+            uksort($headers, array($this, '_sortHeaders'));
+        }
+
+        return array_keys($headers);
+    }
+
+  /**
      * Remove the header with the given $name if it's set.
      *
      * If multiple headers match, the actual one may be specified by $index.
      *
      * @param string  $name
-     * @param integer $index
+     * @param int     $index
      */
     public function remove($name, $index = 0)
     {

@@ -9,7 +9,7 @@ class PageController extends Controller
 {
     public function viewAction($slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $page = $em->getRepository('ColectaSiteBundle:Page')->findOneBySlug($slug);
         
@@ -51,8 +51,8 @@ class PageController extends Controller
                 $em->persist($contactRequest); 
                 $em->flush();
                 
-                $this->get('session')->setFlash('success', 'El formulario se ha enviado correctamente.');
-                $this->get('session')->setFlash('pageFormSent','1');
+                $this->get('session')->getFlashBag()->add('success', 'El formulario se ha enviado correctamente.');
+                $this->get('session')->getFlashBag()->add('pageFormSent','1');
                 
                 /* Send mail to admin */
                 /*$mailer = $this->get('mailer');
@@ -88,9 +88,9 @@ class PageController extends Controller
         }
     }
     
-    public function navigationAction($context)
+    public function navigationAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         if($this->get('security.context')->getToken())
         {
             $user = $this->get('security.context')->getToken()->getUser();
@@ -101,7 +101,7 @@ class PageController extends Controller
         }
         
         //Get all the pages that are not draftsand are ment to be on the sidebar
-        $pages = $em->getRepository('ColectaSiteBundle:Page')->findBy(array('draft'=>0, 'sidebarShow'=>1, 'context'=>$context), array('sidebarOrder'=>'ASC'));
+        $pages = $em->getRepository('ColectaSiteBundle:Page')->findBy(array('draft'=>0, 'sidebarShow'=>1, 'context'=>'extranet'), array('sidebarOrder'=>'ASC'));
         
         if($user == 'anon.')
         {

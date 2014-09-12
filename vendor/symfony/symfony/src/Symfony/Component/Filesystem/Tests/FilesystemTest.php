@@ -89,7 +89,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testCopyFails()
     {
@@ -167,6 +167,19 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SOURCE FILE', file_get_contents($targetFilePath));
     }
 
+    public function testCopyForOriginUrlsAndExistingLocalFileDefaultsToNotCopy()
+    {
+        $sourceFilePath = 'http://symfony.com/images/common/logo/logo_symfony_header.png';
+        $targetFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_target_file';
+
+        file_put_contents($targetFilePath, 'TARGET FILE');
+
+        $this->filesystem->copy($sourceFilePath, $targetFilePath, false);
+
+        $this->assertFileExists($targetFilePath);
+        $this->assertEquals(file_get_contents($sourceFilePath), file_get_contents($targetFilePath));
+    }
+
     public function testMkdirCreatesDirectoriesRecursively()
     {
         $directory = $this->workspace
@@ -207,7 +220,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testMkdirCreatesDirectoriesFails()
     {
@@ -229,7 +242,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testTouchFails()
     {
@@ -336,7 +349,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         mkdir($basePath);
         mkdir($basePath.'dir');
-        // create symlink to unexisting file
+        // create symlink to nonexistent file
         @symlink($basePath.'file', $basePath.'link');
 
         $this->filesystem->remove($basePath);
@@ -518,7 +531,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testChownSymlinkFails()
     {
@@ -531,11 +544,11 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystem->symlink($file, $link);
 
-        $this->filesystem->chown($link, 'user' . time() . mt_rand(1000, 9999));
+        $this->filesystem->chown($link, 'user'.time().mt_rand(1000, 9999));
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testChownFail()
     {
@@ -544,7 +557,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dir = $this->workspace.DIRECTORY_SEPARATOR.'dir';
         mkdir($dir);
 
-        $this->filesystem->chown($dir, 'user' . time() . mt_rand(1000, 9999));
+        $this->filesystem->chown($dir, 'user'.time().mt_rand(1000, 9999));
     }
 
     public function testChgrp()
@@ -584,7 +597,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testChgrpSymlinkFails()
     {
@@ -597,11 +610,11 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystem->symlink($file, $link);
 
-        $this->filesystem->chgrp($link, 'user' . time() . mt_rand(1000, 9999));
+        $this->filesystem->chgrp($link, 'user'.time().mt_rand(1000, 9999));
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testChgrpFail()
     {
@@ -610,7 +623,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dir = $this->workspace.DIRECTORY_SEPARATOR.'dir';
         mkdir($dir);
 
-        $this->filesystem->chgrp($dir, 'user' . time() . mt_rand(1000, 9999));
+        $this->filesystem->chgrp($dir, 'user'.time().mt_rand(1000, 9999));
     }
 
     public function testRename()
@@ -626,7 +639,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testRenameThrowsExceptionIfTargetAlreadyExists()
     {
@@ -639,8 +652,22 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->rename($file, $newPath);
     }
 
+    public function testRenameOverwritesTheTargetIfItAlreadyExists()
+    {
+        $file = $this->workspace.DIRECTORY_SEPARATOR.'file';
+        $newPath = $this->workspace.DIRECTORY_SEPARATOR.'new_file';
+
+        touch($file);
+        touch($newPath);
+
+        $this->filesystem->rename($file, $newPath, true);
+
+        $this->assertFileNotExists($file);
+        $this->assertFileExists($newPath);
+    }
+
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      */
     public function testRenameThrowsExceptionOnError()
     {
@@ -798,6 +825,24 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($targetPath.'directory'));
         $this->assertFileEquals($file1, $targetPath.'directory'.DIRECTORY_SEPARATOR.'file1');
         $this->assertFileEquals($file2, $targetPath.'file2');
+
+        $this->filesystem->remove($file1);
+
+        $this->filesystem->mirror($sourcePath, $targetPath, null, array('delete' => false));
+        $this->assertTrue($this->filesystem->exists($targetPath.'directory'.DIRECTORY_SEPARATOR.'file1'));
+
+        $this->filesystem->mirror($sourcePath, $targetPath, null, array('delete' => true));
+        $this->assertFalse($this->filesystem->exists($targetPath.'directory'.DIRECTORY_SEPARATOR.'file1'));
+
+        file_put_contents($file1, 'FILE1');
+
+        $this->filesystem->mirror($sourcePath, $targetPath, null, array('delete' => true));
+        $this->assertTrue($this->filesystem->exists($targetPath.'directory'.DIRECTORY_SEPARATOR.'file1'));
+
+        $this->filesystem->remove($directory);
+        $this->filesystem->mirror($sourcePath, $targetPath, null, array('delete' => true));
+        $this->assertFalse($this->filesystem->exists($targetPath.'directory'));
+        $this->assertFalse($this->filesystem->exists($targetPath.'directory'.DIRECTORY_SEPARATOR.'file1'));
     }
 
     public function testMirrorCopiesLinks()
@@ -825,7 +870,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $sourcePath = $this->workspace.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
 
-        mkdir($sourcePath . 'nested/', 0777, true);
+        mkdir($sourcePath.'nested/', 0777, true);
         file_put_contents($sourcePath.'/nested/file1.txt', 'FILE1');
         // Note: We symlink directory, not file
         symlink($sourcePath.'nested', $sourcePath.'link1');
@@ -865,12 +910,53 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testDumpFile()
+    {
+        $filename = $this->workspace.DIRECTORY_SEPARATOR.'foo'.DIRECTORY_SEPARATOR.'baz.txt';
+
+        $this->filesystem->dumpFile($filename, 'bar', 0753);
+
+        $this->assertFileExists($filename);
+        $this->assertSame('bar', file_get_contents($filename));
+
+        // skip mode check on Windows
+        if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
+            $this->assertEquals(753, $this->getFilePermissions($filename));
+        }
+    }
+
+    public function testDumpFileWithNullMode()
+    {
+        $filename = $this->workspace.DIRECTORY_SEPARATOR.'foo'.DIRECTORY_SEPARATOR.'baz.txt';
+
+        $this->filesystem->dumpFile($filename, 'bar', null);
+
+        $this->assertFileExists($filename);
+        $this->assertSame('bar', file_get_contents($filename));
+
+        // skip mode check on Windows
+        if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
+            $this->assertEquals(600, $this->getFilePermissions($filename));
+        }
+    }
+
+    public function testDumpFileOverwritesAnExistingFile()
+    {
+        $filename = $this->workspace.DIRECTORY_SEPARATOR.'foo.txt';
+        file_put_contents($filename, 'FOO BAR');
+
+        $this->filesystem->dumpFile($filename, 'bar');
+
+        $this->assertFileExists($filename);
+        $this->assertSame('bar', file_get_contents($filename));
+    }
+
     /**
      * Returns file permissions as three digits (i.e. 755)
      *
-     * @param string $filepath
+     * @param string $filePath
      *
-     * @return integer
+     * @return int
      */
     private function getFilePermissions($filePath)
     {
@@ -895,6 +981,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         if ($datas = posix_getgrgid($infos['gid'])) {
             return $datas['name'];
         }
+
+        $this->markTestSkipped('Unable to retrieve file group name');
     }
 
     private function markAsSkippedIfSymlinkIsMissing()
@@ -904,21 +992,21 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         }
 
         if (defined('PHP_WINDOWS_VERSION_MAJOR') && false === self::$symlinkOnWindows) {
-            $this->markTestSkipped('symlink requires "Create symbolic links" privilege on windows');
+            $this->markTestSkipped('symlink requires "Create symbolic links" privilege on Windows');
         }
     }
 
     private function markAsSkippedIfChmodIsMissing()
     {
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-            $this->markTestSkipped('chmod is not supported on windows');
+            $this->markTestSkipped('chmod is not supported on Windows');
         }
     }
 
     private function markAsSkippedIfPosixIsMissing()
     {
         if (defined('PHP_WINDOWS_VERSION_MAJOR') || !function_exists('posix_isatty')) {
-            $this->markTestSkipped('Posix is not supported');
+            $this->markTestSkipped('POSIX is not supported');
         }
     }
 }

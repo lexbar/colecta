@@ -30,6 +30,8 @@ class Cookie
         'D, d M Y H:i:s T',
         'D, d-M-y H:i:s T',
         'D, d-M-Y H:i:s T',
+        'D, d-m-y H:i:s T',
+        'D, d-m-Y H:i:s T',
         'D M j G:i:s Y',
         'D M d H:i:s Y T',
     );
@@ -51,9 +53,9 @@ class Cookie
      * @param string  $expires      The time the cookie expires
      * @param string  $path         The path on the server in which the cookie will be available on
      * @param string  $domain       The domain that the cookie is available
-     * @param Boolean $secure       Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
-     * @param Boolean $httponly     The cookie httponly flag
-     * @param Boolean $encodedValue Whether the value is encoded or not
+     * @param bool    $secure       Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param bool    $httponly     The cookie httponly flag
+     * @param bool    $encodedValue Whether the value is encoded or not
      *
      * @api
      */
@@ -67,17 +69,19 @@ class Cookie
             $this->rawValue = urlencode($value);
         }
         $this->name     = $name;
-        $this->expires  = null === $expires ? null : (integer) $expires;
+        $this->expires  = null === $expires ? null : (int) $expires;
         $this->path     = empty($path) ? '/' : $path;
         $this->domain   = $domain;
-        $this->secure   = (Boolean) $secure;
-        $this->httponly = (Boolean) $httponly;
+        $this->secure   = (bool) $secure;
+        $this->httponly = (bool) $httponly;
     }
 
     /**
      * Returns the HTTP representation of the Cookie.
      *
      * @return string The HTTP representation of the Cookie
+     *
+     * @throws \UnexpectedValueException
      *
      * @api
      */
@@ -86,14 +90,20 @@ class Cookie
         $cookie = sprintf('%s=%s', $this->name, $this->rawValue);
 
         if (null !== $this->expires) {
-            $cookie .= '; expires='.substr(\DateTime::createFromFormat('U', $this->expires, new \DateTimeZone('GMT'))->format(self::$dateFormats[0]), 0, -5);
+            $dateTime = \DateTime::createFromFormat('U', $this->expires, new \DateTimeZone('GMT'));
+
+            if ($dateTime === false) {
+                throw new \UnexpectedValueException(sprintf('The cookie expiration time "%s" is not valid.'), $this->expires);
+            }
+
+            $cookie .= '; expires='.str_replace('+0000', '', $dateTime->format(self::$dateFormats[0]));
         }
 
         if ('' !== $this->domain) {
             $cookie .= '; domain='.$this->domain;
         }
 
-        if ('/' !== $this->path) {
+        if ($this->path) {
             $cookie .= '; path='.$this->path;
         }
 
@@ -116,6 +126,8 @@ class Cookie
      *
      * @return Cookie A Cookie instance
      *
+     * @throws \InvalidArgumentException
+     *
      * @api
      */
     public static function fromString($cookie, $url = null)
@@ -123,7 +135,7 @@ class Cookie
         $parts = explode(';', $cookie);
 
         if (false === strpos($parts[0], '=')) {
-            throw new \InvalidArgumentException('The cookie string "%s" is not valid.');
+            throw new \InvalidArgumentException(sprintf('The cookie string "%s" is not valid.', $parts[0]));
         }
 
         list($name, $value) = explode('=', array_shift($parts), 2);
@@ -140,13 +152,12 @@ class Cookie
         );
 
         if (null !== $url) {
-            if ((false === $urlParts = parse_url($url)) || !isset($urlParts['host']) || !isset($urlParts['path'])) {
+            if ((false === $urlParts = parse_url($url)) || !isset($urlParts['host'])) {
                 throw new \InvalidArgumentException(sprintf('The URL "%s" is not valid.', $url));
             }
-            $parts = array_merge($urlParts, $parts);
 
-            $values['domain'] = $parts['host'];
-            $values['path'] = substr($parts['path'], 0, strrpos($parts['path'], '/'));
+            $values['domain'] = $urlParts['host'];
+            $values['path'] = isset($urlParts['path']) ? substr($urlParts['path'], 0, strrpos($urlParts['path'], '/')) : '';
         }
 
         foreach ($parts as $part) {
@@ -201,6 +212,11 @@ class Cookie
             if (false !== $date = \DateTime::createFromFormat($dateFormat, $dateValue, new \DateTimeZone('GMT'))) {
                 return $date->getTimestamp();
             }
+        }
+
+        // attempt a fallback for unusual formatting
+        if (false !== $date = date_create($dateValue, new \DateTimeZone('GMT'))) {
+            return $date->getTimestamp();
         }
 
         throw new \InvalidArgumentException(sprintf('Could not parse date "%s".', $dateValue));
@@ -281,7 +297,7 @@ class Cookie
     /**
      * Returns the secure flag of the cookie.
      *
-     * @return Boolean The cookie secure flag
+     * @return bool    The cookie secure flag
      *
      * @api
      */
@@ -293,7 +309,7 @@ class Cookie
     /**
      * Returns the httponly flag of the cookie.
      *
-     * @return Boolean The cookie httponly flag
+     * @return bool    The cookie httponly flag
      *
      * @api
      */
@@ -305,7 +321,7 @@ class Cookie
     /**
      * Returns true if the cookie has expired.
      *
-     * @return Boolean true if the cookie has expired, false otherwise
+     * @return bool    true if the cookie has expired, false otherwise
      *
      * @api
      */

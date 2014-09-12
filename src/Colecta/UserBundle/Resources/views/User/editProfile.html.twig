@@ -1,5 +1,19 @@
 {% extends '::frontend.html.twig' %}
 
+{% form_theme form _self %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+        <ul class="list-unstyled">
+            {% for error in errors %}
+                <li class="text-danger">{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
 {% block article %}
 <div class="title-block">
     <h2>Editar mi perfil</h2>
