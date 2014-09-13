@@ -162,6 +162,20 @@ class DefaultController extends Controller
     }
     public function search($query, $page)
     {
+        $em = $this->getDoctrine()->getManager();
+        $items = $em->createQueryBuilder()
+            ->select('i')
+            ->from('ColectaItemBundle:Item', 'i')
+            ->where('MATCH (i.name, i.summary, i.tagwords) AGAINST (:query) > 1')
+            ->setParameter('query', $query)
+            ->getQuery()
+            ->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)
+            ->getResult();
+            
+        return $items;
+    }
+    /*public function search($query, $page)
+    {
         //SEARCH ENGINE
         
         
@@ -239,7 +253,7 @@ class DefaultController extends Controller
         }   
         
         return $items;
-    }
+    }*/
     public function relateAction($id) 
     {
         $user = $this->get('security.context')->getToken()->getUser();

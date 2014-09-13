@@ -57,6 +57,9 @@ h2, h4 {
     padding: 35px 10px;
     background-size: cover;
     background-position: center center;
+    -webkit-box-shadow: 0 0 40px rgba(0, 0, 0, 0.2) inset; 
+    -moz-box-shadow: 0 0 40px rgba(0, 0, 0, 0.2) inset; 
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.2) inset;
 }
 .navbar-default a.navbar-brand {
     font-weight: bold;

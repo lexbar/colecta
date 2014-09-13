@@ -13,3 +13,4 @@ nano app/config/parameters.yml
 php app/console doctrine:schema:create
 
 // Insert in Database first role, user and category
+CREATE FULLTEXT INDEX itemSearch ON symfony.Item(name,summary,tagwords);

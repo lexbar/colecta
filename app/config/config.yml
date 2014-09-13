@@ -59,6 +59,11 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+        #FULLTEXT Search
+        dql:
+            string_functions:
+                MATCH: Colecta\ItemBundle\Extension\Doctrine\MatchAgainstFunction
+
 
 # Swiftmailer Configuration
 swiftmailer:
