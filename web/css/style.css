@@ -71,6 +71,9 @@ h2, h4 {
 .navbar-default a.navbar-brand * {
     vertical-align: middle;
 }
+.navbar-form {
+    padding-right: 0;
+}
 
 .sidebardisplay {
     position: absolute;
