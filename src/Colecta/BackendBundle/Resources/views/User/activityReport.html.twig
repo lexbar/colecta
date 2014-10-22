@@ -1,9 +1,10 @@
 {% extends '::backend.html.twig' %}
 
-{% block content %} 
-    {% include '::backendNavigation.html.twig' with {'active': 'users'} %}
+{% block article %} 
     
     <h2>Listado de usuarios</h2>
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
     
     <div class="monocontent">
         <table class="table table-condensed table-hover">

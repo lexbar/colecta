@@ -53,17 +53,22 @@ h1, h2, h3, h4, h5, h6 {
 h2, h4 {
     margin: 0 0 8px;
 }
-.navbar-default {
-    padding: 35px 10px;
+.headerimg {
+    height: 120px;
     background-size: cover;
     background-position: center center;
+}
+@media (min-width: 1200px) {
+    .headerimg {
+        height: 160px;
+    }
 }
 .navbar-default a.navbar-brand {
     font-weight: bold;
     font-size: 22px;
     height: auto;
-    text-shadow: 2px 2px 2px rgba(10,10,10,.2);
 }
+
 .sidebardisplay {
     position: absolute;
     top: 0;
@@ -71,7 +76,8 @@ h2, h4 {
     width: 60px;
     z-index: 1090;
     background-color: #FFF;
-    padding: 15px 0;
+    padding: 10px 0;
+    margin: 0 15px 0 0;
     cursor: pointer;
 }
 .sidebardisplay div {
@@ -132,8 +138,6 @@ h2, h4 {
     vertical-align: middle;
 }
 #self a.myname {
-    margin-bottom: 20px;
-    margin-right: 60px;
 }
 #self a strong {
     font-weight: lighter;
@@ -239,7 +243,7 @@ h2, h4 {
     color: #444;
 }
 
-.comments .media img {
+.comments .media .pull-left img {
     width:40px;
 }
 .comments .comment img {
@@ -339,6 +343,10 @@ h2, h4 {
     padding: 15px 10px;
     border: 1px solid #eee;
 }
+.monocontent.tabs {
+    border-color: #DDD;
+    border-top-width: 0;
+}
 
 .relations h4 {
     margin-top: 0;
@@ -406,7 +414,12 @@ h2, h4 {
         margin: 0 -15px 10px;
     }
     .navbar-default a.navbar-brand {
+        margin-left: 15px;
         font-size: 20px;
+    }
+    .navbar-form {
+        border-width: 0;
+        margin: 0;
     }
     .item .panel-heading .panel-title {
         font-size: 20px;

@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <li{% if active is defined and active == 'settings' %} class="active"{% endif %}><a href="{{ path('ColectaBackendSettingsIndex') }}">Ajustes</a></li>
+    <li{% if active is defined and active == 'user' %} class="active"{% endif %}><a href="{{ path('ColectaBackendUserIndex') }}">Usuarios</a></li>
+    <li{% if active is defined and active == 'page' %} class="active"{% endif %}><a href="">Páginas</a></li>
+</ul>

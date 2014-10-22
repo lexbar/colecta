@@ -13,3 +13,19 @@ nano app/config/parameters.yml
 php app/console doctrine:schema:create
 
 // Insert in Database first role, user and category
+
+
+//Search fulltext
+
+CREATE TABLE IF NOT EXISTS `ItemSearch` (
+  `item_id` int(11) NOT NULL,
+  `name` varchar(250) COLLATE utf8_spanish_ci NOT NULL,
+  `text` text COLLATE utf8_spanish_ci NOT NULL,
+  PRIMARY KEY (`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+
+ALTER TABLE  `ItemSearch` ADD FULLTEXT  `fulltext` (
+  `name` ,
+  `text`
+);

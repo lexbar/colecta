@@ -29,6 +29,7 @@
         </div>
         
         <div id="userOptions" style="display:none;">
+            <hr>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="{{ path('userProfile', {'id':app.user.id}) }}"><i class="fa fa-user fa-fw"></i> Mi perfil</a></li>
                 <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="fa fa-bar-chart fa-fw"></i> Mi rendimiento</a></li>
@@ -70,27 +71,25 @@
         }
     </script>
 {% endif %}
-
-    <form id="searchForm" class="" role="search" action="{{ path('ColectaSearch') }}" method="GET">
-        <div class="inner-addon right-addon">
-            <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
-            <i class="fa fa-search"></i>
-        </div>
-    </form>
     
     <hr>
     
     <ul class="nav nav-pills nav-stacked">
+        <li{% if bun == 'ItemBundle' and con == 'DefaultController' %} class="active"{% endif %}>
+            <a href="/">
+                <i class="fa fa-home fa-fw"></i> Inicio
+            </a>
+        </li>
         {#<li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
             <a href="{{ path('ColectaCategoryIndex') }}">
                 <i class="fa fa-list-ul fa-fw"></i> Categorías
             </a>
-        </li>#}
+        </li>
         <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
             <a href="{{ path('ColectaPostIndex') }}">
                 <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-fw"></i> Discusión
             </a>
-        </li>
+        </li>#}
         <li{% if bun == 'ActivityBundle' and con == 'EventController' %} class="active"{% endif %}>
             <a href="{{ path('ColectaEventIndex') }}"> 
                 <i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i>  Calendario
@@ -105,6 +104,13 @@
         <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
             <a href="{{ path('ColectaActivitiesRank') }}"> 
                 <i class="fa fa-sort-amount-desc fa-fw"></i>  Ranking
+            </a>
+        </li>
+        {% endif %}
+        {% if app.user and app.user.role.getSiteConfig %}
+        <li{% if bun == 'BackendBundle' %} class="active"{% endif %}>
+            <a href="{{ path('ColectaBackendIndex') }}"> 
+                <i class="fa fa-cog fa-fw"></i>  Configuración
             </a>
         </li>
         {% endif %}

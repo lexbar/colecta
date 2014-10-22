@@ -6,12 +6,14 @@ a {
 }
 
 h2 {
-    color: #1383A0;
+    color: #1987B6;
+    font-weight: normal;
+    font-size: 32px;
 }
 
 .btn-primary{
     background-color: #009BDB;
-    border-color: #1383A0;
+    border-color: #009BDB;
 }
 .alert {
     border-width: 1px 1px 4px 1px;
@@ -26,15 +28,11 @@ h2 {
 }
 
 .navbar-default {
-    background-color: #1383A0;
+    padding: 0;
 }
 .navbar-default a.navbar-brand {
-    color: #FFF;
+    
 }
-.navbar-default a.navbar-brand:hover {
-    color: #FFF;
-    opacity: .8;
-} 
 
 .sidebar a {
     color: #111;
@@ -47,12 +45,17 @@ h2 {
     color: #1383A0;
 }
 
-.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
-    background-color: #1383A0;
+.sidebar .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    background-color: transparent;
+    color: #1987B6;
 }
-.nav-pills>li {
-    font-size: 18px;
+.sidebar .nav-pills>li {
+    font-size: 20px;
 }
+.sidebar .nav-pills>li>a {
+    padding: 10px 0;
+}
+
 .calendar-heading {
     margin: 0;
     background-color: #FFF;
@@ -113,6 +116,7 @@ h2 {
     padding: 0;
     border-top: 1px solid #DDD;
     margin-bottom: 0;
+    margin-top: 10px;
 }
 .item .properties li {
     padding: 10px 0;

@@ -1,22 +1,18 @@
 {% extends '::backend.html.twig' %}
 
-{% block content %} 
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-6">
-            <h2>Listado de usuarios</h2>
-        </div>
-        <div class="col-xs-6 col-sm-3">
-            <a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default btn-block">Gestionar perfiles <i class="fa fa-flag"></i></a>
-        </div>
-        <div class="col-xs-6 col-sm-3">
-            <a href="{{ path('ColectaBackendNewUser') }}" class="btn btn-primary btn-block">Crear usuario <i class="fa fa-user"></i></a>
-        </div>
-    </div>
+{% block article %}
     
-    <div class="monocontent">
-        <table class="table table-condensed table-hover">
-        <thead><tr><th>Nombre</th><th>Perfil</th><th class="hidden-xs">Registrado</th><th>Acciones</th></tr></thead>
+    <h2>Listado de usuarios</h2>
+
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+        
+    <div class="monocontent tabs">
+        <a href="{{ path('ColectaBackendNewUser') }}" class="btn btn-primary">Crear Usuario <i class="fa fa-plus"></i></a> 
+        <a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default">Gestionar Roles <i class="fa fa-user"></i></a>
+        <hr>
+        
+        <table class="table table-hover">
+        <thead><tr><th>Nombre</th><th>Rol</th><th class="hidden-xs">Registrado</th><th>Acciones</th></tr></thead>
         {% for user in users %}
             <tr>
                 <td><a href="{{ path('userProfile', {'id':user.id}) }}">{{ user.name }}</a></td>

@@ -5,6 +5,8 @@ namespace Colecta\ItemBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Colecta\ItemBundle\Entity\Relation;
 
 class DefaultController extends Controller
@@ -162,6 +164,44 @@ class DefaultController extends Controller
     }
     public function search($query, $page)
     {
+        $em = $this->getDoctrine()->getManager();
+        
+        $sql = "SELECT s.item_id as id, MATCH(s.name, s.text) AGAINST(:query) AS relevance FROM ItemSearch AS s WHERE MATCH(s.name, s.text) AGAINST(:query) > 1 ORDER BY relevance DESC";
+        $stmt = $em->getConnection()->prepare($sql);
+        $stmt->bindValue('query', $query);
+        $stmt->execute();
+        $idsArray = $stmt->fetchAll();
+        
+        if(count($idsArray) < 1)
+        {
+            return array();
+        }
+        
+        $ids = array();
+        foreach($idsArray as $row)
+        {
+            $ids[] = intval($row['id']);
+        }
+        
+        $ids = array_slice($ids, $page * $this->ipp, $this->ipp + 1);
+        
+        $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE i IN ('.implode(',', $ids).')';
+        
+        $query = $em->createQuery($queryString)->setMaxResults(($this->ipp + 1))->setFirstResult($page * $this->ipp);
+        
+        try 
+        {
+            $items = $query->getResult();
+        } 
+        catch (\Doctrine\Orm\NoResultException $e) 
+        {
+            $items = array();
+        }
+        
+        return $items;
+    }
+    /*public function search($query, $page)
+    {
         //SEARCH ENGINE
         
         
@@ -239,7 +279,7 @@ class DefaultController extends Controller
         }   
         
         return $items;
-    }
+    }*/
     public function relateAction($id) 
     {
         $user = $this->get('security.context')->getToken()->getUser();

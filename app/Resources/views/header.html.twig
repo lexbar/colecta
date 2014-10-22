@@ -1,10 +1,28 @@
-<div class="row">
-    <div id="sidebarButton" class="visible-xs sidebardisplay" onClick="$('.sidebar').toggleClass('hidden-xs')">
+<nav class="navbar navbar-default" role="navigation">
+
+    <div id="sidebarButton" class="visible-xs sidebardisplay" onClick="$('.sidebar, #searchForm').toggleClass('hidden-xs')">
         <div><i class="fa fa-bars fa-2x"></i></div>
     </div>
-    <div class="col-xs-12">
-        <div class="navbar navbar-default navbar-static-top" role="navigation" {% if web_header_img | length %}style="background-image: url( {{ random(web_header_img) }} );"{% endif %}>                            
-            <a class="navbar-brand" href="/">{{ web_title }}</a>
+    
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                <img alt="{{ web_title }}" src="/logo.png">
+                {{ web_title }}
+            </a>
         </div>
+        
+        <form id="searchForm" class="navbar-form navbar-right hidden-xs" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+            <div class="inner-addon right-addon">
+                <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+                <i class="fa fa-search"></i>
+            </div>
+        </form>
     </div>
-</div>
+    
+    {% if web_header_img | length %}
+    <div class="row">
+        <div class="col-xs-12 hidden-xs headerimg" style="background-image: url( {{ random(web_header_img) }} );"></div>
+    </div>
+    {% endif %}
+</nav>

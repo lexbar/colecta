@@ -162,6 +162,14 @@ class PlaceController extends Controller
             // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
         
             $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
+            
+            //ItemSearch INSERT
+            $sql = "INSERT INTO ItemSearch VALUES(:id, :name, :text)";
+            $stmt = $em->getConnection()->prepare($sql);
+            $stmt->bindValue('id', $item->getId());
+            $stmt->bindValue('name', $item->getName());
+            $stmt->bindValue('text', $item->getText());
+            $stmt->execute();
         }
         
         if(isset($item))

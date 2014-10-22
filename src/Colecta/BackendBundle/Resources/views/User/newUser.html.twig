@@ -1,17 +1,12 @@
 {% extends '::backend.html.twig' %}
 
-{% block content %} 
-
-    <div class="row">
-        <div class="col-xs-6 col-sm-9">
-            <h2>Crear Usuario</h2>
-        </div>
-        <div class="col-xs-6 col-sm-3">
-            <a href="{{ path('ColectaBackendUserIndex') }}" class="btn btn-primary btn-block"><i class="fa fa-angle-left"></i> Listado de usuarios <i class="fa fa-list"></i></a>
-        </div>
-    </div>
+{% block article %} 
     
-    <div class="monocontent">
+    <h2>Crear Usuario</h2>
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+    
+    <div class="monocontent tabs">        
         <form class="form-horizontal" method="post" action="{{ path('ColectaBackendNewUser') }}">
             <div class="form-group">
                 <label class="col-sm-4 col-lg-3 control-label" for="UserName">Nombre de usuario</label>
@@ -28,7 +23,7 @@
             </div>
             
             <div class="form-group">
-                <label class="col-sm-4 col-lg-3 control-label" for="UserRole">Tipo</label>
+                <label class="col-sm-4 col-lg-3 control-label" for="UserRole">Rol</label>
                 <div class="col-sm-4 col-lg-3">
                     <select name="userRole" id="UserRole" class="form-control">
                         {% for role in roles %}
@@ -123,7 +118,7 @@
             </div>
             
             <div class="form-group">
-                <div class="col-xs-12 col-lg-offset-2 col-lg-10">
+                <div class="col-xs-12 col-sm-offset-4 col-sm-8 col-lg-offset-3 col-lg-9">
                     <input type="submit" value="Crear Usuario" class="btn btn-primary">
                 </div>
             </div>

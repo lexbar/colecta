@@ -113,6 +113,14 @@ class FolderController extends Controller
         $em->persist($item);
         $em->flush();
         
+        //ItemSearch INSERT
+        $sql = "INSERT INTO ItemSearch VALUES(:id, :name, :text)";
+        $stmt = $em->getConnection()->prepare($sql);
+        $stmt->bindValue('id', $item->getId());
+        $stmt->bindValue('name', $item->getName());
+        $stmt->bindValue('text', $item->getText());
+        $stmt->execute();
+        
         return new RedirectResponse($this->generateUrl('ColectaFilePick', array('slug'=>$item->getSlug())));
     }
     public function editAction($slug)
