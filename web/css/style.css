@@ -68,6 +68,9 @@ h2, h4 {
     font-size: 22px;
     height: auto;
 }
+.navbar-default a.navbar-brand * {
+    vertical-align: middle;
+}
 
 .sidebardisplay {
     position: absolute;
@@ -394,15 +397,11 @@ h2, h4 {
 }
 
 .footer {
-    background-color: #EFEFEF;
+    border-top: 1px solid #CCC;
     color: #777;
     padding: 10px;
     margin: 50px 0 20px;
     font-style: italic;
-     -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    border-radius: 5px;
 }
 .footer a {
     color: #333;
