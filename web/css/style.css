@@ -74,6 +74,16 @@ h2, h4 {
 .navbar-form {
     padding-right: 0;
 }
+.navbar-nav li {
+    position: relative;
+}
+.navbar-nav li .badge {
+    background-color: #A01127;
+    color: #FFF;
+    position: absolute;
+    top: 5px;
+    right: 0;
+}
 
 .sidebardisplay {
     position: absolute;
@@ -143,37 +153,17 @@ h2, h4 {
 #self .clearfix *{
     vertical-align: middle;
 }
-#self a.myname {
+#self a.myname img{
+    margin-right: 10px;
 }
-#self a strong {
+#self a.myname strong {
     font-weight: lighter;
     font-size: 18px;
     line-height: 20px;
     color: #000;
 }
-#self .fa-caret-down {
-    font-size: 12px;
-    padding-left: 6px;
-}
-#self ul.notifications {
-    margin-bottom: 0;
-    position: absolute;
-    top: 0;
-    right: 10px;
-}
-#self ul.notifications li {
-    position: relative;
-}
-#self ul.notifications i {
-    font-size: 18px;
-    margin: 4px 0 4px 4px;
-}
-#self ul.notifications li .badge {
-    background-color: #A01127;
-    color: #FFF;
-    position: absolute;
-    top: -4px;
-    right: -5px;
+#self a.myname i {
+    color: #009BDB;
 }
 #self #userOptions {
     margin-bottom: 15px;
@@ -422,6 +412,10 @@ h2, h4 {
     .navbar-form {
         border-width: 0;
         margin: 0;
+        padding-right: 15px;
+    }
+    .navbar-nav {
+        padding: 10px 15px;
     }
     .item .panel-heading .panel-title {
         font-size: 20px;

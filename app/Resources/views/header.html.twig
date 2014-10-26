@@ -1,10 +1,10 @@
 <nav class="navbar navbar-default" role="navigation">
 
-    <div id="sidebarButton" class="visible-xs sidebardisplay" onClick="$('.sidebar, #searchForm').toggleClass('hidden-xs')">
+    <div id="sidebarButton" class="visible-xs sidebardisplay" onClick="$('.sidebar, #header .nav').toggleClass('hidden-xs')">
         <div><i class="fa fa-bars fa-2x"></i></div>
     </div>
     
-    <div class="container">
+    <div class="container" id="header">
         <div class="navbar-header">
             <a class="navbar-brand" href="/">
                 <img alt="{{ web_title }}" src="/logo.png" width="24" height="24">
@@ -12,12 +12,27 @@
             </a>
         </div>
         
-        <form id="searchForm" class="navbar-form navbar-right hidden-xs" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+        <form id="searchForm" class="nav navbar-form navbar-right hidden-xs" role="search" action="{{ path('ColectaSearch') }}" method="GET">
             <div class="inner-addon right-addon">
                 <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
                 <i class="fa fa-search"></i>
             </div>
         </form>
+        
+        {% if app.user %}
+            {% if item is defined %}
+                {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
+            {% else %}
+                {% set notifications = colectauser.notDismissedNotifications %}
+            {% endif %}
+            
+            {% set messages = colectauser.notDismissedMessages %}
+        <ul class="nav navbar-nav navbar-right hidden-xs">
+            <li><a href="{{ path('userMessages')}}"><i class="fa fa-envelope"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
+            <li><a href="{{ path('userNotifications')}}"><i class="fa fa-bell"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Notificaciones</a></li>
+        </ul>
+        
+        {% endif %}
     </div>
     
     {% if web_header_img | length %}
