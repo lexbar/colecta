@@ -153,6 +153,12 @@ h2, h4 {
 #self .clearfix *{
     vertical-align: middle;
 }
+#self a.myname {
+    display: block;
+}
+#self a.myname:hover {
+    text-decoration: none;
+}
 #self a.myname img{
     margin-right: 10px;
 }
@@ -162,8 +168,14 @@ h2, h4 {
     line-height: 20px;
     color: #000;
 }
+#self a.myname:hover strong {
+    text-decoration: underline;
+}
 #self a.myname i {
     color: #009BDB;
+    position: absolute;
+    right: 15px;
+    top: 12px;
 }
 #self #userOptions {
     margin-bottom: 15px;

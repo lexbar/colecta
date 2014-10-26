@@ -10,7 +10,7 @@
 {% if app.user %}    
     <div id="self" class="clearfix hidden-print">
         <div class="clearfix">
-            <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="myname" onClick="$('#userOptions').toggle(); return false;">
+            <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="myname" onClick="$('#userOptions').toggle(500); return false;">
                 <img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40">
                 <strong>{{ app.user.name }} <i class="fa fa-chevron-circle-down"></i></strong>
             </a>
@@ -25,7 +25,9 @@
             </ul>
         </div>
     </div>
-{% elseif not(bun == 'UserBundle' and act == 'loginAction') and bun != '' %}
+    
+    <hr>
+{% elseif 0 and not(bun == 'UserBundle' and act == 'loginAction') and bun != '' %}
     <form class="login" action="{{ path('userLoginCheck') }}" method="post">
         <p><a class="lead" href="#" onClick="$('#singinform').toggle()"> <i class="fa fa-sign-in"></i> Iniciar sesión</a></p>
         
@@ -59,8 +61,6 @@
         }
     </script>
 {% endif %}
-    
-    <hr>
     
     <ul class="nav nav-pills nav-stacked">
         <li{% if bun == 'ItemBundle' and con == 'DefaultController' %} class="active"{% endif %}>

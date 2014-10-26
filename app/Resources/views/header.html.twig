@@ -29,7 +29,14 @@
             {% set messages = colectauser.notDismissedMessages %}
         <ul class="nav navbar-nav navbar-right hidden-xs">
             <li><a href="{{ path('userMessages')}}"><i class="fa fa-envelope"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
-            <li><a href="{{ path('userNotifications')}}"><i class="fa fa-bell"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Notificaciones</a></li>
+            <li><a href="{{ path('userNotifications')}}"><i class="fa fa-bell"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Alertas</a></li>
+        </ul>
+        
+        {% else %}
+        
+        <ul class="nav navbar-nav navbar-right hidden-xs">
+            <li><a href="#"><i class="fa fa-user"></i> Solicitar Invitación</a></li>
+            <li><a href="{{ path('userLogin')}}"><i class="fa fa-share"></i> Iniciar Sesión</a></li>    
         </ul>
         
         {% endif %}
