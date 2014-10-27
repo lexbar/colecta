@@ -58,6 +58,9 @@ h2, h4 {
     background-size: cover;
     background-position: center center;
 }
+.navbar {
+    z-index: auto;
+}
 .navbar-default a.navbar-brand {
     font-weight: bold;
     font-size: 22px;
@@ -85,7 +88,7 @@ h2, h4 {
     top: 0;
     right: 0;
     width: 60px;
-    z-index: 1090;
+    z-index: 1020;
     background-color: #FFF;
     padding: 10px 0;
     margin: 0;
