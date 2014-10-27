@@ -54,14 +54,9 @@ h2, h4 {
     margin: 0 0 8px;
 }
 .headerimg {
-    height: 120px;
+    height: 160px;
     background-size: cover;
     background-position: center center;
-}
-@media (min-width: 1200px) {
-    .headerimg {
-        height: 160px;
-    }
 }
 .navbar-default a.navbar-brand {
     font-weight: bold;
@@ -167,6 +162,7 @@ h2, h4 {
     font-size: 18px;
     line-height: 20px;
     color: #000;
+    padding-right: 14px;
 }
 #self a.myname:hover strong {
     text-decoration: underline;
@@ -411,7 +407,18 @@ h2, h4 {
 .footer a {
     color: #333;
 }
-
+@media (max-width: 1200px) { /* Medium devices */
+    .headerimg {
+        height: 120px;
+    }
+    #self a.myname img{
+        margin-right: 3px;
+        width: 20px;
+    }
+    #self a.myname i {
+        top: 4px;
+    }
+}
 @media (max-width: 767px) { /* Small devices */
     .navbar-default {
         padding: 5px;
