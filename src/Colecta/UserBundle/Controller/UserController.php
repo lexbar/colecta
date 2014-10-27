@@ -165,7 +165,7 @@ class UserController extends Controller
                     $token = new UsernamePasswordToken($user, null, 'main', array('ROLE_USER'));
                     $this->get('security.context')->setToken($token);
                 } 
-                /*
+                
                 //Upload avatar
                 $user->upload();
                 
@@ -188,7 +188,7 @@ class UserController extends Controller
                         }
                     }
                     closedir($handle);
-                }*/
+                }
                 
                 $this->get('session')->getFlashBag()->add(
                     'success',
