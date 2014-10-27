@@ -306,8 +306,9 @@ class UserController extends Controller
             else
             {
                 $image->setImageResolution(72,72); 
-                $image->scaleImage($width, $height, true);
+                $image->cropThumbnailImage($width, $height);
                 $image->setImagePage(0, 0, 0, 0);
+                $image->normalizeImage();
                 //fill out the cache
                 file_put_contents($cachePath, $image);
             }
