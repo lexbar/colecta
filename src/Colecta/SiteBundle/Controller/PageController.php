@@ -51,8 +51,8 @@ class PageController extends Controller
                 $em->persist($contactRequest); 
                 $em->flush();
                 
-                $this->get('session')->setFlash('success', 'El formulario se ha enviado correctamente.');
-                $this->get('session')->setFlash('pageFormSent','1');
+                $this->get('session')->getFlashBag()->add('success', 'El formulario se ha enviado correctamente.');
+                $this->get('session')->getFlashBag()->add('pageFormSent','1');
                 
                 /* Send mail to admin */
                 $mailer = $this->get('mailer');
