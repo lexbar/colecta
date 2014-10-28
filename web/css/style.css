@@ -56,7 +56,10 @@ h2, h4 {
 .headerimg {
     height: 160px;
     background-size: cover;
-    background-position: center center;
+    background-position: center center;    
+    margin-top: -20px;
+    margin-bottom: 20px;
+
 }
 .navbar {
     z-index: auto;
@@ -413,6 +416,9 @@ h2, h4 {
 @media (max-width: 1200px) { /* Medium devices */
     .headerimg {
         height: 120px;
+    }
+    .navbar-nav.navbar-right {
+        margin-right: -15px;
     }
     #self a.myname img{
         margin-right: 3px;
