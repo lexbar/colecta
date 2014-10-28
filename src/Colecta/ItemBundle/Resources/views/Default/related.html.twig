@@ -5,7 +5,8 @@
         <h3 class="panel-title">Relacionado</h3>
     </div>
     <div class="panel-body">
-        {% for item in items if item.draft == 0 %}        
+        {% for item in items if item.draft == 0 %}
+            {% if not loop.first %}<hr>{% endif %}    
             {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
             {% set path = path | replace({'/':'Bundle:'}) %}
             {% include path with { 'item': item } only %}

@@ -12,9 +12,9 @@
         {% set preview = files[0] %}
         
         {% if preview.filetype in ['jpeg','gif','png'] %}
-            <a href="{{ path('ColectaFileView', { 'slug': preview.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileResize', {'slug':preview.slug, 'width':'180', 'height':'180'}) }}"></a>
+            <a href="{{ path('ColectaFileView', { 'slug': preview.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':preview.slug, 'width':'200', 'height':'200'}) }}"></a>
         {% else %}
-            <a href="{{ path('ColectaFileDownload',{ 'slug': preview.slug, 'type': preview.filetype }) }}" class="btn btn-success">{{ preview.name }} <i class="icon-download-alt icon-large"></i></a>
+            <a href="{{ path('ColectaFileDownload',{ 'slug': preview.slug, 'type': preview.filetype }) }}" class="btn btn-success">{{ preview.name }} <i class="fa fa-arrow-down fa-fw"></i></a>
         {% endif %}
         
     {% endif %}
@@ -27,9 +27,9 @@
         <div>
             {% for file in files|slice(1, 5) %}
                 {% if file.filetype in ['jpeg','gif','png'] %}
-                    <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileResize', {'slug':file.slug, 'width':'60', 'height':'60'}) }}"></a>
+                    <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'60', 'height':'60'}) }}"></a>
                 {% else %}
-                    <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-success">{{ file.name }} <i class="icon-download-alt icon-large"></i></a>
+                    <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-success">{{ file.name }} <i class="fa fa-arrow-down fa-fw"></i></a>
                 {% endif %}
             {% endfor %}
         </div>

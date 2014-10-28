@@ -186,9 +186,6 @@ h2, h4 {
     right: 15px;
     top: 12px;
 }
-#self #userOptions {
-    margin-bottom: 15px;
-}
 
 #searchForm i {
     color: #666;
@@ -371,14 +368,11 @@ h2, h4 {
 .relations p {
     font-size: 14px;
 }
-.relations img {
-    margin-bottom: 10px;
-}
 .relations .col-xs-9.col-lg-10 {
     padding-left: 0;
 }
 .relations .date {
-    padding-bottom: 10px;
+    padding-bottom: 0;
 }
 
 .map {
@@ -387,6 +381,9 @@ h2, h4 {
 .profile {
     height: 40px;
     width: 90%;
+}
+.dropdown-menu {
+    margin: 0;
 }
 
 .messages {
@@ -406,6 +403,13 @@ h2, h4 {
     font-weight: bold;
 }
 
+.list-group-item.active a {
+    color: #FFF;
+    text-decoration: underline;
+}
+.list-group-item.active small {
+    color: #EEE;
+}
 .list-group-item .pull-right {
     margin-left: 10px;
 }

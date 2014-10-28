@@ -2,7 +2,7 @@
 
 {% block thumbnail %}
     {% if item.filetype in ['jpeg','gif','png'] %}
-        <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileResize', {'slug':item.slug, 'width':'150', 'height':'150'}) }}"></a>
+        <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':item.slug, 'width':'200', 'height':'200'}) }}"></a>
     {% else %}
         <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-success"><i class="icon-download-alt icon-large"></i> <strong style="text-transform: uppercase;">{{ item.filetype }}</strong></a>
     {% endif %}

@@ -263,7 +263,7 @@ function FileChange() {
         for(var i = 0; i < files.length; i++) {
             var f = files[i];
             var j = (i + FUTheFiles.length);
-            fp.append('<div class="col-lg-4 col-sm-6" id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress"><div role="progressbar"  class="progress-bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
+            fp.append('<div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10" id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress"><div role="progressbar"  class="progress-bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
         }
         
         //Start upload
@@ -346,7 +346,7 @@ function FUuploadComplete(evt) {
     if(res.length > 180) {
         FUuploadFailed();
     } else {
-        $('#UFC'+FUcurrentFileIndex).html('<img src="'+FUpreviewAddress + $.trim(res)+'" class="img-responsive"><input type="text" class="form-control" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..."><textarea class="form-control" name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..."></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete">');
+        $('#UFC'+FUcurrentFileIndex).html('<hr><div class="row"><div class="col-sm-12 col-md-4"><img src="'+FUpreviewAddress + $.trim(res)+'" class="img-responsive"></div><div class="col-sm-12 col-md-8"><input type="text" class="form-control" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..."><textarea class="form-control" name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..."></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete"></div></div>');
         
         uploadNext();
     }
