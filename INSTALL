@@ -1,6 +1,6 @@
 git clone http://github.com/lexbar/colecta .
 
-mkdir app/cache app/logs app/cache/prod app/cache/dev app/cache/prod/images app/cache/prod/files app/cache/prod/images/maps web/uploads web/uploads/files web/uploads/routes
+mkdir app/cache app/logs app/cache/prod app/cache/dev app/cache/prod/images app/cache/prod/files app/cache/prod/images/maps web/uploads web/uploads/files web/uploads/avatars web/uploads/routes
 
 chmod -R 775 app/cache/ app/logs/ web/uploads/
 

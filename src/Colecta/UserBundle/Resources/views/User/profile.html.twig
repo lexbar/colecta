@@ -3,9 +3,10 @@
 {% block title %}Perfil de {{ user.name }}{% endblock %}
 
 {% block article %}
-    {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'items' } %}
-    
+
     <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
+    
+    {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'items' } %}
     
     {% for item in items %}
         
