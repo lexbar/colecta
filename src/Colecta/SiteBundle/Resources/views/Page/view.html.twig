@@ -8,7 +8,7 @@
     <div class="monocontent">
         {{ page.text | usercontent | raw | nl2br }}
     
-        {% if page.contact and page.contactData is iterable and not app.session.flash('pageFormSent') %}
+        {% if page.contact and page.contactData is iterable and not app.session.flashbag.get('pageFormSent') | length > 0 %}
             <hr>
             {# CHECK EXPIRATION #}
             {% if page.contactData['expiration'] is defined and page.contactData['expiration'] | date('U') < 'now' | date('U') %}

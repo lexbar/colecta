@@ -51,20 +51,20 @@ class PageController extends Controller
                 $em->persist($contactRequest); 
                 $em->flush();
                 
-                $this->get('session')->getFlashBag()->add('success', 'El formulario se ha enviado correctamente.');
-                $this->get('session')->getFlashBag()->add('pageFormSent','1');
+                $this->get('session')->setFlash('success', 'El formulario se ha enviado correctamente.');
+                $this->get('session')->setFlash('pageFormSent','1');
                 
                 /* Send mail to admin */
-                /*$mailer = $this->get('mailer');
+                $mailer = $this->get('mailer');
                 $configmail = $this->container->getParameter('mail');
                 
                 $message = \Swift_Message::newInstance();
     		    $message->setSubject('Formulario ['. $page->getName() .']')
     		        ->setFrom($configmail['from'])
-    		        ->setReplyTo(array($email => $name))
+    		        //->setReplyTo(array($email => $name))
     		        ->setTo($configmail['admin'])
-    		        ->setBody($this->renderView('ColectaSiteBundle:Default:contactmail.txt.twig', array('name'=>'FIX', 'email'=>'FIX', 'text'=>'FIX')), 'text/plain');
-    		    $mailer->send($message);*/
+    		        ->setBody($this->renderView('ColectaSiteBundle:Default:contactmail.txt.twig', array('contactRequest'=>$contactRequest)), 'text/plain');
+    		    $mailer->send($message);
             }
             
             return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page, 'contactRequest' => $contactRequest));

@@ -155,8 +155,9 @@ class DefaultController extends Controller
     public function ajaxsearchAction()
     {
         $search = trim($this->get('request')->query->get('search'));
+        $page= intval($this->get('request')->query->get('page'));
         
-        $items = $this->search($search, 0);
+        $items = $this->search($search, $page);
         
         $response = new Response($this->renderView('ColectaItemBundle:Default:items.json.twig', array('items' => $items)),200);
         $response->headers->set('Content-Type', 'application/json');
@@ -172,11 +173,6 @@ class DefaultController extends Controller
         $stmt->execute();
         $idsArray = $stmt->fetchAll();
         
-        if(count($idsArray) < 1)
-        {
-            return array();
-        }
-        
         $ids = array();
         foreach($idsArray as $row)
         {
@@ -184,6 +180,11 @@ class DefaultController extends Controller
         }
         
         $ids = array_slice($ids, $page * $this->ipp, $this->ipp + 1);
+        
+        if(count($ids) < 1)
+        {
+            return array();
+        }
         
         $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE i IN ('.implode(',', $ids).')';
         

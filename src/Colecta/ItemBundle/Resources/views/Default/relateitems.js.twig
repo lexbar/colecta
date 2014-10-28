@@ -1,6 +1,7 @@
     var relations = [{% for related in item.related %}{"name":"{{ related.name }}","type":"{{ related.type }}","id":"{{ related.id }}","author":"{{ related.author.id }}"}{% if not loop.last %},{% endif %}{% endfor%}];
     var xhr;
     var searchagain = false;
+    var searchpage = 0;
     
     function showResults()
     {
@@ -21,14 +22,16 @@
             for(var i = 0; i < relations.length; i++){ excludeIds += relations[i].id + ','; }
             
             xhr = $.ajax({
-                url: '{{ path('ColectaAjaxSearch') }}?search='+$('#searchItem').val()+'&exclude='+excludeIds,
+                url: '{{ path('ColectaAjaxSearch') }}?search='+$('#searchItem').val()+'&exclude='+excludeIds+'&page='+searchpage,
                 success: function(json) {
                     $('#itemResults').html('');
                     $('#itemResults').css('display','none');
                     for(var i = 0; i < json.length; i++) {
                         $('#itemResults').append('<li id="itemResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="addRelation('+encodeItem(json[i])+');return false;"><strong>('+typeName(json[i].type)+')</strong> '+json[i].name+'</a></li>');
                     } 
-                    if(json.length) { $('#itemResults').css('display','block'); }
+                    if(json.length) { 
+                        $('#itemResults').css('display','block');
+                    }
                     $('#searchButton').removeAttr("disabled"); 
                     $('#searchButtonLoading').removeClass('icon-refresh icon-spin');
                 },
@@ -36,6 +39,7 @@
             }).done(function() { 
                 if(searchagain) {
                     searchagain = false;
+                    searchpage = 0;
                     showResults();
                 }
             });
@@ -71,6 +75,7 @@
             }
         }
         
+        searchpage = 0;
         showResults();
     });
     
