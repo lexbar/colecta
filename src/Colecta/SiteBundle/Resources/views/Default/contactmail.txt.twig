@@ -1,6 +1,6 @@
-Alguien se ha puesto en contacto con el club a través de la web de Ciclubs.
+Alguien se ha puesto en contacto con el club a través de la web.
 
-Nombre: {{ name }}
-Correo electrónico: {{ email }}
-----------------------------------------------------
-{{text}}
+{% for key, row in contactRequest.data %}
+    {{ key }}: {{ row }}
+    
+{% endfor %}
