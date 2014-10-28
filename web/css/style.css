@@ -165,10 +165,17 @@ h2, h4 {
 }
 #self a.myname strong {
     font-weight: lighter;
+    color: #000;
     font-size: 18px;
     line-height: 20px;
-    color: #000;
-    padding-right: 14px;
+    position: absolute;
+    top: 10px;
+    left: 65px;
+    right: 30px;
+    height: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #self a.myname:hover strong {
     text-decoration: underline;
@@ -420,9 +427,13 @@ h2, h4 {
     .navbar-nav.navbar-right {
         margin-right: -15px;
     }
-    #self a.myname img{
+    #self a.myname img {
         margin-right: 3px;
         width: 20px;
+    }
+    #self a.myname strong {
+        top: 3px;
+        left: 40px;
     }
     #self a.myname i {
         top: 4px;
