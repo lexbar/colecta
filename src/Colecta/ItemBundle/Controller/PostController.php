@@ -194,20 +194,6 @@ class PostController extends Controller
             
             $em->persist($item); 
             $em->flush();
-            
-            // Update all categories. 
-            // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
-            
-            $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
-            
-            //ItemSearch INSERT
-            $sql = "INSERT INTO ItemSearch VALUES(:id, :name, :text)";
-            $stmt = $em->getConnection()->prepare($sql);
-            $stmt->bindValue('id', $item->getId());
-            $stmt->bindValue('name', $item->getName());
-            $stmt->bindValue('text', $item->getText());
-            $stmt->execute();
-            
         }
         
         if(isset($item))
@@ -324,36 +310,11 @@ class PostController extends Controller
                 $item->setLinkExcerpt($linkPreview['description']);
             }
             
-            /*if(preg_match("/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/", $request->get('text'), $url)) 
-            {
-                $html = getContent($url[0]);
-                //$crawler = new Crawler($html);
-                
-                $item->setLinkURL($url[0]);
-                
-                $title = preg_match('!<title>(.*?)</title>!i', $html, $matches) ? $matches[1] : '';
-                if($title)
-                {
-                    $item->setLinkTitle($title);
-                }
-                
-                $excerpt = preg_match('!<meta .*name="description" .*content="(.*)"!i', $html, $matches) ? $matches[1] : '';
-                if($excerpt)
-                {
-                    $item->setLinkExcerpt($excerpt);
-                }
-            }*/
-            
             if($persist)
             {
                 $em->persist($item); 
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', 'Modificado con éxito.');
-                
-                // Update all categories. 
-                // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
-            
-                $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
             }
         }
         

@@ -183,11 +183,6 @@ class FolderController extends Controller
                 $em->persist($item);
                 $em->flush();
                 
-                // Update all categories. 
-                // This is done this way because I'm lazy and so that every time an item is created or modified consistency is granted.
-            
-                $em->getConnection()->exec("UPDATE Category c SET c.posts = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Item/Post'),c.events = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Event'),c.routes = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Route'),c.places = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Activity/Place'),c.files = (SELECT COUNT(id) FROM Item i WHERE i.category_id = c.id AND i.type='Files/File');");
-                
                 $this->get('session')->getFlashBag()->add('success', 'Carpeta modificada correctamente');
                 return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));     
             }

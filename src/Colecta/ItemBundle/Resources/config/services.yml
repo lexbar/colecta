@@ -7,3 +7,18 @@ services:
         arguments: [@doctrine, @router]
         tags:
             - { name: twig.extension }
+            
+    colecta.doctrine.searchitempostpersist:
+        class: Colecta\ItemBundle\EventListener\SearchIndexer
+        tags: 
+            - { name: doctrine.event_listener, event: postPersist }
+            
+    colecta.doctrine.searchitempostupdate:
+        class: Colecta\ItemBundle\EventListener\SearchIndexer
+        tags: 
+            - { name: doctrine.event_listener, event: postUpdate }
+            
+    colecta.doctrine.searchitempreremove:
+        class: Colecta\ItemBundle\EventListener\SearchIndexer
+        tags: 
+            - { name: doctrine.event_listener, event: preRemove }
