@@ -17,38 +17,7 @@ parameters:
     mail:
         from: { foo@bar.com : Nombre del remitente }
         admin: [foo1@bar.com, foo2@bar.com]
-    welcomeText: |
-        Hola %N!
-        
-        Ya puedes acceder a tu cuenta en ---web_title---
-        
-        Simplemente tienes que seguir el siguiente enlace:
-        %L
         
     #Limits for the account
-    files_monthly_max: 10000 # number of files
-    space_monthly_max: 4000  # MB
-    users_active_max: 200    # users with role that allows interaction
-
-twig:
-    globals:
-        ##### LAYOUT #####
-        web_title: Nombre del club
-        theme_css: style
-        theme_sidebar: right
-        allowed_tags: <br><img>#<span><a><ol><ul><li>
-        rich_text_editor: 0
-        summary_max_length: 600
-        web_header_img:
-        itemIcons:
-            Item/Post: comments
-            Activity/Event: calendar
-            Activity/Route: compass
-            Activity/Place: map-marker
-            Files/File: folder-open
-            Files/Folder: folder-open
-            
-        
-        ##### ANALYTICS #####
-        #googleAnalyticsID: UA-XXXXXXXX-X
-        #googleAnalyticsName: ciclubs.com
+    limit_space: 100  # MB
+    limit_users: 12    # users with role that allows interaction

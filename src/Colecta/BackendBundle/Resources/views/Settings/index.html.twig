@@ -7,13 +7,13 @@
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'settings' } %}
     
     <div class="monocontent tabs">
-        <form action="" method="post" class="form-horizontal">
+        <form action="{{ path('ColectaBackendSettingsIndex') }}" method="post" class="form-horizontal">
             <div class="form-group">
                 <label for="web_title" class="col-sm-4 control-label">
                     <strong>Título de la web:</strong>
                 </label>
                 <div class="col-sm-8">
-                    <input type="text" value="{{ web_title }}" class="form-control" id="web_title">
+                    <input type="text" value="{{ web_parameters.twig.globals.web_title }}" class="form-control" id="web_title" name="web_title">
                 </div>
             </div>
             
@@ -22,18 +22,42 @@
                     <strong>Descripción para buscadores:</strong>
                 </label>
                 <div class="col-sm-8">
-                    <textarea rows="3" class="form-control" id="web_description"></textarea>
+                    <textarea rows="3" class="form-control" id="web_description" name="web_description">{{ web_parameters.twig.globals.web_description }}</textarea>
                 </div>
             </div>
             
             <div class="form-group">
-                <label for="web_default_role" class="col-sm-4 control-label">
-                    <strong>Rol predeterminado:</strong>
+                <label for="web_theme" class="col-sm-4 control-label">
+                    <strong>Estilo:</strong>
                 </label>
                 <div class="col-sm-8">
-                    <select id="web_default_role" class="form-control">
-                        <option value="">Socio</option>
+                    <select id="web_theme" name="web_theme" class="form-control">
+                        {% set theme_options = [['theme-blue','Azul']] %}
+                        {% for theme in theme_options %}
+                        <option{% if web_parameters.twig.globals.web_theme == theme[0] %} selected="selected"{% endif %} value="{{ theme[0] }}">{{ theme[1] }}</option>
+                        {% endfor %}
                     </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="theme_sidebar" class="col-sm-4 control-label">
+                    <strong>Barra lateral:</strong>
+                </label>
+                <div class="col-sm-8">
+                    <label class="radio-inline">
+                        <input type="radio"{% if web_parameters.twig.globals.theme_sidebar == 'left' %} checked="checked"{% endif %} name="theme_sidebar" value="left"> Izquierda
+                    </label>
+                    
+                    <label class="radio-inline">
+                        <input type="radio"{% if web_parameters.twig.globals.theme_sidebar == 'right' %} checked="checked"{% endif %} name="theme_sidebar" value="right"> Derecha
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-8">
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </div>
         </form>

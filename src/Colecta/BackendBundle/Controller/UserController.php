@@ -76,7 +76,7 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $this->get('session')->setFlash('error', 'La fecha de nacimiento '."".' no tiene un valor aceptable.');
+                    $this->get('session')->getFlashBag()->add('error', 'La fecha de nacimiento '."".' no tiene un valor aceptable.');
                 }
             }
             
@@ -90,7 +90,7 @@ class UserController extends Controller
                 
                 if($partnerIdUser && $partnerIdUser->getUser() != $user)
                 {
-                    $this->get('session')->setFlash('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
+                    $this->get('session')->getFlashBag()->add('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
                 }
                 else
                 {
@@ -107,7 +107,7 @@ class UserController extends Controller
             $em->persist($user); 
             $em->persist($profile); 
             $em->flush();
-            $this->get('session')->setFlash('success', 'Modificado correctamente');
+            $this->get('session')->getFlashBag()->add('success', 'Modificado correctamente');
         }
         
         $roles = $em->getRepository('ColectaUserBundle:Role')->findAll();
@@ -124,30 +124,32 @@ class UserController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        // New user handler
-        $newUser = new User();
+        /* Check if new users can be created */
         
-        /* Check if the limit of users is exceeded */
-        $users_active_max = $this->container->getParameter('users_active_max');
+        $users = $em->getRepository('ColectaUserBundle:User')->findAll();
         
-        $roles = $em->getRepository('ColectaUserBundle:Role')->findAll();
-        $active_roles = array();
+        $activeUsers = 0; //counter for active users, as inactive won't count for user creation limit
         
-        foreach($roles as $r)
+        foreach($users as $u) 
         {
-            if($r->getContribute()) //if this role allows user to contribute, the user is active
+            if($u->getRole()->getContribute())
             {
-                $active_roles[] = $r->getId();
+                $activeUsers++;
             }
         }
         
-        $active_users = $em->createQuery('SELECT COUNT(u) FROM ColectaUserBundle:User u WHERE u.role IN ('.implode(',',$active_roles).')')->getSingleScalarResult();
+        $limitUsers = $this->container->getParameter('limit_users');
         
-        if($users_active_max <= $active_users)
+        if($activeUsers >= $limitUsers)
         {
-            $this->get('session')->setFlash('error', 'Se ha superado el límite de usuarios activos permitidos ('.$users_active_max.').');
-            return new RedirectResponse($this->generateUrl('ColectaBackendUserIndex'));
+            $this->get('session')->getFlashBag()->add('error', 'Has superado el límite de usuarios que puedes crear ('.$limitUsers.').');
+            
+            return $this->indexAction();
         }
+        
+        
+        // New user handler
+        $newUser = new User();
         
         if ($this->get('request')->getMethod() == 'POST') 
         {
@@ -159,7 +161,7 @@ class UserController extends Controller
             }
             else
             {
-                $this->get('session')->setFlash('error', 'Debes escribir un nombre de usuario.');
+                $this->get('session')->getFlashBag()->add('error', 'Debes escribir un nombre de usuario.');
             }
             
             if($request->get('userMail'))
@@ -168,7 +170,7 @@ class UserController extends Controller
             }
             else
             {
-                $this->get('session')->setFlash('error', 'Debes escribir un correo electrónico.');
+                $this->get('session')->getFlashBag()->add('error', 'Debes escribir un correo electrónico.');
             }
             
             $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($request->get('userRole'));
@@ -194,7 +196,7 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $this->get('session')->setFlash('error', 'La fecha de nacimiento '."".' no tiene un valor aceptable.');
+                    $this->get('session')->getFlashBag()->add('error', 'La fecha de nacimiento '."".' no tiene un valor aceptable.');
                 }
             }
             
@@ -208,7 +210,7 @@ class UserController extends Controller
                 
                 if($partnerIdUser && $partnerIdUser->getUser() != $newUser)
                 {
-                    $this->get('session')->setFlash('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
+                    $this->get('session')->getFlashBag()->add('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
                 }
                 else
                 {
@@ -240,7 +242,7 @@ class UserController extends Controller
                 $em->persist($newUser);
                 $em->persist($profile); 
                 $em->flush();
-                $this->get('session')->setFlash('success', 'Usuario '. $newUser->getName() .' creado correctamente');
+                $this->get('session')->getFlashBag()->add('success', 'Usuario '. $newUser->getName() .' creado correctamente');
                 
                 if($request->get('notificateUser') == 'on')
                 {
@@ -311,11 +313,11 @@ class UserController extends Controller
             {
                 $em->persist($role); 
                 $em->flush();
-                $this->get('session')->setFlash('success', 'Modificado correctamente');
+                $this->get('session')->getFlashBag()->add('success', 'Modificado correctamente');
             }
             else
             {
-                $this->get('session')->setFlash('error', 'Debes indicar un nombre al perfil');
+                $this->get('session')->getFlashBag()->add('error', 'Debes indicar un nombre al perfil');
             }
         }
         
