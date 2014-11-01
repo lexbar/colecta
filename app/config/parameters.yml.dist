@@ -21,3 +21,9 @@ parameters:
     #Limits for the account
     limit_space: 100  # MB
     limit_users: 12    # users with role that allows interaction
+    
+security:
+    firewalls:
+        main:
+            remember_me:
+                key:        ThisTokenIsNotSoSecretChangeIt

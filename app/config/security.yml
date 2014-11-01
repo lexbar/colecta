@@ -14,7 +14,6 @@ security:
             logout:
                 path: userLogout
             remember_me:
-                key:        hjb87adi4hbi24dhbsa5d
                 lifetime:   2592000
 
     access_control:
