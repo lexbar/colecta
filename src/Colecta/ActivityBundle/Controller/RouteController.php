@@ -413,7 +413,7 @@ class RouteController extends Controller
             {
                 $item = new Route();
                 $form = $this->createForm(new RouteType(), $item);
-                $form->bindRequest($request);
+                $form->bind($request);
                 
                 if ($form->isValid()) 
                 {
@@ -696,7 +696,7 @@ class RouteController extends Controller
                 $item->setCategory($category);
             }
             
-            $form->bindRequest($request);
+            $form->bind($request);
             
             //File replacement
             if ($persist && isset($_FILES['file']) && $_FILES['file']['tmp_name'])
