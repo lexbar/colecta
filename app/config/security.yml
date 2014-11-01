@@ -4,7 +4,7 @@
 
 security:
     firewalls:
-        frontend:
+        main:
             pattern:  ^/
             anonymous: ~
             form_login:
