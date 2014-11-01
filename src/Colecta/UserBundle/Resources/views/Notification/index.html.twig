@@ -1,10 +1,10 @@
 {% extends '::frontend.html.twig' %}
 
-{% block title %}Notificaciones{% endblock %}
+{% block title %}Alertas{% endblock %}
 
 {% block article %}
 
-<h2>Notificaciones</h2>
+<h2>Alertas</h2>
 
 {% if notifications | length > 0 %}
     {% if not notifications[0].dismiss %}
@@ -19,7 +19,7 @@
     
     <div style="text-align:center;margin-bottom: 20px;"><button onclick="loadMore()" class="btn btn-default" id="loadMore">Ver más <i class="fa fa-arrow-down"></i></button></div>
 {% else %}
-    <p class="lead">No tienes ninguna notificación</p>
+    <p class="lead">No tienes ninguna alerta</p>
 {% endif %}
 
 {% endblock %}  
@@ -43,7 +43,7 @@
                 if(data.length) {
                     currentpage++;
                 } else {
-                    $('#notificationstream').append('<li class="list-group-item"><p class="lead" style="text-align:center">No hay más notificaciones</p></li>');
+                    $('#notificationstream').append('<li class="list-group-item"><p class="lead" style="text-align:center">No hay más alertas</p></li>');
                     $('#loadMore').hide();
                 }
                 
