@@ -30,6 +30,7 @@
         <ul class="nav navbar-nav navbar-right hidden-xs">
             <li><a href="{{ path('userMessages')}}"><i class="fa fa-envelope"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
             <li><a href="{{ path('userNotifications')}}"><i class="fa fa-bell"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Alertas</a></li>
+            <li><a href="{{ path('userLogout') }}"><i class="fa fa-sign-out"></i> Salir</a></li>
         </ul>
         
         {% else %}

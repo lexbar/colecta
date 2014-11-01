@@ -171,7 +171,7 @@ h2, h4 {
     position: absolute;
     top: 10px;
     left: 65px;
-    right: 30px;
+    right: 0;
     height: 18px;
     white-space: nowrap;
     overflow: hidden;
@@ -179,12 +179,6 @@ h2, h4 {
 }
 #self a.myname:hover strong {
     text-decoration: underline;
-}
-#self a.myname i {
-    color: #009BDB;
-    position: absolute;
-    right: 15px;
-    top: 12px;
 }
 
 #searchForm i {
@@ -438,9 +432,6 @@ h2, h4 {
     #self a.myname strong {
         top: 3px;
         left: 40px;
-    }
-    #self a.myname i {
-        top: 4px;
     }
 }
 @media (max-width: 767px) { /* Small devices */

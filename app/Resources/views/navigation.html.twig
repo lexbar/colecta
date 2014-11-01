@@ -10,21 +10,16 @@
 {% if app.user %}    
     <div id="self" class="clearfix hidden-print">
         <div class="clearfix">
-            <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="myname" onClick="$('#userOptions').toggle(500); return false;">
+            <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="myname">
                 <img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40">
                 <strong>{{ app.user.name }}</strong> 
-                <i class="fa fa-chevron-circle-down"></i>
             </a>
         </div>
         
-        <div id="userOptions" style="display:none;">
-            <hr>
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="{{ path('userProfile', {'id':app.user.id}) }}"><i class="fa fa-user fa-fw"></i> Mi perfil</a></li>
-                <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="fa fa-bar-chart fa-fw"></i> Mi rendimiento</a></li>
-                <li><a href="{{ path('userLogout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
-            </ul>
-        </div>
+        <hr>
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="fa fa-bar-chart fa-fw"></i> Mi rendimiento</a></li>
+        </ul>
     </div>
     
     <hr>
