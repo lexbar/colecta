@@ -1,0 +1,6 @@
+Alguien se ha puesto en contacto a través del formulario "{{ page.name }}":
+
+{% for key,field in page.contactData['fields'] %}
+    {{ field.title }}: {{ contactRequest.data[key] }}
+    
+{% endfor %}

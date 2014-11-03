@@ -28,6 +28,8 @@
                 <form action="{{ path('ColectaPage', {slug: page.slug}) }}" method="POST" class="form-horizontal" onSubmit="$('#ContactSubmit').attr('disabled','disabled').addClass('disabled'); $('#ContactSubmitText').html('Enviando...'); $('#ContactSubmitLoading').addClass('icon-refresh icon-spin');">
                     <fieldset>
                     
+                      <input type="text" class="hidden" name="website" value=""> {# anti-spam system #}
+                    
                       {% for key,field in page.contactData['fields'] %}
                       
                       <div class="form-group">

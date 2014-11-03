@@ -32,39 +32,43 @@ class PageController extends Controller
         {
             $contactRequest = new ContactRequest();
             
-            if($this->get('request')->getMethod() == 'POST' and $page->getContact() )
+            if($this->get('request')->getMethod() == 'POST' and $page->getContact())
             {
                 $request = $this->get('request')->request;
-                $contactRequest->setPage($page);
-                $contactRequest->setUser($contactRequestUser);
-                $contactRequest->setDate(new \DateTime('now'));
                 
-                $data = array();
-                $contactData = $page->getContactData();
-                foreach($contactData['fields'] as $key=>$field)
-                {
-                    $data[$key] = $this->validateFormType($field['type'], $request->get('field'.$key));
-                }
-                
-                $contactRequest->setData($data);
-                
-                $em->persist($contactRequest); 
-                $em->flush();
-                
-                $this->get('session')->getFlashBag()->add('success', 'El formulario se ha enviado correctamente.');
-                $this->get('session')->getFlashBag()->add('pageFormSent','1');
-                
-                /* Send mail to admin */
-                $mailer = $this->get('mailer');
-                $configmail = $this->container->getParameter('mail');
-                
-                $message = \Swift_Message::newInstance();
-    		    $message->setSubject('Formulario ['. $page->getName() .']')
-    		        ->setFrom($configmail['from'])
-    		        //->setReplyTo(array($email => $name))
-    		        ->setTo($configmail['admin'])
-    		        ->setBody($this->renderView('ColectaSiteBundle:Default:contactmail.txt.twig', array('contactRequest'=>$contactRequest)), 'text/plain');
-    		    $mailer->send($message);
+                if($request->get('website') == '') // anti-spam system
+                {      
+	                $contactRequest->setPage($page);
+	                $contactRequest->setUser($contactRequestUser);
+	                $contactRequest->setDate(new \DateTime('now'));
+	                
+	                $data = array();
+	                $contactData = $page->getContactData();
+	                foreach($contactData['fields'] as $key=>$field)
+	                {
+	                    $data[$key] = $this->validateFormType($field['type'], $request->get('field'.$key));
+	                }
+	                
+	                $contactRequest->setData($data);
+	                
+	                $em->persist($contactRequest); 
+	                $em->flush();
+	                
+	                $this->get('session')->getFlashBag()->add('success', 'El formulario se ha enviado correctamente.');
+	                $this->get('session')->getFlashBag()->add('pageFormSent','1');
+	                
+	                /* Send mail to admin */
+	                $mailer = $this->get('mailer');
+	                $configmail = $this->container->getParameter('mail');
+	                
+	                $message = \Swift_Message::newInstance();
+	    		    $message->setSubject('Formulario ['. $page->getName() .']')
+	    		        ->setFrom($configmail['from'])
+	    		        //->setReplyTo(array($email => $name))
+	    		        ->setTo($configmail['admin'])
+	    		        ->setBody($this->renderView('ColectaSiteBundle:Page:contactRequest.txt.twig', array('page' => $page, 'contactRequest'=>$contactRequest)), 'text/plain');
+	    		    $mailer->send($message);
+    		    }
             }
             
             return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page, 'contactRequest' => $contactRequest));
