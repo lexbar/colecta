@@ -1,0 +1,310 @@
+{% extends '::backend.html.twig' %}
+
+{% block article %} 
+    
+    <h2>{% if role.name == 'ROLE_CUSTOM' and role.id > 0 %}Editar Rol{% else %}Crear nuevo Rol{% endif %}</h2>
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+    
+    <div class="monocontent tabs">       
+    	<a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default"><i class="fa fa-long-arrow-left fa-fw"></i> Gestionar Roles</a>
+    	<hr>
+    	 
+        <form class="form-horizontal" method="post" action="{% if role.name == 'ROLE_CUSTOM' and role.id > 0 %}{{ path('ColectaBackendRoleEdit', {'role_id': role.id}) }}{% else %}{{ path('ColectaBackendRoleCreate') }}{% endif %}">
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="RoleName">Nombre del Rol</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="description" id="RoleName" class="form-control" value="{{ role.description }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Acceso</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="site_access"{% if role.siteAccess %} checked="checked"{% endif %}> Permitir acceso general a la web
+						</label>
+					</div>
+					
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Visualización</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_post_view"{% if role.itemPostView %} checked="checked"{% endif %}> Visualizar <strong>textos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_event_view"{% if role.itemEventView %} checked="checked"{% endif %}> Visualizar <strong>eventos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_route_view"{% if role.itemRouteView %} checked="checked"{% endif %}> Visualizar <strong>rutas</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_place_view"{% if role.itemPlaceView %} checked="checked"{% endif %}> Visualizar <strong>lugares</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_file_view"{% if role.itemFileView %} checked="checked"{% endif %}> Visualizar <strong>archivos</strong>
+						</label>
+					</div>
+					
+					<input type="hidden" name="item_contest_view" value="">
+					<input type="hidden" name="item_poll_view" value="">
+					
+                </div>
+            </div>            
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Publicación</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_post_create"{% if role.itemPostCreate %} checked="checked"{% endif %}> Publicar <strong>textos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_event_create"{% if role.itemEventCreate %} checked="checked"{% endif %}> Publicar <strong>eventos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_route_create"{% if role.itemRouteCreate %} checked="checked"{% endif %}> Publicar <strong>rutas</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_place_create"{% if role.itemPlaceCreate %} checked="checked"{% endif %}> Publicar <strong>lugares</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_file_create"{% if role.itemFileCreate %} checked="checked"{% endif %}> Publicar <strong>archivos</strong>
+						</label>
+					</div>
+					
+					<input type="hidden" name="item_contest_create" value="">
+					<input type="hidden" name="item_poll_create" value="">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Edición<br><small class="help-block">(De publicaciones propias)</small></label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_post_edit"{% if role.itemPostEdit %} checked="checked"{% endif %}> Editar <strong>textos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_event_edit"{% if role.itemEventEdit %} checked="checked"{% endif %}> Editar <strong>eventos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_route_edit"{% if role.itemRouteEdit %} checked="checked"{% endif %}> Editar <strong>rutas</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_place_edit"{% if role.itemPlaceEdit %} checked="checked"{% endif %}> Editar <strong>lugares</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_file_edit"{% if role.itemFileEdit %} checked="checked"{% endif %}> Editar <strong>archivos</strong>
+						</label>
+					</div>
+					
+					<input type="hidden" name="item_contest_edit" value="">
+					<input type="hidden" name="item_poll_edit" value="">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Moderar<br><small class="help-block">(Cualquier publicación)</small></label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_post_edit_any"{% if role.itemPostEditAny %} checked="checked"{% endif %}> Moderar <strong>textos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_event_edit_any"{% if role.itemEventEditAny %} checked="checked"{% endif %}> Moderar <strong>eventos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_route_edit_any"{% if role.itemRouteEditAny %} checked="checked"{% endif %}> Moderar <strong>rutas</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_place_edit_any"{% if role.itemPlaceEditAny %} checked="checked"{% endif %}> Moderar <strong>lugares</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_file_edit_any"{% if role.itemFileEditAny %} checked="checked"{% endif %}> Moderar <strong>archivos</strong>
+						</label>
+					</div>
+					
+					<input type="hidden" name="item_contest_edit_any" value="">
+					<input type="hidden" name="item_poll_edit_any" value="">
+                </div>
+            </div>
+            
+			<div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Relacionar</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_relate_own"{% if role.itemRelateOwn %} checked="checked"{% endif %}> Relacionar con publicaciones <strong>propias</strong>
+						</label>
+					</div>
+					
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_relate_any"{% if role.itemRelateAny %} checked="checked"{% endif %}> Relacionar con publicaciones <strong>ajenas</strong>
+						</label>
+					</div>
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Comentar</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_post_comment"{% if role.itemPostComment %} checked="checked"{% endif %}> Comentar <strong>textos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_event_comment"{% if role.itemEventComment %} checked="checked"{% endif %}> Comentar <strong>eventos</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_route_comment"{% if role.itemRouteComment %} checked="checked"{% endif %}> Comentar <strong>rutas</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_place_comment"{% if role.itemPlaceComment %} checked="checked"{% endif %}> Comentar <strong>lugares</strong>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="item_file_comment"{% if role.itemFileComment %} checked="checked"{% endif %}> Comentar <strong>archivos</strong>
+						</label>
+					</div>
+					
+					<input type="hidden" name="item_contest_comment" value="">
+					<input type="hidden" name="item_poll_comment" value="">
+					<input type="hidden" name="item_poll_vote" value="">
+                </div>
+            </div>
+            
+			<div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Categorías</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="category_create"{% if role.categoryCreate %} checked="checked"{% endif %}> Crear categorías
+						</label>
+					</div>
+					
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="category_edit"{% if role.categoryEdit %} checked="checked"{% endif %}> Modificar categorías
+						</label>
+					</div>
+					
+					<input type="hidden" name="activity_create" value="">
+					<input type="hidden" name="activity_edit" value="">
+                </div>
+            </div>
+            
+			<div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Usuarios</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="user_view"{% if role.userView %} checked="checked"{% endif %}> Ver perfiles de otros usuarios
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="message_send"{% if role.messageSend %} checked="checked"{% endif %}> Enviar mensajes privados
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="user_create"{% if role.userCreate %} checked="checked"{% endif %}> Crear nuevos usuarios
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="user_edit"{% if role.userEdit %} checked="checked"{% endif %}> Modificar datos de cualquier usuario
+						</label>
+					</div>
+                </div>
+            </div>
+            
+			<div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Configuración</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="site_config_settings"{% if role.userView %} checked="checked"{% endif %}> Modificar los ajustes de la web
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="site_config_users"{% if role.messageSend %} checked="checked"{% endif %}> Modificar parámetros de los usuarios
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="site_config_pages"{% if role.userCreate %} checked="checked"{% endif %}> Gestión de las páginas estáticas
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="site_config_lottery"{% if role.userEdit %} checked="checked"{% endif %}> Gestión de la lotería
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="site_config_plan"{% if role.userEdit %} checked="checked"{% endif %}> Acceso a cambio de plan contratado con Desport.es
+						</label>
+					</div>
+					
+					<input type="hidden" name="site_config_stats" value="">
+                </div>
+            </div> 
+            
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-offset-4 col-sm-8 col-lg-offset-3 col-lg-9">
+                    {% if role.name == 'ROLE_CUSTOM' and not role.id %}<input type="submit" value="Crear Rol" class="btn btn-primary">{% endif %}
+                    {% if role.name == 'ROLE_CUSTOM' and role.id > 0 %}<input type="submit" value="Guardar Rol" class="btn btn-primary">{% endif %}
+                    {% if role.name != 'ROLE_CUSTOM' and role.id > 0 %}<input type="submit" value="Crear Nuevo Rol" class="btn btn-primary">{% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock%}

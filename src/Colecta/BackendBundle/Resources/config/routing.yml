@@ -24,6 +24,12 @@ ColectaBackendUserActivityReportCSV:
 ColectaBackendRolesIndex:
     pattern:  /back/roles/
     defaults: { _controller: ColectaBackendBundle:User:roles } 
+ColectaBackendRoleCreate:
+    pattern:  /back/roles/create/
+    defaults: { _controller: ColectaBackendBundle:User:roleCreate } 
+ColectaBackendRoleDelete:
+    pattern:  /back/roles/{role_id}/delete/
+    defaults: { _controller: ColectaBackendBundle:User:roleDelete } 
 ColectaBackendRoleEdit:
     pattern:  /back/roles/{role_id}/
     defaults: { _controller: ColectaBackendBundle:User:roleEdit } 

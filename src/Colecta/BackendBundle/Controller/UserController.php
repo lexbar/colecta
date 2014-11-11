@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\UserBundle\Entity\User;
 use Colecta\UserBundle\Entity\UserProfile;
+use Colecta\UserBundle\Entity\Role;
 
 class UserController extends Controller
 {
@@ -36,6 +37,111 @@ class UserController extends Controller
         $roles = $em->createQuery('SELECT r, (SELECT COUNT(u) FROM ColectaUserBundle:User u WHERE u.role = r) amount FROM ColectaUserBundle:Role r ')->getResult();
         
         return $this->render('ColectaBackendBundle:User:roles.html.twig', array('roles'=>$roles));
+    }
+    public function roleCreateAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $role = new Role();
+        
+        if ($this->get('request')->getMethod() == 'POST') 
+        {
+            $request = $this->get('request')->request;
+            
+            $role = $this->fillRoleForm($role, $request);
+            
+            if(strlen($role->getDescription()))
+            {
+                $em->persist($role); 
+				$em->flush();
+				$this->get('session')->getFlashBag()->add('success', 'Rol creado correctamente');
+				
+				return new RedirectResponse($this->generateUrl('ColectaBackendRolesIndex'));
+            }
+            else
+            {
+                $this->get('session')->getFlashBag()->add('error', 'Debes escribir un nombre para el Rol');
+            }
+        }
+        
+        return $this->render('ColectaBackendBundle:User:roleCreate.html.twig', array('role'=>$role));
+    }
+    public function roleEditAction($role_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($role_id);
+        
+        if ($this->get('request')->getMethod() == 'POST') 
+        {
+	       	if($role->getName() != 'ROLE_CUSTOM') //Only custom roles can be edited
+	        {
+		        $this->get('session')->getFlashBag()->add('error', 'No puedes modificar este Rol');
+	            return new RedirectResponse($this->generateUrl('ColectaBackendRolesIndex'));
+	        }
+	        
+            $request = $this->get('request')->request;
+            
+            $role = $this->fillRoleForm($role, $request);
+            
+            if(strlen($request->get('description')))
+            {
+                $em->persist($role); 
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'Rol modificado correctamente');
+            }
+            else
+            {
+                $this->get('session')->getFlashBag()->add('error', 'Debes indicar un nombre al perfil');
+            }
+        }
+        
+        return $this->render('ColectaBackendBundle:User:roleCreate.html.twig', array('role'=>$role));
+    }
+    public function roleDeleteAction($role_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($role_id);
+        
+       	if($role->getName() != 'ROLE_CUSTOM') //Only custom roles can be edited
+        {
+	        $this->get('session')->getFlashBag()->add('error', 'No puedes modificar este Rol');
+            return new RedirectResponse($this->generateUrl('ColectaBackendRolesIndex'));
+        }
+        
+        $amount= $em->createQuery('SELECT COUNT(u) amount FROM ColectaUserBundle:User u WHERE u.role = :role')->setParameter('role', $role->getId())->getOneOrNullResult();
+        
+        if($amount == null or $amount['amount'] == 0)
+        {
+            $em->remove($role); 
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', 'Rol eliminado correctamente');
+        }
+        else
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No puedes eliminar un Rol que esté en uso.');
+        }
+        
+        return new RedirectResponse($this->generateUrl('ColectaBackendRolesIndex'));
     }
     public function profileAction($user_id)
     {
@@ -283,45 +389,9 @@ class UserController extends Controller
             $welcomeText = str_replace('---web_title---', $webTitle, $this->container->getParameter('welcomeText'));
         }
         
+        $roles = $em->getRepository('ColectaUserBundle:Role')->findAll();
+        
         return $this->render('ColectaBackendBundle:User:newUser.html.twig', array('user'=>$newUser, 'roles'=>$roles, 'welcomeText'=>$welcomeText));
-    }
-    public function roleEditAction($role_id)
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-        
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
-        {
-            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
-        }
-        
-        $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($role_id);
-        
-        if($role->getName() != 'ROLE_CUSTOM') //Only custom roles can be edited
-        {
-            $this->get('request')->SetMethod("GET"); // Set request method to Get before redirection 
-            return new RedirectResponse($this->generateUrl('ColectaBackendRolesIndex'));
-        }
-        
-        if ($this->get('request')->getMethod() == 'POST') 
-        {
-            $request = $this->get('request')->request;
-            
-            $role->set(checkbox($request->get('')));
-            
-            if($request->get('description') != "")
-            {
-                $em->persist($role); 
-                $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Modificado correctamente');
-            }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('error', 'Debes indicar un nombre al perfil');
-            }
-        }
-        
-        return $this->render('ColectaBackendBundle:User:roleEdit.html.twig', array('role'=>$role));
     }
     public function activityReportAction($format) //Special report for Turyciclo
     {
@@ -394,6 +464,93 @@ class UserController extends Controller
             return $this->render('ColectaBackendBundle:User:activityReport.html.twig', array('users'=>$users, 'kms'=>$kms, 'year'=>$year, 'jefesruta' => $jefesruta));
         }
         
+    }
+    
+    /* Custom function to fill Role object with request form object */
+    public function fillRoleForm($role, $request)
+    {
+	    /* DESCRIPTION */
+	    $role->setDescription($request->get('description'));
+	    
+	    /* GLOBAL ACCESS */
+	    $role->setSiteAccess(checkbox($request->get('site_access')));
+	    
+	    /* VIEW ACTIONS */
+	    $role->setItemPostView(checkbox($request->get('item_post_view')));
+	    $role->setItemEventView(checkbox($request->get('item_event_view')));
+	    $role->setItemRouteView(checkbox($request->get('item_route_view')));
+	    $role->setItemPlaceView(checkbox($request->get('item_place_view')));
+	    $role->setItemFileView(checkbox($request->get('item_file_view')));
+	    $role->setItemContestView(checkbox($request->get('item_contest_view')));
+	    $role->setItemPollView(checkbox($request->get('item_poll_view')));
+	    
+	    /* CREATE ACTIONS */
+	    $role->setItemPostCreate(checkbox($request->get('item_post_create')));
+	    $role->setItemEventCreate(checkbox($request->get('item_event_create')));
+	    $role->setItemRouteCreate(checkbox($request->get('item_route_create')));
+	    $role->setItemPlaceCreate(checkbox($request->get('item_place_create')));
+	    $role->setItemFileCreate(checkbox($request->get('item_file_create')));
+	    $role->setItemContestCreate(checkbox($request->get('item_contest_create')));
+	    $role->setItemPollCreate(checkbox($request->get('item_poll_create')));
+	    
+	    /* EDIT ACTIONS */
+	    $role->setItemPostEdit(checkbox($request->get('item_post_edit')));
+	    $role->setItemEventEdit(checkbox($request->get('item_event_edit')));
+	    $role->setItemRouteEdit(checkbox($request->get('item_route_edit')));
+	    $role->setItemPlaceEdit(checkbox($request->get('item_place_edit')));
+	    $role->setItemFileEdit(checkbox($request->get('item_file_edit')));
+	    $role->setItemContestEdit(checkbox($request->get('item_contest_edit')));
+	    $role->setItemPollEdit(checkbox($request->get('item_poll_edit')));
+	    
+	    /* EDIT_ANY ACTIONS */
+	    $role->setItemPostEditAny(checkbox($request->get('item_post_edit_any')));
+	    $role->setItemEventEditAny(checkbox($request->get('item_event_edit_any')));
+	    $role->setItemRouteEditAny(checkbox($request->get('item_route_edit_any')));
+	    $role->setItemPlaceEditAny(checkbox($request->get('item_place_edit_any')));
+	    $role->setItemFileEditAny(checkbox($request->get('item_file_edit_any')));
+	    $role->setItemContestEditAny(checkbox($request->get('item_contest_edit_any')));
+	    $role->setItemPollEditAny(checkbox($request->get('item_poll_edit_any')));
+	    
+	    /* RELATE */
+	    $role->setItemRelateOwn(checkbox($request->get('item_relate_own')));
+	    $role->setItemRelateAny(checkbox($request->get('item_relate_any')));
+	    
+	    /* COMMENT ACTIONS */
+	    $role->setItemPostComment(checkbox($request->get('item_post_comment')));
+	    $role->setItemEventComment(checkbox($request->get('item_event_comment')));
+	    $role->setItemRouteComment(checkbox($request->get('item_route_comment')));
+	    $role->setItemPlaceComment(checkbox($request->get('item_place_comment')));
+	    $role->setItemFileComment(checkbox($request->get('item_file_comment')));
+	    $role->setItemContestComment(checkbox($request->get('item_contest_comment')));
+	    $role->setItemPollComment(checkbox($request->get('item_poll_comment')));
+	    
+	    /* POLL VOTE */
+	    
+	    $role->setItemPollVote(checkbox($request->get('item_poll_vote')));
+	    
+	    /* CATEGORY */
+	    $role->setCategoryCreate(checkbox($request->get('category_create')));
+	    $role->setCategoryEdit(checkbox($request->get('category_edit')));
+	    
+	    /* ACTIVITY */
+	    $role->setActivityCreate(checkbox($request->get('activity_create')));
+	    $role->setActivityEdit(checkbox($request->get('activity_edit')));
+	    
+	    /* USERS */
+	    $role->setUserView(checkbox($request->get('user_view')));
+	    $role->setMessageSend(checkbox($request->get('message_send')));
+	    $role->setUserCreate(checkbox($request->get('user_create')));
+	    $role->setUserEdit(checkbox($request->get('user_edit')));
+	    
+	    /* SITE CONFIG */
+	    $role->setSiteConfigSettings(checkbox($request->get('site_config_settings')));
+	    $role->setSiteConfigUsers(checkbox($request->get('site_config_users')));
+	    $role->setSiteConfigPages(checkbox($request->get('site_config_pages')));
+	    $role->setSiteConfigLottery(checkbox($request->get('site_config_lottery')));
+	    $role->setSiteConfigPlan(checkbox($request->get('site_config_plan')));
+	    $role->setSiteConfigStats(checkbox($request->get('site_config_stats')));
+	    
+	    return $role;
     }
 }
 
