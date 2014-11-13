@@ -1,0 +1,123 @@
+{% extends '::backend.html.twig' %}
+
+{% block content %} 
+
+    <div class="row">
+        <div class="col-xs-6 col-sm-9">
+            <h2>Editar perfil {{ role.description }}</h2>
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <a href="{{ path('ColectaBackendUserIndex') }}" class="btn btn-primary btn-block"><i class="fa fa-angle-left"></i> Listado de usuarios <i class="fa fa-list"></i></a>
+        </div>
+    </div>
+    
+    <div class="monocontent">
+        <form class="form-horizontal" method="post" action="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="RoleName">Nombre</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="name" id="RoleName" class="form-control" value="{{ role.name }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="UserMail">Email</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="userMail" id="UserMail" class="form-control" value="{{ user.mail }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="UserRole">Perfil</label>
+                <div class="col-sm-4 col-lg-3">
+                    <select name="userRole" id="UserRole" class="form-control">
+                        {% for role in roles %}
+                        <option value="{{ role.id }}" {% if user.role.id == role.id %}selected="selected"{% endif %}>{{ role.description }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileName">Nombre</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="name" id="ProfileName" class="form-control" value="{{ user.profile ? user.profile.name }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileSurame">Apellido(s)</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="surname" id="ProfileSurame" class="form-control" value="{{ user.profile ? user.profile.surname }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileSex">Sexo</label>
+                <div class="col-sm-4 col-lg-3">
+                    <select name="sex" id="ProfileSex" class="form-control">
+                        <option value="" {% if not user.profile or user.profile.sex == '' %}selected="selected"{% endif %}>No especificar</option>
+                        <option value="female" {% if user.profile and user.profile.sex == 'female' %}selected="selected"{% endif %}>Mujer</option>
+                        <option value="male" {% if user.profile and user.profile.sex == 'male' %}selected="selected"{% endif %}>Hombre</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileBirthDateDay">Fecha de nacimiento<br><small>(día/mes/año)</small></label>
+                <div class="col-sm-2 col-lg-1">
+                    <input type="text" name="birthDateDay" id="ProfileBirthDateDay" class="form-control" value="{{ not user.profile or user.profile.birthDate is empty ? "" : user.profile.birthDate | date('d') }}">
+                </div>
+                <div class="col-sm-2 col-lg-1">
+                    <input type="text" name="birthDateMonth" class="form-control" value="{{ not user.profile or user.profile.birthDate is empty ? "" : user.profile.birthDate | date('m') }}">
+                </div>
+                <div class="col-sm-3 col-lg-2">
+                    <input type="text" name="birthDateYear" class="form-control" value="{{ not user.profile or user.profile.birthDate is empty ? "" : user.profile.birthDate | date('Y') }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileAddress">Dirección postal</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="address" id="ProfileAddress" class="form-control" value="{{ user.profile ? user.profile.address }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfilePhone">Teléfono(s)</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="phone" id="ProfilePhone" class="form-control" value="{{ user.profile ? user.profile.phone }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileIdNumber">DNI</label>
+                <div class="col-sm-4 col-lg-3">
+                    <input type="text" name="idNumber" id="ProfileIdNumber" class="form-control" value="{{ user.profile ? user.profile.idNumber }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfilePartnerId">ID de socio</label>
+                <div class="col-sm-4 col-lg-3">
+                    <input type="text" name="partnerId" id="ProfilePartnerId" class="form-control" value="{{ user.profile ? user.profile.partnerId }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="ProfileComments">Comentarios de administración</label>
+                <div class="col-sm-8 col-lg-9">
+                    <textarea rows="5" name="comments" id="ProfileComments" class="form-control">{{ user.profile ? user.profile.comments }}</textarea>
+                </div>
+            </div>
+                        
+            <div class="form-group">
+                <div class="col-lg-offset-3 col-sm-offset-4 col-sm-8 col-lg-9">
+                    <input type="submit" value="Guardar cambios" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock%}

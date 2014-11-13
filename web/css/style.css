@@ -362,6 +362,10 @@ h2, h4 {
 .relations p {
     font-size: 14px;
 }
+.relations p.details {
+	font-size: 12px;
+	margin-top: -6px;
+}
 .relations .col-xs-9.col-lg-10 {
     padding-left: 0;
 }
