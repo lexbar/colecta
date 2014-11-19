@@ -405,6 +405,9 @@ h2, h4 {
     color: #FFF;
     text-decoration: underline;
 }
+.list-group-item.active a i {
+	color: firebrick;
+}
 .list-group-item.active small {
     color: #EEE;
 }
