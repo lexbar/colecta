@@ -204,12 +204,14 @@ class linkPreviewController extends Controller
                     $pageUrl = $this->extendedTrim($pageUrl);
                     $description = $this->extendedTrim($description);
     
-                    $description = html_entity_decode(preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description));
+                    $description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
     
             }
     
             $finalLink = explode("&", $finalUrl);
             $finalLink = $finalLink[0];
+            
+            $description = html_entity_decode($description, ENT_COMPAT | ENT_HTML401, 'UTF-8');
     
             $answer = array("title" => $title, "titleEsc" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "cannonicalUrl" => $this->cannonicalPage($pageUrl), "description" => strip_tags($description), "descriptionEsc" => strip_tags($description), "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
     
