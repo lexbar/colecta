@@ -204,7 +204,7 @@ class linkPreviewController extends Controller
                     $pageUrl = $this->extendedTrim($pageUrl);
                     $description = $this->extendedTrim($description);
     
-                    $description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
+                    $description = html_entity_decode(preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description));
     
             }
     
