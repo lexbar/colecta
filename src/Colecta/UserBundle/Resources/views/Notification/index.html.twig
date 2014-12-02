@@ -7,7 +7,7 @@
 <h2>Alertas</h2>
 
 {% if notifications | length > 0 %}
-    {% if not notifications[0].dismiss %}
+    {% if notifications | length > 1 and not notifications[0].dismiss and not notifications[1].dismiss %}
         <a href="{{ path('userNotificationDismissAll') }}" class="btn btn-primary btn-block">Marcar todas como leídas <i class="fa fa-check"></i></a><br>
     {% endif %}
 
