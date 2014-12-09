@@ -1,6 +1,7 @@
 parameters:
-    colecta.install.class: Colecta\BackendBundle\Controller\InstallController
+    colecta.install.class: Colecta\BackendBundle\Services\InstallService
  
 services:
     colecta.install:
         class: "%colecta.install.class%"
+        arguments: [ @doctrine.orm.entity_manager ]
