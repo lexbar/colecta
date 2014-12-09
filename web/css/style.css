@@ -134,9 +134,11 @@ h2, h4 {
 /* style icon */
 .inner-addon .fa {
   position: absolute;
-  top: 0;
-  padding: 9px;
-  pointer-events: none;
+  top: 1px;
+  padding: 8px;
+  border-left: 1px solid #eee;
+  cursor: pointer;
+  /*pointer-events: none;*/
 }
 
 /* align icon */
