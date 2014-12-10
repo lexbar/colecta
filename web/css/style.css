@@ -435,12 +435,12 @@ h2, h4 {
         margin-right: -15px;
     }
     #self a.myname img {
-        margin-right: 3px;
-        width: 20px;
+        margin-right: 5px;
+        width: 25px;
     }
     #self a.myname strong {
         top: 3px;
-        left: 40px;
+        left: 46px;
     }
 }
 @media (max-width: 767px) { /* Small devices */
