@@ -231,6 +231,7 @@ h2, h4 {
 }
 .item .panel-body {
     padding-bottom: 0;
+    word-wrap: break-word;
 }
 
 .item .itemActions {
