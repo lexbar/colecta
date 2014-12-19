@@ -1,32 +1,4 @@
-{% extends '::frontend.html.twig' %}
-
-{% block article %} 
-    
-    <h2>Ranking {{ year }}</h2>
-    {% if years | length > 1 or years | length == 1 and years[0].year != year %}
-        <p class="text-muted">
-            {% for y in years %}
-                {% if y.year != year %}
-                    <a href="{{ path('ColectaActivitiesYearRank',{year:y.year}) }}" class="">{{ y.year }}</a> 
-                {% else %}
-                    {{ y.year }}
-                {% endif %}
-                
-                {% if not loop.last %} | {% endif %}
-            {% endfor %}
-        </p>
-    {% endif %}
-    
-    <div class="monocontent">
-        <table class="rank table table-condensed table-hover">
-        <thead><tr><th style="width: 180px;">Nombre</th><th>Puntos</th></thead>
-        {% set maxpoints = points[users[0].id] %}
-        {% for user in users %}
-            <tr>
-                <td>{{ user.name }}</td>
-                <td>{{ points[user.id] | number_format(0) }} p</td>
-            </tr>
-        {% endfor %}
-        </table>
-    </div>
-{% endblock%}
+Nombre,Puntos
+{% for user in users %}
+{{ user.name }}, {{ points[user.id] | number_format(0) }}        
+{% endfor %}

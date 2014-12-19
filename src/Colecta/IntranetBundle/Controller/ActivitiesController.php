@@ -274,6 +274,16 @@ class ActivitiesController extends Controller
         $stmt->execute();  
         $years = $stmt->fetchAll();
         
-        return $this->render('ColectaIntranetBundle:Activities:turyrank.html.twig', array('users'=>$users, 'points'=>$points, 'kms'=>$kms, 'year'=>$year, 'years'=>$years));
+        $response = $this->render('ColectaIntranetBundle:Activities:turyrank.html.twig', array('users'=>$users, 'points'=>$points, 'kms'=>$kms, 'year'=>$year, 'years'=>$years)); 
+    
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename=export_'.$year.'.csv');
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+        
+        return $response; 
     }
 }
