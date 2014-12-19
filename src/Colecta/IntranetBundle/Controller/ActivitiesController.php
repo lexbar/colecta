@@ -277,6 +277,7 @@ class ActivitiesController extends Controller
         $response = $this->render('ColectaIntranetBundle:Activities:turyrank.html.twig', array('users'=>$users, 'points'=>$points, 'kms'=>$kms, 'year'=>$year, 'years'=>$years)); 
     
         $response->setStatusCode(200);
+        $response->setCharset('UTF-8');
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'Submissions Export');
         $response->headers->set('Content-Disposition', 'attachment; filename=export_'.$year.'.csv');

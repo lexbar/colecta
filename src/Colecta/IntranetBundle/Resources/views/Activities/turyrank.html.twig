@@ -1,4 +1,4 @@
 Nombre,Puntos
 {% for user in users %}
-{{ user.name }}, {{ points[user.id] | number_format(0) }}        
+{{ user.name }}, {{ points[user.id] }}        
 {% endfor %}
