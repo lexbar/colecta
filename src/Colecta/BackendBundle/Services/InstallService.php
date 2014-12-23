@@ -3,6 +3,9 @@
 namespace Colecta\BackendBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use Colecta\UserBundle\Entity\User;
+use Colecta\UserBundle\Entity\UserProfile;
+use Colecta\UserBundle\Entity\Role;
 
 class InstallService
 {    
@@ -52,5 +55,31 @@ class InstallService
         
         
         return true;
+    }
+    
+    public function createAdmin($email, $salt)
+    {
+        $em = $this->em;
+        
+        $admin = new User();
+        
+        $admin->setName('Admin');
+        $admin->setMail($email);
+        
+        $role = $em->getRepository('ColectaUserBundle:Role')->findOneByName('ROLE_ADMIN');
+        $admin->setRole($role);
+        
+        $admin->setPass('');
+        $admin->setAvatar('');
+        $admin->setRegistered(new \DateTime('now'));
+        $admin->setLastAccess(new \DateTime('now'));
+        
+        $admin->setSalt($salt);
+        
+        
+        $em->persist($admin);
+        $em->flush();
+        
+        return $admin->getId();
     }
 }
