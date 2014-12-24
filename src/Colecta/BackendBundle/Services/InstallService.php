@@ -57,13 +57,13 @@ class InstallService
         return true;
     }
     
-    public function createAdmin($email, $salt)
+    public function createAdmin($email, $salt, $name = 'Admin')
     {
         $em = $this->em;
         
         $admin = new User();
         
-        $admin->setName('Admin');
+        $admin->setName($name);
         $admin->setMail($email);
         
         $role = $em->getRepository('ColectaUserBundle:Role')->findOneByName('ROLE_ADMIN');

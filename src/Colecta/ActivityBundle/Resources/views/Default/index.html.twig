@@ -14,8 +14,7 @@
         {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
     {% else %}
         <div class="monocontent text-center">
-            <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-4x"></i>
-            <p class="lead">Las rutas y los lugares que se añadan aparecerán aquí.</p>
+            <h3><i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Las rutas y los lugares que se añadan aparecerán aquí.</h3>
         </div>
     {% endfor %}
     
