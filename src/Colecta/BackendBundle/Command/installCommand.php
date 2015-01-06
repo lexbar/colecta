@@ -51,7 +51,7 @@ class InstallCommand extends ContainerAwareCommand
                 
                 
                 /* SEND MAIL NOTIFICATION */
-                
+                /*
                 $mailer = $this->getContainer()->get('mailer');
                 
                 //Get the mail address the message is sent from
@@ -72,7 +72,7 @@ class InstallCommand extends ContainerAwareCommand
         	        ->setTo($admin_mail)
         	        //->addPart($this->renderView('::foo.txt.twig', array(), 'text/plain')
         	        ->setBody($welcomeText);
-        	    $mailer->send($message);
+        	    $mailer->send($message);*/
             }
             
             $output->writeln('DONE');
