@@ -7,7 +7,7 @@
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'settings' } %}
     
     <div class="monocontent tabs">
-        <form action="{{ path('ColectaBackendSettingsIndex') }}" method="post" class="form-horizontal">
+        <form action="{{ path('ColectaBackendSettingsIndex') }}" method="post" class="form-horizontal" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="web_title" class="col-sm-4 control-label">
                     <strong>Título de la web:</strong>
@@ -56,6 +56,26 @@
             </div>
             
             <div class="form-group">
+                <label for="web_logo" class="col-sm-4 control-label">
+                    <strong>Logo:</strong>
+                </label>
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-md-6"><input type="text" value="{{ web_parameters.twig.globals.web_logo }}" class="form-control" id="web_logo" name="web_logo" placeholder="Dirección web de la imagen..."></div>
+                        <div class="col-md-6"><div style="position:relative;"><input style="position: relative; z-index: 2; font-size: 25px; -moz-opacity:0;filter:alpha(opacity: 0);opacity: 0;" type="file" id="web_logo_upload" name="web_logo_upload"></input><div style="position:absolute;top:0;left:0;width:100%;z-index:1;"><button id="web_logo_upload_button" class="btn btn-default btn-block"><i class="fa fa-upload"></i> Subir archivo</button></div></div></div>
+                    </div>
+                    {% if web_parameters.twig.globals.web_logo %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-12"><img src="{{ web_parameters.twig.globals.web_logo }}"></div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 </div>
@@ -64,3 +84,16 @@
     </div>
         
 {% endblock%}
+
+{% block javascripts %}
+<script> 
+$('#web_logo_upload').change(FileChange);
+
+function FileChange() {
+    if(this.files) {
+        $('#web_logo_upload_button').addClass('btn-success').removeClass('btn-default').html('<i class="fa fa-refresh"></i> Archivo seleccionado');
+        $('#web_logo').val('.../' + this.files[0].name);
+    }
+}
+</script>
+{% endblock %}

@@ -7,7 +7,7 @@
     <div class="container" id="header">
         <div class="navbar-header">
             <a class="navbar-brand" href="/">
-                {#<img alt="{{ web_title }}" src="/logo.png" width="24" height="24">#}
+                {% if web_logo %} <img alt="{{ web_title }}" src="{{ web_logo }}">{% endif %}
                 <span>{{ web_title }}</span>
             </a>
         </div>

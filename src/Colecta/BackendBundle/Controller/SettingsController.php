@@ -8,6 +8,7 @@ use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Exception\DumpException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SettingsController extends Controller
 {
@@ -43,6 +44,66 @@ class SettingsController extends Controller
         if ($this->get('request')->getMethod() == 'POST') 
         {   
             $request = $this->get('request')->request;
+            
+            /* WEB LOGO UPLOAD */
+            
+            /* LOAD UPLOADEDFILE RESOURCE IF THERE IS A FILE */
+            /*if(is_array($_FILES['web_logo_upload']['tmp_name']))
+            {
+                $logofile = new UploadedFile($_FILES['web_logo_upload']['tmp_name'][0],$_FILES['web_logo_upload']['name'][0],$_FILES['web_logo_upload']['type'][0],$_FILES['web_logo_upload']['size'][0],$_FILES['web_logo_upload']['error'][0]);
+            }
+            elseif()
+            {
+                $logofile = new UploadedFile($_FILES['web_logo_upload']['tmp_name'],$_FILES['web_logo_upload']['name'],$_FILES['web_logo_upload']['type'],$_FILES['web_logo_upload']['size'],$_FILES['web_logo_upload']['error']);
+            } 
+            else
+            {
+                $logofile = false;
+            }*/
+            
+            /* IF WE HAVE UPLOADED FILE... */
+            if($_FILES['web_logo_upload']['tmp_name'])
+            {
+                $filename = __DIR__ . '/../../../../web/uploads/files/web_logo';
+                $width = 100;
+                $height = 24;
+                
+                $image = new \Imagick($_FILES['web_logo_upload']['tmp_name']); //load file to Imagick class to resize it
+            
+                $format = $image->getImageFormat();
+                if ($format == 'GIF') 
+                {
+                    //$image = $image->coalesceImages();
+    
+                    foreach ($image as $frame) 
+                    {
+                        $frame->scaleImage($width, $height, true);
+                    }
+                    
+                    //$image = $image->deconstructImages(); 
+                    $image->writeImages($filename, true); 
+                    $image = file_get_contents($filename);
+                }
+                else
+                {
+                    $image->setImageResolution(72,72); 
+                    $image->thumbnailImage($width, $height, true);
+                    $image->setImagePage(0, 0, 0, 0);
+                    $image->normalizeImage();
+                    //fill out the cache
+                    file_put_contents($filename, $image);
+                }
+                
+                if(file_exists($filename))
+                {
+                    $web_parameters['twig']['globals']['web_logo'] = '/uploads/files/web_logo';
+                }
+            }
+            else
+            {
+                $web_parameters['twig']['globals']['web_logo'] =$request->get('web_logo');
+            }
+            /* END WEB LOGO UPLOAD */
             
             $web_parameters['twig']['globals']['web_title'] = $request->get('web_title');
             $web_parameters['twig']['globals']['web_description'] = $request->get('web_description');
@@ -88,6 +149,7 @@ class SettingsController extends Controller
                                 'allowed_tags' => '<br><img>#<span><a><ol><ul><li>',
                                 'rich_text_editor' => '0',
                                 'summary_max_length' => '1200',
+                                'web_logo'=>'',
                                 'web_header_img' => 
                                     array(
                                     ),
@@ -99,7 +161,8 @@ class SettingsController extends Controller
                                         'Activity/Place' => 'map-marker',
                                         'Files/File' => 'folder-open',
                                         'Files/Folder' => 'folder-open',
-                                    )
+                                    ),
+                                'adsense' => ''
                             )
                     )
         );

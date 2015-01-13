@@ -108,3 +108,8 @@
     <hr>
     {{ render(controller('ColectaActivityBundle:Event:calendar', {'date':'today'})) }}
 {% endif %}
+
+{% if adsense %}
+    <hr>
+    {{ adsense | raw }}
+{% endif %}
