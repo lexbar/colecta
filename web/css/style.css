@@ -68,6 +68,7 @@ h2, h4 {
     font-weight: bold;
     font-size: 22px;
     height: auto;
+    padding: 12px;
 }
 .navbar-default a.navbar-brand * {
     vertical-align: middle;
