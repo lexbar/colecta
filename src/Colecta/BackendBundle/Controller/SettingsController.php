@@ -14,10 +14,23 @@ class SettingsController extends Controller
 {
     public function indexAction()
     {
+        // SECURITY 
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigSettings())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        //END SECURITY
+        
+        // Parameters file location
         $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
         
+        // Get the parser to manage settings 
         $yaml = new Parser();
         
+        // If config file does not exist, we create a new one with default parameters
         if(!file_exists($config_location))
         {
             $this->get('session')->getFlashBag()->add('error', 'No existe el archivo de configuración. Se creará uno nuevo.');
@@ -46,25 +59,13 @@ class SettingsController extends Controller
             $request = $this->get('request')->request;
             
             /* WEB LOGO UPLOAD */
-            
-            /* LOAD UPLOADEDFILE RESOURCE IF THERE IS A FILE */
-            /*if(is_array($_FILES['web_logo_upload']['tmp_name']))
-            {
-                $logofile = new UploadedFile($_FILES['web_logo_upload']['tmp_name'][0],$_FILES['web_logo_upload']['name'][0],$_FILES['web_logo_upload']['type'][0],$_FILES['web_logo_upload']['size'][0],$_FILES['web_logo_upload']['error'][0]);
-            }
-            elseif()
-            {
-                $logofile = new UploadedFile($_FILES['web_logo_upload']['tmp_name'],$_FILES['web_logo_upload']['name'],$_FILES['web_logo_upload']['type'],$_FILES['web_logo_upload']['size'],$_FILES['web_logo_upload']['error']);
-            } 
-            else
-            {
-                $logofile = false;
-            }*/
-            
-            /* IF WE HAVE UPLOADED FILE... */
             if($_FILES['web_logo_upload']['tmp_name'])
             {
-                $filename = __DIR__ . '/../../../../web/uploads/files/web_logo';
+                $filename = 'web_logo';
+                $relpath = '/uploads/files/' . $filename;
+                $abspath = __DIR__ . '/../../../../web/uploads/files/' . $filename;
+                
+                
                 $width = 200;
                 $height = 50;
                 
@@ -81,8 +82,8 @@ class SettingsController extends Controller
                     }
                     
                     //$image = $image->deconstructImages(); 
-                    $image->writeImages($filename, true); 
-                    $image = file_get_contents($filename);
+                    $image->writeImages($abspath, true); 
+                    $image = file_get_contents($abspath);
                 }
                 else
                 {
@@ -91,19 +92,87 @@ class SettingsController extends Controller
                     $image->setImagePage(0, 0, 0, 0);
                     $image->normalizeImage();
                     //fill out the cache
-                    file_put_contents($filename, $image);
+                    file_put_contents($abspath, $image);
                 }
                 
-                if(file_exists($filename))
+                if(file_exists($abspath))
                 {
-                    $web_parameters['twig']['globals']['web_logo'] = '/uploads/files/web_logo';
+                    $web_parameters['twig']['globals']['web_logo'] = $relpath;
                 }
             }
             else
             {
-                $web_parameters['twig']['globals']['web_logo'] =$request->get('web_logo');
+                $web_parameters['twig']['globals']['web_logo'] = $request->get('web_logo');
             }
             /* END WEB LOGO UPLOAD */
+            
+            /* HEADER IMAGES REMOVE */
+            foreach($web_parameters['twig']['globals']['web_header_img'] as $k => $v)
+            {
+                if(checkbox($request->get('web_header_img_' . $k)))
+                {
+                    // if located on server...
+                    if(!preg_match('#http#i', $v) && file_exists(__DIR__ . '/../../../../web' . $v))
+                    {
+                        unlink(__DIR__ . '/../../../../web' . $v);
+                    }
+                    
+                    //Remove from array
+                    unset($web_parameters['twig']['globals']['web_header_img'][$k]);
+                }
+            }
+            
+            //Reset the indexes
+            $web_parameters['twig']['globals']['web_header_img'] = array_values($web_parameters['twig']['globals']['web_header_img']);
+            
+            /* END HEADER IMAGES REMOVE */
+            
+            /* HEADER IMAGES UPLOAD */
+            if($_FILES['web_header_img_upload']['tmp_name'])
+            {
+                $filename = 'web_header_img_'.$user->getId() .'_'.time();
+                $relpath = '/uploads/files/' . $filename;
+                $abspath = __DIR__ . '/../../../../web/uploads/files/' . $filename;
+                
+                $width = 1200;
+                $height = 500;
+                
+                $image = new \Imagick($_FILES['web_header_img_upload']['tmp_name']); //load file to Imagick class to resize it
+            
+                $format = $image->getImageFormat();
+                if ($format == 'GIF') 
+                {
+                    //$image = $image->coalesceImages();
+    
+                    foreach ($image as $frame) 
+                    {
+                        $frame->scaleImage($width, $height, true);
+                    }
+                    
+                    //$image = $image->deconstructImages(); 
+                    $image->writeImages($abspath, true); 
+                    $image = file_get_contents($abspath);
+                }
+                else
+                {
+                    $image->setImageResolution(72,72); 
+                    $image->thumbnailImage($width, $height, true);
+                    $image->setImagePage(0, 0, 0, 0);
+                    $image->normalizeImage();
+                    //fill out the cache
+                    file_put_contents($abspath, $image);
+                }
+                
+                if(file_exists($abspath))
+                {
+                    array_push($web_parameters['twig']['globals']['web_header_img'], $relpath);
+                }
+            }
+            elseif($request->get('web_header_img') != '')
+            {
+                array_push($web_parameters['twig']['globals']['web_header_img'], $request->get('web_header_img'));
+            }
+            /* END HEADER IMAGES UPLOAD */
             
             $web_parameters['twig']['globals']['web_title'] = $request->get('web_title');
             $web_parameters['twig']['globals']['web_description'] = $request->get('web_description');
@@ -167,4 +236,9 @@ class SettingsController extends Controller
                     )
         );
     } 
+}
+
+function checkbox($value) //convert the value of a checkbox (on/off) to a boolean value (true/false)
+{
+    return $value == 'on' ? true : false;
 }
