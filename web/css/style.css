@@ -68,7 +68,6 @@ h2, h4 {
     font-weight: bold;
     font-size: 22px;
     height: auto;
-    padding: 12px;
 }
 .navbar-default a.navbar-brand * {
     vertical-align: middle;
@@ -454,7 +453,6 @@ h2, h4 {
     }
     .navbar-default a.navbar-brand {
         margin-left: 15px;
-        padding: 16px;
         padding-right: 60px;
         font-size: 20px;
     }
