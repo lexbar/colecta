@@ -457,6 +457,10 @@ h2, h4 {
         padding: 16px;
         font-size: 20px;
     }
+    .web_logo {
+        height: 24px;
+        max-width: 35px;
+    }
     .navbar-form {
         border-width: 0;
         margin: 0;
