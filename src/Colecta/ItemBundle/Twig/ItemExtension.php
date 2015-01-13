@@ -132,7 +132,7 @@ class ItemExtension extends \Twig_Extension
         return $return;
     }
     
-    public function summarizeFilter($text, $limit = 200)
+    public function summarizeFilter($text, $limit = 300)
     {
         return summarize($text, $limit);
     }
