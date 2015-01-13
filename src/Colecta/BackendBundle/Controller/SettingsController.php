@@ -65,8 +65,8 @@ class SettingsController extends Controller
             if($_FILES['web_logo_upload']['tmp_name'])
             {
                 $filename = __DIR__ . '/../../../../web/uploads/files/web_logo';
-                $width = 100;
-                $height = 24;
+                $width = 200;
+                $height = 50;
                 
                 $image = new \Imagick($_FILES['web_logo_upload']['tmp_name']); //load file to Imagick class to resize it
             
