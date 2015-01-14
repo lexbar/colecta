@@ -1,0 +1,13 @@
+{% extends '::backend.html.twig' %}
+
+{% block article %}
+
+    <h2>Páginas</h2>
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'page' } %}
+    
+    <div class="monocontent tabs">
+        <p class="lead">En construcción...</p>
+    </div>
+        
+{% endblock%}

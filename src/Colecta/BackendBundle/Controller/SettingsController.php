@@ -109,7 +109,7 @@ class SettingsController extends Controller
             /* HEADER IMAGES REMOVE */
             foreach($web_parameters['twig']['globals']['web_header_img'] as $k => $v)
             {
-                if(checkbox($request->get('web_header_img_' . $k)))
+                if($request->get('web_header_img_' . $k) == 'on')
                 {
                     // if located on server...
                     if(!preg_match('#http#i', $v) && file_exists(__DIR__ . '/../../../../web' . $v))
@@ -236,9 +236,4 @@ class SettingsController extends Controller
                     )
         );
     } 
-}
-
-function checkbox($value) //convert the value of a checkbox (on/off) to a boolean value (true/false)
-{
-    return $value == 'on' ? true : false;
 }

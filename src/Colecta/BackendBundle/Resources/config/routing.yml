@@ -34,6 +34,10 @@ ColectaBackendRoleEdit:
     pattern:  /back/roles/{role_id}/
     defaults: { _controller: ColectaBackendBundle:User:roleEdit } 
     
+ColectaBackendPageIndex:
+    pattern:  /back/page/
+    defaults: { _controller: ColectaBackendBundle:Page:index } 
+    
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/
     defaults: { _controller: ColectaBackendBundle:Lottery:index }
