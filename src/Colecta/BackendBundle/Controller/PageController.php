@@ -92,14 +92,31 @@ class PageController extends Controller
             }
             
             $page->setText($request->get('pageText'));
-            $page->setIcon($request->get('pageIcon'));
+            
+            if($request->get('pageIcon'))
+            {
+                $page->setIcon($request->get('pageIcon'));
+            }
+            else
+            {
+                $page->setIcon('');
+            }
             
             $page->setDraft(0); // TODO: MANAGE DRAFTS !!
             
             $page->setAuthor($user);
             $page->setSidebarShow($request->get('pageSidebarShow') == 'on' ? true : false);
             
-            $page->setSidebarOrder(0); //TODO: place last position by default
+            //Sidebar order
+            $pagesSidebar = $em->getRepository('ColectaSiteBundle:Page')->findBy(array('sidebarShow'=>true),array('sidebarOrder'=>'DESC'));
+            if(count($pagesSidebar) > 0)
+            {
+                $page->setSidebarOrder(intval($pagesSidebar[0]->getSidebarOrder()) + 1);
+            }
+            else
+            {  
+                $page->setSidebarOrder(1);
+            }
             
             //Set target Roles
             $target_roles = array(); //is a colection of ids for Role entities
@@ -220,16 +237,48 @@ class PageController extends Controller
             }
             
             $page->setText($request->get('pageText'));
-            $page->setIcon($request->get('pageIcon'));
+            
+            if($request->get('pageIcon'))
+            {
+                $page->setIcon($request->get('pageIcon'));
+            }
+            else
+            {
+                $page->setIcon('');
+            }
             
             $page->setDraft(0); // TODO: MANAGE DRAFTS !!
             
             $page->setAuthor($user);
-            $page->setSidebarShow($request->get('pageSidebarShow') == 'on' ? true : false);
             
-            $page->setSidebarOrder(0); //TODO: place last position by default
             
-            //Set target Roles
+            //Sidebar order
+            $sidebarShow = $request->get('pageSidebarShow') == 'on' ? true : false;
+            
+            if($sidebarShow)
+            {
+                if(!$page->getSidebarShow()) //if it wasn't for sidebar but now it is...
+                {
+                    $pagesSidebar = $em->getRepository('ColectaSiteBundle:Page')->findBy(array('sidebarShow'=>true),array('sidebarOrder'=>'DESC'));
+                    
+                    if(count($pagesSidebar) > 0)
+                    {
+                        $page->setSidebarOrder(intval($pagesSidebar[0]->getSidebarOrder()) + 1);
+                    }
+                    else
+                    {  
+                        $page->setSidebarOrder(1);
+                    }
+                    
+                    $page->setSidebarShow(1);
+                }
+            }
+            else
+            {
+                $page->setSidebarShow(0);
+            }
+            
+            // TARGET ROLES
             $target_roles = array(); //is a colection of ids for Role entities
             
             //Anonnymous role
@@ -311,9 +360,108 @@ class PageController extends Controller
         }
         else
         {
-           $em->remove($page); 
+            $em->remove($page); 
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Página eliminada correctamente'); 
+        }
+        
+        return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
+    }
+    
+    public function moveUpAction($page_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigPages())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        // Page handler
+        $page = $em->getRepository('ColectaSiteBundle:Page')->findOneById($page_id);
+        
+        if(! $page)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'La página no existe.');
+        }
+        elseif(!$page->getSidebarShow())
+        {
+            $this->get('session')->getFlashBag()->add('error', 'La página no es visible en la barra de navegación.');
+        }
+        else
+        {
+            $pagesSidebar = $em->createQuery(
+                'SELECT p
+                FROM ColectaSiteBundle:Page p
+                WHERE p.sidebarShow = 1 AND p.sidebarOrder <= :order AND p.id != :id
+                ORDER BY p.sidebarOrder DESC'
+            )->setParameter('id', $page->getId())->setParameter('order', $page->getSidebarOrder())->setMaxResults(1)->getResult();
+            
+            if(count($pagesSidebar) > 0)
+            {
+                //Swap orders
+                $swapPage = $pagesSidebar[0];
+                
+                $page->setSidebarOrder($swapPage->getSidebarOrder());
+                $swapPage->setSidebarOrder($page->getSidebarOrder() + 1);
+                
+                
+                $em->persist($page);
+                $em->persist($swapPage);
+                $em->flush();
+                
+                $this->get('session')->getFlashBag()->add('success', 'Orden de página modificado correctamente.'); 
+            }
+        }
+        
+        return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
+    }
+    
+    public function moveDownAction($page_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($user == 'anon.' || !$user->getRole()->getSiteConfigPages())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        // Page handler
+        $page = $em->getRepository('ColectaSiteBundle:Page')->findOneById($page_id);
+        
+        if(! $page)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'La página no existe.');
+        }
+        elseif(!$page->getSidebarShow())
+        {
+            $this->get('session')->getFlashBag()->add('error', 'La página no es visible en la barra de navegación.');
+        }
+        else
+        {
+            $pagesSidebar = $em->createQuery(
+                'SELECT p
+                FROM ColectaSiteBundle:Page p
+                WHERE p.sidebarShow = 1 AND p.sidebarOrder >= :order AND p.id != :id
+                ORDER BY p.sidebarOrder ASC'
+            )->setParameter('id', $page->getId())->setParameter('order', $page->getSidebarOrder())->setMaxResults(1)->getResult();
+            
+            if(count($pagesSidebar) > 0)
+            {
+                //Swap orders
+                $swapPage = $pagesSidebar[0];
+                
+                $page->setSidebarOrder($swapPage->getSidebarOrder());
+                $swapPage->setSidebarOrder($page->getSidebarOrder() - 1);
+                
+                $em->persist($page);
+                $em->persist($swapPage);
+                $em->flush();
+                
+                $this->get('session')->getFlashBag()->add('success', 'Orden de página modificado correctamente.'); 
+            }
         }
         
         return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));

@@ -46,6 +46,12 @@ ColectaBackendPage:
 ColectaBackendPageDelete:
     pattern:  /back/page/{page_id}/delete/
     defaults: { _controller: ColectaBackendBundle:Page:delete } 
+ColectaBackendPageMoveUp:
+    pattern:  /back/page/{page_id}/up/
+    defaults: { _controller: ColectaBackendBundle:Page:moveUp } 
+ColectaBackendPageMoveDown:
+    pattern:  /back/page/{page_id}/down/
+    defaults: { _controller: ColectaBackendBundle:Page:moveDown } 
     
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/
