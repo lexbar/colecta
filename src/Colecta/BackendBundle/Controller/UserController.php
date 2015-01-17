@@ -192,15 +192,24 @@ class UserController extends Controller
             
             if($request->get('partnerId'))
             {
-                $partnerIdUser = $em->getRepository('ColectaUserBundle:UserProfile')->findOneByPartnerId($request->get('partnerId'));
-                
-                if($partnerIdUser && $partnerIdUser->getUser() != $user)
+                // Check format
+                if(!is_numeric($request->get('partnerId')))
                 {
-                    $this->get('session')->getFlashBag()->add('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
+                    $this->get('session')->getFlashBag()->add('error', 'El número de socio no se ha establecido porque tiene que ser numérico.');
                 }
                 else
                 {
-                    $profile->setPartnerId($request->get('partnerId'));
+                    // Check for duplicity
+                    $partnerIdUser = $em->getRepository('ColectaUserBundle:UserProfile')->findOneByPartnerId($request->get('partnerId'));
+                
+                    if($partnerIdUser && $partnerIdUser->getUser() != $user)
+                    {
+                        $this->get('session')->getFlashBag()->add('error', 'El número de socio no se ha establecido porque pertenece a '.$partnerIdUser->getUser()->getName());
+                    }
+                    else
+                    {
+                        $profile->setPartnerId($request->get('partnerId'));
+                    }
                 }
             }
             else

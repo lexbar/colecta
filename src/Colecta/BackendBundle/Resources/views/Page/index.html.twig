@@ -1,13 +1,25 @@
 {% extends '::backend.html.twig' %}
 
 {% block article %}
-
+    
     <h2>Páginas</h2>
-    
+
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'page' } %}
-    
-    <div class="monocontent tabs">
-        <p class="lead">En construcción...</p>
-    </div>
         
+    <div class="monocontent tabs">
+        <a href="{{ path('ColectaBackendNewPage') }}" class="btn btn-primary">Crear Nueva Página <i class="fa fa-plus"></i></a> 
+        <hr>
+        
+        <table class="table table-hover">
+        <thead><tr><th>Nombre</th><th>Estado</th><th>Navegación</th><th>Acciones</th></tr></thead>
+        {% for page in pages %}
+            <tr>
+                <td><a href="{{ path('ColectaPage', {slug:page.slug}) }}">{% if page.icon %}<i class="fa fa-{{ page.icon }} fa-fw"></i> {% endif %}{{ page.name }}</a><br>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': page.date } only %}</td>
+                <td>{% if page.draft %}Pendiente{% else %}Publicado{% endif %}</td>
+                <td>{% if page.sidebarShow %}{{ page.sidebarOrder }}{% else %} - {% endif %}</td>
+                <td><a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class="text-success">editar</a> / <a href="{{ path('ColectaBackendPageDelete', {'page_id':page.id}) }}" class="text-danger" onClick="confirm('¿Seguro que deseas eliminar la página?\n{{ page.name }}')">eliminar</a></td>
+            </tr> 
+        {% endfor %}
+        </table>
+    </div>
 {% endblock%}

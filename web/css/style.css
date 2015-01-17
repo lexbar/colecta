@@ -418,6 +418,16 @@ h2, h4 {
     margin-left: 10px;
 }
 
+.contactFormField {
+    padding: 5px 8px 1px;;
+    border-left: 3px solid #EEE;
+    background-color: #FAFAFA;
+    margin-bottom: 10px;
+}
+.contactFormField span.pull-right {
+    cursor: pointer;
+}
+
 .footer {
     border-top: 1px solid #CCC;
     color: #777;

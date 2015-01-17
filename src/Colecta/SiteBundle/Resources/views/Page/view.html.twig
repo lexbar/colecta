@@ -36,11 +36,17 @@
                         <label class="col-sm-3 control-label" for="Contact{{ key }}">{{ field['title'] }}</label>
                         <div class="col-sm-9">
                             {% if field['type'] == 'textarea' %}
-                                <textarea class="form-control" id="Contact{{ key }}" name="field{{ key }}" rows="5">{{ contactRequest.data[key] | default( field['default'] | default('')) }}</textarea>
+                                <textarea class="form-control" id="Contact{{ key }}" name="field{{ key }}" rows="5">{{ contactRequest.data[key] | default( field['value'] | default('')) }}</textarea>
                             {% elseif field['type'] == 'checkbox' %}
-                                <input type="checkbox" id="Contact{{ key }}" name="field{{ key }}" {% if contactRequest.data[key] | default(field['default'] | default(false)) %}checked{% endif %}>
+                                <div class="checkbox"><input type="checkbox" id="Contact{{ key }}" name="field{{ key }}" {% if contactRequest.data[key] | default(field['value'] | default(false)) %}checked{% endif %}></div>
+                            {% elseif field['type'] == 'list' %}
+                                <select class="form-control"  id="Contact{{ key }}" name="field{{ key }}">
+                                {% for option in field['value'] | split(',') %}
+                                    <option value="{{ option }}"{% if contactRequest.data[key] is defined and contactRequest.data[key] == option %} selected="selected"{% endif %}>{{ option }}</option>
+                                {% endfor %}
+                                </select>
                             {% else %}
-                                <input type="text" class="form-control" id="Contact{{ key }}" name="field{{ key }}" value="{{ contactRequest.data[key] | default( field['default'] | default('')) }}">
+                                <input type="text" class="form-control" id="Contact{{ key }}" name="field{{ key }}" value="{{ contactRequest.data[key] | default( field['value'] | default('')) }}">
                             {% endif %}
                             
                             {% if field['help'] is defined %}

@@ -37,6 +37,15 @@ ColectaBackendRoleEdit:
 ColectaBackendPageIndex:
     pattern:  /back/page/
     defaults: { _controller: ColectaBackendBundle:Page:index } 
+ColectaBackendNewPage:
+    pattern:  /back/page/new/
+    defaults: { _controller: ColectaBackendBundle:Page:newPage } 
+ColectaBackendPage:
+    pattern:  /back/page/{page_id}
+    defaults: { _controller: ColectaBackendBundle:Page:edit } 
+ColectaBackendPageDelete:
+    pattern:  /back/page/{page_id}/delete/
+    defaults: { _controller: ColectaBackendBundle:Page:delete } 
     
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/

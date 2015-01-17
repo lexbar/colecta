@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Page
 {
@@ -420,33 +421,58 @@ class Page
         return $this->targetRoles;
     }
     
+    public function generateSlug($string = false, $separator = '-') {
+        
+        if(!$string) 
+        {
+            $string = $this->getName();
+        }
+        
+        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $string); 
+        $slug = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $slug); 
+        $slug = strtolower(trim($slug, $separator)); 
+        $slug = preg_replace("/[\/_|+ -]+/", $separator, $slug);
+        
+        return $slug;
+    }
+    
     public function validContactData()
     {
+        // Validator for contactData field
+        
         /* 
             required structure:
-            array('fields'=>array(array('type'=>(string text|textarea|checkbox|list),'title'=>(string title) [, 'default'=>(string defaultValue)] [, 'help'=>(string helpText)]), ...) [, 'expiration'=>(string expirationDate) [, 'expirationText'=>(string expirationText) ] ]);
+            array('fields'=>array(array('type'=>(string text|textarea|checkbox|list),'title'=>(string title) [, 'value'=>(string defaultValue)] [, 'help'=>(string helpText)]), ... ) [, 'expiration'=>(string expirationDate) [, 'expirationText'=>(string expirationText) ] ]);
         */
         
         $cd = $this->getContactData();
         
-        if( !is_array($cd) )
+        if( !is_array($cd) ) //Must be an array
         {
             return false;
         }
         
-        if( !isset($cd['fields']) or count($cd['fields']) < 1 )
+        if( !isset($cd['fields']) or count($cd['fields']) < 1 ) //must have fields
         {
             return false;
         }
         
         foreach($cd['fields'] as $field)
         {
-            if( !isset($field['type']) or !in_array($field['type'], array('text', 'textarea', 'checkbox', 'list')))
+            if( !isset($field['type']) or !in_array($field['type'], array('text', 'textarea', 'checkbox', 'list'))) // each field must be of a valid type
             {
                 return false;
             }
         }
         
         return true;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->setDate(new \DateTime('now'));
     }
 }

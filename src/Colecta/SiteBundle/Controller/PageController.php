@@ -13,6 +13,11 @@ class PageController extends Controller
         
         $page = $em->getRepository('ColectaSiteBundle:Page')->findOneBySlug($slug);
         
+        if(! $page)
+        {
+             throw $this->createNotFoundException('No existe la página que buscas');
+        }
+        
         $user = $this->get('security.context')->getToken()->getUser();
         
         /* Get the user role id, if annonymous role id = 0 */
@@ -105,7 +110,7 @@ class PageController extends Controller
         }
         
         //Get all the pages that are not draftsand are ment to be on the sidebar
-        $pages = $em->getRepository('ColectaSiteBundle:Page')->findBy(array('draft'=>0, 'sidebarShow'=>1, 'context'=>'extranet'), array('sidebarOrder'=>'ASC'));
+        $pages = $em->getRepository('ColectaSiteBundle:Page')->findBy(array('draft'=>0, 'sidebarShow'=>1), array('sidebarOrder'=>'ASC'));
         
         if($user == 'anon.')
         {

@@ -21,7 +21,7 @@
             <tr>
                 <td><span class="label label-{% if not role.siteAccess %}danger{% elseif not role.contribute %}warning{% elseif role.siteConfig %}primary{% else %}default{% endif %}">{{ role.description }}</span></td>
                 <td>{{ amount }}</td>
-                <td>{% if role.name == 'ROLE_CUSTOM' %}<a class="btn btn-xs btn-success" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">Editar <i class="fa fa-pencil"></i></a>{% else %}<a class="btn btn-xs btn-success" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">Clonar <i class="fa fa-plus"></i></a>{% endif %} {% if role.name == 'ROLE_CUSTOM' and amount == 0 %}<a class="btn btn-xs btn-danger" href="{{ path('ColectaBackendRoleDelete',{role_id: role.id}) }}">Eliminar <i class="fa fa-trash"></i></a>{% endif %}</td>
+                <td>{% if role.name == 'ROLE_CUSTOM' %}<a class="text-success" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">editar</a> / {% endif %}<a class="text-primary" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">clonar</a>{% if role.name == 'ROLE_CUSTOM' and amount == 0 %} / <a class="text-danger" href="{{ path('ColectaBackendRoleDelete',{role_id: role.id}) }}">Eliminar</a>{% endif %}</td>
             </tr> 
         {% endfor %}
         </table>
