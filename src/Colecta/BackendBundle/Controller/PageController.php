@@ -164,8 +164,6 @@ class PageController extends Controller
                 $page->setContactData(array());
             }
             
-            $page->setContext(''); //deprecated
-            
             if($page->getName())
             {
                 $em->persist($page); 
@@ -323,8 +321,6 @@ class PageController extends Controller
                 $page->setContact(false);
                 $page->setContactData(array());
             }
-            
-            $page->setContext(''); //deprecated
             
             if($page->getName())
             {

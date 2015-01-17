@@ -97,13 +97,6 @@ class Page
      * @ORM\Column(name="contactData", type="array")
      */
     protected $contactData;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="context", type="string", length=20)
-     */
-    protected $context; //extranet, intranet, backend
     
     /**
      * @var string
@@ -350,29 +343,6 @@ class Page
     public function getAuthor()
     {
         return $this->author;
-    }
-
-    /**
-     * Set context
-     *
-     * @param string $context
-     * @return Page
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
-    
-        return $this;
-    }
-
-    /**
-     * Get context
-     *
-     * @return string 
-     */
-    public function getContext()
-    {
-        return $this->context;
     }
 
     /**
