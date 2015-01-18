@@ -18,4 +18,6 @@ twig:
             Activity/Place: map-marker
             Files/File: folder-open
             Files/Folder: folder-open
+        #googleAnalyticsID: ''
+        #googleAnalyticsName: ''
         adsense: '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0259798523659720" data-ad-slot="9859843508" data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>'
