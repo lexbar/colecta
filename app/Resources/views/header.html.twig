@@ -95,8 +95,6 @@
 
 {% if web_header_img | length %}
 <div class="container">
-    <div class="row">
-        <div class="col-xs-12 hidden-xs headerimg" style="background-image: url( {{ random(web_header_img) }} );"></div>
-    </div>
+    <div class="col-xs-12 hidden-xs headerimg" style="background-image: url( {{ random(web_header_img) }} );"></div>
 </div>
 {% endif %}
