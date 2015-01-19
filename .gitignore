@@ -1,4 +1,5 @@
 /app/config/parameters.yml
+/app/config/web_parameters.yml
 /app/cache/*
 /app/logs/*
 #/web/apple-touch-icon*
