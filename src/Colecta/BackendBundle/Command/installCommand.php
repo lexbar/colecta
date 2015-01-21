@@ -17,6 +17,7 @@ class InstallCommand extends ContainerAwareCommand
             ->setDescription('Install Method for Colecta')
             ->addArgument('mail', InputArgument::OPTIONAL, 'Email for the administrator')
             ->addArgument('username', InputArgument::OPTIONAL, 'Username for the administrator')
+            ->addArgument('host', InputArgument::OPTIONAL, 'Host to configure the Router context')
             //->addOption('yell', null, InputOption::VALUE_NONE, 'If set, the task will yell in uppercase letters')
         ;
     }
@@ -24,12 +25,19 @@ class InstallCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $admin_mail = $input->getArgument('mail');
-        
         $admin_username = $input->getArgument('username');
+        $host = $input->getArgument('host');
         
         if(empty($admin_username))
         {
             $admin_username = 'Admin';
+        }
+        
+        if($host)
+        {
+            $context = $this->getContainer()->get('router')->getContext();
+            $context->setHost($host);
+            $context->setScheme('http');
         }
 
         /*if ($input->getOption('yell')) {
