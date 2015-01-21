@@ -18,12 +18,16 @@ class InstallCommand extends ContainerAwareCommand
             ->addArgument('mail', InputArgument::OPTIONAL, 'Email for the administrator')
             ->addArgument('username', InputArgument::OPTIONAL, 'Username for the administrator')
             ->addArgument('host', InputArgument::OPTIONAL, 'Host to configure the Router context')
-            //->addOption('yell', null, InputOption::VALUE_NONE, 'If set, the task will yell in uppercase letters')
+            ->addOption('update', null, InputOption::VALUE_NONE, 'If set, instead of installing it updates itself')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('update')) {
+            return $this->update($input, $output);
+        }
+        
         $admin_mail = $input->getArgument('mail');
         $admin_username = $input->getArgument('username');
         $host = $input->getArgument('host');
@@ -39,10 +43,6 @@ class InstallCommand extends ContainerAwareCommand
             $context->setHost($host);
             $context->setScheme('http');
         }
-
-        /*if ($input->getOption('yell')) {
-            $text = strtoupper($text);
-        }*/
         
         $install = $this->getContainer()->get('colecta.install');
         
@@ -89,5 +89,10 @@ class InstallCommand extends ContainerAwareCommand
         {
             $output->writeln('FAILURE');
         }
+    }
+    
+    public function update(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln('DONE');
     }
 }
