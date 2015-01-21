@@ -4,7 +4,7 @@ mkdir app/cache app/logs app/cache/prod app/cache/dev app/cache/prod/images app/
 
 chmod -R 775 app/cache/ app/logs/ web/uploads/ app/config/web_parameters.yml
 
-chown -R cibi:apache ./*
+chown -R apache:apache ./*
 
 cp app/config/parameters.yml.dist app/config/parameters.yml
 
