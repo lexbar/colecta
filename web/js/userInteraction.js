@@ -56,7 +56,7 @@ function typeChosen(type) { //Set the type of item chosen
             break;
             case 'Event': 
                 $('#itemSubmit').attr('action','/crear/actividad/');
-                $('.itemTypeEvent input').change(function(){ unsaved = true })
+                $('.itemTypeEvent input, .itemTypeEvent select').change(function(){ unsaved = true })
             break;
             case 'Place': 
                 $('#itemSubmit').attr('action','/crear/lugar/');
