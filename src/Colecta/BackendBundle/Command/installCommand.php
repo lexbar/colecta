@@ -71,7 +71,7 @@ class InstallCommand extends ContainerAwareCommand
                 $webTitle = $globals['web_title'];
                 
                 //Welcome Text
-                $welcomeText = str_replace(array('%N', '%L', '---web_title---'), array('Admin', $this->getContainer()->get('router')->generate('userResetPasswordCode', array('uid'=>$uid, 'code'=>$code), true), $webTitle), $this->getContainer()->getParameter('welcomeText'));
+                $welcomeText = str_replace(array('%N', '%L', '---web_title---'), array($admin_username, $this->getContainer()->get('router')->generate('userResetPasswordCode', array('uid'=>$uid, 'code'=>$code), true), $webTitle), $this->getContainer()->getParameter('welcomeText'));
                 
                 $message = \Swift_Message::newInstance();
                 //$logo = $message->embed(\Swift_Image::fromPath($this->get('kernel')->getRootDir().'/../web/logo.png'));
