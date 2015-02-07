@@ -1,5 +1,5 @@
 var itemSubmitType = 'Post';
-
+var unsaved = false;
 function typeChosen(type) { //Set the type of item chosen    
     /*$(window).bind('beforeunload', function(){
       return 'Seguro que quieres irte sin publicar?';
@@ -22,16 +22,23 @@ function typeChosen(type) { //Set the type of item chosen
     if(itemSubmitType == type) {
         itemSubmitType = 'Post';
         if(type != 'Post') {
-            $('#itemSubmit .type'+type).removeClass('btn-success').addClass('btn-default');
+            $('#itemSubmit .type'+type).removeClass('active');
             $('#itemSubmit .itemType'+type).addClass('hidden');
         }
         $('#itemSubmit').attr('action','/crear/texto/');
         return false;
     } else {
-        if(itemSubmitType != 'Post') {
-            $('#itemSubmit .type'+itemSubmitType).removeClass('btn-success').addClass('btn-default');
+        if(unsaved && !confirm('¿Seguro que quieres cambiar de tipo de publicación?\nSólo puedes publicar un tipo de contenido al mismo tiempo.'))
+        {
+            return false;
         }
-        $('#itemSubmit .type'+type).removeClass('btn-default').addClass('btn-success');
+        
+        unsaved = false;
+        
+        if(itemSubmitType != 'Post') {
+            $('#itemSubmit .type'+itemSubmitType).removeClass('active');
+        }
+        $('#itemSubmit .type'+type).addClass('active');
         
         $('.itemType'+itemSubmitType).addClass('hidden');
         $('.itemType'+type).removeClass('hidden');
@@ -49,6 +56,7 @@ function typeChosen(type) { //Set the type of item chosen
             break;
             case 'Event': 
                 $('#itemSubmit').attr('action','/crear/actividad/');
+                $('.itemTypeEvent input').change(function(){ unsaved = true })
             break;
             case 'Place': 
                 $('#itemSubmit').attr('action','/crear/lugar/');
@@ -60,6 +68,13 @@ function typeChosen(type) { //Set the type of item chosen
             break;
         }
         return false;
+    }
+}
+
+function checkUnsaved()
+{
+    if(unsaved) {
+        
     }
 }
 
@@ -152,6 +167,8 @@ function mapPosition(position) { //google maps latlng object
     } else {
         PCmarker.setPosition(position);
     }
+    
+    unsaved = true
 }
 
 /* RU Route Uploading */
@@ -171,6 +188,8 @@ function RouteChange() {
         //Start upload
         uploadRouteFile(f);
     }
+    
+    unsaved = true;
 }
 
 function uploadRouteFile(file) {
@@ -273,6 +292,8 @@ function FileChange() {
         
         uploadFUTheFiles();
     }
+    
+    unsaved = true;
 }
 
 function uploadFUTheFiles() {
