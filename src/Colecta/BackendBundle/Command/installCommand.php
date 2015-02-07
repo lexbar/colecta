@@ -55,7 +55,7 @@ class InstallCommand extends ContainerAwareCommand
                 $salt = md5(time() . $this->getContainer()->getParameter('secret'));
                 $code = substr(md5($salt.$this->getContainer()->getParameter('secret')),5,18);
                 
-                $uid = $install->createAdmin($admin_mail, $salt);
+                $uid = $install->createAdmin($admin_mail, $salt, $admin_username);
                 
                 
                 /* SEND MAIL NOTIFICATION */
