@@ -20,4 +20,4 @@ twig:
             Files/Folder: folder-open
         #googleAnalyticsID: ''
         #googleAnalyticsName: ''
-        #adsense: ''
+        adsense: ''
