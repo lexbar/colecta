@@ -38,13 +38,13 @@
                 <div class="col-sm-8 col-lg-9">
                         <div class="checkbox">
     						<label>
-    							<input type="checkbox" name="pageTargetRole0"{% if 0 in page.targetRoles %} checked="checked"{% endif %}> Anónimo
+    							<input type="checkbox" name="pageTargetRole0"{% if 0 in page.targetRoles or page.id < 1 %} checked="checked"{% endif %}> Anónimo
     						</label>
     					</div>
                     {% for role in roles %}
                         <div class="checkbox">
     						<label>
-    							<input type="checkbox" name="pageTargetRole{{ role.id }}"{% if role.id in page.targetRoles %} checked="checked"{% endif %}> {{ role.description }}
+    							<input type="checkbox" name="pageTargetRole{{ role.id }}"{% if role.id in page.targetRoles or page.id < 1 %} checked="checked"{% endif %}> {{ role.description }}
     						</label>
     					</div>
                         {% endfor %}

@@ -65,13 +65,6 @@
     {% set path = path | replace({'/':'Bundle:'}) %}
     {% include path with { 'item': item } only %}
     {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %} 
-    
-{% else %}
-    
-    <div class="alert alert-info">
-        No hay ningún evento en esta fecha.
-    </div>
-
 {% endfor %}
 
 {% if hiddenset %}

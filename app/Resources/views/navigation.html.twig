@@ -15,11 +15,6 @@
                 <strong>{{ app.user.name }}</strong> 
             </a>
         </div>
-        
-        <hr>
-        <ul class="nav nav-pills nav-stacked">
-            <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="fa fa-bar-chart fa-fw"></i> Mi rendimiento</a></li>
-        </ul>
     </div>
     
     <hr>
@@ -88,6 +83,11 @@
         <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
             <a href="{{ path('ColectaActivitiesRank') }}"> 
                 <i class="fa fa-sort-amount-desc fa-fw"></i>  Ranking
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">
+                <i class="fa fa-bar-chart fa-fw"></i> Mi rendimiento
             </a>
         </li>
         {% endif %}

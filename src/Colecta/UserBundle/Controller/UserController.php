@@ -169,7 +169,6 @@ class UserController extends Controller
                 //Upload avatar
                 $user->upload();
                 
-                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
@@ -188,6 +187,12 @@ class UserController extends Controller
                         }
                     }
                     closedir($handle);
+                }
+                
+                //Set last modification of file uploaded to now
+                if($user->getAvatar() && file_exists($cachePath . $user->getAvatar()))
+                {
+                    touch($cachePath . $user->getAvatar());
                 }
                 
                 $this->get('session')->getFlashBag()->add(

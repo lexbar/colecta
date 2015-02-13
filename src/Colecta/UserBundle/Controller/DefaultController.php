@@ -129,7 +129,7 @@ class DefaultController extends Controller
                 $configmail = $this->container->getParameter('mail');
                 
                 $message = \Swift_Message::newInstance();
-			    $message->setSubject('Regenerar contraseña - Ciclubs')
+			    $message->setSubject('Recuperar contraseña')
 			        ->setFrom($configmail['from'])
 			        ->setTo($user->getMail())
 			        ->setBody($this->renderView('ColectaUserBundle:Default:resetPasswordMail.txt.twig', array('user'=>$user, 'code'=>$code)), 'text/plain');

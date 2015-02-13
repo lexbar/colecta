@@ -161,6 +161,13 @@ class UserController extends Controller
             $role = $em->getRepository('ColectaUserBundle:Role')->findOneById($request->get('userRole'));
             $profile = $user->getProfile();
             
+            if(!$profile)
+            {
+                $profile = new UserProfile();
+                $profile->setUser($user);
+                $user->setProfile($profile);
+            }
+            
             $user->setName($request->get('userName'));
             $user->setMail($request->get('userMail'));
             $user->setRole($role);
@@ -211,6 +218,17 @@ class UserController extends Controller
                         $profile->setPartnerId($request->get('partnerId'));
                     }
                 }
+            }
+            elseif($request->get('partnerIdAuto') == 1)
+            {
+                $maxPartnerId = $em->createQuery("SELECT MAX(p.idNumber) FROM ColectaUserBundle:UserProfile p")->getSingleScalarResult();
+                
+                if(!$maxPartnerId)
+                {
+                    $maxPartnerId = 0;
+                }
+                
+                $profile->setPartnerId($maxPartnerId + 1);
             }
             else
             {

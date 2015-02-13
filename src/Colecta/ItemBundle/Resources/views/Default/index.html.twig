@@ -4,7 +4,7 @@
 
 {% block article %}
 
-    {% if app.user %} <a href="{{ path('ColectaItemNew')}}" class="btn btn-small btn-primary pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
+    {% if app.user and app.user.role.contribute %} <a href="{{ path('ColectaItemNew') }}" class="btn btn-small btn-primary pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
     <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
 {% set shownItems = [] %}
@@ -33,8 +33,16 @@
         {% set shownItems = shownItems | merge([ri.id]) %}
     {% endfor %}
 {% else %}
-    <div class="monocontent text-center">
+    {#<div class="monocontent text-center">
         <h3><i class="fa fa-paper-plane"></i> ¡Listos para empezar! </h3>
+    </div>#}
+    
+    <div class="jumbotron">
+        <h1>¡Listos para empezar!</h1>
+        {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
+        <p>¿Qué quieres hacer ahora?</p>
+        <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-wrench fa-fw"></i> Administración</a>{% endif %} {% if app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
+        {% endif %}
     </div>
 {% endfor %}
 
