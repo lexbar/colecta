@@ -1,0 +1,182 @@
+body {
+    background-color: #FBFDFE;
+}
+a {
+    color: #dc0029;
+}
+a:hover {
+    color: #a6001f;
+}
+
+h2 {
+    color: #b51919;
+    font-weight: normal;
+    font-size: 32px;
+}
+
+.btn-primary{
+    background-color: #b3001f;
+    border-color: #b3001f;
+}
+.btn-primary:hover {
+    background-color: #8c0018;
+    border-color: #870018;
+}
+.alert {
+    border-width: 1px 1px 4px 1px;
+}
+.alert-blank {
+    background-color: #FFF;
+    border-color: #EEE;
+}
+
+.row.title {
+    margin-bottom: 10px;
+}
+
+.navbar-default {
+    padding: 0;
+}
+.navbar-default a.navbar-brand {
+    
+}
+
+.sidebar a {
+    color: #111;
+}
+
+#self ul a i {
+    color: #333;
+}
+#self ul a:hover i {
+    color: #a11414;
+}
+
+.sidebar .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    background-color: transparent;
+    color: #b51919;
+}
+.sidebar .nav-pills>li {
+    font-size: 20px;
+}
+.sidebar .nav-pills>li>a {
+    padding: 10px 0;
+}
+
+.calendar-heading {
+    margin: 0;
+    background-color: #FFF;
+    padding: 5px 2px 10px;
+}
+.calendar tbody tr td.active {
+    background-color: #b3001f;
+}
+.calendar tbody tr td.active a {
+    color: #FFF;
+}
+.calendar tbody tr td.today a {
+    color: #b3001f;
+}
+
+.sidebar .calendar-heading i {
+    color: #b3001f;
+}
+
+.panel-primary .panel-heading {
+    background-color: #FFF;
+    color: #333;
+}
+.panel-default .panel-heading {
+    background-color: #FFF;
+}
+
+.item .details {
+    font-size: 12px;
+    color: #999;
+}
+.item .well {
+    border-width: 1px 0 0;
+    background-color: #FFF;
+    border-radius: 0;
+}
+.item .list-group-item {
+    border: 1px dashed #eaeaea;
+}
+.item .itemActions {
+    background-color: #fdf1f1;
+}
+.item .itemActions a {
+    color: #111;
+}
+
+.item .itemActions i {
+    color: #b3001f;
+}
+.item .itemActions a i {
+    color: #999;
+}
+.item .itemActions a.confirmed i {
+    color: #b3001f;
+}
+
+.item .properties {
+    padding: 0;
+    border-top: 1px solid #DDD;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+.item .properties li {
+    padding: 10px 0;
+}
+.item .properties li {
+    border-right: 1px solid #DDD;
+}
+.item .properties li:last-child {
+    border: none;
+}
+
+.item .panel-footer {
+    background-color: #FFF;
+    position: relative;
+    top: -2px;
+}
+.item .likers a {
+    color: #000;
+}
+
+.profileHeader h2 {
+    color: #111;
+    font-size: 22px;
+}
+.profileHeader .nav-pills li {
+    margin-right: 5px;
+}
+.profileHeader .nav-pills li a {
+    background-color: #FFF;
+    color: #222;
+    border: 1px solid #EEE;
+}
+.profileHeader .nav-pills li.active a {
+    color: #b3001f;
+    border-color: #b3001f;
+}
+.profileHeader .nav-pills li a:hover {
+    background-color: #EEE;
+}
+
+.micro h4 a {
+    color: #111;
+    text-decoration: underline;
+}
+.micro.new h4 a {
+    color: #dc7300;
+    text-decoration: underline;
+}
+
+.messages hr {
+    margin: 5px 0 15px;
+}
+
+.progress-bar {
+    background-color: #b3001f;
+}
