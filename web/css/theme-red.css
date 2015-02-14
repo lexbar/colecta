@@ -4,7 +4,7 @@ body {
 a {
     color: #dc0029;
 }
-a:hover, a:active {
+a:hover, a:active, a:focus {
     color: #a6001f;
 }
 
@@ -37,8 +37,9 @@ h2 {
 .navbar-default {
     padding: 0;
 }
-.navbar-default a.navbar-brand {
-    
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    background-color: #b3001f;
+    border-color: #b3001f;
 }
 
 .sidebar a {
