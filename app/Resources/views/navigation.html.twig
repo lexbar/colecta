@@ -85,7 +85,7 @@
                 <i class="fa fa-sort-amount-desc fa-fw"></i>  Ranking
             </a>
         </li>
-        <li>
+        <li{% if con == 'UserController' and (act == 'assistancesAction'    ) %} class="active"{% endif %}>
             <a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">
                 <i class="fa fa-bar-chart fa-fw"></i> Mi rendimiento
             </a>
