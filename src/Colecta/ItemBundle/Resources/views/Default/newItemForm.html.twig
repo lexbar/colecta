@@ -37,29 +37,16 @@
                 <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
                 <div class="col-sm-9 col-lg-10">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12">
+                        <div class="col-lg-4 col-md-5 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
                                 <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-7 col-sm-12">
+                        <div class="col-lg-4 col-md-5 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                
-                                <select class="form-control" id="EventDifficulty" id="EventDateiniHour" name="dateinihour">
-                                    {% for hour in 0..23 %}
-                                    <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if item is defined and item.type == 'Activity/Event' and hour == item.dateini | date('G') or item is not defined and hour == 8 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
-                                    {% endfor %}
-                                </select> 
-                                
-                                <span class="input-group-addon">:</span>
-                                
-                                <select class="form-control" id="EventDifficulty" id="EventDateiniMinute" name="dateiniminute">
-                                    {% for minute in ['00','10','20','30','40','50'] %}
-                                    <option value="{{ minute }}"{% if item is defined and item.type == 'Activity/Event' and minute == item.dateini | date('i') or item is not defined and minute == '00' %} selected="selected"{% endif %}>{{ minute }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i A') }}{% else %}09:00 AM{% endif %}">
                             </div>
                         </div>
                     </div>
@@ -71,29 +58,16 @@
                 <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
                 <div class="col-sm-9 col-lg-10">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12">
+                        <div class="col-lg-4 col-md-5 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
                                 <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-7 col-sm-12">
+                        <div class="col-lg-4 col-md-5 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                
-                                <select class="form-control" id="EventDifficulty" id="EventDateendHour" name="dateendhour">
-                                    {% for hour in 0..23 %}
-                                    <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if item is defined and item.type == 'Activity/Event' and hour == item.dateend | date('G') or item is not defined and hour == 14 %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
-                                    {% endfor %}
-                                </select>
-                                
-                                <span class="input-group-addon">:</span>
-                                
-                                <select class="form-control" id="EventDifficulty" id="EventDateendMinute" name="dateendminute">
-                                    {% for minute in ['00','10','20','30','40','50'] %}
-                                    <option value="{{ minute }}"{% if item is defined and item.type == 'Activity/Event' and minute == item.dateend | date('i') or item is not defined and minute == '00' %} selected="selected"{% endif %}>{{ minute }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i A') }}{% else %}02:00 PM{% endif %}">
                             </div>
                         </div>
                     </div>

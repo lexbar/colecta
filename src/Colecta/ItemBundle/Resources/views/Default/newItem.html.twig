@@ -11,43 +11,54 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/css/summernote.css" />
-    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" />
+    {% if rich_text_editor %}
+        <link rel="stylesheet" href="/css/summernote.css" />
+    {% endif %}
+    <link rel="stylesheet" href="/js/pickadate/themes/default.css" />
+    <link rel="stylesheet" href="/js/pickadate/themes/default.date.css" />
+    <link rel="stylesheet" href="/js/pickadate/themes/default.time.css" />
+    <style>
+    .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+        cursor: pointer;
+        background-color: #FFF;
+    }
+    </style>
 {% endblock %}
 
 {% block javascripts %}
+
+{% if rich_text_editor %}
+    <script src="/js/summernote.min.js"></script>
+{% endif %}
 <script src="/js/userInteraction.js?v=2013/11/20"></script>
-<script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
-<script src="/js/summernote.min.js"></script>
+<script src="/js/pickadate/picker.js"></script>
+<script src="/js/pickadate/picker.date.js"></script>
+<script src="/js/pickadate/picker.time.js"></script>
+<script src="/js/pickadate/legacy.js"></script>
+<script src="/js/pickadate/translations/es_ES.js"></script>
 
 <script>    
-	$.datepicker.regional['es'] = {
-		closeText: 'Cerrar',
-		prevText: 'Anterior',
-		nextText: 'Siguiente',
-		currentText: 'Hoy',
-		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-		monthNamesShort: ['Ene','Feb.','Mar','Abr','May','Jun',
-		'Jul.','Ago','Sep','Oct','Nov','Dic'],
-		dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
-		dayNamesShort: ['Dom.','Lun.','Mar.','Mie.','Jue.','Vie.','Sáb.'],
-		dayNamesMin: ['D','L','M','X','J','V','S'],
-		weekHeader: 'Sem.',
-		dateFormat: 'dd-mm-yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['es']);
-	
-    $( "#EventDateini" ).datepicker({onSelect : function(text,obj){
-                $( "#EventDateend" ).val($( "#EventDateini" ).val());
-                $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
-    }});
+
+    var EventDateini = $('#EventDateini').pickadate({
+        format: 'dd-mm-yyyy',
+        onSet: function(context) {
+            var picker = EventDateend.pickadate('picker');
+            if(context.select > picker.get('select').pick)
+            {
+                picker.set('select', context.select);
+            }
+            picker.set('min', new Date(context.select));
+        }
+    });
     
-    $( "#EventDateend" ).datepicker();
+    var EventDateend = $( "#EventDateend" ).pickadate({
+        format: 'dd-mm-yyyy',
+        min: $('#EventDateini').val()
+    });
+    
+    $('#EventDateiniTime').pickatime();
+    $('#EventDateendTime').pickatime();
   
     {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
     

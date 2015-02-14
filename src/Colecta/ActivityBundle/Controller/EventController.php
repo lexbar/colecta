@@ -257,8 +257,8 @@ class EventController extends Controller
             $item->setDraft(false);
             $item->setPart(false);
             $item->setActivity(null);
-            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
-            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
+            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinitime')));
+            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendtime')));
             $item->setAllowassistances(true);
             $item->setText($request->get('text'));
             $item->setDistance(floatval(str_replace(',','.', $request->get('distance'))));
@@ -373,8 +373,8 @@ class EventController extends Controller
             $item->setAllowComments(true);
             $item->setDraft(false);
             $item->setActivity(null);
-            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinihour').':'.$request->get('dateiniminute')));
-            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendhour').':'.$request->get('dateendminute')));
+            $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinitime')));
+            $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendtime')));
             //$item->setAllowassistances(true);
             $item->setText($request->get('text'));
             $item->setDistance(str_replace(',','.', $request->get('distance')));

@@ -20,24 +20,19 @@
                 <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
                     <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="EventDateini" name="dateini" value="{{ item.dateini | date('d-m-Y') }}">
-                        
-                            <span class="input-group-addon">a las</span>
-                            
-                            <select class="form-control" id="EventDifficulty" id="EventDateiniHour" name="dateinihour">
-                                {% for hour in 0..23 %}
-                                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateini | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
-                                {% endfor %}
-                            </select> 
-                            
-                            <span class="input-group-addon">:</span>
-                            
-                            <select class="form-control" id="EventDifficulty" id="EventDateiniMinute" name="dateiniminute">
-                                {% for minute in ['00','10','20','30','40','50'] %}
-                                <option value="{{ minute }}"{% if minute == item.dateini | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
+                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i A') }}{% else %}09:00 AM{% endif %}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -45,24 +40,19 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
                     <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="EventDateend" name="dateend" value="{{ item.dateend | date('d-m-Y') }}">
-                            
-                            <span class="input-group-addon">a las</span>
-                            
-                            <select class="form-control" id="EventDifficulty" id="EventDateendHour" name="dateendhour">
-                                {% for hour in 0..23 %}
-                                <option value="{% if hour < 10 %}0{% endif %}{{ hour }}"{% if hour == item.dateend | date('G') %} selected="selected"{% endif %}>{% if hour < 10 %}0{% endif %}{{ hour }}</option>
-                                {% endfor %}
-                            </select>
-                            
-                            <span class="input-group-addon">:</span>
-                            
-                            <select class="form-control" id="EventDifficulty" id="EventDateendMinute" name="dateendminute">
-                                {% for minute in ['00','10','20','30','40','50'] %}
-                                <option value="{{ minute }}"{% if minute == item.dateend | date('i') %} selected="selected"{% endif %}>{{ minute }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
+                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i A') }}{% else %}02:00 PM{% endif %}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -165,7 +155,15 @@
         <link rel="stylesheet" href="/css/summernote.css" />
     {% endif %}
     
-    <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.10.1.custom.min.css" type="text/css" />
+    <link rel="stylesheet" href="/js/pickadate/themes/default.css" />
+    <link rel="stylesheet" href="/js/pickadate/themes/default.date.css" />
+    <link rel="stylesheet" href="/js/pickadate/themes/default.time.css" />
+    <style>
+    .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+        cursor: pointer;
+        background-color: #FFF;
+    }
+    </style>
 {% endblock %}
 
 {% block javascripts %}
@@ -175,34 +173,33 @@
         <script src="/js/summernote.min.js"></script>
     {% endif %}
     
-    <script src="/js/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/pickadate/picker.js"></script>
+    <script src="/js/pickadate/picker.date.js"></script>
+    <script src="/js/pickadate/picker.time.js"></script>
+    <script src="/js/pickadate/legacy.js"></script>
+    <script src="/js/pickadate/translations/es_ES.js"></script>
+    
     <script>        
-    	$.datepicker.regional['es'] = {
-    		closeText: 'Cerrar',
-    		prevText: 'Anterior',
-    		nextText: 'Siguiente',
-    		currentText: 'Hoy',
-    		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-    		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-    		monthNamesShort: ['Ene','Feb.','Mar','Abr','May','Jun',
-    		'Jul.','Ago','Sep','Oct','Nov','Dic'],
-    		dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
-    		dayNamesShort: ['Dom.','Lun.','Mar.','Mie.','Jue.','Vie.','Sáb.'],
-    		dayNamesMin: ['D','L','M','X','J','V','S'],
-    		weekHeader: 'Sem.',
-    		dateFormat: 'dd-mm-yy',
-    		firstDay: 1,
-    		isRTL: false,
-    		showMonthAfterYear: false,
-    		yearSuffix: ''};
-    	$.datepicker.setDefaults($.datepicker.regional['es']);
-    	
-        $( "#EventDateini" ).datepicker({onSelect : function(text,obj){
-                    $( "#EventDateend" ).val($( "#EventDateini" ).val());
-                    $( "#EventDateend" ).datepicker( "option", "minDate", $( "#EventDateini" ).datepicker( "getDate" ) );
-        }});
-        
-        $( "#EventDateend" ).datepicker();
+    var EventDateini = $('#EventDateini').pickadate({
+        format: 'dd-mm-yyyy',
+        onSet: function(context) {
+            var picker = EventDateend.pickadate('picker');
+            if(context.select > picker.get('select').pick)
+            {
+                picker.set('select', context.select);
+            }
+            picker.set('min', new Date(context.select));
+        }
+    });
+    
+    var EventDateend = $("#EventDateend").pickadate({
+        format: 'dd-mm-yyyy',
+        min: $('#EventDateini').val()
+    });
+    
+    $('#EventDateiniTime').pickatime();
+    $('#EventDateendTime').pickatime();
         
     {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
       
