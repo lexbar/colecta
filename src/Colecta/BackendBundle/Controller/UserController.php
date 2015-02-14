@@ -221,7 +221,7 @@ class UserController extends Controller
             }
             elseif($request->get('partnerIdAuto') == 1)
             {
-                $maxPartnerId = $em->createQuery("SELECT MAX(p.idNumber) FROM ColectaUserBundle:UserProfile p")->getSingleScalarResult();
+                $maxPartnerId = $em->createQuery("SELECT MAX(p.partnerId) FROM ColectaUserBundle:UserProfile p")->getSingleScalarResult();
                 
                 if(!$maxPartnerId)
                 {
@@ -311,6 +311,7 @@ class UserController extends Controller
             
             $profile = new UserProfile();
             $newUser->setProfile($profile);
+            $profile->setUser($user);
             
             $profile->setName($request->get('name'));
             $profile->setSurname($request->get('surname'));
@@ -349,6 +350,17 @@ class UserController extends Controller
                 {
                     $profile->setPartnerId($request->get('partnerId'));
                 }
+            }
+            elseif($request->get('partnerIdAuto') == 1)
+            {
+                $maxPartnerId = $em->createQuery("SELECT MAX(p.partnerId) FROM ColectaUserBundle:UserProfile p")->getSingleScalarResult();
+                
+                if(!$maxPartnerId)
+                {
+                    $maxPartnerId = 0;
+                }
+                
+                $profile->setPartnerId($maxPartnerId + 1);
             }
             else
             {

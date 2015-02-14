@@ -99,6 +99,9 @@
                 <div class="col-sm-4 col-lg-3">
                     <input type="text" name="partnerId" id="ProfilePartnerId" class="form-control" value="{{ user.profile ? user.profile.partnerId }}">
                 </div>
+                <div class="col-sm-4 col-lg-6 checkbox">
+                    <label><input type="checkbox" name="partnerIdAuto" value="1"> Generar automáticamente</label>
+                </div>
             </div>
             
             <div class="form-group">
@@ -111,7 +114,8 @@
             <div class="form-group">
                 <label class="col-sm-4 col-lg-3 control-label" for="notificateUser">Notificar por email al usuario</label>
                 <div class="col-sm-8 col-lg-9">
-                    <p><input name="notificateUser" id="notificateUser" type="checkbox" checked="checked"> (Abajo puedes personalizar el mensaje de bienvenida)</p>
+                    <div class="checkbox"><label><input name="notificateUser" id="notificateUser" type="checkbox" checked="checked"> Enviar email</label></div>
+                    <p><em>Personalizar el mensaje de bienvenida:</em></p>
                     <textarea rows="6" name="welcomeText" class="form-control">{{ welcomeText }}</textarea>
                     <p class="help-block"><strong>*Códigos:</strong> %N = Nombre del usuario. %L = Enlace de acceso </p>
                 </div>
