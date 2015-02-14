@@ -12,15 +12,23 @@ class CommentController extends Controller
     
     public function commentAction($slug)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $post = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneBySlug($slug);
-    
-        if(!$item || $user == 'anon.' || !$post->get('comment')) 
+        
+        if(!$item)
         {
-            $this->get('session')->getFlashBag()->add('error', 'Error escribiendo el comentario');
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado el contenido que quieres comentar');
+        }
+        elseif(!$user || !$item->canComment($user))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para publicar un comenario');
+        }
+        elseif(!$post->get('comment')) 
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No puedes publicar un comenario vacío');
         }
         else
         {

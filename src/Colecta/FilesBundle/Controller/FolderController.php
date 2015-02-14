@@ -29,18 +29,25 @@ class FolderController extends Controller
     }
     public function newAction()
     {
+        $user = $this->getUser();
+        
+        if(!$user || !$user->getRole()->getContribute()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'File'));
     }
     public function createAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $request = $this->getRequest();
         
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getItemFileCreate()) 
         {
-            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
-            return new RedirectResponse($this->generateUrl('userLogin'));
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para publicar archivos');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         elseif(! $request->request->get('name'))
         {
@@ -126,12 +133,18 @@ class FolderController extends Controller
     public function editAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $request = $this->getRequest();
         
         $item = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
         
-        if($user == 'anon.' || !$item->canEdit($user)) 
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la carpeta que quieres editar.');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        if(!$user == || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));
         }

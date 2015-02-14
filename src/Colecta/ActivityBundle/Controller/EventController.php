@@ -64,6 +64,13 @@ class EventController extends Controller
     }
     public function newAction()
     {
+        $user = $this->getUser();
+        
+        if(!$user || !$user->getRole()->getContribute()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Event'));
     }
     public function dateAction($date)
@@ -141,9 +148,9 @@ class EventController extends Controller
     }
     public function detailsFormAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.')
+        if(!$user)
         {
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
@@ -155,18 +162,19 @@ class EventController extends Controller
     }
     public function createAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
+        if(!$user || !$user->getRole()->getItemEventCreate()) 
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para publicar actividades');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
     
-        if($user == 'anon.')
-        {
-            $login = $this->generateUrl('userLogin');
-            return new RedirectResponse($login);
-        }
-        elseif(!$request->get('text'))
+        if(!$request->get('text'))
         {
             $this->get('session')->getFlashBag()->add('error', 'No has escrito ningun texto');
         }

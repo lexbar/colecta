@@ -58,7 +58,7 @@
     
 {% endfor %}
 
-{% if app.user %}
+{% if app.user and item.canComment(app.user ) %}
     <div class="media">
         <span class="pull-left">
             <img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}"> 

@@ -19,6 +19,13 @@ class DefaultController extends Controller
     }
     public function newAction()
     {
+        $user = $this->getUser();
+        
+        if(!$user || !$user->getRole()->getContribute()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaItemBundle:Default:newItem.html.twig');
     }
     public function attachAction($id)

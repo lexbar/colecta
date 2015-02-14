@@ -50,14 +50,27 @@ class PostController extends Controller
         return $this->render('ColectaItemBundle:Post:full.html.twig', array('item' => $item));
     }
     public function newAction()
-    {        
+    {
+        $user = $this->getUser();
+        
+        if(!$user || !$user->getRole()->getContribute()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Post'));
     }
     public function createAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
+        
+        if(!$user || !$user->getRole()->getItemPostCreate()) 
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para publicar textos');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
         
@@ -211,18 +224,18 @@ class PostController extends Controller
     }
     public function editAction($slug)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
         
-        if($user == 'anon.' || !$item->canEdit($user)) 
+        if(!$user || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
         }
         
-        if ($this->get('request')->getMethod() == 'POST') 
+        if($this->get('request')->getMethod() == 'POST') 
         {
             $persist = true;
             
@@ -323,7 +336,7 @@ class PostController extends Controller
     
     public function deleteAction($slug)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
@@ -333,7 +346,7 @@ class PostController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        if($user == 'anon.' || !$item->canEdit($user)) 
+        if(!$user || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
         }

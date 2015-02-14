@@ -240,7 +240,6 @@ abstract class Item
     
     public function canView(\Colecta\UserBundle\Entity\User $user)
     {
-        $isAuthor = $this->getAuthor() == $user;
         $role = $user->getRole();
         
         if(!$role)
@@ -294,6 +293,70 @@ abstract class Item
             break;
             case 'Colective/Poll':
                 if($role->getItemPollView())
+                {
+                    return true;
+                }
+            break;
+        }
+        
+        return false;
+    }
+    
+    public function canComment(\Colecta\UserBundle\Entity\User $user)
+    {
+        $role = $user->getRole();
+        
+        if(!$role)
+        {
+            return false;
+        }
+        
+        switch($this->getType())
+        {
+            case 'Item/Post':
+                if($role->getItemPostComment())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Event':
+                if($role->getItemEventComment())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Place':
+                if($role->getItemPlaceComment())
+                {
+                    return true;
+                }
+            break;
+            case 'Activity/Route':
+                if($role->getItemRouteComment())
+                {
+                    return true;
+                }
+            break;
+            case 'Files/File':
+                if($role->getItemFileComment())
+                {
+                    return true;
+                }
+            break;
+            case 'Files/Folder':
+                if($role->getItemFileComment())
+                {
+                    return true;
+                }
+            break;
+            case 'Colective/Contest':
+                if($role->getItemContestComment())
+                {
+                    return true;
+                }
+            break;
+            case 'Colective/Poll':
+                if($role->getItemPollComment())
                 {
                     return true;
                 }

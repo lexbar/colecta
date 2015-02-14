@@ -198,6 +198,13 @@ class RouteController extends Controller
     }
     public function newAction()
     {
+        $user = $this->getUser();
+        
+        if(!$user || !$user->getRole()->getContribute()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route'));
     }
     public function uploadAction()
@@ -392,10 +399,16 @@ class RouteController extends Controller
     }
     public function createAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request');
         $post = $request->request;
+        
+        if(!$user || !$user->getRole()->getItemRouteCreate()) 
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para publicar rutas');
+            return new RedirectResponse($this->generateUrl('userLogin'));
+        }
         
         if($this->get('request')->getMethod() == 'POST')
         {

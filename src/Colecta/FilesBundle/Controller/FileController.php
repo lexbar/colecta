@@ -55,14 +55,14 @@ class FileController extends Controller
     }
     public function newAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getItemFileCreate()) 
         {
-            $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
-            return new RedirectResponse($this->generateUrl('userLogin'));
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
+        
+        $em = $this->getDoctrine()->getManager();
         
         $request = $this->getRequest();
         
@@ -175,9 +175,9 @@ class FileController extends Controller
     public function pickAction($slug) //slug of the destiny folder
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user) 
         {
             $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
@@ -236,9 +236,9 @@ class FileController extends Controller
     {
         //Single file upload from XHR form
         
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user) 
         {
             throw $this->createNotFoundException();
         }
@@ -277,9 +277,9 @@ class FileController extends Controller
     {
         $this->get('request')->setRequestFormat('image');
         
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user) 
         {
             throw $this->createNotFoundException();
         }
@@ -318,9 +318,9 @@ class FileController extends Controller
     public function XHRProcessAction($slug) 
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user) 
         {
             $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
@@ -462,12 +462,18 @@ class FileController extends Controller
     public function editAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $request = $this->getRequest();
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
         
-        if($user == 'anon.' || !$item->canEdit($user)) 
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado el archivo que quieres editar.');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        if(!$user || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaFileView', array('slug' => $item->getSlug())));
         }

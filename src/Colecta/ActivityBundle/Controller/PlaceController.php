@@ -51,22 +51,30 @@ class PlaceController extends Controller
     }
     public function newAction()
     {
+        $user = $this->getUser();
+        
+        if(!$user || !$user->getRole()->getContribute()) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Place'));
     }
     public function createAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
+        if(!$user || !$user->getRole()->getItemPlaceCreate()) 
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para publicar lugares');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
     
-        if($user == 'anon.')
-        {
-            $login = $this->generateUrl('userLogin');
-            return new RedirectResponse($login);
-        }
-        elseif(!$category && !$request->get('newCategory'))
+        if(!$category && !$request->get('newCategory'))
         {
             $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
         }

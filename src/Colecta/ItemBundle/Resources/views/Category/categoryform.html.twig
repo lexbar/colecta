@@ -7,7 +7,9 @@
         </select>
         <input class="form-control" type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre">
     </div>
+    {% if app.user.role.categoryCreate %}
     <div class="col-sm-4">
         <button class="btn btn-default newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton"><i class="fa fa-plus"></i> Nueva categoría</button>
     </div>
+    {% endif %}
 </div>

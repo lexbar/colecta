@@ -1,5 +1,5 @@
 {% set canAssist = item.type == 'Activity/Event' and item.allowassistances %}
-{% set canAttach = not item.part %}
+{% set canAttach = not item.part and app.user and (app.user.role.itemRelateAny or app.user.role.itemRelateOwn and item.author == app.user) %}
 {% if app.user %}
     {% set userLikes = item.userLikes(app.user) %}
     
