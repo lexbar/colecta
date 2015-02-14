@@ -18,7 +18,7 @@ h2 {
     background-color: #b3001f;
     border-color: #b3001f;
 }
-.btn-primary:hover, .btn-primary::focus, .btn-primary:active {
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     background-color: #8c0018;
     border-color: #870018;
 }
