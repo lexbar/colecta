@@ -4,7 +4,7 @@ body {
 a {
     color: #dc0029;
 }
-a:hover {
+a:hover, a:active {
     color: #a6001f;
 }
 
