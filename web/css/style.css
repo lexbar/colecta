@@ -92,8 +92,7 @@ h2, h4 {
     right: 0;
     width: 60px;
     z-index: 1020;
-    background-color: #FFF;
-    padding: 10px 0;
+    padding: 9px 0;
     margin: 0;
     cursor: pointer;
 }
@@ -481,6 +480,22 @@ h2, h4 {
     }
     .navbar-nav {
         padding: 10px 15px;
+    }
+    .nav-tabs {
+        background-color: #FFF; 
+        border: 1px solid #ddd;
+        border-bottom-width: 0;
+    }
+    .nav-tabs li.active a {
+        background-color: #009BDB;
+        border: 1px solid #009BDB;
+        color: #FFF;
+        border-radius: 4px;
+    }
+    .nav-tabs li.active a:hover {
+        background-color:#3276b1;
+        border-color:#285e8e;
+        color: #FFF;
     }
     .item .panel-heading .panel-title {
         font-size: 20px;

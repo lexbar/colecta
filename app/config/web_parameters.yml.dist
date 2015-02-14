@@ -5,7 +5,7 @@ twig:
         web_title: 'Título de la web'
         web_description: 'Descripción para buscadores'
         web_theme: theme-blue
-        theme_sidebar: left
+        theme_sidebar: right
         allowed_tags: '<br><img>#<span><a><ol><ul><li>'
         rich_text_editor: 0
         summary_max_length: 1200
