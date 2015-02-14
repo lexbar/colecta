@@ -428,6 +428,10 @@ h2, h4 {
     cursor: pointer;
 }
 
+.jumbotron a.btn {
+    margin: 3px;
+}
+
 .footer {
     border-top: 1px solid #CCC;
     color: #777;

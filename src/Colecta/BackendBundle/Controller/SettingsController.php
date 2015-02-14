@@ -102,7 +102,18 @@ class SettingsController extends Controller
             }
             else
             {
-                $web_parameters['twig']['globals']['web_logo'] = $request->get('web_logo');
+                if($request->get('web_logo_delete') == 1)
+                {
+                    $web_parameters['twig']['globals']['web_logo'] = '';
+                    $web_parameters['twig']['globals']['web_logo_only'] = false;
+                }
+                else
+                {
+                    $web_parameters['twig']['globals']['web_logo_only'] = $request->get('web_logo_only') == 1 ? true : false;
+                    $web_parameters['twig']['globals']['web_logo'] = $request->get('web_logo');
+                }
+                
+                 
             }
             /* END WEB LOGO UPLOAD */
             

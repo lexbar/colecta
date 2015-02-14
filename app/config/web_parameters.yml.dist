@@ -10,6 +10,7 @@ twig:
         rich_text_editor: 0
         summary_max_length: 1200
         web_logo: ''
+        web_logo_only: 0
         web_header_img: {  }
         itemIcons:
             Item/Post: comments

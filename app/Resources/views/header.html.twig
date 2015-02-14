@@ -8,7 +8,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/">
                 {% if web_logo %} <img alt="{{ web_title }}" src="{{ web_logo }}" class="web_logo">{% endif %}
-                <span>{{ web_title }}</span>
+                {% if not web_logo_only %}<span>{{ web_title }}</span>{% endif %}
             </a>
         </div>
         

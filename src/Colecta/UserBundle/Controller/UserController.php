@@ -45,7 +45,7 @@ class UserController extends Controller
         $salt = $user->getSalt();
         $thecode = substr(md5($salt.$this->container->getParameter('secret')),5,18);
         
-        return $this->render('ColectaUserBundle:User:profile.html.twig', array('user' => $user, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1), 'thecode' => $thecode));
+        return $this->render('ColectaUserBundle:User:items.html.twig', array('user' => $user, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1), 'thecode' => $thecode));
     }
     public function itemsAction($id, $page)
     {
