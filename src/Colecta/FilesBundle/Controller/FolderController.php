@@ -144,7 +144,7 @@ class FolderController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        if(!$user == || !$item->canEdit($user)) 
+        if(!$user || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));
         }
