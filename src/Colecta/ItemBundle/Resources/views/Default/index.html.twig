@@ -4,7 +4,22 @@
 
 {% block article %}
 
-    {% if app.user and app.user.role.contribute %} <a href="{{ path('ColectaItemNew') }}" class="btn btn-small btn-primary pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
+    {% if app.user and app.user.role.contribute %} 
+        {#<a href="{{ path('ColectaItemNew') }}" class="btn btn-small btn-primary pull-right">Nueva publicación <i class="fa fa-plus"></i></a>#}
+        
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Nueva publicación <i class="fa fa-plus"></i>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+            {% if app.user.role.itemPostCreate %}<li><a href="{{ path('ColectaPostNew') }}"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Texto</a></li>{% endif %}
+            {% if app.user.role.itemEventCreate %}<li><a href="{{ path('ColectaEventNew') }}"><i class="fa fa-fw fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</a></li>{% endif %}
+            {% if app.user.role.itemFileCreate %}<li><a href="{{ path('ColectaFileNew') }}"><i class="fa fa-fw fa-{{ itemIcons['Files/File']}}"></i> Archivos</a></li>{% endif %}
+            {% if app.user.role.itemRouteCreate %}<li><a href="{{ path('ColectaRouteNew') }}"><i class="fa fa-fw fa-{{ itemIcons['Activity/Route']}}"></i> Track GPS</a></li>{% endif %}
+            {% if app.user.role.itemPlaceCreate %}<li><a href="{{ path('ColectaPlaceNew') }}"><i class="fa fa-fw fa-{{ itemIcons['Activity/Place']}}"></i> Lugar</a></li>{% endif %}
+            </ul>
+        </div>
+    {% endif %}
     <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
 {% set shownItems = [] %}
