@@ -822,6 +822,11 @@ class RouteController extends Controller
         
         $name = $item->getName();
         
+        if(file_exists($this->getUploadDir() . '/' . $item->getSourcefile()))
+        {
+            unlink($this->getUploadDir() . '/' . $item->getSourcefile());
+        }
+        
         $em->remove($item);
         $em->flush();
         
