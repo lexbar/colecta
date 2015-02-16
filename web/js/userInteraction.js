@@ -20,6 +20,13 @@ function typeChosen(type) { //Set the type of item chosen
     }
     
     if(itemSubmitType == type) {
+        if(unsaved && !confirm('¿Seguro que quieres cambiar de tipo de publicación?\nSólo puedes publicar un tipo de contenido al mismo tiempo.'))
+        {
+            return false;
+        }
+        
+        unsaved = false;
+        
         itemSubmitType = 'Post';
         if(type != 'Post') {
             $('#itemSubmit .type'+type).removeClass('active');
