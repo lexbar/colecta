@@ -10,7 +10,7 @@
     
     {% if user.profile and not user.profile.empty and app.user and app.user.role.userView and page == 1%}
     <div class="well">
-        {% if user.profile.partnerId %}<span class="pull-right">#{{ user.profile.partnerId }}</span>{% endif %}
+        {% if user.profile.partnerId %}<span class="pull-right">{% if app.user and app.user.role.userEdit %}<a href="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">{% endif %}#{{ user.profile.partnerId }}{% if app.user and app.user.role.userEdit %}</a>{% endif %}</span>{% endif %}
         <p><strong>{{ user.profile.name }} {{ user.profile.surname }}</strong> {{ user.profile.idNumber ? '(' ~ user.profile.idNumber ~ ')' }}</p>
         <p>{% if user.profile.sex %} <i class="fa fa-fw fa-{{ user.profile.sex == 'male' ? 'mars' : 'venus' }}"></i>{% endif %} {% if user.profile.birthDate %}{{ user.profile.birthDate | age }} años {% endif %}</p>
         <p style="margin-bottom: 0">{% if user.profile.address %}<i class="fa fa-fw fa-home"></i> {{ user.profile.address }}{% endif %} {% if user.profile.phone %}<i class="fa fa-fw fa-phone"></i> {{ user.profile.phone }}{% endif %}</p>
