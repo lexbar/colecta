@@ -971,6 +971,8 @@ class FileController extends Controller
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
         
+        $user = $this->getUser();
+        
         if(!$item)
         {
             throw $this->createNotFoundException('El archivo no existe');

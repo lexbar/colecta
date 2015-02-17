@@ -114,6 +114,8 @@ class RouteController extends Controller
             
             $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
             
+            $user = $this->getUser();
+            
             if(!$item)
             {
                 return new Response('Page not found.', 404);
@@ -183,6 +185,8 @@ class RouteController extends Controller
             
             
             $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
+            
+            $user = $this->getUser();
             
             if(!$item)
             {
