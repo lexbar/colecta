@@ -330,4 +330,9 @@ class UserProfile
     {
         return $this->user;
     }
+    
+    public function getEmpty()
+    {
+        return !$this->getName() && !$this->getSurname() && !$this->getSex() && !$this->getBirthDate() && !$this->getAddress() && !$this->getPhone() && !$this->getIdNumber() && !$this->getPartnerId() ;
+    }
 }

@@ -8,7 +8,7 @@
     
     {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'items' } %}
     
-    {% if user.profile and app.user and app.user.role.userView and page == 1%}
+    {% if user.profile and not user.profile.empty and app.user and app.user.role.userView and page == 1%}
     <div class="well">
         {% if user.profile.partnerId %}<span class="pull-right">#{{ user.profile.partnerId }}</span>{% endif %}
         <p><strong>{{ user.profile.name }} {{ user.profile.surname }}</strong> {{ user.profile.idNumber ? '(' ~ user.profile.idNumber ~ ')' }}</p>

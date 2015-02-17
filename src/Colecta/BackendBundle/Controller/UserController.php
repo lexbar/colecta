@@ -192,6 +192,10 @@ class UserController extends Controller
                     $this->get('session')->getFlashBag()->add('error', 'La fecha de nacimiento '."".' no tiene un valor aceptable.');
                 }
             }
+            else
+            {
+                $profile->setBirthDate(null);
+            }
             
             $profile->setAddress($request->get('address'));
             $profile->setPhone($request->get('phone'));
