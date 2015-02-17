@@ -1460,4 +1460,76 @@ class Role
     {
         return $this->item_post_create || $this->item_event_create || $this->item_route_create || $this->item_place_create || $this->item_file_create; 
     }
+    
+    public function getGreaterPermissions($role)
+    {
+        /* CREATE ACTIONS */
+	    if($this->getItemPostCreate() && ! $role->getItemPostCreate()) return true;
+	    if($this->getItemEventCreate() && ! $role->getItemEventCreate()) return true;
+	    if($this->getItemRouteCreate() && ! $role->getItemRouteCreate()) return true;
+	    if($this->getItemPlaceCreate() && ! $role->getItemPlaceCreate()) return true;
+	    if($this->getItemFileCreate() && ! $role->getItemFileCreate()) return true;
+	    if($this->getItemContestCreate() && ! $role->getItemContestCreate()) return true;
+	    if($this->getItemPollCreate() && ! $role->getItemPollCreate()) return true;
+	    
+	    /* EDIT ACTIONS */
+	    if($this->getItemPostEdit() && ! $role->getItemPostEdit()) return true;
+	    if($this->getItemEventEdit() && ! $role->getItemEventEdit()) return true;
+	    if($this->getItemRouteEdit() && ! $role->getItemRouteEdit()) return true;
+	    if($this->getItemPlaceEdit() && ! $role->getItemPlaceEdit()) return true;
+	    if($this->getItemFileEdit() && ! $role->getItemFileEdit()) return true;
+	    if($this->getItemContestEdit() && ! $role->getItemContestEdit()) return true;
+	    if($this->getItemPollEdit() && ! $role->getItemPollEdit()) return true;
+	    
+	    /* EDIT_ANY ACTIONS */
+	    if($this->getItemPostEditAny() && ! $role->getItemPostEditAny()) return true;
+	    if($this->getItemEventEditAny() && ! $role->getItemEventEditAny()) return true;
+	    if($this->getItemRouteEditAny() && ! $role->getItemRouteEditAny()) return true;
+	    if($this->getItemPlaceEditAny() && ! $role->getItemPlaceEditAny()) return true;
+	    if($this->getItemFileEditAny() && ! $role->getItemFileEditAny()) return true;
+	    if($this->getItemContestEditAny() && ! $role->getItemContestEditAny()) return true;
+	    if($this->getItemPollEditAny() && ! $role->getItemPollEditAny()) return true;
+	    
+	    /* RELATE */
+	    if($this->getItemRelateOwn() && ! $role->getItemRelateOwn()) return true;
+	    if($this->getItemRelateAny() && ! $role->getItemRelateAny()) return true;
+	    
+	    /* COMMENT ACTIONS */
+	    if($this->getItemPostComment() && ! $role->getItemPostComment()) return true;
+	    if($this->getItemEventComment() && ! $role->getItemEventComment()) return true;
+	    if($this->getItemRouteComment() && ! $role->getItemRouteComment()) return true;
+	    if($this->getItemPlaceComment() && ! $role->getItemPlaceComment()) return true;
+	    if($this->getItemFileComment() && ! $role->getItemFileComment()) return true;
+	    if($this->getItemContestComment() && ! $role->getItemContestComment()) return true;
+	    if($this->getItemPollComment() && ! $role->getItemPollComment()) return true;
+	    
+	    /* POLL VOTE */
+	    
+	    if($this->getItemPollVote() && ! $role->getItemPollVote()) return true;
+	    
+	    /* CATEGORY */
+	    if($this->getCategoryCreate() && ! $role->getCategoryCreate()) return true;
+	    if($this->getCategoryEdit() && ! $role->getCategoryEdit()) return true;
+	    
+	    /* ACTIVITY */
+	    if($this->getActivityCreate() && ! $role->getActivityCreate()) return true;
+	    if($this->getActivityEdit() && ! $role->getActivityEdit()) return true;
+	    
+	    /* USERS */
+	    if($this->getUserView() && ! $role->getUserView()) return true;
+	    if($this->getMessageSend() && ! $role->getMessageSend()) return true;
+	    if($this->getUserCreate() && ! $role->getUserCreate()) return true;
+	    if($this->getUserEdit() && ! $role->getUserEdit()) return true;
+	    
+	    /* SITE CONFIG */
+	    if($this->getSiteConfigSettings() && ! $role->getSiteConfigSettings()) return true;
+	    if($this->getSiteConfigUsers() && ! $role->getSiteConfigUsers()) return true;
+	    if($this->getSiteConfigPages() && ! $role->getSiteConfigPages()) return true;
+	    if($this->getSiteConfigLottery() && ! $role->getSiteConfigLottery()) return true;
+	    if($this->getSiteConfigPlan() && ! $role->getSiteConfigPlan()) return true;
+	    if($this->getSiteConfigStats() && ! $role->getSiteConfigStats()) return true;
+        
+        
+        return false;
+    }
 }

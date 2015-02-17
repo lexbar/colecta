@@ -235,12 +235,12 @@
                 <div class="col-sm-8 col-lg-9">
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" name="site_config_settings"{% if role.siteConfigSettings %} checked="checked"{% endif %}> Modificar los ajustes de la web
+							<input type="checkbox" name="site_config_settings"{% if role.siteConfigSettings %} checked="checked"{% endif %}> Acceso los ajustes de la web
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" name="site_config_users"{% if role.siteConfigUsers %} checked="checked"{% endif %}> Modificar parámetros de los usuarios
+							<input type="checkbox" name="site_config_users"{% if role.siteConfigUsers %} checked="checked"{% endif %}> Acceso a parámetros de los usuarios
 						</label>
 					</div>
 					<div class="checkbox">
@@ -248,7 +248,7 @@
 							<input type="checkbox" name="site_config_pages"{% if role.siteConfigPages %} checked="checked"{% endif %}> Gestión de las páginas estáticas
 						</label>
 					</div>
-					<div class="checkbox">
+					<div class="checkbox hidden">
 						<label>
 							<input type="checkbox" name="site_config_plan"{% if role.siteConfigPlan %} checked="checked"{% endif %}> Acceso a cambio de plan contratado
 						</label>

@@ -8,6 +8,15 @@
     
     {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'items' } %}
     
+    {% if user.profile and app.user and app.user.role.userView and page == 1%}
+    <div class="well">
+        {% if user.profile.partnerId %}<span class="pull-right">#{{ user.profile.partnerId }}</span>{% endif %}
+        <p><strong>{{ user.profile.name }} {{ user.profile.surname }}</strong> {{ user.profile.idNumber ? '(' ~ user.profile.idNumber ~ ')' }}</p>
+        <p>{% if user.profile.sex %} <i class="fa fa-fw fa-{{ user.profile.sex == 'male' ? 'mars' : 'venus' }}"></i>{% endif %} {% if user.profile.birthDate %}{{ user.profile.birthDate | age }} años {% endif %}</p>
+        <p style="margin-bottom: 0">{% if user.profile.address %}<i class="fa fa-fw fa-home"></i> {{ user.profile.address }}{% endif %} {% if user.profile.phone %}<i class="fa fa-fw fa-phone"></i> {{ user.profile.phone }}{% endif %}</p>
+    </div>
+    {% endif %}
+    
     {% for item in items %}
         
         <div class="item" id="item{{ item.id}}">        
@@ -22,7 +31,7 @@
         <p class="lead">No ha publicado nada... por ahora.</p>
     {% endfor %}
     
-    {% if items | length > 0 %}
+    {% if items | length > 0 and ( page > 1 or thereAreMore ) %}
     <ul class="pager">
       <li class="previous{% if page == 1 %} disabled{% endif %}">
         <a href="{% if page > 1 %}{{ path('userItems', {'id': user.id, 'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>

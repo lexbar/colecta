@@ -1,4 +1,9 @@
 services:
+    colecta.twig.user_extension:
+        class: Colecta\UserBundle\Twig\UserExtension
+        arguments: [@doctrine, @router]
+        tags:
+            - { name: twig.extension }
     colectauser.login_success_handler:
         class:  Colecta\UserBundle\Service\LoginSuccessHandler
         arguments:  [@router, @security.context, @session]

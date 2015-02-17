@@ -12,10 +12,10 @@ class UserController extends Controller
 {
     public function indexAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -26,10 +26,10 @@ class UserController extends Controller
     }
     public function rolesAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -40,10 +40,10 @@ class UserController extends Controller
     }
     public function roleCreateAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -74,10 +74,10 @@ class UserController extends Controller
     }
     public function roleEditAction($role_id)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -112,10 +112,10 @@ class UserController extends Controller
     }
     public function roleDeleteAction($role_id)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -145,10 +145,10 @@ class UserController extends Controller
     }
     public function profileAction($user_id)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers() || !$user->getRole()->getUserEdit())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -249,11 +249,12 @@ class UserController extends Controller
     }
     public function newUserAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers() || !$user->getRole()->getUserCreate())
         {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ejecutar esta acción.');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
@@ -436,10 +437,10 @@ class UserController extends Controller
     {
         $year = 2013;
         
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigUsers())
+        if(!$user || !$user->getRole()->getSiteConfigUsers())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -515,13 +516,13 @@ class UserController extends Controller
 	    $role->setSiteAccess(checkbox($request->get('site_access')));
 	    
 	    /* VIEW ACTIONS */
-	    $role->setItemPostView(checkbox($request->get('item_post_view')));
+	    /*$role->setItemPostView(checkbox($request->get('item_post_view')));
 	    $role->setItemEventView(checkbox($request->get('item_event_view')));
 	    $role->setItemRouteView(checkbox($request->get('item_route_view')));
 	    $role->setItemPlaceView(checkbox($request->get('item_place_view')));
 	    $role->setItemFileView(checkbox($request->get('item_file_view')));
 	    $role->setItemContestView(checkbox($request->get('item_contest_view')));
-	    $role->setItemPollView(checkbox($request->get('item_poll_view')));
+	    $role->setItemPollView(checkbox($request->get('item_poll_view')));*/
 	    
 	    /* CREATE ACTIONS */
 	    $role->setItemPostCreate(checkbox($request->get('item_post_create')));

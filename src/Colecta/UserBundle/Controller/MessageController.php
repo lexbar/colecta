@@ -14,9 +14,9 @@ class MessageController extends Controller
     
     public function indexAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.')
+        if(!$user)
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
@@ -47,9 +47,9 @@ class MessageController extends Controller
     
     public function sentAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.')
+        if(!$user)
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
@@ -64,11 +64,11 @@ class MessageController extends Controller
     
     public function newAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request');
         
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getMessageSend()) 
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
@@ -151,11 +151,11 @@ class MessageController extends Controller
     }
     public function newToAction($user_id)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userTo = $em->getRepository('ColectaUserBundle:User')->find($user_id);
         
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getMessageSend()) 
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));
@@ -169,11 +169,11 @@ class MessageController extends Controller
     }
     public function responseAction($responseto)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request');
         
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getMessageSend()) 
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             return new RedirectResponse($this->generateUrl('userLogin'));

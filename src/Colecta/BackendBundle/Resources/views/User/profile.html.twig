@@ -26,7 +26,7 @@
                 <label class="col-sm-4 col-lg-3 control-label" for="UserRole">Rol</label>
                 <div class="col-sm-4 col-lg-3">
                     <select name="userRole" id="UserRole" class="form-control">
-                        {% for role in roles %}
+                        {% for role in roles if not role.greaterPermissions(app.user.role) %}
                         <option value="{{ role.id }}" {% if user.role.id == role.id %}selected="selected"{% endif %}>{{ role.description }}</option>
                         {% endfor %}
                     </select>

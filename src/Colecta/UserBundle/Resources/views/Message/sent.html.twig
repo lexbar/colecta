@@ -5,15 +5,17 @@
 {% block article %}
 
 <div class="row title">
-    <div class="col-sm-6">
+    <div class="col-sm-{{ app.user.role.messageSend ? '6' : '9' }}">
         <h2>Mensajes Enviados</h2>
     </div>
     <div class="col-sm-3">
         <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Recibidos <i class="fa fa-inbox"></i></a>
     </div>
+    {% if app.user.role.messageSend %}
     <div class="col-sm-3">
         <a class="btn btn-success btn-block" href="{{ path('userMessageNew')}}">Nuevo <i class="fa fa-plus"></i></a>
     </div>
+    {% endif %}
 </div>
 
 <ul class="messages list-group">
