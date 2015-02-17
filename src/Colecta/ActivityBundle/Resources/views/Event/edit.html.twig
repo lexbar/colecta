@@ -30,7 +30,7 @@
                             <div class="col-lg-4 col-md-5 col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i A') }}{% else %}09:00 AM{% endif %}">
+                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                             <div class="col-lg-4 col-md-5 col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i A') }}{% else %}02:00 PM{% endif %}">
+                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}02:00{% endif %}">
                                 </div>
                             </div>
                         </div>
@@ -133,6 +133,7 @@
               
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                        <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
                         <button type="submit" class="btn btn-primary">Actualizar</button>
                         <a href="{{ path('ColectaEventDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
                     </div>
@@ -154,7 +155,6 @@
     {% if rich_text_editor %}
         <link rel="stylesheet" href="/css/summernote.css" />
     {% endif %}
-    
     <link rel="stylesheet" href="/js/pickadate/themes/default.css" />
     <link rel="stylesheet" href="/js/pickadate/themes/default.date.css" />
     <link rel="stylesheet" href="/js/pickadate/themes/default.time.css" />
@@ -167,20 +167,29 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="/js/bootstrap.min.js"></script>
-    
-    {% if rich_text_editor %}
-        <script src="/js/summernote.min.js"></script>
-    {% endif %}
-    
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/pickadate/picker.js"></script>
-    <script src="/js/pickadate/picker.date.js"></script>
-    <script src="/js/pickadate/picker.time.js"></script>
-    <script src="/js/pickadate/legacy.js"></script>
-    <script src="/js/pickadate/translations/es_ES.js"></script>
+{% if rich_text_editor %}
+    <script src="/js/summernote.min.js"></script>
+{% endif %}
+<script src="/js/userInteraction.js?v=2013/11/20"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/pickadate/picker.js"></script>
+<script src="/js/pickadate/picker.date.js"></script>
+<script src="/js/pickadate/picker.time.js"></script>
+<script src="/js/pickadate/legacy.js"></script>
+<script src="/js/pickadate/translations/es_ES.js"></script>
     
     <script>        
+    function privacyToggle()
+    {
+        if($('#privacy').val() == '1'){
+            $('#privacy').val('0');
+            $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+        }else{
+            $('#privacy').val('1');
+            $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+        }
+    } 
+    
     var EventDateini = $('#EventDateini').pickadate({
         format: 'dd-mm-yyyy',
         onSet: function(context) {
@@ -193,13 +202,19 @@
         }
     });
     
-    var EventDateend = $("#EventDateend").pickadate({
+    var EventDateend = $( "#EventDateend" ).pickadate({
         format: 'dd-mm-yyyy',
         min: $('#EventDateini').val()
     });
     
-    $('#EventDateiniTime').pickatime();
-    $('#EventDateendTime').pickatime();
+    $('#EventDateiniTime').pickatime({
+        interval: 10,
+        format: 'HH:i'
+    });
+    $('#EventDateendTime').pickatime({
+        interval: 10,
+        format: 'HH:i'
+    });
         
     {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
       

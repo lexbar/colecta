@@ -25,6 +25,7 @@
         
         <div class="form-group">
             <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
                 {#<button class="btn disabled" disabled="disabled">Guardar como borrador</button>#}
                 <button type="submit" class="btn btn-primary" id="FolderSubmit"><i id="FolderSubmitLoading"></i> <span id="FolderSubmitText">Publicar ahora</span></button>
             </div>

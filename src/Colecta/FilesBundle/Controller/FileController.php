@@ -28,8 +28,15 @@ class FileController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
+        $findby = array('draft'=>0);
+        
+        if(!$this->getUser())
+        {
+            $findby['open'] = 1;
+        }
+        
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaFilesBundle:Folder')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $items = $em->getRepository('ColectaFilesBundle:Folder')->findBy($findby, array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         $count = count($items);
         
         //Pagination
@@ -50,6 +57,19 @@ class FileController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaFilesBundle:File')->findOneBySlug($slug);
+        
+        $user = $this->getUser();
+        
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado el archivo que estás buscando');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver este archivo');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
         
         return $this->render('ColectaFilesBundle:File:full.html.twig', array('item' => $item));
     }
@@ -107,6 +127,7 @@ class FileController extends Controller
             $item->setText($request->request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(true);
+            $item->setOpen($request->get('open'));
             $item->setPart(false);
             $item->setPublic(true);
             $item->setPersonal(false);
@@ -629,9 +650,9 @@ class FileController extends Controller
     }
     public function uploadAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user) 
         {
             return new RedirectResponse($this->generateUrl('userLogin'));
         }
@@ -721,6 +742,7 @@ class FileController extends Controller
                         $folder->summarize($item->getText());
                         $folder->setAllowComments(1);
                         $folder->setDraft(0);
+                        $item->setOpen($request->get('open'));
                         $folder->setPart(0);
                         $folder->setPublic(1);
                         $folder->setPersonal(0);
@@ -952,6 +974,10 @@ class FileController extends Controller
         if(!$item)
         {
             throw $this->createNotFoundException('El archivo no existe');
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            return new Response('Forbidden.', 403);
         }
 
         $response = new Response();

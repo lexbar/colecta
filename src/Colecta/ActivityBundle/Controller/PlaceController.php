@@ -24,8 +24,16 @@ class PlaceController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
+        $findby = array('draft'=>0);
+        
+        if(!$this->getUser())
+        {
+            $findby['open'] = 1;
+        }
+        
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaActivityBundle:Place')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $items = $em->getRepository('ColectaActivityBundle:Place')->findBy($findby, array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
         //Pagination
@@ -47,13 +55,26 @@ class PlaceController extends Controller
         
         $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
         
+        $user = $this->getUser();
+        
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado el lugar que estás buscando');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver este lugar');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaActivityBundle:Place:full.html.twig', array('item' => $item));
     }
     public function newAction()
     {
         $user = $this->getUser();
         
-        if(!$user || !$user->getRole()->getContribute()) 
+        if(!$user || !$user->getRole()->getItemPlaceCreate()) 
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -144,6 +165,7 @@ class PlaceController extends Controller
             $item->summarize($request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(false);
+            $item->setOpen($request->get('open'));
             $item->setPart(false);
             $item->setText($request->get('text'));
             $item->setLatitude($request->get('latitude'));
@@ -182,13 +204,13 @@ class PlaceController extends Controller
     }
     public function editAction($slug)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
         
-        if($user == 'anon.' || !$item->canEdit($user)) 
+        if(!$user || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaPlaceView', array('slug'=>$slug)));
         }
@@ -248,6 +270,7 @@ class PlaceController extends Controller
             $item->setText($request->get('text'));
             $item->setLatitude($request->get('latitude'));
             $item->setLongitude($request->get('longitude'));
+            $item->setOpen($request->get('open'));
             
             if($persist)
             {
@@ -263,7 +286,7 @@ class PlaceController extends Controller
     
     public function deleteAction($slug)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Place')->findOneBySlug($slug);
@@ -273,7 +296,7 @@ class PlaceController extends Controller
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
         
-        if($user == 'anon.' || !$item->canEdit($user)) 
+        if(!$user || !$item->canEdit($user)) 
         {
             return new RedirectResponse($this->generateUrl('ColectaPostView', array('slug'=>$slug)));
         }

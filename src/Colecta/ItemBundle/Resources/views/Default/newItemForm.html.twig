@@ -46,7 +46,7 @@
                         <div class="col-lg-4 col-md-5 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i A') }}{% else %}09:00 AM{% endif %}">
+                                <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         <div class="col-lg-4 col-md-5 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i A') }}{% else %}02:00 PM{% endif %}">
+                                <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}14:00{% endif %}">
                             </div>
                         </div>
                     </div>
@@ -196,6 +196,7 @@
           
           <div class="form-group">
             <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default"><i class="fa fa-unlock"></i> Abierto</button><input id="privacy" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
                 {#<button class="btn">Guardar como borrador</button>#}
                 <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora</span> <i id="itemSubmitButtonLoading"></i></button> 
             </div>

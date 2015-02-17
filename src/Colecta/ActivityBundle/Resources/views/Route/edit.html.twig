@@ -188,6 +188,7 @@
               
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                        <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
                         <button type="submit" class="btn btn-primary" id="RouteSubmit"><i id="RouteSubmitLoading"></i> <span id="RouteSubmitText">Actualizar</span></button>
                         <a href="{{ path('ColectaRouteDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
                     </div>
@@ -219,7 +220,17 @@
     {% endif %}
     
     <script>
-
+    function privacyToggle()
+    {
+        if($('#privacy').val() == '1'){
+            $('#privacy').val('0');
+            $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+        }else{
+            $('#privacy').val('1');
+            $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+        }
+    } 
+    
     {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
         
     {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}

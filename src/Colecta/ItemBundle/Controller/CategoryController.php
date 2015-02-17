@@ -31,7 +31,15 @@ class CategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneBySlug($slug);
-        $items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft' => 0, 'category' => $category->getId()), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        
+        $findby = array('draft' => 0, 'category' => $category->getId());
+        
+        if(!$this->getUser())
+        {
+            $findby['open'] = 1;
+        }
+        
+        $items = $em->getRepository('ColectaItemBundle:Item')->findBy($findby, array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         //Pagination
         if(count($items) > $this->ipp) 

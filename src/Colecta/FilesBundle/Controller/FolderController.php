@@ -14,8 +14,15 @@ class FolderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
+        $findby = array('draft'=>0);
+        
+        if(!$this->getUser())
+        {
+            $findby['open'] = 1;
+        }
+        
         //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaFilesBundle:Folder')->findBy(array('draft'=>0), array('date'=>'DESC'),10,0);
+        $items = $em->getRepository('ColectaFilesBundle:Folder')->findBy($findby, array('date'=>'DESC'),10,0);
         
         return $this->render('ColectaFilesBundle:Folder:index.html.twig', array('items' => $items));
     }
@@ -25,13 +32,26 @@ class FolderController extends Controller
         
         $item = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
         
+        $user = $this->getUser();
+        
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la carpeta que estás buscando');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta carpeta');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         return $this->render('ColectaFilesBundle:Folder:full.html.twig', array('item' => $item));
     }
     public function newAction()
     {
         $user = $this->getUser();
         
-        if(!$user || !$user->getRole()->getContribute()) 
+        if(!$user || !$user->getRole()->getItemFileCreate()) 
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -82,6 +102,7 @@ class FolderController extends Controller
         $item->setText($request->request->get('text'));
         $item->setAllowComments(true);
         $item->setDraft(true);
+        $item->setOpen($request->get('open'));
         $item->setPart(false);
         $item->setPublic(true);
         $item->setPersonal(false);
@@ -155,6 +176,7 @@ class FolderController extends Controller
             
             $item->setName($request->request->get('name'));
             $item->setCategory($category);
+            $item->setOpen($request->get('open'));
             
             if(!$request->get('newCategory') && !$category)
             {
@@ -206,9 +228,9 @@ class FolderController extends Controller
     public function formlistAction($selected, $firstwrite)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.')
+        if(!$user)
         {
             $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));
@@ -273,9 +295,9 @@ class FolderController extends Controller
     public function chooseAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.')
+        if(!$user)
         {
             $this->get('session')->getFlashBag()->add('error', 'Debes iniciar sesión');
             return new RedirectResponse($this->generateUrl('userLogin'));

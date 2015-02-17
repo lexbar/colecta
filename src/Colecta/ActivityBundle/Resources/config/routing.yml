@@ -46,9 +46,6 @@ ColectaEventPage:
 ColectaEventDate:
     pattern:  /actividades/fecha/{date}
     defaults: { _controller: ColectaActivityBundle:Event:date }
-ColectaEventDate2:
-    pattern:  /actividades/fecha2/{date}
-    defaults: { _controller: ColectaActivityBundle:Event:date2 }
 ColectaEventView:
     pattern:  /actividades/{slug}
     defaults: { _controller: ColectaActivityBundle:Event:view }

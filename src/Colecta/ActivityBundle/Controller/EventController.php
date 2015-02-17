@@ -28,8 +28,16 @@ class EventController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaActivityBundle:Event')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $findby = array('draft'=>0);
+        
+        if(!$this->getUser())
+        {
+            $findby['open'] = 1;
+        }
+        
+        //Get ALL the items that are accessible
+        $items = $em->getRepository('ColectaActivityBundle:Event')->findBy($findby, array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
         //Pagination
@@ -49,7 +57,20 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
+        $user = $this->getUser();
+        
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la actividad que estás buscando');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta actividad');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
         
         //Points
         $points = array();
@@ -66,7 +87,7 @@ class EventController extends Controller
     {
         $user = $this->getUser();
         
-        if(!$user || !$user->getRole()->getContribute()) 
+        if(!$user || !$user->getRole()->getItemEventCreate()) 
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -86,18 +107,25 @@ class EventController extends Controller
             $myDate = false;
         }
         
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND e.open = 1 ';
+        }
+        
         if($myDate)
         {
             if(strlen($date) == 7) //format YYYY-MM
             {
                 $ismonth = true;
-                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini <= '".$myDate->format('Y-m-t 23:59:59')."' AND e.dateend >= '".$myDate->format('Y-m-1 00:00:00')."' ORDER BY e.dateini ASC")->getResult();
+                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 $SQLprivacy AND e.dateini <= '".$myDate->format('Y-m-t 23:59:59')."' AND e.dateend >= '".$myDate->format('Y-m-1 00:00:00')."' ORDER BY e.dateini ASC")->getResult();
                 
             }
             else
             {
                 $ismonth = false;
-                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini <= '".$myDate->format('Y-m-d 23:59:59')."' AND e.dateend >= '".$myDate->format('Y-m-d 00:00:00')."' ORDER BY e.dateini ASC")->getResult();
+                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 $SQLprivacy AND e.dateini <= '".$myDate->format('Y-m-d 23:59:59')."' AND e.dateend >= '".$myDate->format('Y-m-d 00:00:00')."' ORDER BY e.dateini ASC")->getResult();
             } 
         }
         else
@@ -106,45 +134,6 @@ class EventController extends Controller
         }
         
         return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items, 'date' => $myDate, 'ismonth' => $ismonth));
-    }
-    
-    public function date2Action($date)
-    {
-        $em = $this->getDoctrine()->getManager();
-        
-        try 
-        {
-            $myDate = new \DateTime($date);
-        }
-        catch(Exception $e)
-        {
-            $myDate = false;
-        }
-        
-        if($myDate)
-        {
-            if(strlen($date) == 7) //format YYYY-MM
-            {
-                $ismonth = true;
-                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".$myDate->format('Y-m-1 00:00:00')."' AND e.dateini <= '".$myDate->format('Y-m-31 23:59:59')."' ORDER BY e.dateini ASC")->getResult();
-                if(count($items))
-                {
-                   $myDate =  $items[0]->getDateIni();
-                }
-                
-            }
-            else
-            {
-                $ismonth = false;
-                $items = $em->createQuery("SELECT e FROM ColectaActivityBundle:Event e WHERE e.dateini >= '".$myDate->format('Y-m-d 00:00:00')."' AND e.dateini <= '".$myDate->format('Y-m-d 23:59:59')."' ORDER BY e.dateini ASC")->getResult();
-            } 
-        }
-        else
-        {
-            $items = array();
-        }
-        
-        return $this->render('ColectaActivityBundle:Event:date2.html.twig', array('items' => $items, 'date' => $myDate, 'ismonth' => $ismonth));
     }
     public function detailsFormAction()
     {
@@ -255,6 +244,7 @@ class EventController extends Controller
             $item->summarize($request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(false);
+            $item->setOpen($request->get('open'));
             $item->setPart(false);
             $item->setActivity(null);
             $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinitime')));
@@ -372,6 +362,7 @@ class EventController extends Controller
             $item->summarize($request->get('text'));
             $item->setAllowComments(true);
             $item->setDraft(false);
+            $item->setOpen($request->get('open'));
             $item->setActivity(null);
             $item->setDateini(new \DateTime(trim($request->get('dateini')).' '.$request->get('dateinitime')));
             $item->setDateend(new \DateTime(trim($request->get('dateend')).' '.$request->get('dateendtime')));
@@ -613,12 +604,12 @@ class EventController extends Controller
     */
     {
         $request = $this->get('request')->request;
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
-        if($user == 'anon.')
+        if(!$user)
         {
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
@@ -764,7 +755,15 @@ class EventController extends Controller
     {
         $dateOb = new \DateTime($date);
         $em = $this->getDoctrine()->getManager();
-        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 AND e.dateini <= \''.$dateOb->format('Y-m-t 23:59:59').'\' AND e.dateend >= \''.$dateOb->format('Y-m-1 00:00:00').'\' ORDER BY e.dateini ASC')->getResult();
+        
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND e.open = 1 ';
+        }
+        
+        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 '.$SQLprivacy.' AND e.dateini <= \''.$dateOb->format('Y-m-t 23:59:59').'\' AND e.dateend >= \''.$dateOb->format('Y-m-1 00:00:00').'\' ORDER BY e.dateini ASC')->getResult();
         
         //array of each day of the month prepared with empty arrays
         $ev = array();
@@ -807,7 +806,15 @@ class EventController extends Controller
     public function icsAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 ORDER BY e.dateini DESC')->getResult();
+        
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND e.open = 1 ';
+        }
+        
+        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 '.$SQLprivacy.' ORDER BY e.dateini DESC')->getResult();
         
         return $this->render('ColectaActivityBundle:Event:calendar.ics.twig', array('events' => $items));
     }

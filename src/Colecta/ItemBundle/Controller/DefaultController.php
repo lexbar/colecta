@@ -41,11 +41,15 @@ class DefaultController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        //Get ALL the items that are not drafts
-        //$items = $em->getRepository('ColectaItemBundle:Item')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
         
         $query = $em->createQuery(
-            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
         )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
         
         $items = $query->getResult();
@@ -95,11 +99,18 @@ class DefaultController extends Controller
             'SELECT i FROM ColectaItemBundle:Item i JOIN ColectaItemBundle:Comment c ON c.item = i WHERE i.draft = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\') ORDER BY i.date ASC'
         );*/
         
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
+        
         $query = $em->createQueryBuilder('ColectaItemBundle:Item')
             ->select('i')
             ->from('ColectaItemBundle:Item', 'i')
             ->leftJoin('i.comments', 'c')
-            ->where('i.draft = 0 AND i.part = 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
+            ->where('i.draft = 0 AND i.part = '.$SQLprivacy.' 0 AND (i.date > \''.$slv->format('Y-m-d H:i:s').'\' OR c.date > \''.$slv->format('Y-m-d H:i:s').'\')')
             ->orderBy('i.lastInteraction', 'ASC')
             ->getQuery();
         
@@ -193,7 +204,14 @@ class DefaultController extends Controller
             return array();
         }
         
-        $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE i IN ('.implode(',', $ids).')';
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
+        
+        $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE i IN ('.implode(',', $ids).')' . $SQLprivacy;
         
         $query = $em->createQuery($queryString)->setMaxResults(($this->ipp + 1))->setFirstResult($page * $this->ipp);
         
@@ -290,13 +308,13 @@ class DefaultController extends Controller
     }*/
     public function relateAction($id) 
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $request = $this->get('request')->request;
         
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($id);
     
-        if($user == 'anon.') 
+        if(!$user) 
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
         }
@@ -391,10 +409,10 @@ class DefaultController extends Controller
     }
     public function likeAction($slug)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.')
+        if(!$user)
         {
             //User must log in
             return new Response('Error',200);

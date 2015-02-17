@@ -22,6 +22,12 @@ h2 {
     background-color: #8c0018;
     border-color: #870018;
 }
+.panel-primary {
+    border-color: #b3001f;
+}
+.panel-primary>.panel-heading {
+    border-color: #b3001f;
+}
 .alert {
     border-width: 1px 1px 4px 1px;
 }

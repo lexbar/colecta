@@ -30,8 +30,16 @@ class RouteController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        //Get ALL the items that are not drafts
-        $items = $em->getRepository('ColectaActivityBundle:Route')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $findby = array('draft'=>0);
+        
+        if(!$this->getUser())
+        {
+            $findby['open'] = 1;
+        }
+        
+        //Get ALL the items that are accessible
+        $items = $em->getRepository('ColectaActivityBundle:Route')->findBy($findby, array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        
         $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
         
         //Pagination
@@ -52,6 +60,19 @@ class RouteController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
+        
+        $user = $this->getUser();
+        
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la ruta que estás buscando');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta ruta');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
         
         return $this->render('ColectaActivityBundle:Route:full.html.twig', array('item' => $item));
     }
@@ -92,9 +113,20 @@ class RouteController extends Controller
             
             
             $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
+            
+            if(!$item)
+            {
+                return new Response('Page not found.', 404);
+            }
+            if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+            {
+                return new Response('Forbidden.', 403);
+            }
+            
             $itemtrack = $item->getTrackpoints();
             
             $n = count($itemtrack);
+            
             if($n > 0) 
             {
                 $url = "http://maps.google.com/maps/api/staticmap?size=300x200&maptype=terrain&sensor=false&path=color:0xff0000|weight:3";
@@ -151,6 +183,16 @@ class RouteController extends Controller
             
             
             $item = $em->getRepository('ColectaActivityBundle:Route')->findOneById($id);
+            
+            if(!$item)
+            {
+                return new Response('Page not found.', 404);
+            }
+            if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+            {
+                return new Response('Forbidden.', 403);
+            }
+            
             $track = $item->getTrackpoints();
             
             $coordinates = array();
@@ -200,7 +242,7 @@ class RouteController extends Controller
     {
         $user = $this->getUser();
         
-        if(!$user || !$user->getRole()->getContribute()) 
+        if(!$user || !$user->getRole()->getItemRouteCreate()) 
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
@@ -209,9 +251,9 @@ class RouteController extends Controller
     }
     public function uploadAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getItemRouteCreate()) 
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
         }
@@ -288,9 +330,9 @@ class RouteController extends Controller
     {
         //Single file upload from XHR form
         
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getItemRouteCreate()) 
         {
             throw $this->createNotFoundException();
         }
@@ -323,19 +365,17 @@ class RouteController extends Controller
     }
     public function XHRPreviewAction($token)
     {        
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        $response = new Response();
-        $response->setStatusCode(200);
-        
-        if($user == 'anon.') 
+        if(!$user || !$user->getRole()->getItemRouteCreate()) 
         {
-            $response->setContent('<strong>Ha ocurrido un error, tienes que estar logueado.</strong>');
-        
-            return $response;
+            throw $this->createNotFoundException();
         }
         else
         {
+            $response = new Response();
+            $response->setStatusCode(200);
+        
             $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
             $token = $this->safeToken($token);
             
@@ -518,6 +558,7 @@ class RouteController extends Controller
                     
                     $item->setAllowComments(true);
                     $item->setDraft(false);
+                    $item->setOpen($request->get('open'));
                     $item->setPart(false);
                     
                     $item->setActivity(null);
@@ -789,7 +830,7 @@ class RouteController extends Controller
             $item->summarize($item->getText());
             $item->setDifficulty($post->get('difficulty'));
             $time = intval($post->get('days')) * 24 * 60 * 60 + intval($post->get('hours')) * 60 * 60 + intval($post->get('minutes')) * 60;
-            $item->setTime($time);
+            $item->setOpen($request->get('open'));
             
             if($persist)
             {
@@ -842,9 +883,20 @@ class RouteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
         
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la ruta que estás buscando');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta ruta');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
         $oformat = $this->acceptedExtensions($extension);
         
-        if($item && $oformat)
+        if($oformat)
         {
             $filepath = $this->getUploadDir() . '/' . $item->getSourcefile();
             $iformat = $this->acceptedExtensions($this->extension($item->getSourcefile()));

@@ -39,7 +39,6 @@
 <script src="/js/pickadate/translations/es_ES.js"></script>
 
 <script>    
-
     var EventDateini = $('#EventDateini').pickadate({
         format: 'dd-mm-yyyy',
         onSet: function(context) {
@@ -57,8 +56,14 @@
         min: $('#EventDateini').val()
     });
     
-    $('#EventDateiniTime').pickatime();
-    $('#EventDateendTime').pickatime();
+    $('#EventDateiniTime').pickatime({
+        interval: 10,
+        format: 'HH:i'
+    });
+    $('#EventDateendTime').pickatime({
+        interval: 10,
+        format: 'HH:i'
+    });
   
     {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
     

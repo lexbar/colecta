@@ -48,6 +48,13 @@ abstract class Item
      * @ORM\Column(name="part", type="boolean")
      */
     protected $part;
+    
+    /**
+     * @var boolean $open
+     *
+     * @ORM\Column(name="open", type="boolean")
+     */
+    protected $open = true;
 
     /**
      * @var string $summary
@@ -545,6 +552,29 @@ abstract class Item
     public function getPart()
     {
         return $this->part;
+    }
+    
+    /**
+     * Set open
+     *
+     * @param boolean $open
+     * @return Item
+     */
+    public function setOpen($open)
+    {
+        $this->open = $open;
+    
+        return $this;
+    }
+
+    /**
+     * Get open
+     *
+     * @return boolean 
+     */
+    public function getOpen()
+    {
+        return $this->open;
     }
 
     /**

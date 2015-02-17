@@ -45,7 +45,20 @@ class PostController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
+        $user = $this->getUser();
+        
         $item = $em->getRepository('ColectaItemBundle:Post')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado el texto que estás buscando');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver este texto');
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
         
         return $this->render('ColectaItemBundle:Post:full.html.twig', array('item' => $item));
     }
@@ -156,6 +169,7 @@ class PostController extends Controller
             $item->setAllowComments(true);
             $item->setDraft(false);
             $item->setPart(false);
+            $item->setOpen($request->get('open'));
             $item->setText($request->get('text'));
             $item->setLinkURL('');
             $item->setLinkImage('');
@@ -289,6 +303,7 @@ class PostController extends Controller
             $item->setName($request->get('name'));
             $item->setText($request->get('text'));
             $item->summarize($request->get('text'));
+            $item->setOpen($request->get('open'));
             $item->setLinkURL('');
             $item->setLinkImage('');
             $item->setLinkExcerpt('');

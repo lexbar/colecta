@@ -405,3 +405,14 @@ function process() {
     
     $('#ProcessForm').attr('action','').attr('onSubmit','').submit();
 }
+
+function privacyToggle()
+{
+    if($('#privacy').val() == '1'){
+        $('#privacy').val('0');
+        $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+    }else{
+        $('#privacy').val('1');
+        $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+    }
+}
