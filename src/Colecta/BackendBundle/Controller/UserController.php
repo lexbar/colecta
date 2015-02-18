@@ -377,7 +377,13 @@ class UserController extends Controller
             //Welcome Text
             $welcomeText = $request->get('welcomeText');
             
-            if($newUser->getName() && $newUser->getMail())
+            $repeated = $em->getRepository('ColectaUserBundle:User')->findOneByMail($request->get('userMail'));
+            
+            if($repeated)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'El email '.$repeated->getMail().' ya pertenece a otro usuario.');
+            }
+            elseif($newUser->getName() && $newUser->getMail())
             {
                 $newUser->setPass('');
                 $newUser->setAvatar('');
