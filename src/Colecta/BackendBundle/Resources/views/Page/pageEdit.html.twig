@@ -56,14 +56,14 @@
             
             <div class="form-group">
                 <label class="col-sm-4 col-lg-3 control-label">Icono</label>
-                <div class="col-sm-8 col-lg-9">
-                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                <div class="col-sm-8 col-lg-9 row">
+                    <div class="col-xs-4 col-md-3 col-lg-2">
                         <label class="radio-inline"><input type="radio" name="pageIcon" value="" {% if page.icon == '' %}checked="checked"{% endif %}> (ninguno)</label>
                     </div>
                     
                     {% for icon in icons %}
-                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                            <label class="radio-inline"><input type="radio" name="pageIcon" value="{{ icon }}" {% if page.icon == icon %}checked="checked"{% endif %}> <i class="fa fa-{{ icon }}"></i></label>
+                        <div class="col-xs-4 col-md-3 col-lg-2">
+                            <label class="radio-inline"><input type="radio" name="pageIcon" value="{{ icon }}" {% if page.icon == icon %}checked="checked"{% endif %}> <i class="fa fa-{{ icon }} fa-fw"></i></label>
                         </div>
                     {% endfor %}
                 </div>
@@ -106,7 +106,12 @@
 					        </div>
 					    {% endfor %}{% endif %}
 					    </div>
+					    
 					    <button type="button" class="btn btn-success btn-block" onClick="newField();">Insertar otro campo</button>
+					    
+					    <hr>
+					    <label id="contactFormEmail" for="contactFormEmail">Dirección de contacto</label>
+    				    <input class="form-control" type="text" name="contactFormEmail" id="contactFormEmail" value="{{ page.contactData is defined and page.contactData.email is defined ? page.contactData.email | default('') : '' }}">
 					</div>
                 </div>
             </div>

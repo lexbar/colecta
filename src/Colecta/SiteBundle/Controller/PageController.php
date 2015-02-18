@@ -18,10 +18,10 @@ class PageController extends Controller
              throw $this->createNotFoundException('No existe la página que buscas');
         }
         
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
         /* Get the user role id, if annonymous role id = 0 */
-        if($user == 'anon.')
+        if(!$user)
         {
             $role = 0;
             $contactRequestUser = null;
@@ -59,8 +59,7 @@ class PageController extends Controller
 	                $em->persist($contactRequest); 
 	                $em->flush();
 	                
-	                $this->get('session')->getFlashBag()->add('success', 'El formulario se ha enviado correctamente.');
-	                $this->get('session')->getFlashBag()->add('pageFormSent','1');
+	                $sendTo = isset($contactData['email']) && !empty($contactData['email']) ? $contactData['email'] : $configmail['admin'];
 	                
 	                /* Send mail to admin */
 	                $mailer = $this->get('mailer');
@@ -70,9 +69,12 @@ class PageController extends Controller
 	    		    $message->setSubject('Formulario ['. $page->getName() .']')
 	    		        ->setFrom($configmail['from'])
 	    		        //->setReplyTo(array($email => $name))
-	    		        ->setTo($configmail['admin'])
+	    		        ->setTo($sendTo)
 	    		        ->setBody($this->renderView('ColectaSiteBundle:Page:contactRequest.txt.twig', array('page' => $page, 'contactRequest'=>$contactRequest)), 'text/plain');
 	    		    $mailer->send($message);
+	    		    
+	    		    $this->get('session')->getFlashBag()->add('success', 'El formulario se ha enviado correctamente.');
+	                $this->get('session')->getFlashBag()->add('pageFormSent','1');
     		    }
             }
             
@@ -80,7 +82,7 @@ class PageController extends Controller
         }
         else
         {
-            throw $this->createNotFoundException('No tienes permisos para visualizar la página.');
+            throw $this->createNotFoundException('No tienes permiso para visualizar la página.');
         }
     }
     

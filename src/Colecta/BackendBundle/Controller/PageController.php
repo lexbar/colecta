@@ -154,7 +154,7 @@ class PageController extends Controller
                     $field++;
                 }
                 
-                $page->setContactData(array('fields'=>$contactDataFields));
+                $page->setContactData( array('fields' => $contactDataFields, 'email' => $request->get('contactFormEmail')) );
                 
                 $page->setContact(true);
             }
@@ -312,7 +312,7 @@ class PageController extends Controller
                     $field++;
                 }
                 
-                $page->setContactData(array('fields'=>$contactDataFields));
+                $page->setContactData( array('fields' => $contactDataFields, 'email' => $request->get('contactFormEmail')) );
                 
                 $page->setContact(true);
             }

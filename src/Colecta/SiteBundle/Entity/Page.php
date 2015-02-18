@@ -106,6 +106,11 @@ class Page
     protected $icon; //based on Font Awesome, fa-* (without the 'fa-' part)
     
     /**
+     * @ORM\OneToMany(targetEntity="ContactRequest", mappedBy="page")
+     */
+    private $contactRequests;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -444,5 +449,45 @@ class Page
     public function prePersist()
     {
         $this->setDate(new \DateTime('now'));
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contactRequests = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add contactRequests
+     *
+     * @param \Colecta\SiteBundle\Entity\ContactRequest $contactRequests
+     * @return Page
+     */
+    public function addContactRequest(\Colecta\SiteBundle\Entity\ContactRequest $contactRequests)
+    {
+        $this->contactRequests[] = $contactRequests;
+
+        return $this;
+    }
+
+    /**
+     * Remove contactRequests
+     *
+     * @param \Colecta\SiteBundle\Entity\ContactRequest $contactRequests
+     */
+    public function removeContactRequest(\Colecta\SiteBundle\Entity\ContactRequest $contactRequests)
+    {
+        $this->contactRequests->removeElement($contactRequests);
+    }
+
+    /**
+     * Get contactRequests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getContactRequests()
+    {
+        return $this->contactRequests;
     }
 }
