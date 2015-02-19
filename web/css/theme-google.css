@@ -30,6 +30,8 @@ h1, h2, h3, h4, h5, h6 {
 .nav-stacked>li+li {margin: 0;}
 .nav-pills>li>a { background-color: #FFF; border-radius: 0; }
 
+.nav-tabs.nav-justified>li>a {color: #333;}
+
 .header {background-color:#ffffff;border-width:0;}
 .header .navbar-collapse {background-color:#ffffff;}
 .btn,.form-control,.panel,.list-group,.well {border-radius:1px;box-shadow:0 0 0;}
@@ -116,7 +118,6 @@ h3,h4,h5 {
 }
 
 a.myname {
-    background-color: #FFF;
     padding: 10px;
 }
 a.myname img {
