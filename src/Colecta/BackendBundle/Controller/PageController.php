@@ -46,10 +46,10 @@ class PageController extends Controller
     
     public function newPageAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigPages())
+        if(!$user || !$user->getRole()->getSiteConfigPages())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }

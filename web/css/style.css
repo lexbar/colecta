@@ -438,8 +438,14 @@ h2, h4 {
     margin: 50px 0 20px;
     font-style: italic;
 }
-.footer a {
-    color: #333;
+.footer a.deporde {
+    color: #222;
+    vertical-align: middle;
+    font-style: normal;
+    font-weight: bold;
+}
+.footer a.deporde img {
+    vertical-align: text-top;
 }
 @media (max-width: 1200px) { /* Medium devices */
     .headerimg {
