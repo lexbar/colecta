@@ -169,7 +169,18 @@ class UserController extends Controller
             }
             
             $user->setName($request->get('userName'));
-            $user->setMail($request->get('userMail'));
+            
+            $repeated = $em->getRepository('ColectaUserBundle:User')->findOneByMail($request->get('userMail'));
+            
+            if($repeated && $repeated->getId() != $user->getId())
+            {
+                $this->get('session')->getFlashBag()->add('error', 'El email '.$repeated->getMail().' ya pertenece a otro usuario.');
+            }
+            else
+            {
+                $user->setMail($request->get('userMail'));
+            }
+            
             $user->setRole($role);
             
             $profile->setName($request->get('name'));
@@ -316,7 +327,7 @@ class UserController extends Controller
             
             $profile = new UserProfile();
             $newUser->setProfile($profile);
-            $profile->setUser($user);
+            $profile->setUser($newUser);
             
             $profile->setName($request->get('name'));
             $profile->setSurname($request->get('surname'));
