@@ -82,11 +82,6 @@ h2 {
 .panel-default .panel-heading {
     background-color: #FFF;
 }
-
-.item .details {
-    font-size: 12px;
-    color: #999;
-}
 .item .well {
     border-width: 1px 0 0;
     background-color: #FFF;
@@ -168,4 +163,10 @@ h2 {
 
 .messages hr {
     margin: 5px 0 15px;
+}
+
+@media (max-width: 767px) { /* Extra Small devices */
+    .item .properties li {
+        border: none;
+    }
 }

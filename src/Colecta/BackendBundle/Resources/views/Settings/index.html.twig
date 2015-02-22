@@ -32,7 +32,7 @@
                 </label>
                 <div class="col-sm-8">
                     <select id="web_theme" name="web_theme" class="form-control">
-                        {% set theme_options = [['theme-blue','Azul'],['theme-google','Google']] %}
+                        {% set theme_options = [['theme-blue','Cásico'],['theme-google','Google']] %}
                         {% for theme in theme_options %}
                         <option{% if web_parameters.twig.globals.web_theme == theme[0] %} selected="selected"{% endif %} value="{{ theme[0] }}">{{ theme[1] }}</option>
                         {% endfor %}

@@ -118,13 +118,15 @@ h3,h4,h5 {
 }
 
 a.myname {
-    padding: 10px;
+    padding: 5px 5px 0 10px;
 }
 a.myname img {
-border-radius: 2px;
+border-radius: 50%;
+border-bottom: 2px solid #ccc;
+background-color: #FFF;
 }
 #self a.myname strong {
-    top: 20px;
+    top: 15px;
     right: 20px;
     left: 70px;
 }
@@ -144,8 +146,13 @@ border-radius: 2px;
     line-height: 1.5;
 }
 .item .details img {
-    vertical-align: top;
+    vertical-align: bottom;
     border-radius: 50%;
+    background-color: #FFF;
+}
+.comments .media .pull-left img {
+    border-radius: 50%;
+    background-color: #FFF;
 }
 .item .list-group-item {
     border: 1px dashed #eaeaea;
@@ -155,4 +162,22 @@ border-radius: 2px;
 }
 .footer a.deporde img {
     vertical-align: sub;
+}
+
+@media (max-width: 1200px) { /* Medium devices */
+    #self a.myname strong {
+        top: 8px;
+        left: 60px;
+    }
+}
+@media (max-width: 767px) { /* Extra Small devices */
+    .nav-tabs li.active a {
+        color: #FFF;
+        border-radius: 0;
+        border: none;
+        background-color: #4285f4;
+    }
+    .nav-tabs li a:hover {
+        border: none !important;    
+    }
 }
