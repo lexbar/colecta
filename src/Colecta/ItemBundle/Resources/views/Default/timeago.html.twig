@@ -19,6 +19,7 @@
         Ayer<span> a las {{ date | date('H:i')  }}</span>
     {% else %}
         {{ date | date('j')  }} {% include '::month.html.twig' with{'date':date,'short':1} %}
+        {% if date | date('Y') != 'today' | date('Y') %} {{ date | date('Y') }} {% endif %}
         <span> a las {{ date | date('H:i')  }}</span>
     {% endif %}
 {% endif %}

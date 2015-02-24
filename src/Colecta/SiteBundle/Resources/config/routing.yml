@@ -1,9 +1,9 @@
-ColectaContact:
-    pattern:  /contacto/
-    defaults: { _controller: ColectaSiteBundle:Default:contact }
 ColectaPagesNavigation:
     pattern:  /pagesnavigation/{context}/
     defaults: { _controller: ColectaSiteBundle:Page:navigation }
 ColectaPage:
     pattern:  /static/{slug}/
     defaults: { _controller: ColectaSiteBundle:Page:view }
+ColectaTheme:
+    path:  /css/theme.css
+    defaults: { _controller: ColectaSiteBundle:Default:theme }

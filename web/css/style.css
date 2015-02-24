@@ -304,6 +304,9 @@ h2, h4 {
     opacity: 1;
 }
 
+.dropdown-menu>li>a {
+    padding: 8px 20px;
+}
 .dropdown:hover .dropdown-menu {
     display: block !important;
 }
@@ -443,12 +446,17 @@ h2, h4 {
 }
 .footer a.deporde {
     color: #222;
-    vertical-align: middle;
+    padding-left: 5px;
     font-style: normal;
-    font-weight: bold;
+    white-space: nowrap;    
 }
 .footer a.deporde img {
-    vertical-align: text-top;
+    vertical-align: baseline;
+    width: 14px;
+}
+.footer a.deporde span {
+    vertical-align: top;
+    line-height: 20px;
 }
 @media (max-width: 1200px) { /* Medium devices */
     .headerimg {

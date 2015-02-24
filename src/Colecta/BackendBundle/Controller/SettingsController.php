@@ -188,6 +188,7 @@ class SettingsController extends Controller
             $web_parameters['twig']['globals']['web_title'] = $request->get('web_title');
             $web_parameters['twig']['globals']['web_description'] = $request->get('web_description');
             $web_parameters['twig']['globals']['web_theme'] = $request->get('web_theme');
+            $web_parameters['twig']['globals']['web_theme_colors'] = explode(',', $request->get('web_theme_colors'));
             $web_parameters['twig']['globals']['theme_sidebar'] = $request->get('theme_sidebar');
             
             $dumper = new Dumper();
