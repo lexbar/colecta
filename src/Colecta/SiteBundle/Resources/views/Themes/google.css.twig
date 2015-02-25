@@ -36,7 +36,7 @@ a.btn-default {
     color: {{ web_theme_colors[7] | default('#4285f4') }};
 }
 .navbar-default {background-color:#f4f4f4;border-width:0;}
-.navbar-default .navbar-nav > .active > a,.navbar-default .navbar-nav > li:hover > a {border:0 solid #4285f4;border-bottom-width:2px;font-weight:800;background-color:transparent;}
+.navbar-default .navbar-nav > .active > a,.navbar-default .navbar-nav > li:hover > a {border:0 solid {{ web_theme_colors[7] | default('#4285f4') }};border-bottom-width:2px;font-weight:800;background-color:transparent;}
 .navbar-default .dropdown-menu {background-color:#ffffff;}
 .navbar-default .dropdown-menu li > a {padding-left:30px;}
 
@@ -50,7 +50,7 @@ a.btn-default {
 .btn,.form-control,.panel,.list-group,.well {border-radius:1px;box-shadow:0 0 0;}
 .form-control {border-color:#d7d7d7;}
 .btn-primary {border-color:transparent;}
-.btn-primary,.label-primary,.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {background-color:#4285f4;}
+.label-primary,.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {background-color:{{ web_theme_colors[7] | default('#4285f4') }};}
 .btn-primary, .btn-primary:visited, .btn-primary:link, .dropdown-menu>li>a:hover {
     background-color: {{ web_theme_colors[7] | default('#4285f4') }};
 }
