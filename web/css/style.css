@@ -428,6 +428,13 @@ h2, h4 {
     border-left: 3px solid #EEE;
     background-color: #FAFAFA;
     margin-bottom: 10px;
+    position: relative;
+}
+.contactFormField .fieldNumber {
+    position: absolute;
+    font-size: 30px;
+    left: -50px;
+    top: 0px;
 }
 .contactFormField span.pull-right {
     cursor: pointer;
@@ -519,6 +526,13 @@ h2, h4 {
         background-color:#3276b1;
         border-color:#285e8e;
         color: #FFF;
+    }
+    
+    .contactFormField .fieldNumber {
+        position: relative;
+        font-size: inherit;
+        left: auto;
+        top: auto;
     }
     
     .item .panel-heading .panel-title {

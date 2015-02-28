@@ -27,7 +27,7 @@
                 <div class="col-sm-8 col-lg-9">
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" name="pageSidebarShow"{% if page.sidebarShow %} checked="checked"{% endif %}> Mostrar enlace en la barra de navegación.							
+							<input type="checkbox" name="pageSidebarShow"{% if page.sidebarShow or page.id < 1 %} checked="checked"{% endif %}> Mostrar enlace en la barra de navegación.							
 						</label>
 					</div>
                 </div>
@@ -76,7 +76,7 @@
                 <div class="col-sm-8 col-lg-9">
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" id="pageContact" name="pageContact"{% if page.contact %} checked="checked"{% endif %}> Mostrar formulario de contacto.							
+							<input type="checkbox" id="pageContact" name="pageContact"{% if page.contact %} checked="checked"{% endif %}> Crear formulario de contacto.							
 						</label>
 					</div>
 					<div id="contactForm"{% if not page.contact %} style="display:none"{% endif %}>
@@ -84,6 +84,7 @@
 					    <div id="contactFormFields">
 					    {% if page.contactData.fields is defined %}{% for field in page.contactData.fields %}
 					        <div class="contactFormField" id="contactFormField{{ loop.index0 }}">
+					            <span class="fieldNumber">#{{ loop.index }} </span>
     				            <span class="text-danger pull-right" onClick="deleteField({{ loop.index0 }})">eliminar</span>
     				            
     				            <label id="contactFormField{{ loop.index0 }}TypeLabel" for="contactFormField{{ loop.index0 }}Type">Tipo de campo</label>
@@ -141,7 +142,7 @@ $('#pageContact').change(function () {
 var fields = {{ page.contactData | length }};
 
 function newField() {
-    $('#contactFormFields').append('<div class="contactFormField" id="contactFormField'+fields+'"><span class="text-danger pull-right" onClick="deleteField('+fields+')">eliminar</span><label id="contactFormField'+fields+'TypeLabel" for="contactFormField'+fields+'Type">Tipo de campo</label><select class="form-control" name="contactFormField'+fields+'Type" id="contactFormField'+fields+'Type"><option value="text">Texto</option><option value="textarea">Texto de párrafo</option><option value="checkbox">Opción si/no</option><option value="list">Elegir de una lista</option></select><br><label id="contactFormField'+fields+'TitleLabel" for="contactFormField'+fields+'Title">Título de la pregunta</label><input class="form-control" type="text" name="contactFormField'+fields+'Title" id="contactFormField'+fields+'Title"><br><label id="contactFormField'+fields+'HelpLabel" for="contactFormField'+fields+'Help">Texto de ayuda <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Help" id="contactFormField'+fields+'Help"><br><label id="contactFormField'+fields+'ValueLabel" for="contactFormField'+fields+'Value">Valor <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Value" id="contactFormField'+fields+'Value"><p class="help-block">Si es tipo "Elegir de una lista" inserta las opciones separadas por comas.</p></div>');
+    $('#contactFormFields').append('<div class="contactFormField" id="contactFormField'+fields+'"><span class="fieldNumber">#'+(fields + 1)+' </span><span class="text-danger pull-right" onClick="deleteField('+fields+')">eliminar</span><label id="contactFormField'+fields+'TypeLabel" for="contactFormField'+fields+'Type">Tipo de campo</label><select class="form-control" name="contactFormField'+fields+'Type" id="contactFormField'+fields+'Type"><option value="text">Texto</option><option value="textarea">Texto de párrafo</option><option value="checkbox">Opción si/no</option><option value="list">Elegir de una lista</option></select><br><label id="contactFormField'+fields+'TitleLabel" for="contactFormField'+fields+'Title">Título de la pregunta</label><input class="form-control" type="text" name="contactFormField'+fields+'Title" id="contactFormField'+fields+'Title"><br><label id="contactFormField'+fields+'HelpLabel" for="contactFormField'+fields+'Help">Texto de ayuda <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Help" id="contactFormField'+fields+'Help"><br><label id="contactFormField'+fields+'ValueLabel" for="contactFormField'+fields+'Value">Valor <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Value" id="contactFormField'+fields+'Value"><p class="help-block">Si es tipo "Elegir de una lista" inserta las opciones separadas por comas.</p></div>');
     
     fields++;
 }
@@ -159,6 +160,7 @@ function deleteField(id) {
 }
 
 function updateFieldId(previd, postid) {
+    $('#contactFormField'+previd+' .fieldNumber').html('#'+ (postid + 1) + ' ');
     $('#contactFormField'+previd+' span.pull-right').attr('onClick', 'deleteField('+postid+')');
     $('#contactFormField'+previd).attr('id', 'contactFormField'+postid);
     $('#contactFormField'+previd+'TypeLabel').attr('id', 'contactFormField'+postid+'TypeLabel').attr('for', 'contactFormField'+postid+'Type');
