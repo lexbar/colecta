@@ -192,6 +192,12 @@ h2 {
     margin: 5px 0 15px;
 }
 
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    background-color: {{ web_theme_colors[8] | default('#1383A0') }};
+    border-color: {{ web_theme_colors[9] | default('#1383A0') }};
+    color: #FFF;
+}
+
 .progress-bar-primary {
     background-color: {{ web_theme_colors[4] | default('#009BDB') }};
 }

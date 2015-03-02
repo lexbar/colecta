@@ -191,6 +191,13 @@ background-color: #FFF;
 .profileHeader h2 {
     font-size: 22px;
 }
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    background-color: {{ web_theme_colors[8] | default('#009BDB') }};
+    border-color: {{ web_theme_colors[9] | default('#009BDB') }};
+    color: #FFF;
+}
+
 .progress {
     border-radius: 3px;
     box-shadow: none;
