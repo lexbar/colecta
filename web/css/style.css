@@ -465,6 +465,10 @@ h2, h4 {
     vertical-align: top;
     line-height: 20px;
 }
+
+#toolbar {
+    margin-bottom: 5px;
+}
 .btn.btn-default.wysihtml5-command-active {
     box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.2);
     background: #eee;

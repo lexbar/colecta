@@ -18,19 +18,29 @@
             <div class="form-group">
                 <label class="col-sm-4 col-lg-3 control-label" for="PageText">Texto</label>
                 <div class="col-sm-8 col-lg-9">
-                    <p id="toolbar">
+                    <div id="toolbar">
                         <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" class="btn btn-default" title="Título"><i class="fa fa-text-height fa-fw"></i></a>
-                         - 
+                         | 
                         <a data-wysihtml5-command="bold" class="btn btn-default" title="Negrilla"><i class="fa fa-bold fa-fw"></i></a>
                         <a data-wysihtml5-command="italic" class="btn btn-default" title="Cursiva"><i class="fa fa-italic fa-fw"></i></a>
                         <a data-wysihtml5-command="underline" class="btn btn-default" title="Subrayar"><i class="fa fa-underline fa-fw"></i></a>
-                         - 
+                         | 
+                        <a data-wysihtml5-command="createLink" class="btn btn-default" title="Enlace"><i class="fa fa-link fa-fw"></i></a>
+                        <a data-wysihtml5-command="removeLink" class="btn btn-default" title="Quitar enlace"><i class="fa fa-chain-broken fa-fw"></i></a>
+                         | 
                         <a data-wysihtml5-command="insertUnorderedList" class="btn btn-default" title="Lista desordenada"><i class="fa fa-list-ul fa-fw"></i></a>
                         <a data-wysihtml5-command="insertOrderedList" class="btn btn-default" title="Lista ordenada"><i class="fa fa-list-ol fa-fw"></i></a>
-                         - 
-                        <a data-wysihtml5-command="undo" class="btn btn-default" title="Deshacer"><i class="fa fa-undo fa-fw"></i></a>
-                        <a data-wysihtml5-command="redo" class="btn btn-default" title="Rehacer"><i class="fa fa-repeat fa-fw"></i></a>
-                    </p>
+                        
+                        <div data-wysihtml5-dialog="createLink" style="display:none">
+                            <label>
+                                Enlace:
+                                <input data-wysihtml5-dialog-field="href" value="http://">
+                            </label>
+                            <a data-wysihtml5-dialog-action="save">OK</a>
+                            <a data-wysihtml5-dialog-action="cancel">Cancel</a>
+                        </div>
+                    </div>
+                    
                     <textarea rows="8" name="pageText" id="PageText" class="form-control">{{ page.text }}</textarea>
                 </div>
             </div>
