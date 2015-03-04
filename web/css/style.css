@@ -71,6 +71,7 @@ h2, h4 {
 }
 .navbar-default a.navbar-brand * {
     vertical-align: middle;
+    max-height: 24px;
 }
 .navbar-form {
     padding-right: 0;
@@ -509,10 +510,6 @@ h2, h4 {
         margin-left: 15px;
         padding-right: 60px;
         font-size: 20px;
-    }
-    .web_logo {
-        height: 24px;
-        max-width: 35px;
     }
     .navbar-form {
         border-width: 0;
