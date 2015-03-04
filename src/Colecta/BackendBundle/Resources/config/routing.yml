@@ -42,16 +42,25 @@ ColectaBackendNewPage:
     defaults: { _controller: ColectaBackendBundle:Page:newPage } 
 ColectaBackendPage:
     pattern:  /back/page/{page_id}
-    defaults: { _controller: ColectaBackendBundle:Page:edit } 
+    defaults: { _controller: ColectaBackendBundle:Page:editPage } 
 ColectaBackendPageDelete:
     pattern:  /back/page/{page_id}/delete/
-    defaults: { _controller: ColectaBackendBundle:Page:delete } 
+    defaults: { _controller: ColectaBackendBundle:Page:deletePage } 
 ColectaBackendPageMoveUp:
     pattern:  /back/page/{page_id}/up/
-    defaults: { _controller: ColectaBackendBundle:Page:moveUp } 
+    defaults: { _controller: ColectaBackendBundle:Page:movePageUp } 
 ColectaBackendPageMoveDown:
     pattern:  /back/page/{page_id}/down/
-    defaults: { _controller: ColectaBackendBundle:Page:moveDown } 
+    defaults: { _controller: ColectaBackendBundle:Page:movePageDown } 
+ColectaBackendNewLink:
+    pattern:  /back/link/new/
+    defaults: { _controller: ColectaBackendBundle:Settings:newLink } 
+ColectaBackendLink:
+    pattern:  /back/link/{link_id}
+    defaults: { _controller: ColectaBackendBundle:Settings:editLink } 
+ColectaBackendLinkDelete:
+    pattern:  /back/link/{link_id}/delete/
+    defaults: { _controller: ColectaBackendBundle:Settings:deleteLink } 
     
 ColectaBackendLotteryIndex:
     pattern:  /back/lottery/

@@ -178,7 +178,7 @@ class PageController extends Controller
         return $this->render('ColectaBackendBundle:Page:pageEdit.html.twig', array('page'=>$page, 'roles'=>$roles));
     }
     
-    public function editAction($page_id)
+    public function editPageAction($page_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -336,7 +336,7 @@ class PageController extends Controller
         return $this->render('ColectaBackendBundle:Page:pageEdit.html.twig', array('page'=>$page, 'roles'=>$roles));
     }
     
-    public function deleteAction($page_id)
+    public function deletePageAction($page_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -364,7 +364,7 @@ class PageController extends Controller
         return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
     }
     
-    public function moveUpAction($page_id)
+    public function movePageUpAction($page_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -414,7 +414,7 @@ class PageController extends Controller
         return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
     }
     
-    public function moveDownAction($page_id)
+    public function movePageDownAction($page_id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();

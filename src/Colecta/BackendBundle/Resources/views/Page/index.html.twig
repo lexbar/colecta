@@ -7,24 +7,37 @@
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'page' } %}
         
     <div class="monocontent tabs">
-        <a href="{{ path('ColectaBackendNewPage') }}" class="btn btn-primary">Crear Nueva Página <i class="fa fa-plus"></i></a> 
+        <a href="{{ path('ColectaBackendNewPage') }}" class="btn btn-primary">Crear Nueva Página <i class="fa fa-plus"></i></a> <a href="{{ path('ColectaBackendNewLink') }}" class="btn btn-default">Crear Enlace <i class="fa fa-plus"></i></a> 
         {% if pages | length > 0 %}
+            <hr>
+            
+            <table class="table table-hover">
+            <thead><tr><th>Nombre</th><th>Estado</th>{% if pages | length > 1 %}<th>Orden</th>{% endif %}<th class="text-right">Acciones</th></tr></thead>
+            {% for page in pages %}
+                <tr>
+                    <td><a href="{{ path('ColectaPage', {slug:page.slug}) }}">{% if page.icon %}<i class="fa fa-{{ page.icon }} fa-fw"></i> {% endif %}{{ page.name }}</a><br>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': page.date } only %}</td>
+                    <td>{% if page.draft %}<span class="hidden-xs">Pendiente</span><i class="fa fa-edit visible-xs"></i>{% else %}<span class="hidden-xs">Publicado</span><i class="fa fa-check visible-xs"></i>{% endif %}</td>
+                    {% if pages | length > 1 %}
+                    <td>{% if page.sidebarShow %}<a href="{{ path('ColectaBackendPageMoveUp' , {'page_id':page.id}) }}"><i class="fa fa-chevron-up"></i></a> <a href="{{ path('ColectaBackendPageMoveDown' , {'page_id':page.id}) }}"><i class="fa fa-chevron-down"></i></a>{% else %} <i class="fa fa-eye-slash"></i> {% endif %}</td>
+                    {% endif %}
+                    <td class="text-right">{% if page.contactRequests | length == 0 %}<a href="{{ path('ColectaBackendPageDelete', {'page_id':page.id}) }}" class="text-danger" onClick="confirm('¿Seguro que deseas eliminar la página?\n{{ page.name }}')">eliminar</a> / {% endif %}<a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class="text-success">editar</a></td>
+                </tr> 
+            {% endfor %}
+            </table>
+        {% endif %}
         
-        <hr>
-        
-        <table class="table table-hover">
-        <thead><tr><th>Nombre</th><th>Estado</th>{% if pages | length > 1 %}<th>Orden</th>{% endif %}<th>Acciones</th></tr></thead>
-        {% for page in pages %}
-            <tr>
-                <td><a href="{{ path('ColectaPage', {slug:page.slug}) }}">{% if page.icon %}<i class="fa fa-{{ page.icon }} fa-fw"></i> {% endif %}{{ page.name }}</a><br>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': page.date } only %}</td>
-                <td>{% if page.draft %}<span class="hidden-xs">Pendiente</span><i class="fa fa-edit visible-xs"></i>{% else %}<span class="hidden-xs">Publicado</span><i class="fa fa-check visible-xs"></i>{% endif %}</td>
-                {% if pages | length > 1 %}
-                <td>{% if page.sidebarShow %}<a href="{{ path('ColectaBackendPageMoveUp' , {'page_id':page.id}) }}"><i class="fa fa-chevron-up"></i></a> <a href="{{ path('ColectaBackendPageMoveDown' , {'page_id':page.id}) }}"><i class="fa fa-chevron-down"></i></a>{% else %} <i class="fa fa-eye-slash"></i> {% endif %}</td>
-                {% endif %}
-                <td><a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class="text-success">editar</a>{% if page.contactRequests | length == 0 %} / <a href="{{ path('ColectaBackendPageDelete', {'page_id':page.id}) }}" class="text-danger" onClick="confirm('¿Seguro que deseas eliminar la página?\n{{ page.name }}')">eliminar</a>{% endif %}</td>
-            </tr> 
-        {% endfor %}
-        </table>
+        {% if web_links | length > 0 %}
+            <hr>
+            
+            <table class="table table-hover">
+            <thead><tr><th>Enlace</th><th class="text-right">Acciones</th></tr></thead>
+            {% for link in web_links %}
+                <tr>
+                    <td><a href="{{ link[0] }}">{% if link[2] is defined %}<i class="fa fa-{{ link[2] }} fa-fw"></i> {% endif %}{{ link[1] }}</a><br>{{ link[0] }}</td>
+                    <td class="text-right"><a href="{{ path('ColectaBackendLinkDelete', {'link_id':loop.index0}) }}" class="text-danger" onClick="confirm('¿Seguro que deseas eliminar el enlace?\n{{ link[0] }}')">eliminar</a> / <a href="{{ path('ColectaBackendLink', {'link_id':loop.index0}) }}" class="text-success">editar</a></td>
+                </tr> 
+            {% endfor %}
+            </table>
         {% endif %}
     </div>
 {% endblock%}

@@ -12,6 +12,7 @@ twig:
         web_logo: ''
         web_logo_only: 0
         web_header_img: {  }
+        web_links: {  }
         itemIcons:
             Item/Post: comments
             Activity/Event: calendar

@@ -211,6 +211,223 @@ class SettingsController extends Controller
         return $this->render('ColectaBackendBundle:Settings:index.html.twig', array('web_parameters'=>$web_parameters));
     }
     
+    public function newLinkAction() 
+    {
+        // SECURITY 
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if(!$user || !$user->getRole()->getSiteConfigSettings())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        //END SECURITY
+        
+        // Parameters file location
+        $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
+        
+        // Get the parser to manage settings 
+        $yaml = new Parser();
+        
+        // If config file does not exist, we create a new one with default parameters
+        if(!file_exists($config_location))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No existe el archivo de configuración. Se creará uno nuevo.');
+            $web_parameters = $this->getDefaultWebParameters();
+        }
+        else
+        {
+            try
+            {
+                $web_parameters = $yaml->parse(file_get_contents($config_location));
+            } 
+            catch (ParseException $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
+                $web_parameters = $this->getDefaultWebParameters();
+            }
+            catch (Exception $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
+                $web_parameters = $this->getDefaultWebParameters();
+            }
+        }
+        
+        if ($this->get('request')->getMethod() == 'POST') 
+        {   
+            $request = $this->get('request')->request;
+            
+            $link_id = count($web_parameters['twig']['globals']['web_links']);
+            $web_parameters['twig']['globals']['web_links'][$link_id] = array($request->get('linkURL'), $request->get('linkName'), $request->get('linkIcon'));
+            
+            $dumper = new Dumper();
+            try
+            {
+                $yaml = $dumper->dump($web_parameters, 4);
+                
+                file_put_contents($config_location, $yaml);
+                
+                $this->get('session')->getFlashBag()->add('success', 'Enlace modificado correctamente');
+                
+                return new RedirectResponse($this->generateUrl('ColectaBackendLink', array('link_id' => $link_id)));
+            }
+            catch (DumpException $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
+            }
+        }
+        
+        $link = array('','','');
+        
+        return $this->render('ColectaBackendBundle:Link:linkEdit.html.twig', array('link'=>$link));
+    }
+    
+    public function editLinkAction($link_id) 
+    {
+        // SECURITY 
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if(!$user || !$user->getRole()->getSiteConfigSettings())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        //END SECURITY
+        
+        // Parameters file location
+        $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
+        
+        // Get the parser to manage settings 
+        $yaml = new Parser();
+        
+        // If config file does not exist, we create a new one with default parameters
+        if(!file_exists($config_location))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No existe el archivo de configuración. Se creará uno nuevo.');
+            $web_parameters = $this->getDefaultWebParameters();
+        }
+        else
+        {
+            try
+            {
+                $web_parameters = $yaml->parse(file_get_contents($config_location));
+            } 
+            catch (ParseException $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
+                $web_parameters = $this->getDefaultWebParameters();
+            }
+            catch (Exception $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
+                $web_parameters = $this->getDefaultWebParameters();
+            }
+        }
+        
+        if ($this->get('request')->getMethod() == 'POST') 
+        {   
+            $request = $this->get('request')->request;
+            
+            $web_parameters['twig']['globals']['web_links'][$link_id] = array($request->get('linkURL'), $request->get('linkName'), $request->get('linkIcon'));
+            
+            $dumper = new Dumper();
+            try
+            {
+                $yaml = $dumper->dump($web_parameters, 4);
+                
+                file_put_contents($config_location, $yaml);
+                
+                $this->get('session')->getFlashBag()->add('success', 'Enlace modificado correctamente');
+                
+                return new RedirectResponse($this->generateUrl('ColectaBackendLink', array('link_id' => $link_id)));
+            }
+            catch (DumpException $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
+            }
+        }
+        
+        if(!isset($web_parameters['twig']['globals']['web_links']) || count($web_parameters['twig']['globals']['web_links']) <= $link_id)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No existe el enlace.');
+            return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
+        }
+        
+        $link = $web_parameters['twig']['globals']['web_links'][$link_id];
+        
+        return $this->render('ColectaBackendBundle:Link:linkEdit.html.twig', array('link_id'=>$link_id, 'link'=>$link));
+    }
+    
+    public function deleteLinkAction($link_id) 
+    {
+        // SECURITY 
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if(!$user || !$user->getRole()->getSiteConfigSettings())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        //END SECURITY
+        
+        // Parameters file location
+        $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
+        
+        // Get the parser to manage settings 
+        $yaml = new Parser();
+        
+        // If config file does not exist, we create a new one with default parameters
+        if(!file_exists($config_location))
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No existe el archivo de configuración. Se creará uno nuevo.');
+            $web_parameters = $this->getDefaultWebParameters();
+        }
+        else
+        {
+            try
+            {
+                $web_parameters = $yaml->parse(file_get_contents($config_location));
+            } 
+            catch (ParseException $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
+                $web_parameters = $this->getDefaultWebParameters();
+            }
+            catch (Exception $e)
+            {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
+                $web_parameters = $this->getDefaultWebParameters();
+            }
+        }
+        
+        if(!isset($web_parameters['twig']['globals']['web_links']) || count($web_parameters['twig']['globals']['web_links']) <= $link_id)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No existe el enlace.');
+            return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
+        }
+            
+        //Remove link
+        
+        unset($web_parameters['twig']['globals']['web_links'][$link_id]);
+        
+        $dumper = new Dumper();
+        try
+        {
+            $yaml = $dumper->dump($web_parameters, 4);
+            
+            file_put_contents($config_location, $yaml);
+            
+            $this->get('session')->getFlashBag()->add('success', 'Enlace eliminado correctamente');
+            
+        }
+        catch (DumpException $e)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
+        }
+        
+        return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
+    }
+    
     public function getDefaultWebParameters()
     {
         return 

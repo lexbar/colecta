@@ -1,0 +1,50 @@
+{% extends '::backend.html.twig' %}
+
+{% block article %} 
+    
+    <h2>Crear Página</h2>
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'page' } %}
+    
+    <div class="monocontent tabs">        
+        <form class="form-horizontal" method="post" action="{% if link_id is defined %}{{ path('ColectaBackendLink', {link_id:link_id}) }}{% else %}{{ path('ColectaBackendNewLink') }}{% endif %}">
+
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="linkName">Título</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="linkName" id="linkName" class="form-control" value="{{ link[1] | default('') }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="linkURL">Dirección URL</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="linkURL" id="linkURL" class="form-control" value="{{ link[0] | default('') }}">
+                </div>
+            </div>
+            
+            {% set icons = ['info-circle', 'bicycle', 'beer', 'bolt', 'camera', 'flag', 'flag-checkered', 'smile-o', 'exclamation-triangle', 'trophy', 'futbol-o', 'envelope', 'envelope-o', 'exclamation-circle', 'female', 'male', 'archive', 'ban', 'binoculars', 'book', 'coffee', 'birthday-cake', 'circle', 'paper-plane-o', 'question', 'star-o', 'users'] %}
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Icono</label>
+                <div class="col-sm-8 col-lg-9 row">
+                    <div class="col-xs-4 col-md-3 col-lg-2">
+                        <label class="radio-inline"><input type="radio" name="linkIcon" value="" {% if link[2] | default('') == '' %}checked="checked"{% endif %}> (ninguno)</label>
+                    </div>
+                    
+                    {% for icon in icons %}
+                        <div class="col-xs-4 col-md-3 col-lg-2">
+                            <label class="radio-inline"><input type="radio" name="linkIcon" value="{{ icon }}" {% if link[2] | default('') == icon %}checked="checked"{% endif %}> <i class="fa fa-{{ icon }} fa-fw"></i></label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+                        
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-offset-4 col-sm-8 col-lg-offset-3 col-lg-9">
+                    <input type="submit" value="Publicar" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock%}
