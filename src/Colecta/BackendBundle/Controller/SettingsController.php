@@ -24,35 +24,7 @@ class SettingsController extends Controller
         }
         //END SECURITY
         
-        // Parameters file location
-        $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
-        
-        // Get the parser to manage settings 
-        $yaml = new Parser();
-        
-        // If config file does not exist, we create a new one with default parameters
-        if(!file_exists($config_location))
-        {
-            $this->get('session')->getFlashBag()->add('error', 'No existe el archivo de configuración. Se creará uno nuevo.');
-            $web_parameters = $this->getDefaultWebParameters();
-        }
-        else
-        {
-            try
-            {
-                $web_parameters = $yaml->parse(file_get_contents($config_location));
-            } 
-            catch (ParseException $e)
-            {
-                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
-                $web_parameters = $this->getDefaultWebParameters();
-            }
-            catch (Exception $e)
-            {
-                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
-                $web_parameters = $this->getDefaultWebParameters();
-            }
-        }
+        $web_parameters = $this->getWebParameters();
         
         if ($this->get('request')->getMethod() == 'POST') 
         {   
@@ -191,18 +163,12 @@ class SettingsController extends Controller
             $web_parameters['twig']['globals']['web_theme_colors'] = explode(',', $request->get('web_theme_colors'));
             $web_parameters['twig']['globals']['theme_sidebar'] = $request->get('theme_sidebar');
             
-            $dumper = new Dumper();
-            try
+            if($this->setWebParameters($web_parameters))
             {
-                $yaml = $dumper->dump($web_parameters, 4);
-                
-                file_put_contents($config_location, $yaml);
-                
-                $this->get('session')->getFlashBag()->add('success', 'Configuración guardada correctamente');
-                
+                $this->get('session')->getFlashBag()->add('success', 'Ajustes modificados correctamente');
                 return new RedirectResponse($this->generateUrl('ColectaBackendSettingsIndex'));
             }
-            catch (DumpException $e)
+            else
             {
                 $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
             }
@@ -223,55 +189,21 @@ class SettingsController extends Controller
         }
         //END SECURITY
         
-        // Parameters file location
-        $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
-        
-        // Get the parser to manage settings 
-        $yaml = new Parser();
-        
-        // If config file does not exist, we create a new one with default parameters
-        if(!file_exists($config_location))
-        {
-            $this->get('session')->getFlashBag()->add('error', 'No existe el archivo de configuración. Se creará uno nuevo.');
-            $web_parameters = $this->getDefaultWebParameters();
-        }
-        else
-        {
-            try
-            {
-                $web_parameters = $yaml->parse(file_get_contents($config_location));
-            } 
-            catch (ParseException $e)
-            {
-                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
-                $web_parameters = $this->getDefaultWebParameters();
-            }
-            catch (Exception $e)
-            {
-                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
-                $web_parameters = $this->getDefaultWebParameters();
-            }
-        }
+        $web_parameters = $this->getWebParameters();
         
         if ($this->get('request')->getMethod() == 'POST') 
         {   
             $request = $this->get('request')->request;
             
             $link_id = count($web_parameters['twig']['globals']['web_links']);
-            $web_parameters['twig']['globals']['web_links'][$link_id] = array($request->get('linkURL'), $request->get('linkName'), $request->get('linkIcon'));
+            $web_parameters['twig']['globals']['web_links'][$link_id] = array($this->forceLink($request->get('linkURL')), $request->get('linkName'), $request->get('linkIcon'));
             
-            $dumper = new Dumper();
-            try
+            if($this->setWebParameters($web_parameters))
             {
-                $yaml = $dumper->dump($web_parameters, 4);
-                
-                file_put_contents($config_location, $yaml);
-                
-                $this->get('session')->getFlashBag()->add('success', 'Enlace modificado correctamente');
-                
+                $this->get('session')->getFlashBag()->add('success', 'Enlace creado correctamente');
                 return new RedirectResponse($this->generateUrl('ColectaBackendLink', array('link_id' => $link_id)));
             }
-            catch (DumpException $e)
+            else
             {
                 $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
             }
@@ -294,54 +226,20 @@ class SettingsController extends Controller
         }
         //END SECURITY
         
-        // Parameters file location
-        $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
-        
-        // Get the parser to manage settings 
-        $yaml = new Parser();
-        
-        // If config file does not exist, we create a new one with default parameters
-        if(!file_exists($config_location))
-        {
-            $this->get('session')->getFlashBag()->add('error', 'No existe el archivo de configuración. Se creará uno nuevo.');
-            $web_parameters = $this->getDefaultWebParameters();
-        }
-        else
-        {
-            try
-            {
-                $web_parameters = $yaml->parse(file_get_contents($config_location));
-            } 
-            catch (ParseException $e)
-            {
-                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
-                $web_parameters = $this->getDefaultWebParameters();
-            }
-            catch (Exception $e)
-            {
-                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cargar correctamente el archivo de configuración.');
-                $web_parameters = $this->getDefaultWebParameters();
-            }
-        }
+        $web_parameters = $this->getWebParameters();
         
         if ($this->get('request')->getMethod() == 'POST') 
         {   
             $request = $this->get('request')->request;
             
-            $web_parameters['twig']['globals']['web_links'][$link_id] = array($request->get('linkURL'), $request->get('linkName'), $request->get('linkIcon'));
+            $web_parameters['twig']['globals']['web_links'][$link_id] = array($this->forceLink($request->get('linkURL')), $request->get('linkName'), $request->get('linkIcon'));
             
-            $dumper = new Dumper();
-            try
+            if($this->setWebParameters($web_parameters))
             {
-                $yaml = $dumper->dump($web_parameters, 4);
-                
-                file_put_contents($config_location, $yaml);
-                
                 $this->get('session')->getFlashBag()->add('success', 'Enlace modificado correctamente');
-                
                 return new RedirectResponse($this->generateUrl('ColectaBackendLink', array('link_id' => $link_id)));
             }
-            catch (DumpException $e)
+            else
             {
                 $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
             }
@@ -370,6 +268,49 @@ class SettingsController extends Controller
         }
         //END SECURITY
         
+        $web_parameters = $this->getWebParameters();
+        
+        if(!isset($web_parameters['twig']['globals']['web_links']) || count($web_parameters['twig']['globals']['web_links']) <= $link_id)
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No existe el enlace.');
+            return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
+        }
+            
+        //Remove link
+        
+        unset($web_parameters['twig']['globals']['web_links'][$link_id]);
+        
+        if($this->setWebParameters($web_parameters))
+        {
+            $this->get('session')->getFlashBag()->add('success', 'Enlace eliminado correctamente');
+        }
+        else
+        {
+            $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
+        }
+        
+        return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
+    }
+    
+    public function forceLink($url)
+    {
+        $url = htmlentities($url);
+        
+        if($url == '' )
+        {
+            return '';
+        }
+        
+        if(substr($url, 0, 6) != 'http://' && substr($url, 0, 1) != '/') // A link can begin with http://.. or with /...
+        {
+            return 'http://'.$url;
+        }
+        
+        return $url;
+    }
+    
+    public function getWebParameters()
+    {
         // Parameters file location
         $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
         
@@ -400,15 +341,13 @@ class SettingsController extends Controller
             }
         }
         
-        if(!isset($web_parameters['twig']['globals']['web_links']) || count($web_parameters['twig']['globals']['web_links']) <= $link_id)
-        {
-            $this->get('session')->getFlashBag()->add('error', 'No existe el enlace.');
-            return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
-        }
-            
-        //Remove link
-        
-        unset($web_parameters['twig']['globals']['web_links'][$link_id]);
+        return $web_parameters;
+    }
+    
+    public function setWebParameters($web_parameters)
+    {
+        // Parameters file location
+        $config_location = $this->get('kernel')->getRootDir() . '/config/web_parameters.yml';
         
         $dumper = new Dumper();
         try
@@ -417,15 +356,13 @@ class SettingsController extends Controller
             
             file_put_contents($config_location, $yaml);
             
-            $this->get('session')->getFlashBag()->add('success', 'Enlace eliminado correctamente');
+            return true;
             
         }
         catch (DumpException $e)
         {
-            $this->get('session')->getFlashBag()->add('error', 'No se ha podido guardar correctamente la configuración.');
+            return false;
         }
-        
-        return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
     }
     
     public function getDefaultWebParameters()
