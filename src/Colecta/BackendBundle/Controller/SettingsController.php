@@ -301,7 +301,7 @@ class SettingsController extends Controller
             return '';
         }
         
-        if(substr($url, 0, 6) != 'http://' && substr($url, 0, 1) != '/') // A link can begin with http://.. or with /...
+        if(substr($url, 0, 7) != 'http://' && substr($url, 0, 1) != '/') // A link can begin with http://.. or with /...
         {
             return 'http://'.$url;
         }
