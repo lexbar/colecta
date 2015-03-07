@@ -6,7 +6,11 @@
     
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'page' } %}
     
-    <div class="monocontent tabs">        
+    <div class="monocontent tabs">      
+        <a href="{{ path('ColectaBackendPageIndex') }}" class="btn btn-default"><i class="fa fa-long-arrow-left fa-fw"></i> Gestionar Contenido</a>
+        
+        <hr>
+          
         <form class="form-horizontal" method="post" action="{% if link_id is defined %}{{ path('ColectaBackendLink', {link_id:link_id}) }}{% else %}{{ path('ColectaBackendNewLink') }}{% endif %}">
 
             <div class="form-group">

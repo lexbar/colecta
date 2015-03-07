@@ -15,14 +15,14 @@
         <hr>
         
         <table class="table table-hover">
-        <thead><tr><th>Nombre</th><th>Usuarios</th><th>Acciones</th></tr></thead>
+        <thead><tr><th>Nombre</th><th>Usuarios</th><th class="text-right">Acciones</th></tr></thead>
         {% for role in roles %}
             {% set amount = role['amount'] %}
             {% set role = role[0] %}
             <tr>
                 <td><span class="label label-{% if not role.siteAccess %}danger{% elseif not role.contribute %}warning{% elseif role.siteConfig %}primary{% else %}default{% endif %}">{{ role.description }}</span></td>
                 <td>{{ amount }}</td>
-                <td>{% if role.name == 'ROLE_CUSTOM' %}<a class="text-success" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">editar</a> / {% endif %}<a class="text-primary" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">clonar</a>{% if role.name == 'ROLE_CUSTOM' and amount == 0 %} / <a class="text-danger" href="{{ path('ColectaBackendRoleDelete',{role_id: role.id}) }}">eliminar</a>{% endif %}</td>
+                <td class="text-right">{% if role.name == 'ROLE_CUSTOM' %}<a class="text-success" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">editar</a> / {% endif %}<a class="text-primary" href="{{ path('ColectaBackendRoleEdit',{role_id: role.id}) }}">clonar</a>{% if role.name == 'ROLE_CUSTOM' and amount == 0 %} / <a onClick="return confirm('¿Seguro que quieres ELIMINAR este Rol?\n{{ role.description }}')" class="text-danger" href="{{ path('ColectaBackendRoleDelete',{role_id: role.id}) }}">eliminar</a>{% endif %}</td>
             </tr> 
         {% endfor %}
         </table>

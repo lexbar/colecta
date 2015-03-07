@@ -1,0 +1,202 @@
+{% extends '::backend.html.twig' %}
+
+{% block title %}Crear Caso | Puntuación {% endblock %}
+
+{% block article %} 
+    
+    <h2>Crear Caso</h2>
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+    
+    <div class="monocontent tabs">     
+        <a href="{{ path('ColectaBackendPointsIndex') }}" class="btn btn-default"><i class="fa fa-long-arrow-left fa-fw"></i> Gestionar Puntuaciones</a>
+        
+        <hr>
+           
+        <form class="form-horizontal" method="post" action="{% if pointsCondition.id %}{{ path('ColectaBackendPointsCase', {case_id:pointsCondition.id}) }}{% else %}{{ path('ColectaBackendPointsNewCase') }}{% endif %}">
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="PointsName">Título del caso</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="pointsName" id="PointsName" class="form-control" value="{{ pointsCondition ? pointsCondition.name : '' }}">
+                </div>
+            </div>    
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="PointsCond0">Condiciones</label>
+                <div class="col-sm-8 col-lg-9">
+                    <div id="ConditionsList">
+                        {% if pointsCondition.requirement | length == 0 %}
+                        <div class="row" id="cond0Container">
+                            <div class="col-md-7">
+                                <select id="cond0" name="pointsCond0" class="form-control" onChange="updateCondition(this);">
+                                    <option value="always">Siempre (ninguna condición)</option>
+                                    <option value="is_author">Es el autor de la actividad</option>
+                                    <option value="mt_distance">Más de .. distanica</option>
+                                    <option value="lt_distance">Menos de .. distanica</option>
+                                    <option value="mt_uphill">Más de .. desnivel</option>
+                                    <option value="lt_uphill">Menos de .. desnivel</option>
+                                    <option value="is_easy">Dificultad fácil</option>
+                                    <option value="is_moderate">Dificultad moderada</option>
+                                    <option value="is_hard">Dificultad difícil</option>
+                                    <option value="is_veryhard">Dificultad muy difícil</option>
+                                    <option value="is_expertsonly">Dificultad sólo expertos</option>
+                                    <option value="role">Pertenece al rol ..</option>
+                                    <option value="category">En la categoría ..</option>
+                                </select>
+                            </div>
+                            <div class="col-md-5" id="cond0Value">
+                            
+                            </div>
+                        </div>
+                        {% else %}
+                        {% for condition in pointsCondition.requirement %}
+                        <div class="row" id="cond{{ loop.index0 }}Container">
+                            <div class="col-md-7">
+                                <select id="cond{{ loop.index0 }}" name="pointsCond{{ loop.index0 }}" class="form-control" onChange="updateCondition(this);">
+                                    {% if loop.first %}<option value="always"{{ condition.condition == 'always' ? ' selected="selected"' }}>Siempre (ninguna condición)</option>{% endif %}
+                                    <option value="is_author"{{ condition.condition == 'is_author' ? ' selected="selected"' }}>Es el autor de la actividad</option>
+                                    <option value="mt_distance"{{ condition.condition == 'mt_distance' ? ' selected="selected"' }}>Más de .. distanica</option>
+                                    <option value="lt_distance"{{ condition.condition == 'lt_distance' ? ' selected="selected"' }}>Menos de .. distanica</option>
+                                    <option value="mt_uphill"{{ condition.condition == 'mt_uphill' ? ' selected="selected"' }}>Más de .. desnivel</option>
+                                    <option value="lt_uphill"{{ condition.condition == 'lt_uphill' ? ' selected="selected"' }}>Menos de .. desnivel</option>
+                                    <option value="is_easy"{{ condition.condition == 'is_easy' ? ' selected="selected"' }}>Dificultad fácil</option>
+                                    <option value="is_moderate"{{ condition.condition == 'is_moderate' ? ' selected="selected"' }}>Dificultad moderada</option>
+                                    <option value="is_hard"{{ condition.condition == 'is_hard' ? ' selected="selected"' }}>Dificultad difícil</option>
+                                    <option value="is_veryhard"{{ condition.condition == 'is_veryhard' ? ' selected="selected"' }}>Dificultad muy difícil</option>
+                                    <option value="is_expertsonly"{{ condition.condition == 'is_expertsonly' ? ' selected="selected"' }}>Dificultad sólo expertos</option>
+                                    <option value="role"{{ condition.condition == 'role' ? ' selected="selected"' }}>Pertenece al rol ..</option>
+                                    <option value="category"{{ condition.condition == 'category' ? ' selected="selected"' }}>En la categoría ..</option>
+                                    {% if not loop.first %}<option value="remove">(eliminar esta condición)</option>{% endif %}
+                                </select>
+                            </div>
+                            <div class="col-md-5" id="cond{{ loop.index0 }}Value">
+                                {% if condition.condition in ['mt_distance','lt_distance','mt_uphill','lt_uphill'] %}<div class="input-group"><input type="text" name="pointsCond{{ loop.index0 }}Value" class="form-control" value="{{ condition.value }}"><span class="input-group-addon"> km</span></div>
+                                {% elseif condition.condition == 'role' %}<select name="pointsCond{{ loop.index0 }}Value" class="form-control">{% for role in roles_array%}<option value="{{ role[0] }}"{{ condition.value == role[0] ? ' selected="selected"' }}>{{ role[1] }}</option>{% endfor %}</select>
+                                {% elseif condition.condition == 'category' %}<select name="pointsCond{{ loop.index0 }}Value" class="form-control">{% for category in categories_array%}<option value="{{ category[0] }}"{{ condition.value == category[0] ? ' selected="selected"' }}>{{ category[1] }}</option>{% endfor %}</select>{% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    
+                    <div id="addConditionFooter" style="{% if pointsCondition.requirement | length == 0 %}display:none;{% endif %}">
+                        <p><button type="button" class="btn btn-default" onclick="addCondition()">Añadir condición <i class="fa fa-plus"></i></button></p>
+                        <p class="help-block">Ten en cuenta que deben cumplirse TODAS las condiciones para aplicar este caso.</p>
+                    </div>
+                    
+                    <hr>
+                </div>
+            </div>
+            
+            
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="PointsValue">Puntos</label>
+                <div class="col-sm-8 col-lg-9">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <select name="pointsOperator" class="form-control">
+                                <option value="+"{{ pointsCondition.operator == '+' ? ' selected="selected"' }}>Sumar (+)</option>
+                                <option value="-"{{ pointsCondition.operator == '-' ? ' selected="selected"' }}>Restar (-)</option>
+                                <option value="*"{{ pointsCondition.operator == '*' ? ' selected="selected"' }}>Multiplicar (*)</option>
+                                <option value="/"{{ pointsCondition.operator == '/' ? ' selected="selected"' }}>Dividir (/)</option>
+                                <option value="="{{ pointsCondition.operator == '=' ? ' selected="selected"' }}>Asignar (=)</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-7">
+                            <input type="text" name="pointsValue" id="PointsValue" class="form-control" value="{{ pointsCondition ? pointsCondition.value : '0' | default(0) }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label">Acumular</label>
+                <div class="col-sm-8 col-lg-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="pointsGather" value="1"{% if pointsCondition and pointsCondition.gather or pointscondition is not defined %} checked="checked"{% endif %}> Considerar más casos en orden de prioridad.							
+						</label>
+					</div>
+					<p class="help-block">Si desmarcas la casilla el sistema no considerará ningún caso de menor prioridad.</p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 col-lg-3 control-label" for="PointsName">Prioridad</label>
+                <div class="col-sm-8 col-lg-9">
+                    <input type="text" name="pointsPriority" class="form-control" value="{{ pointsCondition ? pointsCondition.priority : '0' | default(0) }}" style="width:80px">
+                    <p class="help-block">Asigna un número de prioridad. Más alto es más importante y se ejecuta antes.</p>
+                </div>
+                
+            </div>
+            
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-offset-4 col-sm-8 col-lg-offset-3 col-lg-9">
+                    <input type="submit" value="Guardar" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock%}
+
+{% block javascripts %}
+<script> 
+    var conditionsCount = {{ pointsCondition.requirement | length ?: 1 }};    
+    
+    var roles = {{ roles_array | json_encode | raw }};
+    
+    var categories = {{ categories_array | json_encode | raw }};
+    
+    function updateCondition(el) {
+        
+        $('#addConditionFooter').show();
+        var val = $(el).val();
+        var cid = $(el).attr('id');
+        var id = Number(cid.substr(4));
+        if(val == 'mt_distance' || val == 'lt_distance' || val == 'mt_uphill' || val == 'lt_uphill') {
+            $('#'+cid+'Value').html('<div class="input-group"><input type="text" name="pointsCond'+id+'Value" class="form-control" value="0"><span class="input-group-addon"> km</span></div>');
+        } else if(val == 'role') {
+            var selectHTML = '<select name="pointsCond'+id+'Value" class="form-control">';
+            for(var i = 0; i < roles.length; i++) { //>
+                selectHTML = selectHTML + '<option value="'+roles[i][0]+'">'+roles[i][1]+'</option>'
+            }
+            selectHTML = selectHTML + '</select>';
+            
+            $('#'+cid+'Value').html(selectHTML);    
+        } else if(val == 'category') {
+            var selectHTML = '<select name="pointsCond'+id+'Value" class="form-control">';
+            for(var i = 0; i < categories.length; i++) { //>
+                selectHTML = selectHTML + '<option value="'+categories[i][0]+'">'+categories[i][1]+'</option>'
+            }
+            selectHTML = selectHTML + '</select>';
+            
+            $('#'+cid+'Value').html(selectHTML);    
+        } else if(val == 'remove') {
+            removeCondition(id);        
+        } else {
+            $('#'+cid+'Value').html('');
+        }
+    }
+    
+    function addCondition() {
+        $('#ConditionsList').append('<div class="row" id="cond'+conditionsCount+'Container"><div class="col-md-7"><select id="cond'+conditionsCount+'" name="pointsCond'+conditionsCount+'" class="form-control" onChange="updateCondition(this);"><option value="is_author">Es el autor de la actividad</option><option value="mt_distance">Más de .. distanica</option><option value="lt_distance">Menos de .. distanica</option><option value="mt_uphill">Más de .. desnivel</option><option value="lt_uphill">Menos de .. desnivel</option><option value="is_easy">Dificultad fácil</option><option value="is_moderate">Dificultad moderada</option><option value="is_hard">Dificultad difícil</option><option value="is_veryhard">Dificultad muy difícil</option><option value="is_expertsonly">Dificultad sólo expertos</option><option value="role">Pertenece al rol ..</option><option value="category">En la categoría ..</option><option value="remove">(eliminar esta condición)</option></select></div><div class="col-md-5" id="cond'+conditionsCount+'Value"></div></div>');
+        
+        conditionsCount++;
+    }
+    
+    function removeCondition(id) {
+        $('#cond'+id+'Container').remove();
+        
+        id ++;
+        while($('#cond'+id+'Container').length > 0) {
+            $('#cond'+id).attr('id','cond'+(id - 1)).attr('name','pointsCond'+(id-1));
+            $('#cond'+id+'Container').attr('id','cond'+(id - 1)+'Container');
+            $('#cond'+id+'Value').attr('id','cond'+(id - 1)+'Value');
+            $('#cond'+id+'Value input').attr('name','pointsCond'+(id - 1)+'Value');
+            id ++;
+        }
+        conditionsCount --;
+    }
+</script>
+{% endblock %}

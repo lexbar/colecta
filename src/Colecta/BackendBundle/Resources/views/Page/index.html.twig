@@ -1,5 +1,7 @@
 {% extends '::backend.html.twig' %}
 
+{% block title %}Gestionar Páginas{% endblock %}
+
 {% block article %}
     
     <h2>Páginas</h2>
@@ -20,7 +22,7 @@
                     {% if pages | length > 1 %}
                     <td>{% if page.sidebarShow %}<a href="{{ path('ColectaBackendPageMoveUp' , {'page_id':page.id}) }}"><i class="fa fa-chevron-up"></i></a> <a href="{{ path('ColectaBackendPageMoveDown' , {'page_id':page.id}) }}"><i class="fa fa-chevron-down"></i></a>{% else %} <i class="fa fa-eye-slash"></i> {% endif %}</td>
                     {% endif %}
-                    <td class="text-right">{% if page.contactRequests | length == 0 %}<a href="{{ path('ColectaBackendPageDelete', {'page_id':page.id}) }}" class="text-danger" onClick="confirm('¿Seguro que deseas eliminar la página?\n{{ page.name }}')">eliminar</a> / {% endif %}<a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class="text-success">editar</a></td>
+                    <td class="text-right">{% if page.contactRequests | length == 0 %}<a href="{{ path('ColectaBackendPageDelete', {'page_id':page.id}) }}" class="text-danger" onClick="return confirm('¿Seguro que deseas eliminar la página?\n{{ page.name }}')">eliminar</a> / {% endif %}<a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class="text-success">editar</a></td>
                 </tr> 
             {% endfor %}
             </table>
@@ -34,7 +36,7 @@
             {% for link in web_links %}
                 <tr>
                     <td><a href="{{ link[0] }}">{% if link[2] is defined %}<i class="fa fa-{{ link[2] }} fa-fw"></i> {% endif %}{{ link[1] }}</a><br>{{ link[0] }}</td>
-                    <td class="text-right"><a href="{{ path('ColectaBackendLinkDelete', {'link_id':loop.index0}) }}" class="text-danger" onClick="confirm('¿Seguro que deseas eliminar el enlace?\n{{ link[0] }}')">eliminar</a> / <a href="{{ path('ColectaBackendLink', {'link_id':loop.index0}) }}" class="text-success">editar</a></td>
+                    <td class="text-right"><a href="{{ path('ColectaBackendLinkDelete', {'link_id':loop.index0}) }}" class="text-danger" onClick="return confirm('¿Seguro que deseas eliminar el enlace?\n{{ link[0] }}')">eliminar</a> / <a href="{{ path('ColectaBackendLink', {'link_id':loop.index0}) }}" class="text-success">editar</a></td>
                 </tr> 
             {% endfor %}
             </table>

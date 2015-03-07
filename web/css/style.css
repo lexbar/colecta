@@ -477,6 +477,11 @@ h2, h4 {
     box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.2);
     background: #eee;
 }
+
+form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form .col-xs-5, form .col-xs-6, form .col-xs-7, form .col-xs-8, form .col-xs-9, form .col-xs-10, form .col-xs-11, form .col-xs-12, form .col-sm-1, form .col-sm-2, form .col-sm-3, form .col-sm-4, form .col-sm-5, form .col-sm-6, form .col-sm-7, form .col-sm-8, form .col-sm-9, form .col-sm-10, form .col-sm-11, form .col-sm-12, form .col-md-1, form .col-md-2, form .col-md-3, form .col-md-4, form .col-md-5, form .col-md-6, form .col-md-7, form .col-md-8, form .col-md-9, form .col-md-10, form .col-md-11, form .col-md-12, form .col-lg-1, form .col-lg-2, form .col-lg-3, form .col-lg-4, form .col-lg-5, form .col-lg-6, form .col-lg-7, form .col-lg-8, form .col-lg-9, form .col-lg-10, form .col-lg-11, form .col-lg-12 {
+    margin-bottom: 6px;
+}
+
 @media (max-width: 1200px) { /* Medium devices */
     .headerimg {
         height: 120px;

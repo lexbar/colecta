@@ -34,6 +34,19 @@ ColectaBackendRoleEdit:
     pattern:  /back/roles/{role_id}/
     defaults: { _controller: ColectaBackendBundle:User:roleEdit } 
     
+ColectaBackendPointsIndex:
+    pattern:  /back/points/
+    defaults: { _controller: ColectaBackendBundle:Points:index } 
+ColectaBackendPointsNewCase:
+    pattern:  /back/points/new/
+    defaults: { _controller: ColectaBackendBundle:Points:newCase } 
+ColectaBackendPointsCase:
+    pattern:  /back/points/{case_id}/
+    defaults: { _controller: ColectaBackendBundle:Points:editCase } 
+ColectaBackendPointsCaseDelete:
+    pattern:  /back/points/{case_id}/delete/
+    defaults: { _controller: ColectaBackendBundle:Points:deleteCase } 
+
 ColectaBackendPageIndex:
     pattern:  /back/page/
     defaults: { _controller: ColectaBackendBundle:Page:index } 

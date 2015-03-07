@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class PointsCondition
 {
@@ -20,25 +21,20 @@ class PointsCondition
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="requirement", type="string", length=15)
+     * @ORM\Column(name="name", type="string", length=250)
+     */
+    private $name;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="requirement", type="array")
      */
     private $requirement;
-
-    /**
-    * @ORM\ManyToOne(targetEntity="Colecta\ActivityBundle\Entity\Activity")
-    * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", nullable=true)
-    */
-    private $activity;
-
-    /**
-    * @ORM\ManyToOne(targetEntity="Role")
-    * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=true)
-    */
-    private $role;
 
     /**
      * @var string
@@ -52,14 +48,14 @@ class PointsCondition
      *
      * @ORM\Column(name="value", type="integer")
      */
-    private $value;
+    private $value = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="gather", type="boolean")
      */
-    private $gather;
+    private $gather = true;
 
     /**
      * @var integer
@@ -95,7 +91,7 @@ class PointsCondition
     /**
      * Set requirement
      *
-     * @param string $requirement
+     * @param array $requirement
      * @return PointsCondition
      */
     public function setRequirement($requirement)
@@ -108,7 +104,7 @@ class PointsCondition
     /**
      * Get requirement
      *
-     * @return string 
+     * @return array 
      */
     public function getRequirement()
     {
@@ -229,51 +225,13 @@ class PointsCondition
     {
         return $this->date;
     }
-
-    /**
-     * Set activity
-     *
-     * @param \Colecta\ActivityBundle\Entity\Activity $activity
-     * @return PointsCondition
-     */
-    public function setActivity(\Colecta\ActivityBundle\Entity\Activity $activity = null)
-    {
-        $this->activity = $activity;
     
-        return $this;
-    }
-
     /**
-     * Get activity
-     *
-     * @return \Colecta\ActivityBundle\Entity\Activity 
+     * @ORM\PrePersist()
      */
-    public function getActivity()
+    public function prePersist()
     {
-        return $this->activity;
-    }
-
-    /**
-     * Set role
-     *
-     * @param \Colecta\UserBundle\Entity\Role $role
-     * @return PointsCondition
-     */
-    public function setRole(\Colecta\UserBundle\Entity\Role $role = null)
-    {
-        $this->role = $role;
-    
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return \Colecta\UserBundle\Entity\Role 
-     */
-    public function getRole()
-    {
-        return $this->role;
+        $this->setDate(new \DateTime('now'));
     }
 
     /**
@@ -297,5 +255,28 @@ class PointsCondition
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return PointsCondition
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

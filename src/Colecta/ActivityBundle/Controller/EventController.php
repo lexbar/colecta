@@ -420,12 +420,12 @@ class EventController extends Controller
         From the Event node
     */
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
-        if($user == 'anon.')
+        if(!$user)
         {
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
@@ -482,6 +482,13 @@ class EventController extends Controller
                     if($item->getDateini() < new \DateTime('now'))
                     {
                         $assistance->setConfirmed(1);
+                        
+                        $points = $this->getPointsHandler($assistance, true);
+                        
+                        $conditions = $em->getRepository('ColectaUserBundle:PointsCondition')->findBy(array(), array('priority'=>'DESC'));
+                        $points->applyConditions($conditions);
+                        
+                        $em->persist($points);
                     }
                     
                 }
@@ -667,6 +674,8 @@ class EventController extends Controller
                     $em->flush();
                 }
             }
+            
+            //Add new assistance
             if($request->get('targetUser'))
             {
                 //Check if Target User exists
@@ -703,6 +712,9 @@ class EventController extends Controller
                             //set points for assistance
                             $points = $this->getPointsHandler($assistance, true);
                             $points->setPoints($item->getDistance());
+                            
+                            $conditions = $em->getRepository('ColectaUserBundle:PointsCondition')->findBy(array(), array('priority'=>'DESC'));
+                            $points->applyConditions($conditions);
                             
                             $em->persist($points); 
                         }

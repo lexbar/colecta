@@ -1,0 +1,39 @@
+{% extends '::backend.html.twig' %}
+
+{% block title %}Gestionar Puntuaciones{% endblock %}
+
+{% block article %} 
+    
+    <h2>Gestionar Puntuaciones</h2>
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+    
+    <div class="monocontent tabs">
+        <a href="{{ path('ColectaBackendUserIndex') }}" class="btn btn-default"><i class="fa fa-long-arrow-left fa-fw"></i> Listado de usuarios</a>
+        <a href="{{ path('ColectaBackendPointsNewCase') }}" class="btn btn-primary">Crear nuevo Caso <i class="fa fa-plus"></i></a>
+        
+        <hr>
+        
+        <p>A cada usuario con asistencia confirmada a una actividad se le otorga tantos puntos como km ha recorrido.</p>
+        <p>Sobre esta base puedes crear distintos <strong>casos</strong> que modifiquen esta asignación de puntos.</p>
+        
+        {% if pointsConditions | length > 0 %}
+        <hr>
+        
+        <table class="table table-hover">
+        <thead><tr><th>Caso</th><th>Condiciones</th><th>Puntos</th><th class="text-right">Acciones</th></tr></thead>
+        {% set coditionName = {'always':'Siempre','is_author':'Autor','mt_distance':'Distancia >','lt_distance':'Distancia <','mt_uphill':'Desnivel >','lt_uphill':'Desnivel <','is_easy':'Es Fácil','is_moderate':'Es Moderada','is_hard':'Es Difícil','is_veryhard':'Es Muy Difícil','is_expertsonly':'Es Sólo Expertos','role':'Rol','category':'Categoría'} %}
+        {% for pointsCondition in pointsConditions %}
+            <tr>
+                <td><strong>{{ pointsCondition.name }}</strong> <small class="label label-default">{{ pointsCondition.priority }}</small></td>
+                <td>{% for condition in pointsCondition.requirement %}
+                    {{ coditionName[condition.condition] }} {{ condition.condition in ['mt_distance','lt_distance','mt_uphill','lt_uphill'] ? condition.value }}{{ condition.condition == 'role' and roles_keys[condition.value] ? roles_keys[condition.value] }}{{ condition.condition == 'category' and categories_keys[condition.value] ? categories_keys[condition.value] }} {{ not loop.last ? ' + ' }}
+                {% endfor %}</td>
+                <td>{{ pointsCondition.operator }}{{ pointsCondition.value }}</td>
+                <td class="text-right"><a onClick="return confirm('¿Seguro que quieres ELIMINAR este caso?\n{{ pointsCondition.name }}')" href="{{ path('ColectaBackendPointsCaseDelete',{case_id:pointsCondition.id}) }}" class="text-danger">eliminar</a> / <a href="{{ path('ColectaBackendPointsCase',{case_id:pointsCondition.id}) }}" class="text-success">editar</a></td>
+            </tr> 
+        {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+{% endblock%}

@@ -161,12 +161,66 @@ class Points
         
         foreach($conditions as $condition)
         {
-            if( //satisfies condition
-                $condition->getRequirement() == 'any'
-                || $condition->getRequirement() == 'activity' && in_array($this->getItem()->getType(), array('Activity/Event', 'Activity/Route')) && $this->getItem()->getActivity() == $condition->getActivity()
-                || $condition->getRequirement() == 'author' && $this->getItem()->getAuthor() == $this->getUser()
-                || $condition->getRequirement() == 'role' && $this->getUser()->getRole() == $condition->getRole()
-            )
+            $apply = true;
+            
+            foreach($condition->getRequirement() as $requirement)
+            {
+                switch($requirement['condition'])
+                {
+                    case 'always':
+                        $apply = $apply & true;
+                    break;
+                    case 'is_author':
+                        $apply = $apply & $this->getItem()->getAuthor() == $this->getUser();
+                    break;
+                    case 'mt_distance':
+                        $apply = $apply & $this->getItem()->getDistance() > $requirement['value'];
+                    break;
+                    case 'lt_distance':
+                        $apply = $apply & $this->getItem()->getDistance() < $requirement['value'];
+                    break;
+                    case 'mt_uphill':
+                        $apply = $apply & $this->getItem()->getUphill() > $requirement['value'];
+                    break;
+                    case 'lt_uphill':
+                        $apply = $apply & $this->getItem()->getUphill() < $requirement['value'];
+                    break;
+                    case 'is_easy':
+                        $apply = $apply & $this->getItem()->getDifficulty() == 'easy';
+                    break;
+                    case 'is_moderate':
+                        $apply = $apply & $this->getItem()->getDifficulty() == 'moderate';
+                    break;
+                    case 'is_hard':
+                        $apply = $apply & $this->getItem()->getDifficulty() == 'hard';
+                    break;
+                    case 'is_veryhard':
+                        $apply = $apply & $this->getItem()->getDifficulty() == 'very hard';
+                    break;
+                    case 'is_expertsonly':
+                        $apply = $apply & $this->getItem()->getDifficulty() == 'experts only';
+                    break;
+                    case 'role':
+                        $apply = $apply & $this->getUser()->getRole()->getId() == $requirement['value'];
+                    break;
+                    case 'category':
+                        if($this->getItem()->getCategory())
+                        {
+                            $apply = $apply & $this->getItem()->getCategory()->getId() == $requirement['value'];
+                        } 
+                        else
+                        {
+                            $apply = false;
+                        }
+                        
+                    break;
+                    default:
+                        $apply = false;
+                    break;
+                }
+            }
+            
+            if($apply)
             {
                 switch($condition->getOperator())
                 {
@@ -174,8 +228,16 @@ class Points
                         $this->setPoints($this->getPoints() + $condition->getValue());
                     break;
                     
+                    case '-':
+                        $this->setPoints($this->getPoints() - $condition->getValue());
+                    break;
+                    
                     case '*':
                         $this->setPoints($this->getPoints() * $condition->getValue());
+                    break;
+                    
+                    case '/':
+                        $this->setPoints($this->getPoints() / $condition->getValue());
                     break;
                     
                     case '=':

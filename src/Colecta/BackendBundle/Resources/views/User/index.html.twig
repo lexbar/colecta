@@ -1,5 +1,7 @@
 {% extends '::backend.html.twig' %}
 
+{% block title %}Gestionar Usuarios{% endblock %}
+
 {% block article %}
     
     <h2>Listado de usuarios</h2>
@@ -9,16 +11,17 @@
     <div class="monocontent tabs">
         {% if app.user.role.userCreate %}<a href="{{ path('ColectaBackendNewUser') }}" class="btn btn-primary">Crear Usuario <i class="fa fa-plus"></i></a> {% endif %}
         <a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default">Gestionar Roles <i class="fa fa-user"></i></a>
+        <a href="{{ path('ColectaBackendPointsIndex') }}" class="btn btn-default">Gestionar Puntuaciones <i class="fa fa-star"></i></a>
         <hr>
         
         <table class="table table-hover">
-        <thead><tr><th>Nombre</th><th>Rol</th><th class="hidden-xs">Registrado</th>{% if app.user.role.userEdit %}<th>Acciones</th>{% endif %}</tr></thead>
+        <thead><tr><th>Nombre</th><th>Rol</th><th class="hidden-xs">Registrado</th>{% if app.user.role.userEdit %}<th class="text-right">Acciones</th>{% endif %}</tr></thead>
         {% for user in users %}
             <tr>
                 <td><a href="{{ path('userProfile', {'id':user.id}) }}">{{ user.name }}</a></td>
                 <td><span class="label label-{% if not user.role.siteAccess %}danger{% elseif not user.role.contribute %}warning{% elseif user.role.siteConfig %}primary{% else %}default{% endif %}">{{ user.role.description }}</span></td>
                 <td class="hidden-xs">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': user.registered } only %}</td>
-                {% if app.user.role.userEdit %}<td> <a class="text-success" href="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">editar</a></td>{% endif %}
+                {% if app.user.role.userEdit %}<td class="text-right"> <a class="text-success" href="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">editar</a></td>{% endif %}
             </tr> 
         {% endfor %}
         </table>
