@@ -373,6 +373,23 @@ abstract class Item
         return false;
     }
     
+    public function getRelatedVisible($user)
+    {
+        $related = $this->getRelated();
+        
+        $items = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        foreach($related as $item) 
+        {
+            if(!$item->getDraft() && !(!$item->getOpen() && !$user))
+            {
+                $items->add($item);
+            }
+        }
+        
+        return $items;
+    }
+    
     public function __construct()
     {
         $this->relatedto = new \Doctrine\Common\Collections\ArrayCollection();

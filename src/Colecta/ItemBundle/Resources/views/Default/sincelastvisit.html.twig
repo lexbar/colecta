@@ -27,7 +27,7 @@
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
         
-        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
     
     {% set shownItems = shownItems | merge([item.id]) %}
     {% for ri in item.related %}

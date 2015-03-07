@@ -53,7 +53,7 @@
     </div>
 </div>
 
-{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
 
 
 

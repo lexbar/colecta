@@ -32,7 +32,7 @@
 {% for item in items if item.id not in shownItems %}
     {% if item.part %}
         {% for relitem in item.related %}
-            {% if not relitem.part %}
+            {% if not relitem.part and (app.user or relitem.open) %}
                 {% set item = relitem %}
             {% endif %}
         {% endfor %}
@@ -41,7 +41,7 @@
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
         
-        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
     
     {% set shownItems = shownItems | merge([item.id]) %}
     {% for ri in item.related %}
