@@ -64,7 +64,8 @@
     {% for ri in item.related %}
         {% set shownItems = shownItems | merge([ri.id]) %}
     {% endfor %}
-{% else %}    
+{% else %}
+    {% if app.user %}
     <div class="jumbotron">
         <h1>¡Listos para empezar!</h1>
         {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
@@ -72,6 +73,7 @@
         <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-wrench fa-fw"></i> Administración</a>{% endif %} {% if app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
         {% endif %}
     </div>
+    {% endif %}
 {% endfor %}
 
 {% if page > 1 or thereAreMore %}
