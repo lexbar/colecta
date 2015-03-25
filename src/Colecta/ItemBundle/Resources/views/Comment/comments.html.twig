@@ -66,7 +66,7 @@
         
         <div class="media-body form">
             <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST" onSubmit="$('#commentItem{{ item.id }}').attr('disabled','disabled')">
-                <textarea class="form-control" rows="1" onClick="this.rows = 3; document.getElementById('commentItem{{ item.id }}').style.display = '';" name="comment" placeholder="Escribe un comentario…"></textarea>
+                <textarea class="form-control" rows="1" onClick="this.rows = 3; document.getElementById('commentItem{{ item.id }}').style.display = ''; $(this).css('max-height','500px');" name="comment" placeholder="Escribe un comentario…"></textarea>
                 <button style="display:none;margin-top:10px;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i class="fa fa-comment"></i></button>
             </form>
         </div>

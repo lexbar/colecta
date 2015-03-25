@@ -17,61 +17,39 @@
 {{ render(controller('ColectaActivityBundle:Event:calendar', {'date':date | date('Y-m-d')})) }}
 </div>
 
-{% set hiddenset = 0 %}
-{% if date | date('Ym') == 'now' | date('Ym') and ismonth and items | length > 0 and items[0].happened %}
-    {% set hiddenset = 1 %}
-    <div id="hiddenset" style="display:none;">
-{% endif %}
+{% set panelHappenedOpen = 0 %}
 
-{% if ismonth and items | length > 0 %} {% set current_date = '' %} {% endif %}
+{% if items | length > 0 and items[0].happened %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Actividades pasadas</h3>
+    </div>
+    <div class="panel-body">
+    
+    {% set panelHappenedOpen = 1 %}
+{% endif %}
 
 {% for item in items %}
-    
-    {% if hiddenset and not item.happened %}
-        {% set hiddenset = 0 %}
-        </div>
-        <div class="row" id="showMoreEvents"><p class="col-sm-4 col-xs-12" style="margin:10px 0 20px"><button onClick="$('#showMoreEvents').css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-default btn-block"><i style="color:darkgreen;margin-right:2px" class="fa fa-plus-square"></i> Ver eventos pasados de este mes</button></p></div>
+    {% if item.happened %}
+        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+    {% else %}  
+        {% if panelHappenedOpen %}
+            </div></div>
+            {% set panelHappenedOpen = 0 %}
+        {% endif %}      
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %} 
     {% endif %}
-    
-    {% if ismonth and ( current_date == '' or current_date | date('d') != item.dateini | date('d')) %}
-        <h2 class="datetitle">{{ item.dateini | date('l') | replace ({
-                'Monday':'Lunes',
-                'Tuesday':'Martes',
-                'Wednesday':'Miércoles',
-                'Thursday':'Jueves',
-                'Friday':'Viernes',
-                'Saturday':'Sábado',
-                'Sunday':'Domingo'
-            }) }} {{ item.dateini | date('d') }} de {{ item.dateini | date('n') | replace({
-                '1':'Enero',
-                '2':'Febrero',
-                '3':'Marzo',
-                '4':'Abril',
-                '5':'Mayo',
-                '6':'Junio',
-                '7':'Julio',
-                '8':'Agosto',
-                '9':'Septiembre',
-                '10':'Octubre',
-                '11':'Noviembre',
-                '12':'Diciembre'
-            }) }}
-        </h2>
-        
-        {% set current_date = item.dateini %}
-    {% endif %}
-    
-    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %} 
 {% endfor %}
 
-{% if hiddenset %}
-    </div>
-    <div class="row" id="showMoreEvents"><p class="col-sm-3 col-xs-12" style="margin:10px 0 20px"><button onClick="$('#showMoreEvents').css('display','none'); $('#hiddenset').css('display','block')" type="button" class="btn btn-sm btn-default btn-block"><i class="fa fa-ellipsis-vertical" style="padding:0 5px"></i> Ver eventos pasados</button></p></div>
-{% endif %}
-
+{% if panelHappenedOpen %}
+    </div></div>
+    {% set panelHappenedOpen = 0 %}
+{% endif %}    
 
 <div class="alert alert-blank text-center" role="alert"><strong>Puedes suscribirte</strong> al calendario usando Outlook, iCal, Google Calendar, etc... <a href="{{ path('ColectaEventAboutics')}}">Saber más <i class="fa fa-angle-double-right"></i>.</a></div>
 

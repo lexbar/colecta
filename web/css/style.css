@@ -252,9 +252,52 @@ h2, h4 {
     padding-right: 0;
     padding-left: 0;
 }
-
 .item .panel-footer {
     color: #444;
+}
+.micro {
+    overflow: hidden;
+    margin: 0 0 10px 0;
+    padding: 0 0 10px;
+    border-bottom: 1px solid #EEE;
+}
+.micro:last-child {
+    border-bottom: none;
+    margin: 0;
+    padding: 0;
+}
+.micro h4 {
+    margin: 0 10px 0 0;
+    padding: 0;
+    border: none;
+    float: left;
+}
+.micro p {
+    color: #888;
+}
+.micro .details {
+    color: #444;
+    font-size: 12px;
+    margin: 0;
+}
+.microdate {
+    margin-bottom: 10px;
+}
+.microdate .hour {
+    font-size: 12px;
+}
+.microdate strong {
+    font-size: 18px;
+    line-height: 18px;
+}
+.microdate small {
+    vertical-align: text-bottom;
+}
+.micro .microdate .panel-body {
+    padding: 0;
+}
+.micro h4 a {
+    display: block;
 }
 
 .comments .media .pull-left img {
@@ -269,6 +312,8 @@ h2, h4 {
 .comments .media textarea {
     font-size: 16px;
     padding: 8px 12px;
+    max-height: 40px;
+    transition: max-height 1.2s
 }
 .comments .media .removeComment {
     display: none;
@@ -278,10 +323,13 @@ h2, h4 {
     display: inline;
 }
 
+.nextevents {
+     margin: 0 0 25px;
+ }
 .relations {
     margin: -14px 0 20px;
 }
-.relations .panel {
+.relations .panel, .nextevents .panel {
     margin-bottom: 6px;
 }
 

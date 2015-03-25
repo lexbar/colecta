@@ -123,6 +123,7 @@
                 spacingBottom: 4,
                 type: 'column'
             },
+            {% if web_theme_colors is defined and web_theme_colors | length > 4 %}colors: ['{{ web_theme_colors[5] }}'],{% endif %}
             credits: {
                 enabled : false
             },

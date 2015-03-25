@@ -17,6 +17,40 @@ class DefaultController extends Controller
     {
         return $this->dashboardPageAction(1);
     }
+    public function dashboardPageAction($page)
+    {
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
+        
+        $items = $em->createQuery(
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) ORDER BY i.date DESC"
+        )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
+        
+        $nextactivities = $em->createQuery(
+            "SELECT i FROM ColectaActivityBundle:Event i WHERE i.draft = 0 $SQLprivacy AND i.dateini >= CURRENT_DATE() ORDER BY i.dateini ASC"
+        )->setMaxResults(2)->getResult();
+        
+        //Pagination
+        if(count($items) > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
+        
+        return $this->render('ColectaItemBundle:Default:index.html.twig', array('nextactivities' => $nextactivities, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+    }
     public function newAction()
     {
         $user = $this->getUser();
@@ -34,38 +68,6 @@ class DefaultController extends Controller
         $item = $em->getRepository('ColectaItemBundle:Item')->findOneById($id);
         
         return $this->render('ColectaItemBundle:Default:attach.html.twig', array('item' => $item));
-    }
-    public function dashboardPageAction($page)
-    {
-        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
-        
-        $em = $this->getDoctrine()->getManager();
-        
-        $SQLprivacy = '';
-        
-        if(!$this->getUser())
-        {
-            $SQLprivacy = ' AND i.open = 1 ';
-        }
-        
-        $query = $em->createQuery(
-            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
-        )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
-        
-        $items = $query->getResult();
-        
-        //Pagination
-        if(count($items) > $this->ipp) 
-        {
-            $thereAreMore = true;
-            unset($items[$this->ipp]);
-        }
-        else
-        {
-            $thereAreMore = false;
-        }
-        
-        return $this->render('ColectaItemBundle:Default:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function sinceLastVisitAction()
     {

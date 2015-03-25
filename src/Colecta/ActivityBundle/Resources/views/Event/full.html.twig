@@ -49,8 +49,7 @@
                 '12':'DIC'
             }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}</span> 
                     <span class="monthday">{{ item.dateini | date('d') }}</span> 
-                    <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% endif%}</span> 
-                    {% if not sameday %}<span class="label label-default">+{% if item.daysDistance > 0 %}{{ item.daysDistance }} días{% else %}{{ item.hoursDistance }} horas{% endif %}</span>{% endif %}
+                    <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% else %} +{% if item.daysDistance > 0 %}{{ item.daysDistance }} días{% else %}{{ item.hoursDistance }} horas{% endif %}{% endif %}</span> 
             </div>
         </div>
         

@@ -3,7 +3,7 @@
 {% block title %}Inicio{% endblock %}
 
 {% block article %}
-
+    
     {% if app.user and app.user.role.contribute %} 
         {#<a href="{{ path('ColectaItemNew') }}" class="btn btn-small btn-primary pull-right">Nueva publicación <i class="fa fa-plus"></i></a>#}
         
@@ -21,6 +21,23 @@
         </div>
     {% endif %}
     <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    
+    {% if not app.user %}<div class="well well-sm">{{ web_description | nl2br }}</div>{% endif %}
+    
+    {% if nextactivities | length %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i> Próximas actividades</h3>
+            </div>
+            <div class="panel-body">
+            {% for item in nextactivities %}
+                {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+                {% set path = path | replace({'/':'Bundle:'}) %}
+                {% include path with { 'item': item } only %}
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
 {% set shownItems = [] %}
 {% set mainItemsToShow = [] %}
@@ -47,11 +64,7 @@
     {% for ri in item.related %}
         {% set shownItems = shownItems | merge([ri.id]) %}
     {% endfor %}
-{% else %}
-    {#<div class="monocontent text-center">
-        <h3><i class="fa fa-paper-plane"></i> ¡Listos para empezar! </h3>
-    </div>#}
-    
+{% else %}    
     <div class="jumbotron">
         <h1>¡Listos para empezar!</h1>
         {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
