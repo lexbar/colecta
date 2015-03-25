@@ -3,9 +3,6 @@
 {% block title %}Perfil de {{ user.name }}{% endblock %}
 
 {% block article %}
-
-    <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
-    
     {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'items' } %}
     
     {% if user.profile and not user.profile.empty and app.user and app.user.role.userView and page == 1%}
@@ -16,6 +13,8 @@
         <p style="margin-bottom: 0">{% if user.profile.address %}<i class="fa fa-fw fa-home"></i> {{ user.profile.address }}{% endif %} {% if user.profile.phone %}<i class="fa fa-fw fa-phone"></i> {{ user.profile.phone }}{% endif %}</p>
     </div>
     {% endif %}
+    
+    <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
     
     {% for item in items %}
         

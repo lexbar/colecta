@@ -3,12 +3,10 @@
 {% block title %}Rendimiento de {{ user.name }}{% endblock %}
 
 {% block article %}
-
-    <h2>Rendimiento</h2>
     
     {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'assistances' } %}
     
-    <h3>Rendimiento {{ year }}</h3>
+    <h2>Rendimiento {{ year }}</h2>
     {% if years | length > 1 or years | length == 1 and years[0].year != year %}
         <p class="text-muted">
             {% for y in years %}
