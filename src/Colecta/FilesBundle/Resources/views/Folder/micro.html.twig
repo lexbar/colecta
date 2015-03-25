@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block summary %}
-    <p>{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}</p>
+    {% if item.summary %}<p>{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}</p>{% endif %}
     
     {% if files | length > 1 %}
         <div>
