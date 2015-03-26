@@ -280,6 +280,20 @@ h2, h4 {
     font-size: 12px;
     margin: 0;
 }
+.micro .thumbnails {
+    clear: both;
+    margin: 15px 0 10px;
+}
+.micro .btn.file {
+    font-size: 12px;
+    white-space: inherit;
+    padding: 4px;
+    text-align: left;
+}
+.micro .btn .fa {
+    border-left: 1px solid #ddd;
+    padding-left: 2px;
+}
 .microdate {
     margin-bottom: 10px;
 }

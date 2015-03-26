@@ -3,7 +3,7 @@ parameters:
 twig:
     globals:
         web_title: 'Título de la web'
-        web_description: 'Descripción de la web.'
+        web_description: 'Descripción breve de la web.'
         web_theme: theme-blue
         theme_sidebar: right
         allowed_tags: '<br><img>#<span><a><ol><ul><li>'
