@@ -32,7 +32,7 @@
                 </label>
                 <div class="col-sm-8">
                     <select id="web_theme" name="web_theme" class="form-control">
-                        {% set theme_options = [['classic','Clásico'],['google','Google']] %}
+                        {% set theme_options = [['classic','Clásico'],['google','Google'],['facebook','Facebook']] %}
                         {% for theme in theme_options %}
                         <option{% if web_parameters.twig.globals.web_theme | default('') == theme[0] %} selected="selected"{% endif %} value="{{ theme[0] }}">{{ theme[1] }}</option>
                         {% endfor %}
@@ -84,7 +84,7 @@
                     <div class="row">
                         <div class="col-xs-6 col-sm-12 col-md-6"><img src="{{ web_parameters.twig.globals.web_logo }}"></div>
                         <div class="col-xs-6 col-sm-12 col-md-6">
-                            <div class="checkbox" style="padding-top:0"><label><input type="checkbox" name="web_logo_only" value="1"{% if web_parameters.twig.globals.web_logo_only %}checked="checked"{% endif %}> No mostrar el título</label></div>
+                            <div class="checkbox" style="padding-top:0"><label><input type="checkbox" name="web_logo_only" value="1"{% if web_parameters.twig.globals.web_logo_only %}checked="checked"{% endif %}> Ocultar texto del título</label></div>
                             <div class="checkbox" style="padding-top:0"><label class="text-danger"><input type="checkbox" name="web_logo_delete" value="1"> Eliminar</label></div>
                         </div>
                     </div>

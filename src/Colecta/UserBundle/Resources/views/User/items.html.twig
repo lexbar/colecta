@@ -16,15 +16,12 @@
     
     <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
     
-    {% for item in items %}
+    {% for item in items %}   
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
         
-        <div class="item" id="item{{ item.id}}">        
-            {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-            {% set path = path | replace({'/':'Bundle:'}) %}
-            {% include path with { 'item': item } only %}
-            
-            {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-        </div>
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
     
     {% else %}
         <p class="lead">No ha publicado nada... por ahora.</p>
