@@ -24,16 +24,6 @@
     
     {% if not app.user %}<div class="well well-sm">{{ web_description | nl2br }}</div>{% endif %}
     
-    {# if app.user %}
-    <div class="itemForm">    
-        <ul class="nav nav-pills">
-            <li><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Mensaje</a></li>
-            <li><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</a></li>
-            <li><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Activity/Route']}}"></i> Mapa</a></li>
-        </ul>
-    </div>
-    {% endif #}
-    
     {% if nextactivities | length %}
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -48,6 +38,17 @@
             </div>
         </div>
     {% endif %}
+    
+    {# if app.user %}
+    <div class="itemForm panel panel-default">    
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Mensaje</a></li>
+            <li><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</a></li>
+            <li><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Activity/Route']}}"></i> Mapa</a></li>
+        </ul>
+        
+    </div>
+    {% endif #}
 
 {% set shownItems = [] %}
 {% set mainItemsToShow = [] %}

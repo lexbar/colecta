@@ -337,6 +337,19 @@ h2, h4 {
     display: inline;
 }
 
+.itemForm .nav li a {
+    color: #888;
+    background-color: transparent;
+}
+.itemForm .nav li.active a {
+    background-color: #FFF;
+    color: #000;
+}
+.itemForm .nav li a:hover, .itemForm .nav li.active a:hover, .itemForm .nav li.active a:focus {
+    color: #000;
+    background-color: transparent;
+}
+
 .nextevents {
      margin: 0 0 25px;
  }
