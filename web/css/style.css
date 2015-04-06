@@ -282,7 +282,7 @@ h2, h4 {
 }
 .micro .thumbnails {
     clear: both;
-    margin: 15px 0 10px;
+    margin: 25px 0 8px;
 }
 .micro .btn.file {
     font-size: 12px;
@@ -445,10 +445,12 @@ h2, h4 {
 }
 .relations p {
     font-size: 14px;
+    margin-bottom: 4px;
 }
 .relations p.details {
 	font-size: 12px;
-	margin-top: -6px;
+	margin-top: 3px;
+	clear: both;
 }
 .relations .col-xs-9.col-lg-10 {
     padding-left: 0;
