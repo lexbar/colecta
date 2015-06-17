@@ -234,7 +234,7 @@ function RUuploadCanceled(evt) {
 function RUuploadEnd() {
     RUuploading = false;
     
-    $('#RouteFile').remove();
+    //$('#RouteFile').remove();
     $('#itemSubmit .itemTypeRoute .form-controls').prepend('<input type="file" id="RouteFile" name="file">');
     $('#RouteFile').change(RouteChange);
     

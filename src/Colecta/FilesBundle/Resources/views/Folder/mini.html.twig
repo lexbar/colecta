@@ -32,24 +32,20 @@
     {% endif %}
     
     {% if thumbnails == 1 and listed == 0 %} {# The folder consists of only one image #}
-        <div class="row">
-            <div class="col-xs-12 col-sm-9">
-                {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
                 
-                <div id="summary-{{ item.slug }}">
-                    {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-                    {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
-                </div>
-                
-                {% if item.text | length > summary_max_length %}
-                    <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-                {% endif %}
-            </div>
+        <div id="summary-{{ item.slug }}">
+            {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+            {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
+        </div>
+        
+        {% if item.text | length > summary_max_length %}
+            <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+        {% endif %}
             
-            <div class="preview col-xs-12 col-sm-3 ">
-                {% set file = files.first %}
-                <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
-            </div>
+        <div class="preview">
+            {% set file = files.first %}
+            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
         </div>
     {% elseif thumbnails > 0 %}
         <div class="row thumbnails">        
