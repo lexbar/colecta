@@ -18,9 +18,9 @@
         </ul>
         <form id="textForm" action="{{ path('ColectaPostCreate') }}" method="post">
             <div class="hidable">
-                <input type="text" class="form-control" placeholder="Título" name="name">
+                <input type="text" class="form-control" placeholder="Título" name="name" value="{% if item is defined %}{{ item.name }}{% endif %}">
             </div>
-            <textarea rows="1" class="form-control" placeholder="Escribe un mensaje..." name="text" onClick="typeChosen('text');"></textarea>
+            <textarea rows="1" class="form-control" placeholder="Escribe un mensaje..." name="text" onClick="typeChosen('text');">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
             <div class="hidable">
                 {% if app.user.role.itemFileCreate %}
                     <p><strong>Adjuntar archivos:</strong></p> 
@@ -42,9 +42,9 @@
         {% if app.user.role.itemEventCreate %}
         <form id="eventForm" action="{{ path('ColectaEventCreate') }}" method="post" class="hiddenForm">
             <div class="hidable">
-                <input type="text" class="form-control" placeholder="Título" name="name">
+                <input type="text" class="form-control" placeholder="Título" name="name" value="{% if item is defined %}{{ item.name }}{% endif %}">
             </div>
-            <textarea rows="1" class="form-control" placeholder="Descripción de la actividad..." name="text" onClick="$('#itemForm').removeClass('compressed')"></textarea>
+            <textarea rows="1" class="form-control" placeholder="Descripción de la actividad..." name="text" onClick="$('#itemForm').removeClass('compressed')">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
             <div class="hidable">
                 <hr>
                 <div class="form-group">
@@ -156,9 +156,9 @@
         {% if app.user.role.itemRouteCreate %}
         <form id="mapForm" action="{{ path('ColectaRouteCreate') }}" method="post" class="hiddenForm">
             <div class="hidable">
-                <input type="text" class="form-control" placeholder="Título" name="name">
+                <input type="text" class="form-control" placeholder="Título" name="name" value="{% if item is defined %}{{ item.name }}{% endif %}">
             </div>
-            <textarea rows="1" class="form-control" placeholder="Descripción de la ruta..." name="text" onClick="$('#itemForm').removeClass('compressed')"></textarea>
+            <textarea rows="1" class="form-control" placeholder="Descripción de la ruta..." name="text" onClick="$('#itemForm').removeClass('compressed')">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
             <div class="hidable">
                 <p><strong>Archivo GPS:</strong></p> 
                 <div id="RouteFileHandler"><input id="RouteFile" type="file" name="file"></div>

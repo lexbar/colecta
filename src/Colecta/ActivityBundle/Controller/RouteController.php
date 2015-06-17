@@ -458,11 +458,7 @@ class RouteController extends Controller
         {
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->get('category'));
         
-            if(!$user) 
-            {
-                $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
-            }
-            elseif(!$category && !$request->get('newCategory'))
+            if(!$category && !$request->get('newCategory'))
             {
                 $this->get('session')->getFlashBag()->add('error', 'No existe la categoria');
             }
@@ -527,6 +523,12 @@ class RouteController extends Controller
                     $rootdir = $this->getUploadDir();
                     
                     $filename = $this->safeToken($post->get('filename'));
+                    
+                    if(!file_exists($cachePath.'/'.$filename))
+                    {
+                        $this->get('session')->getFlashBag()->add('error', 'No hemos podido procesar el archivo de ruta');
+                        return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route', 'item'=>$item));
+                    }
                     
                     if(copy($cachePath.'/'.$filename, $rootdir.'/'.$filename))
                     {
@@ -675,9 +677,16 @@ class RouteController extends Controller
                     $filename = $post->get('filename');
                     $rootdir = $this->getUploadDir();
                     
-                    $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
-                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
-                    $itemdata = $this->getRouteData($fulltrack);
+                    if(file_exists($rootdir.'/'.$filename))
+                    {
+                        $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
+                        $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
+                        $itemdata = $this->getRouteData($fulltrack);
+                    }
+                    else
+                    {
+                        $track = $fulltrack = $itemdata = null;
+                    }
                     
                     $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
                     

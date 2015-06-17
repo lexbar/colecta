@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-8">
         <select name="category" class="form-control Category">
         {% for category in categories %}
             <option value="{{ category.id }}"{% if category.id == selected %} selected="selected"{% endif %}>{{ category.name }}</option>
@@ -8,8 +8,8 @@
         <input class="form-control NewCategory" type="text" name="newCategory" style="display:none" placeholder="Nombre">
     </div>
     {% if app.user.role.categoryCreate %}
-    <div class="col-sm-6">
-        <button class="btn btn-default newcategory categoryCreateButton" type="button" onClick="toggleCategoryCreate(this)"><i class="fa fa-plus"></i> Nueva categoría</button>
+    <div class="col-sm-4">
+        <button class="btn btn-default btn-block newcategory categoryCreateButton" type="button" onClick="toggleCategoryCreate(this)"><i class="fa fa-plus"></i> Nueva categoría</button>
     </div>
     {% endif %}
 </div>

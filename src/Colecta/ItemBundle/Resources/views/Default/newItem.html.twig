@@ -5,7 +5,7 @@
 {% block article %}
 
     <h2>Nueva publicación</h2>
-
+    
     {% if app.user and app.user.role.contribute %} 
     {% include 'ColectaItemBundle:Default:newItemForm.html.twig' %}
     {% endif %}
@@ -94,6 +94,16 @@
             interval: 10,
             format: 'HH:i'
         });
+        
+        {% if item is defined %}
+            {% if item.type == 'Activity/Event' %}
+                $(document).ready(function() {typeChosen('event');});
+            {% elseif item.type == 'Item/Post' or item.type == 'Files/Folder' or item.type == 'Files/File' %}
+                $(document).ready(function() {typeChosen('text');});
+            {% elseif item.type == 'Activity/Route' or item.type == 'Activity/Place' %}
+                $(document).ready(function() {typeChosen('map');});
+            {% endif %}
+        {% endif %}
         </script>
     {% endif %}
 {% endblock %}
