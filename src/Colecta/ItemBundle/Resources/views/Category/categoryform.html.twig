@@ -1,15 +1,15 @@
 <div class="row">
     <div class="col-sm-6">
-        <select id="Category" name="category" class="form-control">
+        <select name="category" class="form-control Category">
         {% for category in categories %}
             <option value="{{ category.id }}"{% if category.id == selected %} selected="selected"{% endif %}>{{ category.name }}</option>
         {% endfor %}
         </select>
-        <input class="form-control" type="text" id="NewCategory" name="newCategory" style="display:none" placeholder="Nombre">
+        <input class="form-control NewCategory" type="text" name="newCategory" style="display:none" placeholder="Nombre">
     </div>
     {% if app.user.role.categoryCreate %}
     <div class="col-sm-6">
-        <button class="btn btn-default newcategory" type="button" onClick="toggleCategoryCreate()" id="categoryCreateButton"><i class="fa fa-plus"></i> Nueva categoría</button>
+        <button class="btn btn-default newcategory categoryCreateButton" type="button" onClick="toggleCategoryCreate(this)"><i class="fa fa-plus"></i> Nueva categoría</button>
     </div>
     {% endif %}
 </div>
