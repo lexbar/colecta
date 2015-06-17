@@ -72,7 +72,7 @@
         </li>
         <li{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} class="active"{% endif %}>
             <a href="{{ path('ColectaMapIndex') }}">
-                <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Mapas
+                <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Rutas
             </a>
         </li><li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
             <a href="{{ path('ColectaCategoryIndex') }}">

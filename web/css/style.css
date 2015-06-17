@@ -337,6 +337,9 @@ h2, h4 {
     display: inline;
 }
 
+.itemForm .nav {
+    border-bottom: 1px solid #EEE;
+}
 .itemForm .nav li a {
     color: #888;
     background-color: transparent;
@@ -348,6 +351,48 @@ h2, h4 {
 .itemForm .nav li a:hover, .itemForm .nav li.active a:hover, .itemForm .nav li.active a:focus {
     color: #000;
     background-color: transparent;
+}
+.itemForm form {
+    padding: 10px;
+}
+.itemForm .hidable {
+    max-height: 3000px;
+    transition: max-height 1.2s;
+    margin: 8px 0;
+}
+.itemForm.compressed .hidable {
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+}
+.itemForm.compressed textarea.form-control {
+    border-width: 0;
+    box-shadow: none;
+    margin: 0;
+}
+.itemForm textarea {
+    height: 200px;
+    transition: height 1s;
+}
+.itemForm.compressed textarea {
+    height: 34px;
+}
+.itemForm {
+    max-height: 3000px;
+}
+.itemForm .hiddenForm {
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: max-height 1.2s;
+} 
+.itemForm .form-group {
+    overflow: hidden;
+}
+
+#FUaddon textarea {
+    margin: 5px 0;
+    height: auto;
 }
 
 .nextevents {

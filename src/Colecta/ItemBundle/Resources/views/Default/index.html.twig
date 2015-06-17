@@ -4,8 +4,7 @@
 
 {% block article %}
     
-    {% if app.user and app.user.role.contribute %} 
-        {#<a href="{{ path('ColectaItemNew') }}" class="btn btn-small btn-primary pull-right">Nueva publicación <i class="fa fa-plus"></i></a>#}
+    {# if app.user and app.user.role.contribute %} 
         
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -19,10 +18,184 @@
             {% if app.user.role.itemPlaceCreate %}<li><a href="{{ path('ColectaPlaceNew') }}"><i class="fa fa-fw fa-{{ itemIcons['Activity/Place']}}"></i> Lugar</a></li>{% endif %}
             </ul>
         </div>
-    {% endif %}
+    {% endif #}
     <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
     {% if not app.user %}<div class="well well-sm">{{ web_description | nl2br }}</div>{% endif %}
+    
+    {% if app.user and app.user.role.contribute %} 
+    <div class="itemForm panel panel-default compressed" id="itemForm">    
+        <ul class="nav nav-pills">
+            {% if app.user.role.itemPostCreate or app.user.role.itemFileCreate %}
+                <li class="active" id="textHandler">
+                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Mensaje</a>
+                </li>
+            {% endif %}
+            {% if app.user.role.itemEventCreate %}
+                <li id="eventHandler">
+                    <a href="#" onClick="typeChosen('event');return false;"><i class="fa fa-fw fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</a>
+                </li>
+            {% endif %}
+            {% if app.user.role.itemRouteCreate or app.user.role.itemPlaceCreate %}
+                <li id="mapHandler">
+                    <a href="#" onClick="typeChosen('map');return false;"><i class="fa fa-fw fa-{{ itemIcons['Activity/Route']}}"></i> Ruta</a>
+                </li>
+            {% endif %}
+        </ul>
+        <form id="textForm" action="{{ path('ColectaPostCreate') }}" method="post">
+            <div class="hidable">
+                <input type="text" class="form-control" placeholder="Título" name="name">
+            </div>
+            <textarea rows="1" class="form-control" placeholder="Escribe un mensaje..." name="text" onClick="typeChosen('text');"></textarea>
+            <div class="hidable">
+                {% if app.user.role.itemFileCreate %}
+                    <p><strong>Adjuntar archivos:</strong></p> 
+                    <div id="FilesFileHandler"><input id="FilesFile" type="file" multiple="multiple" name="file[]"></div>
+                    <div id="FUaddon" class="clearfix"></div>
+                {% endif %}
+                <hr>
+                
+                {{ render(controller('ColectaItemBundle:Category:formlist', {'selected' : 0})) }}
+                  
+                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                {#<button class="btn">Guardar como borrador</button>#}
+                <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+            </div>
+        </form>
+        {% if app.user.role.itemEventCreate %}
+        <form id="eventForm" action="{{ path('ColectaEventCreate') }}" method="post" class="hiddenForm">
+            <div class="hidable">
+                <input type="text" class="form-control" placeholder="Título" name="name">
+            </div>
+            <textarea rows="1" class="form-control" placeholder="Descripción de la actividad..." name="text" onClick="$('#itemForm').removeClass('compressed')"></textarea>
+            <div class="hidable">
+                <hr>
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
+                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
+                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}14:00{% endif %}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Distancia</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="EventDistance" name="distance" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.distance }}{% endif %}"><span class="input-group-addon"> km</span>
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Desnivel subida</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="EventUphill" name="uphill" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.uphill }}{% endif %}"><span class="input-group-addon"> metros</span>
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Dificultad</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item is defined and item.type == 'Activity/Event' and item.difficulty == '' or item is not defined%} checked{% endif %}>
+                            No indicar
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'easy' %} checked{% endif %}>
+                            <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                            Fácil
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'moderate' %} checked{% endif %}>
+                            <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                            Moderado
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'hard' %} checked{% endif %}>
+                            <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                            Difícil
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'very hard' %} checked{% endif %}>
+                            <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                            Muy difícil
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'experts only' %} checked{% endif %}>
+                            <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                            Sólo expertos
+                        </label>
+                    </div>
+                </div>
+                <hr>
+            
+                {{ render(controller('ColectaItemBundle:Category:formlist', {'selected' : 0})) }}
+                  
+                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                {#<button class="btn">Guardar como borrador</button>#}
+                <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+            </div>
+        </form>
+        {% endif %}
+        {% if app.user.role.itemRouteCreate %}
+        <form id="mapForm" action="" method="post" class="hiddenForm">
+            <div class="hidable">
+                <input type="text" class="form-control" placeholder="Título" name="name">
+            </div>
+            <textarea rows="1" class="form-control" placeholder="Descripción de la ruta..." name="text" onClick="$('#itemForm').removeClass('compressed')"></textarea>
+            <div class="hidable">
+                <p><strong>Archivo GPS:</strong></p> 
+                <div id="RouteFileHandler"><input id="RouteFile" type="file" name="file"></div>
+                <div id="RUmessage" class="clearfix"></div>
+                
+                <hr>
+                
+                {{ render(controller('ColectaItemBundle:Category:formlist', {'selected' : 0})) }}
+                  
+                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                {#<button class="btn">Guardar como borrador</button>#}
+                <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+            </div>
+        </form>
+        {% endif %}
+    </div>
+    {% endif %}
     
     {% if nextactivities | length %}
         <div class="panel panel-default">
@@ -38,53 +211,129 @@
             </div>
         </div>
     {% endif %}
-    
-    {# if app.user %}
-    <div class="itemForm panel panel-default">    
-        <ul class="nav nav-pills">
-            <li class="active"><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Mensaje</a></li>
-            <li><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</a></li>
-            <li><a href="#"><i class="fa fa-fw fa-{{ itemIcons['Activity/Route']}}"></i> Mapa</a></li>
-        </ul>
+
         
-    </div>
-    {% endif #}
-
-{% set shownItems = [] %}
-
-{% for item in items if item.id not in shownItems %}
- 
-    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-    {% set path = path | replace({'/':'Bundle:'}) %}
-    {% include path with { 'item': item } only %}
+    {% set shownItems = [] %}
     
-    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
-    
-    {% set shownItems = shownItems | merge([item.id]) %}
-    {% for ri in item.related %}
-        {% set shownItems = shownItems | merge([ri.id]) %}
-    {% endfor %}
-{% else %}
-    {% if app.user %}
-    <div class="jumbotron">
-        <h1>¡Listos para empezar!</h1>
-        {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
-        <p>¿Qué quieres hacer ahora?</p>
-        <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-wrench fa-fw"></i> Administración</a>{% endif %} {% if app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
+    {% for item in items if item.id not in shownItems %}
+     
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+        
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
+        
+        {% set shownItems = shownItems | merge([item.id]) %}
+        {% for ri in item.related %}
+            {% set shownItems = shownItems | merge([ri.id]) %}
+        {% endfor %}
+    {% else %}
+        {% if app.user %}
+        <div class="jumbotron">
+            <h1>¡Listos para empezar!</h1>
+            {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
+            <p>¿Qué quieres hacer ahora?</p>
+            <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-wrench fa-fw"></i> Administración</a>{% endif %} {% if app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
+            {% endif %}
+        </div>
         {% endif %}
-    </div>
+    {% endfor %}
+    
+    {% if page > 1 or thereAreMore %}
+        <ul class="pager">
+          <li class="previous{% if page == 1 %} disabled{% endif %}">
+            <a href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+          </li>
+          <li class="next{% if not thereAreMore %} disabled{% endif %}">
+            <a href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+          </li>
+        </ul>
     {% endif %}
-{% endfor %}
 
-{% if page > 1 or thereAreMore %}
-    <ul class="pager">
-      <li class="previous{% if page == 1 %} disabled{% endif %}">
-        <a href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-      </li>
-      <li class="next{% if not thereAreMore %} disabled{% endif %}">
-        <a href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-      </li>
-    </ul>
-{% endif %}
+{% endblock %}
 
+{% block stylesheets %}
+    {% if app.user and app.user.role.contribute %} 
+        {% if rich_text_editor %}
+            <link rel="stylesheet" href="/css/summernote.css" />
+        {% endif %}
+        <link rel="stylesheet" href="/js/pickadate/themes/default.css" />
+        <link rel="stylesheet" href="/js/pickadate/themes/default.date.css" />
+        <link rel="stylesheet" href="/js/pickadate/themes/default.time.css" />
+        <style>
+        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+            cursor: pointer;
+            background-color: #FFF;
+        }
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}  
+    {% if app.user and app.user.role.contribute %} 
+        {% if rich_text_editor %}
+            <script src="/js/summernote.min.js"></script>
+        {% endif %}
+        
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/pickadate/picker.js"></script>
+        <script src="/js/pickadate/picker.date.js"></script>
+        <script src="/js/pickadate/picker.time.js"></script>
+        <script src="/js/pickadate/legacy.js"></script>
+        <script src="/js/pickadate/translations/es_ES.js"></script>
+        
+        <script src="/js/userinteraction.js"></script>
+        <script>        
+        {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
+    
+        {% if rich_text_editor %}
+            $(document).ready(function() {
+                $('#FileText').summernote({
+                    height: 180,
+                    toolbar: [
+                    //['style', ['style']], // no style button
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    //['fontsize', ['fontsize']],
+                    //['color', ['color']],
+                    ['para', ['ul', 'ol']],
+                    //['height', ['height']],
+                    ['insert', [/*'picture',*/ 'link']], // no insert buttons
+                    //['table', ['table']], // no table button
+                    ['help', ['help']] //no help button
+                    ]
+                });
+            });
+            
+            var postForm = function() {
+                var content = $('textarea[name="text"]').html($('#FileText').code());
+            }
+        {% endif %}
+        
+        var EventDateini = $('#EventDateini').pickadate({
+            format: 'dd-mm-yyyy',
+            onSet: function(context) {
+                var picker = EventDateend.pickadate('picker');
+                if(context.select > picker.get('select').pick)
+                {
+                    picker.set('select', context.select);
+                }
+                picker.set('min', new Date(context.select));
+            }
+        });
+        
+        var EventDateend = $( "#EventDateend" ).pickadate({
+            format: 'dd-mm-yyyy',
+            min: $('#EventDateini').val()
+        });
+        
+        $('#EventDateiniTime').pickatime({
+            interval: 10,
+            format: 'HH:i'
+        });
+        $('#EventDateendTime').pickatime({
+            interval: 10,
+            format: 'HH:i'
+        });
+        </script>
+    {% endif %}
 {% endblock %}

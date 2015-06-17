@@ -1,5 +1,6 @@
-var itemSubmitType = 'Post';
+var itemSubmitType = 'text';
 var unsaved = false;
+
 function typeChosen(type) { //Set the type of item chosen    
     /*$(window).bind('beforeunload', function(){
       return 'Seguro que quieres irte sin publicar?';
@@ -8,80 +9,50 @@ function typeChosen(type) { //Set the type of item chosen
         window.onbeforeunload = null;
     });*/
     
-    if(itemSubmitType == 'Route') {
+    
+    $('#itemForm').removeClass('compressed'); //Expand the form if compressed
+    
+    if(itemSubmitType == 'map') {
         $('#RouteFile').remove();
-        $('#itemSubmit .itemTypeRoute .form-controls').prepend('<input type="file" id="RouteFile" name="file">');
+        $('#RouteFileHandler').html('<input type="file" id="RouteFile" name="file">');
         $('#RouteFile').change(RouteChange);
     }
-    else if(itemSubmitType == 'File') {
+    else if(itemSubmitType == 'text') {
         $('#FilesFile').remove();
-        $('#itemSubmit .itemTypeFile .form-controls').prepend('<input type="file" id="FilesFile" multiple="multiple" name="file[]">');
+        $('#FilesFileHandler').html('<input type="file" id="FilesFile" multiple="multiple" name="file[]">');
         $('#FilesFile').change(FileChange);
     }
     
     if(itemSubmitType == type) {
-        if(unsaved && !confirm('¿Seguro que quieres cambiar de tipo de publicación?\nSólo puedes publicar un tipo de contenido al mismo tiempo.'))
-        {
-            return false;
-        }
-        
-        unsaved = false;
-        
-        itemSubmitType = 'Post';
-        if(type != 'Post') {
-            $('#itemSubmit .type'+type).removeClass('active');
-            $('#itemSubmit .itemType'+type).addClass('hidden');
-        }
-        $('#itemSubmit').attr('action','/crear/texto/');
         return false;
     } else {
-        if(unsaved && !confirm('¿Seguro que quieres cambiar de tipo de publicación?\nSólo puedes publicar un tipo de contenido al mismo tiempo.'))
+        if(unsaved && !confirm('¿Seguro que quieres descartar la publicación?\nSólo puedes publicar un tipo de contenido al mismo tiempo.'))
         {
             return false;
         }
         
         unsaved = false;
         
-        if(itemSubmitType != 'Post') {
-            $('#itemSubmit .type'+itemSubmitType).removeClass('active');
+        if(itemSubmitType != '')
+        {
+            $('#'+itemSubmitType+'Handler').removeClass('active');
+            $('#'+itemSubmitType+'Form').addClass('hiddenForm');  
         }
-        $('#itemSubmit .type'+type).addClass('active');
         
-        $('.itemType'+itemSubmitType).addClass('hidden');
-        $('.itemType'+type).removeClass('hidden');
-        
+        $('#'+type+'Form').removeClass('hiddenForm');
+        $('#'+type+'Handler').addClass('active');
+                
         itemSubmitType = type;
         
         switch(type) {
-            case 'File': 
-                $('#itemSubmit').attr('action','/archivo/crear/');
-                $('#FilesFile').change(FileChange);
+            case 'event': 
+                $('#eventForm input, .itemTypeEvent select').change(function(){ unsaved = true })
             break;
-            case 'Route': 
-                $('#itemSubmit').attr('action','/crear/ruta/');
+            case 'map':
                 $('#RouteFile').change(RouteChange);
-            break;
-            case 'Event': 
-                $('#itemSubmit').attr('action','/crear/actividad/');
-                $('.itemTypeEvent input, .itemTypeEvent select').change(function(){ unsaved = true })
-            break;
-            case 'Place': 
-                $('#itemSubmit').attr('action','/crear/lugar/');
-                $('#itemSubmit').submit(searchAction);
-                $('#PlaceMapSearch').focus();
-            break;
-            case 'Post': 
-                $('#itemSubmit').attr('action','/crear/texto/');
             break;
         }
         return false;
-    }
-}
-
-function checkUnsaved()
-{
-    if(unsaved) {
-        
     }
 }
 
@@ -289,7 +260,7 @@ function FileChange() {
         for(var i = 0; i < files.length; i++) {
             var f = files[i];
             var j = (i + FUTheFiles.length);
-            fp.append('<div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10" id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress"><div role="progressbar"  class="progress-bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
+            fp.append('<div id="UFC'+j+'"><div class="uploadmessage">Preparando '+f.name+'</div><div class="progress"><div role="progressbar"  class="progress-bar" id="progress'+j+'" style="width: 0%;"></div></div></div>');
         }
         
         //Start upload
@@ -333,12 +304,14 @@ function endOfUploads() {
     FUuploading = false;
     
     $('#FilesFile').remove();
-    $('#itemSubmit .itemTypeFile .form-controls').prepend('<input type="file" id="FilesFile" multiple="multiple" name="file[]">');
+    $('#FilesFileHandler').prepend('<input type="file" id="FilesFile" multiple="multiple" name="file[]">');
     $('#FilesFile').change(FileChange);
     
     $('#itemSubmitButton').removeAttr('disabled').removeClass('disabled'); 
     $('#itemSubmitButtonText').html('Publicar'); 
     $('#itemSubmitButtonLoading').removeClass('fa fa-refresh fa-spin');
+    
+    $('#textForm').attr('action','/archivo/crear/');
 }
 function uploadFile(file) {
     var fd = new FormData();
@@ -374,7 +347,7 @@ function FUuploadComplete(evt) {
     if(res.length > 180) {
         FUuploadFailed();
     } else {
-        $('#UFC'+FUcurrentFileIndex).html('<hr><div class="row"><div class="col-sm-12 col-md-4"><img src="'+FUpreviewAddress + $.trim(res)+'" class="img-responsive"></div><div class="col-sm-12 col-md-8"><input type="text" class="form-control" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..."><textarea class="form-control" name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..."></textarea><small class="btn btn-link btn-small" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete"></div></div>');
+        $('#UFC'+FUcurrentFileIndex).html('<hr><div class="row"><div class="col-sm-12 col-md-4"><img src="'+FUpreviewAddress + $.trim(res)+'" class="img-responsive"></div><div class="col-sm-12 col-md-8"><input type="text" class="form-control" name="file'+FUcurrentFileIndex+'Name" placeholder="Nombre..."><textarea rows="4" class="form-control" name="file'+FUcurrentFileIndex+'Description" placeholder="Descripción..."></textarea><small class="btn btn-link btn-small" style="color:red" onClick="deleteFile('+FUcurrentFileIndex+')">(Eliminar archivo)</small><input type="hidden" name="file'+FUcurrentFileIndex+'Token" value="'+res+'"><input type="hidden" name="file'+FUcurrentFileIndex+'Delete" value="0" id="file'+FUcurrentFileIndex+'Delete"></div></div>');
         
         uploadNext();
     }
@@ -408,11 +381,11 @@ function process() {
 
 function privacyToggle()
 {
-    if($('#privacy').val() == '1'){
-        $('#privacy').val('0');
-        $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+    if($('.privacyToggle').val() == '1'){
+        $('.privacyToggle').val('0');
+        $('.privacyToggleButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
     }else{
-        $('#privacy').val('1');
-        $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+        $('.privacyToggle').val('1');
+        $('.privacyToggleButton').html('<i class="fa fa-unlock"></i> Abierto');
     }
 }
