@@ -21,7 +21,7 @@
     {% endif #}
     <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
-    {% if not app.user %}<div class="well well-sm">{{ web_description | nl2br }}</div>{% endif %}
+    {% if not app.user and web_description %}<div class="well well-sm">{{ web_description | nl2br }}</div>{% endif %}
     
     {% if app.user and app.user.role.contribute %} 
         {% include 'ColectaItemBundle:Default:newItemForm.html.twig' %}
