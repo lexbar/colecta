@@ -35,6 +35,9 @@
                 {#<button class="btn">Guardar como borrador</button>#}
                 <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
             </div>
+            {% if attachto is defined %}
+                <input type="hidden" value="{{ attachto }}" name="attachTo">
+            {% endif %}
         </form>
         {% if app.user.role.itemEventCreate %}
         <form id="eventForm" action="{{ path('ColectaEventCreate') }}" method="post" class="hiddenForm">
@@ -145,6 +148,9 @@
                 {#<button class="btn">Guardar como borrador</button>#}
                 <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
             </div>
+            {% if attachto is defined %}
+                <input type="hidden" value="{{ attachto }}" name="attachTo">
+            {% endif %}
         </form>
         {% endif %}
         {% if app.user.role.itemRouteCreate %}
@@ -166,6 +172,9 @@
                 {#<button class="btn">Guardar como borrador</button>#}
                 <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
             </div>
+            {% if attachto is defined %}
+                <input type="hidden" value="{{ attachto }}" name="attachTo">
+            {% endif %}
         </form>
         {% endif %}
     </div>

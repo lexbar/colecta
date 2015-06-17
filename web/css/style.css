@@ -372,7 +372,7 @@ h2, h4 {
 }
 .itemForm textarea {
     height: 200px;
-    transition: height 1s;
+    transition: height .2s;
 }
 .itemForm.compressed textarea {
     height: 34px;
