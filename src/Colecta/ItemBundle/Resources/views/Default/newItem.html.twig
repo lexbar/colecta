@@ -103,7 +103,16 @@
             {% elseif item.type == 'Activity/Route' or item.type == 'Activity/Place' %}
                 $(document).ready(function() {typeChosen('map');});
             {% endif %}
+        {% elseif type is defined %}
+            {% if type == 'Event' %}
+                $(document).ready(function() {typeChosen('event');});
+            {% elseif type == 'Post' or type == 'Folder' or type == 'File' %}
+                $(document).ready(function() {typeChosen('text');});
+            {% elseif type == 'Route' or type == 'Place' %}
+                $(document).ready(function() {typeChosen('map');});
+            {% endif %}
         {% endif %}
+        
         </script>
     {% endif %}
 {% endblock %}
