@@ -6,92 +6,94 @@
 
     <h2>Nueva publicación</h2>
 
-{% include 'ColectaItemBundle:Default:newItemForm.html.twig' %}
+    {% if app.user and app.user.role.contribute %} 
+    {% include 'ColectaItemBundle:Default:newItemForm.html.twig' %}
+    {% endif %}
 
 {% endblock %}
 
 {% block stylesheets %}
-    {% if rich_text_editor %}
-        <link rel="stylesheet" href="/css/summernote.css" />
+    {% if app.user and app.user.role.contribute %} 
+        {% if rich_text_editor %}
+            <link rel="stylesheet" href="/css/summernote.css" />
+        {% endif %}
+        <link rel="stylesheet" href="/js/pickadate/themes/default.css" />
+        <link rel="stylesheet" href="/js/pickadate/themes/default.date.css" />
+        <link rel="stylesheet" href="/js/pickadate/themes/default.time.css" />
+        <style>
+        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+            cursor: pointer;
+            background-color: #FFF;
+        }
+        </style>
     {% endif %}
-    <link rel="stylesheet" href="/js/pickadate/themes/default.css" />
-    <link rel="stylesheet" href="/js/pickadate/themes/default.date.css" />
-    <link rel="stylesheet" href="/js/pickadate/themes/default.time.css" />
-    <style>
-    .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-        cursor: pointer;
-        background-color: #FFF;
-    }
-    </style>
 {% endblock %}
 
-{% block javascripts %}
-
-{% if rich_text_editor %}
-    <script src="/js/summernote.min.js"></script>
-{% endif %}
-<script src="/js/userInteraction.js?v=2013/11/20"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/pickadate/picker.js"></script>
-<script src="/js/pickadate/picker.date.js"></script>
-<script src="/js/pickadate/picker.time.js"></script>
-<script src="/js/pickadate/legacy.js"></script>
-<script src="/js/pickadate/translations/es_ES.js"></script>
-
-<script>    
-    var EventDateini = $('#EventDateini').pickadate({
-        format: 'dd-mm-yyyy',
-        onSet: function(context) {
-            var picker = EventDateend.pickadate('picker');
-            if(context.select > picker.get('select').pick)
-            {
-                picker.set('select', context.select);
-            }
-            picker.set('min', new Date(context.select));
-        }
-    });
+{% block javascripts %}  
+    {% if app.user and app.user.role.contribute %} 
+        {% if rich_text_editor %}
+            <script src="/js/summernote.min.js"></script>
+        {% endif %}
+        
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/pickadate/picker.js"></script>
+        <script src="/js/pickadate/picker.date.js"></script>
+        <script src="/js/pickadate/picker.time.js"></script>
+        <script src="/js/pickadate/legacy.js"></script>
+        <script src="/js/pickadate/translations/es_ES.js"></script>
+        
+        <script src="/js/userInteraction.js"></script>
+        <script>        
+        {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
     
-    var EventDateend = $( "#EventDateend" ).pickadate({
-        format: 'dd-mm-yyyy',
-        min: $('#EventDateini').val()
-    });
-    
-    $('#EventDateiniTime').pickatime({
-        interval: 10,
-        format: 'HH:i'
-    });
-    $('#EventDateendTime').pickatime({
-        interval: 10,
-        format: 'HH:i'
-    });
-  
-    {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
-    
-    {% if type is defined %}
-    $( document ).ready(function(){typeChosen('{{ type }}')});
-    {% endif %}
-    
-    {% if rich_text_editor %}
-        $(document).ready(function() {
-            $('#ItemSubmitText').summernote({
-                height: 100,
-                toolbar: [
-                //['style', ['style']], // no style button
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                //['fontsize', ['fontsize']],
-                //['color', ['color']],
-                ['para', ['ul', 'ol']],
-                //['height', ['height']],
-                ['insert', [/*'picture',*/ 'link']], // no insert buttons
-                //['table', ['table']], // no table button
-                ['help', ['help']] //no help button
-                ]
+        {% if rich_text_editor %}
+            $(document).ready(function() {
+                $('#FileText').summernote({
+                    height: 180,
+                    toolbar: [
+                    //['style', ['style']], // no style button
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    //['fontsize', ['fontsize']],
+                    //['color', ['color']],
+                    ['para', ['ul', 'ol']],
+                    //['height', ['height']],
+                    ['insert', [/*'picture',*/ 'link']], // no insert buttons
+                    //['table', ['table']], // no table button
+                    ['help', ['help']] //no help button
+                    ]
+                });
             });
+            
+            var postForm = function() {
+                var content = $('textarea[name="text"]').html($('#FileText').code());
+            }
+        {% endif %}
+        
+        var EventDateini = $('#EventDateini').pickadate({
+            format: 'dd-mm-yyyy',
+            onSet: function(context) {
+                var picker = EventDateend.pickadate('picker');
+                if(context.select > picker.get('select').pick)
+                {
+                    picker.set('select', context.select);
+                }
+                picker.set('min', new Date(context.select));
+            }
         });
         
-        var postForm = function() {
-            var content = $('textarea[name="text"]').html($('#ItemSubmitText').code());
-        }
+        var EventDateend = $( "#EventDateend" ).pickadate({
+            format: 'dd-mm-yyyy',
+            min: $('#EventDateini').val()
+        });
+        
+        $('#EventDateiniTime').pickatime({
+            interval: 10,
+            format: 'HH:i'
+        });
+        $('#EventDateendTime').pickatime({
+            interval: 10,
+            format: 'HH:i'
+        });
+        </script>
     {% endif %}
-</script>
 {% endblock %}
