@@ -148,7 +148,7 @@
         </form>
         {% endif %}
         {% if app.user.role.itemRouteCreate %}
-        <form id="mapForm" action="" method="post" class="hiddenForm">
+        <form id="mapForm" action="{{ path('ColectaRouteCreate') }}" method="post" class="hiddenForm">
             <div class="hidable">
                 <input type="text" class="form-control" placeholder="Título" name="name">
             </div>
