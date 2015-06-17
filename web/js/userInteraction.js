@@ -162,6 +162,7 @@ function RouteChange() {
         //Show the file uloading process
         var f = files[0]
         $('#RUmessage').append('<p class="lead">Subiendo el archivo <small>'+f.name+'</small></p> <div class="progress"><div class="progress-bar" id="RUprogress" style="width: 0%;"></div>');
+        $('#RUaddon').html('');
         
         //Start upload
         uploadRouteFile(f);
