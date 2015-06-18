@@ -59,7 +59,13 @@ h2, h4 {
     background-position: center center;    
     margin-top: -20px;
     margin-bottom: 20px;
-
+}
+.panel.panel-highlight {
+    border-color: #DDD;
+}
+.panel.panel-highlight .panel-heading {
+    background-color: #EEE;
+    border-bottom: 1px solid #DDD;
 }
 .navbar {
     z-index: auto;

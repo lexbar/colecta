@@ -28,7 +28,7 @@
     {% endif %}
     
     {% if nextactivities | length %}
-        <div class="panel panel-default">
+        <div class="panel panel-highlight">
             <div class="panel-heading">
                 <h3 class="panel-title"><a href="{{ path('ColectaEventDate', {'date': nextactivities[0].dateini | date('Y-m') }) }}"><i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i> Próximas actividades</a></h3>
             </div>

@@ -11,7 +11,7 @@
             'Friday':'VIE',
             'Saturday':'SÁB',
             'Sunday':'DOM'
-        }) }} | {% set month = item.dateini | date('n') | replace({
+        }) }} · {% set month = item.dateini | date('n') | replace({
             '1':'ENE',
             '2':'FEB',
             '3':'MAR',
