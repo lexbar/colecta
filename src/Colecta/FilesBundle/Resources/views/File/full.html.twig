@@ -27,9 +27,9 @@
             </div>
             <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="fa fa-download"></i></small></a>
         {% elseif item.filetype in ['mp4','ogg','webm'] %}
-            <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
-            
             <video controls="" src="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" style="width:100%"></video>
+            <br>
+            <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-sm btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
         {% else %}
             <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
         {% endif %}
