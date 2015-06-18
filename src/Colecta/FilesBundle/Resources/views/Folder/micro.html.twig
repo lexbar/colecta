@@ -14,7 +14,7 @@
         {% if preview.filetype in ['jpeg','gif','png'] %}
             <a href="{{ path('ColectaFileView', { 'slug': preview.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':preview.slug, 'width':'200', 'height':'200'}) }}"></a>
         {% elseif preview.filetype in ['mp4','ogg','webm'] %}
-            <a href="{{ path('ColectaFileView', { 'slug': preview.slug }) }}" class="btn btn-primary"><i class="fa fa-play-circle-o icon-large"></i> {{ preview.name }}</a>
+            <a href="{{ path('ColectaFileView', { 'slug': preview.slug }) }}" class="btn btn-primary file">{{ preview.name }} <i class="fa fa-play-circle-o icon-large"></i></a>
         {% else %}
             <a href="{{ path('ColectaFileDownload',{ 'slug': preview.slug, 'type': preview.filetype }) }}" class="btn btn-success file">{{ preview.name }} <i class="fa fa-arrow-down fa-fw"></i></a>
         {% endif %}
@@ -31,7 +31,7 @@
                 {% if file.filetype in ['jpeg','gif','png'] %}
                     <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':'60', 'height':'60'}) }}"></a>
                 {% elseif file.filetype in ['mp4','ogg','webm'] %}
-                    <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}" class="btn btn-primary"><i class="fa fa-play-circle-o icon-large"></i> {{ file.name }}</a>
+                    <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}" class="btn btn-primary file">{{ file.name }} <i class="fa fa-play-circle-o icon-large"></i></a>
                 {% else %}
                     <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-success file">{{ file.name }} <i class="fa fa-arrow-down fa-fw"></i></a>
                 {% endif %}
