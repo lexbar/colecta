@@ -360,6 +360,9 @@ h2, h4 {
     transition: max-height 1.2s;
     margin: 8px 0;
 }
+.itemForm .row, .form-group div {
+    margin-bottom: 0 !important;
+}
 .itemForm.compressed .hidable {
     max-height: 0;
     overflow: hidden;
