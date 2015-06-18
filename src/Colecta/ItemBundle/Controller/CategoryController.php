@@ -32,14 +32,16 @@ class CategoryController extends Controller
         
         $category = $em->getRepository('ColectaItemBundle:Category')->findOneBySlug($slug);
         
-        $findby = array('draft' => 0, 'category' => $category->getId());
+        $SQLprivacy = '';
         
         if(!$this->getUser())
         {
-            $findby['open'] = 1;
+            $SQLprivacy = ' AND i.open = 1 ';
         }
         
-        $items = $em->getRepository('ColectaItemBundle:Item')->findBy($findby, array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        $items = $em->createQuery(
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND i.category = :category AND NOT i INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.date DESC"
+        )->setParameter('category',$category->getId())->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         
         //Pagination
         if(count($items) > $this->ipp) 
