@@ -2,7 +2,7 @@
         <ul class="nav nav-pills">
             {% if app.user.role.itemPostCreate or app.user.role.itemFileCreate %}
                 <li class="active" id="textHandler">
-                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Mensaje</a>
+                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Publicación</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemEventCreate %}
@@ -20,7 +20,7 @@
             <div class="hidable">
                 <input type="text" class="form-control" placeholder="Título" name="name" value="{% if item is defined %}{{ item.name }}{% endif %}">
             </div>
-            <textarea rows="1" class="form-control" placeholder="Escribe un mensaje..." name="text" onClick="typeChosen('text');">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
+            <textarea rows="1" class="form-control" placeholder="Escribe una publicación..." name="text" onClick="typeChosen('text');">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
             <div class="hidable">
                 {% if app.user.role.itemFileCreate %}
                     <p><strong>Adjuntar archivos:</strong></p> 
