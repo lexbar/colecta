@@ -2,17 +2,17 @@
         <ul class="nav nav-pills">
             {% if app.user.role.itemPostCreate or app.user.role.itemFileCreate %}
                 <li class="active" id="textHandler">
-                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-fw fa-{{ itemIcons['Item/Post']}}"></i> Publicación</a>
+                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-{{ itemIcons['Item/Post']}}"></i> Publicación</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemEventCreate %}
                 <li id="eventHandler">
-                    <a href="#" onClick="typeChosen('event');return false;"><i class="fa fa-fw fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</a>
+                    <a href="#" onClick="typeChosen('event');return false;"><i class="fa fa-{{ itemIcons['Activity/Event']}}"></i> Actividad</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemRouteCreate or app.user.role.itemPlaceCreate %}
                 <li id="mapHandler">
-                    <a href="#" onClick="typeChosen('map');return false;"><i class="fa fa-fw fa-{{ itemIcons['Activity/Route']}}"></i> Ruta</a>
+                    <a href="#" onClick="typeChosen('map');return false;"><i class="fa fa-{{ itemIcons['Activity/Route']}}"></i> Ruta</a>
                 </li>
             {% endif %}
         </ul>
