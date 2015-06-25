@@ -398,6 +398,9 @@ h2, h4 {
 .itemForm .form-group {
     overflow: hidden;
 }
+.category {
+    margin-top: 30px;
+}
 
 #FUaddon textarea {
     margin: 5px 0;
@@ -671,7 +674,10 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         border-color:#285e8e;
         color: #FFF;
     }
-    
+    .itemForm .nav li a {
+        padding-right: 2px;
+        padding-left: 5px;
+    }
     .contactFormField .fieldNumber {
         position: relative;
         font-size: inherit;

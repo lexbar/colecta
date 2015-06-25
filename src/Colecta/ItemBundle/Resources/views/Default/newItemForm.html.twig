@@ -27,13 +27,16 @@
                     <div id="FilesFileHandler"><input id="FilesFile" type="file" multiple="multiple" name="file[]"></div>
                     <div id="FUaddon" class="clearfix"></div>
                 {% endif %}
-                <hr>
+                
                 
                 {{ render(controller('ColectaItemBundle:Category:formlist', {'selected' : 0})) }}
-                  
-                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
-                {#<button class="btn">Guardar como borrador</button>#}
-                <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                
+                <hr>
+                
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                </div>
             </div>
             {% if attachto is defined %}
                 <input type="hidden" value="{{ attachto }}" name="attachTo">
@@ -140,13 +143,15 @@
                         </label>
                     </div>
                 </div>
-                <hr>
-            
+                
                 {{ render(controller('ColectaItemBundle:Category:formlist', {'selected' : 0})) }}
-                  
-                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
-                {#<button class="btn">Guardar como borrador</button>#}
-                <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                
+                <hr>
+                
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                </div>
             </div>
             {% if attachto is defined %}
                 <input type="hidden" value="{{ attachto }}" name="attachTo">
@@ -164,13 +169,15 @@
                 <div id="RouteFileHandler"><input id="RouteFile" type="file" name="file"></div>
                 <div id="RUmessage" class="clearfix"></div>
                 <div id="RUaddon"></div>
-                <hr>
                 
                 {{ render(controller('ColectaItemBundle:Category:formlist', {'selected' : 0})) }}
-                  
-                <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
-                {#<button class="btn">Guardar como borrador</button>#}
-                <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                
+                <hr>
+                
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-xs btn-default privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                </div>
             </div>
             {% if attachto is defined %}
                 <input type="hidden" value="{{ attachto }}" name="attachTo">
