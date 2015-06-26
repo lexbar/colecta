@@ -63,7 +63,7 @@
         <ul class="filelist list-group">
             {% for file in files %}
                 {% if file.filetype not in ['jpeg','gif','png'] %}
-                    <li class="list-group-item"<i class="icon-file icon-2x"></i>
+                    <li class="list-group-item clearfix"<i class="icon-file icon-2x"></i>
                         <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
                         {% if file.filetype in ['mp4','ogg','webm'] %}
                             <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}" class="btn btn-primary btn-xs pull-right"><i class="fa fa-play-circle-o icon-large"></i> Reproducir</a>
