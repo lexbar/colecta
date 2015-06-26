@@ -2,7 +2,7 @@
         <ul class="nav nav-pills">
             {% if app.user.role.itemPostCreate or app.user.role.itemFileCreate %}
                 <li class="active" id="textHandler">
-                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-{{ itemIcons['Item/Post']}}"></i> Publicación</a>
+                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-{{ itemIcons['Item/Post']}}"></i> Mensaje</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemEventCreate %}
