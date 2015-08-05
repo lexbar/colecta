@@ -520,9 +520,13 @@ h2, h4 {
     border: 1px solid #DDD;
 }
 .profile {
-    height: 64px;
-    width: 96%;
+    height: 70px;
+    width: 97%;
     float: right;
+}
+.item .properties li {
+    padding: 10px 0;
+    border-right: 1px solid #DDD;
 }
 .dropdown-menu {
     margin: 0;
