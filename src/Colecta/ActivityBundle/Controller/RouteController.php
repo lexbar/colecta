@@ -895,6 +895,7 @@ class RouteController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository('ColectaActivityBundle:Route')->findOneBySlug($slug);
+        $user = $this->getUser();
         
         if(!$item)
         {
