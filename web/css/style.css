@@ -253,6 +253,10 @@ h2, h4 {
 .item .thumbnails div {
     margin-bottom: 15px;
 }
+.item .thumbnails img.current {
+    padding: 5px;
+    background-color: #ffff7f;
+}
 
 .item .row.itemActions div {
     padding-right: 0;
@@ -387,7 +391,7 @@ h2, h4 {
     height: 34px;
 }
 .itemForm {
-    max-height: 3000px;
+    max-height: 30000px;
 }
 .itemForm .hiddenForm {
     max-height: 0;
