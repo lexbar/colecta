@@ -257,7 +257,21 @@ h2, h4 {
     padding: 5px;
     background-color: #ffff7f;
 }
-
+.item .thumbnails div.more {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    background-color: rgba(0,0,0,.4);
+    text-align: center;
+    color: #FFF;
+    font-size: 30px;
+    font-weight: bold;
+}
+.item .thumbnails div.moreHandler {
+    position: relative;
+}
 .item .row.itemActions div {
     padding-right: 0;
     padding-left: 0;

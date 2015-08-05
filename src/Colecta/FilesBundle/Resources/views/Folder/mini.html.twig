@@ -52,7 +52,17 @@
             {% for file in files | slice(0,8) %}
                 {% if file.filetype in ['jpeg','gif','png'] %}                    
                     <div class="col-xs-6 col-sm-3">
-                        <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+                        <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">
+                            {% if loop.index == 8 and files | length > 8 %}
+                                <div class="moreHandler">
+                                    <img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}">
+                                    <div class="more">+{{ files | length - 8 }}</div>
+                                </div>
+                            {% else %}
+                                <img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}">
+                            {% endif %}
+                            
+                        </a>
                     </div>
                 {% endif %}
             {% endfor %}
