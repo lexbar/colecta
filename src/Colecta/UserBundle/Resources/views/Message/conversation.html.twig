@@ -1,0 +1,44 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title %}Mensajes recibidos{% endblock %}
+
+{% block article %}
+
+<div class="row title">
+    <div class="col-sm-{{ app.user.role.messageSend ? '9' : '12' }}">
+        <h2>{{ interlocutor.name }}</h2>
+    </div>
+    <div class="col-sm-3">
+        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}"><i class="fa fa-reply"></i> Volver</a>
+    </div>
+</div>
+
+<div class="monocontent clearfix">
+    <form action="{{ path('userMessageNew') }}" method="POST" class="form-horizontal" onSubmit="$('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">
+        <input type="hidden" class="form-control" id="userSearch" name="destination" value="{{ interlocutor.name }}" autocomplete="off">
+        <p><textarea class="form-control" id="MessageText" name="text" rows="4">{% for MessageText in app.session.flashbag.get('MessageText') %}{{ MessageText }}{% endfor %}</textarea></p>
+        <p><button type="submit" class="btn btn-primary pull-right" id="updateBtn"><i id="updateBtnLoading"></i> Enviar Mensaje </button></p>
+    </form>
+</div>
+
+<hr>
+
+<ul class="messages list-group">
+    {% for message in messages %}
+        <li class="list-group-item clearfix">
+                <img class="pull-left" src="{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}">
+                
+                <small class="text-muted pull-right">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
+            
+                <p><strong>{{ message.origin.name }}</strong> <br>{{ message.text | usercontent | raw | nl2br }}</p>
+        </li>
+    {% else %}
+        <li class="list-group-item clearfix"><p class="lead">Ningún mensaje encontrado</p></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block navigation %}
+    {% include '::navigation.html.twig' with {'navigation': 'messages'} %}
+{% endblock %}

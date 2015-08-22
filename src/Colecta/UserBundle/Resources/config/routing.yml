@@ -58,6 +58,10 @@ userNotificationsLoad:
 userMessages:
     pattern:  /mensajes/
     defaults: { _controller: ColectaUserBundle:Message:index }
+
+userConversation:
+    pattern:  /mensajes/conversacion/{user_id}
+    defaults: { _controller: ColectaUserBundle:Message:conversation }
     
 userSentMessages:
     pattern:  /mensajes/enviados/

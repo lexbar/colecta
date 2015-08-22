@@ -5,11 +5,8 @@
 {% block article %}
 
 <div class="row title">
-    <div class="col-sm-{{ app.user.role.messageSend ? '6' : '9' }}">
-        <h2>Mensajes Recibidos</h2>
-    </div>
-    <div class="col-sm-3">
-        <a class="btn btn-default btn-block" href="{{ path('userSentMessages') }}">Enviados <i class="fa fa-plane"></i></a>
+    <div class="col-sm-{{ app.user.role.messageSend ? '9' : '12' }}">
+        <h2>Mensajes</h2>
     </div>
     {% if app.user.role.messageSend %}
     <div class="col-sm-3">
@@ -20,29 +17,13 @@
 
 <ul class="messages list-group">
     {% for message in messages %}
-        <li class="list-group-item">
-            <div class="row">
-                <div class="col-md-1 col-sm-2 hidden-xs">
-                    <img class="img-responsive" src="{{ path('userAvatar',{'uid':message.origin.id,'width':40,'height':40}) }}">
-                </div>
+        <a href="{{ path('userConversation', {'user_id':(message.origin == app.user) ? message.destination.id : message.origin.id}) }}" class="list-group-item clearfix{% if message.origin != app.user and not message.dismiss %} active{% endif %}">
+                <img class="pull-left" src="{{ path('userAvatar',{'uid':(message.origin == app.user) ? message.destination.id : message.origin.id,'width':40,'height':40}) }}">
                 
-                <div class="col-md-9 col-sm-10 col-xs-12">
+                <small class="text-muted pull-right">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
             
-                    <p><strong>{{ message.origin.name }}</strong> <small class="text-muted">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small></p>
-                    
-                    {% if message.responseto %}
-                        <p class="text-muted">{{ message.responseto.text | usercontent | raw | nl2br }}</p>
-                        <hr>
-                    {% endif %}
-                    
-                    <p>{{ message.text | usercontent | raw | nl2br }}</p>
-                </div>
-                
-                <div class="col-md-2 col-xs-12">
-                    <a href="{{ path('userMessageResponse',{'responseto':message.id}) }}" class="btn btn-sm btn-block btn-default">Responder <i class="fa fa-mail-reply"></i></a>
-                </div>
-            </div>
-        </li>
+                <p><strong>{{ (message.origin == app.user) ? message.destination.name : message.origin.name }}</strong> <br>{% if message.origin == app.user %}<i class="fa fa-reply"></i> {% endif %}{{ message.text | usercontent | raw | nl2br }}</p>
+        </a>
     {% else %}
         <li class="list-group-item clearfix"><p class="lead">No tienes ningún mensaje</p></li>
     {% endfor %}

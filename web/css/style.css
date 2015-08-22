@@ -553,8 +553,8 @@ h2, h4 {
 .messages {
     word-break: break-word;
 }
-.messages .btn-block {
-    display: inline-block;
+.messages img {
+    margin-right: 15px;
 }
 
 .rank .progress {
