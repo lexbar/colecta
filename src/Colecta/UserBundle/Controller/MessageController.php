@@ -59,8 +59,8 @@ class MessageController extends Controller
         $interlocutor = $em->getRepository('ColectaUserBundle:User')->findOneById($user_id);
         
         $messages = $em->createQuery(
-            "SELECT m FROM ColectaUserBundle:Message m WHERE m.origin = :user_id OR m.destination = :user_id ORDER BY m.date DESC"
-        )->setParameter('user_id', $user_id)->getResult();
+            "SELECT m FROM ColectaUserBundle:Message m WHERE m.origin = :user_id and m.destination = :interlocutor_id OR m.destination = :user_id and m.origin = :interlocutor_id ORDER BY m.date DESC"
+        )->setParameter('user_id', $user->getId())->setParameter('interlocutor_id', $interlocutor->getId())->getResult();
         
         if(count($messages))
         {
