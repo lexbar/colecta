@@ -22,7 +22,7 @@
                 
                 <small class="text-muted pull-right">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
             
-                <p><strong>{{ (message.origin == app.user) ? message.destination.name : message.origin.name }}</strong> <br>{% if message.origin == app.user %}<i class="fa fa-reply"></i> {% endif %}{{ message.text | usercontent | raw | nl2br }}</p>
+                <p><strong>{{ (message.origin == app.user) ? message.destination.name : message.origin.name }}</strong> <br>{% if message.origin == app.user %}<i class="fa fa-reply"></i> {% endif %}{{ message.text }}</p>
         </a>
     {% else %}
         <li class="list-group-item clearfix"><p class="lead">No tienes ningún mensaje</p></li>
