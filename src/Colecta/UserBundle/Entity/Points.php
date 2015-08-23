@@ -156,6 +156,8 @@ class Points
     {
         if(count($conditions) == 0)
         {
+            $this->setPoints(intval($this->getItem()->getDistance()));
+            
             return null;
         }
         
