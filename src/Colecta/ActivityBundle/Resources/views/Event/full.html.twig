@@ -112,11 +112,11 @@
             {% if canedit %}
                 <li class="list-group-item clearfix">
                     {% if item.allowassistances %}
-                        <button onClick="$('#addUser').removeClass('hidden'); $(this).hide();" class="btn btn-default" type="button"><i class="fa fa-user-plus"></i> Añadir un usuario</button>
-                        
-                        <div class="row hidden" id="addUser">
+                        <div class="row">
                             <div class="col-xs-12 col-sm-9">
-                                <div class="input-group">
+                                <button onClick="$('#addUser').removeClass('hidden'); $(this).hide();" class="btn btn-default" type="button"><i class="fa fa-user-plus"></i> Añadir un usuario</button>
+                                
+                                <div class="input-group hidden" id="addUser">
                                   <span class="input-group-addon"><i class="fa fa-user"></i></span>
                                   <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
                                 </div>
@@ -130,7 +130,7 @@
                             </div>    
                         </div> 
                     {% elseif item.assistances | length and haspassed %}
-                        <button id="updateBtn" class="btn btn-default btn-block" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+                        <button id="updateBtn" class="btn btn-default pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
                     {% endif %}    
                 </li>
             {% endif %}
