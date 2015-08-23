@@ -112,28 +112,26 @@
             {% if canedit %}
                 <li class="list-group-item clearfix">
                     {% if item.allowassistances %}
-                        <p class="lead" style="margin-bottom:10px;">Añadir un usuario</p>
-                    {% endif %}
-                    
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-9">
-                        {% if item.allowassistances %}
-                            <div class="input-group">
-                              <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                              <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
+                        <button onClick="$('#addUser').removeClass('hidden'); $(this).hide();" class="btn btn-default" type="button"><i class="fa fa-user-plus"></i> Añadir un usuario</button>
+                        
+                        <div class="row hidden" id="addUser">
+                            <div class="col-xs-12 col-sm-9">
+                                <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                  <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
+                                </div>
+                                
+                                <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
+                                <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
                             </div>
                             
-                            <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
-                            <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
-                        {% endif %}
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-3">
-                        {% if item.allowassistances or item.assistances | length and haspassed %}
-                            <button id="updateBtn" class="btn btn-default btn-block" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
-                        {% endif %}   
-                        </div>    
-                    </div>             
+                            <div class="col-xs-12 col-sm-3">
+                                <button id="updateBtn" class="btn btn-default btn-block" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+                            </div>    
+                        </div> 
+                    {% elseif item.assistances | length and haspassed %}
+                        <button id="updateBtn" class="btn btn-default btn-block" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
+                    {% endif %}    
                 </li>
             {% endif %}
             
