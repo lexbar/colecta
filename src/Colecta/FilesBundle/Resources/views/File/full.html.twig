@@ -27,7 +27,7 @@
             </div>
             <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="fa fa-download"></i></small></a>
         {% elseif item.filetype in ['mp4','ogg','webm'] %}
-            <video controls="" src="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" style="width:100%"></video>
+            <video id="video_player" class="video-js vjs-default-skin" controls="" preload="auto" data-setup='{}' src="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" type="video/{{ item.filetype }}" width="auto" height="auto"></video>
             <br>
             <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-sm btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
         {% else %}
@@ -70,3 +70,25 @@
 {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
 
 {% endblock %}
+
+{% if item.filetype in ['mp4','ogg','webm'] %}
+    {% block stylesheets %}
+        <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+        <script src="//vjs.zencdn.net/4.12/video.js"></script> {# not a stylesheet but needs to be loaded on the head tag #}
+        <style>
+        #video_player {width: 100%; height: auto;}
+        .video-js {
+            position: relative !important;
+            width: 100% !important;
+            height: auto !important;
+        }
+        .vjs-poster {
+            position: absolute !important;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+        </style>
+    {% endblock %}
+{% endif %}
