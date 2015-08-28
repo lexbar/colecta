@@ -890,12 +890,31 @@ class FileController extends Controller
             
             $image = new \Imagick($item->getAbsolutePath());
             autoRotateImage($image, $item->getAbsolutePath());
-            $image->cropThumbnailImage($width, $height);
-            $image->setImagePage(0, 0, 0, 0);
-            $image->normalizeImage();
             
-            //fill out the cache
-            file_put_contents($cachePath, $image);
+            $format = $image->getImageFormat();
+            if ($format == 'GIF') 
+            {
+                //$image = $image->coalesceImages();
+
+                foreach ($image as $frame) 
+                {
+                    $frame->scaleImage($width, $height, true);
+                }
+                
+                //$image = $image->deconstructImages(); 
+                $image->writeImages($cachePath, true); 
+                
+                $image = file_get_contents($cachePath);
+            }
+            else
+            {
+                $image->setImageResolution(72,72); 
+                $image->cropThumbnailImage($width, $height);
+                $image->setImagePage(0, 0, 0, 0);
+                $image->normalizeImage();
+                //fill out the cache
+                file_put_contents($cachePath, $image);
+            }
             
             
             $response->setStatusCode(200);
@@ -949,12 +968,31 @@ class FileController extends Controller
             
             $image = new \Imagick($item->getAbsolutePath());
             autoRotateImage($image, $item->getAbsolutePath());
-            $image->setImageResolution(72,72); 
-            $image->scaleImage($width, $height, true);
-            $image->setImagePage(0, 0, 0, 0);
             
-            //fill out the cache
-            file_put_contents($cachePath, $image);
+            $format = $image->getImageFormat();
+            if ($format == 'GIF') 
+            {
+                //$image = $image->coalesceImages();
+
+                foreach ($image as $frame) 
+                {
+                    $frame->scaleImage($width, $height, true);
+                }
+                
+                //$image = $image->deconstructImages(); 
+                $image->writeImages($cachePath, true); 
+                
+                $image = file_get_contents($cachePath);
+            }
+            else
+            {
+                $image->setImageResolution(72,72); 
+                $image->cropThumbnailImage($width, $height);
+                $image->setImagePage(0, 0, 0, 0);
+                $image->normalizeImage();
+                //fill out the cache
+                file_put_contents($cachePath, $image);
+            }
             
             $response = new Response();
             
