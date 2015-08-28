@@ -1,5 +1,5 @@
 {% if app.user and item.userLikes(app.user) %}
-        <span><i class="fa fa-thumbs-o-up"></i> Te gusta</span>
+        <span><i class="fa fa-hand-peace-o"></i> Te gusta</span>
 {% elseif app.user %}
     <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
 {% endif%}

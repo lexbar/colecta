@@ -9,7 +9,7 @@
         <div class="{% if canAttach %}{% if canAssist %}col-xs-4{% else %}col-xs-6{% endif %}{% else %}{% if canAssist %}col-xs-6{% else %}col-xs-12{% endif %}{% endif %}">
             <span id="itemLikes{{ item.id }}" class="like">
             {% if userLikes %}
-                <span><i class="fa fa-thumbs-o-up"></i> Te gusta</span>
+                <span><i class="fa fa-hand-peace-o"></i> Te gusta</span>
             {% else %}
                 <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
             {% endif%}

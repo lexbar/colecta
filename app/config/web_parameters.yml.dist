@@ -14,7 +14,7 @@ twig:
         web_header_img: {  }
         web_links: {  }
         itemIcons:
-            Item/Post: comments
+            Item/Post: sticky-note-o
             Activity/Event: calendar
             Activity/Route: map-o
             Activity/Place: map-marker
