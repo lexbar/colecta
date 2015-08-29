@@ -236,6 +236,15 @@ img.smiley {
 .item .details {
     font-size: 12px;
     color: #999;
+    overflow: hidden;
+}
+.item .details .username {
+    line-height: 20px;
+}
+.item .details .dateandcat {
+    float: right;
+    padding-left: 2px;
+    line-height: 20px;
 }
 .item .itemActions {
     border-top: 1px solid #CCC;
@@ -582,7 +591,7 @@ img.smiley {
 }
 
 .contactFormField {
-    padding: 5px 8px 1px;;
+    padding: 5px 8px 15px;;
     border-left: 3px solid #EEE;
     background-color: #FAFAFA;
     margin-bottom: 10px;
