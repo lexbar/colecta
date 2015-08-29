@@ -141,7 +141,8 @@
 					    
 					    <hr>
 					    <label id="contactFormEmail" for="contactFormEmail">Dirección de contacto</label>
-    				    <input class="form-control" type="text" name="contactFormEmail" id="contactFormEmail" value="{{ page.contactData is defined and page.contactData.email is defined ? page.contactData.email | default('') : '' }}">
+					    <p class="help-block">(La dirección a la que llegarán los emails de contacto)</p>
+    				    <input class="form-control" type="text" name="contactFormEmail" id="contactFormEmail" value="{{ page.contactData is defined and page.contactData.email is defined ? page.contactData.email | default(app.user.mail) : app.user.mail }}">
 					</div>
                 </div>
             </div>
