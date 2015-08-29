@@ -178,16 +178,6 @@ img.smiley {
 #self a.myname strong {
     font-weight: lighter;
     color: #000;
-    font-size: 18px;
-    line-height: 20px;
-    position: absolute;
-    top: 10px;
-    left: 65px;
-    right: 0;
-    height: 18px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 #self a.myname:hover strong {
     text-decoration: underline;

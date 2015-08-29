@@ -216,7 +216,7 @@ function RUuploadComplete(evt) {
     
     $('#RUmessage').html('');
     
-    $('#RUaddon').html('<div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10"><p class="lead"> <i class="fa fa-refresh fa-spin"></i> Procesando archivo...</p></div>')
+    $('#RUaddon').html('<div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10"><p class="lead"> <i class="fa fa-cog fa-spin"></i> Procesando archivo...</p></div>')
     $('#RUaddon').load(RUpreviewAddress+token);
     
     RUuploadEnd();

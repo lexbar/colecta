@@ -7,6 +7,8 @@
 {% else %}
     {% set bun, con, act = '', '', ''%}
 {% endif %}
+
+<div class="sidebarblock">
 {% if app.user %}    
     <div id="self" class="clearfix hidden-print">
         <div class="clearfix">
@@ -111,3 +113,4 @@
     <hr>
     {{ adsense | raw }}
 {% endif %}
+</div>
