@@ -262,8 +262,10 @@ img.smiley {
     padding-right: 0;
 }
 .item .thumbnails img.current {
-    padding: 5px;
-    background-color: #ffff7f;
+    padding: 2px;
+    background-color: #FFF;
+    opacity: .3;
+    border: 1px solid #000;
 }
 .item .thumbnails div.more {
     position: absolute;
