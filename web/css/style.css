@@ -254,8 +254,12 @@ img.smiley {
 .item .preview {
     padding-bottom: 15px;
 }
+.item .thumbnails {
+    padding-right: 15px;
+}
 .item .thumbnails div {
     margin-bottom: 15px;
+    padding-right: 0;
 }
 .item .thumbnails img.current {
     padding: 5px;
