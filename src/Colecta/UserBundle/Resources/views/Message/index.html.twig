@@ -15,6 +15,7 @@
     {% endif %}
 </div>
 
+{% if messages | length > 0 %}
 <ul class="messages list-group">
     {% for message in messages %}
         <a href="{{ path('userConversation', {'user_id':(message.origin == app.user) ? message.destination.id : message.origin.id}) }}" class="list-group-item clearfix{% if message.origin != app.user and not message.dismiss %} active{% endif %}">
@@ -24,10 +25,11 @@
             
                 <p><strong>{{ (message.origin == app.user) ? message.destination.name : message.origin.name }}</strong> <br>{% if message.origin == app.user %}<i class="fa fa-reply"></i> {% endif %}{{ message.text }}</p>
         </a>
-    {% else %}
-        <li class="list-group-item clearfix"><p class="lead">No tienes ningún mensaje</p></li>
     {% endfor %}
 </ul>
+{% else %}
+    <p class="lead">No tienes ningún mensaje</p>
+{% endif %}
 
 {% endblock %}
 
