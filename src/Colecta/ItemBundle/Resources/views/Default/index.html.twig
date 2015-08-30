@@ -63,7 +63,7 @@
             <h1>¡Listos para empezar!</h1>
             {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
             <p>¿Qué quieres hacer ahora?</p>
-            <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-wrench fa-fw"></i> Administración</a>{% endif %} {% if app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
+            <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-magic fa-fw"></i> Personalizar la página</a> <a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendNewUser') }}" role="button"><i class="fa fa-user-plus fa-fw"></i> Crear nuevo usuario</a>{% elseif app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
             {% endif %}
         </div>
         {% endif %}
