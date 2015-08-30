@@ -111,10 +111,17 @@
 					<div id="contactForm"{% if not page.contact %} style="display:none"{% endif %}>
 					    <hr>
 					    <div id="contactFormFields">
-					    {% if page.contactData.fields is defined %}{% for field in page.contactData.fields %}
+					    {% if page.contactData.fields is defined %}
+					    {% for field in page.contactData.fields %}
 					        <div class="contactFormField" id="contactFormField{{ loop.index0 }}">
 					            <span class="fieldNumber">#{{ loop.index }} </span>
     				            <span class="text-danger pull-right" onClick="deleteField({{ loop.index0 }})">eliminar</span>
+    				            
+    				            <label id="contactFormField{{ loop.index0 }}TitleLabel" for="contactFormField{{ loop.index0 }}Title">Título de la pregunta</label>
+    				            <input class="form-control" type="text" name="contactFormField{{ loop.index0 }}Title" id="contactFormField{{ loop.index0 }}Title" value="{{ field.title }}"><br>
+    				            
+    				            <label id="contactFormField{{ loop.index0 }}HelpLabel" for="contactFormField{{ loop.index0 }}Help">Texto de ayuda <sup class="text-muted">(Opcional)</sup></label>
+    				            <input class="form-control" type="text" name="contactFormField{{ loop.index0 }}Help" id="contactFormField{{ loop.index0 }}Help" value="{{ field.help }}"><br>
     				            
     				            <label id="contactFormField{{ loop.index0 }}TypeLabel" for="contactFormField{{ loop.index0 }}Type">Tipo de campo</label>
     				            <select class="form-control" name="contactFormField{{ loop.index0 }}Type" id="contactFormField{{ loop.index0 }}Type">
@@ -124,17 +131,12 @@
     				                <option value="list"{% if field.type == 'list' %} selected="selected"{% endif %}>Elegir de una lista</option>
     				            </select><br>
     				            
-    				            <label id="contactFormField{{ loop.index0 }}TitleLabel" for="contactFormField{{ loop.index0 }}Title">Título de la pregunta</label>
-    				            <input class="form-control" type="text" name="contactFormField{{ loop.index0 }}Title" id="contactFormField{{ loop.index0 }}Title" value="{{ field.title }}"><br>
-    				            
-    				            <label id="contactFormField{{ loop.index0 }}HelpLabel" for="contactFormField{{ loop.index0 }}Help">Texto de ayuda <sup class="text-muted">(Opcional)</sup></label>
-    				            <input class="form-control" type="text" name="contactFormField{{ loop.index0 }}Help" id="contactFormField{{ loop.index0 }}Help" value="{{ field.help }}"><br>
-    				            
     				            <label id="contactFormField{{ loop.index0 }}ValueLabel" for="contactFormField{{ loop.index0 }}Value">Valor <sup class="text-muted">(Opcional)</sup></label>
     				            <input class="form-control" type="text" name="contactFormField{{ loop.index0 }}Value" id="contactFormField{{ loop.index0 }}Value" value="{{ field.value }}">
     				            <p class="help-block">Si es tipo "Elegir de una lista" inserta las opciones separadas por comas.</p>
 					        </div>
-					    {% endfor %}{% endif %}
+					    {% endfor %}
+					    {% endif %}
 					    </div>
 					    
 					    <button type="button" class="btn btn-success btn-block" onClick="newField();">Insertar otro campo</button>
@@ -179,7 +181,7 @@ $('#pageContact').change(function () {
 var fields = {{ page.contactData | length }};
 
 function newField() {
-    $('#contactFormFields').append('<div class="contactFormField" id="contactFormField'+fields+'"><span class="fieldNumber">#'+(fields + 1)+' </span><span class="text-danger pull-right" onClick="deleteField('+fields+')">eliminar</span><label id="contactFormField'+fields+'TypeLabel" for="contactFormField'+fields+'Type">Tipo de campo</label><select class="form-control" name="contactFormField'+fields+'Type" id="contactFormField'+fields+'Type"><option value="text">Texto</option><option value="textarea">Texto de párrafo</option><option value="checkbox">Opción si/no</option><option value="list">Elegir de una lista</option></select><br><label id="contactFormField'+fields+'TitleLabel" for="contactFormField'+fields+'Title">Título de la pregunta</label><input class="form-control" type="text" name="contactFormField'+fields+'Title" id="contactFormField'+fields+'Title"><br><label id="contactFormField'+fields+'HelpLabel" for="contactFormField'+fields+'Help">Texto de ayuda <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Help" id="contactFormField'+fields+'Help"><br><label id="contactFormField'+fields+'ValueLabel" for="contactFormField'+fields+'Value">Valor <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Value" id="contactFormField'+fields+'Value"><p class="help-block">Si es tipo "Elegir de una lista" inserta las opciones separadas por comas.</p></div>');
+    $('#contactFormFields').append('<div class="contactFormField" id="contactFormField'+fields+'"><span class="fieldNumber">#'+(fields + 1)+' </span><span class="text-danger pull-right" onClick="deleteField('+fields+')">eliminar</span><label id="contactFormField'+fields+'TitleLabel" for="contactFormField'+fields+'Title">Título de la pregunta</label><input class="form-control" type="text" name="contactFormField'+fields+'Title" id="contactFormField'+fields+'Title"><br><label id="contactFormField'+fields+'HelpLabel" for="contactFormField'+fields+'Help">Texto de ayuda <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Help" id="contactFormField'+fields+'Help"><br><label id="contactFormField'+fields+'TypeLabel" for="contactFormField'+fields+'Type">Tipo de campo</label><select class="form-control" name="contactFormField'+fields+'Type" id="contactFormField'+fields+'Type"><option value="text">Texto</option><option value="textarea">Texto de párrafo</option><option value="checkbox">Opción si/no</option><option value="list">Elegir de una lista</option></select><br><label id="contactFormField'+fields+'ValueLabel" for="contactFormField'+fields+'Value">Valor <sup class="text-muted">(Opcional)</sup></label><input class="form-control" type="text" name="contactFormField'+fields+'Value" id="contactFormField'+fields+'Value"><p class="help-block">Si es tipo "Elegir de una lista" inserta las opciones separadas por comas.</p></div>');
     
     fields++;
 }
