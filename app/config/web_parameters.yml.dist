@@ -4,7 +4,7 @@ twig:
     globals:
         web_title: 'Título de la web'
         web_description: 'Descripción breve de la web.'
-        web_theme: theme-blue
+        web_theme: classic
         theme_sidebar: right
         allowed_tags: '<br><img>#<span><a><ol><ul><li>'
         rich_text_editor: 0
@@ -23,3 +23,5 @@ twig:
         #googleAnalyticsID: ''
         #googleAnalyticsName: ''
         adsense: ''
+        web_theme_colors:
+            - ''
