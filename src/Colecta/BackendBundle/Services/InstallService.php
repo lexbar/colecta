@@ -40,7 +40,7 @@ class InstallService
         $sql = "INSERT INTO `Role` (`id`, `name`, `description`, `site_access`, `site_config_plan`, `item_post_create`, `item_event_create`, `item_route_create`, `item_place_create`, `item_file_create`, `item_contest_create`, `item_poll_create`, `item_post_edit`, `item_event_edit`, `item_route_edit`, `item_place_edit`, `item_file_edit`, `item_contest_edit`, `item_poll_edit`, `item_post_edit_any`, `item_event_edit_any`, `item_route_edit_any`, `item_place_edit_any`, `item_file_edit_any`, `item_contest_edit_any`, `item_poll_edit_any`, `item_relate_own`, `item_relate_any`, `item_post_comment`, `item_event_comment`, `item_route_comment`, `item_place_comment`, `item_file_comment`, `item_contest_comment`, `item_poll_comment`, `item_poll_vote`, `category_create`, `category_edit`, `activity_create`, `activity_edit`, `user_create`, `user_edit`, `user_view`, `message_send`, `site_config_settings`, `site_config_users`, `site_config_pages`, `site_config_lottery`, `site_config_stats`) VALUES
 (1, 'ROLE_ADMIN', 'Admin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (2, 'ROLE_USER', 'Socio', 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0),
-(3, 'ROLE_BANNED', 'Bloqueado', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0);";
+(3, 'ROLE_BANNED', 'Bloqueado', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);";
 
         $em->getConnection()->prepare($sql)->execute();
 
