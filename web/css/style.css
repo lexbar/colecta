@@ -556,7 +556,10 @@ img.smiley {
     padding: 10px 0;
     border-right: 1px solid #DDD;
 }
-.dropdown-menu {
+.item .dropdown.pull-right{
+        margin-left: 15px;
+}
+.item .dropdown-menu {
     margin: 0;
 }
 
