@@ -35,6 +35,11 @@ a.btn {
 a.btn-default {
     color: {{ web_theme_colors[7] | default('#4285f4') }};
 }
+
+.itemForm .nav li.active a, .itemForm .nav li.active a:active, .itemForm .nav li.active a:visited  {
+    color: {{ web_theme_colors[6] | default('#4285f4') }}!important;
+}
+
 .navbar-default {background-color:#f4f4f4;border-width:0;}
 .navbar-default .navbar-nav > .active > a,.navbar-default .navbar-nav > li:hover > a {border:0 solid {{ web_theme_colors[7] | default('#4285f4') }};border-bottom-width:2px;font-weight:800;background-color:transparent;}
 .navbar-default .dropdown-menu {background-color:#ffffff;}

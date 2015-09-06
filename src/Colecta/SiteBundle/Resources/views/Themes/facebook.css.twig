@@ -32,6 +32,11 @@ a.btn-default {
 .nav>li>a:hover {
     background-color: #dcdee3;
 }
+
+.itemForm .nav li.active a, .itemForm .nav li.active a:active, .itemForm .nav li.active a:visited  {
+    color: {{ web_theme_colors[6] | default('#4e69a2') }}!important;
+}
+
 .navbar-default a.navbar-brand * { color:#FFF;}
 .navbar-default {
     background-color: {{ web_theme_colors[9] | default('#3b5998') }};

@@ -52,6 +52,10 @@ h2 {
     color: #111;
 }
 
+.itemForm .nav li.active a, .itemForm .nav li.active a:active, .itemForm .nav li.active a:visited  {
+    color: {{ web_theme_colors[6] | default('#009BDB') }}!important;
+}
+
 .nav-pills>li.active>a {
     background-color: transparent;
     color: {{ web_theme_colors[6] | default('#009BDB') }};
