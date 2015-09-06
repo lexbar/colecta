@@ -1,55 +1,3 @@
-@font-face {
-     font-family: 'Aller';
-     src: url('/fonts/Aller_Rg.ttf') format('truetype');
-     font-weight: normal;
-     font-style: normal;
-}
-@font-face {
-     font-family: 'Aller';
-     src: url('/fonts/Aller_Bd.ttf') format('truetype');
-     font-weight: bold;
-     font-style: normal;
-}
-@font-face {
-     font-family: 'Aller';
-     src: url('/fonts/Aller_It.ttf') format('truetype');
-     font-weight: normal;
-     font-style: italic;
-}
-@font-face {
-     font-family: 'Aller';
-     src: url('/fonts/Aller_BdIt.ttf') format('truetype');
-     font-weight: bold;
-     font-style: italic;
-}
-@font-face {
-     font-family: 'Aller';
-     src: url('/fonts/Aller_Lt.ttf') format('truetype');
-     font-weight: lighter;
-     font-style: normal;
-}
-@font-face {
-     font-family: 'Aller';
-     src: url('/fonts/Aller_LtIt.ttf') format('truetype');
-     font-weight: lighter;
-     font-style: italic;
-}
-@font-face {
-     font-family: 'AllerDisplay';
-     src: url('/fonts/Aller_Display.ttf') format('truetype');
-     font-weight: normal;
-     font-style: normal;
-}
-body { 
-    font-family: Aller, Arial, Helvetica, sans-serif;
-    font-size: 16px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: Aller, Arial, Helvetica, sans-serif;
-    font-weight: lighter;
-}
-
 h2, h4 {
     margin: 0 0 8px;
 }
@@ -633,8 +581,9 @@ img.smiley {
 }
 .footer a.deporde span {
     vertical-align: middle;
-    font-size: 16px;
+    font-size: 22px;
     line-height: 16px;
+    font-family: "Roboto Slab";
 }
 
 #toolbar {
