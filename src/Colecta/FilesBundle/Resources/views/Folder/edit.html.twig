@@ -11,7 +11,40 @@
         </div>
     </div>
 
-    {% include 'ColectaFilesBundle:Folder:form.html.twig' with { 'item': item, 'formaction': path('ColectaFolderEdit', {'slug':item.slug}),'firstwrite':0} %}
+    <div class="monocontent">
+        <form action="{{ path('ColectaFolderEdit', {'slug':item.slug}) }}" method="POST" class="form-horizontal" onSubmit="$('#FolderSubmit').attr('disabled','disabled').addClass('disabled'); $('#FolderSubmitText').html('Enviando...'); $('#FolderSubmitLoading').addClass('icon-refresh icon-spin');">
+            <fieldset>        
+                
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="FolderName">Nombre</label>
+                    <div class="col-sm-9 col-lg-10">
+                        <input id="FolderName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}" class="form-control">
+                    </div>
+                </div>
+                
+                {% if item.category.id is defined %}
+                    {% set category = item.category.id %}
+                {% else %}
+                    {% set category = 0 %}
+                {% endif %}
+                
+                <div class="form-group">
+                    <label class="col-sm-3 col-lg-2 control-label" for="Category">Categoría</label>
+                    <div class="col-sm-9 col-lg-10">
+                        {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':category})) }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
+                        <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
+                        <button type="submit" class="btn btn-primary" id="FolderSubmit"><i id="FolderSubmitLoading"></i> <span id="FolderSubmitText">Publicar ahora</span></button>
+                        <a href="{{ path('ColectaFolderDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
     
     <hr>
     <h3>Enlazar con otros contenidos</h3>

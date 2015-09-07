@@ -10,6 +10,9 @@ ColectaFolderView:
 ColectaFolderEdit:
     pattern:  /carpeta/{slug}/edit/
     defaults: { _controller: ColectaFilesBundle:Folder:edit }
+ColectaFolderDelete:
+    pattern:  /carpeta/{slug}/eliminar/
+    defaults: { _controller: ColectaFilesBundle:Folder:delete }
 ColectaFileIndex:
     pattern:  /archivo/
     defaults: { _controller: ColectaFilesBundle:File:index }

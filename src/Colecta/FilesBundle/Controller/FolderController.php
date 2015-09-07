@@ -225,6 +225,40 @@ class FolderController extends Controller
         
         return $this->render('ColectaFilesBundle:Folder:edit.html.twig', array('item' => $item));
     }
+    public function deleteAction($slug)
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        $item = $em->getRepository('ColectaFilesBundle:Folder')->findOneBySlug($slug);
+        
+        if(!$item)
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        if(!$user|| !$item->canEdit($user)) 
+        {
+            return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug'=>$slug)));
+        }
+        
+        $name = $item->getName();
+        
+        //remove files contained
+        foreach($item->getFiles() as $file)
+        {
+            $em->remove($file);
+        }
+        
+        //and now remove the folder itself
+        $em->remove($item);
+        
+        $em->flush();
+        
+        $this->get('session')->getFlashBag()->add('success', '"'.$name.'" ha sido eliminado.');
+        
+        return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+    }
     public function formlistAction($selected, $firstwrite)
     {
         $em = $this->getDoctrine()->getManager();
