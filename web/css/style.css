@@ -239,6 +239,7 @@ img.smiley {
 }
 .item.well {
     padding: 15px;
+    margin-bottom: 10px;
 }
 .item.well h4 {
     margin: 0;
