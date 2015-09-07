@@ -131,7 +131,7 @@ class RouteController extends Controller
             
             if($n > 0) 
             {
-                $url = "http://maps.google.com/maps/api/staticmap?size=300x200&maptype=terrain&sensor=false&path=color:0xff0000|weight:3";
+                $url = "http://maps.google.com/maps/api/staticmap?size=500x335&maptype=terrain&sensor=false&path=color:0xff0000|weight:3";
                 $step = floor($n / 60);
                 for($i = 0; $i < $n; $i += $step)
                 {

@@ -2,13 +2,13 @@
 
 {% block itemBody %}
     <div class="row">
-        <div class="col-xs-12 col-sm-8">  
+        <div class="col-xs-12 col-md-8">  
             {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
             
             {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item, showProfile: 1 } only %}
 
         </div>
-        <div class="preview col-xs-12 col-sm-4 ">
+        <div class="preview col-xs-12 col-md-4 ">
             <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img class="img-responsive map" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
         </div>
     </div>

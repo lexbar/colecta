@@ -515,15 +515,19 @@ img.smiley {
 
 .map {
     border: 1px solid #DDD;
+    margin: 0 auto;
 }
-.profile {
+.profile img {
     height: 70px;
-    width: 97%;
+    width: 100%;
     float: right;
 }
 .item .properties li {
     padding: 10px 0;
     border-right: 1px solid #DDD;
+}
+.item .properties .profile {
+    padding: 10px 15px;
 }
 .item .dropdown.pull-right{
         margin-left: 15px;

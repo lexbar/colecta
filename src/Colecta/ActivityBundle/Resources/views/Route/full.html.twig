@@ -55,8 +55,6 @@
 
 {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
 
-
-
     {#
     
     
@@ -85,10 +83,11 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=weather"></script>
     <script src="/js/highcharts.js"></script>
     <script>
-     
+     <!--
     {% set boundsswlat, boundsswlng = item.trackpoints[0].latitude, item.trackpoints[0].longitude %}
     {% set boundsnelat, boundsnelng = item.trackpoints[0].latitude, item.trackpoints[0].longitude %} 
     {% set points = '[' ~ item.trackpoints[0].latitude ~ ',' ~ item.trackpoints[0].longitude ~ ',' ~ item.trackpoints[0].altitude ~ ']' %}
+    {% set markers = '' %}
     
     {% for tp in item.trackpoints %}
         {% if not loop.first %}
@@ -100,6 +99,10 @@
         {% endif %}
     {% endfor %}
     
+    {% for mk in item.related if mk.type == 'Activity/Place' %}
+        {% set markers = markers ~ '["' ~ mk.name ~ '", ' ~ mk.latitude ~ ',' ~ mk.longitude ~ '],' %}
+    {% endfor %}
+    
     var map;
     var positionMarker;
     var isFullScreen = false;
@@ -108,6 +111,7 @@
     var chartData = [];
     var chartDistance = 0;
     var points = [{{ points }}];
+    var markers = [{{ markers | raw }}];
     var bounds;
     var weatherLayer;
     
@@ -127,14 +131,16 @@
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
         map.fitBounds(bounds);
         
-        /* Weather control button */
+        /* Weather control button 
         var weatherDIV = document.createElement('div');
         weatherDIV.className = 'control';
         weatherDIV.innerHTML = 'Meteorología';
         google.maps.event.addDomListener(weatherDIV, 'click', function() {
             toggleWeather();
         });
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(weatherDIV);
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(weatherDIV);*/
+        
+        if(markers.length) {setMarkers(markers);}
         
         /* Fullscreen control button*/
         var fullscreenDIV = document.createElement('div');
@@ -267,6 +273,26 @@
         $(document).keyup(function(e){ if(e.keyCode == '27'){if(isFullScreen){ toggleFullScreen(); }}});
     }
     
+    function setMarkers(markers)
+    {
+        var image = {
+            url: '/pin.png',
+            size: new google.maps.Size(12, 21),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(6, 21)
+        };
+        
+        for (var i = 0; i < markers.length; i++) {
+            var s = markers[i];
+            var marker = new google.maps.Marker({
+                position: {lat: s[1], lng: s[2]},
+                map: map,
+                icon: image,
+                title: s[0]
+            });
+        }
+    }
+    
     function distance(lat1, lng1, alt1, lat2, lng2, alt2) 
     {         
     	var distproj = 6371000 * 2 * Math.asin( Math.sqrt( Math.pow( Math.sin( deg2rad( lat1  - lat2 ) / 2 ), 2) + Math.cos(deg2rad( lat1 )) * Math.cos( deg2rad( lat2 ) ) * Math.pow( Math.sin( deg2rad( lng1 - lng2 ) / 2 ), 2) )); //harvesinus formula
@@ -321,7 +347,7 @@
             $('#weather').addClass('disabled');
         }
     }
-    
+    -->
     </script>
     
 {% endblock %}
