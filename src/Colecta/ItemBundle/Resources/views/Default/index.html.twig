@@ -47,7 +47,7 @@
     
     {% for item in items if item.id not in shownItems %}
         
-        {% if item.type == 'Activity/Event' %}
+        {% if item.type == 'Activity/Event' or item.type == 'Activity/Route' %}
             {% set path = 'Colecta' ~ item.type ~ ':pico.html.twig' %}
             {% set path = path | replace({'/':'Bundle:'}) %}
             {% include path with { 'item': item } only %}
