@@ -1,0 +1,7 @@
+{% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
+{% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
+
+<div class="item well{% if new %} new{% endif %}">
+    <span class="dateandcat">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}</span>
+    <h4><a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{% block icon %}{% endblock %}{{ item.name }}</a></h4>
+</div>

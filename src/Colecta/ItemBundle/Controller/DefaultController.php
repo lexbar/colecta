@@ -31,7 +31,7 @@ class DefaultController extends Controller
         }
         
         $items = $em->createQuery(
-            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) ORDER BY i.date DESC"
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND (i NOT INSTANCE OF Colecta\FilesBundle\Entity\File) ORDER BY i.date DESC"
         )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         
         $nextactivities = $em->createQuery(

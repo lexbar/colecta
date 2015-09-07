@@ -237,6 +237,26 @@ img.smiley {
 .item .panel-footer {
     color: #444;
 }
+.item.well {
+    padding: 15px;
+}
+.item.well h4 {
+    margin: 0;
+}
+.item.well h4 a {
+    color: #000;
+}
+.item.well h4 a i {
+    color: #999;
+}
+.item.well .dateandcat {
+    font-size: 12px;
+    color: #999;
+    overflow: hidden;
+    float: right;
+    padding-left: 2px;
+    line-height: 20px;
+}
 .micro {
     overflow: hidden;
     margin: 0 0 10px 0;
