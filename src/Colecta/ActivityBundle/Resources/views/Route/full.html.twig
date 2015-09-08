@@ -104,6 +104,7 @@
     {% endfor %}
     
     var map;
+    var mapMarkers;
     var positionMarker;
     var isFullScreen = false;
     var polyline = [];
@@ -290,6 +291,16 @@
                 icon: image,
                 title: s[0]
             });
+            
+            var content = s[0];  
+            var infowindow = new google.maps.InfoWindow()
+            
+            google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+                return function() {
+                   infowindow.setContent(content);
+                   infowindow.open(map,marker);
+                };
+            })(marker,content,infowindow)); 
         }
     }
     
