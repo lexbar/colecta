@@ -8,7 +8,7 @@ X-MS-OLK-FORCEINSPECTOROPEN:TRUE
 BEGIN:VEVENT
 CLASS:PUBLIC
 CREATED:{{ item.date | date("Ymd\\THis\\Z", "UTC") }}
-DESCRIPTION:{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}
+DESCRIPTION:{{ item.summary | replace({"\n":' ', "\r":' '}) }}{% if item.text | length > item.summary | length %} (...){% endif %}
 
 DTSTAMP:{{ item.date | date("Ymd\\THis\\Z", "UTC") }}
 DTSTART:{{ item.dateini | date("Ymd\\THis\\Z", "UTC") }}
