@@ -826,7 +826,7 @@ class EventController extends Controller
             $SQLprivacy = ' AND e.open = 1 ';
         }
         
-        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 '.$SQLprivacy.' ORDER BY e.dateini DESC')->getResult();
+        $items = $em->createQuery('SELECT e FROM ColectaActivityBundle:Event e WHERE e.draft = 0 '.$SQLprivacy.' ORDER BY e.dateini DESC LIMIT 100')->getResult();
         
         return $this->render('ColectaActivityBundle:Event:calendar.ics.twig', array('events' => $items));
     }
