@@ -205,6 +205,10 @@ img.smiley {
 .item .thumbnails {
     padding-right: 15px;
 }
+.item .thumbnails.fullview {
+    border-top: 1px solid #CCC;
+    padding-top: 15px;
+}
 .item .thumbnails div {
     margin-bottom: 15px;
     padding-right: 0;
