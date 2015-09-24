@@ -898,7 +898,7 @@ class FileController extends Controller
 
                 foreach ($image as $frame) 
                 {
-                    $frame->scaleImage($width, $height, true);
+                    $frame->cropThumbnailImage($width, $height, true);
                 }
                 
                 //$image = $image->deconstructImages(); 
@@ -987,7 +987,7 @@ class FileController extends Controller
             else
             {
                 $image->setImageResolution(72,72); 
-                $image->cropThumbnailImage($width, $height);
+                $image->scaleImage($width, $height, true);
                 $image->setImagePage(0, 0, 0, 0);
                 $image->normalizeImage();
                 //fill out the cache
