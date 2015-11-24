@@ -1028,11 +1028,11 @@ class RouteController extends Controller
         $format = $this->acceptedExtensions($this->extension($filepath));
         if($simplified && is_numeric($simplified))
         {
-            $csv = shell_exec("gpsbabel -t -i $format -f $filepath -x simplify,count=$simplified -o unicsv -F -");
+            $csv = shell_exec("gpsbabel -t -i $format -f $filepath -x simplify,count=$simplified -o unicsv -F - 2>&1");
         }
         else
         {
-            $csv = shell_exec("gpsbabel -t -i $format -f $filepath -o unicsv -F -");
+            $csv = shell_exec("gpsbabel -t -i $format -f $filepath -o unicsv -F - 2>&1");
         }
         
         $lines = explode("\n",$csv);
