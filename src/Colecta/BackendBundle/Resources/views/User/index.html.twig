@@ -3,10 +3,10 @@
 {% block title %}Gestionar Usuarios{% endblock %}
 
 {% block article %}
-    
-    <h2>Listado de usuarios</h2>
 
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+
+    <h2>Listado de usuarios</h2>
         
     <div class="monocontent tabs">
         {% if app.user.role.userCreate %}<a href="{{ path('ColectaBackendNewUser') }}" class="btn btn-primary">Crear Usuario <i class="fa fa-plus"></i></a> {% endif %}

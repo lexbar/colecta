@@ -23,9 +23,9 @@
     
     {% if not app.user and web_description %}<div class="well well-sm">{{ web_description | nl2br }}</div>{% endif %}
     
-    {% if app.user and app.user.role.contribute %} 
+    {#% if app.user and app.user.role.contribute %} 
         {% include 'ColectaItemBundle:Default:newItemForm.html.twig' %}
-    {% endif %}
+    {% endif %#}
     
     {% if nextactivities | length %}
         <div class="panel panel-highlight">
@@ -46,25 +46,16 @@
     {% set shownItems = [] %}
     
     {% for item in items if item.id not in shownItems %}
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
         
-        {% if item.type == 'Activity/Event' or item.type == 'Activity/Place' %}
-            {% set path = 'Colecta' ~ item.type ~ ':pico.html.twig' %}
-            {% set path = path | replace({'/':'Bundle:'}) %}
-            {% include path with { 'item': item } only %}
-            
-            {% set shownItems = shownItems | merge([item.id]) %}
-        {% else %}
-            {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-            {% set path = path | replace({'/':'Bundle:'}) %}
-            {% include path with { 'item': item } only %}
-            
-            {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
-            
-            {% set shownItems = shownItems | merge([item.id]) %}
-            {% for ri in item.related %}
-                {% set shownItems = shownItems | merge([ri.id]) %}
-            {% endfor %}
-        {% endif %}
+        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
+        
+        {% set shownItems = shownItems | merge([item.id]) %}
+        {% for ri in item.related %}
+            {% set shownItems = shownItems | merge([ri.id]) %}
+        {% endfor %}
     {% else %}
         {% if app.user %}
         <div class="jumbotron">

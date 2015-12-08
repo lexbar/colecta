@@ -1,17 +1,43 @@
 {% extends 'ColectaItemBundle:Default:itemMini.html.twig' %}
 
 {% block itemBody %}
-    <div class="row">
-        <div class="col-xs-12 col-md-8">  
-            {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+    {% if item.time > 0 %}
+        {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
+        {% if item.time < 60 %}
+            {% set secconds = item.time %}
+        {% else %}
+            {% set minutes = item.time // 60 %}
+            {% set secconds = item.time - minutes * 60 %}
             
-            {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item, showProfile: 1 } only %}
-
-        </div>
-        <div class="preview col-xs-12 col-md-4 ">
-            <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img class="img-responsive map" src="{{ path('ColectaRouteMap',{id : item.id}) }}"></a>
-        </div>
-    </div>
+            {% if minutes >= 60 %}
+                {% set hours = minutes // 60 %}
+                {% set minutes = minutes - hours * 60 %}
+                
+                {% if hours >= 24 %}
+                    {% set days = hours // 24 %}
+                    {% set hours = hours - days * 24 %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        
+        {% if days > 0 %}
+            {% set timeformat = days ~ 'd ' ~ hours ~ 'h ' ~ minutes ~ 'm ' %}
+        {% else %}
+            {% set timeformat = hours ~ 'h ' ~ minutes ~ 'm ' %}
+        {% endif %}
+    {% endif %}
+    
+    {% set properties = [] %}
+    {% if item.distance > 0 %}{% set properties = properties|merge([item.distance ~ ' km']) %}{% endif %}
+    {% if item.time > 0 %}{% set properties = properties|merge(['tiempo: ' ~ timeformat]) %}{% endif %}
+    {% if item.uphill > 0 %}{% set properties = properties|merge(['desnivel: ' ~ item.uphill ~ ' m']) %}{% endif %}
+    {% if item.difficulty != '' %}{% set properties = properties|merge(['dificultad: ' ~ item.difficulty | replace({'easy':'fácil', 'moderate':'moderada', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'})]) %}{% endif %}
+    
+    {% if properties|length > 0 %}
+        <p class="properties"><strong>{{ properties | join(' | ') }}</strong></p>
+    {% endif %}
+    
+    <p><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaRouteMap',{id : item.id}) }}"><img class="mapprofile" src="{{ path('ColectaRouteProfile', { 'id' : item.id }) }}"></a></p>
     
     <div id="summary-{{ item.slug }}">
         {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}

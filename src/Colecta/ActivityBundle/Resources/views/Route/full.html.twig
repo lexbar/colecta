@@ -6,51 +6,47 @@
 {% block article %}    
 {% set canEdit = app.user and item.canEdit(app.user) %}
 
-<div class="item panel panel-default{% if canEdit %} editable{% endif %}">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a>
-            {% if canEdit %}
-                <a href="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
-            {% endif %}
-        </h3>
-    </div>
+<div class="full item{% if canEdit %} editable{% endif %}">
+    {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+    <h2>
+        <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a>
+    </h2>
     
-    <div class="panel-body">
-        <div class="dropdown pull-right">
-            <button class="btn btn-success btn-xs dropdown-toggle" type="button" onClick="return false;">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
-            <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
-                <li role="presentation" class="dropdown-header">Track completo</li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
-                <li class="divider"></li>
-                <li role="presentation" class="dropdown-header">Track simplificado</li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
-                <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
-            </ul>
+    <div class="row">
+        <div class="col-sm-4 col-md-3">
+            <div id="mapdata">
+                <div class="dropdown">
+                    <button id="dropdownMenu" class="btn btn-success btn-block btn-sm dropdown-toggle" type="button" onClick="return false;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
+                    <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
+                        <li role="presentation" class="dropdown-header">Track completo</li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}">KML</a></li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}">PLT</a></li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}">GDB</a></li>
+                        <li class="divider"></li>
+                        <li role="presentation" class="dropdown-header">Track simplificado</li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}?simplified=500">GPX</a></li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'kml'}) }}?simplified=500">KML</a></li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'plt'}) }}?simplified=500">PLT</a></li>
+                        <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gdb'}) }}?simplified=500">GDB</a></li>
+                    </ul>
+                </div>
+                
+                {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+            </div>
         </div>
-        
-        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-        
-        <div class="row">
+        <div class="col-sm-8 col-md-9">
             <div id="map" style="width:auto;height:300px;"></div>
             <div id="chart" style="width:auto;height:170px;"></div>
         </div>
-        <hr>
+    </div>
         
-        {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+    <hr>
+        
+    {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
     
-        {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-    </div>
-    
-    <div class="panel-footer">
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
-    </div>
+    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
 </div>
 
 {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}

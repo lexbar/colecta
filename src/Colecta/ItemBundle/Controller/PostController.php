@@ -28,6 +28,12 @@ class PostController extends Controller
         $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) AND i.draft = 0 ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         //$items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
+        $query = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+        )->setFirstResult(0)->setMaxResults(50);
+        
+        $categories = $query->getResult();
+        
         //Pagination
         if(count($items) > $this->ipp) 
         {
@@ -39,7 +45,7 @@ class PostController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Post:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaItemBundle:Post:index.html.twig', array('items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function viewAction($slug)
     {

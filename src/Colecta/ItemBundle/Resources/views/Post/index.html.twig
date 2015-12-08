@@ -1,33 +1,53 @@
 {% extends '::frontend.html.twig' %}
 
-{% block title %}Textos{% endblock %}
+{% block title %}Debate{% endblock %}
 
 {% block article %}
     
-    {% if app.user %} <a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-    <h2>Discusión{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
-    
-    {% for item in items %}
-        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}
-        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
-    {% else %}
-        <div class="monocontent text-center">
-            <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-4x"></i>
-            <p class="lead">Las publicaciones que se añadan aparecerán aquí.</p>
+    <div class="row">    
+        <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
+            <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+                <div class="inner-addon right-addon">
+                    <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+                    <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+                </div>
+            </form>
+            <div class="categories">
+                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
+                <ul class="list-unstyled hidden-xs" id="categoriesList">
+                    {% for category in categories %}
+                    <li><a href="{{ path('ColectaCategoryView',{'slug':category.slug}) }}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-    {% endfor %}
-    
-    {% if page > 1 or thereAreMore %}
-        <ul class="pager">
-          <li class="previous{% if page == 1 %} disabled{% endif %}">
-            <a href="{% if page > 1 %}{{ path('ColectaPostPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-          </li>
-          <li class="next{% if not thereAreMore %} disabled{% endif %}">
-            <a href="{% if thereAreMore %}{{ path('ColectaPostPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-          </li>
-        </ul>
-    {% endif %}
-
+        <div class="col-xs-12 col-sm-8 col-md-9">
+            {% if app.user %}<p><a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-default pull-right post-content"><i class="fa fa-plus fa-fw"></i> Publicar </a></p>{% endif %}
+            
+            <h2>Debate{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+            
+            {% for item in items %}
+                {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+                {% set path = path | replace({'/':'Bundle:'}) %}
+                {% include path with { 'item': item } only %}
+                {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
+            {% else %}
+                <div class="monocontent text-center">
+                    <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-4x"></i>
+                    <p class="lead">Las publicaciones que se añadan aparecerán aquí.</p>
+                </div>
+            {% endfor %}
+            
+            {% if page > 1 or thereAreMore %}
+                <ul class="pager">
+                  <li class="previous{% if page == 1 %} disabled{% endif %}">
+                    <a href="{% if page > 1 %}{{ path('ColectaPostPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+                  </li>
+                  <li class="next{% if not thereAreMore %} disabled{% endif %}">
+                    <a href="{% if thereAreMore %}{{ path('ColectaPostPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+                  </li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

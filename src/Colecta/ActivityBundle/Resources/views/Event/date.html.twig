@@ -4,53 +4,47 @@
 
 {% block article %}
 
-{% if app.user %} <a href="{{ path('ColectaEventNew')}}" class="btn btn-small btn-primary pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
-<h2>
-{% if ismonth %}
-    Actividades en {% include "::month.html.twig" with {'date': date, 'short':0} %}
-{% else %}
-    Actividades el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} 
-{% endif %}
-</h2>
-
-<div class="bigcalendar">
-{{ render(controller('ColectaActivityBundle:Event:calendar', {'date':date | date('Y-m-d')})) }}
-</div>
-
-{% set panelHappenedOpen = 0 %}
-
-{% if items | length > 0 and items[0].happened %}
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Actividades pasadas</h3>
+    <div class="row">    
+        <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
+            <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+                <div class="inner-addon right-addon">
+                    <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+                    <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+                </div>
+            </form>
+            <div class="categories">
+                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
+                <ul class="list-unstyled hidden-xs" id="categoriesList">
+                    {% for category in categories %}
+                    <li><a href="{{ path('ColectaCategoryView',{'slug':category.slug}) }}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-9">
+            {% if app.user %} <a href="{{ path('ColectaEventNew')}}" class="btn btn-small btn-primary pull-right post-content"><i class="fa fa-plus fa-fw"></i> Publicar</a> {% endif %}
+            <h2>
+            {% if ismonth %}
+                Actividades en {% include "::month.html.twig" with {'date': date, 'short':0} %}
+            {% else %}
+                Actividades el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} 
+            {% endif %}
+            </h2>
+            
+            <div class="bigcalendar">
+            {{ render(controller('ColectaActivityBundle:Event:calendar', {'date':date | date('Y-m-d')})) }}
+            </div>
+            
+            {% for item in items %} 
+                {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+                {% set path = path | replace({'/':'Bundle:'}) %}
+                {% include path with { 'item': item } only %}
+                {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %} 
+            {% endfor %}
+             
+        </div>
     </div>
-    <div class="panel-body">
     
-    {% set panelHappenedOpen = 1 %}
-{% endif %}
-
-{% for item in items %}
-    {% if item.happened %}
-        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}
-    {% else %}  
-        {% if panelHappenedOpen %}
-            </div></div>
-            {% set panelHappenedOpen = 0 %}
-        {% endif %}      
-        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}
-        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %} 
-    {% endif %}
-{% endfor %}
-
-{% if panelHappenedOpen %}
-    </div></div>
-    {% set panelHappenedOpen = 0 %}
-{% endif %}    
-
-<div class="alert alert-blank text-center" role="alert"><strong>Puedes suscribirte</strong> al calendario usando Outlook, iCal, Google Calendar, etc... <a href="{{ path('ColectaEventAboutics')}}">Saber más <i class="fa fa-angle-double-right"></i>.</a></div>
+    <div class="alert alert-blank text-center" role="alert"><strong>Puedes suscribirte</strong> al calendario usando Outlook, iCal, Google Calendar, etc... <a href="{{ path('ColectaEventAboutics')}}">Saber más <i class="fa fa-angle-double-right"></i>.</a></div>
 
 {% endblock %}

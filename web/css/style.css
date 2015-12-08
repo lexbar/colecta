@@ -1,15 +1,47 @@
-h2, h4 {
-    margin: 0 0 8px;
-}
+
 img.smiley {
-    vertical-align: baseline;
+    vertical-align: text-bottom;
 }
 .headerimg {
-    height: 160px;
+    height: 150px;
     background-size: cover;
     background-position: center center;    
     margin-top: -20px;
-    margin-bottom: 20px;
+}
+.sidebardisplay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    z-index: 1020;
+    padding: 18px 0;
+    margin: 0;
+    cursor: pointer;
+}
+.btn.post-content {
+    color: #0275d8;
+    background-color: transparent;
+    border-color: #0275d8;
+}
+.btn.post-content:hover, .btn.post-content:active, .btn.post-content:focus {
+    color: #fff;
+    background-color: #0275d8;
+    border-color: #0275d8;
+}
+.categories {
+    margin-top: 20px;
+    background-color: #f8f8f8;
+    padding: 10px;
+}
+.categories .lead {
+    margin-bottom: 10px;
+    margin-top: -8px;
+}
+.categories .lead i {
+    display: none;
+}
+.categories ul {
+    font-size: 16px;
 }
 .panel.panel-highlight {
     border-color: #DDD;
@@ -18,8 +50,15 @@ img.smiley {
     background-color: #EEE;
     border-bottom: 1px solid #DDD;
 }
+.well-link {
+    background-color: #FFF;
+    margin-top: 10px;
+}
 .navbar {
     z-index: auto;
+}
+.navbar-default .web_logo {
+    display: inline;
 }
 .navbar-default a.navbar-brand {
     font-weight: bold;
@@ -30,6 +69,9 @@ img.smiley {
     vertical-align: middle;
     max-height: 24px;
     color: #555;
+}
+.navbar-default .userProfile a {
+    padding: 7px 15px;
 }
 .navbar-form {
     padding-right: 0;
@@ -45,19 +87,28 @@ img.smiley {
     right: 0;
 }
 
-.sidebardisplay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 60px;
-    z-index: 1020;
-    padding: 9px 0;
-    margin: 0;
-    cursor: pointer;
+#mainTabs li a {
+    color: #666;
 }
-.sidebardisplay div {
-    width: 60px;
-    text-align:center;
+#mainTabs li a:hover, #mainTabs li a:focus {
+    background-color: transparent;
+    border-color: transparent;
+    color: #000;
+}
+#mainTabs li.active a {
+    border-width: 0;
+    border-bottom: 2px solid #222;
+    color: #111;
+}
+
+#searchForm {
+    margin-top: 20px;
+}
+#searchForm i {
+    color: #777;
+}
+.btn.post-content, .btn.btn-head {
+    margin-top: 20px;
 }
 
 .login p {
@@ -94,7 +145,6 @@ img.smiley {
   position: absolute;
   top: 1px;
   padding: 8px;
-  border-left: 1px solid #eee;
   cursor: pointer;
   /*pointer-events: none;*/
 }
@@ -109,63 +159,27 @@ img.smiley {
 
 /* END LEFT/RIGHT ICON ADDON*/
 
-/* SIDEBAR */
-
-#self .clearfix *{
-    vertical-align: middle;
+/* ITEMS */
+.item {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 40px;
+    margin-top: 20px;
 }
-#self a.myname {
-    display: block;
+.item.full {
+    border: none;
 }
-#self a.myname:hover {
+.item.full h2 a {
+    color: #000;
     text-decoration: none;
 }
-#self a.myname img{
-    margin-right: 10px;
-}
-#self a.myname strong {
-    font-weight: lighter;
-    color: #000;
-}
-#self a.myname:hover strong {
-    text-decoration: underline;
-}
-
-#searchForm i {
-    color: #666;
-}
-
-.calendar-heading {
-    font-weight: lighter;
+.item.full p {
     font-size: 16px;
 }
-.calendar-heading a {
-    color: #000;
-}
-.calendar {
-    background-color: #FFF;
-}
-.calendar thead tr th {
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 10px;
-}
-.calendar tbody tr td {
-    text-align: center;
-    border: 2px solid #FFF;
-}
-.calendar tbody tr td a {
-    display: block;
-}
-.calendar tbody tr td.today {
-    background-color: #EEE;
-}
-/* END SIDEBAR */
-
-/* ITEMS */
-.item .panel-heading .panel-title {
+.item .panel-title {
     font-size: 24px;
     position: relative;
+    line-height: 24px;
+    margin: 15px 0 10px;
 }
 .item.editable .panel-heading .panel-title {
     padding-right: 70px;
@@ -181,23 +195,54 @@ img.smiley {
     padding-bottom: 0;
     word-wrap: break-word;
 }
+.item .mapprofile {
+    width: 100%;
+    max-width: 500px;
+    height: 30px;
+    margin-top: 5px;
+}
+.item .properties {
+    margin-top: -10px;
+    color: #555;
+    font-size: 16px;
+}
+.item .properties strong {
+    font-weight: 500;
+}
+.item .event-date {
+    font-size: 18px;
+    font-weight: 200;
+}
+.item .event-date span {
+    padding-right: 10px;
+}
+.item .event-date i {
+    color: #333;
+}
 .item .details {
     font-size: 12px;
     color: #999;
     overflow: hidden;
+}
+.item .details img {
+    margin-right: 10px;
 }
 .item .details .username {
     line-height: 20px;
     font-size: 14px;
 }
 .item .details .dateandcat {
-    float: right;
     padding-left: 2px;
     line-height: 20px;
 }
 .item .itemActions {
-    border-top: 1px solid #CCC;
-    padding: 12px 0;
+    padding: 10px 0;
+}
+.item .itemActions a, .item .itemActions .like span {
+    display: inline-block;
+    margin-right: 15px;
+    color: #555;
+    font-weight: bold;
 }
 .item .preview {
     padding-bottom: 15px;
@@ -261,6 +306,17 @@ img.smiley {
     float: right;
     padding-left: 2px;
     line-height: 20px;
+}
+.related {
+    margin-bottom: 20px;
+}
+.related li h4, .related li p {
+    display: inline-block;
+    margin: 0;
+}
+.related li p {
+    color: #666;
+    padding-left: 5px;
 }
 .micro {
     overflow: hidden;
@@ -334,7 +390,9 @@ img.smiley {
     font-size: 16px;
     padding: 8px 12px;
     max-height: 40px;
-    transition: max-height 1.2s
+    transition: max-height 1.2s;
+    border-color: #eee;
+    box-shadow: none;
 }
 .comments .media .removeComment {
     display: none;
@@ -342,6 +400,53 @@ img.smiley {
 }
 .comments .media:hover .removeComment {
     display: inline;
+}
+
+.assistances .attendee {
+    color: #000;
+    font-weight: bold;
+}
+.assistances .btn.btn-default {
+    border-color: #0275d8;
+}
+
+
+.bigcalendar {
+    font-size: 18px;
+    margin-top: 20px;
+    border: 1px dashed #ddd;
+    padding: 5px;
+}
+.bigcalendar .calendar-heading {
+    font-size: 22px;
+}
+.calendar-heading a {
+    color: #000;
+}
+.calendar {
+    background-color: #FFF;
+    margin-bottom: 0;
+}
+.calendar thead tr th {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+}
+.calendar tbody tr td {
+    text-align: center;
+    border: 2px solid #FFF;
+}
+.calendar tbody tr td a {
+    display: block;
+}
+.calendar tbody tr td.today {
+    background-color: #337ab7;
+    color: #fff;
+}
+.calendar tbody tr td.today a {
+    color: #FFF;
+    font-weight: bold;
 }
 
 .itemForm .nav {
@@ -441,8 +546,11 @@ img.smiley {
 .dropdown-menu>li>a {
     padding: 8px 20px;
 }
-.dropdown:hover .dropdown-menu {
-    display: block !important;
+#mapdata {
+    background-color: #eee;
+    padding: 10px;
+    height: 470px;
+    overflow-y: auto;
 }
 #map .control {
     background-color: #FFFFFF;
@@ -482,20 +590,10 @@ img.smiley {
 }
 
 .profileHeader img {
-    margin: 0 10px 20px 0;
+    margin: 25px 10px 20px 0;
 }
 .profileHeader div {
     margin: 0 0 20px 0;
-}
-
-.monocontent {
-    background-color: #FFF;
-    padding: 15px 10px;
-    border: 1px solid #eee;
-}
-.monocontent.tabs {
-    border-color: #DDD;
-    border-top-width: 0;
 }
 
 .relations h4 {
@@ -525,13 +623,6 @@ img.smiley {
     height: 70px;
     width: 100%;
     float: right;
-}
-.item .properties li {
-    padding: 10px 0;
-    border-right: 1px solid #DDD;
-}
-.item .properties .profile {
-    padding: 10px 15px;
 }
 .item .dropdown.pull-right{
         margin-left: 15px;
@@ -596,7 +687,7 @@ img.smiley {
     border-top: 1px solid #CCC;
     color: #777;
     padding: 10px;
-    margin: 50px 0 20px;
+    margin: 20px 0;
     font-style: italic;
 }
 .footer a.deporde {
@@ -637,20 +728,8 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .navbar-nav.navbar-right {
         margin-right: -15px;
     }
-    #self a.myname img {
-        margin-right: 5px;
-        width: 25px;
-    }
-    #self a.myname strong {
-        top: 3px;
-        left: 46px;
-    }
 }
 @media (max-width: 992px) { /* Small devices */
-    .profileHeader img.avatar {
-        float: left !important;
-        height: 20px;
-    }
 }
 @media (max-width: 767px) { /* Extra Small devices */
     .navbar .container {
@@ -672,22 +751,6 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .navbar-nav {
         padding: 10px 15px;
     }
-    .nav-tabs {
-        background-color: #FFF; 
-        border: 1px solid #ddd;
-        border-bottom-width: 0;
-    }
-    .nav-tabs li.active a {
-        background-color: #009BDB;
-        border: 1px solid #009BDB;
-        color: #FFF;
-        border-radius: 4px;
-    }
-    .nav-tabs li.active a:hover {
-        background-color:#3276b1;
-        border-color:#285e8e;
-        color: #FFF;
-    }
     .itemForm .nav li a {
         padding-right: 5px;
     }
@@ -700,7 +763,24 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         left: auto;
         top: auto;
     }
-    
+    .categories .lead {
+        cursor: pointer;
+        margin-bottom: 5px;
+        margin-top: 3px;
+    }
+    .categories .lead i {
+        display: inline-block;
+    }
+    #mapdata {
+        height: auto;
+        overflow-y: visible;
+    }
+    .bigcalendar .calendar-heading {
+        font-size: 16px;
+    }
+    .calendar thead tr th {
+        font-size: 14px;
+    }
     .item .panel-heading .panel-title {
         font-size: 20px;
     }

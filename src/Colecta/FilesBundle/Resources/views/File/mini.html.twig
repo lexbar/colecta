@@ -4,8 +4,6 @@
     {% if item.filetype in ['jpeg','gif','png'] %}
         <div class="row">
             <div class="col-xs-12 col-sm-9">
-                {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-                
                 <div id="summary-{{ item.slug }}">
                     {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
                     {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
@@ -20,9 +18,7 @@
                 <a href="{{ path('ColectaFileView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileResize', {'slug':item.slug, 'width':'180', 'height':'350'}) }}"></a>
             </div>
         </div>
-    {% else %}
-        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-        
+    {% else %}        
         <div id="summary-{{ item.slug }}">
             {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
             {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}

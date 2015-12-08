@@ -6,37 +6,26 @@
 
 {% set canEdit = app.user and item.canEdit(app.user) %}
 
-<div class="item panel panel-default{% if canEdit %} editable{% endif %}">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a>
-            {% if canEdit %}
-                <a href="{{ path('ColectaPostEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+<div class="full item{% if canEdit %} editable{% endif %}">
+    {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+    <h2>
+        <a href="{{ path('ColectaPostView', { 'slug': item.slug }) }}">{{ item.name }}</a>
+    </h2>
+        
+    {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+    
+    {% if item.linkTitle != '' %}
+        <p class="well-link clearfix">
+            {% if item.linkImage != '' %}
+                <a href="{{ item.linkURL }}" target="_blank"><img src="{{ item.linkImage }}" class="pull-left" style="height:100px;max-width:300px;margin-right:10px;"></a>
             {% endif %}
-        </h3>
-    </div>
+            <strong><a href="{{ item.linkURL }}" target="_blank">{{ item.linkTitle | raw }}</a></strong><br><small class="text-muted">{{ item.linkURL | urlHost }}</small>
+            <br> {{ item.linkExcerpt }}
+        </p>
+    {% endif %}
     
-    <div class="panel-body">
-        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-        
-        {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-        
-        {% if item.linkTitle != '' %}
-            <p class="well well-sm well-link clearfix">
-                {% if item.linkImage != '' %}
-                    <a href="{{ item.linkURL }}"><img src="{{ item.linkImage }}" class="pull-left" style="height:100px;max-width:300px;margin-right:10px;"></a>
-                {% endif %}
-                <strong><a href="{{ item.linkURL }}">{{ item.linkTitle | raw }}</a></strong><br><small class="text-muted">{{ item.linkURL | urlHost }}</small>
-                <br> {{ item.linkExcerpt }}
-            </p>
-        {% endif %}
-        
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
-    </div>
-    
-    <div class="panel-footer">
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
-    </div>
+    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
 </div>
 
 {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}

@@ -40,7 +40,11 @@ class RouteController extends Controller
         //Get ALL the items that are accessible
         $items = $em->getRepository('ColectaActivityBundle:Route')->findBy($findby, array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        $query = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+        )->setFirstResult(0)->setMaxResults(50);
+        
+        $categories = $query->getResult();
         
         //Pagination
         if(count($items) > $this->ipp) 
@@ -131,7 +135,7 @@ class RouteController extends Controller
             
             if($n > 0) 
             {
-                $url = "http://maps.google.com/maps/api/staticmap?size=500x335&maptype=terrain&sensor=false&path=color:0xff0000|weight:3";
+                $url = "http://maps.google.com/maps/api/staticmap?size=500x200&maptype=terrain&sensor=false&path=color:0xff0000|weight:3";
                 $step = floor($n / 60);
                 for($i = 0; $i < $n; $i += $step)
                 {

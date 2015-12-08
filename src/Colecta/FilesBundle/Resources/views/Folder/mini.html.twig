@@ -18,9 +18,7 @@
     
     {# Thumbnails are viewable files #}
     
-    {% if thumbnails != 1 or listed > 0 %}
-        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-        
+    {% if thumbnails != 1 or listed > 0 %}        
         <div id="summary-{{ item.slug }}">
             {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
             {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
@@ -32,7 +30,6 @@
     {% endif %}
     
     {% if thumbnails == 1 and listed == 0 %} {# The folder consists of only one image #}
-        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
                 
         <div id="summary-{{ item.slug }}">
             {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}

@@ -1,20 +1,21 @@
 {% set canAssist = item.type == 'Activity/Event' and item.allowassistances %}
 {% set canAttach = not item.part and app.user and (app.user.role.itemRelateAny or app.user.role.itemRelateOwn and item.author == app.user) %}
+{% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
+{% set canEdit = app.user and item.canEdit(app.user) %}
+
 {% if app.user %}
     {% set userLikes = item.userLikes(app.user) %}
     
-    <div class="itemActions row text-center">
+    <div class="itemActions">
     
         {# LIKE #}
-        <div class="{% if canAttach %}{% if canAssist %}col-xs-4{% else %}col-xs-6{% endif %}{% else %}{% if canAssist %}col-xs-6{% else %}col-xs-12{% endif %}{% endif %}">
-            <span id="itemLikes{{ item.id }}" class="like">
-            {% if userLikes %}
-                <span><i class="fa fa-hand-peace-o"></i> Te gusta</span>
-            {% else %}
-                <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
-            {% endif%}
-            </span>
-        </div>
+        <span id="itemLikes{{ item.id }}" class="like">
+        {% if userLikes %}
+            <span><i class="fa fa-hand-peace-o"></i> Te gusta</span>
+        {% else %}
+            <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
+        {% endif%}
+        </span>
         
         {# ASSISTANCE #}
         {% if canAssist %}
@@ -29,7 +30,6 @@
             {% endfor %}
             
             {% spaceless %}
-            <div class="{% if canAttach %}col-xs-4{% else %}col-x-6{% endif%}">
                 <a href="{% if assists %}{{ path('ColectaEventUnasist',{'slug':item.slug}) }}{% else %}{{ path('ColectaEventAsist',{'slug':item.slug}) }}{% endif%}"{% if assists and (not haspassed or haspassed and confirmed) %}class="confirmed"{% endif %}>
                     {% if assists %}
                         <span class="done">
@@ -62,7 +62,6 @@
                         </span>
                     {% endif %} 
                 </a>
-            </div>
             {% endspaceless %}
         {% endif %}
         
@@ -79,10 +78,12 @@
         
         {# ATTACH #}
         {% if canAttach %}
-            <div class="{% if canAssist %}col-xs-4{% else %}col-xs-6{% endif %}">
-                <a href="{{ path('ColectaItemAttach',{'id':item.id}) }}"><i class="fa fa-paperclip"></i> Adjuntar</a>
-            </div>
+            <a href="{{ path('ColectaItemAttach',{'id':item.id}) }}"><i class="fa fa-paperclip"></i> Adjuntar</a>
         {% endif %}
         
+        {# EDIT #}
+        {% if canEdit %}
+            <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+        {% endif %}
     </div>
 {% endif %}

@@ -39,7 +39,12 @@ class DefaultController extends Controller
         
         //Get ALL the routes and places that are not drafts
         $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ActivityBundle\Entity\Route OR i INSTANCE OF Colecta\ActivityBundle\Entity\Place) AND i.draft = 0 $SQLprivacy ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
-        //$items = $em->getRepository('ColectaActivityBundle:Route')->findBy(array('draft'=>0), array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
+        
+        $query = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+        )->setFirstResult(0)->setMaxResults(50);
+        
+        $categories = $query->getResult();
         
         //Pagination
         if(count($items) > $this->ipp)
@@ -52,6 +57,6 @@ class DefaultController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaActivityBundle:Default:index.html.twig', array('items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaActivityBundle:Default:index.html.twig', array('items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
 }

@@ -4,9 +4,9 @@
 
 {% block article %}
     
-    <h2>Páginas</h2>
-
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'page' } %}
+    
+    <h2>Páginas</h2>
         
     <div class="monocontent tabs">
         <a href="{{ path('ColectaBackendNewPage') }}" class="btn btn-primary">Crear Nueva Página <i class="fa fa-plus"></i></a> <a href="{{ path('ColectaBackendNewLink') }}" class="btn btn-default">Crear Enlace <i class="fa fa-plus"></i></a> 

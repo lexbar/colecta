@@ -8,104 +8,20 @@
     {% set bun, con, act = '', '', ''%}
 {% endif %}
 
-<div class="sidebarblock">
-{% if app.user %}    
-    <div id="self" class="clearfix hidden-print">
-        <div class="clearfix">
-            <a href="{{ path('userProfile', { 'id': app.user.id }) }}" class="myname">
-                <img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40">
-                <strong>{{ app.user.name }}</strong> 
-            </a>
-        </div>
-    </div>
     
-    <hr>
-{% elseif 0 and not(bun == 'UserBundle' and act == 'loginAction') and bun != '' %}
-    <form class="login" action="{{ path('userLoginCheck') }}" method="post">
-        <p><a class="lead" href="#" onClick="$('#singinform').toggle()"> <i class="fa fa-sign-in"></i> Iniciar sesión</a></p>
-        
-        <div id="singinform" style="display:none;">
-            <p class="input-group input-group-sm">
-                  <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                  <input  type="email" required class="form-control" id="username" name="_username" placeholder="Email" value="" onFocus="if(this.value == 'Email') this.value=''">
-            </p>
-        
-            <p class="input-group input-group-sm">
-                  <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                  <input type="password" required class="form-control" id="password" name="_password" class="input-medium" placeholder="Contraseña" value="" onFocus="if(this.value == 'Contraseña') this.value=''">
-            </p>
-            
-            <p><label for="remember_me">
-                <small><input id="remember_me" name="_remember_me" type="checkbox" checked /> Mantenerme conectado</small>
-            </label></p>
-            
-            <button type="submit" name="login" class="btn btn-primary btn-block btn-sm">Acceder</button>
-            <a href="{{ path('userResetPassword') }}" class="btn btn-block btn-link btn-xs">Olvidé mi contraseña</a>
-            
-            <hr>
-        </div>
-    </form>
-    
-    <script>
-        var phitest = document.createElement('input');
-        if(!('placeholder' in phitest)) {
-            document.getElementById('username').value='Email';
-            document.getElementById('password').value='Contraseña';
-        }
-    </script>
-{% endif %}
-    
-    <ul class="nav nav-pills nav-stacked">
-        <li{% if bun == 'ItemBundle' and con == 'DefaultController' %} class="active"{% endif %}>
-            <a href="/">
-                <i class="fa fa-home fa-fw"></i> Inicio
-            </a>
-        </li>
-        {#
+    <ul class="nav nav-tabs" id="mainTabs">
         <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
             <a href="{{ path('ColectaPostIndex') }}">
-                <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-fw"></i> Discusión
+                <i class="fa fa-comment-o"></i> Debate
             </a>
-        </li>#}
+        </li>
         <li{% if bun == 'ActivityBundle' and con == 'EventController' %} class="active"{% endif %}>
             <a href="{{ path('ColectaEventIndex') }}"> 
-                <i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i>  Calendario
+                <i class="fa fa-calendar-o"></i>  Actividades
             </a>
         </li>
         <li{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} class="active"{% endif %}>
             <a href="{{ path('ColectaMapIndex') }}">
-                <i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Rutas
+                <i class="fa fa-map-o"></i> Rutas
             </a>
-        </li><li{% if bun == 'ItemBundle' and con == 'CategoryController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaCategoryIndex') }}">
-                <i class="fa fa-list-ul fa-fw"></i> Categorías
-            </a>
-        </li>
     </ul>
-    {% if app.user %}
-    <hr>
-    <ul class="nav nav-pills nav-stacked">
-        
-        <li{% if con == 'UserController' and (act == 'assistancesAction'    ) %} class="active"{% endif %}>
-            <a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">
-                <i class="fa fa-bar-chart fa-fw"></i> Mi rendimiento
-            </a>
-        </li>
-        <li{% if con == 'ActivitiesController' and (act == 'rankAction' or act == 'yearPointsRankAction') %} class="active"{% endif %}>
-            <a href="{{ path('ColectaActivitiesRank') }}"> 
-                <i class="fa fa-sort-amount-desc fa-fw"></i>  Ranking
-            </a>
-        </li>
-        
-        {% if app.user and app.user.role.getSiteConfig %}
-        <li{% if bun == 'BackendBundle' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaBackendIndex') }}"> 
-                <i class="fa fa-wrench fa-fw"></i>  Administración
-            </a>
-        </li>
-        {% endif %}
-    </ul>
-    {% endif %}
-    
-    {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
-</div>

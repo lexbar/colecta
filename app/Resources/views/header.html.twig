@@ -1,6 +1,5 @@
-<nav class="navbar navbar-default" role="navigation">
-
-    <div id="sidebarButton" class="visible-xs sidebardisplay" onClick="$('.sidebar, #header .nav').toggleClass('hidden-xs')">
+<nav class="navbar navbar-default" role="navigation">    
+    <div id="sidebarButton" class="visible-xs sidebardisplay" onclick="$('#header .nav').toggleClass('hidden-xs')">
         <div><i class="fa fa-bars fa-2x"></i></div>
     </div>
     
@@ -11,13 +10,6 @@
                 {% if not web_logo_only %}<span>{{ web_title }}</span>{% endif %}
             </a>
         </div>
-        
-        <form id="searchForm" class="nav navbar-form navbar-right hidden-xs" role="search" action="{{ path('ColectaSearch') }}" method="GET">
-            <div class="inner-addon right-addon">
-                <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
-                <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
-            </div>
-        </form>
         
         {% if app.user %}
             {% if item is defined %}
@@ -30,7 +22,19 @@
         <ul class="nav navbar-nav navbar-right hidden-xs">
             <li><a href="{{ path('userMessages')}}"><i class="fa fa-envelope"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
             <li><a href="{{ path('userNotifications')}}"><i class="fa fa-bell"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Alertas</a></li>
-            <li><a href="{{ path('userLogout') }}"><i class="fa fa-sign-out"></i> Salir</a></li>
+            <li class="dropdown userProfile">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40"></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="fa fa-user fa-fw"></i> Perfil</a></li>
+                    <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="fa fa-bar-chart fa-fw"></i> Rendimiento</a></li>
+                    <li><a href="{{ path('ColectaActivitiesRank') }}"><i class="fa fa-sort-amount-desc fa-fw"></i> Ranking</a></li>
+                    {% if app.user and app.user.role.getSiteConfig %}
+                    <li><a href="{{ path('ColectaBackendIndex') }}"><i class="fa fa-cog fa-fw"></i> Administración</a></li>
+                    {% endif %}
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{{ path('userLogout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
+                </ul>
+            </li>
         </ul>
         
         {% else %}

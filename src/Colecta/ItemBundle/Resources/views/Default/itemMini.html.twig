@@ -1,36 +1,29 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
-{% set canEdit = app.user and item.canEdit(app.user) %}
 
-<div class="item panel {% if new %}panel-primary{% else %}panel-default{% endif %}{% if canEdit %} editable{% endif %}" id="item{{ item.id}}">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            {% block itemTitle %}
-                <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
-                {% if canEdit %}
-                    <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
-                {% endif %}
-            {% endblock %}
-        </h3>
-    </div>
+
+<div class="item {% if new %}new{% endif %}" id="item{{ item.id}}">
+    {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     
-    <div class="panel-body">
-        {% block itemBody %}
-            {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-            
-            {% block itemContent %}
-                <p>{{ item.summary }}</p>
-            {% endblock %}
+    <h3 class="panel-title">
+        {% block itemTitle %}
+            <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
         {% endblock %}
-        
-        {% block itemActions %}
-            {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    </h3>
+    
+    {% block itemBody %}                
+        {% block itemContent %}
+            <p>{{ item.summary }}</p>
         {% endblock %}
-    </div>
+    {% endblock %}
+    
+    {% block itemActions %}
+        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    {% endblock %}
     
     {% block itemFooter %}
         {% if app.user or item.comments | length > 0 or item.likers | length > 0 %} {# only if theres something to show #}
-            <div class="panel-footer">
+            <div class="comments">
                 {% include 'ColectaItemBundle:Default:itemLikers.html.twig' with { 'item': item } only %}
                 {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
             </div>

@@ -11,9 +11,9 @@
     {% endif %}
     
     {% if item.linkTitle != '' %}
-        <p class="well well-sm well-link clearfix">
+        <p class="well-link clearfix">
             {% if item.linkImage != '' %}
-                <a href="{{ item.linkURL }}"><img src="{{ item.linkImage }}" class="pull-left" style="height:100px;max-width:300px;margin-right:10px;"></a>
+                <a href="{{ item.linkURL }}" target="_blank"><img src="{{ item.linkImage }}" class="pull-left" style="height:100px;max-width:300px;margin-right:10px;"></a>
             {% endif %}
             <strong><a target="_blank" href="{{ item.linkURL }}">{{ item.linkTitle | raw }}</a></strong><br><small class="text-muted">{{ item.linkURL | urlHost }}</small>
             <br> {{ item.linkExcerpt }}

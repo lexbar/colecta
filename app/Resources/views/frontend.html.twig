@@ -4,9 +4,10 @@
 
 {% block body %}
     {% include '::header.html.twig' %}
-    <div class="container">       
+    <div class="container">
+        {% include '::navigation.html.twig' %}
         <div class="row content">
-            
+            {#}
             <div class="col-xs-12 col-md-3 col-sm-4 hidden-xs {% if theme_sidebar == 'right' %}pull-right{% endif %} sidebar">
                 {% include '::navigation.html.twig' %}
                 
@@ -15,8 +16,8 @@
                     {{ adsense | raw }}
                 {% endif %}
             </div>
-            
-            <div class="col-xs-12 col-md-9 col-sm-8 {% if theme_sidebar == 'right' %}pull-left{% endif %} main">
+            #}
+            <div class="col-xs-12 main">
                 {% for flashMessage in app.session.flashbag.get('error') %}
                     <div class="alert alert-danger">
                         <i class="fa fa-exclamation-circle"></i> 

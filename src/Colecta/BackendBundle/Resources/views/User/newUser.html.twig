@@ -2,9 +2,9 @@
 
 {% block article %} 
     
-    <h2>Crear Usuario</h2>
-    
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+    
+    <h2>Crear Usuario</h2>
     
     <div class="monocontent tabs">        
         <form class="form-horizontal" method="post" action="{{ path('ColectaBackendNewUser') }}">

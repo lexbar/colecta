@@ -1,22 +1,9 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
 
-<div class="micro{% if new %} new{% endif %}">
-    <div class="col-xs-12 col-sm-3 col-lg-2">
-        {% block thumbnail %}
-            
-        {% endblock %}
-    </div>
-    <div class="col-xs-12 col-sm-9 col-lg-10">
-        {% block text %}
-            <h4><a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a></h4>
-            {% block summary %}
-                {% if item.summary %}
-                    <p>{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}</p>
-                {% endif %}
-            {% endblock %}
-            
-            {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item, hideavatar: 1 } only %}
-        {% endblock %}
-    </div>
-</div>
+<h4><a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a></h4>
+{% block summary %}
+    {% if item.summary %}
+        <p>{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}</p>
+    {% endif %}
+{% endblock %}

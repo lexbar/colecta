@@ -2,9 +2,9 @@
 
 {% block article %}
 
-    <h2>Ajustes</h2>
-    
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'settings' } %}
+    
+    <h2>Ajustes</h2>
     
     <div class="monocontent tabs">
         <form action="{{ path('ColectaBackendSettingsIndex') }}" method="post" class="form-horizontal" enctype="multipart/form-data">

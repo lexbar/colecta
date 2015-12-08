@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs nav-justified" role="tablist">
+<ul class="nav nav-tabs" id="mainTabs" role="tablist">
     <li{% if active is defined and active == 'settings' %} class="active"{% endif %}><a href="{{ path('ColectaBackendSettingsIndex') }}"><i class="fa fa-wrench fa-fw"></i> Ajustes</a></li>
     <li{% if active is defined and active == 'user' %} class="active"{% endif %}><a href="{{ path('ColectaBackendUserIndex') }}"><i class="fa fa-users fa-fw"></i> Usuarios</a></li>
     <li{% if active is defined and active == 'page' %} class="active"{% endif %}><a href="{{ path('ColectaBackendPageIndex') }}"><i class="fa fa-bars fa-fw"></i> Contenido</a></li>

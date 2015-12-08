@@ -1,49 +1,66 @@
 {% extends 'ColectaItemBundle:Default:itemMini.html.twig' %}
 
-{% block itemBody %}
-    <div class="row">
-        <div class="col-xs-12 col-sm-9 col-md-10">   
-            {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-                 
-            <div id="summary-{{ item.slug }}">
-                {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-                {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
-            </div>
-            
-            {% if item.text | length > summary_max_length %}
-                <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
-            {% endif %}
-        </div>
+{% set dias_semana = {
+            'Monday':'Lunes',
+            'Tuesday':'Martes',
+            'Wednesday':'Miércoles',
+            'Thursday':'Jueves',
+            'Friday':'Viernes',
+            'Saturday':'Sábado',
+            'Sunday':'Domingo'
+        }%}
+{% set meses = {
+            '1':'Enero',
+            '2':'Febrero',
+            '3':'Marzo',
+            '4':'Abril',
+            '5':'Mayo',
+            '6':'Junio',
+            '7':'Julio',
+            '8':'Agosto',
+            '9':'Septiembre',
+            '10':'Octubre',
+            '11':'Noviembre',
+            '12':'Diciembre'
+        }%}
         
-        {% set sameday = item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %}
-        <div class="date col-xs-12 col-sm-3 col-md-2 ">
-                <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">
-                <span class="weekday">{{ item.dateini | date('l') | replace ({
-            'Monday':'LUN',
-            'Tuesday':'MAR',
-            'Wednesday':'MIÉ',
-            'Thursday':'JUE',
-            'Friday':'VIE',
-            'Saturday':'SÁB',
-            'Sunday':'DOM'
-        }) }} · {% set month = item.dateini | date('n') | replace({
-            '1':'ENE',
-            '2':'FEB',
-            '3':'MAR',
-            '4':'ABR',
-            '5':'MAY',
-            '6':'JUN',
-            '7':'JUL',
-            '8':'AGO',
-            '9':'SEP',
-            '10':'OCT',
-            '11':'NOV',
-            '12':'DIC'
-        }) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}</span> 
-                <span class="monthday">{{ item.dateini | date('d') }}</span> 
-                <span class="hour">{{ item.dateini | date('H:i') }}{% if sameday %} - {{ item.dateend | date('H:i') }}{% else %} +{% if item.daysDistance > 0 %}{{ item.daysDistance }} días{% else %}{{ item.hoursDistance }} horas{% endif %}{% endif %}</span> 
-                </a>
-        </div>
+{% block itemBody %}
+    <p class="event-date">
+        <span style="white-space:nowrap;"><i class="fa fa-calendar-o"></i>
+        {{ item.dateini | date('l') | replace (dias_semana) }}, 
+        {{ item.dateini | date('d') }} 
+        de {% set month = item.dateini | date('n') | replace(meses) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}
+        
+        {% if item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %} 
+            {# Same Day#}
+            </span> <span style="white-space:nowrap;"><i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} a {{ item.dateend | date('H:i') }}</span>
+        {% else %}
+            {# Different days #}
+             <i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} </span>
+                <span style="white-space:nowrap;"><i class="fa fa-long-arrow-right"></i>
+                {{ item.dateend | date('l') | replace (dias_semana) }}, 
+                {{ item.dateend | date('d') }} 
+                de {% set month = item.dateend | date('n') | replace(meses) %}{% if item.dateend | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateend | date('y') }}{% endif %}
+                <i class="fa fa-clock-o"></i> {{ item.dateend | date('H:i') }}</span>
+        {% endif %}
+    </p>
+    
+    
+    {% set properties = [] %}
+    {% if item.distance > 0 %}{% set properties = properties|merge([item.distance ~ ' km']) %}{% endif %}
+    {% if item.uphill > 0 %}{% set properties = properties|merge(['desnivel: ' ~ item.uphill ~ ' m']) %}{% endif %}
+    {% if item.difficulty != '' %}{% set properties = properties|merge(['dificultad: ' ~ item.difficulty | replace({'easy':'fácil', 'moderate':'moderada', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'})]) %}{% endif %}
+    
+    {% if properties|length > 0 %}
+        <p class="properties"><strong>{{ properties | join(' | ') }}</strong></p>
+    {% endif %}
+                    
+    <div id="summary-{{ item.slug }}">
+        {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
+        {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
     </div>
-    {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+    
+    {% if item.text | length > summary_max_length %}
+        <div id="readmore-{{ item.slug }}" style="display:none">{{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }} </div>
+    {% endif %}
 {% endblock %}

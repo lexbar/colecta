@@ -38,7 +38,11 @@ class EventController extends Controller
         //Get ALL the items that are accessible
         $items = $em->getRepository('ColectaActivityBundle:Event')->findBy($findby, array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
-        $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
+        $query = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+        )->setFirstResult(0)->setMaxResults(50);
+        
+        $categories = $query->getResult();
         
         //Pagination
         if(count($items) > $this->ipp) 
@@ -133,7 +137,13 @@ class EventController extends Controller
             $items = array();
         }
         
-        return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items, 'date' => $myDate, 'ismonth' => $ismonth));
+        $query = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+        )->setFirstResult(0)->setMaxResults(50);
+        
+        $categories = $query->getResult();
+        
+        return $this->render('ColectaActivityBundle:Event:date.html.twig', array('items' => $items, 'categories' => $categories, 'date' => $myDate, 'ismonth' => $ismonth));
     }
     public function detailsFormAction()
     {
