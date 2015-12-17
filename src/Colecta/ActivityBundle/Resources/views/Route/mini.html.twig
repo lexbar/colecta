@@ -37,7 +37,7 @@
         <p class="properties"><strong>{{ properties | join(' | ') }}</strong></p>
     {% endif %}
     
-    <p><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img class="img-responsive" src="{{ path('ColectaRouteMap',{id : item.id}) }}"><img class="mapprofile" src="{{ path('ColectaRouteProfile', { 'id' : item.id }) }}"></a></p>
+    <p><a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><img class="img-responsive staticmap" src="{{ path('ColectaRouteMap',{id : item.id}) }}"><img class="mapprofile" src="{{ path('ColectaRouteProfile', { 'id' : item.id }) }}"></a></p>
     
     <div id="summary-{{ item.slug }}">
         {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}

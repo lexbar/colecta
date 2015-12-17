@@ -888,7 +888,11 @@ class FileController extends Controller
                 throw $this->createNotFoundException('El archivo no existe');
             }
             
-            $image = new \Imagick($item->getAbsolutePath());
+            $image = new \Imagick();
+            
+            $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+            
+            $image->readImageBlob( $filesystem->read( 'files/' . $item->getFilename() ) );
             autoRotateImage($image, $item->getAbsolutePath());
             
             $format = $image->getImageFormat();
@@ -908,7 +912,6 @@ class FileController extends Controller
             }
             else
             {
-                $image->setImageResolution(72,72); 
                 $image->cropThumbnailImage($width, $height);
                 $image->setImagePage(0, 0, 0, 0);
                 $image->normalizeImage();

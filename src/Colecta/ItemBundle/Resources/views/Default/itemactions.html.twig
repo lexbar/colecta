@@ -65,11 +65,11 @@
             {% endspaceless %}
         {% endif %}
         
-        {# COMMENTS 
-        {% if showCommentsLink is defined %}
+        {# COMMENTS #}
+        {% if item.comments | length > 0 %}
             {% set n_comments = item.comments | length %}
-            <a href="#" onClick="$('#itemcomments{{ item.id }}').show(); return false;"><i class="fa fa-comment"></i> {{ n_comments }} comentario{% if n_comments != 1 %}s{% endif %}</a>
-        {% endif %}#}
+            <a href="#comments-{{ item.slug }}" onClick="$('#comments-{{ item.slug }}').toggleClass('hidden'); var ta = $('#comments-{{ item.slug }} textarea'); ta.attr('rows',3); $('#commentItem3764').css('display',''); ta.css('max-height','500px'); ta.focus(); return false;"><i class="fa fa-comment"></i> Comentar</a>
+        {% endif %}
         
         {# FILE #}
         {#{% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}

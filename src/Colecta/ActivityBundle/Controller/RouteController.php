@@ -41,7 +41,7 @@ class RouteController extends Controller
         $items = $em->getRepository('ColectaActivityBundle:Route')->findBy($findby, array('date'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         $query = $em->createQuery(
-            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+            'SELECT c FROM ColectaItemBundle:Category c WHERE c.routes > 0 ORDER BY c.name ASC'
         )->setFirstResult(0)->setMaxResults(50);
         
         $categories = $query->getResult();

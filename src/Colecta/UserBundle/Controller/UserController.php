@@ -284,14 +284,18 @@ class UserController extends Controller
                 throw $this->createNotFoundException();
             }
             
-            $imagefile = __DIR__ . '/../../../../web' . $user->getUploadDir() . '/' .$user->getAvatar();
-            
-            if($user->getAvatar() == '' || !file_exists($imagefile))
+            if($user->getAvatar() == '')
             {
-                $imagefile = __DIR__ . '/../Resources/views/User/anonymous.png';
+                $imageblob = file_get_contents( __DIR__ . '/../Resources/views/User/anonymous.png' );
+            }
+            else 
+            {
+                $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+                $imageblob = $filesystem->read( 'avatars/' . $user->getAvatar() );
             }
             
-            $image = new \Imagick($imagefile);
+            $image = new \Imagick();
+            $image->readImageBlob($imageblob);
             
             $format = $image->getImageFormat();
             if ($format == 'GIF') 
@@ -320,7 +324,7 @@ class UserController extends Controller
             
             $response->setStatusCode(200);
             $response->setContent($image);
-            $response->headers->set('Content-Type', mime_content_type( $imagefile ));
+            $response->headers->set('Content-Type', mime_content_type ( $cachePath ));
             
             return $response;
         }
