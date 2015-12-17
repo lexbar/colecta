@@ -23,13 +23,13 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  */
 class NumberToLocalizedStringTransformer implements DataTransformerInterface
 {
-    const ROUND_FLOOR    = \NumberFormatter::ROUND_FLOOR;
-    const ROUND_DOWN     = \NumberFormatter::ROUND_DOWN;
+    const ROUND_FLOOR = \NumberFormatter::ROUND_FLOOR;
+    const ROUND_DOWN = \NumberFormatter::ROUND_DOWN;
     const ROUND_HALFDOWN = \NumberFormatter::ROUND_HALFDOWN;
     const ROUND_HALFEVEN = \NumberFormatter::ROUND_HALFEVEN;
-    const ROUND_HALFUP   = \NumberFormatter::ROUND_HALFUP;
-    const ROUND_UP       = \NumberFormatter::ROUND_UP;
-    const ROUND_CEILING  = \NumberFormatter::ROUND_CEILING;
+    const ROUND_HALFUP = \NumberFormatter::ROUND_HALFUP;
+    const ROUND_UP = \NumberFormatter::ROUND_UP;
+    const ROUND_CEILING = \NumberFormatter::ROUND_CEILING;
 
     protected $precision;
 
@@ -86,7 +86,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a localized number into an integer or float
+     * Transforms a localized number into an integer or float.
      *
      * @param string $value The localized value
      *
@@ -132,7 +132,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
             throw new TransformationFailedException('I don\'t have a clear idea what infinity looks like');
         }
 
-        if (function_exists('mb_detect_encoding') && false !== $encoding = mb_detect_encoding($value)) {
+        if (function_exists('mb_detect_encoding') && false !== $encoding = mb_detect_encoding($value, null, true)) {
             $length = mb_strlen($value, $encoding);
             $remainder = mb_substr($value, $position, $length, $encoding);
         } else {
@@ -158,7 +158,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * Returns a preconfigured \NumberFormatter instance
+     * Returns a preconfigured \NumberFormatter instance.
      *
      * @return \NumberFormatter
      */

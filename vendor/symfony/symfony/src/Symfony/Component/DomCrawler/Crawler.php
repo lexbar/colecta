@@ -17,35 +17,36 @@ use Symfony\Component\CssSelector\CssSelector;
  * Crawler eases navigation of a list of \DOMNode objects.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
 class Crawler extends \SplObjectStorage
 {
     /**
-     * @var string The current URI or the base href value
+     * @var string The current URI
      */
     protected $uri;
 
     /**
+     * @var string The base href value
+     */
+    private $baseHref;
+
+    /**
      * Constructor.
      *
-     * @param mixed  $node A Node to use as the base for the crawling
-     * @param string $uri  The current URI or the base href value
-     *
-     * @api
+     * @param mixed  $node       A Node to use as the base for the crawling
+     * @param string $currentUri The current URI
+     * @param string $baseHref   The base href value
      */
-    public function __construct($node = null, $uri = null)
+    public function __construct($node = null, $currentUri = null, $baseHref = null)
     {
-        $this->uri = $uri;
+        $this->uri = $currentUri;
+        $this->baseHref = $baseHref ?: $currentUri;
 
         $this->add($node);
     }
 
     /**
      * Removes all the nodes.
-     *
-     * @api
      */
     public function clear()
     {
@@ -61,8 +62,6 @@ class Crawler extends \SplObjectStorage
      * @param \DOMNodeList|\DOMNode|array|string|null $node A node
      *
      * @throws \InvalidArgumentException When node is not the expected type.
-     *
-     * @api
      */
     public function add($node)
     {
@@ -138,8 +137,6 @@ class Crawler extends \SplObjectStorage
      *
      * @param string $content The HTML content
      * @param string $charset The charset
-     *
-     * @api
      */
     public function addHtmlContent($content, $charset = 'UTF-8')
     {
@@ -149,19 +146,42 @@ class Crawler extends \SplObjectStorage
         $dom = new \DOMDocument('1.0', $charset);
         $dom->validateOnParse = true;
 
-        if (function_exists('mb_convert_encoding')) {
-            $hasError = false;
-            set_error_handler(function () use (&$hasError) {
-                $hasError = true;
-            });
-            $tmpContent = @mb_convert_encoding($content, 'HTML-ENTITIES', $charset);
+        set_error_handler(function () {throw new \Exception();});
 
-            restore_error_handler();
+        try {
+            // Convert charset to HTML-entities to work around bugs in DOMDocument::loadHTML()
 
-            if (!$hasError) {
-                $content = $tmpContent;
+            if (function_exists('mb_convert_encoding')) {
+                $content = mb_convert_encoding($content, 'HTML-ENTITIES', $charset);
+            } elseif (function_exists('iconv')) {
+                $content = preg_replace_callback(
+                    '/[\x80-\xFF]+/',
+                    function ($m) {
+                        $m = unpack('C*', $m[0]);
+                        $i = 1;
+                        $entities = '';
+
+                        while (isset($m[$i])) {
+                            if (0xF0 <= $m[$i]) {
+                                $c = (($m[$i++] - 0xF0) << 18) + (($m[$i++] - 0x80) << 12) + (($m[$i++] - 0x80) << 6) + $m[$i++] - 0x80;
+                            } elseif (0xE0 <= $m[$i]) {
+                                $c = (($m[$i++] - 0xE0) << 12) + (($m[$i++] - 0x80) << 6) + $m[$i++]  - 0x80;
+                            } else {
+                                $c = (($m[$i++] - 0xC0) << 6) + $m[$i++] - 0x80;
+                            }
+
+                            $entities .= '&#'.$c.';';
+                        }
+
+                        return $entities;
+                    },
+                    iconv($charset, 'UTF-8', $content)
+                );
             }
+        } catch (\Exception $e) {
         }
+
+        restore_error_handler();
 
         if ('' !== trim($content)) {
             @$dom->loadHTML($content);
@@ -176,13 +196,13 @@ class Crawler extends \SplObjectStorage
 
         $baseHref = current($base);
         if (count($base) && !empty($baseHref)) {
-            if ($this->uri) {
+            if ($this->baseHref) {
                 $linkNode = $dom->createElement('a');
                 $linkNode->setAttribute('href', $baseHref);
-                $link = new Link($linkNode, $this->uri);
-                $this->uri = $link->getUri();
+                $link = new Link($linkNode, $this->baseHref);
+                $this->baseHref = $link->getUri();
             } else {
-                $this->uri = $baseHref;
+                $this->baseHref = $baseHref;
             }
         }
     }
@@ -199,8 +219,6 @@ class Crawler extends \SplObjectStorage
      *
      * @param string $content The XML content
      * @param string $charset The charset
-     *
-     * @api
      */
     public function addXmlContent($content, $charset = 'UTF-8')
     {
@@ -225,8 +243,6 @@ class Crawler extends \SplObjectStorage
      * Adds a \DOMDocument to the list of nodes.
      *
      * @param \DOMDocument $dom A \DOMDocument instance
-     *
-     * @api
      */
     public function addDocument(\DOMDocument $dom)
     {
@@ -239,8 +255,6 @@ class Crawler extends \SplObjectStorage
      * Adds a \DOMNodeList to the list of nodes.
      *
      * @param \DOMNodeList $nodes A \DOMNodeList instance
-     *
-     * @api
      */
     public function addNodeList(\DOMNodeList $nodes)
     {
@@ -255,8 +269,6 @@ class Crawler extends \SplObjectStorage
      * Adds an array of \DOMNode instances to the list of nodes.
      *
      * @param \DOMNode[] $nodes An array of \DOMNode instances
-     *
-     * @api
      */
     public function addNodes(array $nodes)
     {
@@ -269,8 +281,6 @@ class Crawler extends \SplObjectStorage
      * Adds a \DOMNode instance to the list of nodes.
      *
      * @param \DOMNode $node A \DOMNode instance
-     *
-     * @api
      */
     public function addNode(\DOMNode $node)
     {
@@ -281,24 +291,33 @@ class Crawler extends \SplObjectStorage
         }
     }
 
+    // Serializing and unserializing a crawler creates DOM objects in a corrupted state. DOM elements are not properly serializable.
+    public function unserialize($serialized)
+    {
+        throw new \BadMethodCallException('A Crawler cannot be serialized.');
+    }
+
+    public function serialize()
+    {
+        throw new \BadMethodCallException('A Crawler cannot be serialized.');
+    }
+
     /**
      * Returns a node given its position in the node list.
      *
-     * @param int     $position The position
+     * @param int $position The position
      *
      * @return Crawler A new instance of the Crawler with the selected node, or an empty Crawler if it does not exist.
-     *
-     * @api
      */
     public function eq($position)
     {
         foreach ($this as $i => $node) {
             if ($i == $position) {
-                return new static($node, $this->uri);
+                return new static($node, $this->uri, $this->baseHref);
             }
         }
 
-        return new static(null, $this->uri);
+        return new static(null, $this->uri, $this->baseHref);
     }
 
     /**
@@ -316,14 +335,12 @@ class Crawler extends \SplObjectStorage
      * @param \Closure $closure An anonymous function
      *
      * @return array An array of values returned by the anonymous function
-     *
-     * @api
      */
     public function each(\Closure $closure)
     {
         $data = array();
         foreach ($this as $i => $node) {
-            $data[] = $closure(new static($node, $this->uri), $i);
+            $data[] = $closure(new static($node, $this->uri, $this->baseHref), $i);
         }
 
         return $data;
@@ -337,27 +354,23 @@ class Crawler extends \SplObjectStorage
      * @param \Closure $closure An anonymous function
      *
      * @return Crawler A Crawler instance with the selected nodes.
-     *
-     * @api
      */
     public function reduce(\Closure $closure)
     {
         $nodes = array();
         foreach ($this as $i => $node) {
-            if (false !== $closure(new static($node, $this->uri), $i)) {
+            if (false !== $closure(new static($node, $this->uri, $this->baseHref), $i)) {
                 $nodes[] = $node;
             }
         }
 
-        return new static($nodes, $this->uri);
+        return new static($nodes, $this->uri, $this->baseHref);
     }
 
     /**
-     * Returns the first node of the current selection
+     * Returns the first node of the current selection.
      *
      * @return Crawler A Crawler instance with the first selected node
-     *
-     * @api
      */
     public function first()
     {
@@ -365,11 +378,9 @@ class Crawler extends \SplObjectStorage
     }
 
     /**
-     * Returns the last node of the current selection
+     * Returns the last node of the current selection.
      *
      * @return Crawler A Crawler instance with the last selected node
-     *
-     * @api
      */
     public function last()
     {
@@ -377,13 +388,11 @@ class Crawler extends \SplObjectStorage
     }
 
     /**
-     * Returns the siblings nodes of the current selection
+     * Returns the siblings nodes of the current selection.
      *
      * @return Crawler A Crawler instance with the sibling nodes
      *
      * @throws \InvalidArgumentException When current node is empty
-     *
-     * @api
      */
     public function siblings()
     {
@@ -391,17 +400,15 @@ class Crawler extends \SplObjectStorage
             throw new \InvalidArgumentException('The current node list is empty.');
         }
 
-        return new static($this->sibling($this->getNode(0)->parentNode->firstChild), $this->uri);
+        return new static($this->sibling($this->getNode(0)->parentNode->firstChild), $this->uri, $this->baseHref);
     }
 
     /**
-     * Returns the next siblings nodes of the current selection
+     * Returns the next siblings nodes of the current selection.
      *
      * @return Crawler A Crawler instance with the next sibling nodes
      *
      * @throws \InvalidArgumentException When current node is empty
-     *
-     * @api
      */
     public function nextAll()
     {
@@ -409,17 +416,15 @@ class Crawler extends \SplObjectStorage
             throw new \InvalidArgumentException('The current node list is empty.');
         }
 
-        return new static($this->sibling($this->getNode(0)), $this->uri);
+        return new static($this->sibling($this->getNode(0)), $this->uri, $this->baseHref);
     }
 
     /**
-     * Returns the previous sibling nodes of the current selection
+     * Returns the previous sibling nodes of the current selection.
      *
      * @return Crawler A Crawler instance with the previous sibling nodes
      *
      * @throws \InvalidArgumentException
-     *
-     * @api
      */
     public function previousAll()
     {
@@ -427,17 +432,15 @@ class Crawler extends \SplObjectStorage
             throw new \InvalidArgumentException('The current node list is empty.');
         }
 
-        return new static($this->sibling($this->getNode(0), 'previousSibling'), $this->uri);
+        return new static($this->sibling($this->getNode(0), 'previousSibling'), $this->uri, $this->baseHref);
     }
 
     /**
-     * Returns the parents nodes of the current selection
+     * Returns the parents nodes of the current selection.
      *
      * @return Crawler A Crawler instance with the parents nodes of the current selection
      *
      * @throws \InvalidArgumentException When current node is empty
-     *
-     * @api
      */
     public function parents()
     {
@@ -454,17 +457,15 @@ class Crawler extends \SplObjectStorage
             }
         }
 
-        return new static($nodes, $this->uri);
+        return new static($nodes, $this->uri, $this->baseHref);
     }
 
     /**
-     * Returns the children nodes of the current selection
+     * Returns the children nodes of the current selection.
      *
      * @return Crawler A Crawler instance with the children nodes
      *
      * @throws \InvalidArgumentException When current node is empty
-     *
-     * @api
      */
     public function children()
     {
@@ -474,7 +475,7 @@ class Crawler extends \SplObjectStorage
 
         $node = $this->getNode(0)->firstChild;
 
-        return new static($node ? $this->sibling($node) : array(), $this->uri);
+        return new static($node ? $this->sibling($node) : array(), $this->uri, $this->baseHref);
     }
 
     /**
@@ -485,8 +486,6 @@ class Crawler extends \SplObjectStorage
      * @return string The attribute value
      *
      * @throws \InvalidArgumentException When current node is empty
-     *
-     * @api
      */
     public function attr($attribute)
     {
@@ -503,8 +502,6 @@ class Crawler extends \SplObjectStorage
      * @return string The node value
      *
      * @throws \InvalidArgumentException When current node is empty
-     *
-     * @api
      */
     public function text()
     {
@@ -530,7 +527,7 @@ class Crawler extends \SplObjectStorage
 
         $html = '';
         foreach ($this->getNode(0)->childNodes as $child) {
-            if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
+            if (PHP_VERSION_ID >= 50306) {
                 // node parameter was added to the saveHTML() method in PHP 5.3.6
                 // @see http://php.net/manual/en/domdocument.savehtml.php
                 $html .= $child->ownerDocument->saveHTML($child);
@@ -556,8 +553,6 @@ class Crawler extends \SplObjectStorage
      * @param array $attributes An array of attributes
      *
      * @return array An array of extracted values
-     *
-     * @api
      */
     public function extract($attributes)
     {
@@ -592,8 +587,6 @@ class Crawler extends \SplObjectStorage
      * @param string $xpath An XPath expression
      *
      * @return Crawler A new instance of Crawler with the filtered list of nodes
-     *
-     * @api
      */
     public function filterXPath($xpath)
     {
@@ -601,7 +594,7 @@ class Crawler extends \SplObjectStorage
 
         // If we dropped all expressions in the XPath while preparing it, there would be no match
         if ('' === $xpath) {
-            return new static(null, $this->uri);
+            return new static(null, $this->uri, $this->baseHref);
         }
 
         return $this->filterRelativeXPath($xpath);
@@ -617,8 +610,6 @@ class Crawler extends \SplObjectStorage
      * @return Crawler A new instance of Crawler with the filtered list of nodes
      *
      * @throws \RuntimeException if the CssSelector Component is not available
-     *
-     * @api
      */
     public function filter($selector)
     {
@@ -638,8 +629,6 @@ class Crawler extends \SplObjectStorage
      * @param string $value The link text
      *
      * @return Crawler A new instance of Crawler with the filtered list of nodes
-     *
-     * @api
      */
     public function selectLink($value)
     {
@@ -655,8 +644,6 @@ class Crawler extends \SplObjectStorage
      * @param string $value The button text
      *
      * @return Crawler A new instance of Crawler with the filtered list of nodes
-     *
-     * @api
      */
     public function selectButton($value)
     {
@@ -676,8 +663,6 @@ class Crawler extends \SplObjectStorage
      * @return Link A Link instance
      *
      * @throws \InvalidArgumentException If the current node list is empty
-     *
-     * @api
      */
     public function link($method = 'get')
     {
@@ -687,21 +672,19 @@ class Crawler extends \SplObjectStorage
 
         $node = $this->getNode(0);
 
-        return new Link($node, $this->uri, $method);
+        return new Link($node, $this->baseHref, $method);
     }
 
     /**
      * Returns an array of Link objects for the nodes in the list.
      *
      * @return Link[] An array of Link instances
-     *
-     * @api
      */
     public function links()
     {
         $links = array();
         foreach ($this as $node) {
-            $links[] = new Link($node, $this->uri, 'get');
+            $links[] = new Link($node, $this->baseHref, 'get');
         }
 
         return $links;
@@ -716,8 +699,6 @@ class Crawler extends \SplObjectStorage
      * @return Form A Form instance
      *
      * @throws \InvalidArgumentException If the current node list is empty
-     *
-     * @api
      */
     public function form(array $values = null, $method = null)
     {
@@ -725,7 +706,7 @@ class Crawler extends \SplObjectStorage
             throw new \InvalidArgumentException('The current node list is empty.');
         }
 
-        $form = new Form($this->getNode(0), $this->uri, $method);
+        $form = new Form($this->getNode(0), $this->uri, $method, $this->baseHref);
 
         if (null !== $values) {
             $form->setValues($values);
@@ -778,7 +759,7 @@ class Crawler extends \SplObjectStorage
             }
         }
 
-        return sprintf("concat(%s)", implode($parts, ', '));
+        return sprintf('concat(%s)', implode($parts, ', '));
     }
 
     /**
@@ -792,7 +773,7 @@ class Crawler extends \SplObjectStorage
      */
     private function filterRelativeXPath($xpath)
     {
-        $crawler = new static(null, $this->uri);
+        $crawler = new static(null, $this->uri, $this->baseHref);
 
         foreach ($this as $node) {
             $domxpath = new \DOMXPath($node->ownerDocument);
@@ -873,7 +854,7 @@ class Crawler extends \SplObjectStorage
     }
 
     /**
-     * @param int     $position
+     * @param int $position
      *
      * @return \DOMElement|null
      */

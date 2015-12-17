@@ -44,7 +44,7 @@ class FormConfigBuilder implements FormConfigBuilderInterface
         'PUT',
         'POST',
         'DELETE',
-        'PATCH'
+        'PATCH',
     );
 
     /**
@@ -193,7 +193,7 @@ class FormConfigBuilder implements FormConfigBuilderInterface
         self::validateName($name);
 
         if (null !== $dataClass && !class_exists($dataClass)) {
-            throw new InvalidArgumentException(sprintf('The data class "%s" is not a valid class.', $dataClass));
+            throw new InvalidArgumentException(sprintf('Class "%s" not found. Is the "data_class" form option set correctly?', $dataClass));
         }
 
         $this->name = (string) $name;
@@ -855,6 +855,10 @@ class FormConfigBuilder implements FormConfigBuilderInterface
      */
     public function setAutoInitialize($initialize)
     {
+        if ($this->locked) {
+            throw new BadMethodCallException('FormConfigBuilder methods cannot be accessed anymore once the builder is turned into a FormConfigInterface instance.');
+        }
+
         $this->autoInitialize = (bool) $initialize;
 
         return $this;

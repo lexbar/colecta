@@ -29,18 +29,10 @@ class IniFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (!class_exists('Symfony\Component\Config\Loader\Loader')) {
-            $this->markTestSkipped('The "Config" component is not available');
-        }
-
         $this->container = new ContainerBuilder();
-        $this->loader    = new IniFileLoader($this->container, new FileLocator(self::$fixturesPath.'/ini'));
+        $this->loader = new IniFileLoader($this->container, new FileLocator(self::$fixturesPath.'/ini'));
     }
 
-    /**
-     * @covers Symfony\Component\DependencyInjection\Loader\IniFileLoader::__construct
-     * @covers Symfony\Component\DependencyInjection\Loader\IniFileLoader::load
-     */
     public function testIniFileCanBeLoaded()
     {
         $this->loader->load('parameters.ini');
@@ -48,9 +40,6 @@ class IniFileLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Symfony\Component\DependencyInjection\Loader\IniFileLoader::__construct
-     * @covers Symfony\Component\DependencyInjection\Loader\IniFileLoader::load
-     *
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The file "foo.ini" does not exist (in:
      */
@@ -60,9 +49,6 @@ class IniFileLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Symfony\Component\DependencyInjection\Loader\IniFileLoader::__construct
-     * @covers Symfony\Component\DependencyInjection\Loader\IniFileLoader::load
-     *
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The "nonvalid.ini" file is not valid.
      */
@@ -71,9 +57,6 @@ class IniFileLoaderTest extends \PHPUnit_Framework_TestCase
         @$this->loader->load('nonvalid.ini');
     }
 
-    /**
-     * @covers Symfony\Component\DependencyInjection\Loader\IniFileLoader::supports
-     */
     public function testSupports()
     {
         $loader = new IniFileLoader(new ContainerBuilder(), new FileLocator());

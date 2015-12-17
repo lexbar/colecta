@@ -20,26 +20,11 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager
 
 class BasicAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\HttpKernel\HttpKernel')) {
-            $this->markTestSkipped('The "HttpKernel" component is not available');
-        }
-    }
-
     public function testHandleWithValidUsernameAndPasswordServerParameters()
     {
         $request = new Request(array(), array(), array(), array(), array(), array(
             'PHP_AUTH_USER' => 'TheUsername',
-            'PHP_AUTH_PW'   => 'ThePassword'
+            'PHP_AUTH_PW' => 'ThePassword',
         ));
 
         $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
@@ -85,7 +70,7 @@ class BasicAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(array(), array(), array(), array(), array(), array(
             'PHP_AUTH_USER' => 'TheUsername',
-            'PHP_AUTH_PW'   => 'ThePassword'
+            'PHP_AUTH_PW' => 'ThePassword',
         ));
 
         $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
@@ -214,7 +199,7 @@ class BasicAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(array(), array(), array(), array(), array(), array(
             'PHP_AUTH_USER' => 'TheUsername',
-            'PHP_AUTH_PW'   => 'ThePassword'
+            'PHP_AUTH_PW' => 'ThePassword',
         ));
 
         $token = new PreAuthenticatedToken('TheUser', 'TheCredentials', 'TheProviderKey', array('ROLE_FOO'));

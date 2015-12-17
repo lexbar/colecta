@@ -11,18 +11,12 @@
 
 namespace Symfony\Bridge\Propel1\Tests\Fixtures;
 
-use PropelPDO;
-
 class TranslatableItemI18n implements \Persistent
 {
     private $id;
-
     private $locale;
-
     private $value;
-
     private $value2;
-
     private $item;
 
     public function __construct($id = null, $locale = null, $value = null)
@@ -84,17 +78,16 @@ class TranslatableItemI18n implements \Persistent
     {
     }
 
-    public function delete(PropelPDO $con = null)
+    public function delete(\PropelPDO $con = null)
     {
     }
 
-    public function save(PropelPDO $con = null)
+    public function save(\PropelPDO $con = null)
     {
     }
 
     public function setLocale($locale)
     {
-
         $this->locale = $locale;
     }
 
@@ -115,7 +108,6 @@ class TranslatableItemI18n implements \Persistent
 
     public function setValue($value)
     {
-
         $this->value = $value;
     }
 
@@ -126,7 +118,6 @@ class TranslatableItemI18n implements \Persistent
 
     public function setValue2($value2)
     {
-
         $this->value2 = $value2;
     }
 

@@ -18,21 +18,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AbstractPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\HttpKernel\HttpKernel')) {
-            $this->markTestSkipped('The "HttpKernel" component is not available');
-        }
-    }
-
     public function testHandleWithValidValues()
     {
         $userCredentials = array('TheUser', 'TheCredentials');
@@ -64,7 +49,7 @@ class AbstractPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
         $listener = $this->getMockForAbstractClass('Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener', array(
             $context,
             $authenticationManager,
-            'TheProviderKey'
+            'TheProviderKey',
         ));
         $listener
             ->expects($this->once())
@@ -110,7 +95,7 @@ class AbstractPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
         $listener = $this->getMockForAbstractClass('Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener', array(
             $context,
             $authenticationManager,
-            'TheProviderKey'
+            'TheProviderKey',
         ));
         $listener
             ->expects($this->once())
@@ -158,7 +143,7 @@ class AbstractPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
         $listener = $this->getMockForAbstractClass('Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener', array(
             $context,
             $authenticationManager,
-            'TheProviderKey'
+            'TheProviderKey',
         ));
         $listener
             ->expects($this->once())
@@ -199,7 +184,7 @@ class AbstractPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
         $listener = $this->getMockForAbstractClass('Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener', array(
             $context,
             $authenticationManager,
-            'TheProviderKey'
+            'TheProviderKey',
         ));
         $listener
             ->expects($this->once())
@@ -248,7 +233,7 @@ class AbstractPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
         $listener = $this->getMockForAbstractClass('Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener', array(
             $context,
             $authenticationManager,
-            'TheProviderKey'
+            'TheProviderKey',
         ));
         $listener
             ->expects($this->once())

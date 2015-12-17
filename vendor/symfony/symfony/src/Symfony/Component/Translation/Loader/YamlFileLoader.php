@@ -21,17 +21,13 @@ use Symfony\Component\Yaml\Exception\ParseException;
  * YamlFileLoader loads translations from Yaml files.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
-class YamlFileLoader extends ArrayLoader implements LoaderInterface
+class YamlFileLoader extends ArrayLoader
 {
     private $yamlParser;
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function load($resource, $locale, $domain = 'messages')
     {
@@ -41,6 +37,10 @@ class YamlFileLoader extends ArrayLoader implements LoaderInterface
 
         if (!file_exists($resource)) {
             throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
+        }
+
+        if (!class_exists('Symfony\Component\Yaml\Parser')) {
+            throw new \LogicException('Loading translations from the YAML format requires the Symfony Yaml component.');
         }
 
         if (null === $this->yamlParser) {
@@ -64,7 +64,10 @@ class YamlFileLoader extends ArrayLoader implements LoaderInterface
         }
 
         $catalogue = parent::load($messages, $locale, $domain);
-        $catalogue->addResource(new FileResource($resource));
+
+        if (class_exists('Symfony\Component\Config\Resource\FileResource')) {
+            $catalogue->addResource(new FileResource($resource));
+        }
 
         return $catalogue;
     }

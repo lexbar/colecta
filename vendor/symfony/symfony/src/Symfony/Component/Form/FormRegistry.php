@@ -23,7 +23,7 @@ use Symfony\Component\Form\Exception\InvalidArgumentException;
 class FormRegistry implements FormRegistryInterface
 {
     /**
-     * Extensions
+     * Extensions.
      *
      * @var FormExtensionInterface[] An array of FormExtensionInterface
      */
@@ -69,10 +69,6 @@ class FormRegistry implements FormRegistryInterface
      */
     public function getType($name)
     {
-        if (!is_string($name)) {
-            throw new UnexpectedTypeException($name, 'string');
-        }
-
         if (!isset($this->types[$name])) {
             $type = null;
 

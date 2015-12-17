@@ -13,7 +13,6 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Luhn;
 use Symfony\Component\Validator\Constraints\LuhnValidator;
-use Symfony\Component\Validator\Validation;
 
 class LuhnValidatorTest extends AbstractConstraintValidatorTest
 {
@@ -81,9 +80,9 @@ class LuhnValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($number, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$number.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$number.'"')
+            ->assertRaised();
     }
 
     public function getInvalidNumbers()

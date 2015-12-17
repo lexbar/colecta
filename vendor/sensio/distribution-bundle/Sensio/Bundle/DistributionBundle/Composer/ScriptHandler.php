@@ -12,6 +12,7 @@
 namespace Sensio\Bundle\DistributionBundle\Composer;
 
 use Symfony\Component\ClassLoader\ClassCollectionLoader;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Composer\Script\CommandEvent;
@@ -41,6 +42,29 @@ class ScriptHandler
         }
 
         static::executeBuildBootstrap($appDir, $options['process-timeout']);
+    }
+
+    /**
+     * Sets up deployment target specific features.
+     * Could be custom web server configs, boot command files etc.
+     *
+     * @param $event CommandEvent An instance
+     */
+    public static function prepareDeploymentTarget(CommandEvent $event)
+    {
+        self::prepareDeploymentTargetHeroku($event);
+    }
+
+    protected static function prepareDeploymentTargetHeroku(CommandEvent $event)
+    {
+        $options = self::getOptions($event);
+        if (($stack = getenv('STACK')) && ($stack == 'cedar' || $stack == 'cedar-14')) {
+            $fs = new Filesystem();
+            if (!$fs->exists('Procfile')) {
+                $event->getIO()->write('Heroku deploy detected; creating default Procfile for "web" dyno');
+                $fs->dumpFile('Procfile', sprintf('web: $(composer config bin-dir)/heroku-php-apache2 %s/', $options['symfony-web-dir']));
+            }
+        }
     }
 
     /**
@@ -166,14 +190,20 @@ class ScriptHandler
 
         ClassCollectionLoader::load($classes, dirname($file), basename($file, '.php.cache'), false, false, '.php.cache');
 
-        file_put_contents($file, sprintf("<?php
+        file_put_contents($file, sprintf(<<<'EOF'
+<?php
 
-namespace { \$loader = require_once __DIR__.'/autoload.php'; }
+namespace {
+    error_reporting(error_reporting() & ~E_USER_DEPRECATED);
+    $loader = require_once __DIR__.'/autoload.php';
+}
 
 %s
 
-namespace { return \$loader; }
-            ", substr(file_get_contents($file), 5)));
+namespace { return $loader; }
+
+EOF
+            , substr(file_get_contents($file), 5)));
     }
 
     protected static function executeCommand(CommandEvent $event, $appDir, $cmd, $timeout = 300)
@@ -209,7 +239,7 @@ namespace { return \$loader; }
         $options = array_merge(array(
             'symfony-app-dir' => 'app',
             'symfony-web-dir' => 'web',
-            'symfony-assets-install' => 'hard'
+            'symfony-assets-install' => 'hard',
         ), $event->getComposer()->getPackage()->getExtra());
 
         $options['symfony-assets-install'] = getenv('SYMFONY_ASSETS_INSTALL') ?: $options['symfony-assets-install'];
@@ -221,7 +251,7 @@ namespace { return \$loader; }
 
     protected static function getPhp()
     {
-        $phpFinder = new PhpExecutableFinder;
+        $phpFinder = new PhpExecutableFinder();
         if (!$phpPath = $phpFinder->find()) {
             throw new \RuntimeException('The php executable could not be found, add it to your PATH environment variable and try again');
         }

@@ -33,21 +33,21 @@ class LintCommand extends ContainerAwareCommand
 The <info>%command.name%</info> command lints a template and outputs to stdout
 the first encountered syntax error.
 
-<info>php %command.full_name% filename</info>
+  <info>php %command.full_name% filename</info>
 
 The command gets the contents of <comment>filename</comment> and validates its syntax.
 
-<info>php %command.full_name% dirname</info>
+  <info>php %command.full_name% dirname</info>
 
 The command finds all twig templates in <comment>dirname</comment> and validates the syntax
 of each Twig template.
 
-<info>php %command.full_name% @AcmeMyBundle</info>
+  <info>php %command.full_name% @AcmeMyBundle</info>
 
 The command finds all twig templates in the <comment>AcmeMyBundle</comment> bundle and validates
 the syntax of each Twig template.
 
-<info>cat filename | php %command.full_name%</info>
+  <info>cat filename | php %command.full_name%</info>
 
 The command gets the template contents from stdin and validates its syntax.
 EOF
@@ -63,7 +63,7 @@ EOF
 
         if (!$filename) {
             if (0 !== ftell(STDIN)) {
-                throw new \RuntimeException("Please provide a filename or pipe template content to stdin.");
+                throw new \RuntimeException('Please provide a filename or pipe template content to stdin.');
             }
 
             while (!feof(STDIN)) {
@@ -77,7 +77,6 @@ EOF
             throw new \RuntimeException(sprintf('File or directory "%s" is not readable', $filename));
         }
 
-        $files = array();
         if (is_file($filename)) {
             $files = array($filename);
         } elseif (is_dir($filename)) {
@@ -111,18 +110,18 @@ EOF
 
     protected function renderException(OutputInterface $output, $template, \Twig_Error $exception, $file = null)
     {
-        $line =  $exception->getTemplateLine();
+        $line = $exception->getTemplateLine();
         $lines = $this->getContext($template, $line);
 
         if ($file) {
-            $output->writeln(sprintf("<error>KO</error> in %s (line %s)", $file, $line));
+            $output->writeln(sprintf('<error>KO</error> in %s (line %s)', $file, $line));
         } else {
-            $output->writeln(sprintf("<error>KO</error> (line %s)", $line));
+            $output->writeln(sprintf('<error>KO</error> (line %s)', $line));
         }
 
         foreach ($lines as $no => $code) {
             $output->writeln(sprintf(
-                "%s %-6s %s",
+                '%s %-6s %s',
                 $no == $line ? '<error>>></error>' : '  ',
                 $no,
                 $code
@@ -143,7 +142,7 @@ EOF
         $result = array();
         while ($position < $max) {
             $result[$position + 1] = $lines[$position];
-            $position++;
+            ++$position;
         }
 
         return $result;

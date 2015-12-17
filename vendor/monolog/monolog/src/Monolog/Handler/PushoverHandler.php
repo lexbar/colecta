@@ -30,6 +30,28 @@ class PushoverHandler extends SocketHandler
 
     private $highPriorityLevel;
     private $emergencyLevel;
+    private $useFormattedMessage = false;
+
+    /**
+     * All parameters that can be sent to Pushover
+     * @see https://pushover.net/api
+     * @var array
+     */
+    private $parameterNames = array(
+        'token' => true,
+        'user' => true,
+        'message' => true,
+        'device' => true,
+        'title' => true,
+        'url' => true,
+        'url_title' => true,
+        'priority' => true,
+        'timestamp' => true,
+        'sound' => true,
+        'retry' => true,
+        'expire' => true,
+        'callback' => true,
+    );
 
     /**
      * Sounds the api supports by default
@@ -65,8 +87,8 @@ class PushoverHandler extends SocketHandler
         $this->token = $token;
         $this->users = (array) $users;
         $this->title = $title ?: gethostname();
-        $this->highPriorityLevel = $highPriorityLevel;
-        $this->emergencyLevel = $emergencyLevel;
+        $this->highPriorityLevel = Logger::toMonologLevel($highPriorityLevel);
+        $this->emergencyLevel = Logger::toMonologLevel($emergencyLevel);
         $this->retry = $retry;
         $this->expire = $expire;
     }
@@ -82,7 +104,10 @@ class PushoverHandler extends SocketHandler
     {
         // Pushover has a limit of 512 characters on title and message combined.
         $maxMessageLength = 512 - strlen($this->title);
-        $message = substr($record['message'], 0, $maxMessageLength);
+
+        $message = ($this->useFormattedMessage) ? $record['formatted'] : $record['message'];
+        $message = substr($message, 0, $maxMessageLength);
+
         $timestamp = $record['datetime']->getTimestamp();
 
         $dataArray = array(
@@ -93,18 +118,24 @@ class PushoverHandler extends SocketHandler
             'timestamp' => $timestamp
         );
 
-        if ($record['level'] >= $this->emergencyLevel) {
+        if (isset($record['level']) && $record['level'] >= $this->emergencyLevel) {
             $dataArray['priority'] = 2;
             $dataArray['retry'] = $this->retry;
             $dataArray['expire'] = $this->expire;
-        } elseif ($record['level'] >= $this->highPriorityLevel) {
+        } elseif (isset($record['level']) && $record['level'] >= $this->highPriorityLevel) {
             $dataArray['priority'] = 1;
         }
 
-        if (isset($record['context']['sound']) && in_array($record['context']['sound'], $this->sounds)) {
-            $dataArray['sound'] = $record['context']['sound'];
-        } elseif (isset($record['extra']['sound']) && in_array($record['extra']['sound'], $this->sounds)) {
-            $dataArray['sound'] = $record['extra']['sound'];
+        // First determine the available parameters
+        $context = array_intersect_key($record['context'], $this->parameterNames);
+        $extra = array_intersect_key($record['extra'], $this->parameterNames);
+
+        // Least important info should be merged with subsequent info
+        $dataArray = array_merge($extra, $context, $dataArray);
+
+        // Only pass sounds that are supported by the API
+        if (isset($dataArray['sound']) && !in_array($dataArray['sound'], $this->sounds)) {
+            unset($dataArray['sound']);
         }
 
         return http_build_query($dataArray);
@@ -121,7 +152,7 @@ class PushoverHandler extends SocketHandler
         return $header;
     }
 
-    public function write(array $record)
+    protected function write(array $record)
     {
         foreach ($this->users as $user) {
             $this->user = $user;
@@ -141,5 +172,14 @@ class PushoverHandler extends SocketHandler
     public function setEmergencyLevel($value)
     {
         $this->emergencyLevel = $value;
+    }
+
+    /**
+     * Use the formatted message?
+     * @param boolean $value
+     */
+    public function useFormattedMessage($value)
+    {
+        $this->useFormattedMessage = (boolean) $value;
     }
 }

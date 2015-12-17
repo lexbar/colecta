@@ -3,7 +3,7 @@
     "type": "library",
     "description": "A PHP replacement layer for the C intl extension that includes additional data from the ICU library.",
     "keywords": ["intl", "icu", "internationalization", "localization", "i18n", "l10n"],
-    "homepage": "http://symfony.com",
+    "homepage": "https://symfony.com",
     "license": "MIT",
     "authors": [
         {
@@ -20,12 +20,11 @@
         },
         {
             "name": "Symfony Community",
-            "homepage": "http://symfony.com/contributors"
+            "homepage": "https://symfony.com/contributors"
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "symfony/icu": "~1.0-RC"
+        "php": ">=5.3.3"
     },
     "require-dev": {
         "symfony/filesystem": ">=2.1"
@@ -36,7 +35,10 @@
     "autoload": {
         "psr-0": { "Symfony\\Component\\Intl\\": "" },
         "classmap": [ "Symfony/Component/Intl/Resources/stubs" ],
-        "files": [ "Symfony/Component/Intl/Resources/stubs/functions.php" ]
+        "files": [ "Symfony/Component/Intl/Resources/stubs/functions.php" ],
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "target-dir": "Symfony/Component/Intl",
     "minimum-stability": "dev",

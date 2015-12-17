@@ -64,7 +64,7 @@ class AclVoter implements VoterInterface
 
             if (null === $object) {
                 if (null !== $this->logger) {
-                    $this->logger->debug(sprintf('Object identity unavailable. Voting to %s', $this->allowIfObjectIdentityUnavailable? 'grant access' : 'abstain'));
+                    $this->logger->debug(sprintf('Object identity unavailable. Voting to %s', $this->allowIfObjectIdentityUnavailable ? 'grant access' : 'abstain'));
                 }
 
                 return $this->allowIfObjectIdentityUnavailable ? self::ACCESS_GRANTED : self::ACCESS_ABSTAIN;
@@ -79,7 +79,7 @@ class AclVoter implements VoterInterface
                 $oid = $object;
             } elseif (null === $oid = $this->objectIdentityRetrievalStrategy->getObjectIdentity($object)) {
                 if (null !== $this->logger) {
-                    $this->logger->debug(sprintf('Object identity unavailable. Voting to %s', $this->allowIfObjectIdentityUnavailable? 'grant access' : 'abstain'));
+                    $this->logger->debug(sprintf('Object identity unavailable. Voting to %s', $this->allowIfObjectIdentityUnavailable ? 'grant access' : 'abstain'));
                 }
 
                 return $this->allowIfObjectIdentityUnavailable ? self::ACCESS_GRANTED : self::ACCESS_ABSTAIN;
@@ -113,13 +113,13 @@ class AclVoter implements VoterInterface
                 }
 
                 return self::ACCESS_DENIED;
-            } catch (AclNotFoundException $noAcl) {
+            } catch (AclNotFoundException $e) {
                 if (null !== $this->logger) {
                     $this->logger->debug('No ACL found for the object identity. Voting to deny access.');
                 }
 
                 return self::ACCESS_DENIED;
-            } catch (NoAceFoundException $noAce) {
+            } catch (NoAceFoundException $e) {
                 if (null !== $this->logger) {
                     $this->logger->debug('ACL found, no ACE applicable. Voting to deny access.');
                 }

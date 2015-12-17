@@ -69,10 +69,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('test')->end()
                 ->scalarNode('default_locale')->defaultValue('en')->end()
                 ->arrayNode('trusted_hosts')
-                    ->beforeNormalization()
-                        ->ifTrue(function ($v) { return is_string($v); })
-                        ->then(function ($v) { return array($v); })
-                    ->end()
+                    ->beforeNormalization()->ifString()->then(function ($v) { return array($v); })->end()
                     ->prototype('scalar')->end()
                 ->end()
             ->end()
@@ -229,11 +226,11 @@ class Configuration implements ConfigurationInterface
         $organizeUrls = function ($urls) {
             $urls += array(
                 'http' => array(),
-                'ssl'  => array(),
+                'ssl' => array(),
             );
 
             foreach ($urls as $i => $url) {
-                if (is_integer($i)) {
+                if (is_int($i)) {
                     if (0 === strpos($url, 'https://') || 0 === strpos($url, '//')) {
                         $urls['http'][] = $urls['ssl'][] = $url;
                     } else {
@@ -364,8 +361,13 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('translator')
                     ->info('translator configuration')
                     ->canBeEnabled()
+                    ->fixXmlConfig('fallback')
                     ->children()
-                        ->scalarNode('fallback')->defaultValue('en')->end()
+                        ->arrayNode('fallbacks')
+                            ->beforeNormalization()->ifString()->then(function ($v) { return array($v); })->end()
+                            ->prototype('scalar')->end()
+                            ->defaultValue(array('en'))
+                        ->end()
                     ->end()
                 ->end()
             ->end()

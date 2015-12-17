@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Symfony\Bridge\Propel1\Tests\Form\ChoiceList;
 
 use Symfony\Bridge\Propel1\Form\ChoiceList\ModelChoiceList;
@@ -20,23 +29,6 @@ class CompatModelChoiceListTest extends AbstractChoiceListTest
     protected $item2;
     protected $item3;
     protected $item4;
-
-    public static function setUpBeforeClass()
-    {
-        if (!class_exists('\Propel')) {
-            self::markTestSkipped('Propel is not available.');
-        }
-
-        if (!class_exists('Symfony\Component\Form\Form')) {
-            self::markTestSkipped('The "Form" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\PropertyAccess\PropertyAccessor')) {
-            self::markTestSkipped('The "PropertyAccessor" component is not available');
-        }
-
-        parent::setUpBeforeClass();
-    }
 
     public function testGetChoicesForValues()
     {

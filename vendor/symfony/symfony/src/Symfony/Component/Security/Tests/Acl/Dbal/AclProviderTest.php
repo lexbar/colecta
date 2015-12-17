@@ -17,6 +17,9 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Dbal\Schema;
 use Doctrine\DBAL\DriverManager;
 
+/**
+ * @requires extension pdo_sqlite
+ */
 class AclProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected $con;
@@ -45,11 +48,11 @@ class AclProviderTest extends \PHPUnit_Framework_TestCase
             $this->getProvider()->findAcls($oids);
 
             $this->fail('Provider did not throw an expected exception.');
-        } catch (\Exception $ex) {
-            $this->assertInstanceOf('Symfony\Component\Security\Acl\Exception\AclNotFoundException', $ex);
-            $this->assertInstanceOf('Symfony\Component\Security\Acl\Exception\NotAllAclsFoundException', $ex);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Symfony\Component\Security\Acl\Exception\AclNotFoundException', $e);
+            $this->assertInstanceOf('Symfony\Component\Security\Acl\Exception\NotAllAclsFoundException', $e);
 
-            $partialResult = $ex->getPartialResult();
+            $partialResult = $e->getPartialResult();
             $this->assertTrue($partialResult->contains($oids[0]));
             $this->assertFalse($partialResult->contains($oids[1]));
         }
@@ -130,7 +133,7 @@ class AclProviderTest extends \PHPUnit_Framework_TestCase
         $i = 0;
         foreach ($aces as $index => $ace) {
             $this->assertEquals($i, $index);
-            $i++;
+            ++$i;
         }
 
         $sid = $aces[0]->getSecurityIdentity();
@@ -141,13 +144,6 @@ class AclProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (!class_exists('Doctrine\DBAL\DriverManager')) {
-            $this->markTestSkipped('The Doctrine2 DBAL is required for this test');
-        }
-        if (!class_exists('PDO') || !in_array('sqlite', \PDO::getAvailableDrivers())) {
-            self::markTestSkipped('This test requires SQLite support in your environment');
-        }
-
         $this->con = DriverManager::getConnection(array(
             'driver' => 'pdo_sqlite',
             'memory' => true,

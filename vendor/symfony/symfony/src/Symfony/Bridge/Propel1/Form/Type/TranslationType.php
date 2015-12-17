@@ -17,15 +17,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Bridge\Propel1\Form\EventListener\TranslationFormListener;
 
 /**
- * Translation type class
+ * Translation type class.
  *
  * @author Patrick Kaufmann
  */
 class TranslationType extends AbstractType
 {
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventSubscriber(
@@ -48,7 +48,7 @@ class TranslationType extends AbstractType
     {
         $resolver->setRequired(array(
             'data_class',
-            'columns'
+            'columns',
         ));
     }
 }

@@ -11,18 +11,10 @@
 
 namespace Symfony\Component\Security\Tests\Http\Logout;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler;
 
 class DefaultLogoutSuccessHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-    }
-
     public function testLogout()
     {
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');

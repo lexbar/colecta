@@ -16,16 +16,9 @@ use Symfony\Component\Form\Extension\Core\EventListener\TrimListener;
 
 class TrimListenerTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-    }
-
     public function testTrim()
     {
-        $data = " Foo! ";
+        $data = ' Foo! ';
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $event = new FormEvent($form, $data);
 
@@ -49,13 +42,10 @@ class TrimListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider spaceProvider
+     * @requires extension mbstring
      */
     public function testTrimUtf8Separators($hex)
     {
-        if (!function_exists('mb_convert_encoding')) {
-            $this->markTestSkipped('The "mb_convert_encoding" function is not available');
-        }
-
         // Convert hexadecimal representation into binary
         // H: hex string, high nibble first (UCS-2BE)
         // *: repeat until end of string
@@ -65,7 +55,7 @@ class TrimListenerTest extends \PHPUnit_Framework_TestCase
         $symbol = mb_convert_encoding($binary, 'UTF-8', 'UCS-2BE');
         $symbol = $symbol."ab\ncd".$symbol;
 
-        $form  = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $event = new FormEvent($form, $symbol);
 
         $filter = new TrimListener();

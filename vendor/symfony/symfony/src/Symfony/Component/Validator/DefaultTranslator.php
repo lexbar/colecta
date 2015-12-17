@@ -88,7 +88,7 @@ class DefaultTranslator implements TranslatorInterface
      * have the same expressiveness. While Translator supports intervals in
      * message translations, which are needed for languages other than English,
      * this translator does not. You should use Translator or a custom
-     * implementation of {@link TranslatorInterface} if you need this or similar
+     * implementation of {@link \Symfony\Component\Translation\TranslatorInterface} if you need this or similar
      * functionality.
      *
      * Example usage:
@@ -117,11 +117,11 @@ class DefaultTranslator implements TranslatorInterface
      *
      *     // -> These are 3 donkeys.
      *
-     * @param string  $id         The message id
-     * @param int     $number     The number to use to find the index of the message
-     * @param array   $parameters An array of parameters for the message
-     * @param string  $domain     Ignored
-     * @param string  $locale     Ignored
+     * @param string $id         The message id
+     * @param int    $number     The number to use to find the index of the message
+     * @param array  $parameters An array of parameters for the message
+     * @param string $domain     Ignored
+     * @param string $locale     Ignored
      *
      * @return string The translated string
      *

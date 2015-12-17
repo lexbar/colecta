@@ -99,7 +99,7 @@ class DialogHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testAskHiddenResponse()
     {
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if ('\\' === DIRECTORY_SEPARATOR) {
             $this->markTestSkipped('This test is not supported on Windows');
         }
 
@@ -133,7 +133,7 @@ class DialogHelperTest extends \PHPUnit_Framework_TestCase
         $helperSet = new HelperSet(array(new FormatterHelper()));
         $dialog->setHelperSet($helperSet);
 
-        $question ='What color was the white horse of Henry IV?';
+        $question = 'What color was the white horse of Henry IV?';
         $error = 'This is not a color!';
         $validator = function ($color) use ($error) {
             if (!in_array($color, array('white', 'black'))) {
@@ -159,7 +159,7 @@ class DialogHelperTest extends \PHPUnit_Framework_TestCase
     protected function getInputStream($input)
     {
         $stream = fopen('php://memory', 'r+', false);
-        fputs($stream, $input);
+        fwrite($stream, $input);
         rewind($stream);
 
         return $stream;

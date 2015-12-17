@@ -14,8 +14,6 @@ namespace Symfony\Component\Validator\Tests\Mapping;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Validator\Exception\GroupDefinitionException;
-use Symfony\Component\Validator\Tests\Fixtures\Entity;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintA;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintB;
 use Symfony\Component\Validator\Tests\Fixtures\PropertyConstraint;
@@ -115,7 +113,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
         $this->metadata->addPropertyConstraint('firstName', new ConstraintA());
 
         $this->assertTrue($this->metadata->hasMemberMetadatas('firstName'));
-        $this->assertFalse($this->metadata->hasMemberMetadatas('non_existant_field'));
+        $this->assertFalse($this->metadata->hasMemberMetadatas('non_existent_field'));
     }
 
     public function testMergeConstraintsKeepsPrivateMembersSeparate()
@@ -224,7 +222,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * https://github.com/symfony/symfony/issues/11604
+     * https://github.com/symfony/symfony/issues/11604.
      */
     public function testGetMemberMetadatasReturnsEmptyArrayWithoutConfiguredMetadata()
     {
@@ -232,7 +230,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * https://github.com/symfony/symfony/issues/11604
+     * https://github.com/symfony/symfony/issues/11604.
      */
     public function testGetPropertyMetadataReturnsEmptyArrayWithoutConfiguredMetadata()
     {

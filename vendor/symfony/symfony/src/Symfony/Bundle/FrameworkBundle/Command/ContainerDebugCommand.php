@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 
 /**
- * A console command for retrieving information about services
+ * A console command for retrieving information about services.
  *
  * @author Ryan Weaver <ryan@thatsquality.com>
  */
@@ -46,7 +46,7 @@ class ContainerDebugCommand extends ContainerAwareCommand
                 new InputOption('tag', null, InputOption::VALUE_REQUIRED, 'Show all services with a specific tag'),
                 new InputOption('tags', null, InputOption::VALUE_NONE, 'Displays tagged services for an application'),
                 new InputOption('parameter', null, InputOption::VALUE_REQUIRED, 'Displays a specific parameter for an application'),
-                new InputOption('parameters', null, InputOption::VALUE_NONE, 'Displays parameters for an application')
+                new InputOption('parameters', null, InputOption::VALUE_NONE, 'Displays parameters for an application'),
             ))
             ->setDescription('Displays current services for an application')
             ->setHelp(<<<EOF
@@ -59,7 +59,7 @@ To get specific information about a service, specify its name:
   <info>php %command.full_name% validator</info>
 
 By default, private services are hidden. You can display all services by
-using the --show-private flag:
+using the <info>--show-private</info> flag:
 
   <info>php %command.full_name% --show-private</info>
 
@@ -67,15 +67,15 @@ Use the --tags option to display tagged <comment>public</comment> services group
 
   <info>php %command.full_name% --tags</info>
 
-Find all services with a specific tag by specifying the tag name with the --tag option:
+Find all services with a specific tag by specifying the tag name with the <info>--tag</info> option:
 
   <info>php %command.full_name% --tag=form.type</info>
 
-Use the --parameters option to display all parameters:
+Use the <info>--parameters</info> option to display all parameters:
 
   <info>php %command.full_name% --parameters</info>
 
-Display a specific parameter by specifying his name with the --parameter option:
+Display a specific parameter by specifying his name with the <info>--parameter</info> option:
 
   <info>php %command.full_name% --parameter=kernel.debug</info>
 EOF
@@ -143,7 +143,7 @@ EOF
         $optionsCount = 0;
         foreach ($options as $option) {
             if ($input->getOption($option)) {
-                $optionsCount++;
+                ++$optionsCount;
             }
         }
 
@@ -207,12 +207,12 @@ EOF
             }
         }
         $format = '%-'.$maxName.'s ';
-        $format .= implode("", array_map(function ($length) { return "%-{$length}s "; }, $maxTags));
+        $format .= implode('', array_map(function ($length) { return "%-{$length}s "; }, $maxTags));
         $format .= '%-'.$maxScope.'s %s';
 
         // the title field needs extra space to make up for comment tags
         $format1 = '%-'.($maxName + 19).'s ';
-        $format1 .= implode("", array_map(function ($length) { return '%-'.($length + 19).'s '; }, $maxTags));
+        $format1 .= implode('', array_map(function ($length) { return '%-'.($length + 19).'s '; }, $maxTags));
         $format1 .= '%-'.($maxScope + 19).'s %s';
 
         $tags = array();
@@ -230,7 +230,7 @@ EOF
                     foreach ($definition->getTag($showTagAttributes) as $key => $tag) {
                         $tagValues = array();
                         foreach (array_keys($maxTags) as $tagName) {
-                            $tagValues[] = isset($tag[$tagName]) ? $tag[$tagName] : "";
+                            $tagValues[] = isset($tag[$tagName]) ? $tag[$tagName] : '';
                         }
                         if (0 === $key) {
                             $lines[] = $this->buildArgumentsArray($serviceId, $definition->getScope(), $definition->getClass(), $tagValues);
@@ -247,11 +247,11 @@ EOF
                 }
             } elseif ($definition instanceof Alias) {
                 $alias = $definition;
-                $output->writeln(vsprintf($format, $this->buildArgumentsArray($serviceId, 'n/a', sprintf('<comment>alias for</comment> <info>%s</info>', (string) $alias), count($maxTags) ? array_fill(0, count($maxTags), "") : array())));
+                $output->writeln(vsprintf($format, $this->buildArgumentsArray($serviceId, 'n/a', sprintf('<comment>alias for</comment> <info>%s</info>', (string) $alias), count($maxTags) ? array_fill(0, count($maxTags), '') : array())));
             } else {
                 // we have no information (happens with "service_container")
                 $service = $definition;
-                $output->writeln(vsprintf($format, $this->buildArgumentsArray($serviceId, '', get_class($service), count($maxTags) ? array_fill(0, count($maxTags), "") : array())));
+                $output->writeln(vsprintf($format, $this->buildArgumentsArray($serviceId, '', get_class($service), count($maxTags) ? array_fill(0, count($maxTags), '') : array())));
             }
         }
     }
@@ -269,7 +269,7 @@ EOF
     }
 
     /**
-     * Renders detailed service information about one service
+     * Renders detailed service information about one service.
      */
     protected function outputService(OutputInterface $output, $serviceId)
     {
@@ -281,7 +281,7 @@ EOF
 
         if ($definition instanceof Definition) {
             $output->writeln(sprintf('<comment>Service Id</comment>       %s', $serviceId));
-            $output->writeln(sprintf('<comment>Class</comment>            %s', $definition->getClass() ?: "-"));
+            $output->writeln(sprintf('<comment>Class</comment>            %s', $definition->getClass() ?: '-'));
 
             $tags = $definition->getTags();
             if (count($tags)) {
@@ -305,7 +305,7 @@ EOF
             $synthetic = $definition->isSynthetic() ? 'yes' : 'no';
             $output->writeln(sprintf('<comment>Synthetic</comment>        %s', $synthetic));
 
-            $file = $definition->getFile() ? $definition->getFile() : '-';
+            $file = $definition->getFile() ?: '-';
             $output->writeln(sprintf('<comment>Required File</comment>    %s', $file));
         } elseif ($definition instanceof Alias) {
             $alias = $definition;
@@ -409,7 +409,7 @@ EOF
     }
 
     /**
-     * Renders list of tagged services grouped by tag
+     * Renders list of tagged services grouped by tag.
      *
      * @param OutputInterface $output
      * @param bool            $showPrivate

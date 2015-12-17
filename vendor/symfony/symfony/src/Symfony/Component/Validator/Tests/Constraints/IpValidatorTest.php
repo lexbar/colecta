@@ -13,7 +13,6 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Ip;
 use Symfony\Component\Validator\Constraints\IpValidator;
-use Symfony\Component\Validator\Validation;
 
 class IpValidatorTest extends AbstractConstraintValidatorTest
 {
@@ -146,9 +145,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidIpsV4()
@@ -178,9 +177,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidPrivateIpsV4()
@@ -204,9 +203,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidReservedIpsV4()
@@ -230,9 +229,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidPublicIpsV4()
@@ -252,9 +251,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidIpsV6()
@@ -288,9 +287,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidPrivateIpsV6()
@@ -314,9 +313,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidReservedIpsV6()
@@ -339,9 +338,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidPublicIpsV6()
@@ -361,9 +360,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidIpsAll()
@@ -383,9 +382,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidPrivateIpsAll()
@@ -405,9 +404,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidReservedIpsAll()
@@ -427,9 +426,9 @@ class IpValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($ip, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$ip.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$ip.'"')
+            ->assertRaised();
     }
 
     public function getInvalidPublicIpsAll()

@@ -15,7 +15,7 @@ use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\Exception\DummyException;
 
 /**
- * ErrorHandlerTest
+ * ErrorHandlerTest.
  *
  * @author Robert Schönthal <seroscho@googlemail.com>
  */
@@ -26,26 +26,23 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $errorReporting;
 
-    /**
-     * @var string Display errors setting before running tests.
-     */
-    protected $displayErrors;
-
-    public function setUp()
+    protected function setUp()
     {
         $this->errorReporting = error_reporting(E_ALL | E_STRICT);
-        $this->displayErrors = ini_get('display_errors');
-        ini_set('display_errors', '1');
+        $this->iniSet('display_errors', '1');
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
-        ini_set('display_errors', $this->displayErrors);
         error_reporting($this->errorReporting);
     }
 
     public function testCompileTimeError()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('HHVM does not trigger strict notices.');
+        }
+
         // the ContextErrorException must not be loaded to test the workaround
         // for https://bugs.php.net/bug.php?id=65322.
         if (class_exists('Symfony\Component\Debug\Exception\ContextErrorException', false)) {
@@ -66,9 +63,14 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $that = $this;
         $exceptionCheck = function ($exception) use ($that) {
             $that->assertInstanceOf('Symfony\Component\Debug\Exception\ContextErrorException', $exception);
-            $that->assertEquals(E_STRICT, $exception->getSeverity());
             $that->assertEquals(2, $exception->getLine());
-            $that->assertStringStartsWith('Runtime Notice: Declaration of _CompileTimeError::foo() should be compatible with', $exception->getMessage());
+            if (PHP_VERSION_ID < 70000) {
+                $that->assertEquals(E_STRICT, $exception->getSeverity());
+                $that->assertStringStartsWith('Runtime Notice: Declaration', $exception->getMessage());
+            } else {
+                $that->assertEquals(E_WARNING, $exception->getSeverity());
+                $that->assertStringStartsWith('Warning: Declaration', $exception->getMessage());
+            }
             $that->assertArrayHasKey('bar', $exception->getContext());
         };
 
@@ -109,7 +111,7 @@ PHP
             $that->assertEquals(E_NOTICE, $exception->getSeverity());
             $that->assertEquals(__LINE__ + 40, $exception->getLine());
             $that->assertEquals(__FILE__, $exception->getFile());
-            $that->assertRegexp('/^Notice: Undefined variable: (foo|bar)/', $exception->getMessage());
+            $that->assertRegExp('/^Notice: Undefined variable: (foo|bar)/', $exception->getMessage());
             $that->assertArrayHasKey('foobar', $exception->getContext());
 
             $trace = $exception->getTrace();
@@ -119,11 +121,11 @@ PHP
             $that->assertEquals('->', $trace[0]['type']);
 
             $that->assertEquals(__FILE__, $trace[1]['file']);
-            $that->assertEquals(__CLASS__, $trace[1]['class']);
+            $that->assertEquals('Symfony\Component\Debug\Tests\ErrorHandlerTest', $trace[1]['class']);
             $that->assertEquals('triggerNotice', $trace[1]['function']);
             $that->assertEquals('::', $trace[1]['type']);
 
-            $that->assertEquals(__CLASS__, $trace[2]['class']);
+            $that->assertEquals('Symfony\Component\Debug\Tests\ErrorHandlerTest', $trace[2]['class']);
             $that->assertEquals('testNotice', $trace[2]['function']);
             $that->assertEquals('->', $trace[2]['type']);
         };

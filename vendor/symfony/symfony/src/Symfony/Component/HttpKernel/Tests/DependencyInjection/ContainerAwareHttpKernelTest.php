@@ -19,21 +19,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ContainerAwareHttpKernelTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\DependencyInjection\Container')) {
-            $this->markTestSkipped('The "DependencyInjection" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-    }
-
     /**
      * @dataProvider getProviderTypes
      */
@@ -152,10 +137,10 @@ class ContainerAwareHttpKernelTest extends \PHPUnit_Framework_TestCase
         try {
             $kernel->handle($request, $type);
             $this->fail('->handle() suppresses the controller exception');
-        } catch (\PHPUnit_Framework_Exception $exception) {
-            throw $exception;
-        } catch (\Exception $actual) {
-            $this->assertSame($expected, $actual, '->handle() throws the controller exception');
+        } catch (\PHPUnit_Framework_Exception $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            $this->assertSame($expected, $e, '->handle() throws the controller exception');
         }
     }
 

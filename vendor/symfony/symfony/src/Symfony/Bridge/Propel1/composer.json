@@ -3,7 +3,7 @@
     "type": "symfony-bridge",
     "description": "Symfony Propel1 Bridge",
     "keywords": [],
-    "homepage": "http://symfony.com",
+    "homepage": "https://symfony.com",
     "license": "MIT",
     "authors": [
         {
@@ -12,21 +12,25 @@
         },
         {
             "name": "Symfony Community",
-            "homepage": "http://symfony.com/contributors"
+            "homepage": "https://symfony.com/contributors"
         }
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/http-foundation": "~2.0",
-        "symfony/http-kernel": "~2.0",
-        "symfony/form": "~2.2",
-        "propel/propel1": "1.6.*"
+        "symfony/http-foundation": "~2.0,>=2.0.5",
+        "symfony/http-kernel": "~2.0,>=2.0.5",
+        "symfony/form": "~2.3,>=2.3.8",
+        "symfony/property-access": "~2.3",
+        "propel/propel1": "~1.6,>=1.6.5"
     },
     "require-dev": {
         "symfony/stopwatch": "~2.2"
     },
     "autoload": {
-        "psr-0": { "Symfony\\Bridge\\Propel1\\": "" }
+        "psr-0": { "Symfony\\Bridge\\Propel1\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "target-dir": "Symfony/Bridge/Propel1",
     "minimum-stability": "dev",

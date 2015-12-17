@@ -47,8 +47,8 @@ class PropelLogger
      */
     public function __construct(LoggerInterface $logger = null, Stopwatch $stopwatch = null)
     {
-        $this->logger    = $logger;
-        $this->queries   = array();
+        $this->logger = $logger;
+        $this->queries = array();
         $this->stopwatch = $stopwatch;
         $this->isPrepared = false;
     }
@@ -138,7 +138,7 @@ class PropelLogger
             $trace = debug_backtrace();
             $method = $trace[2]['args'][2];
 
-            $watch = 'Propel Query '.(count($this->queries)+1);
+            $watch = 'Propel Query '.(count($this->queries) + 1);
             if ('PropelPDO::prepare' === $method) {
                 $this->isPrepared = true;
                 $this->stopwatch->start($watch, 'propel');

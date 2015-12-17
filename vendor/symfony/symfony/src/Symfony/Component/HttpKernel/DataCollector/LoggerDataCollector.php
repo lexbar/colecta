@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\HttpKernel\DataCollector;
 
+use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
@@ -39,9 +39,9 @@ class LoggerDataCollector extends DataCollector
     {
         if (null !== $this->logger) {
             $this->data = array(
-                'error_count'       => $this->logger->countErrors(),
-                'logs'              => $this->sanitizeLogs($this->logger->getLogs()),
-                'deprecation_count' => $this->computeDeprecationCount()
+                'error_count' => $this->logger->countErrors(),
+                'logs' => $this->sanitizeLogs($this->logger->getLogs()),
+                'deprecation_count' => $this->computeDeprecationCount(),
             );
         }
     }
@@ -116,7 +116,7 @@ class LoggerDataCollector extends DataCollector
         $count = 0;
         foreach ($this->logger->getLogs() as $log) {
             if (isset($log['context']['type']) && ErrorHandler::TYPE_DEPRECATION === $log['context']['type']) {
-                $count++;
+                ++$count;
             }
         }
 

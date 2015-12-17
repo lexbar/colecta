@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Symfony Validator Component",
     "keywords": [],
-    "homepage": "http://symfony.com",
+    "homepage": "https://symfony.com",
     "license": "MIT",
     "authors": [
         {
@@ -12,17 +12,18 @@
         },
         {
             "name": "Symfony Community",
-            "homepage": "http://symfony.com/contributors"
+            "homepage": "https://symfony.com/contributors"
         }
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/translation": "~2.0"
+        "symfony/translation": "~2.0,>=2.0.5"
     },
     "require-dev": {
+        "doctrine/common": "~2.3",
         "symfony/http-foundation": "~2.1",
         "symfony/intl": "~2.3",
-        "symfony/yaml": "~2.0",
+        "symfony/yaml": "~2.0,>=2.0.5",
         "symfony/config": "~2.2"
     },
     "suggest": {
@@ -33,7 +34,10 @@
         "symfony/config": ""
     },
     "autoload": {
-        "psr-0": { "Symfony\\Component\\Validator\\": "" }
+        "psr-0": { "Symfony\\Component\\Validator\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "target-dir": "Symfony/Component/Validator",
     "minimum-stability": "dev",

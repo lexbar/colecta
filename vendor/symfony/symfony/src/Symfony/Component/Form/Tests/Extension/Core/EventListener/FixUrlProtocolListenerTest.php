@@ -16,16 +16,9 @@ use Symfony\Component\Form\Extension\Core\EventListener\FixUrlProtocolListener;
 
 class FixUrlProtocolListenerTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-    }
-
     public function testFixHttpUrl()
     {
-        $data = "www.symfony.com";
+        $data = 'www.symfony.com';
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $event = new FormEvent($form, $data);
 
@@ -37,7 +30,7 @@ class FixUrlProtocolListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSkipKnownUrl()
     {
-        $data = "http://www.symfony.com";
+        $data = 'http://www.symfony.com';
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $event = new FormEvent($form, $data);
 
@@ -49,7 +42,7 @@ class FixUrlProtocolListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSkipOtherProtocol()
     {
-        $data = "ftp://www.symfony.com";
+        $data = 'ftp://www.symfony.com';
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $event = new FormEvent($form, $data);
 

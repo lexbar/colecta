@@ -26,13 +26,13 @@ use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
 {
     const EQUAL = 'equal';
-    const ALL   = 'all';
-    const ANY   = 'any';
+    const ALL = 'all';
+    const ANY = 'any';
 
     private $auditLogger;
 
     /**
-     * Sets the audit logger
+     * Sets the audit logger.
      *
      * @param AuditLoggerInterface $auditLogger
      */
@@ -55,21 +55,21 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                 }
 
                 return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
-            } catch (NoAceFoundException $noObjectAce) {
+            } catch (NoAceFoundException $e) {
                 $aces = $acl->getClassAces();
 
                 if (!$aces) {
-                    throw $noObjectAce;
+                    throw $e;
                 }
 
                 return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
             }
-        } catch (NoAceFoundException $noClassAce) {
+        } catch (NoAceFoundException $e) {
             if ($acl->isEntriesInheriting() && null !== $parentAcl = $acl->getParentAcl()) {
                 return $parentAcl->isGranted($masks, $sids, $administrativeMode);
             }
 
-            throw $noClassAce;
+            throw $e;
         }
     }
 
@@ -86,20 +86,20 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                 }
 
                 return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
-            } catch (NoAceFoundException $noObjectAces) {
+            } catch (NoAceFoundException $e) {
                 $aces = $acl->getClassFieldAces($field);
                 if (!$aces) {
-                    throw $noObjectAces;
+                    throw $e;
                 }
 
                 return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
             }
-        } catch (NoAceFoundException $noClassAces) {
+        } catch (NoAceFoundException $e) {
             if ($acl->isEntriesInheriting() && null !== $parentAcl = $acl->getParentAcl()) {
                 return $parentAcl->isFieldGranted($field, $masks, $sids, $administrativeMode);
             }
 
-            throw $noClassAces;
+            throw $e;
         }
     }
 
@@ -130,13 +130,13 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
      * @param SecurityIdentityInterface[] $sids               An array of SecurityIdentityInterface implementations
      * @param bool                        $administrativeMode True turns off audit logging
      *
-     * @return bool    true, or false; either granting, or denying access respectively.
+     * @return bool true, or false; either granting, or denying access respectively.
      *
      * @throws NoAceFoundException
      */
     private function hasSufficientPermissions(AclInterface $acl, array $aces, array $masks, array $sids, $administrativeMode)
     {
-        $firstRejectedAce  = null;
+        $firstRejectedAce = null;
 
         foreach ($masks as $requiredMask) {
             foreach ($sids as $sid) {

@@ -64,6 +64,26 @@ namespace Symfony\Component\Security\Tests\Acl\Domain
             $this->assertEquals('Symfony\Component\Security\Tests\Acl\Domain\TestDomainObject', $id->getType());
         }
 
+        public function testFromDomainObjectWithoutInterfaceEnforcesStringIdentifier()
+        {
+            $domainObject = new TestDomainObject();
+            $domainObject->id = 1;
+            $id = ObjectIdentity::fromDomainObject($domainObject);
+
+            $this->assertSame('1', $id->getIdentifier());
+            $this->assertEquals('Symfony\Component\Security\Tests\Acl\Domain\TestDomainObject', $id->getType());
+        }
+
+        public function testFromDomainObjectWithoutInterfaceAllowsZeroAsIdentifier()
+        {
+            $domainObject = new TestDomainObject();
+            $domainObject->id = '0';
+            $id = ObjectIdentity::fromDomainObject($domainObject);
+
+            $this->assertSame('0', $id->getIdentifier());
+            $this->assertEquals('Symfony\Component\Security\Tests\Acl\Domain\TestDomainObject', $id->getType());
+        }
+
         /**
          * @dataProvider getCompareData
          */
@@ -85,17 +105,12 @@ namespace Symfony\Component\Security\Tests\Acl\Domain
                 array(new ObjectIdentity('1', 'bla'), new ObjectIdentity('1', 'blub'), false),
             );
         }
-
-        protected function setUp()
-        {
-            if (!class_exists('Doctrine\DBAL\DriverManager')) {
-                $this->markTestSkipped('The Doctrine2 DBAL is required for this test');
-            }
-        }
     }
 
     class TestDomainObject
     {
+        public $id = 'getId()';
+
         public function getObjectIdentifier()
         {
             return 'getObjectIdentifier()';
@@ -103,7 +118,7 @@ namespace Symfony\Component\Security\Tests\Acl\Domain
 
         public function getId()
         {
-            return 'getId()';
+            return $this->id;
         }
     }
 }

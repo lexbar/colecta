@@ -1,30 +1,59 @@
 language: php
 
-php:
-    - 5.3.3
-    - 5.3
-    - 5.4
-    - 5.5
-    - 5.6
-    - hhvm-nightly
+sudo: false
+
+addons:
+    apt_packages:
+        - parallel
+        - language-pack-fr-base
+
+cache:
+    directories:
+        - .phpunit
 
 matrix:
-    allow_failures:
-        - php: hhvm-nightly
+    include:
+        - php: hhvm
+        - php: 5.3
+        - php: 5.4
+        - php: 5.5
+        - php: 5.6
+          env: deps=high
+        - php: 7
+          env: deps=low
+    fast_finish: true
 
 services: mongodb
 
-before_script:
-    - travis_retry sudo apt-get install parallel
-    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then echo "" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini; fi;'
-    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
-    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ] && [ $(php -r "echo PHP_MINOR_VERSION;") -le 4 ]; then echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
-    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
-    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
-    - sudo locale-gen fr_FR.UTF-8 && sudo update-locale
-    - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
-#    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "5.3.3" ]; then phpunit --self-update; fi;'
+env:
+    global:
+        - deps=no
+        - SYMFONY_DEPRECATIONS_HELPER=weak
+
+before_install:
+    - if [[ "$deps" = "no" ]] && [[ "$TRAVIS_PHP_VERSION" =~ 5.[45] ]] && [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then export deps=skip; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi;
+    - echo "memory_limit = -1" >> $INI_FILE
+    - echo "session.gc_probability = 0" >> $INI_FILE
+    - if [ "$deps" != "skip" ]; then composer self-update; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then phpenv config-rm xdebug.ini; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then echo "extension = mongo.so" >> $INI_FILE; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then echo "extension = memcache.so" >> $INI_FILE; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then (echo yes | pecl install -f apcu-4.0.7 && echo "apc.enable_cli = 1" >> $INI_FILE) || echo "Let's continue without apcu extension"; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then pecl install -f memcached-2.1.0 || echo "Let's continue without memcached extension"; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then php -i; else hhvm --php -r 'print_r($_SERVER);print_r(ini_get_all());'; fi;
+    - if [ "$deps" != "skip" ]; then ./phpunit install; fi;
+    - export PHPUNIT="$(readlink -f ./phpunit)"
+
+install:
+    - if [ "$TRAVIS_BRANCH" = "master" ]; then export COMPOSER_ROOT_VERSION=dev-master; else export COMPOSER_ROOT_VERSION="$TRAVIS_BRANCH".x-dev; fi;
+    - if [ "$deps" = "no" ]; then composer --prefer-source install; fi;
+    - if [ "$deps" != "skip" ]; then COMPONENTS=$(find src/Symfony -mindepth 3 -type f -name phpunit.xml.dist -printf '%h\n'); fi;
+    - if [ "$deps" != "skip" ] && [ "$deps" != "no" ]; then php .travis.php $TRAVIS_COMMIT_RANGE $TRAVIS_BRANCH $COMPONENTS; fi;
 
 script:
-    - ls -d src/Symfony/*/* | parallel --gnu --keep-order 'echo "Running {} tests"; phpunit --exclude-group tty,benchmark {};'
-    - echo "Running tests requiring tty"; phpunit --group tty
+    - if [ "$deps" = "no" ]; then echo "$COMPONENTS" | parallel --gnu '$PHPUNIT --exclude-group tty,benchmark,intl-data {}'; fi;
+    - if [ "$deps" = "no" ]; then echo -e "\\nRunning tests requiring tty"; $PHPUNIT --group tty; fi;
+    - if [ "$deps" = "high" ]; then echo "$COMPONENTS" | parallel --gnu -j10% 'cd {}; composer --prefer-source update; $PHPUNIT --exclude-group tty,benchmark,intl-data'; fi;
+    - if [ "$deps" = "low" ]; then echo "$COMPONENTS" | parallel --gnu -j10% 'cd {}; composer --prefer-source --prefer-lowest --prefer-stable update; $PHPUNIT --exclude-group tty,benchmark,intl-data'; fi;
+    - if [ "$deps" = "skip" ]; then echo 'This matrix line is skipped for pull requests.'; fi;

@@ -13,7 +13,6 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Issn;
 use Symfony\Component\Validator\Constraints\IssnValidator;
-use Symfony\Component\Validator\Validation;
 
 /**
  * @see https://en.wikipedia.org/wiki/Issn
@@ -79,7 +78,7 @@ class IssnValidatorTest extends AbstractConstraintValidatorTest
         return array(
             array(0),
             array('1539'),
-            array('2156-537A')
+            array('2156-537A'),
         );
     }
 
@@ -92,7 +91,6 @@ class IssnValidatorTest extends AbstractConstraintValidatorTest
             array('1684-537X'),
             array('1996-0795'),
         );
-
     }
 
     public function getInvalidIssn()
@@ -142,9 +140,9 @@ class IssnValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($issn, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$issn.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$issn.'"')
+            ->assertRaised();
     }
 
     /**
@@ -159,9 +157,9 @@ class IssnValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($issn, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$issn.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$issn.'"')
+            ->assertRaised();
     }
 
     /**
@@ -187,9 +185,9 @@ class IssnValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($issn, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$issn.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$issn.'"')
+            ->assertRaised();
     }
 
     /**
@@ -203,9 +201,9 @@ class IssnValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($issn, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$issn.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$issn.'"')
+            ->assertRaised();
     }
 
     /**
@@ -219,8 +217,8 @@ class IssnValidatorTest extends AbstractConstraintValidatorTest
 
         $this->validator->validate($issn, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$issn.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$issn.'"')
+            ->assertRaised();
     }
 }

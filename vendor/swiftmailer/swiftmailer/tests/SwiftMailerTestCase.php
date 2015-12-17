@@ -2,9 +2,8 @@
 
 /**
  * A base test case with some custom expectations.
- * @package     Swift
- * @subpackage  Tests
- * @author      Rouven Weßling
+ *
+ * @author Rouven Weßling
  */
 class SwiftMailerTestCase extends \PHPUnit_Framework_TestCase
 {

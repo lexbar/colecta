@@ -18,8 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Tests\Templating\Helper\Fixtures\StubTemplate
 use Symfony\Bundle\FrameworkBundle\Tests\Templating\Helper\Fixtures\StubTranslator;
 use Symfony\Component\Templating\PhpEngine;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
-
-// should probably be moved to the Translation component
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\TranslatorHelper;
 
 class FormHelperDivLayoutTest extends AbstractDivLayoutTest
@@ -28,19 +26,6 @@ class FormHelperDivLayoutTest extends AbstractDivLayoutTest
      * @var PhpEngine
      */
     protected $engine;
-
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Bundle\FrameworkBundle\Templating\Helper\TranslatorHelper')) {
-            $this->markTestSkipped('The "FrameworkBundle" is not available');
-        }
-
-        if (!class_exists('Symfony\Component\Templating\PhpEngine')) {
-            $this->markTestSkipped('The "Templating" component is not available');
-        }
-
-        parent::setUp();
-    }
 
     protected function getExtensions()
     {
@@ -79,7 +64,11 @@ class FormHelperDivLayoutTest extends AbstractDivLayoutTest
 
     protected function renderEnctype(FormView $view)
     {
-        return (string) $this->engine->get('form')->enctype($view);
+        if (!method_exists($form = $this->engine->get('form'), 'enctype')) {
+            $this->markTestSkipped(sprintf('Deprecated method %s->enctype() is not implemented.', get_class($form)));
+        }
+
+        return (string) $form->enctype($view);
     }
 
     protected function renderLabel(FormView $view, $label = null, array $vars = array())
@@ -125,14 +114,14 @@ class FormHelperDivLayoutTest extends AbstractDivLayoutTest
     public static function themeBlockInheritanceProvider()
     {
         return array(
-            array(array('TestBundle:Parent'))
+            array(array('TestBundle:Parent')),
         );
     }
 
     public static function themeInheritanceProvider()
     {
         return array(
-            array(array('TestBundle:Parent'), array('TestBundle:Child'))
+            array(array('TestBundle:Parent'), array('TestBundle:Child')),
         );
     }
 }

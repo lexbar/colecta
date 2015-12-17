@@ -16,13 +16,6 @@ use Symfony\Component\Config\Resource\FileResource;
 
 class XliffFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\Config\Loader\Loader')) {
-            $this->markTestSkipped('The "Config" component is not available');
-        }
-    }
-
     public function testLoad()
     {
         $loader = new XliffFileLoader();
@@ -31,6 +24,26 @@ class XliffFileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('en', $catalogue->getLocale());
         $this->assertEquals(array(new FileResource($resource)), $catalogue->getResources());
+        $this->assertSame(array(), libxml_get_errors());
+        $this->assertContainsOnly('string', $catalogue->all('domain1'));
+    }
+
+    public function testLoadWithInternalErrorsEnabled()
+    {
+        $internalErrors = libxml_use_internal_errors(true);
+
+        $this->assertSame(array(), libxml_get_errors());
+
+        $loader = new XliffFileLoader();
+        $resource = __DIR__.'/../fixtures/resources.xlf';
+        $catalogue = $loader->load($resource, 'en', 'domain1');
+
+        $this->assertEquals('en', $catalogue->getLocale());
+        $this->assertEquals(array(new FileResource($resource)), $catalogue->getResources());
+        $this->assertSame(array(), libxml_get_errors());
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
     }
 
     public function testLoadWithResname()
@@ -46,16 +59,14 @@ class XliffFileLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new XliffFileLoader();
         $catalogue = $loader->load(__DIR__.'/../fixtures/resources.xlf', 'en', 'domain1');
 
-        $this->assertEquals(array('foo' => 'bar', 'key' => '', 'test' => 'with'), $catalogue->all('domain1'));
-        $this->assertFalse($catalogue->has('extra', 'domain1'));
+        $this->assertEquals(array('foo' => 'bar', 'extra' => 'extra', 'key' => '', 'test' => 'with'), $catalogue->all('domain1'));
     }
 
+    /**
+     * @requires extension mbstring
+     */
     public function testEncoding()
     {
-        if (!function_exists('iconv') && !function_exists('mb_convert_encoding')) {
-            $this->markTestSkipped('The iconv and mbstring extensions are not available.');
-        }
-
         $loader = new XliffFileLoader();
         $catalogue = $loader->load(__DIR__.'/../fixtures/encoding.xlf', 'en', 'domain1');
 

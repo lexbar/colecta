@@ -22,7 +22,7 @@ namespace Symfony\Component\Config\Util;
 class XmlUtils
 {
     /**
-     * This class should not be instantiated
+     * This class should not be instantiated.
      */
     private function __construct()
     {
@@ -31,7 +31,7 @@ class XmlUtils
     /**
      * Loads an XML file.
      *
-     * @param string $file                      An XML file path
+     * @param string          $file             An XML file path
      * @param string|callable $schemaOrCallable An XSD schema file path or callable
      *
      * @return \DOMDocument
@@ -95,9 +95,10 @@ class XmlUtils
                 }
                 throw new \InvalidArgumentException(implode("\n", $messages), 0, $e);
             }
-
-            libxml_use_internal_errors($internalErrors);
         }
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
 
         return $dom;
     }
@@ -190,17 +191,19 @@ class XmlUtils
                 return;
             case ctype_digit($value):
                 $raw = $value;
-                $cast = intval($value);
+                $cast = (int) $value;
 
-                return '0' == $value[0] ? octdec($value) : (((string) $raw == (string) $cast) ? $cast : $raw);
+                return '0' == $value[0] ? octdec($value) : (((string) $raw === (string) $cast) ? $cast : $raw);
             case 'true' === $lowercaseValue:
                 return true;
             case 'false' === $lowercaseValue:
                 return false;
             case is_numeric($value):
-                return '0x' == $value[0].$value[1] ? hexdec($value) : floatval($value);
+                return '0x' === $value[0].$value[1] ? hexdec($value) : (float) $value;
+            case preg_match('/^0x[0-9a-f]++$/i', $value):
+                return hexdec($value);
             case preg_match('/^(-|\+)?[0-9]+(\.[0-9]+)?$/', $value):
-                return floatval($value);
+                return (float) $value;
             default:
                 return $value;
         }
@@ -214,7 +217,7 @@ class XmlUtils
                 LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
                 $error->code,
                 trim($error->message),
-                $error->file ? $error->file : 'n/a',
+                $error->file ?: 'n/a',
                 $error->line,
                 $error->column
             );

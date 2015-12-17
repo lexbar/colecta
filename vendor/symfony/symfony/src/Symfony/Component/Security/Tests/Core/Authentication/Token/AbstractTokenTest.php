@@ -52,7 +52,9 @@ class ConcreteToken extends AbstractToken
         parent::unserialize($parentStr);
     }
 
-    public function getCredentials() {}
+    public function getCredentials()
+    {
+    }
 }
 
 class AbstractTokenTest extends \PHPUnit_Framework_TestCase
@@ -83,10 +85,6 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
         $token->eraseCredentials();
     }
 
-    /**
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::serialize
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::unserialize
-     */
     public function testSerialize()
     {
         $token = $this->getToken(array('ROLE_FOO'));
@@ -112,9 +110,6 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::__construct
-     */
     public function testConstructor()
     {
         $token = $this->getToken(array('ROLE_FOO'));
@@ -127,10 +122,6 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(new Role('ROLE_FOO'), new Role('ROLE_BAR')), $token->getRoles());
     }
 
-    /**
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::isAuthenticated
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::setAuthenticated
-     */
     public function testAuthenticatedFlag()
     {
         $token = $this->getToken();
@@ -143,13 +134,6 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($token->isAuthenticated());
     }
 
-    /**
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::getAttributes
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::setAttributes
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::hasAttribute
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::getAttribute
-     * @covers Symfony\Component\Security\Core\Authentication\Token\AbstractToken::setAttribute
-     */
     public function testAttributes()
     {
         $attributes = array('foo' => 'bar');
@@ -227,13 +211,13 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
                 'foo', $user,
             ),
             array(
-                'foo', $advancedUser
+                'foo', $advancedUser,
             ),
             array(
-                $user, 'foo'
+                $user, 'foo',
             ),
             array(
-                $advancedUser, 'foo'
+                $advancedUser, 'foo',
             ),
             array(
                 $user, new TestUser('foo'),
@@ -254,10 +238,10 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
                 new TestUser('foo'), $advancedUser,
             ),
             array(
-                $user, $advancedUser
+                $user, $advancedUser,
             ),
             array(
-                $advancedUser, $user
+                $advancedUser, $user,
             ),
         );
     }

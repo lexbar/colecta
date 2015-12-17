@@ -11,22 +11,18 @@
 
 namespace Symfony\Component\Form\Tests;
 
+use Symfony\Component\Form\ButtonBuilder;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\SubmitButtonBuilder;
 
 class FormBuilderTest extends \PHPUnit_Framework_TestCase
 {
     private $dispatcher;
-
     private $factory;
-
     private $builder;
 
     protected function setUp()
     {
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
         $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->factory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
         $this->builder = new FormBuilder('name', null, $this->dispatcher, $this->factory);
@@ -41,9 +37,9 @@ class FormBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Changing the name is not allowed, otherwise the name and property path
-     * are not synchronized anymore
+     * are not synchronized anymore.
      *
-     * @see FormType::buildForm
+     * @see FormType::buildForm()
      */
     public function testNoSetName()
     {
@@ -158,6 +154,12 @@ class FormBuilderTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->builder->create('foo');
+    }
+
+    public function testAddButton()
+    {
+        $this->builder->add(new ButtonBuilder('reset'));
+        $this->builder->add(new SubmitButtonBuilder('submit'));
     }
 
     public function testGetUnknown()

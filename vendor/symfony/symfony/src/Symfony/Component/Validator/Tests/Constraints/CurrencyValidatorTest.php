@@ -17,13 +17,6 @@ use Symfony\Component\Validator\Constraints\CurrencyValidator;
 
 class CurrencyValidatorTest extends AbstractConstraintValidatorTest
 {
-    protected function setUp()
-    {
-        IntlTestHelper::requireFullIntl($this);
-
-        parent::setUp();
-    }
-
     protected function createValidator()
     {
         return new CurrencyValidator();
@@ -66,6 +59,8 @@ class CurrencyValidatorTest extends AbstractConstraintValidatorTest
      **/
     public function testValidCurrenciesWithCountrySpecificLocale($currency)
     {
+        IntlTestHelper::requireFullIntl($this);
+
         \Locale::setDefault('en_GB');
 
         $this->validator->validate($currency, new Currency());
@@ -90,14 +85,14 @@ class CurrencyValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidCurrencies($currency)
     {
         $constraint = new Currency(array(
-            'message' => 'myMessage'
+            'message' => 'myMessage',
         ));
 
         $this->validator->validate($currency, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$currency.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$currency.'"')
+            ->assertRaised();
     }
 
     public function getInvalidCurrencies()

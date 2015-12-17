@@ -16,8 +16,6 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
- *
- * @api
  */
 class TypeValidator extends ConstraintValidator
 {
@@ -35,9 +33,9 @@ class TypeValidator extends ConstraintValidator
         $isFunction = 'is_'.$type;
         $ctypeFunction = 'ctype_'.$type;
 
-        if (function_exists($isFunction) && call_user_func($isFunction, $value)) {
+        if (function_exists($isFunction) && $isFunction($value)) {
             return;
-        } elseif (function_exists($ctypeFunction) && call_user_func($ctypeFunction, $value)) {
+        } elseif (function_exists($ctypeFunction) && $ctypeFunction($value)) {
             return;
         } elseif ($value instanceof $constraint->type) {
             return;
@@ -45,7 +43,7 @@ class TypeValidator extends ConstraintValidator
 
         $this->context->addViolation($constraint->message, array(
             '{{ value }}' => $this->formatValue($value),
-            '{{ type }}'  => $constraint->type,
+            '{{ type }}' => $constraint->type,
         ));
     }
 }

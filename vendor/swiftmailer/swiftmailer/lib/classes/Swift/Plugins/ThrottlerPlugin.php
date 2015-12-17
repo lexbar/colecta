@@ -11,9 +11,7 @@
 /**
  * Throttles the rate at which emails are sent.
  *
- * @package    Swift
- * @subpackage Plugins
- * @author     Chris Corbyn
+ * @author Chris Corbyn
  */
 class Swift_Plugins_ThrottlerPlugin extends Swift_Plugins_BandwidthMonitorPlugin implements Swift_Plugins_Sleeper, Swift_Plugins_Timer
 {
@@ -99,7 +97,7 @@ class Swift_Plugins_ThrottlerPlugin extends Swift_Plugins_BandwidthMonitorPlugin
         }
         $duration = $time - $this->_start;
 
-        switch($this->_mode) {
+        switch ($this->_mode) {
             case self::BYTES_PER_MINUTE :
                 $sleep = $this->_throttleBytesPerMinute($duration);
                 break;
@@ -133,7 +131,7 @@ class Swift_Plugins_ThrottlerPlugin extends Swift_Plugins_BandwidthMonitorPlugin
     /**
      * Sleep for $seconds.
      *
-     * @param int     $seconds
+     * @param int $seconds
      */
     public function sleep($seconds)
     {
@@ -158,12 +156,10 @@ class Swift_Plugins_ThrottlerPlugin extends Swift_Plugins_BandwidthMonitorPlugin
         }
     }
 
-    // -- Private methods
-
     /**
      * Get a number of seconds to sleep for.
      *
-     * @param int     $timePassed
+     * @param int $timePassed
      *
      * @return int
      */
@@ -191,7 +187,7 @@ class Swift_Plugins_ThrottlerPlugin extends Swift_Plugins_BandwidthMonitorPlugin
     /**
      * Get a number of seconds to sleep for.
      *
-     * @param int     $timePassed
+     * @param int $timePassed
      *
      * @return int
      */

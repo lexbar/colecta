@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * A console command for dumping available configuration reference
+ * A console command for dumping available configuration reference.
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
@@ -32,7 +32,7 @@ class ConfigDumpReferenceCommand extends ContainerDebugCommand
         $this
             ->setName('config:dump-reference')
             ->setDefinition(array(
-                new InputArgument('name', InputArgument::OPTIONAL, 'The Bundle or extension alias')
+                new InputArgument('name', InputArgument::OPTIONAL, 'The Bundle or extension alias'),
             ))
             ->setDescription('Dumps default configuration for an extension')
             ->setHelp(<<<EOF

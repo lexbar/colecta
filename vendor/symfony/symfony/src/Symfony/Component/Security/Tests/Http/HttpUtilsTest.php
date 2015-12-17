@@ -14,22 +14,12 @@ namespace Symfony\Component\Security\Tests\Http;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 class HttpUtilsTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\Routing\Router')) {
-            $this->markTestSkipped('The "Routing" component is not available');
-        }
-    }
-
     public function testCreateRedirectResponseWithPath()
     {
         $utils = new HttpUtils($this->getUrlGenerator());
@@ -54,7 +44,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase
         $urlGenerator
             ->expects($this->any())
             ->method('generate')
-            ->with('foobar', array(), true)
+            ->with('foobar', array(), UrlGeneratorInterface::ABSOLUTE_URL)
             ->will($this->returnValue('http://localhost/foo/bar'))
         ;
         $urlGenerator
@@ -139,7 +129,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase
         return array(
             array(SecurityContextInterface::AUTHENTICATION_ERROR),
             array(SecurityContextInterface::ACCESS_DENIED_ERROR),
-            array(SecurityContextInterface::LAST_USERNAME)
+            array(SecurityContextInterface::LAST_USERNAME),
         );
     }
 

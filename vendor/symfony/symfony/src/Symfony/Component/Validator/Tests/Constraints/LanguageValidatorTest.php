@@ -22,13 +22,6 @@ class LanguageValidatorTest extends AbstractConstraintValidatorTest
         return new LanguageValidator();
     }
 
-    protected function setUp()
-    {
-        IntlTestHelper::requireFullIntl($this);
-
-        parent::setUp();
-    }
-
     public function testNullIsValid()
     {
         $this->validator->validate(null, new Language());
@@ -76,14 +69,14 @@ class LanguageValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidLanguages($language)
     {
         $constraint = new Language(array(
-            'message' => 'myMessage'
+            'message' => 'myMessage',
         ));
 
         $this->validator->validate($language, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$language.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$language.'"')
+            ->assertRaised();
     }
 
     public function getInvalidLanguages()
@@ -96,11 +89,13 @@ class LanguageValidatorTest extends AbstractConstraintValidatorTest
 
     public function testValidateUsingCountrySpecificLocale()
     {
+        IntlTestHelper::requireFullIntl($this);
+
         \Locale::setDefault('fr_FR');
         $existingLanguage = 'en';
 
         $this->validator->validate($existingLanguage, new Language(array(
-            'message' => 'aMessage'
+            'message' => 'aMessage',
         )));
 
         $this->assertNoViolation();

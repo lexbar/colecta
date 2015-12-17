@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__DIR__) . '/EsmtpTransportTest.php';
-require_once dirname(dirname(dirname(dirname(__DIR__)))) . '/fixtures/EsmtpTransportFixture.php';
+require_once dirname(__DIR__).'/EsmtpTransportTest.php';
+require_once dirname(dirname(dirname(dirname(__DIR__)))).'/fixtures/EsmtpTransportFixture.php';
 
 interface Swift_Transport_EsmtpHandlerMixin extends Swift_Transport_EsmtpHandler
 {
@@ -12,7 +12,6 @@ interface Swift_Transport_EsmtpHandlerMixin extends Swift_Transport_EsmtpHandler
 class Swift_Transport_EsmtpTransport_ExtensionSupportTest
     extends Swift_Transport_EsmtpTransportTest
 {
-
     public function testExtensionHandlersAreSortedAsNeeded()
     {
         $buf = $this->_getBuffer();
@@ -178,7 +177,7 @@ class Swift_Transport_EsmtpTransport_ExtensionSupportTest
             ->andReturn("250 SIZE=123456\r\n");
         $buf->shouldReceive('write')
             ->once()
-            ->with("MAIL FROM: <me@domain> FOO ZIP\r\n")
+            ->with("MAIL FROM:<me@domain> FOO ZIP\r\n")
             ->andReturn(2);
         $buf->shouldReceive('readLine')
             ->once()
@@ -186,7 +185,7 @@ class Swift_Transport_EsmtpTransport_ExtensionSupportTest
             ->andReturn("250 OK\r\n");
         $buf->shouldReceive('write')
             ->once()
-            ->with("RCPT TO: <foo@bar>\r\n")
+            ->with("RCPT TO:<foo@bar>\r\n")
             ->andReturn(3);
         $buf->shouldReceive('readLine')
             ->once()
@@ -237,10 +236,10 @@ class Swift_Transport_EsmtpTransport_ExtensionSupportTest
 
         $message->shouldReceive('getFrom')
                 ->zeroOrMoreTimes()
-                ->andReturn(array('me@domain'=>'Me'));
+                ->andReturn(array('me@domain' => 'Me'));
         $message->shouldReceive('getTo')
                 ->zeroOrMoreTimes()
-                ->andReturn(array('foo@bar'=>null));
+                ->andReturn(array('foo@bar' => null));
 
         $buf->shouldReceive('readLine')
             ->once()
@@ -264,7 +263,7 @@ class Swift_Transport_EsmtpTransport_ExtensionSupportTest
             ->andReturn("250 SIZE=123456\r\n");
         $buf->shouldReceive('write')
             ->once()
-            ->with("MAIL FROM: <me@domain>\r\n")
+            ->with("MAIL FROM:<me@domain>\r\n")
             ->andReturn(2);
         $buf->shouldReceive('readLine')
             ->once()
@@ -272,7 +271,7 @@ class Swift_Transport_EsmtpTransport_ExtensionSupportTest
             ->andReturn("250 OK\r\n");
         $buf->shouldReceive('write')
             ->once()
-            ->with("RCPT TO: <foo@bar> FOO ZIP\r\n")
+            ->with("RCPT TO:<foo@bar> FOO ZIP\r\n")
             ->andReturn(3);
         $buf->shouldReceive('readLine')
             ->once()
@@ -412,9 +411,10 @@ class Swift_Transport_EsmtpTransport_ExtensionSupportTest
         $ext1->shouldReceive('onCommand')
              ->once()
              ->with($smtp, "FOO\r\n", array(250, 251), \Mockery::any(), \Mockery::any())
-             ->andReturnUsing(function($a, $b, $c, $d, &$e) {
+             ->andReturnUsing(function ($a, $b, $c, $d, &$e) {
                  $e = true;
-                 return "250 ok";
+
+                 return '250 ok';
              });
         $ext2->shouldReceive('getHandledKeyword')
              ->zeroOrMoreTimes()
@@ -480,11 +480,11 @@ class Swift_Transport_EsmtpTransport_ExtensionSupportTest
         $ext1->shouldReceive('setUsername')
              ->once()
              ->with('mick')
-             ->andReturn(NULL);
+             ->andReturn(null);
         $ext1->shouldReceive('setPassword')
              ->once()
              ->with('pass')
-             ->andReturn(NULL);
+             ->andReturn(null);
         $ext2->shouldReceive('getHandledKeyword')
              ->zeroOrMoreTimes()
              ->andReturn('STARTTLS');

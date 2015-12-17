@@ -75,14 +75,14 @@ class DateTimeValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidDateTimes($dateTime)
     {
         $constraint = new DateTime(array(
-            'message' => 'myMessage'
+            'message' => 'myMessage',
         ));
 
         $this->validator->validate($dateTime, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$dateTime.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$dateTime.'"')
+            ->assertRaised();
     }
 
     public function getInvalidDateTimes()

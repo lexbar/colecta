@@ -11,7 +11,7 @@ Resources
 
 Documentation:
 
-http://symfony.com/doc/2.3/book/security.html
+https://symfony.com/doc/2.3/book/security.html
 
 Resources
 ---------
@@ -19,5 +19,5 @@ Resources
 You can run the unit tests with the following command:
 
     $ cd path/to/Symfony/Component/Security/
-    $ composer.phar install
+    $ composer install
     $ phpunit

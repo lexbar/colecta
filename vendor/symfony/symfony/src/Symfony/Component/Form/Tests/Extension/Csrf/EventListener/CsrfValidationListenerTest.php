@@ -23,10 +23,6 @@ class CsrfValidationListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
         $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->factory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
         $this->csrfProvider = $this->getMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface');
@@ -66,7 +62,7 @@ class CsrfValidationListenerTest extends \PHPUnit_Framework_TestCase
     // https://github.com/symfony/symfony/pull/5838
     public function testStringFormData()
     {
-        $data = "XP4HUzmHPi";
+        $data = 'XP4HUzmHPi';
         $event = new FormEvent($this->form, $data);
 
         $validation = new CsrfValidationListener('csrf', $this->csrfProvider, 'unknown', 'Invalid.');

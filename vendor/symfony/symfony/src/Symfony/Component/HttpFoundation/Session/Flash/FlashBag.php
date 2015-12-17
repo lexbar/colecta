@@ -28,7 +28,7 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate
     private $flashes = array();
 
     /**
-     * The storage key for flashes in the session
+     * The storage key for flashes in the session.
      *
      * @var string
      */
@@ -76,7 +76,7 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function peek($type, array $default =array())
+    public function peek($type, array $default = array())
     {
         return $this->has($type) ? $this->flashes[$type] : $default;
     }

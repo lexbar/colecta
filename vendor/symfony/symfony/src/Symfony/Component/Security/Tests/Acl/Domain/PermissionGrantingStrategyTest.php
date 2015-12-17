@@ -154,7 +154,8 @@ class PermissionGrantingStrategyTest extends \PHPUnit_Framework_TestCase
             try {
                 $strategy->isGranted($acl, array($requiredMask), array($sid));
                 $this->fail('The ACE is not supposed to match.');
-            } catch (NoAceFoundException $noAce) { }
+            } catch (NoAceFoundException $e) {
+            }
         } else {
             $this->assertTrue($strategy->isGranted($acl, array($requiredMask), array($sid)));
         }
@@ -181,12 +182,5 @@ class PermissionGrantingStrategyTest extends \PHPUnit_Framework_TestCase
         static $id = 1;
 
         return new Acl($id++, new ObjectIdentity(1, 'Foo'), $strategy, array(), true);
-    }
-
-    protected function setUp()
-    {
-        if (!class_exists('Doctrine\DBAL\DriverManager')) {
-            $this->markTestSkipped('The Doctrine2 DBAL is required for this test');
-        }
     }
 }

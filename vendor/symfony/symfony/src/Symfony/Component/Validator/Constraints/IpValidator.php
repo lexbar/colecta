@@ -16,12 +16,10 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
- * Validates whether a value is a valid IP address
+ * Validates whether a value is a valid IP address.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @api
  */
 class IpValidator extends ConstraintValidator
 {

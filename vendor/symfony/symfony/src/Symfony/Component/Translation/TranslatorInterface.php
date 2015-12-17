@@ -15,8 +15,6 @@ namespace Symfony\Component\Translation;
  * TranslatorInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
 interface TranslatorInterface
 {
@@ -31,25 +29,21 @@ interface TranslatorInterface
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
      * @return string The translated string
-     *
-     * @api
      */
     public function trans($id, array $parameters = array(), $domain = null, $locale = null);
 
     /**
      * Translates the given choice message by choosing a translation according to a number.
      *
-     * @param string  $id         The message id (may also be an object that can be cast to string)
-     * @param int     $number     The number to use to find the indice of the message
-     * @param array   $parameters An array of parameters for the message
-     * @param string  $domain     The domain for the message
-     * @param string  $locale     The locale
+     * @param string $id         The message id (may also be an object that can be cast to string)
+     * @param int    $number     The number to use to find the indice of the message
+     * @param array  $parameters An array of parameters for the message
+     * @param string $domain     The domain for the message
+     * @param string $locale     The locale
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
      * @return string The translated string
-     *
-     * @api
      */
     public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null);
 
@@ -59,8 +53,6 @@ interface TranslatorInterface
      * @param string $locale The locale
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
-     *
-     * @api
      */
     public function setLocale($locale);
 
@@ -68,8 +60,6 @@ interface TranslatorInterface
      * Returns the current locale.
      *
      * @return string The locale
-     *
-     * @api
      */
     public function getLocale();
 }

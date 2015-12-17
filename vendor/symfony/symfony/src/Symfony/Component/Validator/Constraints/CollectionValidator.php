@@ -17,8 +17,6 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
- *
- * @api
  */
 class CollectionValidator extends ConstraintValidator
 {
@@ -46,7 +44,7 @@ class CollectionValidator extends ConstraintValidator
                 $this->context->validateValue($value[$field], $fieldConstraint->constraints, '['.$field.']', $group);
             } elseif (!$fieldConstraint instanceof Optional && !$constraint->allowMissingFields) {
                 $this->context->addViolationAt('['.$field.']', $constraint->missingFieldsMessage, array(
-                    '{{ field }}' => $this->formatValue($field)
+                    '{{ field }}' => $this->formatValue($field),
                 ), null);
             }
         }
@@ -55,7 +53,7 @@ class CollectionValidator extends ConstraintValidator
             foreach ($value as $field => $fieldValue) {
                 if (!isset($constraint->fields[$field])) {
                     $this->context->addViolationAt('['.$field.']', $constraint->extraFieldsMessage, array(
-                        '{{ field }}' => $this->formatValue($field)
+                        '{{ field }}' => $this->formatValue($field),
                     ), $fieldValue);
                 }
             }

@@ -14,7 +14,6 @@ namespace Symfony\Component\Form\Tests;
 use Symfony\Component\Form\ResolvedFormType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\Form;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -39,14 +38,6 @@ class ResolvedFormTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (!class_exists('Symfony\Component\OptionsResolver\OptionsResolver')) {
-            $this->markTestSkipped('The "OptionsResolver" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
         $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->factory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
         $this->dataMapper = $this->getMock('Symfony\Component\Form\DataMapperInterface');
@@ -54,10 +45,6 @@ class ResolvedFormTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateBuilder()
     {
-        if (version_compare(\PHPUnit_Runner_Version::id(), '3.7', '<')) {
-            $this->markTestSkipped('This test requires PHPUnit 3.7.');
-        }
-
         $parentType = $this->getMockFormType();
         $type = $this->getMockFormType();
         $extension1 = $this->getMockFormTypeExtension();
@@ -269,7 +256,7 @@ class ResolvedFormTypeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $name
-     * @param array $options
+     * @param array  $options
      *
      * @return FormBuilder
      */

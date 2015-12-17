@@ -60,17 +60,16 @@ class FormTypeValidatorExtension extends BaseValidatorExtension
         };
 
         $resolver->setDefaults(array(
-            'error_mapping'              => array(),
-            'constraints'                => array(),
-            'cascade_validation'         => false,
-            'invalid_message'            => 'This value is not valid.',
+            'error_mapping' => array(),
+            'constraints' => array(),
+            'cascade_validation' => false,
+            'invalid_message' => 'This value is not valid.',
             'invalid_message_parameters' => array(),
-            'extra_fields_message'       => 'This form should not contain extra fields.',
-            'post_max_size_message'      => 'The uploaded file was too large. Please try to upload a smaller file.',
+            'extra_fields_message' => 'This form should not contain extra fields.',
         ));
 
         $resolver->setNormalizers(array(
-            'constraints'       => $constraintsNormalizer,
+            'constraints' => $constraintsNormalizer,
         ));
     }
 

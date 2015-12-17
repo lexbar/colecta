@@ -12,7 +12,6 @@
 namespace Symfony\Bundle\WebProfilerBundle\Tests\DependencyInjection;
 
 use Symfony\Bundle\WebProfilerBundle\Tests\TestCase;
-
 use Symfony\Bundle\WebProfilerBundle\DependencyInjection\WebProfilerExtension;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,7 +24,7 @@ class WebProfilerExtensionTest extends TestCase
 {
     private $kernel;
     /**
-     * @var Symfony\Component\DependencyInjection\Container $container
+     * @var \Symfony\Component\DependencyInjection\Container
      */
     private $container;
 
@@ -56,7 +55,8 @@ class WebProfilerExtensionTest extends TestCase
         $this->container->register('templating.helper.assets', $this->getMockClass('Symfony\\Component\\Templating\\Helper\\AssetsHelper'));
         $this->container->register('templating.helper.router', $this->getMockClass('Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\RouterHelper'))
             ->addArgument(new Reference('router'));
-        $this->container->register('twig', 'Twig_Environment');
+        $this->container->register('twig_loader', 'Twig_Loader_Array')->addArgument(array());
+        $this->container->register('twig', 'Twig_Environment')->addArgument(new Reference('twig_loader'));
         $this->container->setParameter('kernel.bundles', array());
         $this->container->setParameter('kernel.cache_dir', __DIR__);
         $this->container->setParameter('kernel.debug', false);

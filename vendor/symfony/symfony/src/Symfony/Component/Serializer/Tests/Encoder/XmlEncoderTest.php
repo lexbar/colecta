@@ -32,7 +32,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncodeScalar()
     {
         $obj = new ScalarDummy();
-        $obj->xmlFoo = "foo";
+        $obj->xmlFoo = 'foo';
 
         $expected = '<?xml version="1.0"?>'."\n".
             '<response>foo</response>'."\n";
@@ -43,7 +43,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
     public function testSetRootNodeName()
     {
         $obj = new ScalarDummy();
-        $obj->xmlFoo = "foo";
+        $obj->xmlFoo = 'foo';
 
         $this->encoder->setRootNodeName('test');
         $expected = '<?xml version="1.0"?>'."\n".
@@ -67,14 +67,14 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
         $obj->xmlFoo = array(
             'foo-bar' => array(
                 '@id' => 1,
-                '@name' => 'Bar'
+                '@name' => 'Bar',
             ),
             'Foo' => array(
-                'Bar' => "Test",
-                '@Type' => 'test'
+                'Bar' => 'Test',
+                '@Type' => 'test',
             ),
             'föo_bär' => 'a',
-            "Bar" => array(1,2,3),
+            'Bar' => array(1,2,3),
             'a' => 'b',
         );
         $expected = '<?xml version="1.0"?>'."\n".
@@ -124,7 +124,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $array = array(
           '#' => 'Paul',
-          '@gender' => 'm'
+          '@gender' => 'm',
         );
 
         $expected = '<?xml version="1.0"?>'."\n".
@@ -137,7 +137,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $array = array(
           'firstname' => 'Paul',
-          '@gender' => 'm'
+          '@gender' => 'm',
         );
 
         $expected = '<?xml version="1.0"?>'."\n".
@@ -230,7 +230,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
 
         $expected = array(
             '#' => 'Peter',
-            '@gender' => 'M'
+            '@gender' => 'M',
         );
 
         $this->assertEquals($expected, $this->encoder->decode($source, 'xml'));
@@ -244,7 +244,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
         $expected = array(
             'firstname' => 'Peter',
             'lastname' => 'Mac Calloway',
-            '@gender' => 'M'
+            '@gender' => 'M',
         );
 
         $this->assertEquals($expected, $this->encoder->decode($source, 'xml'));
@@ -263,8 +263,8 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
         $expected = array(
             'people' => array('person' => array(
                 array('firstname' => 'Benjamin', 'lastname' => 'Alexandre'),
-                array('firstname' => 'Damien', 'lastname' => 'Clay')
-            ))
+                array('firstname' => 'Damien', 'lastname' => 'Clay'),
+            )),
         );
 
         $this->assertEquals($expected, $this->encoder->decode($source, 'xml'));
@@ -275,28 +275,28 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
         $obj = new ScalarDummy();
         $obj->xmlFoo = array(
             'foo-bar' => array(
-                '@key' => "value",
-                'item' => array("@key" => 'key', "key-val" => 'val')
+                '@key' => 'value',
+                'item' => array('@key' => 'key', 'key-val' => 'val'),
             ),
             'Foo' => array(
-                'Bar' => "Test",
-                '@Type' => 'test'
+                'Bar' => 'Test',
+                '@Type' => 'test',
             ),
             'föo_bär' => 'a',
-            "Bar" => array(1,2,3),
+            'Bar' => array(1,2,3),
             'a' => 'b',
         );
         $expected = array(
             'foo-bar' => array(
-                '@key' => "value",
-                'key' => array('@key' => 'key', "key-val" => 'val')
+                '@key' => 'value',
+                'key' => array('@key' => 'key', 'key-val' => 'val'),
             ),
             'Foo' => array(
-                'Bar' => "Test",
-                '@Type' => 'test'
+                'Bar' => 'Test',
+                '@Type' => 'test',
             ),
             'föo_bär' => 'a',
-            "Bar" => array(1,2,3),
+            'Bar' => array(1,2,3),
             'a' => 'b',
         );
         $xml = $this->encoder->encode($obj, 'xml');
@@ -355,7 +355,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
         $obj->foo = 'foo';
         $obj->bar = array('a', 'b');
         $obj->baz = array('key' => 'val', 'key2' => 'val', 'A B' => 'bar', 'item' => array(array('title' => 'title1'), array('title' => 'title2')), 'Barry' => array('FooBar' => array('Baz' => 'Ed', '@id' => 1)));
-        $obj->qux = "1";
+        $obj->qux = '1';
 
         return $obj;
     }

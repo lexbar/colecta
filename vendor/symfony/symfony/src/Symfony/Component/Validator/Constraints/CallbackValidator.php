@@ -17,11 +17,9 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 
 /**
- * Validator for Callback constraint
+ * Validator for Callback constraint.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
- *
- * @api
  */
 class CallbackValidator extends ConstraintValidator
 {
@@ -43,7 +41,9 @@ class CallbackValidator extends ConstraintValidator
         $methods = $constraint->methods;
 
         foreach ($methods as $method) {
-            if (is_array($method) || $method instanceof \Closure) {
+            if ($method instanceof \Closure) {
+                $method($object, $this->context);
+            } elseif (is_array($method)) {
                 if (!is_callable($method)) {
                     throw new ConstraintDefinitionException(sprintf('"%s::%s" targeted by Callback constraint is not a valid callable', $method[0], $method[1]));
                 }

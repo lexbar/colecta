@@ -19,17 +19,6 @@ use Symfony\Component\Routing\RequestContext;
 
 class RouterListenerTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\Routing\Router')) {
-            $this->markTestSkipped('The "Routing" component is not available');
-        }
-    }
-
     /**
      * @dataProvider getPortData
      */
@@ -130,5 +119,35 @@ class RouterListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onKernelRequest($event);
 
         $this->assertEquals('GET', $context->getMethod());
+    }
+
+    /**
+     * @dataProvider getLoggingParameterData
+     */
+    public function testLoggingParameter($parameter, $log)
+    {
+        $requestMatcher = $this->getMock('Symfony\Component\Routing\Matcher\RequestMatcherInterface');
+        $requestMatcher->expects($this->once())
+          ->method('matchRequest')
+          ->will($this->returnValue($parameter));
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger->expects($this->once())
+          ->method('info')
+          ->with($this->equalTo($log));
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $request = Request::create('http://localhost/');
+
+        $listener = new RouterListener($requestMatcher, new RequestContext(), $logger);
+        $listener->onKernelRequest(new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST));
+    }
+
+    public function getLoggingParameterData()
+    {
+        return array(
+            array(array('_route' => 'foo'), 'Matched route "foo" (parameters: "_route": "foo")'),
+            array(array(), 'Matched route "n/a" (parameters: )'),
+        );
     }
 }

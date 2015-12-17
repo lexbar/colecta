@@ -30,22 +30,6 @@ class FormExtensionDivLayoutTest extends AbstractDivLayoutTest
 
     protected function setUp()
     {
-        if (!class_exists('Symfony\Component\Locale\Locale')) {
-            $this->markTestSkipped('The "Locale" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\Form\Form')) {
-            $this->markTestSkipped('The "Form" component is not available');
-        }
-
-        if (!class_exists('Twig_Environment')) {
-            $this->markTestSkipped('Twig is not available.');
-        }
-
         parent::setUp();
 
         $rendererEngine = new TwigRendererEngine(array(
@@ -58,7 +42,7 @@ class FormExtensionDivLayoutTest extends AbstractDivLayoutTest
 
         $loader = new StubFilesystemLoader(array(
             __DIR__.'/../../Resources/views/Form',
-            __DIR__,
+            __DIR__.'/Fixtures/templates/form',
         ));
 
         $environment = new \Twig_Environment($loader, array('strict_variables' => true));
@@ -210,14 +194,14 @@ class FormExtensionDivLayoutTest extends AbstractDivLayoutTest
     public static function themeBlockInheritanceProvider()
     {
         return array(
-            array(array('theme.html.twig'))
+            array(array('theme.html.twig')),
         );
     }
 
     public static function themeInheritanceProvider()
     {
         return array(
-            array(array('parent_label.html.twig'), array('child_label.html.twig'))
+            array(array('parent_label.html.twig'), array('child_label.html.twig')),
         );
     }
 }

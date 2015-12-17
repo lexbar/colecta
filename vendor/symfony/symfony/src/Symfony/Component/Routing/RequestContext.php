@@ -17,8 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Holds information about the current request.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
+ * @author Tobias Schultze <http://tobion.de>
  */
 class RequestContext
 {
@@ -39,29 +38,32 @@ class RequestContext
     /**
      * Constructor.
      *
-     * @param string  $baseUrl      The base URL
-     * @param string  $method       The HTTP method
-     * @param string  $host         The HTTP host name
-     * @param string  $scheme       The HTTP scheme
-     * @param int     $httpPort     The HTTP port
-     * @param int     $httpsPort    The HTTPS port
-     * @param string  $path         The path
-     * @param string  $queryString  The query string
-     *
-     * @api
+     * @param string $baseUrl     The base URL
+     * @param string $method      The HTTP method
+     * @param string $host        The HTTP host name
+     * @param string $scheme      The HTTP scheme
+     * @param int    $httpPort    The HTTP port
+     * @param int    $httpsPort   The HTTPS port
+     * @param string $path        The path
+     * @param string $queryString The query string
      */
     public function __construct($baseUrl = '', $method = 'GET', $host = 'localhost', $scheme = 'http', $httpPort = 80, $httpsPort = 443, $path = '/', $queryString = '')
     {
-        $this->baseUrl = $baseUrl;
-        $this->method = strtoupper($method);
-        $this->host = $host;
-        $this->scheme = strtolower($scheme);
-        $this->httpPort = $httpPort;
-        $this->httpsPort = $httpsPort;
-        $this->pathInfo = $path;
-        $this->queryString = $queryString;
+        $this->setBaseUrl($baseUrl);
+        $this->setMethod($method);
+        $this->setHost($host);
+        $this->setScheme($scheme);
+        $this->setHttpPort($httpPort);
+        $this->setHttpsPort($httpsPort);
+        $this->setPathInfo($path);
+        $this->setQueryString($queryString);
     }
 
+    /**
+     * Updates the RequestContext information based on a HttpFoundation Request.
+     *
+     * @param Request $request A Request instance
+     */
     public function fromRequest(Request $request)
     {
         $this->setBaseUrl($request->getBaseUrl());
@@ -71,7 +73,7 @@ class RequestContext
         $this->setScheme($request->getScheme());
         $this->setHttpPort($request->isSecure() ? $this->httpPort : $request->getPort());
         $this->setHttpsPort($request->isSecure() ? $request->getPort() : $this->httpsPort);
-        $this->setQueryString($request->server->get('QUERY_STRING'));
+        $this->setQueryString($request->server->get('QUERY_STRING', ''));
     }
 
     /**
@@ -88,8 +90,6 @@ class RequestContext
      * Sets the base URL.
      *
      * @param string $baseUrl The base URL
-     *
-     * @api
      */
     public function setBaseUrl($baseUrl)
     {
@@ -132,8 +132,6 @@ class RequestContext
      * Sets the HTTP method.
      *
      * @param string $method The HTTP method
-     *
-     * @api
      */
     public function setMethod($method)
     {
@@ -142,6 +140,8 @@ class RequestContext
 
     /**
      * Gets the HTTP host.
+     *
+     * The host is always lowercased because it must be treated case-insensitive.
      *
      * @return string The HTTP host
      */
@@ -154,12 +154,10 @@ class RequestContext
      * Sets the HTTP host.
      *
      * @param string $host The HTTP host
-     *
-     * @api
      */
     public function setHost($host)
     {
-        $this->host = $host;
+        $this->host = strtolower($host);
     }
 
     /**
@@ -176,8 +174,6 @@ class RequestContext
      * Sets the HTTP scheme.
      *
      * @param string $scheme The HTTP scheme
-     *
-     * @api
      */
     public function setScheme($scheme)
     {
@@ -187,7 +183,7 @@ class RequestContext
     /**
      * Gets the HTTP port.
      *
-     * @return string The HTTP port
+     * @return int The HTTP port
      */
     public function getHttpPort()
     {
@@ -197,19 +193,17 @@ class RequestContext
     /**
      * Sets the HTTP port.
      *
-     * @param string $httpPort The HTTP port
-     *
-     * @api
+     * @param int $httpPort The HTTP port
      */
     public function setHttpPort($httpPort)
     {
-        $this->httpPort = $httpPort;
+        $this->httpPort = (int) $httpPort;
     }
 
     /**
      * Gets the HTTPS port.
      *
-     * @return string The HTTPS port
+     * @return int The HTTPS port
      */
     public function getHttpsPort()
     {
@@ -219,19 +213,17 @@ class RequestContext
     /**
      * Sets the HTTPS port.
      *
-     * @param string $httpsPort The HTTPS port
-     *
-     * @api
+     * @param int $httpsPort The HTTPS port
      */
     public function setHttpsPort($httpsPort)
     {
-        $this->httpsPort = $httpsPort;
+        $this->httpsPort = (int) $httpsPort;
     }
 
     /**
      * Gets the query string.
      *
-     * @return string The query string
+     * @return string The query string without the "?"
      */
     public function getQueryString()
     {
@@ -241,13 +233,12 @@ class RequestContext
     /**
      * Sets the query string.
      *
-     * @param string $queryString The query string
-     *
-     * @api
+     * @param string $queryString The query string (after "?")
      */
     public function setQueryString($queryString)
     {
-        $this->queryString = $queryString;
+        // string cast to be fault-tolerant, accepting null
+        $this->queryString = (string) $queryString;
     }
 
     /**
@@ -263,11 +254,9 @@ class RequestContext
     /**
      * Sets the parameters.
      *
-     * This method implements a fluent interface.
-     *
      * @param array $parameters The parameters
      *
-     * @return Route The current Route instance
+     * @return RequestContext The current instance, implementing a fluent interface
      */
     public function setParameters(array $parameters)
     {
@@ -281,7 +270,7 @@ class RequestContext
      *
      * @param string $name A parameter name
      *
-     * @return mixed The parameter value
+     * @return mixed The parameter value or null if nonexistent
      */
     public function getParameter($name)
     {
@@ -293,7 +282,7 @@ class RequestContext
      *
      * @param string $name A parameter name
      *
-     * @return bool    true if the parameter value is set, false otherwise
+     * @return bool True if the parameter value is set, false otherwise
      */
     public function hasParameter($name)
     {
@@ -305,8 +294,6 @@ class RequestContext
      *
      * @param string $name      A parameter name
      * @param mixed  $parameter The parameter value
-     *
-     * @api
      */
     public function setParameter($name, $parameter)
     {

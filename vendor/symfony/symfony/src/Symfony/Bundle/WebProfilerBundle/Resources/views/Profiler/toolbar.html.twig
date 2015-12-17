@@ -1,7 +1,7 @@
-<!-- START of Symfony2 Web Debug Toolbar -->
+<!-- START of Symfony Web Debug Toolbar -->
 {% if 'normal' != position %}
-    <div id="sfMiniToolbar-{{ token }}" class="sf-minitoolbar">
-        <a href="javascript:void(0);" title="Show Symfony toolbar" onclick="
+    <div id="sfMiniToolbar-{{ token }}" class="sf-minitoolbar" data-no-turbolink>
+        <a href="javascript:void(0);" title="Show Symfony toolbar" tabindex="-1" accesskey="D" onclick="
             var elem = this.parentNode;
             if (elem.style.display == 'none') {
                 document.getElementById('sfToolbarMainContent-{{ token }}').style.display = 'none';
@@ -24,7 +24,7 @@
     <div id="sfToolbarClearer-{{ token }}" style="clear: both; height: 38px;"></div>
 {% endif %}
 
-<div id="sfToolbarMainContent-{{ token }}" class="sf-toolbarreset">
+<div id="sfToolbarMainContent-{{ token }}" class="sf-toolbarreset" data-no-turbolink>
     {% for name, template in templates %}
         {{ template.renderblock('toolbar', {
             'collector': profile.getcollector(name),
@@ -36,7 +36,7 @@
     {% endfor %}
 
     {% if 'normal' != position %}
-        <a class="hide-button" title="Close Toolbar" onclick="
+        <a class="hide-button" title="Close Toolbar" tabindex="-1" accesskey="D" onclick="
             var p = this.parentNode;
             p.style.display = 'none';
             (p.previousElementSibling || p.previousSibling).style.display = 'none';
@@ -45,4 +45,4 @@
         "></a>
     {% endif %}
 </div>
-<!-- END of Symfony2 Web Debug Toolbar -->
+<!-- END of Symfony Web Debug Toolbar -->

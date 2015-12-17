@@ -55,7 +55,7 @@ class TemplateFinder implements TemplateFinderInterface
 
         $templates = array();
 
-        foreach ($this->kernel->getBundles() as $name => $bundle) {
+        foreach ($this->kernel->getBundles() as $bundle) {
             $templates = array_merge($templates, $this->findTemplatesInBundle($bundle));
         }
 
@@ -97,8 +97,12 @@ class TemplateFinder implements TemplateFinderInterface
      */
     private function findTemplatesInBundle(BundleInterface $bundle)
     {
-        $templates = $this->findTemplatesInFolder($bundle->getPath().'/Resources/views');
         $name = $bundle->getName();
+        $templates = array_merge(
+            $this->findTemplatesInFolder($bundle->getPath().'/Resources/views'),
+            $this->findTemplatesInFolder($this->rootDir.'/'.$name.'/views')
+        );
+        $templates = array_unique($templates);
 
         foreach ($templates as $i => $template) {
             $templates[$i] = $template->set('bundle', $name);

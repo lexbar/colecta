@@ -33,10 +33,8 @@ namespace Symfony\Component\Console\Input;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  *
- * @see    http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
- * @see    http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02
- *
- * @api
+ * @see http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
+ * @see http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02
  */
 class ArgvInput extends Input
 {
@@ -48,8 +46,6 @@ class ArgvInput extends Input
      *
      * @param array           $argv       An array of parameters from the CLI (in the argv format)
      * @param InputDefinition $definition A InputDefinition instance
-     *
-     * @api
      */
     public function __construct(array $argv = null, InputDefinition $definition = null)
     {
@@ -123,7 +119,7 @@ class ArgvInput extends Input
     private function parseShortOptionSet($name)
     {
         $len = strlen($name);
-        for ($i = 0; $i < $len; $i++) {
+        for ($i = 0; $i < $len; ++$i) {
             if (!$this->definition->hasShortcut($name[$i])) {
                 throw new \RuntimeException(sprintf('The "-%s" option does not exist.', $name[$i]));
             }
@@ -169,7 +165,7 @@ class ArgvInput extends Input
         // if input is expecting another argument, add it
         if ($this->definition->hasArgument($c)) {
             $arg = $this->definition->getArgument($c);
-            $this->arguments[$arg->getName()] = $arg->isArray()? array($token) : $token;
+            $this->arguments[$arg->getName()] = $arg->isArray() ? array($token) : $token;
 
         // if last argument isArray(), append token to last argument
         } elseif ($this->definition->hasArgument($c - 1) && $this->definition->getArgument($c - 1)->isArray()) {
@@ -215,13 +211,13 @@ class ArgvInput extends Input
 
         $option = $this->definition->getOption($name);
 
-        // Convert false values (from a previous call to substr()) to null
-        if (false === $value) {
+        // Convert empty values to null
+        if (!isset($value[0])) {
             $value = null;
         }
 
         if (null !== $value && !$option->acceptValue()) {
-            throw new \RuntimeException(sprintf('The "--%s" option does not accept a value.', $name, $value));
+            throw new \RuntimeException(sprintf('The "--%s" option does not accept a value.', $name));
         }
 
         if (null === $value && $option->acceptValue() && count($this->parsed)) {
@@ -278,7 +274,7 @@ class ArgvInput extends Input
      *
      * @param string|array $values The value(s) to look for in the raw parameters (can be an array)
      *
-     * @return bool    true if the value is contained in the raw parameters
+     * @return bool true if the value is contained in the raw parameters
      */
     public function hasParameterOption($values)
     {
@@ -309,9 +305,11 @@ class ArgvInput extends Input
     public function getParameterOption($values, $default = false)
     {
         $values = (array) $values;
-
         $tokens = $this->tokens;
-        while ($token = array_shift($tokens)) {
+
+        while (0 < count($tokens)) {
+            $token = array_shift($tokens);
+
             foreach ($values as $value) {
                 if ($token === $value || 0 === strpos($token, $value.'=')) {
                     if (false !== $pos = strpos($token, '=')) {
@@ -327,7 +325,7 @@ class ArgvInput extends Input
     }
 
     /**
-     * Returns a stringified representation of the args passed to the command
+     * Returns a stringified representation of the args passed to the command.
      *
      * @return string
      */
@@ -336,7 +334,7 @@ class ArgvInput extends Input
         $self = $this;
         $tokens = array_map(function ($token) use ($self) {
             if (preg_match('{^(-[^=]+=)(.+)}', $token, $match)) {
-                return $match[1] . $self->escapeToken($match[2]);
+                return $match[1].$self->escapeToken($match[2]);
             }
 
             if ($token && $token[0] !== '-') {

@@ -2,6 +2,8 @@
 
 namespace Doctrine\Tests\Common\Cache;
 
+use Doctrine\Common\Cache\Cache;
+
 /**
  * @group DCOM-101
  */
@@ -21,87 +23,110 @@ class FileCacheTest extends \Doctrine\Tests\DoctrineTestCase
         );
     }
 
-    public function getProviderFileName()
-    {
-         return array(
-            //The characters :\/<>"*?| are not valid in Windows filenames.
-            array('key:1', 'key1'),
-            array('key\2', 'key2'),
-            array('key/3', 'key3'),
-            array('key<4', 'key4'),
-            array('key>5', 'key5'),
-            array('key"6', 'key6'),
-            array('key*7', 'key7'),
-            array('key?8', 'key8'),
-            array('key|9', 'key9'),
-            array('key[0]','key[0]'),
-        );
-    }
-
-    /**
-     * @dataProvider getProviderFileName
-     */
-    public function testInvalidFilename($key, $expected)
-    {
-        $cache  = $this->driver;
-        $method = new \ReflectionMethod($cache, 'getFilename');
-
-        $method->setAccessible(true);
-
-        $value  = $method->invoke($cache, $key);
-        $actual = pathinfo($value, PATHINFO_FILENAME);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testFilenameCollision()
-    {
-        $data['key:0']  = 'key0';
-        $data['key\0']  = 'key0';
-        $data['key/0']  = 'key0';
-        $data['key<0']  = 'key0';
-        $data['key>0']  = 'key0';
-        $data['key"0']  = 'key0';
-        $data['key*0']  = 'key0';
-        $data['key?0']  = 'key0';
-        $data['key|0']  = 'key0';
-
-        $paths  = array();
-        $cache  = $this->driver;
-        $method = new \ReflectionMethod($cache, 'getFilename');
-
-        $method->setAccessible(true);
-
-        foreach ($data as $key => $expected) {
-            $path   = $method->invoke($cache, $key);
-            $actual = pathinfo($path, PATHINFO_FILENAME);
-
-            $this->assertNotContains($path, $paths);
-            $this->assertEquals($expected, $actual);
-
-            $paths[] = $path;
-        }
-    }
-
-    public function testFilenameShouldCreateThePathWithFourSubDirectories()
+    public function testFilenameShouldCreateThePathWithOneSubDirectory()
     {
         $cache          = $this->driver;
         $method         = new \ReflectionMethod($cache, 'getFilename');
         $key            = 'item-key';
-        $expectedDir[]  = '84e0e2e893febb73';
-        $expectedDir[]  = '7a0fee0c89d53f4b';
-        $expectedDir[]  = 'b7fcb44c57cdf3d3';
-        $expectedDir[]  = '2ce7363f5d597760';
+        $expectedDir    = array(
+            '84',
+        );
         $expectedDir    = implode(DIRECTORY_SEPARATOR, $expectedDir);
 
         $method->setAccessible(true);
 
         $path       = $method->invoke($cache, $key);
-        $filename   = pathinfo($path, PATHINFO_FILENAME);
         $dirname    = pathinfo($path, PATHINFO_DIRNAME);
 
-        $this->assertEquals('item-key', $filename);
         $this->assertEquals(DIRECTORY_SEPARATOR . $expectedDir, $dirname);
-        $this->assertEquals(DIRECTORY_SEPARATOR . $expectedDir . DIRECTORY_SEPARATOR . $key, $path);
+    }
+
+    public function testFileExtensionCorrectlyEscaped()
+    {
+        $driver1 = $this->getMock(
+            'Doctrine\Common\Cache\FileCache',
+            array('doFetch', 'doContains', 'doSave'),
+            array(__DIR__, '.*')
+        );
+        $driver2 = $this->getMock(
+            'Doctrine\Common\Cache\FileCache',
+            array('doFetch', 'doContains', 'doSave'),
+            array(__DIR__, '.php')
+        );
+
+        $doGetStats = new \ReflectionMethod($driver1, 'doGetStats');
+
+        $doGetStats->setAccessible(true);
+
+        $stats1 = $doGetStats->invoke($driver1);
+        $stats2 = $doGetStats->invoke($driver2);
+
+        $this->assertSame(0, $stats1[Cache::STATS_MEMORY_USAGE]);
+        $this->assertGreaterThan(0, $stats2[Cache::STATS_MEMORY_USAGE]);
+    }
+
+    /**
+     * @group DCOM-266
+     */
+    public function testFileExtensionSlashCorrectlyEscaped()
+    {
+        $driver = $this->getMock(
+            'Doctrine\Common\Cache\FileCache',
+            array('doFetch', 'doContains', 'doSave'),
+            array(__DIR__ . '/../', DIRECTORY_SEPARATOR . basename(__FILE__))
+        );
+
+        $doGetStats = new \ReflectionMethod($driver, 'doGetStats');
+
+        $doGetStats->setAccessible(true);
+
+        $stats = $doGetStats->invoke($driver);
+
+        $this->assertGreaterThan(0, $stats[Cache::STATS_MEMORY_USAGE]);
+    }
+
+    public function testNonIntUmaskThrowsInvalidArgumentException()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+
+        $this->getMock(
+            'Doctrine\Common\Cache\FileCache',
+            array(),
+            array('', '', 'invalid')
+        );
+    }
+
+    public function testGetDirectoryReturnsRealpathDirectoryString()
+    {
+        $directory = __DIR__ . '/../';
+        $driver = $this->getMock(
+            'Doctrine\Common\Cache\FileCache',
+            array('doFetch', 'doContains', 'doSave'),
+            array($directory)
+        );
+
+        $doGetDirectory = new \ReflectionMethod($driver, 'getDirectory');
+
+        $actualDirectory = $doGetDirectory->invoke($driver);
+        $expectedDirectory = realpath($directory);
+
+        $this->assertEquals($expectedDirectory, $actualDirectory);
+    }
+
+    public function testGetExtensionReturnsExtensionString()
+    {
+        $directory = __DIR__ . '/../';
+        $extension = DIRECTORY_SEPARATOR . basename(__FILE__);
+        $driver = $this->getMock(
+            'Doctrine\Common\Cache\FileCache',
+            array('doFetch', 'doContains', 'doSave'),
+            array($directory, $extension)
+        );
+
+        $doGetExtension = new \ReflectionMethod($driver, 'getExtension');
+
+        $actualExtension = $doGetExtension->invoke($driver);
+
+        $this->assertEquals($extension, $actualExtension);
     }
 }

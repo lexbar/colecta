@@ -56,23 +56,19 @@ class PreAuthenticatedAuthenticationProvider implements AuthenticationProviderIn
              return;
          }
 
-        if (!$user = $token->getUser()) {
-            throw new BadCredentialsException('No pre-authenticated principal found in request.');
-        }
-/*
-        if (null === $token->getCredentials()) {
-            throw new BadCredentialsException('No pre-authenticated credentials found in request.');
-        }
-*/
-        $user = $this->userProvider->loadUserByUsername($user);
+         if (!$user = $token->getUser()) {
+             throw new BadCredentialsException('No pre-authenticated principal found in request.');
+         }
 
-        $this->userChecker->checkPostAuth($user);
+         $user = $this->userProvider->loadUserByUsername($user);
 
-        $authenticatedToken = new PreAuthenticatedToken($user, $token->getCredentials(), $this->providerKey, $user->getRoles());
-        $authenticatedToken->setAttributes($token->getAttributes());
+         $this->userChecker->checkPostAuth($user);
 
-        return $authenticatedToken;
-    }
+         $authenticatedToken = new PreAuthenticatedToken($user, $token->getCredentials(), $this->providerKey, $user->getRoles());
+         $authenticatedToken->setAttributes($token->getAttributes());
+
+         return $authenticatedToken;
+     }
 
     /**
      * {@inheritdoc}

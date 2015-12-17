@@ -17,13 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EsiTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-    }
-
     public function testHasSurrogateEsiCapability()
     {
         $esi = new Esi();
@@ -99,6 +92,28 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->headers->has('x-body-eval'));
     }
 
+    public function testMultilineEsiRemoveTagsAreRemoved()
+    {
+        $esi = new Esi();
+
+        $request = Request::create('/');
+        $response = new Response('<esi:remove> <a href="http://www.example.com">www.example.com</a> </esi:remove> Keep this'."<esi:remove>\n <a>www.example.com</a> </esi:remove> And this");
+        $esi->process($request, $response);
+
+        $this->assertEquals(' Keep this And this', $response->getContent());
+    }
+
+    public function testCommentTagsAreRemoved()
+    {
+        $esi = new Esi();
+
+        $request = Request::create('/');
+        $response = new Response('<esi:comment text="some comment &gt;" /> Keep this');
+        $esi->process($request, $response);
+
+        $this->assertEquals(' Keep this', $response->getContent());
+    }
+
     public function testProcess()
     {
         $esi = new Esi();
@@ -109,6 +124,11 @@ class EsiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo <?php echo $this->esi->handle($this, \'...\', \'alt\', true) ?>'."\n", $response->getContent());
         $this->assertEquals('ESI', $response->headers->get('x-body-eval'));
+
+        $response = new Response('foo <esi:comment text="some comment" /><esi:include src="foo\'" alt="bar\'" onerror="continue" />');
+        $esi->process($request, $response);
+
+        $this->assertEquals("foo <?php echo \$this->esi->handle(\$this, 'foo\\'', 'bar\\'', true) ?>"."\n", $response->getContent());
 
         $response = new Response('foo <esi:include src="..." />');
         $esi->process($request, $response);
@@ -126,10 +146,10 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $esi = new Esi();
 
         $request = Request::create('/');
-        $response = new Response('foo <?php die("foo"); ?><%= "lala" %>');
+        $response = new Response('<?php <? <% <script language=php>');
         $esi->process($request, $response);
 
-        $this->assertEquals('foo <?php echo "<?"; ?>php die("foo"); ?><?php echo "<%"; ?>= "lala" %>', $response->getContent());
+        $this->assertEquals('<?php echo "<?"; ?>php <?php echo "<?"; ?> <?php echo "<%"; ?> <?php echo "<s"; ?>cript language=php>', $response->getContent());
     }
 
     /**

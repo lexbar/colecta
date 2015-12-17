@@ -22,8 +22,6 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
  * @author Bernhard Schussek <bschussek@gmail.com>
- *
- * @api
  */
 class ChoiceValidator extends ConstraintValidator
 {
@@ -32,7 +30,7 @@ class ChoiceValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint->choices && !$constraint->callback) {
+        if (!is_array($constraint->choices) && !$constraint->callback) {
             throw new ConstraintDefinitionException('Either "choices" or "callback" must be specified on constraint Choice');
         }
 
@@ -45,13 +43,12 @@ class ChoiceValidator extends ConstraintValidator
         }
 
         if ($constraint->callback) {
-            if (is_callable(array($this->context->getClassName(), $constraint->callback))) {
-                $choices = call_user_func(array($this->context->getClassName(), $constraint->callback));
-            } elseif (is_callable($constraint->callback)) {
-                $choices = call_user_func($constraint->callback);
-            } else {
+            if (!is_callable($choices = array($this->context->getClassName(), $constraint->callback))
+                && !is_callable($choices = $constraint->callback)
+            ) {
                 throw new ConstraintDefinitionException('The Choice constraint expects a valid callback');
             }
+            $choices = call_user_func($choices);
         } else {
             $choices = $constraint->choices;
         }
@@ -69,7 +66,7 @@ class ChoiceValidator extends ConstraintValidator
 
             if ($constraint->min !== null && $count < $constraint->min) {
                 $this->context->addViolation($constraint->minMessage, array(
-                    '{{ limit }}' => $constraint->min
+                    '{{ limit }}' => $constraint->min,
                 ), $value, (int) $constraint->min);
 
                 return;
@@ -77,14 +74,14 @@ class ChoiceValidator extends ConstraintValidator
 
             if ($constraint->max !== null && $count > $constraint->max) {
                 $this->context->addViolation($constraint->maxMessage, array(
-                    '{{ limit }}' => $constraint->max
+                    '{{ limit }}' => $constraint->max,
                 ), $value, (int) $constraint->max);
 
                 return;
             }
         } elseif (!in_array($value, $choices, $constraint->strict)) {
             $this->context->addViolation($constraint->message, array(
-                '{{ value }}' => $this->formatValue($value)
+                '{{ value }}' => $this->formatValue($value),
             ));
         }
     }

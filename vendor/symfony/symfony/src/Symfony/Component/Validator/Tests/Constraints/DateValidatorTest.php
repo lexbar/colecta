@@ -75,14 +75,14 @@ class DateValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidDates($date)
     {
         $constraint = new Date(array(
-            'message' => 'myMessage'
+            'message' => 'myMessage',
         ));
 
         $this->validator->validate($date, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$date.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$date.'"')
+            ->assertRaised();
     }
 
     public function getInvalidDates()

@@ -15,7 +15,7 @@ use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Core\Role\Role;
 
 /**
- * A SecurityIdentity implementation for roles
+ * A SecurityIdentity implementation for roles.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
@@ -24,7 +24,7 @@ final class RoleSecurityIdentity implements SecurityIdentityInterface
     private $role;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param mixed $role a Role instance, or its string representation
      */
@@ -38,7 +38,7 @@ final class RoleSecurityIdentity implements SecurityIdentityInterface
     }
 
     /**
-     * Returns the role name
+     * Returns the role name.
      *
      * @return string
      */
@@ -52,7 +52,7 @@ final class RoleSecurityIdentity implements SecurityIdentityInterface
      */
     public function equals(SecurityIdentityInterface $sid)
     {
-        if (!$sid instanceof RoleSecurityIdentity) {
+        if (!$sid instanceof self) {
             return false;
         }
 

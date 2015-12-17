@@ -23,13 +23,6 @@ use Symfony\Component\Validator\Tests\Fixtures\ConstraintB;
 
 class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\Yaml\Yaml')) {
-            $this->markTestSkipped('The "Yaml" component is not available');
-        }
-    }
-
     public function testLoadClassMetadataReturnsFalseIfEmpty()
     {
         $loader = new YamlFileLoader(__DIR__.'/empty-mapping.yml');
@@ -39,13 +32,39 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider provideInvalidYamlFiles
      * @expectedException \InvalidArgumentException
      */
-    public function testLoadClassMetadataThrowsExceptionIfNotAnArray()
+    public function testInvalidYamlFiles($path)
+    {
+        $loader = new YamlFileLoader(__DIR__.'/'.$path);
+        $metadata = new ClassMetadata('Symfony\Component\Validator\Tests\Fixtures\Entity');
+
+        $loader->loadClassMetadata($metadata);
+    }
+
+    public function provideInvalidYamlFiles()
+    {
+        return array(
+            array('nonvalid-mapping.yml'),
+            array('bad-format.yml'),
+        );
+    }
+
+    /**
+     * @see https://github.com/symfony/symfony/pull/12158
+     */
+    public function testDoNotModifyStateIfExceptionIsThrown()
     {
         $loader = new YamlFileLoader(__DIR__.'/nonvalid-mapping.yml');
         $metadata = new ClassMetadata('Symfony\Component\Validator\Tests\Fixtures\Entity');
-        $loader->loadClassMetadata($metadata);
+        try {
+            $loader->loadClassMetadata($metadata);
+        } catch (\InvalidArgumentException $e) {
+            // Call again. Again an exception should be thrown
+            $this->setExpectedException('\InvalidArgumentException');
+            $loader->loadClassMetadata($metadata);
+        }
     }
 
     public function testLoadClassMetadataReturnsTrueIfSuccessful()

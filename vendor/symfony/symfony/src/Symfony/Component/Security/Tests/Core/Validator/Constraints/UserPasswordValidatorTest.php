@@ -16,17 +16,13 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPasswordValidator;
 
 class UserPasswordValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    const PASSWORD_VALID   = true;
+    const PASSWORD_VALID = true;
     const PASSWORD_INVALID = false;
 
     protected $context;
 
     protected function setUp()
     {
-        if (false === class_exists('Symfony\Component\Validator\Validator')) {
-            $this->markTestSkipped('The Validator component is required for this test.');
-        }
-
         $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
     }
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This file is part of the Symfony Standard Edition.
 #
@@ -42,10 +42,10 @@ cd /tmp/Symfony
 git clone https://github.com/symfony/symfony-standard.git .
 git reset --hard origin/$2
 
-composer.phar update --prefer-dist -n
+composer install --prefer-dist -n
 
 # cleanup
-sudo rm -rf app/cache/* app/logs/* .git*
+rm -rf app/cache/* app/logs/* .git*
 chmod 777 app/cache app/logs
 find . -name .DS_Store | xargs rm -rf -
 
@@ -56,10 +56,14 @@ cd /tmp/Symfony
 TARGET=/tmp/Symfony/vendor
 
 # Doctrine
-cd $TARGET/doctrine/orm && rm -rf UPGRADE* build* bin tests tools lib/vendor
-cd $TARGET/doctrine/dbal && rm -rf bin build* tests lib/vendor
+cd $TARGET/doctrine/orm && rm -rf UPGRADE* build* tests tools lib/vendor
+cd $TARGET/doctrine/dbal && rm -rf build* tests lib/vendor
 cd $TARGET/doctrine/common && rm -rf build* tests lib/vendor
-cd $TARGET/doctrine/doctrine-bundle && rm -rf Doctrine/Bundle/DoctrineBundle/Tests Doctrine/Bundle/DoctrineBundle/Resources/doc
+if [ -d $TARGET/doctrine/doctrine-bundle/Doctrine/Bundle/DoctrineBundle ]; then
+    cd $TARGET/doctrine/doctrine-bundle/Doctrine/Bundle/DoctrineBundle && rm -rf Tests Resources/doc
+else
+    cd $TARGET/doctrine/doctrine-bundle && rm -rf Tests Resources/doc
+fi
 
 # kriswallsmith
 cd $TARGET/kriswallsmith/assetic && rm -rf CHANGELOG* phpunit.xml* tests docs
@@ -69,7 +73,11 @@ cd $TARGET/monolog/monolog && rm -rf README.markdown phpunit.xml* tests
 
 # Sensio
 cd $TARGET/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle && rm -rf phpunit.xml* Tests CHANGELOG* Resources/doc
-cd $TARGET/sensio/framework-extra-bundle/Sensio/Bundle/FrameworkExtraBundle && rm -rf phpunit.xml* Tests CHANGELOG* Resources/doc
+if [ -d $TARGET/sensio/framework-extra-bundle/Sensio/Bundle/FrameworkExtraBundle ]; then
+    cd $TARGET/sensio/framework-extra-bundle/Sensio/Bundle/FrameworkExtraBundle && rm -rf phpunit.xml* Tests CHANGELOG* Resources/doc
+else
+    cd $TARGET/sensio/framework-extra-bundle && rm -rf phpunit.xml* Tests CHANGELOG* Resources/doc
+fi
 cd $TARGET/sensio/generator-bundle/Sensio/Bundle/GeneratorBundle && rm -rf phpunit.xml* Tests CHANGELOG* Resources/doc
 
 # Swiftmailer
@@ -77,8 +85,16 @@ cd $TARGET/swiftmailer/swiftmailer && rm -rf CHANGES README* build* docs notes t
 
 # Symfony
 cd $TARGET/symfony/symfony && rm -rf README.md phpunit.xml* tests *.sh vendor
-cd $TARGET/symfony/assetic-bundle/Symfony/Bundle/AsseticBundle && rm -rf Tests Resources/doc
-cd $TARGET/symfony/swiftmailer-bundle/Symfony/Bundle/SwiftmailerBundle && rm -rf Tests Resources/doc
+if [ -d $TARGET/symfony/assetic-bundle/Symfony/Bundle/AsseticBundle ]; then
+    cd $TARGET/symfony/assetic-bundle/Symfony/Bundle/AsseticBundle && rm -rf Tests Resources/doc
+else
+    cd $TARGET/symfony/assetic-bundle && rm -rf Tests Resources/doc
+fi
+if [ -d $TARGET/symfony/swiftmailer-bundle/Symfony/Bundle/SwiftmailerBundle ]; then
+    cd $TARGET/symfony/swiftmailer-bundle/Symfony/Bundle/SwiftmailerBundle && rm -rf Tests Resources/doc
+else
+    cd $TARGET/symfony/swiftmailer-bundle && rm -rf Tests Resources/doc
+fi
 if [ -d $TARGET/symfony/monolog-bundle/Symfony/Bundle/MonologBundle ]; then
     cd $TARGET/symfony/monolog-bundle/Symfony/Bundle/MonologBundle && rm -rf Tests Resources/doc
 else
@@ -95,14 +111,15 @@ find $TARGET -name .gitignore | xargs rm -rf -
 find $TARGET -name .gitmodules | xargs rm -rf -
 find $TARGET -name .svn | xargs rm -rf -
 
+# With vendors
 cd /tmp
 tar zcpf $DIR/Symfony_Standard_Vendors_$VERSION.tgz Symfony
-sudo rm -f $DIR/Symfony_Standard_Vendors_$VERSION.zip
+rm -f $DIR/Symfony_Standard_Vendors_$VERSION.zip
 zip -rq $DIR/Symfony_Standard_Vendors_$VERSION.zip Symfony
 
 # Without vendors
 cd /tmp
 rm -rf Symfony/vendor
 tar zcpf $DIR/Symfony_Standard_$VERSION.tgz Symfony
-sudo rm -f $DIR/Symfony_Standard_$VERSION.zip
+rm -f $DIR/Symfony_Standard_$VERSION.zip
 zip -rq $DIR/Symfony_Standard_$VERSION.zip Symfony

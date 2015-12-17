@@ -59,6 +59,7 @@ class StringUtilTest extends \PHPUnit_Framework_TestCase
             array('data', array('daton', 'datum')),
             array('days', 'day'),
             array('discos', 'disco'),
+            array('devices', array('devex', 'devix', 'device')),
             array('drives', 'drive'),
             array('drivers', 'driver'),
             array('dwarves', array('dwarf', 'dwarve', 'dwarff')),
@@ -67,6 +68,7 @@ class StringUtilTest extends \PHPUnit_Framework_TestCase
             array('emphases', array('emphas', 'emphase', 'emphasis')),
             array('faxes', 'fax'),
             array('feet', 'foot'),
+            array('feedback', 'feedback'),
             array('foci', 'focus'),
             array('focuses', array('focus', 'focuse', 'focusis')),
             array('formulae', 'formula'),
@@ -97,6 +99,7 @@ class StringUtilTest extends \PHPUnit_Framework_TestCase
             array('men', 'man'),
             array('mice', 'mouse'),
             array('moves', 'move'),
+            array('movies', 'movie'),
             array('nebulae', 'nebula'),
             array('neuroses', array('neuros', 'neurose', 'neurosis')),
             array('oases', array('oas', 'oase', 'oasis')),
@@ -116,6 +119,7 @@ class StringUtilTest extends \PHPUnit_Framework_TestCase
             array('sandwiches', array('sandwich', 'sandwiche')),
             array('scarves', array('scarf', 'scarve', 'scarff')),
             array('schemas', 'schema'), //schemata
+            array('selfies', 'selfie'),
             array('sheriffs', 'sheriff'),
             array('shoes', array('sho', 'shoe')),
             array('spies', 'spy'),
@@ -151,9 +155,9 @@ class StringUtilTest extends \PHPUnit_Framework_TestCase
     {
         $single = StringUtil::singularify($plural);
         if (is_string($singular) && is_array($single)) {
-            $this->fail("--- Expected\n`string`: " . $singular . "\n+++ Actual\n`array`: " . implode(', ', $single));
+            $this->fail("--- Expected\n`string`: ".$singular."\n+++ Actual\n`array`: ".implode(', ', $single));
         } elseif (is_array($singular) && is_string($single)) {
-            $this->fail("--- Expected\n`array`: " . implode(', ', $singular) . "\n+++ Actual\n`string`: " . $single);
+            $this->fail("--- Expected\n`array`: ".implode(', ', $singular)."\n+++ Actual\n`string`: ".$single);
         }
 
         $this->assertEquals($singular, $single);

@@ -17,25 +17,6 @@ use Symfony\Component\Security\Http\Firewall\LogoutListener;
 
 class LogoutListenerTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\Form\Form')) {
-            $this->markTestSkipped('The "Form" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\EventDispatcher\EventDispatcher')) {
-            $this->markTestSkipped('The "EventDispatcher" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\HttpKernel\HttpKernel')) {
-            $this->markTestSkipped('The "HttpKernel" component is not available');
-        }
-    }
-
     public function testHandleUnmatchedPath()
     {
         list($listener, $context, $httpUtils, $options) = $this->getListener();
@@ -236,9 +217,9 @@ class LogoutListenerTest extends \PHPUnit_Framework_TestCase
             $successHandler ?: $this->getSuccessHandler(),
             $options = array(
                 'csrf_parameter' => '_csrf_token',
-                'intention'      => 'logout',
-                'logout_path'    => '/logout',
-                'target_url'     => '/',
+                'intention' => 'logout',
+                'logout_path' => '/logout',
+                'target_url' => '/',
             ),
             $csrfProvider
         );

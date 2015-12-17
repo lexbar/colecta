@@ -34,7 +34,7 @@ class FirePHPHandler extends BaseFirePHPHandler
     private $response;
 
     /**
-     * Adds the headers to the response once it's created
+     * Adds the headers to the response once it's created.
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
@@ -44,7 +44,6 @@ class FirePHPHandler extends BaseFirePHPHandler
 
         if (!preg_match('{\bFirePHP/\d+\.\d+\b}', $event->getRequest()->headers->get('User-Agent'))
             && !$event->getRequest()->headers->has('X-FirePHP-Version')) {
-
             $this->sendHeaders = false;
             $this->headers = array();
 
@@ -75,7 +74,7 @@ class FirePHPHandler extends BaseFirePHPHandler
     }
 
     /**
-     * Override default behavior since we check the user agent in onKernelResponse
+     * Override default behavior since we check the user agent in onKernelResponse.
      */
     protected function headersAccepted()
     {

@@ -15,10 +15,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
- * Runs Symfony2 application using PHP built-in web server
+ * Runs Symfony application using PHP built-in web server.
  *
  * @author Michał Pipa <michal.pipa.xsolve@gmail.com>
  */
@@ -29,7 +30,7 @@ class ServerRunCommand extends ContainerAwareCommand
      */
     public function isEnabled()
     {
-        if (version_compare(phpversion(), '5.4.0', '<')) {
+        if (PHP_VERSION_ID < 50400 || defined('HHVM_VERSION')) {
             return false;
         }
 
@@ -44,7 +45,7 @@ class ServerRunCommand extends ContainerAwareCommand
         $this
             ->setDefinition(array(
                 new InputArgument('address', InputArgument::OPTIONAL, 'Address:port', 'localhost:8000'),
-                new InputOption('docroot', 'd', InputOption::VALUE_REQUIRED, 'Document root', 'web/'),
+                new InputOption('docroot', 'd', InputOption::VALUE_REQUIRED, 'Document root', null),
                 new InputOption('router', 'r', InputOption::VALUE_REQUIRED, 'Path to custom router script'),
             ))
             ->setName('server:run')
@@ -83,6 +84,10 @@ EOF
     {
         $documentRoot = $input->getOption('docroot');
 
+        if (null === $documentRoot) {
+            $documentRoot = $this->getContainer()->getParameter('kernel.root_dir').'/../web';
+        }
+
         if (!is_dir($documentRoot)) {
             $output->writeln(sprintf('<error>The given document root directory "%s" does not exist</error>', $documentRoot));
 
@@ -90,26 +95,89 @@ EOF
         }
 
         $env = $this->getContainer()->getParameter('kernel.environment');
+        $address = $input->getArgument('address');
+
+        if (false === strpos($address, ':')) {
+            $output->writeln('The address has to be of the form <comment>bind-address:port</comment>.');
+
+            return 1;
+        }
+
+        if ($this->isOtherServerProcessRunning($address)) {
+            $output->writeln(sprintf('<error>A process is already listening on http://%s.</error>', $address));
+
+            return 1;
+        }
 
         if ('prod' === $env) {
             $output->writeln('<error>Running PHP built-in server in production environment is NOT recommended!</error>');
         }
 
-        $router = $input->getOption('router') ?: $this
+        if (null === $builder = $this->createPhpProcessBuilder($output, $address, $input->getOption('router'), $env)) {
+            return 1;
+        }
+
+        $output->writeln(sprintf("Server running on <info>http://%s</info>\n", $address));
+        $output->writeln('Quit the server with CONTROL-C.');
+
+        $builder->setWorkingDirectory($documentRoot);
+        $builder->setTimeout(null);
+        $process = $builder->getProcess();
+        $process->run(function ($type, $buffer) use ($output) {
+            if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                $output->write($buffer);
+            }
+        });
+
+        if (!$process->isSuccessful()) {
+            $output->writeln('<error>Built-in server terminated unexpectedly</error>');
+
+            if (OutputInterface::VERBOSITY_VERBOSE > $output->getVerbosity()) {
+                $output->writeln('<error>Run the command again with -v option for more details</error>');
+            }
+        }
+
+        return $process->getExitCode();
+    }
+
+    private function isOtherServerProcessRunning($address)
+    {
+        list($hostname, $port) = explode(':', $address);
+
+        $fp = @fsockopen($hostname, $port, $errno, $errstr, 5);
+
+        if (false !== $fp) {
+            fclose($fp);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function createPhpProcessBuilder(OutputInterface $output, $address, $router, $env)
+    {
+        $router = $router ?: $this
             ->getContainer()
             ->get('kernel')
             ->locateResource(sprintf('@FrameworkBundle/Resources/config/router_%s.php', $env))
         ;
 
-        $output->writeln(sprintf("Server running on <info>http://%s</info>\n", $input->getArgument('address')));
+        if (!file_exists($router)) {
+            $output->writeln(sprintf('<error>The given router script "%s" does not exist</error>', $router));
 
-        $builder = new ProcessBuilder(array(PHP_BINARY, '-S', $input->getArgument('address'), $router));
-        $builder->setWorkingDirectory($documentRoot);
-        $builder->setTimeout(null);
-        $builder->getProcess()->run(function ($type, $buffer) use ($output) {
-            if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
-                $output->write($buffer);
-            }
-        });
+            return;
+        }
+
+        $router = realpath($router);
+        $finder = new PhpExecutableFinder();
+
+        if (false === $binary = $finder->find()) {
+            $output->writeln('<error>Unable to find PHP binary to run server</error>');
+
+            return;
+        }
+
+        return new ProcessBuilder(array($binary, '-S', $address, $router));
     }
 }

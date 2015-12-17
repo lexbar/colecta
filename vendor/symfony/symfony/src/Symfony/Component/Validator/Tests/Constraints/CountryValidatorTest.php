@@ -17,13 +17,6 @@ use Symfony\Component\Validator\Constraints\CountryValidator;
 
 class CountryValidatorTest extends AbstractConstraintValidatorTest
 {
-    protected function setUp()
-    {
-        IntlTestHelper::requireFullIntl($this);
-
-        parent::setUp();
-    }
-
     protected function createValidator()
     {
         return new CountryValidator();
@@ -76,14 +69,14 @@ class CountryValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidCountries($country)
     {
         $constraint = new Country(array(
-            'message' => 'myMessage'
+            'message' => 'myMessage',
         ));
 
         $this->validator->validate($country, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$country.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$country.'"')
+            ->assertRaised();
     }
 
     public function getInvalidCountries()

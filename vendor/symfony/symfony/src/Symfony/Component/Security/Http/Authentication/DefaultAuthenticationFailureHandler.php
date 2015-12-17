@@ -46,14 +46,14 @@ class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandle
     public function __construct(HttpKernelInterface $httpKernel, HttpUtils $httpUtils, array $options, LoggerInterface $logger = null)
     {
         $this->httpKernel = $httpKernel;
-        $this->httpUtils  = $httpUtils;
-        $this->logger     = $logger;
+        $this->httpUtils = $httpUtils;
+        $this->logger = $logger;
 
         $this->options = array_merge(array(
-            'failure_path'           => null,
-            'failure_forward'        => false,
-            'login_path'             => '/login',
-            'failure_path_parameter' => '_failure_path'
+            'failure_path' => null,
+            'failure_forward' => false,
+            'login_path' => '/login',
+            'failure_path_parameter' => '_failure_path',
         ), $options);
     }
 
@@ -63,7 +63,7 @@ class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandle
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         if ($failureUrl = $request->get($this->options['failure_path_parameter'], null, true)) {
-             $this->options['failure_path'] = $failureUrl;
+            $this->options['failure_path'] = $failureUrl;
         }
 
         if (null === $this->options['failure_path']) {

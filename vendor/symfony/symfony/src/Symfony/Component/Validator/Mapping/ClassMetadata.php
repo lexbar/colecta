@@ -68,7 +68,7 @@ class ClassMetadata extends ElementMetadata implements MetadataInterface, ClassB
     private $reflClass;
 
     /**
-     * Constructs a metadata for the given class
+     * Constructs a metadata for the given class.
      *
      * @param string $class
      */
@@ -118,7 +118,7 @@ class ClassMetadata extends ElementMetadata implements MetadataInterface, ClassB
     }
 
     /**
-     * Returns the properties to be serialized
+     * Returns the properties to be serialized.
      *
      * @return array
      */
@@ -131,14 +131,14 @@ class ClassMetadata extends ElementMetadata implements MetadataInterface, ClassB
             'members',
             'name',
             'properties',
-            'defaultGroup'
+            'defaultGroup',
         ));
     }
 
     /**
-     * Returns the fully qualified name of the class
+     * Returns the fully qualified name of the class.
      *
-     * @return string  The fully qualified class name
+     * @return string The fully qualified class name
      */
     public function getClassName()
     {
@@ -146,7 +146,7 @@ class ClassMetadata extends ElementMetadata implements MetadataInterface, ClassB
     }
 
     /**
-     * Returns the name of the default group for this class
+     * Returns the name of the default group for this class.
      *
      * For each class, the group "Default" is an alias for the group
      * "<ClassName>", where <ClassName> is the non-namespaced name of the
@@ -158,7 +158,7 @@ class ClassMetadata extends ElementMetadata implements MetadataInterface, ClassB
      * will validate the group sequence. The constraints assigned to "Default"
      * can still be validated by validating the class in "<ClassName>".
      *
-     * @return string  The name of the default group
+     * @return string The name of the default group
      */
     public function getDefaultGroup()
     {
@@ -400,7 +400,7 @@ class ClassMetadata extends ElementMetadata implements MetadataInterface, ClassB
     /**
      * Sets whether a group sequence provider should be used.
      *
-     * @param bool    $active
+     * @param bool $active
      *
      * @throws GroupDefinitionException
      */

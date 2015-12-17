@@ -13,7 +13,6 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\IbanValidator;
-use Symfony\Component\Validator\Validation;
 
 class IbanValidatorTest extends AbstractConstraintValidatorTest
 {
@@ -154,14 +153,14 @@ class IbanValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidIbans($iban)
     {
         $constraint = new Iban(array(
-            'message' => 'myMessage'
+            'message' => 'myMessage',
         ));
 
         $this->validator->validate($iban, $constraint);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$iban.'"',
-        ));
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$iban.'"')
+            ->assertRaised();
     }
 
     public function getInvalidIbans()
@@ -181,7 +180,7 @@ class IbanValidatorTest extends AbstractConstraintValidatorTest
 
             //Ibans with lower case values are invalid
             array('Ae260211000000230064016'),
-            array('ae260211000000230064016')
+            array('ae260211000000230064016'),
         );
     }
 }

@@ -178,8 +178,8 @@ class Swift_Mime_ContentEncoder_Base64ContentEncoderTest extends \SwiftMailerTes
 
         $this->_encoder->encodeByteStream($os, $is);
         $this->assertEquals(
-            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3ODkwQUJDREVGR0hJSktMTU5PUFFS\r\n" .
-            "U1RVVldYWVoxMjM0NTY3YWJjZGVmZ2hpamts",
+            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3ODkwQUJDREVGR0hJSktMTU5PUFFS\r\n".
+            'U1RVVldYWVoxMjM0NTY3YWJjZGVmZ2hpamts',
             $collection->content
             );
     }
@@ -220,9 +220,9 @@ class Swift_Mime_ContentEncoder_Base64ContentEncoderTest extends \SwiftMailerTes
 
         $this->_encoder->encodeByteStream($os, $is, 0, 50);
         $this->assertEquals(
-            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3OD\r\n" .
-            "kwQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVoxMjM0NTY3YWJj\r\n" .
-            "ZGVmZ2hpamts",
+            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3OD\r\n".
+            "kwQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVoxMjM0NTY3YWJj\r\n".
+            'ZGVmZ2hpamts',
             $collection->content
             );
     }
@@ -263,8 +263,8 @@ class Swift_Mime_ContentEncoder_Base64ContentEncoderTest extends \SwiftMailerTes
 
         $this->_encoder->encodeByteStream($os, $is, 0, 100);
         $this->assertEquals(
-            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3ODkwQUJDREVGR0hJSktMTU5PUFFS\r\n" .
-            "U1RVVldYWVoxMjM0NTY3YWJjZGVmZ2hpamts",
+            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3ODkwQUJDREVGR0hJSktMTU5PUFFS\r\n".
+            'U1RVVldYWVoxMjM0NTY3YWJjZGVmZ2hpamts',
             $collection->content
             );
     }
@@ -305,13 +305,11 @@ class Swift_Mime_ContentEncoder_Base64ContentEncoderTest extends \SwiftMailerTes
 
         $this->_encoder->encodeByteStream($os, $is, 19);
         $this->assertEquals(
-            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3ODkwQUJDR\r\n" .
-            "EVGR0hJSktMTU5PUFFSU1RVVldYWVoxMjM0NTY3YWJjZGVmZ2hpamts",
+            "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmMxMjM0NTY3ODkwQUJDR\r\n".
+            'EVGR0hJSktMTU5PUFFSU1RVVldYWVoxMjM0NTY3YWJjZGVmZ2hpamts',
             $collection->content
             );
     }
-
-    // -- Private Methods
 
     private function _createOutputByteStream($stub = false)
     {

@@ -18,19 +18,12 @@ use Symfony\Bridge\Twig\Tests\TestCase;
 
 class TwigExtractorTest extends TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\Translation\Translator')) {
-            $this->markTestSkipped('The "Translation" component is not available');
-        }
-    }
-
     /**
      * @dataProvider getExtractData
      */
     public function testExtract($template, $messages)
     {
-        $loader = new \Twig_Loader_Array(array());
+        $loader = $this->getMock('Twig_LoaderInterface');
         $twig = new \Twig_Environment($loader, array(
             'strict_variables' => true,
             'debug' => true,
@@ -77,5 +70,18 @@ class TwigExtractorTest extends TestCase
             array('{{ "new key" | trans(domain="domain") }}', array('new key' => 'domain')),
             array('{{ "new key" | transchoice(domain="domain", count=1) }}', array('new key' => 'domain')),
         );
+    }
+
+    /**
+     * @expectedException              \Twig_Error
+     * @expectedExceptionMessageRegExp /Unclosed "block" in "extractor(\/|\\)syntax_error\.twig" at line 1/
+     */
+    public function testExtractSyntaxError()
+    {
+        $twig = new \Twig_Environment($this->getMock('Twig_LoaderInterface'));
+        $twig->addExtension(new TranslationExtension($this->getMock('Symfony\Component\Translation\TranslatorInterface')));
+
+        $extractor = new TwigExtractor($twig);
+        $extractor->extract(__DIR__.'/../Fixtures', new MessageCatalogue('en'));
     }
 }

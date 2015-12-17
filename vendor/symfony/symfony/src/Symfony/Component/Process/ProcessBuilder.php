@@ -31,7 +31,7 @@ class ProcessBuilder
     private $prefix;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string[] $arguments An array of arguments
      */
@@ -67,7 +67,7 @@ class ProcessBuilder
     }
 
     /**
-     * Adds an unescaped prefix to the command string.
+     * Adds a prefix to the command string.
      *
      * The prefix is preserved when resetting arguments.
      *
@@ -128,7 +128,7 @@ class ProcessBuilder
     }
 
     /**
-     * Sets an environment variable
+     * Sets an environment variable.
      *
      * Setting a variable overrides its previous value. Use `null` to unset a
      * defined environment variable.
@@ -166,7 +166,7 @@ class ProcessBuilder
      *
      * To disable the timeout, set this value to null.
      *
-     * @param float|null
+     * @param float|null $timeout
      *
      * @return ProcessBuilder
      *

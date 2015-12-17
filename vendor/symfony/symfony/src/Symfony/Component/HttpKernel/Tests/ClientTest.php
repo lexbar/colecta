@@ -12,8 +12,6 @@
 namespace Symfony\Component\HttpKernel\Tests;
 
 use Symfony\Component\HttpKernel\Client;
-use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -22,13 +20,6 @@ use Symfony\Component\HttpKernel\Tests\Fixtures\TestClient;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\BrowserKit\Client')) {
-            $this->markTestSkipped('The "BrowserKit" component is not available');
-        }
-    }
-
     public function testDoRequest()
     {
         $client = new Client(new TestHttpKernel());
@@ -50,14 +41,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScript()
     {
-        if (!class_exists('Symfony\Component\Process\Process')) {
-            $this->markTestSkipped('The "Process" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\ClassLoader\ClassLoader')) {
-            $this->markTestSkipped('The "ClassLoader" component is not available');
-        }
-
         $client = new TestClient(new TestHttpKernel());
         $client->insulate();
         $client->request('GET', '/');
@@ -75,7 +58,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $expected = array(
             'foo=bar; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly',
-            'foo1=bar1; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly'
+            'foo1=bar1; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly',
         );
 
         $response = new Response();

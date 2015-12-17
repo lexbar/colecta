@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
- *
- * @api
  */
 class FileValidator extends ConstraintValidator
 {
@@ -97,7 +95,7 @@ class FileValidator extends ConstraintValidator
 
         if (!is_file($path)) {
             $this->context->addViolation($constraint->notFoundMessage, array(
-                '{{ file }}' => $this->formatValue($path)
+                '{{ file }}' => $this->formatValue($path),
             ));
 
             return;
@@ -105,7 +103,7 @@ class FileValidator extends ConstraintValidator
 
         if (!is_readable($path)) {
             $this->context->addViolation($constraint->notReadableMessage, array(
-                '{{ file }}' => $this->formatValue($path)
+                '{{ file }}' => $this->formatValue($path),
             ));
 
             return;

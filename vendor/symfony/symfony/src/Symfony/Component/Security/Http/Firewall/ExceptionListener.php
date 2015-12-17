@@ -46,8 +46,9 @@ class ExceptionListener
     private $errorPage;
     private $logger;
     private $httpUtils;
+    private $stateless;
 
-    public function __construct(SecurityContextInterface $context, AuthenticationTrustResolverInterface $trustResolver, HttpUtils $httpUtils, $providerKey, AuthenticationEntryPointInterface $authenticationEntryPoint = null, $errorPage = null, AccessDeniedHandlerInterface $accessDeniedHandler = null, LoggerInterface $logger = null)
+    public function __construct(SecurityContextInterface $context, AuthenticationTrustResolverInterface $trustResolver, HttpUtils $httpUtils, $providerKey, AuthenticationEntryPointInterface $authenticationEntryPoint = null, $errorPage = null, AccessDeniedHandlerInterface $accessDeniedHandler = null, LoggerInterface $logger = null, $stateless = false)
     {
         $this->context = $context;
         $this->accessDeniedHandler = $accessDeniedHandler;
@@ -57,6 +58,7 @@ class ExceptionListener
         $this->authenticationTrustResolver = $trustResolver;
         $this->errorPage = $errorPage;
         $this->logger = $logger;
+        $this->stateless = $stateless;
     }
 
     /**
@@ -87,7 +89,7 @@ class ExceptionListener
             } elseif ($exception instanceof AccessDeniedException) {
                 return $this->handleAccessDeniedException($event, $exception);
             } elseif ($exception instanceof LogoutException) {
-                return $this->handleLogoutException($event, $exception);
+                return $this->handleLogoutException($exception);
             }
         } while (null !== $exception = $exception->getPrevious());
     }
@@ -153,7 +155,7 @@ class ExceptionListener
         }
     }
 
-    private function handleLogoutException(GetResponseForExceptionEvent $event, LogoutException $exception)
+    private function handleLogoutException(LogoutException $exception)
     {
         if (null !== $this->logger) {
             $this->logger->info(sprintf('Logout exception occurred; wrapping with AccessDeniedHttpException (%s)', $exception->getMessage()));
@@ -165,6 +167,7 @@ class ExceptionListener
      * @param AuthenticationException $authException
      *
      * @return Response
+     *
      * @throws AuthenticationException
      */
     private function startAuthentication(Request $request, AuthenticationException $authException)
@@ -177,7 +180,9 @@ class ExceptionListener
             $this->logger->debug('Calling Authentication entry point');
         }
 
-        $this->setTargetPath($request);
+        if (!$this->stateless) {
+            $this->setTargetPath($request);
+        }
 
         if ($authException instanceof AccountStatusException) {
             // remove the security token to prevent infinite redirect loops
@@ -193,7 +198,7 @@ class ExceptionListener
     protected function setTargetPath(Request $request)
     {
         // session isn't required when using HTTP basic authentication mechanism for example
-        if ($request->hasSession() && $request->isMethodSafe()) {
+        if ($request->hasSession() && $request->isMethodSafe() && !$request->isXmlHttpRequest()) {
             $request->getSession()->set('_security.'.$this->providerKey.'.target_path', $request->getUri());
         }
     }

@@ -41,28 +41,21 @@ class TwigEngine extends BaseEngine implements EngineInterface
         $this->locator = $locator;
     }
 
+    /**
+     * @deprecated Deprecated since version 2.3, to be removed in 3.0. Inject the escaping
+     *             strategy on Twig_Environment instead
+     */
     public function setDefaultEscapingStrategy($strategy)
     {
         $this->environment->getExtension('escaper')->setDefaultStrategy($strategy);
     }
 
+    /**
+     * @deprecated Deprecated since version 2.3, to be removed in 3.0. Use TwigDefaultEscapingStrategy instead.
+     */
     public function guessDefaultEscapingStrategy($filename)
     {
-        // remove .twig
-        $filename = substr($filename, 0, -5);
-
-        // get the format
-        $format = substr($filename, strrpos($filename, '.') + 1);
-
-        if ('js' === $format) {
-            return 'js';
-        }
-
-        if ('txt' === $format) {
-            return false;
-        }
-
-        return 'html';
+        return TwigDefaultEscapingStrategy::guess($filename);
     }
 
     /**
@@ -86,7 +79,7 @@ class TwigEngine extends BaseEngine implements EngineInterface
                 try {
                     // try to get the real file name of the template where the error occurred
                     $e->setTemplateFile(sprintf('%s', $this->locator->locate($this->parser->parse($e->getTemplateFile()))));
-                } catch (\Exception $ex) {
+                } catch (\Exception $e2) {
                 }
             }
 

@@ -142,6 +142,21 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
     }
 
     /**
+     * @requires PHP 5.5
+     */
+    public function testTransformDateTimeImmutableTimezones()
+    {
+        $transformer = new DateTimeToLocalizedStringTransformer('America/New_York', 'Asia/Hong_Kong');
+
+        $input = new \DateTimeImmutable('2010-02-03 04:05:06 America/New_York');
+
+        $dateTime = clone $input;
+        $dateTime = $dateTime->setTimezone(new \DateTimeZone('Asia/Hong_Kong'));
+
+        $this->assertEquals($dateTime->format('d.m.Y H:i'), $transformer->transform($input));
+    }
+
+    /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function testTransformRequiresValidDateTime()
@@ -154,9 +169,11 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
     {
         $transformer = new DateTimeToLocalizedStringTransformer();
 
+        $this->markTestIncomplete('Checking for intl errors needs to be reimplemented');
+
         // HOW TO REPRODUCE?
 
-        //$this->setExpectedException('Symfony\Component\Form\Extension\Core\DataTransformer\Transdate_formationFailedException');
+        //$this->setExpectedException('Symfony\Component\Form\Extension\Core\DataTransformer\TransformationFailedException');
 
         //$transformer->transform(1.5);
     }

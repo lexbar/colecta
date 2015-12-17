@@ -14,7 +14,6 @@ namespace Symfony\Component\BrowserKit\Tests;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\History;
 use Symfony\Component\BrowserKit\CookieJar;
-use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\BrowserKit\Response;
 
 class SpecialResponse extends Response
@@ -74,27 +73,18 @@ EOF;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers Symfony\Component\BrowserKit\Client::getHistory
-     */
     public function testGetHistory()
     {
         $client = new TestClient(array(), $history = new History());
         $this->assertSame($history, $client->getHistory(), '->getHistory() returns the History');
     }
 
-    /**
-     * @covers Symfony\Component\BrowserKit\Client::getCookieJar
-     */
     public function testGetCookieJar()
     {
         $client = new TestClient(array(), null, $cookieJar = new CookieJar());
         $this->assertSame($cookieJar, $client->getCookieJar(), '->getCookieJar() returns the CookieJar');
     }
 
-    /**
-     * @covers Symfony\Component\BrowserKit\Client::getRequest
-     */
     public function testGetRequest()
     {
         $client = new TestClient();
@@ -141,9 +131,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($json, $client->getRequest()->getContent());
     }
 
-    /**
-     * @covers Symfony\Component\BrowserKit\Client::getCrawler
-     */
     public function testGetCrawler()
     {
         $client = new TestClient();
@@ -208,6 +195,21 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->request('GET', 'http://www.example.com/foo/foobar');
         $client->request('GET', 'bar');
         $this->assertEquals('http://www.example.com/foo/bar', $client->getRequest()->getUri(), '->request() uses the previous request for relative URLs');
+
+        $client = new TestClient();
+        $client->request('GET', 'http://www.example.com/foo/');
+        $client->request('GET', 'http');
+        $this->assertEquals('http://www.example.com/foo/http', $client->getRequest()->getUri(), '->request() uses the previous request for relative URLs');
+
+        $client = new TestClient();
+        $client->request('GET', 'http://www.example.com/foo');
+        $client->request('GET', 'http/bar');
+        $this->assertEquals('http://www.example.com/http/bar', $client->getRequest()->getUri(), '->request() uses the previous request for relative URLs');
+
+        $client = new TestClient();
+        $client->request('GET', 'http://www.example.com/');
+        $client->request('GET', 'http');
+        $this->assertEquals('http://www.example.com/http', $client->getRequest()->getUri(), '->request() uses the previous request for relative URLs');
     }
 
     public function testRequestURIConversionByServerHost()
@@ -269,14 +271,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testClick()
     {
-        if (!class_exists('Symfony\Component\DomCrawler\Crawler')) {
-            $this->markTestSkipped('The "DomCrawler" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\CssSelector\CssSelector')) {
-            $this->markTestSkipped('The "CssSelector" component is not available');
-        }
-
         $client = new TestClient();
         $client->setNextResponse(new Response('<html><a href="/foo">foo</a></html>'));
         $crawler = $client->request('GET', 'http://www.example.com/foo/foobar');
@@ -288,14 +282,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testClickForm()
     {
-        if (!class_exists('Symfony\Component\DomCrawler\Crawler')) {
-            $this->markTestSkipped('The "DomCrawler" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\CssSelector\CssSelector')) {
-            $this->markTestSkipped('The "CssSelector" component is not available');
-        }
-
         $client = new TestClient();
         $client->setNextResponse(new Response('<html><form action="/foo"><input type="submit" /></form></html>'));
         $crawler = $client->request('GET', 'http://www.example.com/foo/foobar');
@@ -307,14 +293,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmit()
     {
-        if (!class_exists('Symfony\Component\DomCrawler\Crawler')) {
-            $this->markTestSkipped('The "DomCrawler" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\CssSelector\CssSelector')) {
-            $this->markTestSkipped('The "CssSelector" component is not available');
-        }
-
         $client = new TestClient();
         $client->setNextResponse(new Response('<html><form action="/foo"><input type="submit" /></form></html>'));
         $crawler = $client->request('GET', 'http://www.example.com/foo/foobar');
@@ -326,14 +304,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmitPreserveAuth()
     {
-        if (!class_exists('Symfony\Component\DomCrawler\Crawler')) {
-            $this->markTestSkipped('The "DomCrawler" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\CssSelector\CssSelector')) {
-            $this->markTestSkipped('The "CssSelector" component is not available');
-        }
-
         $client = new TestClient(array('PHP_AUTH_USER' => 'foo', 'PHP_AUTH_PW' => 'bar'));
         $client->setNextResponse(new Response('<html><form action="/foo"><input type="submit" /></form></html>'));
         $crawler = $client->request('GET', 'http://www.example.com/foo/foobar');
@@ -365,7 +335,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $client->followRedirect();
             $this->fail('->followRedirect() throws a \LogicException if the request was not redirected');
         } catch (\Exception $e) {
-            $this->assertInstanceof('LogicException', $e, '->followRedirect() throws a \LogicException if the request was not redirected');
+            $this->assertInstanceOf('LogicException', $e, '->followRedirect() throws a \LogicException if the request was not redirected');
         }
 
         $client->setNextResponse(new Response('', 302, array('Location' => 'http://www.example.com/redirected')));
@@ -395,7 +365,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $client->followRedirect();
             $this->fail('->followRedirect() throws a \LogicException if the request did not respond with 30x HTTP Code');
         } catch (\Exception $e) {
-            $this->assertInstanceof('LogicException', $e, '->followRedirect() throws a \LogicException if the request did not respond with 30x HTTP Code');
+            $this->assertInstanceOf('LogicException', $e, '->followRedirect() throws a \LogicException if the request did not respond with 30x HTTP Code');
         }
     }
 
@@ -425,7 +395,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $client->followRedirect();
             $this->fail('->followRedirect() throws a \LogicException if the request was redirected and limit of redirections was reached');
         } catch (\Exception $e) {
-            $this->assertInstanceof('LogicException', $e, '->followRedirect() throws a \LogicException if the request was redirected and limit of redirections was reached');
+            $this->assertInstanceOf('LogicException', $e, '->followRedirect() throws a \LogicException if the request was redirected and limit of redirections was reached');
         }
 
         $client->setNextResponse(new Response('', 302, array('Location' => 'http://www.example.com/redirected')));
@@ -456,7 +426,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = new TestClient();
         $client->followRedirects(false);
         $client->setNextResponse(new Response('', 302, array(
-            'Location'   => 'http://www.example.com/redirected',
+            'Location' => 'http://www.example.com/redirected',
             'Set-Cookie' => 'foo=bar',
         )));
         $client->request('GET', 'http://www.example.com/');
@@ -468,16 +438,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testFollowRedirectWithHeaders()
     {
         $headers = array(
-            'HTTP_HOST'       => 'www.example.com',
+            'HTTP_HOST' => 'www.example.com',
             'HTTP_USER_AGENT' => 'Symfony2 BrowserKit',
-            'CONTENT_TYPE'    => 'application/vnd.custom+xml',
-            'HTTPS'           => false,
+            'CONTENT_TYPE' => 'application/vnd.custom+xml',
+            'HTTPS' => false,
         );
 
         $client = new TestClient();
         $client->followRedirects(false);
         $client->setNextResponse(new Response('', 302, array(
-            'Location'    => 'http://www.example.com/redirected',
+            'Location' => 'http://www.example.com/redirected',
         )));
         $client->request('GET', 'http://www.example.com/', array(), array(), array(
             'CONTENT_TYPE' => 'application/vnd.custom+xml',
@@ -495,15 +465,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testFollowRedirectWithPort()
     {
         $headers = array(
-            'HTTP_HOST'       => 'www.example.com:8080',
+            'HTTP_HOST' => 'www.example.com:8080',
             'HTTP_USER_AGENT' => 'Symfony2 BrowserKit',
-            'HTTPS'           => false,
-            'HTTP_REFERER'    => 'http://www.example.com:8080/'
+            'HTTPS' => false,
+            'HTTP_REFERER' => 'http://www.example.com:8080/',
         );
 
         $client = new TestClient();
         $client->setNextResponse(new Response('', 302, array(
-            'Location'    => 'http://www.example.com:8080/redirected',
+            'Location' => 'http://www.example.com:8080/redirected',
         )));
         $client->request('GET', 'http://www.example.com:8080/');
 
@@ -582,10 +552,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testInsulatedRequests()
     {
-        if (!class_exists('Symfony\Component\Process\Process')) {
-            $this->markTestSkipped('The "Process" component is not available');
-        }
-
         $client = new TestClient();
         $client->insulate();
         $client->setNextScript("new Symfony\Component\BrowserKit\Response('foobar')");
@@ -599,7 +565,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $client->request('GET', 'http://www.example.com/foo/foobar');
             $this->fail('->request() throws a \RuntimeException if the script has an error');
         } catch (\Exception $e) {
-            $this->assertInstanceof('RuntimeException', $e, '->request() throws a \RuntimeException if the script has an error');
+            $this->assertInstanceOf('RuntimeException', $e, '->request() throws a \RuntimeException if the script has an error');
         }
     }
 
@@ -633,10 +599,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Symfony2 BrowserKit', $client->getServerParameter('HTTP_USER_AGENT'));
 
         $client->request('GET', 'https://www.example.com/https/www.example.com', array(), array(), array(
-            'HTTP_HOST'       => 'testhost',
+            'HTTP_HOST' => 'testhost',
             'HTTP_USER_AGENT' => 'testua',
-            'HTTPS'           => false,
-            'NEW_SERVER_KEY'  => 'new-server-key-value'
+            'HTTPS' => false,
+            'NEW_SERVER_KEY' => 'new-server-key-value',
         ));
 
         $this->assertEquals('localhost', $client->getServerParameter('HTTP_HOST'));

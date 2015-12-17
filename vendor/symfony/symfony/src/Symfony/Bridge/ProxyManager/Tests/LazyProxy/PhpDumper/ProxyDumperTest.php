@@ -15,11 +15,9 @@ use Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Tests for {@see \Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper}
+ * Tests for {@see \Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper}.
  *
  * @author Marco Pivetta <ocramius@gmail.com>
- *
- * @covers \Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper
  */
 class ProxyDumperTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +29,7 @@ class ProxyDumperTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->dumper = new ProxyDumper();
     }
@@ -57,7 +55,7 @@ class ProxyDumperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertStringMatchesFormat(
             '%Aclass SymfonyBridgeProxyManagerTestsLazyProxyPhpDumperProxyDumperTest%aextends%w'
-                . '\Symfony\Bridge\ProxyManager\Tests\LazyProxy\PhpDumper\ProxyDumperTest%a',
+                .'\Symfony\Bridge\ProxyManager\Tests\LazyProxy\PhpDumper\ProxyDumperTest%a',
             $code
         );
     }
@@ -72,10 +70,10 @@ class ProxyDumperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertStringMatchesFormat(
             '%wif ($lazyLoad) {%w$container = $this;%wreturn $this->services[\'foo\'] = new '
-            . 'SymfonyBridgeProxyManagerTestsLazyProxyPhpDumperProxyDumperTest_%s(%wfunction '
-            . '(&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) use ($container) {'
-            . '%w$wrappedInstance = $container->getFooService(false);%w$proxy->setProxyInitializer(null);'
-            . '%wreturn true;%w}%w);%w}%w',
+            .'SymfonyBridgeProxyManagerTestsLazyProxyPhpDumperProxyDumperTest_%s(%wfunction '
+            .'(&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) use ($container) {'
+            .'%w$wrappedInstance = $container->getFooService(false);%w$proxy->setProxyInitializer(null);'
+            .'%wreturn true;%w}%w);%w}%w',
             $code
         );
     }
@@ -88,7 +86,7 @@ class ProxyDumperTest extends \PHPUnit_Framework_TestCase
         $definitions = array(
             array(new Definition(__CLASS__), true),
             array(new Definition('stdClass'), true),
-            array(new Definition('foo' . uniqid()), false),
+            array(new Definition('foo'.uniqid()), false),
             array(new Definition(), false),
         );
 

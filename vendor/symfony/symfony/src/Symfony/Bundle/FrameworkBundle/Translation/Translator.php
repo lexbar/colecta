@@ -49,7 +49,7 @@ class Translator extends BaseTranslator
 
         $this->options = array(
             'cache_dir' => null,
-            'debug'     => false,
+            'debug' => false,
         );
 
         // check option names
@@ -95,7 +95,7 @@ class Translator extends BaseTranslator
 
         $this->assertValidLocale($locale);
 
-        $cache = new ConfigCache($this->options['cache_dir'].'/catalogue.'.$locale.'.php', $this->options['debug']);
+        $cache = new ConfigCache($this->getCatalogueCachePath($locale), $this->options['debug']);
         if (!$cache->isFresh()) {
             $this->initialize();
 
@@ -156,5 +156,10 @@ EOF
                 $this->addLoader($alias, $this->container->get($id));
             }
         }
+    }
+
+    private function getCatalogueCachePath($locale)
+    {
+        return $this->options['cache_dir'].'/catalogue.'.$locale.'.'.sha1(serialize($this->getFallbackLocales())).'.php';
     }
 }

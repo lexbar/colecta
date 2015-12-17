@@ -22,19 +22,6 @@ class ModelChoiceListTest extends Propel1TestCase
 {
     const ITEM_CLASS = '\Symfony\Bridge\Propel1\Tests\Fixtures\Item';
 
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-
-        if (!class_exists('Symfony\Component\Form\Form')) {
-            self::markTestSkipped('The "Form" component is not available');
-        }
-
-        if (!class_exists('Symfony\Component\PropertyAccess\PropertyAccessor')) {
-            self::markTestSkipped('The "PropertyAccessor" component is not available');
-        }
-    }
-
     protected function setUp()
     {
         ItemQuery::$result = array();
@@ -97,7 +84,7 @@ class ModelChoiceListTest extends Propel1TestCase
             null,
             null,
             array(
-                $item1
+                $item1,
             )
         );
 
@@ -122,7 +109,7 @@ class ModelChoiceListTest extends Propel1TestCase
         $this->assertSame(array(1 => $item1, 2 => $item2), $choiceList->getChoices());
         $this->assertEquals(array(
             'group1' => array(1 => new ChoiceView($item1, '1', 'Foo')),
-            'group2' => array(2 => new ChoiceView($item2, '2', 'Bar'))
+            'group2' => array(2 => new ChoiceView($item2, '2', 'Bar')),
         ), $choiceList->getRemainingViews());
     }
 
@@ -150,7 +137,7 @@ class ModelChoiceListTest extends Propel1TestCase
         $this->assertEquals(array(
             'Group1' => array(1 => new ChoiceView($item1, '1', 'Foo'), 2 => new ChoiceView($item2, '2', 'Bar')),
             'Group2' => array(3 => new ChoiceView($item3, '3', 'Baz')),
-            4 => new ChoiceView($item4, '4', 'Boo!')
+            4 => new ChoiceView($item4, '4', 'Boo!'),
         ), $choiceList->getRemainingViews());
     }
 
@@ -172,7 +159,7 @@ class ModelChoiceListTest extends Propel1TestCase
 
         $this->assertEquals(array(
             1 => $item1,
-            2 => $item2
+            2 => $item2,
         ), $choiceList->getChoices());
     }
 
@@ -249,7 +236,7 @@ class ModelChoiceListTest extends Propel1TestCase
      */
     public function testEmptyClass()
     {
-        $choiceList = new ModelChoiceList('');
+        new ModelChoiceList('');
     }
 
     /**
@@ -257,6 +244,6 @@ class ModelChoiceListTest extends Propel1TestCase
      */
     public function testInvalidClass()
     {
-        $choiceList = new ModelChoiceList('Foo\Bar\DoesNotExistClass');
+        new ModelChoiceList('Foo\Bar\DoesNotExistClass');
     }
 }

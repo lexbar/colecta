@@ -12,18 +12,10 @@
 namespace Symfony\Component\HttpKernel\Tests\Controller;
 
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\HttpKernel\Tests\Logger;
 use Symfony\Component\HttpFoundation\Request;
 
 class ControllerResolverTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The "HttpFoundation" component is not available');
-        }
-    }
-
     public function testGetControllerWithoutControllerParameter()
     {
         $logger = $this->getMock('Psr\Log\LoggerInterface');
@@ -188,7 +180,7 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
         $request->attributes->set('foobar', 'foobar');
         $controller = array(new self(), 'controllerMethod3');
 
-        if (version_compare(PHP_VERSION, '5.3.16', '==')) {
+        if (PHP_VERSION_ID === 50316) {
             $this->markTestSkipped('PHP 5.3.16 has a major bug in the Reflection sub-system');
         } else {
             try {
