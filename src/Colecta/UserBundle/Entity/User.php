@@ -531,7 +531,7 @@ class User implements UserInterface, \Serializable
     
     public function getUploadDir() 
     {
-        return '/uploads/avatars';
+        return 'avatars';
     }
     
     public function getFile() 
@@ -567,19 +567,36 @@ class User implements UserInterface, \Serializable
     protected function getUploadRootDir() 
     {
         // the absolute directory path where uploaded documents should be saved
-        return __DIR__ . '/../../../../web' . $this->getUploadDir();
+        return __DIR__ . '/../../../../web/uploads/' . $this->getUploadDir();
     }
     
-    public function upload() 
+    public function upload($filesystem) 
     {
         // the file property can be empty if the field is not required
         if (null === $this->file) {
             return;
         }
         
+        //First delete previous file
+        if($this->getAvatar())
+        {
+            if($filesystem->has($this->getUploadDir() . '/' . $this->getAvatar())) //Filesystem storage
+            {
+                $filesystem->delete($this->getUploadDir() . '/' . $this->getAvatar());
+            }
+            
+            if(file_exists($this->getUploadRootDir() . $this->getAvatar())) //Local storage (deprecated)
+            {
+                unlink($this->getUploadRootDir() . $this->getAvatar());
+            }
+            
+        }
+        
         $hashName = sha1($this->file->getClientOriginalName() . $this->getId() . mt_rand(0, 99999));
         
         $this->avatar = $hashName . '.' . $this->file->guessExtension();
+        
+        $filesystem->write( $this->getUploadDir() . '/' . $this->getAvatar(), file_get_contents($this->file->getRealPath()) );
         
         $this->file->move($this->getUploadRootDir(), $this->getAvatar());
         

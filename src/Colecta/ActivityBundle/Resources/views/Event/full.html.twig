@@ -194,13 +194,12 @@
     
     {######## END ASSISTANCES ########}
     
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
+    
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
 </div>
-
-        
-{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
 
 {% endblock %}
 

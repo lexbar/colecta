@@ -234,7 +234,7 @@ img.smiley {
     color: #333;
 }
 .item .details {
-    font-size: 12px;
+    font-size: 12px !important;
     color: #999;
     overflow: hidden;
 }

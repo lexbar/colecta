@@ -82,13 +82,17 @@ services:
                 
 knp_gaufrette:
     adapters:
+        uploads_local:
+            local:
+                directory: %uploads_local_directory%
         uploads_s3:
             aws_s3:
                 service_id: 'colecta.aws_s3.client'
-                bucket_name: 'colecta'
+                bucket_name: %amazon_s3.bucket%
                 options:
                     directory: %amazon_s3.directory%
+                    acl: 'public-read'
     filesystems:
         uploads:
-            adapter:    uploads_s3
+            adapter:    %uploads_adapter%
             alias:      uploads

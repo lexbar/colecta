@@ -22,6 +22,14 @@ parameters:
     limit_space: 100  # MB
     limit_users: 12    # users with role that allows interaction
     
+    #Uploads
+    uploads_adapter: uploads_local # uploads_local|uploads_s3
+    amazon_s3.key: ~
+    amazon_s3.secret: ~
+    amazon_s3.region: ~
+    amazon_s3.bucket: ~
+    amazon_s3.directory: ~
+    uploads_local_directory: %kernel.root_dir%/../web/uploads
 security:
     firewalls:
         main:

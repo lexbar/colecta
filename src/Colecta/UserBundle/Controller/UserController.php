@@ -167,7 +167,8 @@ class UserController extends Controller
                 } 
                 
                 //Upload avatar
-                $user->upload();
+                $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+                $user->upload($filesystem);
                 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);

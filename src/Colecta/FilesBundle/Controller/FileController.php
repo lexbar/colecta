@@ -390,6 +390,11 @@ class FileController extends Controller
                 }
                 else
                 {
+                    //Upload file
+                    $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+                    $filesystem->write( 'files/'.$hashName, file_get_contents($cachePath.$token) );
+                    
+                    //Also upload to local
                     rename($cachePath.$token,$uploadPath.$hashName);
                     
                     $item = new File();
@@ -969,7 +974,12 @@ class FileController extends Controller
                 throw $this->createNotFoundException('El archivo no existe');
             }
             
-            $image = new \Imagick($item->getAbsolutePath());
+            $image = new \Imagick();
+            
+            $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+            
+            $image->readImageBlob( $filesystem->read( 'files/' . $item->getFilename() ) );
+            
             autoRotateImage($image, $item->getAbsolutePath());
             
             $format = $image->getImageFormat();
