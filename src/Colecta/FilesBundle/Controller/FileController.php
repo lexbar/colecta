@@ -285,6 +285,13 @@ class FileController extends Controller
             $extension = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION));
         }
         
+        //If the cache folder has not been created, do it now
+        if(!is_dir($cachePath))
+        {
+            // dir doesn't exist, make it
+            mkdir($cachePath, 0755, true);
+        }
+        
         $file->move($cachePath, $filename.'.'.$extension);
         
         $response = new Response();
@@ -858,7 +865,8 @@ class FileController extends Controller
     {    
         $this->get('request')->setRequestFormat('image');
         
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/thumbnail-' . $slug . '_' . $width . 'x' . $height ;
+        $cacheDir = __DIR__ . '/../../../../app/cache/prod/images';
+        $cachePath = $cacheDir . '/thumbnail-' . $slug . '_' . $width . 'x' . $height ;
         
         $response = new Response();
         
@@ -921,6 +929,11 @@ class FileController extends Controller
                 $image->setImagePage(0, 0, 0, 0);
                 $image->normalizeImage();
                 //fill out the cache
+                if(!is_dir($cacheDir))
+                {
+                    // dir doesn't exist, make it
+                    mkdir($cacheDir, 0755, true);
+                }
                 file_put_contents($cachePath, $image);
             }
             
@@ -937,7 +950,8 @@ class FileController extends Controller
     {
         $this->get('request')->setRequestFormat('image');
         
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/bestfit-' . $slug . '_' . $width . 'x' . $height ;
+        $cacheDir = __DIR__ . '/../../../../app/cache/prod/images/';
+        $cachePath = $cacheDir . 'bestfit-' . $slug . '_' . $width . 'x' . $height ;
         
         $response = new Response();
         
@@ -1004,6 +1018,11 @@ class FileController extends Controller
                 $image->setImagePage(0, 0, 0, 0);
                 $image->normalizeImage();
                 //fill out the cache
+                if(!is_dir($cacheDir))
+                {
+                    // dir doesn't exist, make it
+                    mkdir($cacheDir, 0755, true);
+                }
                 file_put_contents($cachePath, $image);
             }
             

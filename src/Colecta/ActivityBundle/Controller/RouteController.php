@@ -84,7 +84,8 @@ class RouteController extends Controller
     {
         $this->get('request')->setRequestFormat('image');
         
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id .'.png';
+        $cacheDir = __DIR__ . '/../../../../app/cache/prod/images/maps';
+        $cachePath = $cacheDir . '/' . $id .'.png';
         
         $response = new Response();
         
@@ -144,6 +145,12 @@ class RouteController extends Controller
                 
                 $image = getContent($url);
                 
+                //Write file to cache
+                if(!is_dir($cacheDir))
+                {
+                    // dir doesn't exist, make it
+                    mkdir($cacheDir, 0755, true);
+                }
                 file_put_contents($cachePath, $image);
             }
             else 
@@ -160,7 +167,8 @@ class RouteController extends Controller
     {
         $this->get('request')->setRequestFormat('image');
         
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/maps/' . $id .'-profile.svg' ;
+        $cacheDir = __DIR__ . '/../../../../app/cache/prod/images/maps';
+        $cachePath = $cacheDir . '/' . $id .'-profile.svg' ;
         
         $response = new Response();
         
@@ -239,6 +247,12 @@ class RouteController extends Controller
             }
             $image = $this->renderView('ColectaActivityBundle:Route:profile.svg.twig', array('coordinates' => $coordinates, 'maxheight' => $maxheight, 'maxwidth' => $maxwidth));
             
+            //Write file to cache
+            if(!is_dir($cacheDir))
+            {
+                // dir doesn't exist, make it
+                mkdir($cacheDir, 0755, true);
+            }
             file_put_contents($cachePath, $image);
         }
         

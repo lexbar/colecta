@@ -246,7 +246,8 @@ class UserController extends Controller
     {
         $this->get('request')->setRequestFormat('image');
         
-        $cachePath = __DIR__ . '/../../../../app/cache/prod/images/avatar-' . $uid . '_' . $width . 'x' . $height ;
+        $cacheDir = __DIR__ . '/../../../../app/cache/prod/images';
+        $cachePath = $cacheDir . '/avatar-' . $uid . '_' . $width . 'x' . $height ;
         
         $response = new Response();
         
@@ -320,6 +321,11 @@ class UserController extends Controller
                 $image->setImagePage(0, 0, 0, 0);
                 $image->normalizeImage();
                 //fill out the cache
+                if(!is_dir($cacheDir))
+                {
+                    // dir doesn't exist, make it
+                    mkdir($cacheDir, 0755, true);
+                }
                 file_put_contents($cachePath, $image);
             }
             
