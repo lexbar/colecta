@@ -5,7 +5,7 @@
 <div class="item {% if new %}new{% endif %}" id="item{{ item.id}}">
     {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     
-    <h3 class="panel-title">
+    <h3 class="title">
         {% block itemTitle %}
             <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
         {% endblock %}
