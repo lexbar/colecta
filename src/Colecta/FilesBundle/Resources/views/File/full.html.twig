@@ -44,7 +44,7 @@
         {% for thisitem in item.folder.files %}
             <div class="col-xs-6 col-sm-3">
                 {% if thisitem.filetype in ['jpeg','gif','png'] %}
-                    <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}"><img class="img-responsive{% if thisitem == item %} current{% endif %}" src="{{ path('ColectaFileThumbnail', {'slug':thisitem.slug, 'width':200, 'height':200}) }}"></a>
+                    <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}"><img class="img-responsive{% if thisitem == item %} current{% endif %}" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':thisitem.slug, 'width':275, 'height':275}) }}"></a>
                 {% elseif thisitem.filetype in ['mp4','ogg','webm'] %}
                     <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}" class="btn btn-warning btn-block"><i class="fa fa-video-camera icon-large"></i> {{ thisitem.name }}</a>
                 {% else %}

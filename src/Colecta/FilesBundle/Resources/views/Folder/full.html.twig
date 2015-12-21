@@ -45,14 +45,14 @@
             
         <div class="preview">
             {% set file = files.first %}
-            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}"></a>
         </div>
     {% elseif thumbnails > 0 %}
         <div class="row thumbnails">        
             {% for file in files %}
                 {% if file.filetype in ['jpeg','gif','png'] %}                    
                     <div class="col-xs-6 col-sm-3">
-                        <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':200, 'height':200}) }}"></a>
+                        <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}"></a>
                     </div>
                 {% endif %}
             {% endfor %}

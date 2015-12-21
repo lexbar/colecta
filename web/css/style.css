@@ -197,6 +197,7 @@ img.smiley {
 }
 .item .staticmap {
     margin-bottom: -30px;
+    min-height: 60px;
 }
 .item .mapprofile {
     width: 100%;
