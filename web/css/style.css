@@ -417,6 +417,9 @@ img.smiley {
     display: inline;
 }
 
+.assistances ul {
+	margin-bottom: 30px;
+}
 .assistances .attendee {
     color: #000;
     font-weight: bold;
