@@ -99,6 +99,6 @@
 
 {% if web_header_img | length %}
 <div class="container">
-    <div class="col-xs-12 hidden-xs headerimg" style="background-image: url( {{ path('ColectaHeaderimg', { n: random(web_header_img | length - 1) }) }} );"></div>
+    <img src="{{ path('ColectaHeaderimg', { n: random(web_header_img | length - 1) }) }}" class="hidden-xs headerimg img-responsive"></img>
 </div>
 {% endif %}

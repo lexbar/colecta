@@ -14,7 +14,7 @@
     {% if item.filetype in ['jpeg','gif','png'] %}
         {% set next = item.folder.getNextPicture(item) %}
         {% set previous = item.folder.getPreviousPicture(item) %}
-        <div class="fullimage row" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'850', 'height':'480'}) }}') scroll no-repeat center center #FFF; background-size: contain;">
+        <div class="fullimage" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'850', 'height':'480'}) }}') scroll no-repeat center center #FFF; background-size: contain;">
             <a style="height:480px" href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-left{% if previous %} active{% endif %} col-xs-3"><i class="fa fa-angle-left fa-4x"></i></a>
             <a style="height:480px" href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-right text-right{% if next %} active{% endif %} col-xs-9"><i class="fa fa-angle-right fa-4x"></i></a>
         </div>
