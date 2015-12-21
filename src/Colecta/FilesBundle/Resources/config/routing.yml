@@ -53,8 +53,8 @@ ColectaFileDownload:
     pattern:  /archivo/descargar/{slug}.{type}
     defaults: { _controller: ColectaFilesBundle:File:download }
 ColectaFileThumbnail:
-    pattern:  /archivo/thumbnail/{slug}/{width}/{height}/
+    pattern:  /archivo/thumbnail/{width}/{height}/{slug}/
     defaults: { _controller: ColectaFilesBundle:File:thumbnail }
 ColectaFileResize:
-    pattern:  /archivo/resize/{slug}/{width}/{height}/
+    pattern:  /archivo/resize/{width}/{height}/{slug}/
     defaults: { _controller: ColectaFilesBundle:File:resize }

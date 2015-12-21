@@ -32,7 +32,7 @@ ColectaUserAssistancesYear:
     defaults: { _controller: ColectaUserBundle:User:assistancesYear }
     
 userAvatar:
-    pattern:  /avatar/{uid}/{width}/{height}/
+    pattern:  /avatar/{width}/{height}/{uid}/
     defaults: { _controller: ColectaUserBundle:User:avatar }
     
 userEditProfile:
