@@ -7,3 +7,9 @@ ColectaPage:
 ColectaTheme:
     path:  /css/theme.css
     defaults: { _controller: ColectaSiteBundle:Default:theme }
+ColectaHeaderimg:
+    path:  /header_img/{n}
+    defaults: { _controller: ColectaSiteBundle:Default:headerimg }
+ColectaLogo:
+    path:  /logo
+    defaults: { _controller: ColectaSiteBundle:Default:logo }

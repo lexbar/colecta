@@ -1030,7 +1030,7 @@ class FileController extends Controller
             
             $response->setStatusCode(200);
             $response->setContent($image);
-            $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
+            $response->headers->set('Content-Type', mime_content_type( $cachePath ));
             
             return $response;
         }

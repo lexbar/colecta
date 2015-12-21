@@ -17,6 +17,7 @@ class SettingsController extends Controller
         // SECURITY 
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
+        $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
         
         if($user == 'anon.' || !$user->getRole()->getSiteConfigSettings())
         {
@@ -34,42 +35,26 @@ class SettingsController extends Controller
             if($_FILES['web_logo_upload']['tmp_name'])
             {
                 $filename = 'web_logo';
-                $relpath = '/uploads/files/' . $filename;
-                $abspath = __DIR__ . '/../../../../web/uploads/files/' . $filename;
+                $path = 'files/' . $filename;
                 
-                
-                $width = 200;
-                $height = 50;
-                
-                $image = new \Imagick($_FILES['web_logo_upload']['tmp_name']); //load file to Imagick class to resize it
-            
-                $format = $image->getImageFormat();
-                if ($format == 'GIF') 
+                //Fisrt delete previous logo
+                if($filesystem->has($path))
                 {
-                    //$image = $image->coalesceImages();
-    
-                    foreach ($image as $frame) 
-                    {
-                        $frame->scaleImage($width, $height, true);
-                    }
-                    
-                    //$image = $image->deconstructImages(); 
-                    $image->writeImages($abspath, true); 
-                    $image = file_get_contents($abspath);
+                    $filesystem->delete($path);
                 }
-                else
+                //And logo cache
+                $cacheDir = __DIR__ . '/../../../../app/cache/prod/images';
+                if(file_exists($cacheDir.'/web_logo'))
                 {
-                    $image->setImageResolution(72,72); 
-                    $image->thumbnailImage($width, $height, true);
-                    $image->setImagePage(0, 0, 0, 0);
-                    $image->normalizeImage();
-                    //fill out the cache
-                    file_put_contents($abspath, $image);
+                    unlink($cacheDir.'/web_logo');
                 }
                 
-                if(file_exists($abspath))
+                //And now upload the new one
+                $filesystem->write($path, file_get_contents($_FILES['web_logo_upload']['tmp_name']));
+                
+                if($filesystem->has($path))
                 {
-                    $web_parameters['twig']['globals']['web_logo'] = $relpath;
+                    $web_parameters['twig']['globals']['web_logo'] = $filename;
                 }
             }
             else
@@ -78,6 +63,15 @@ class SettingsController extends Controller
                 {
                     $web_parameters['twig']['globals']['web_logo'] = '';
                     $web_parameters['twig']['globals']['web_logo_only'] = false;
+                    
+                    //Delete logo file 
+                    $filename = 'web_logo';
+                    $path = 'files/' . $filename;
+                                       
+                    if($filesystem->has($path))
+                    {
+                        $filesystem->delete($path);
+                    }
                 }
                 else
                 {
@@ -94,11 +88,21 @@ class SettingsController extends Controller
             {
                 if($request->get('web_header_img_' . $k) == 'on')
                 {
-                    // if located on server...
-                    if(!preg_match('#http#i', $v) && file_exists(__DIR__ . '/../../../../web' . $v))
-                    {
-                        unlink(__DIR__ . '/../../../../web' . $v);
+                    $path = 'files/' . $v;
+                    
+                    // if file exists...
+                    if($filesystem->has($path))
+                    {   
+                        //Remove
+                        $filesystem->delete($path);
                     }
+                    //And cache file too
+                    $cacheDir = __DIR__ . '/../../../../app/cache/prod/images';
+                    if(file_exists($cacheDir.'/web_header-'.$v))
+                    {
+                        unlink($cacheDir.'/web_header-'.$v);
+                    }
+
                     
                     //Remove from array
                     unset($web_parameters['twig']['globals']['web_header_img'][$k]);
@@ -114,41 +118,13 @@ class SettingsController extends Controller
             if($_FILES['web_header_img_upload']['tmp_name'])
             {
                 $filename = 'web_header_img_'.$user->getId() .'_'.time();
-                $relpath = '/uploads/files/' . $filename;
-                $abspath = __DIR__ . '/../../../../web/uploads/files/' . $filename;
+                $path = 'files/' . $filename;
                 
-                $width = 1200;
-                $height = 500;
+                $filesystem->write($path, file_get_contents($_FILES['web_header_img_upload']['tmp_name']));
                 
-                $image = new \Imagick($_FILES['web_header_img_upload']['tmp_name']); //load file to Imagick class to resize it
-            
-                $format = $image->getImageFormat();
-                if ($format == 'GIF') 
+                if($filesystem->has($path))
                 {
-                    //$image = $image->coalesceImages();
-    
-                    foreach ($image as $frame) 
-                    {
-                        $frame->scaleImage($width, $height, true);
-                    }
-                    
-                    //$image = $image->deconstructImages(); 
-                    $image->writeImages($abspath, true); 
-                    $image = file_get_contents($abspath);
-                }
-                else
-                {
-                    $image->setImageResolution(72,72); 
-                    $image->thumbnailImage($width, $height, true);
-                    $image->setImagePage(0, 0, 0, 0);
-                    $image->normalizeImage();
-                    //fill out the cache
-                    file_put_contents($abspath, $image);
-                }
-                
-                if(file_exists($abspath))
-                {
-                    array_push($web_parameters['twig']['globals']['web_header_img'], $relpath);
+                    array_push($web_parameters['twig']['globals']['web_header_img'], $filename);
                 }
             }
             elseif($request->get('web_header_img') != '')

@@ -26,6 +26,7 @@
                 </div>
             </div>
             
+            {#}
             <div class="form-group">
                 <label for="web_theme" class="col-sm-4 control-label">
                     <strong>Diseño:</strong>
@@ -68,7 +69,7 @@
                     </label>
                 </div>
             </div>
-            
+            #}
             <div class="form-group">
                 <label for="web_logo" class="col-sm-4 control-label">
                     <strong>Logo:</strong>
@@ -82,7 +83,7 @@
                     {% if web_parameters.twig.globals.web_logo %}
                     <hr>
                     <div class="row">
-                        <div class="col-xs-6 col-sm-12 col-md-6"><img src="{{ web_parameters.twig.globals.web_logo }}"></div>
+                        <div class="col-xs-6 col-sm-12 col-md-6"><img src="{{ path('ColectaLogo') }}"></div>
                         <div class="col-xs-6 col-sm-12 col-md-6">
                             <div class="checkbox" style="padding-top:0"><label><input type="checkbox" name="web_logo_only" value="1"{% if web_parameters.twig.globals.web_logo_only %}checked="checked"{% endif %}> Ocultar texto del título</label></div>
                             <div class="checkbox" style="padding-top:0"><label class="text-danger"><input type="checkbox" name="web_logo_delete" value="1"> Eliminar</label></div>
@@ -111,7 +112,7 @@
                                 <div class="checkbox">
                                     <label class="text-danger"><input type="checkbox" name="web_header_img_{{ loop.index0 }}"> Eliminar</label>
                                 </div>
-                                <img class="img-responsive" src="{{ img }}">
+                                <img class="img-responsive" src="{{ path('ColectaHeaderimg', { n: loop.index0 }) }}">
                             </div>
                         {% endfor %}
                     </div>
