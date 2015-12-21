@@ -178,7 +178,7 @@ img.smiley {
 .item .title {
     font-size: 20px;
     position: relative;
-    line-height: 24px;
+    line-height: 20px;
     margin: 15px 0 10px;
 }
 .item.editable .panel-heading .panel-title {
@@ -323,7 +323,7 @@ img.smiley {
     line-height: 20px;
 }
 .related {
-    margin-bottom: 20px;
+    margin-bottom: 60px;
 }
 .related li h4, .related li p {
     display: inline-block;
