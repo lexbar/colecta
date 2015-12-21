@@ -26,22 +26,22 @@
         
 {% block itemBody %}
     <p class="event-date">
-        <span><i class="fa fa-calendar-o"></i>
+        <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="fa fa-calendar-o"></i>
         {{ item.dateini | date('l') | replace (dias_semana) }}, 
         {{ item.dateini | date('d') }} 
         de {% set month = item.dateini | date('n') | replace(meses) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}
         
         {% if item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %} 
             {# Same Day#}
-            </span> <span><i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} a {{ item.dateend | date('H:i') }}</span>
+            </a> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} a {{ item.dateend | date('H:i') }}</a>
         {% else %}
             {# Different days #}
-             <i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} </span>
-                <span><i class="fa fa-long-arrow-right"></i>
+             <i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} </a>
+                <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="fa fa-long-arrow-right"></i>
                 {{ item.dateend | date('l') | replace (dias_semana) }}, 
                 {{ item.dateend | date('d') }} 
                 de {% set month = item.dateend | date('n') | replace(meses) %}{% if item.dateend | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateend | date('y') }}{% endif %}
-                <i class="fa fa-clock-o"></i> {{ item.dateend | date('H:i') }}</span>
+                <i class="fa fa-clock-o"></i> {{ item.dateend | date('H:i') }}</a>
         {% endif %}
     </p>
     

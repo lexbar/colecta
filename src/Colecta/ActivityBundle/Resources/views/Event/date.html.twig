@@ -25,9 +25,9 @@
             {% if app.user %} <a href="{{ path('ColectaEventNew')}}" class="btn btn-small btn-primary pull-right post-content"><i class="fa fa-plus fa-fw"></i> Publicar</a> {% endif %}
             <h2>
             {% if ismonth %}
-                Actividades en {% include "::month.html.twig" with {'date': date, 'short':0} %}
+                Actividades en {% include "::month.html.twig" with {'date': date, 'short':0} %} {% if 'today' | date('Y') != date | date('Y') %} {{ date | date('Y') }}{% endif %}
             {% else %}
-                Actividades el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} 
+                Actividades el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} {% if 'today' | date('Y') != date | date('Y') %} {{ date | date('Y') }}{% endif %}
             {% endif %}
             </h2>
             

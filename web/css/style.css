@@ -227,7 +227,9 @@ img.smiley {
     font-size: 18px;
     font-weight: 200;
 }
-.item .event-date span {
+.item .event-date span, .item .event-date a {
+    color: #000;
+    text-decoration: none;
     padding-right: 10px;
     white-space:nowrap;
 }
