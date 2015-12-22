@@ -88,10 +88,12 @@
                 {% if haspassed %}
                     {% if assistance.confirmed %}
                         {{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km 
-                        <a href="#">Cambiar</a> <a class="text-danger" href="#">Borrar</a>
+                        {% if canedit %}
+                            <a href="#">Cambiar</a> <a class="text-danger" href="#">Borrar</a>
+                        {% endif %}
                     {% else %}
                         {% if canedit %}
-                            <a href="#" class="btn btn-xs btn-default">Confirmar <i class="fa fa-check"></i></a>
+                            <a href="#" class="text-success">Confirmar <i class="fa fa-check"></i></a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
