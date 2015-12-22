@@ -1,6 +1,6 @@
 {% if items | length > 0 %}
 
-<h4>Relacionado:</h4>
+<h4>Relacionado con {{ item.name }}:</h4>
 <ul class="related">
     {% for item in items if item.draft == 0 %}  
         {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
