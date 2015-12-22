@@ -5,17 +5,12 @@
 {% block article %}
 
     <h2>Adjuntar</h2>
+
+    {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': item } only %}
     
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Contenido al que se enlaza</h3>
-        </div>
-        <div class="panel-body">
-        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}
-        </div>
-    </div>
+    <hr>
     
     {% include 'ColectaItemBundle:Default:newItemForm.html.twig' with {'attachto':item.id} only %}
 

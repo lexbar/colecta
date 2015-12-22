@@ -21,26 +21,52 @@
     {% endif #}
     <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
-    {% if not app.user and web_description %}<div class="well well-sm">{{ web_description | nl2br }}</div>{% endif %}
+    {% if not app.user and web_description %}<p class="lead">{{ web_description | nl2br }}</p>{% endif %}
     
     {#% if app.user and app.user.role.contribute %} 
         {% include 'ColectaItemBundle:Default:newItemForm.html.twig' %}
     {% endif %#}
     
+    {# NEXT ACTIVITIES #}
     {% if nextactivities | length %}
-        <div class="panel panel-highlight">
-            <div class="panel-heading">
-                <h3 class="panel-title"><a href="{{ path('ColectaEventDate', {'date': nextactivities[0].dateini | date('Y-m') }) }}"><i class="fa fa-{{ itemIcons['Activity/Event'] }} fa-fw"></i> Próximas actividades</a></h3>
-            </div>
-            <div class="panel-body">
+        {% set dias_semana = {
+            'Monday':'Lunes',
+            'Tuesday':'Martes',
+            'Wednesday':'Miércoles',
+            'Thursday':'Jueves',
+            'Friday':'Viernes',
+            'Saturday':'Sábado',
+            'Sunday':'Domingo'
+        }%}
+        
+        <div class="panel dashboard panel-default">
+            <div class="panel-body row">
             {% for item in nextactivities %}
-                {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
-                {% set path = path | replace({'/':'Bundle:'}) %}
-                {% include path with { 'item': item } only %}
+                <div class="col-sm-6">
+                    <h3>{% if item.dateini | date('z') == 'today' | date('z') %}Hoy{% elseif item.dateini | date('z') == 'today'  | date('z') + 1 %}Mañana{% else %}Próximo {{ item.dateini | date('l') | replace (dias_semana) }}{% endif %}:</h3>
+                    {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+                    {% set path = path | replace({'/':'Bundle:'}) %}
+                    {% include path with { 'item': item } only %}
+                </div>
             {% endfor %}
             </div>
         </div>
     {% endif %}
+    
+    {# ACTIVITIES #}
+    {#% if app.user %}
+        <div class="panel dashboard panel-default">
+            <div class="panel-body row">
+                <div class="col-sm-6">
+                    <h3><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">Rendimiento:</a></h3>
+                </div>
+                
+                <div class="col-sm-6">
+                    <h3><a href="{{ path('ColectaActivitiesRank') }}">Ranking:</a></h3>
+                </div>
+            </div>
+        </div>
+    {% endif %#}
 
         
     {% set shownItems = [] %}

@@ -1,4 +1,6 @@
-
+.alert {
+    margin-top:15px;
+}
 img.smiley {
     vertical-align: text-bottom;
 }
@@ -159,7 +161,7 @@ img.smiley {
 
 /* ITEMS */
 .item {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 40px;
     margin-top: 20px;
 }
@@ -445,6 +447,9 @@ img.smiley {
     border-color: #0275d8;
 }
 
+.dashboard h3, .dashboard p {
+    margin: 0;
+}
 
 .bigcalendar {
     font-size: 18px;
@@ -483,24 +488,8 @@ img.smiley {
     color: #FFF;
     font-weight: bold;
 }
-
-.itemForm .nav {
-    border-bottom: 1px solid #EEE;
-}
-.itemForm .nav li a {
-    color: #888;
-    background-color: transparent;
-}
-.itemForm .nav li.active a {
-    background-color: #FFF;
-    color: #000;
-}
-.itemForm .nav li a:hover, .itemForm .nav li.active a:hover, .itemForm .nav li.active a:focus {
-    color: #000;
-    background-color: transparent;
-}
-.itemForm form {
-    padding: 10px;
+.itemForm .nav-pills>li>a {
+    font-size: 16px;
 }
 .itemForm .hidable {
     max-height: 3000px;
@@ -792,9 +781,6 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     .navbar-nav {
         padding: 10px 15px;
-    }
-    .itemForm .nav li a {
-        padding-right: 5px;
     }
     .itemForm.compressed form {
         display: none;

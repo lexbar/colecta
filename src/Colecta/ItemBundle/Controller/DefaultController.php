@@ -35,7 +35,7 @@ class DefaultController extends Controller
         )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         
         $nextactivities = $em->createQuery(
-            "SELECT i FROM ColectaActivityBundle:Event i WHERE i.draft = 0 $SQLprivacy AND i.dateini >= CURRENT_DATE() ORDER BY i.dateini ASC"
+            "SELECT i FROM ColectaActivityBundle:Event i WHERE i.draft = 0 $SQLprivacy AND i.dateini >= CURRENT_DATE() AND i.dateini < DATE_ADD(CURRENT_DATE(),7, 'day') ORDER BY i.dateini ASC"
         )->setMaxResults(2)->getResult();
         
         //Pagination

@@ -1,9 +1,1 @@
 {% extends 'ColectaItemBundle:Default:itemMicro.html.twig' %}
-
-{% block thumbnail %}
-    {% if item.linkImage %}
-        <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}"><img src="{{ item.linkImage }}" class="img-responsive pull-right"></a>
-    {% else %}
-        <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}" class="img-responsive pull-right"></a>
-    {% endif %}
-{% endblock %}

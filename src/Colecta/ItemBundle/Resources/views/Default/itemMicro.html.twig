@@ -1,7 +1,7 @@
 {% set new = app.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') != 'dismiss' and app.session.get('sinceLastVisit') < item.date %}
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
 
-<h4><a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a></h4>
+<h4><a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}"><i class="fa fa-{{ itemTypeName | replace({'Post':'comment-o', 'Event':'calendar-o', 'Route':'map-o', 'File':'file-o', 'Place': 'map-marker'}) }}"></i> {{ item.name }}</a></h4>
 {% block summary %}
     {% if item.summary %}
         <p>{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}</p>
