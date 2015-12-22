@@ -251,6 +251,7 @@ class Folder extends \Colecta\ItemBundle\Entity\Item
     public function setText($text)
     {
         $text = str_replace(array("<br>","<br />"),"\n",str_replace("\n",'',$text));
+        $text = preg_replace('/[ \t]+/', ' ', preg_replace('/\s*$^\s*/m', "\n", $text));
         $this->text = $text;
     }
 
