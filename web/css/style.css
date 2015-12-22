@@ -295,6 +295,22 @@ img.smiley {
     position: relative;
     margin: 0;
 }
+.item .thumbnails div.moreHandler span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100px;
+    text-align: center;
+    margin-left: -50px;
+    height: 30px;
+    margin-top: -15px;
+    padding: 0;
+    margin-bottom: 0;
+    line-height: 30px;
+}
+.item .thumbnails img {
+    margin: 0 auto;
+}
 .item .row.itemActions div {
     padding-right: 0;
     padding-left: 0;

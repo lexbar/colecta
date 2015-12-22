@@ -53,7 +53,7 @@
                             {% if loop.index == 8 and files | length > 8 %}
                                 <div class="moreHandler">
                                     <img class="img-responsive" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}">
-                                    <div class="more">+{{ files | length - 8 }}</div>
+                                    <div class="more"><span>+{{ files | length - 8 }}</span></div>
                                 </div>
                             {% else %}
                                 <img class="img-responsive" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}">
