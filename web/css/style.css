@@ -344,6 +344,9 @@ img.smiley {
 .related {
     margin-bottom: 60px;
 }
+.item.full .related {
+    margin-bottom: 20px;
+}
 .related li h4, .related li p {
     display: inline-block;
     margin: 0;
