@@ -196,18 +196,18 @@ img.smiley {
     word-wrap: break-word;
 }
 .item .staticmap {
-    margin-bottom: -30px;
+    margin-bottom: -50px;
     min-height: 60px;
 }
 .item .mapprofile {
     width: 100%;
     max-width: 500px;
-    height: 30px;
-    opacity: .85;
+    height: 50px;
+    opacity: .7;
     transition: opacity .35s ease-in;
 }
 .item:hover .mapprofile {
-    opacity: 1;
+    opacity: .9;
 }
 .item .properties {
     margin-top: -10px;
