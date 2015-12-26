@@ -568,18 +568,19 @@ img.smiley {
 .fullimage a {
     height: 480px;
     padding: 0 10px;
-    color: #CCC;
+    color: #FFF;
     line-height: 480px;
+    text-shadow: 0 0 2px #000;
 }
 .fullimage a {
-    opacity: .1;
+    opacity: .2;
     transition: opacity .5s;
 }
 .fullimage:hover a {
     opacity: .2;
 }
 .fullimage:hover a.active {
-    opacity: .6;
+    opacity: .5;
 }
 .fullimage a.active:hover {
     opacity: 1;
