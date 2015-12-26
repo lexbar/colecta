@@ -90,11 +90,11 @@
                     {% if assistance.confirmed %}
                         <span class="assistance">{{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km</span>
                         {% if canedit %}
-                            <a class="control" href="#">Cambiar</a> <a class="control text-danger" href="#">Borrar</a>
+                            <a class="control" href="#">Modificar <i class="fa fa-pencil"></i></a> <a class="control text-danger" href="#">Borrar <i class="fa fa-times"></i></a>
                         {% endif %}
                     {% else %}
                         {% if canedit %}
-                            <a href="#" class="control text-success">Confirmar <i class="fa fa-check"></i></a>
+                            <a href="#" class="text-success">Confirmar <i class="fa fa-check"></i></a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
