@@ -441,6 +441,7 @@ img.smiley {
 
 .assistances ul {
 	margin-bottom: 30px;
+	color: #777;
 }
 .assistances .attendee {
     color: #000;
@@ -449,6 +450,20 @@ img.smiley {
 .assistances .btn.btn-default {
     border-color: #0275d8;
 }
+.assistances .attendee {
+	display: inline-block;
+	margin-right: 10px;
+}
+.assistances .control {
+	margin-left: 10px;
+	display: none;
+}
+.assistances li:hover .control {
+	display: inline-block;
+}
+.assistances .assistance{
+	font-style: italic;
+} 
 
 .dashboard h3, .dashboard p {
     margin: 0;

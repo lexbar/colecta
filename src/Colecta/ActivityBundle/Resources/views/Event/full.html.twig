@@ -80,20 +80,21 @@
         <div class="assistances">
         <h3>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}:</h3>
             
-        <ul class="assistances">    
+        <ul class="assistances fa-ul">    
         {% for assistance in item.assistances %}
         
             <li>
+            	<i class="fa fa-user fa-fw"></i>
                 <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee" class="attendee">{{assistance.user.name}}</a> 
                 {% if haspassed %}
                     {% if assistance.confirmed %}
-                        {{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km 
+                        <span class="assistance">{{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km</span>
                         {% if canedit %}
-                            <a href="#">Cambiar</a> <a class="text-danger" href="#">Borrar</a>
+                            <a class="control" href="#">Cambiar</a> <a class="control text-danger" href="#">Borrar</a>
                         {% endif %}
                     {% else %}
                         {% if canedit %}
-                            <a href="#" class="text-success">Confirmar <i class="fa fa-check"></i></a>
+                            <a href="#" class="control text-success">Confirmar <i class="fa fa-check"></i></a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
