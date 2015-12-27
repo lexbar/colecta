@@ -5,8 +5,7 @@ img.smiley {
     vertical-align: text-bottom;
 }
 .headerimg {
-    min-height: 75px;
-    margin-top: -20px;
+    height: 120px;
 }
 .sidebardisplay {
     position: absolute;
@@ -59,6 +58,7 @@ img.smiley {
 }
 .navbar {
     z-index: auto;
+    margin-bottom: 0;
 }
 .navbar-default .web_logo {
     display: inline;
@@ -782,10 +782,19 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .navbar-nav.navbar-right {
         margin-right: -15px;
     }
+    .headerimg {
+        height: 99px;
+    }
 }
 @media (max-width: 992px) { /* Small devices */
+    .headerimg {
+        height: 76px;
+    }
 }
 @media (max-width: 767px) { /* Extra Small devices */
+    .headerimg {
+        height: 0;
+    }
     .navbar .container {
         padding-left: 0;
     }
