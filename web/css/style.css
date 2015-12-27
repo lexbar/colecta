@@ -88,7 +88,8 @@ img.smiley {
 }
 
 #mainTabs li a {
-    color: #666;
+    padding: 0 0 8px;
+	margin-right: 20px
 }
 #mainTabs li a:hover, #mainTabs li a:focus {
     background-color: transparent;
