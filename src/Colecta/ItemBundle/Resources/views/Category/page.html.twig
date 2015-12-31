@@ -25,10 +25,7 @@
     {% endif %}   
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}
-        
-        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.related } %}
-    
+        {% include path with { 'item': item } only %}    
     {% set shownItems = shownItems | merge([item.id]) %}
     {% for ri in item.related %}
         {% set shownItems = shownItems | merge([ri.id]) %}

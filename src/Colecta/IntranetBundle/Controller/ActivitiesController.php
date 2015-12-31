@@ -108,7 +108,7 @@ class ActivitiesController extends Controller
         
         $stmt = $em  
                ->getConnection()  
-               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e WHERE  e.dateend <= \''.date('Y').'-12-31 00:00:00\' ORDER BY e.dateini ASC');
+               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e WHERE  e.dateend <= \''.date('Y').'-12-31 00:00:00\' ORDER BY YEAR(e.dateini) ASC');
                
         $stmt->execute();  
         $years = $stmt->fetchAll();
@@ -188,7 +188,7 @@ class ActivitiesController extends Controller
         //Get the years with assistances
         $stmt = $em  
                ->getConnection()  
-               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e WHERE  e.dateend <= \''.date('Y').'-12-31 00:00:00\' ORDER BY e.dateini ASC');
+               ->prepare('SELECT DISTINCT(YEAR(e.dateini)) AS year FROM Event e WHERE  e.dateend <= \''.date('Y').'-12-31 00:00:00\' ORDER BY YEAR(e.dateini) ASC');
                
         $stmt->execute();  
         $years = $stmt->fetchAll();

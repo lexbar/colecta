@@ -39,7 +39,6 @@
                 {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
                 {% set path = path | replace({'/':'Bundle:'}) %}
                 {% include path with { 'item': item } only %}
-                {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %} 
             {% endfor %}
              
             <div class="alert alert-blank text-center" role="alert"><strong>Puedes suscribirte</strong> al calendario usando Outlook, iCal, Google Calendar, etc... <a href="{{ path('ColectaEventAboutics')}}">Saber más <i class="fa fa-angle-double-right"></i>.</a></div>
