@@ -8,28 +8,10 @@
 
 <h2>Publicado en <em>{{ category.name }}</em>{% if page > 1 %} <small> página {{ page }}</small>{% endif %}</h2>
 
-{% set shownItems = [] %}
-{% set mainItemsToShow = [] %}
-
-{% for item in items if not item.part %}
-    {% set mainItemsToShow = mainItemsToShow | merge([item.id]) %}
-{% endfor %}
-
-{% for item in items if item.id not in shownItems %}
-    {% if item.part %}
-        {% for relitem in item.related %}
-            {% if not relitem.part %}
-                {% set item = relitem %}
-            {% endif %}
-        {% endfor %}
-    {% endif %}   
-        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        {% include path with { 'item': item } only %}    
-    {% set shownItems = shownItems | merge([item.id]) %}
-    {% for ri in item.related %}
-        {% set shownItems = shownItems | merge([ri.id]) %}
-    {% endfor %}
+{% for item in items %}
+    {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+    {% set path = path | replace({'/':'Bundle:'}) %}
+    {% include path with { 'item': item } only %}
 {% else %}
     <div class="monocontent">
         <p class="lead">No hay publicaciones en esta categoría</p>

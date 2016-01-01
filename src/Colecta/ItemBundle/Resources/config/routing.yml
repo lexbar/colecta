@@ -34,6 +34,12 @@ ColectaPostIndex:
 ColectaPostPage:
     pattern:  /textos/pagina/{page}/
     defaults: { _controller: ColectaItemBundle:Post:page }
+ColectaPostCategoryIndex:
+    pattern:  /textos/categoria/{slug}/
+    defaults: { _controller: ColectaItemBundle:Post:category }
+ColectaPostCategoryPage:
+    pattern:  /textos/categoria/{slug}/{page}
+    defaults: { _controller: ColectaItemBundle:Post:categoryPage }
 ColectaPostNew:
     pattern:  /textos/crear/
     defaults: { _controller: ColectaItemBundle:Post:new }

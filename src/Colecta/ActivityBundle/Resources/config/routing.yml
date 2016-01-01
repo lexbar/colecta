@@ -4,6 +4,7 @@ ColectaMapIndex:
 ColectaMapPage:
     pattern:  /mapas/pagina/{page}
     defaults: { _controller: ColectaActivityBundle:Default:page }
+
 ColectaPlaceCreate:
     pattern:  /crear/lugar/
     defaults: { _controller: ColectaActivityBundle:Place:create }
@@ -25,12 +26,19 @@ ColectaPlaceEdit:
 ColectaPlaceDelete:
     pattern:  /lugares/{slug}/eliminar/
     defaults: { _controller: ColectaActivityBundle:Place:delete }
+
 ColectaEventCreate:
     pattern:  /crear/actividad/
     defaults: { _controller: ColectaActivityBundle:Event:create }
 ColectaEventIndex:
     pattern:  /actividades/
     defaults: { _controller: ColectaActivityBundle:Event:index }
+ColectaEventCategoryIndex:
+    pattern:  /actividades/categoria/{slug}/
+    defaults: { _controller: ColectaActivityBundle:Event:category }
+ColectaEventCategoryPage:
+    pattern:  /actividades/categoria/{slug}/{page}
+    defaults: { _controller: ColectaActivityBundle:Event:categoryPage }
 ColectaEventICS:
     pattern:  /calendar.ics
     defaults: { _controller: ColectaActivityBundle:Event:ics }
@@ -67,6 +75,7 @@ ColectaEventUpdateAsist:
 ColectaEventAboutics:
     pattern:  /icsinfo.html
     defaults: { _controller: ColectaActivityBundle:Event:aboutics }
+
 ColectaRouteUpload:
     pattern:  /upload/rutas/
     defaults: { _controller: ColectaActivityBundle:Route:upload }
@@ -88,6 +97,12 @@ ColectaRouteIndex:
 ColectaRoutePage:
     pattern:  /rutas/pagina/{page}
     defaults: { _controller: ColectaActivityBundle:Route:page }
+ColectaRouteCategoryIndex:
+    pattern:  /rutas/categoria/{slug}/
+    defaults: { _controller: ColectaActivityBundle:Route:category }
+ColectaRouteCategoryPage:
+    pattern:  /rutas/categoria/{slug}/{page}
+    defaults: { _controller: ColectaActivityBundle:Route:categoryPage }
 ColectaRouteDownload:
     pattern:  /rutas/descargar/{slug}.{extension}
     defaults: { _controller: ColectaActivityBundle:Route:download }

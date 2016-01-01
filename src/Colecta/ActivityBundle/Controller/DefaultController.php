@@ -41,8 +41,8 @@ class DefaultController extends Controller
         $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ActivityBundle\Entity\Route OR i INSTANCE OF Colecta\ActivityBundle\Entity\Place) AND i.draft = 0 $SQLprivacy ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         
         $query = $em->createQuery(
-            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
-        )->setFirstResult(0)->setMaxResults(50);
+            'SELECT c FROM ColectaItemBundle:Category c WHERE c.routes > 0 ORDER BY c.name ASC'
+        )->setFirstResult(0);
         
         $categories = $query->getResult();
         

@@ -40,7 +40,7 @@ class EventController extends Controller
         
         $query = $em->createQuery(
             'SELECT c FROM ColectaItemBundle:Category c WHERE c.events > 0 ORDER BY c.name ASC'
-        )->setFirstResult(0)->setMaxResults(50);
+        )->setFirstResult(0);
         
         $categories = $query->getResult();
         
@@ -57,6 +57,44 @@ class EventController extends Controller
         
         return $this->render('ColectaActivityBundle:Event:index.html.twig', array('items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
+    
+    public function categoryAction($slug)
+    {
+        return $this->categoryPageAction($slug, 1);
+    }    
+    public function categoryPageAction($slug, $page)
+    {
+        $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $category = $em->getRepository('ColectaItemBundle:Category')->findOneBySlug($slug);
+        
+        $SQLprivacy = '';
+        
+        if(!$this->getUser())
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
+        
+        $items = $em->createQuery(
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND i.category = :category AND i INSTANCE OF Colecta\ActivityBundle\Entity\Event ORDER BY i.date DESC"
+        )->setParameter('category',$category->getId())->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
+        
+        //Pagination
+        if(count($items) > $this->ipp) 
+        {
+            $thereAreMore = true;
+            unset($items[$this->ipp]);
+        }
+        else
+        {
+            $thereAreMore = false;
+        }
+        
+        return $this->render('ColectaItemBundle:Category:page.html.twig', array('category'=>$category, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+    }
+    
     public function viewAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
