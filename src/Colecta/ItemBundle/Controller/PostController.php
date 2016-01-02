@@ -30,7 +30,7 @@ class PostController extends Controller
         
         $query = $em->createQuery(
             'SELECT c FROM ColectaItemBundle:Category c WHERE c.posts > 0 OR c.files > 0 ORDER BY c.name ASC'
-        )->setFirstResult(0)->setMaxResults(50);
+        )->setFirstResult(0);
         
         $categories = $query->getResult();
         
@@ -67,8 +67,14 @@ class PostController extends Controller
         }
         
         $items = $em->createQuery(
-            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND i.category = :category AND i INSTANCE OF Colecta\ItemBundle\Entity\Post ORDER BY i.date DESC"
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND i.category = :category AND (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) ORDER BY i.date DESC"
         )->setParameter('category',$category->getId())->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
+        
+        $query = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE c.posts > 0 OR c.files > 0 ORDER BY c.name ASC'
+        )->setFirstResult(0);
+        
+        $categories = $query->getResult();
         
         //Pagination
         if(count($items) > $this->ipp) 
@@ -81,7 +87,7 @@ class PostController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Category:page.html.twig', array('category'=>$category, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaItemBundle:Post:category.html.twig', array('category'=>$category, 'items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function viewAction($slug)
     {

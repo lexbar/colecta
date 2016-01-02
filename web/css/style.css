@@ -45,6 +45,9 @@ img.smiley {
 .categories ul {
     font-size: 16px;
 }
+.categories ul li.active {
+	font-weight: bold;
+}
 .panel.panel-highlight {
     border-color: #DDD;
 }

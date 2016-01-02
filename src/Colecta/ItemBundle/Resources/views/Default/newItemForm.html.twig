@@ -23,9 +23,11 @@
             <textarea rows="1" class="form-control" placeholder="Escribe una publicación..." name="text" onClick="typeChosen('text');">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
             <div class="hidable">
                 {% if app.user.role.itemFileCreate %}
-                    <p><strong>Adjuntar archivos:</strong></p> 
-                    <div id="FilesFileHandler"><input id="FilesFile" type="file" multiple="multiple" name="file[]"></div>
-                    <div id="FUaddon" class="clearfix"></div>
+                	<fieldset>
+						<legend>Adjuntar archivos:</legend>
+	                    <div id="FilesFileHandler"><input id="FilesFile" type="file" multiple="multiple" name="file[]"></div>
+	                    <div id="FUaddon" class="clearfix"></div>
+	                </fieldset>
                 {% endif %}
                 
                 
@@ -165,10 +167,12 @@
             </div>
             <textarea rows="1" class="form-control" placeholder="Descripción de la ruta..." name="text" onClick="$('#itemForm').removeClass('compressed')">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
             <div class="hidable">
-                <p><strong>Archivo GPS:</strong></p> 
-                <div id="RouteFileHandler"><input id="RouteFile" type="file" name="file"></div>
-                <div id="RUmessage" class="clearfix"></div>
-                <div id="RUaddon"></div>
+                <fieldset>
+					<legend>Archivo GPS:</legend>
+		            <div id="RouteFileHandler"><input id="RouteFile" type="file" name="file"></div>
+		            <div id="RUmessage" class="clearfix"></div>
+		            <div id="RUaddon"></div>
+                </fieldset>
                 
                 {{ render(controller('ColectaItemBundle:Category:formlist', {'selected' : 0})) }}
                 

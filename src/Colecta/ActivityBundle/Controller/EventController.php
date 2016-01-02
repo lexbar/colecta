@@ -81,6 +81,12 @@ class EventController extends Controller
             "SELECT i FROM ColectaItemBundle:Item i WHERE i.draft = 0 $SQLprivacy AND i.category = :category AND i INSTANCE OF Colecta\ActivityBundle\Entity\Event ORDER BY i.date DESC"
         )->setParameter('category',$category->getId())->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         
+        $query = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE c.events > 0 ORDER BY c.name ASC'
+        )->setFirstResult(0);
+        
+        $categories = $query->getResult();
+        
         //Pagination
         if(count($items) > $this->ipp) 
         {
@@ -92,7 +98,7 @@ class EventController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Category:page.html.twig', array('category'=>$category, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaActivityBundle:Event:category.html.twig', array('category'=>$category, 'items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     
     public function viewAction($slug)
