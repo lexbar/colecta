@@ -170,7 +170,7 @@ img.smiley {
 /* ITEMS */
 .item {
     border-bottom: 1px solid #ddd;
-    padding-bottom: 75px;
+    padding-bottom: 60px;
     margin-top: 20px;
 }
 .item.full {
@@ -232,7 +232,7 @@ img.smiley {
     font-weight: 500;
 }
 .item .event-date {
-    font-size: 18px;
+    font-size: 18px !important;
     font-weight: 200;
 }
 .item .event-date span, .item .event-date a {
