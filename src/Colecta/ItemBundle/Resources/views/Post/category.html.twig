@@ -19,7 +19,7 @@
                     {% endfor %}
                 </ul>
                 
-                <a href="{{ path('ColectaCategoryIndex') }}" class="btn btn-default pull-block btn-sm"><i class="fa fa-angle-double-left"></i> Índice de categorías</a>
+                <a href="{{ path('ColectaCategoryView', {'slug': category.slug }) }}" class="btn btn-default pull-block btn-sm"><i class="fa fa-angle-double-left"></i> Todo en esta categoría</a>
             </div>
         </div>
         <div class="col-xs-12 col-sm-8 col-md-9">
