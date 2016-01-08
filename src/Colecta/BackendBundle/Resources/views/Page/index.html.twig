@@ -6,7 +6,7 @@
     
     {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'page' } %}
     
-    <h2>Páginas</h2>
+    <h2>Contenido fijo</h2>
         
     <div class="monocontent tabs">
         <a href="{{ path('ColectaBackendNewPage') }}" class="btn btn-primary">Crear Nueva Página <i class="fa fa-plus"></i></a> <a href="{{ path('ColectaBackendNewLink') }}" class="btn btn-default">Crear Enlace <i class="fa fa-plus"></i></a> 
@@ -33,10 +33,10 @@
             
             <table class="table table-hover" style="word-break: break-all;">
             <thead><tr><th>Enlace</th><th class="text-right">Acciones</th></tr></thead>
-            {% for link in web_links %}
+            {% for key,link in web_links %}
                 <tr>
                     <td><a href="{{ link[0] }}">{% if link[2] is defined %}<i class="fa fa-{{ link[2] }} fa-fw"></i> {% endif %}{{ link[1] }}</a><br>{{ link[0] }}</td>
-                    <td class="text-right"><a href="{{ path('ColectaBackendLinkDelete', {'link_id':loop.index0}) }}" class="text-danger" onClick="return confirm('¿Seguro que deseas eliminar el enlace?\n{{ link[0] }}')">eliminar</a> / <a href="{{ path('ColectaBackendLink', {'link_id':loop.index0}) }}" class="text-success">editar</a></td>
+                    <td class="text-right"><a href="{{ path('ColectaBackendLinkDelete', {'link_id':key}) }}" class="text-danger" onClick="return confirm('¿Seguro que deseas eliminar el enlace?\n{{ link[0] }}')">eliminar</a> / <a href="{{ path('ColectaBackendLink', {'link_id':key}) }}" class="text-success">editar</a></td>
                 </tr> 
             {% endfor %}
             </table>

@@ -221,7 +221,7 @@ class SettingsController extends Controller
             }
         }
         
-        if(!isset($web_parameters['twig']['globals']['web_links']) || count($web_parameters['twig']['globals']['web_links']) <= $link_id)
+        if(!isset($web_parameters['twig']['globals']['web_links']) || !isset($web_parameters['twig']['globals']['web_links'][$link_id]))
         {
             $this->get('session')->getFlashBag()->add('error', 'No existe el enlace.');
             return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
@@ -246,15 +246,17 @@ class SettingsController extends Controller
         
         $web_parameters = $this->getWebParameters();
         
-        if(!isset($web_parameters['twig']['globals']['web_links']) || count($web_parameters['twig']['globals']['web_links']) <= $link_id)
+        if(!isset($web_parameters['twig']['globals']['web_links']) || !isset($web_parameters['twig']['globals']['web_links'][$link_id]))
         {
             $this->get('session')->getFlashBag()->add('error', 'No existe el enlace.');
             return new RedirectResponse($this->generateUrl('ColectaBackendPageIndex'));
         }
             
         //Remove link
-        
         unset($web_parameters['twig']['globals']['web_links'][$link_id]);
+        
+        //reset key values
+        $web_parameters['twig']['globals']['web_links'] = array_values($web_parameters['twig']['globals']['web_links']); 
         
         if($this->setWebParameters($web_parameters))
         {

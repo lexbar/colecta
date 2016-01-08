@@ -1,7 +1,5 @@
 {% if pages | length > 0 %}
-<hr>
-
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-pills nav-stacked panel panel-default">
     {% for page in pages %}
     <li {% if app.request.uri == url('ColectaPage',{slug:page.slug}) %}class="active"{% endif %}>
         <a href="{{ path('ColectaPage', { slug: page.slug } ) }}">
@@ -13,9 +11,7 @@
 {% endif %}
 
 {% if web_links | length > 0 %}
-<hr>
-
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-pills nav-stacked panel panel-default">
     {% for link in web_links %}
     <li>
         <a href="{{ link[0] }}">
@@ -24,4 +20,8 @@
     </li>
     {% endfor %}
 </ul>
+{% endif %}
+
+{% if app.user and app.user.role.siteConfigSettings %}
+    <a href="{{ path('ColectaBackendPageIndex') }}" class="btn btn-sm btn-link"><i class="fa fa-pencil"></i> Administrar contenido</a>
 {% endif %}

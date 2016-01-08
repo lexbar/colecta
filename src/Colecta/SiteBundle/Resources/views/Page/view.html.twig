@@ -67,6 +67,9 @@
                 </form>
             {% endif %} {# /expiration #}
         {% endif %} {# /contact page #}
-    
+        
+        {% if app.user and app.user.role.siteConfigSettings %}
+            <a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class="btn btn-sm btn-link"><i class="fa fa-pencil"></i> Administrar contenido</a>
+        {% endif %}
     </div>
 {% endblock %}

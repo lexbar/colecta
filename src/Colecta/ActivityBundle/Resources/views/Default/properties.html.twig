@@ -28,10 +28,5 @@
     
     <li class="col-xs-6">Duración: <br><strong>{% if item.time > 0 %}{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m{% else %}--{% endif%}</strong> </li>
     
-    <li class="col-xs-6">Dificultad: <br><strong>{% if item.difficulty != '' %}{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderada', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}{% else %}--{% endif %}</strong> </li>
-    
-    {% if isRoute and showProfile is defined %}
-        <li class="col-xs-12 profile"><img src="{{ path('ColectaRouteProfile', { 'id' : item.id }) }}"></li>
-    {% endif %}
-    
+    <li class="col-xs-6">Dificultad: <br><strong>{% if item.difficulty != '' %}{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderada', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}{% else %}--{% endif %}</strong> </li>    
 </ul>
