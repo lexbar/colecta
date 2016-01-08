@@ -38,6 +38,10 @@ class DefaultController extends Controller
             "SELECT i FROM ColectaActivityBundle:Event i WHERE i.draft = 0 $SQLprivacy AND i.dateini >= CURRENT_DATE() AND i.dateini < DATE_ADD(CURRENT_DATE(),7, 'day') ORDER BY i.dateini ASC"
         )->setMaxResults(2)->getResult();
         
+        $categories = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+        )->setFirstResult(0)->setMaxResults(50)->getResult();
+        
         //Pagination
         if(count($items) > $this->ipp) 
         {
@@ -49,7 +53,7 @@ class DefaultController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Default:index.html.twig', array('nextactivities' => $nextactivities, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaItemBundle:Default:index.html.twig', array('nextactivities' => $nextactivities, 'items' => $items, 'categories' => $categories, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function newAction()
     {

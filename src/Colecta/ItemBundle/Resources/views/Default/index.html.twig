@@ -6,6 +6,8 @@
 
     <h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
+    {% if not app.user and web_description and page <= 1 %}<p class="lead">{{ web_description | nl2br }}</p>{% endif %}
+    
     <div class="row">    
         <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
             {# NEXT ACTIVITIES #}
@@ -32,13 +34,21 @@
                 {% endfor %}
             {% endif %}
             
+            {# CUSTOM NAVIGATION #}
             {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
+            
+            {# CATEGORIES #}
+            <div class="categories">
+                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
+                <ul class="list-unstyled hidden-xs" id="categoriesList">
+                    {% for categoryItem in categories %}
+                    <li><a href="{{ path('ColectaCategoryView',{'slug':categoryItem.slug}) }}">{{ categoryItem.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
         <div class="col-xs-12 col-sm-8 col-md-9">
-    
-            {% if not app.user and web_description and page <= 1 %}<p class="lead">{{ web_description | nl2br }}</p>{% endif %}
-            
-            
+        
             {# ACTIVITIES #}
             {#% if app.user %}
                 <div class="panel dashboard panel-default">
