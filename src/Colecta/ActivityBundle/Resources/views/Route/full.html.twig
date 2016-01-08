@@ -242,11 +242,15 @@
                 enabled: false
             },
             plotOptions: {
+                series: {
+                    color: '#FF0000'
+                },
                 area: {
                     fillColor: {
                         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                        stops: [[0, Highcharts.getOptions().colors[0]],[1, 'rgba(255,255,255,0)']]
+                        stops: [[0, 'rgba(255,0,0,.5)'],[1, 'rgba(255,255,255,0)']]
                     },
+                    lineColor: 'rgba(255,0,0,.8)',
                     lineWidth: 2,
                     marker: {
                         enabled: false,

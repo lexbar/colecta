@@ -74,7 +74,7 @@ img.smiley {
 .navbar-default a.navbar-brand * {
     vertical-align: middle;
     max-height: 24px;
-    color: #555;
+    color: #222;
 }
 .navbar-default .userProfile a {
     padding: 7px 15px;
