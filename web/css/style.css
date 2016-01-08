@@ -7,6 +7,9 @@ img.smiley {
 .headerimg {
     height: 120px;
 }
+.dashboard {
+    margin-top: -10px;
+}
 .sidebardisplay {
     position: absolute;
     top: 0;

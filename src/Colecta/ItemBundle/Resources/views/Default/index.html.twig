@@ -8,7 +8,7 @@
     
     {% if not app.user and web_description and page <= 1 %}<p class="lead">{{ web_description | nl2br }}</p>{% endif %}
     
-    <div class="row">    
+    <div class="row dashboard">    
         <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
             {# NEXT ACTIVITIES #}
             {% if nextactivities | length and page <= 1 %}
