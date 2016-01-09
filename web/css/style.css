@@ -13,6 +13,9 @@ img.smiley {
 .panel.card {
 	border-top: 3px solid #337ab7;
 }
+.panel.nav-pills {
+	font-size: 16px;
+}
 .card h3, .card p {
     margin: 0;
 }
@@ -22,9 +25,13 @@ img.smiley {
     right: 0;
     width: 40px;
     z-index: 1020;
-    padding: 18px 0;
+    padding: 14px 0;
     margin: 0;
     cursor: pointer;
+}
+.sidebardisplay i {
+	margin-top: 4px;
+	color: #000;
 }
 .btn.post-content {
     color: #0275d8;
@@ -176,7 +183,7 @@ img.smiley {
 /* ITEMS */
 .item {
     border-bottom: 1px solid #ddd;
-    padding-bottom: 50px;
+    padding-bottom: 25px;
     margin-top: 20px;
 }
 .item.full {
@@ -257,13 +264,13 @@ img.smiley {
 }
 .item .details img {
     margin-right: 10px;
+    border-radius: 100%;
 }
 .item .details .username {
     line-height: 20px;
     font-size: 14px;
 }
 .item .details .dateandcat {
-    padding-left: 2px;
     line-height: 20px;
 }
 .item .itemActions {
@@ -430,6 +437,7 @@ img.smiley {
 
 .comments .media .pull-left img {
     width:40px;
+    border-radius: 100%;
 }
 .comments .comment img {
     margin-top: 4px;

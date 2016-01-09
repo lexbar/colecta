@@ -1,8 +1,14 @@
 <nav class="navbar navbar-default" role="navigation">    
-    <div id="sidebarButton" class="visible-xs sidebardisplay" onclick="$('#header .nav').toggleClass('hidden-xs')">
-        <div><i class="fa fa-bars fa-2x"></i></div>
-    </div>
-    
+	{% if app.user %}
+		<div class="visible-xs sidebardisplay" onclick="$('#header .nav').toggleClass('hidden-xs');">
+	        <a href="#"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40"></a>
+	    </div>
+	{% else %}
+		<div class="visible-xs sidebardisplay">
+			<a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-sign-in fa-2x"></i></a>
+		</div>
+	{% endif %}
+	
     <div class="container" id="header">
         <div class="navbar-header">
             <a class="navbar-brand" href="/">
@@ -23,9 +29,9 @@
             <li><a href="{{ path('userMessages')}}"><i class="fa fa-envelope"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
             <li><a href="{{ path('userNotifications')}}"><i class="fa fa-bell"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Alertas</a></li>
             <li class="dropdown userProfile">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40"></a>
+                <a href="#" id="userProfile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40" class="hidden-xs"><span class="visible-xs"><i class="fa fa-user-plus fa-fw"></i> Mi Cuenta</span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="fa fa-user fa-fw"></i> Perfil</a></li>
+                    <li><a href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="fa fa-user fa-fw"></i> Mi Perfil</a></li>
                     <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="fa fa-bar-chart fa-fw"></i> Rendimiento</a></li>
                     <li><a href="{{ path('ColectaActivitiesRank') }}"><i class="fa fa-sort-amount-desc fa-fw"></i> Ranking</a></li>
                     {% if app.user and app.user.role.getSiteConfig %}
@@ -41,7 +47,7 @@
         
         <ul class="nav navbar-nav navbar-right hidden-xs">
             {#<li><a href="#"><i class="fa fa-user"></i> Solicitar Invitación</a></li>#}
-            <li><a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-share"></i> Iniciar Sesión</a></li>    
+            <li><a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-sign-in"></i> Iniciar Sesión</a></li>    
         </ul>
         
         <!-- Modal -->
@@ -71,7 +77,7 @@
                             
                             <div class="form-group">
                                 <div class="col-xs-12 col-lg-offset-2 col-lg-10">
-                                    <label class="checkbox">
+                                    <label class="">
                                         <small><input type="checkbox" id="remember_me" name="_remember_me" checked> Mantenerme conectado </small>
                                     </label>
                                 </div>
