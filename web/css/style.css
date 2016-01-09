@@ -10,6 +10,12 @@ img.smiley {
 .dashboard {
     margin-top: -10px;
 }
+.panel.card {
+	border-top: 3px solid #337ab7;
+}
+.card h3, .card p {
+    margin: 0;
+}
 .sidebardisplay {
     position: absolute;
     top: 0;
@@ -19,9 +25,6 @@ img.smiley {
     padding: 18px 0;
     margin: 0;
     cursor: pointer;
-}
-.panel.dashboard {
-	border-top: 3px solid #337ab7;
 }
 .btn.post-content {
     color: #0275d8;
