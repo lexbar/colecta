@@ -12,6 +12,10 @@
                     <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
                 </div>
             </form>
+            
+            {# CUSTOM NAVIGATION #}
+            {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
+            
             <div class="categories">
                 <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
                 <ul class="list-unstyled hidden-xs" id="categoriesList">

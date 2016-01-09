@@ -8,13 +8,15 @@ img.smiley {
     height: 120px;
 }
 .dashboard {
-    margin-top: -10px;
+    margin-top: -20px;
 }
 .panel.card {
 	border-top: 3px solid #337ab7;
+	margin-top: 20px;
 }
 .panel.nav-pills {
 	font-size: 16px;
+	margin-top: 20px;
 }
 .card h3, .card p {
     margin: 0;
@@ -826,6 +828,9 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .headerimg {
         height: 0;
     }
+    .dashboard {
+    margin-top: 0;
+}
     .navbar .container {
         padding-left: 0;
     }

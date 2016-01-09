@@ -10,7 +10,22 @@
     
     <div class="row dashboard">    
         <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
-            {# NEXT ACTIVITIES #}
+        	{# CUSTOM NAVIGATION #}
+            {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
+            
+            {# CATEGORIES #}
+            <div class="categories">
+                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
+                <ul class="list-unstyled hidden-xs" id="categoriesList">
+                    {% for categoryItem in categories %}
+                    <li><a href="{{ path('ColectaCategoryView',{'slug':categoryItem.slug}) }}">{{ categoryItem.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-9">
+        
+        	{# NEXT ACTIVITIES #}
             {% if nextactivities | length and page <= 1 %}
                 {% set dias_semana = {
                     'Monday':'Lunes',
@@ -33,23 +48,8 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            
-            {# CUSTOM NAVIGATION #}
-            {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
-            
-            {# CATEGORIES #}
-            <div class="categories">
-                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
-                <ul class="list-unstyled hidden-xs" id="categoriesList">
-                    {% for categoryItem in categories %}
-                    <li><a href="{{ path('ColectaCategoryView',{'slug':categoryItem.slug}) }}">{{ categoryItem.name }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-8 col-md-9">
         
-            {# ACTIVITIES #}
+            {# GRAPS #}
             {#% if app.user %}
                 <div class="panel dashboard panel-default">
                     <div class="panel-body row">

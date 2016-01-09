@@ -39,7 +39,7 @@ class DefaultController extends Controller
         )->setMaxResults(2)->getResult();
         
         $categories = $em->createQuery(
-            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.posts + c.routes + c.events + c.files + c.places DESC'
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.name ASC'
         )->setFirstResult(0)->setMaxResults(50)->getResult();
         
         //Pagination
