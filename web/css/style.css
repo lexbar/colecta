@@ -176,7 +176,7 @@ img.smiley {
 /* ITEMS */
 .item {
     border-bottom: 1px solid #ddd;
-    padding-bottom: 60px;
+    padding-bottom: 50px;
     margin-top: 20px;
 }
 .item.full {
@@ -356,7 +356,7 @@ img.smiley {
     line-height: 20px;
 }
 .related {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .item.full .related {
     margin-bottom: 20px;
