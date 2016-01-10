@@ -916,7 +916,8 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 		display: block;
 	}
 	.assistances .attendee {
-		width: 100%;
+		width: auto;
+		margin-bottom: 5px;
 	}
 	.assistances .control {
 		opacity: 1;
