@@ -464,11 +464,15 @@ img.smiley {
 }
 
 .assistances ul {
-	margin-bottom: 30px;
+	margin-bottom: 25px;
 	color: #777;
+	font-size: 16px;
 }
 .assistances li {
 	padding: 1px 0;
+}
+.assistances form {
+	display: inline;
 }
 .assistances ul li:hover {
 	background-color: #e6f6ff;
@@ -476,6 +480,10 @@ img.smiley {
 .assistances .attendee {
     color: #000;
     font-weight: bold;
+}
+.assistances .assistance {
+	word-wrap: break-word;
+	word-break: 
 }
 .assistances .btn.btn-default {
     border-color: #0275d8;
@@ -488,22 +496,26 @@ img.smiley {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+.assistances .save {
+	display: inline-block;
+	margin-left: 10px;
+}
 .assistances .control {
 	margin-left: 10px;
 	opacity: 0;
 	display: inline-block;
-	transition: .1s opacity
+	transition: .1s opacity;
 }
 .assistances li:hover .control {
 	opacity: 1;
 }
-.assistances .assistance{
-	font-style: italic;
-} 
 .assistances input {
 	padding: 0 3px;
 	line-height: 12px;
 	width: 50px;
+}
+.assistances .adduser {
+	margin-bottom: 15px;
 }
 
 .bigcalendar {
@@ -900,4 +912,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .profileHeader .pull-left, .profileHeader .nav-pills>li {
         float: none !important;
     }
+    .assistances form {
+		display: block;
+	}
 }

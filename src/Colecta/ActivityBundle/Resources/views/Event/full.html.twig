@@ -4,7 +4,9 @@
 
 {% block article %}
 
-{% set canEdit = app.user and item.canEdit(app.user) %}
+{% set canedit = item.canEdit(app.user) %}
+{% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
+
 {% set dias_semana = {
             'Monday':'Lunes',
             'Tuesday':'Martes',
@@ -29,7 +31,7 @@
             '12':'Diciembre'
         }%}
 
-<div class="full item{% if canEdit %} editable{% endif %}">
+<div class="full item{% if canedit %} editable{% endif %}">
     {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     <h2>
         <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a>
@@ -69,130 +71,57 @@
     
     {######## ASSISTANCES ########}
     
-    {% set canedit = item.canEdit(app.user) %}
-    {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
-    
-    {% if item.assistances | length or canedit and item.allowassistances %}
-        {% if canedit %}
-            <form class="form-inline" action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">
-        {% endif %}
-        
+    {% if item.assistances | length or canedit and item.allowassistances %}        
         <div class="assistances">
         <h3>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}:</h3>
             
-        <ul class="assistances list-unstyled">    
+        <ul class="list-unstyled">    
         {% for assistance in item.assistances %}
         
-            <li>
+            <li id="user{{ assistance.user.id }}assistance">
             	<i class="fa fa-user fa-fw"></i>
                 <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee" class="attendee">{{assistance.user.name}}</a> 
                 {% if haspassed %}
                     {% if assistance.confirmed %}
-                        <span class="assistance">{{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km</span>
+                        
+                        
                         {% if canedit %}
-                            <a class="control" href="#">Modificar <i class="fa fa-pencil"></i></a> <a class="control text-danger" href="#">Borrar <i class="fa fa-times"></i></a>
+                        	<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug, 'user_id': assistance.user.id}) }}" method="POST" onSubmit="">
+	                        	<span class="assistance"><input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ points[assistance.user.id].points }}" class="text-right"> puntos | <input name="user{{ assistance.user.id }}km" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ assistance.km }}" class="text-right"> km</span>
+	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save hidden"><i class="fa fa-save"></i> Guardar</a>
+	                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="fa fa-times"></i></a>
+                            </form>
+                        {% else %}
+                        	<span class="assistance">{{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km</span>
                         {% endif %}
                     {% else %}
                         {% if canedit %}
-                            <a href="#" class="text-success">Confirmar <i class="fa fa-check"></i></a> <a class="control text-danger" href="#">Borrar <i class="fa fa-times"></i></a>
+                            <a href="#" onClick="confirmAssistance({{ assistance.user.id }});return false;" class="text-success">Confirmar <i class="fa fa-check"></i></a> <a class="control text-danger" href="#">Borrar <i class="fa fa-times"></i></a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
             </li>
             
         {% else %}
-            <li><em>Ninguna asistencia confirmada</em></li>
+            <li class="no-assistance"><em>Ninguna asistencia confirmada</em></li>
         {% endfor %}
-        
         </ul>
         
-        </div>
-        
-        {% if canedit %}</form>{% endif %}
-        
-        
-        {#}
-        <hr>
-    
-        {% if canedit %}<form class="form-inline" action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug}) }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">{% endif %}
-        
-        <div class="assistances">
-        <h4>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}:</h4>
-            
-        <ul class="list-group assistances">    
-        {% for assistance in item.assistances %}
-        
-            <li class="clearfix list-group-item {% if loop.index is odd %}odd{% else %}even{% endif %}">
-                <div class="row">
-                    <div class="media col-xs-12  col-sm-12 col-md-4">
-                        <img class="username pull-left" width="20" height="20" src="{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}"> 
-                        <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee">{{assistance.user.name}}</a>
+        {% if canedit and item.allowassistances %}
+            <div class="row adduser">
+                <div class="col-xs-12 col-sm-9 col-md-6">
+                    <div class="input-group" id="addUser">
+                      <span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
+                      <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
                     </div>
                     
-                    {% if haspassed %}
-                        {% if canedit %}
-                            {% if assistance.confirmed %}
-                            <div class="col-xs-12 col-sm-6 col-md-3">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" name="user{{assistance.user.id}}points" value="{% if points[assistance.user.id] is defined %}{{ points[assistance.user.id].points }}{% endif %}" onKeyUp="highlightUpdateBtn()">
-                                    <span class="input-group-addon">puntos</span>
-                                </div>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="col-xs-12 col-sm-6 col-md-3{% if not assistance.confirmed %} col-sm-offset-3{% endif %}">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" name="user{{assistance.user.id}}km" value="{% if assistance.km <= 0 and not assistance.confirmed %}{{ item.distance }}{% else %}{{ assistance.km }}{% endif %}" onKeyUp="highlightUpdateBtn()">
-                                    <span class="input-group-addon">km</span>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-12 col-md-2">
-                                <label for="user{{assistance.user.id}}confirmed">confirmar</label> <input onClick="highlightUpdateBtn()" type="checkbox" {% if assistance.confirmed %}checked{%endif%} name="user{{assistance.user.id}}confirmed" id="user{{assistance.user.id}}confirmed">
-                            </div>
-                        {% elseif assistance.confirmed %}
-                            <div class="col-xs-12 col-md-8">{{ assistance.km }} km{% if points[assistance.user.id] is defined %} / {{ points[assistance.user.id].points }} p{% endif %} <i class="fa fa-check pull-right"></i></div>
-                        {% endif %}
-                    {% endif %}
+                    <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
+                    <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
                 </div>
-            </li>
-            
-        {% else %}
-            <li class="list-group-item"><em>Ninguna asistencia confirmada</em></li>
-        {% endfor %}
-        
-        {% if canedit %}
-            <li class="list-group-item clearfix">
-                {% if item.allowassistances %}
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-9">
-                            <button onClick="$('#addUser').removeClass('hidden'); $(this).hide();" class="btn btn-default" type="button"><i class="fa fa-user-plus"></i> Añadir un usuario</button>
-                            
-                            <div class="input-group hidden" id="addUser">
-                              <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                              <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
-                            </div>
-                            
-                            <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
-                            <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-3">
-                            <button id="updateBtn" class="btn btn-default btn-block" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
-                        </div>    
-                    </div> 
-                {% elseif item.assistances | length and haspassed %}
-                    <button id="updateBtn" class="btn btn-default pull-right" type="submit"><i id="updateBtnLoading"></i> Actualizar</button>
-                {% endif %}    
-            </li>
+            </div> 
         {% endif %}
         
-        </ul>
-        
         </div>
-        
-        {% if canedit %}</form>{% endif %}
-        #}
     {% endif %}
     
     {######## END ASSISTANCES ########}
@@ -377,95 +306,70 @@
         /*prefetch: 'http://colecta.dev{{ path('ColectaAjaxUserList') }}'*/
     });
     
-    function highlightUpdateBtn() 
-    {
-        $('#updateBtn').addClass('btn-primary');
-    }
-{#  var xhr;
-    var searchagain = false;
+    $('#userSearch').bind('typeahead:selected', function(obj, datum, name) {    
+        addAssistance(datum.value, datum.tokens[2]);
+        $('#userSearch').val('');
+	});
     
-    function showResults()
-    {
-        if($('#userSearch').val().length < 2) {
-            hideResults();
-            return;
-        }
-        
-        $('#destinationLoading').removeClass('hidden');
-        
-        if(xhr && xhr.readyState != 4) {
-            searchagain = true;
-        } else {        
-            
-            xhr = $.ajax({
-                url: '{{ path('ColectaAjaxUserSearch') }}?search='+$('#userSearch').val(),
-                success: function(json) {
-                    $('#userResults').html('');
-                    $('#userResults').css('display','none');
-                    for(var i = 0; i < json.length; i++) {
-                        $('#userResults').append('<li id="userResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
-                    } 
-                    if(json.length) { $('#userResults').css('display','block'); }
-                    //$('#searchButton').removeAttr("disabled"); 
-                },
-                cache: false
-            }).done(function() { 
-                if(searchagain) 
-                {
-                    searchagain = false;
-                    showResults();
-                }
-                else
-                {
-                    $('#destinationLoading').addClass('hidden');
-                }
-            });
-        }
+    function addAssistance(name, user_id) {
+	    if($('#user'+user_id+'assistance').length == 0) { //if not already in list
+		    $('.assistances ul').append('<li id="user'+user_id+'assistance"><i class="fa fa-user fa-fw"></i> <a href="/usuario/'+user_id+'/" itemprop="attendee" class="attendee">'+name+'</a> <i class="fa fa-spinner fa-pulse"></i></li>');
+			confirmAssistance(user_id);
+			$('.no-assistance').remove();
+	    }
     }
     
-    //Key up
-    $('#userSearch').keyup(function(e){
-        if($('#userResults li').length) {
-            var current = $('#userResults li.active');
-            var currentN = 0;
-            if(current.length) {
-                currentN = parseInt(current.attr('id').substring(10));
-            } 
-            
-            if(e.keyCode == 40){
-                if($('#userResult'+(currentN + 1)).length) {
-                    $('#userResult'+(currentN)).removeClass('active');
-                    $('#userResult'+(currentN + 1)).addClass('active');
-                    return;
-                }
-                return;
-            } else if(e.keyCode == 38){
-                if($('#userResult'+(currentN - 1)).length) {
-                    $('#userResult'+(currentN)).removeClass('active');
-                    $('#userResult'+(currentN - 1)).addClass('active');
-                    return;
-                }
-                return;
-            } else if(e.keyCode == 13){
-                if($('#userResult'+(currentN)).length) {
-                    $('#userResult'+(currentN)+' a').click();
-                    return;
-                }
-                return;
-            }
-        }
-        
-        showResults();
-    });
-    
-    function hideResults() 
-    {
-        $('#userResults').html('');
-        $('#userResults').css('display','none');
-    }
-    
-    
-#}
+    function confirmAssistance(user_id) {
+	    $('#user'+user_id+'assistance .text-success i.fa-check').removeClass('fa-check').addClass('fa-spinner fa-pulse');
+	    
+	    $.ajax({
+		    url: "/actividades/{{ item.slug }}/confirm/" + user_id,
+		})
+		.done(function (data) {
+			$('#user'+data.user_id+'assistance .text-success, #user'+data.user_id+'assistance .text-danger').remove();
+		
+        	$('#user'+data.user_id+'assistance .attendee').after('<form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.km+'" class="text-right"> km</span><a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save hidden"><i class="fa fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="fa fa-times"></i></a></form>');
+        	$('#user'+user_id+'assistance i.fa-spinner').remove();
+		})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+			$('#user'+data.user_id+'assistance .text-success i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-check');
+			alert("Ha ocurrido un error."+errorThrown+" .... "+errorThrown);
+		});
+	}
+	
+	function removeAssistance(user_id) {
+	    $('#user'+user_id+'assistance i.fa-times').removeClass('fa-times').addClass('fa-spinner fa-pulse');
+	    
+	    $.ajax({
+		    url: "/actividades/{{ item.slug }}/remove/" + user_id,
+		})
+		.done(function (data) {
+			$('#user'+data.user_id+'assistance').remove();
+		})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+			$('#user'+data.user_id+'assistance i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-times');
+			alert("Ha ocurrido un error."+errorThrown+" .... "+errorThrown);
+		});
+	}
+	
+	function updateAssistance(user_id) {
+	    $('#user'+user_id+'assistance i.fa-save').removeClass('fa-save').addClass('fa-spinner fa-pulse');
+	    
+	    $.post( "/actividades/{{ item.slug }}/update/" + user_id, $("#user"+user_id+"assistance form:first").serialize() )
+		.done(function (data) {
+			$('#user'+data.user_id+'assistance i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-save');
+        	$('#user'+data.user_id+'assistance form input[name="user'+data.user_id+'points"]').val(data.points);
+        	$('#user'+data.user_id+'assistance form input[name="user'+data.user_id+'km"]').val(data.km);
+        	$('#user'+user_id+'assistance .save').addClass('hidden');
+        	$('#user'+data.user_id+'assistance form input').css('border', '1px solid green');
+        	$('#user'+data.user_id+'assistance .assistance').after('<i class="fa fa-check text-success removemenow"></i>');
+        	$('.removemenow').fadeOut(1000);
+		})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+			$('#user'+data.user_id+'assistance i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-save');
+			alert("Ha ocurrido un error."+errorThrown+" .... "+errorThrown);
+		});
+	}
     </script>
 {% endblock %}
 {% endif %}

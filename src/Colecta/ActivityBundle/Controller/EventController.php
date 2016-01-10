@@ -3,6 +3,7 @@
 namespace Colecta\ActivityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Colecta\ActivityBundle\Entity\Event;
 use Colecta\ActivityBundle\Entity\EventAssistance;
@@ -601,7 +602,15 @@ class EventController extends Controller
             }
             else
             {
+	            $points = $this->getPointsHandler($assistance, false);
+	            
+	            if($points)
+                {
+	                $em->remove($points);
+                }
+                
                 $em->remove($assistance);
+                
                 $em->flush();
                 
                 //Notification to the author of the event
@@ -755,8 +764,6 @@ class EventController extends Controller
                         $assistance->setUser($targetUser);
                         $assistance->setEvent($item);
                         
-                        $em->persist($assistance); 
-                        
                         $now = new \DateTime('now');
                         //If this is an event that has already happened
                         if($item->getDateend() <= $now) 
@@ -773,6 +780,8 @@ class EventController extends Controller
                             $em->persist($points); 
                         }
                         
+                        $em->persist($assistance); 
+                        
                         $em->flush();
                     }                
                 }
@@ -787,6 +796,205 @@ class EventController extends Controller
         }
         
         return new RedirectResponse($referer);
+    }
+    public function assistanceConfirmAction($slug, $user_id) //JSON Method
+    {
+	    $em = $this->getDoctrine()->getManager();
+	    
+	    $user = $this->getUser();
+	    
+	    if(!$user)
+	    {
+		    //Must be logged
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'Tienes que iniciar sesión','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+	    
+	    if(!$item)
+	    {
+		    //no item found
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'No se ha encontrado el evento','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    elseif(!$item->canEdit($user))
+	    {
+		    //you cannot edit this item
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'No tienes los permisos suficientes','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $targetUser = $em->getRepository('ColectaUserBundle:User')->findOneById($user_id);
+	    
+	    if(!$targetUser)
+	    {
+		    //target user not found
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'No se ha encontrado el usuario','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $assistance = $em->getRepository('ColectaActivityBundle:EventAssistance')->findOneBy(array('event'=>$item->getId(),'user'=>$targetUser->getId()));
+                    
+        if(!$assistance)
+        {
+	        $assistance = new EventAssistance();
+            $assistance->setUser($targetUser);
+            $assistance->setEvent($item);
+        }
+        
+        $assistance->setConfirmed(true);
+        $assistance->setKm($item->getDistance());
+            
+        $points = $this->getPointsHandler($assistance, true);
+        $points->setPoints($assistance->getKm());
+        
+        $conditions = $em->getRepository('ColectaUserBundle:PointsCondition')->findBy(array(), array('priority'=>'DESC'));
+        $points->applyConditions($conditions);
+        
+        $em->persist($assistance);
+        $em->persist($points);
+        
+        $em->flush();
+        
+        $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('user_id' => $user_id, 'error' => '','success' => $points->getPoints() . ' puntos | ' . $assistance->getKm() . ' km', 'points' => $points->getPoints(), 'km' => $assistance->getKm())),200);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+	public function assistanceRemoveAction($slug, $user_id) //JSON Method
+    {
+	    $em = $this->getDoctrine()->getManager();
+	    
+	    $user = $this->getUser();
+	    
+	    if(!$user)
+	    {
+		    //Must be logged
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'Tienes que iniciar sesión','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+	    
+	    if(!$item)
+	    {
+		    //no item found
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'No se ha encontrado el evento','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    elseif(!$item->canEdit($user))
+	    {
+		    //you cannot edit this item
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'No tienes los permisos suficientes','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $targetUser = $em->getRepository('ColectaUserBundle:User')->findOneById($user_id);
+	    
+	    if(!$targetUser)
+	    {
+		    //target user not found
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'No se ha encontrado el usuario','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $assistance = $em->getRepository('ColectaActivityBundle:EventAssistance')->findOneBy(array('event'=>$item->getId(),'user'=>$targetUser->getId()));
+        
+        $points = $this->getPointsHandler($assistance, false);
+	            
+        if($points)
+        {
+            $em->remove($points);
+        }
+               
+        if($assistance)
+        {
+            $em->remove($assistance);
+        }
+        
+        $em->flush();
+        
+        $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('user_id' => $user_id, 'error' => '','success' => 'Asistencia eliminada')),200);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
+    public function assistanceUpdateAction($slug, $user_id) //JSON Method
+    {
+	    $em = $this->getDoctrine()->getManager();
+	    $request = $this->get('request')->request;
+	    
+	    $user = $this->getUser();
+	    
+	    if(!$user)
+	    {
+		    //Must be logged
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('user_id' => $user_id, 'error' => 'Tienes que iniciar sesión','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
+	    
+	    if(!$item)
+	    {
+		    //no item found
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('user_id' => $user_id, 'error' => 'No se ha encontrado el evento','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    elseif(!$item->canEdit($user))
+	    {
+		    //you cannot edit this item
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('user_id' => $user_id, 'error' => 'No tienes los permisos suficientes','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $targetUser = $em->getRepository('ColectaUserBundle:User')->findOneById($user_id);
+	    
+	    if(!$targetUser)
+	    {
+		    //target user not found
+		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('user_id' => $user_id, 'error' => 'No se ha encontrado el usuario','success' => '')),200);
+	        $response->headers->set('Content-Type', 'application/json');
+	        return $response;
+	    }
+	    
+	    $assistance = $em->getRepository('ColectaActivityBundle:EventAssistance')->findOneBy(array('event'=>$item->getId(),'user'=>$targetUser->getId()));
+                    
+        if(!$assistance)
+        {
+	        $assistance = new EventAssistance();
+            $assistance->setConfirmed(1);
+            $assistance->setUser($targetUser);
+            $assistance->setEvent($item);
+        }
+        
+        $assistance->setConfirmed(true);
+        
+        $assistance->setKm(floatval(str_replace(',','.', $request->get('user'.$user_id.'km'))));
+            
+        $points = $this->getPointsHandler($assistance, true);
+        $points->setPoints(intval(str_replace(',','.', $request->get('user'.$user_id.'points'))));
+        
+        $em->persist($assistance);
+        $em->persist($points);
+        
+        $em->flush();
+        
+        $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('user_id' => $user_id, 'error' => '','success' => $points->getPoints() . ' puntos | ' . $assistance->getKm() . ' km', 'points' => $points->getPoints(), 'km' => $assistance->getKm())),200);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
     
     protected function getPointsHandler(\Colecta\ActivityBundle\Entity\EventAssistance $assistance, $createIfNotExists = false)

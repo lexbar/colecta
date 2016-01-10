@@ -1,1 +1,1 @@
-[{% for user in users %}{% if user.role.contribute %}{"value":"{{ user.name }}","tokens":["{{ user.name }}","{{ user.mail }}"]}{% if not loop.last %},{% endif %}{% endif%}{% endfor %}]
+[{% for user in users %}{% if user.role.contribute %}{"value":"{{ user.name }}","tokens":["{{ user.name }}","{{ user.mail }}","{{ user.id }}"]}{% if not loop.last %},{% endif %}{% endif%}{% endfor %}]

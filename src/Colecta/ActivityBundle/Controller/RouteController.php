@@ -994,7 +994,7 @@ class RouteController extends Controller
         }
         else
         {
-            throw $this->createNotFoundException('El formato '.$formato.' no existe.');
+            throw $this->createNotFoundException('El formato '.$oformat.' no existe.');
         }
     }
     public function getUploadDir($absolute = true)

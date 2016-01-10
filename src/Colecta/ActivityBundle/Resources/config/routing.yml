@@ -72,6 +72,15 @@ ColectaEventUnasist:
 ColectaEventUpdateAsist:
     pattern:  /actividades/{slug}/updateasist/
     defaults: { _controller: ColectaActivityBundle:Event:updateAssistances }
+ColectaEventAssistanceConfirm:
+    pattern:  /actividades/{slug}/confirm/{user_id}
+    defaults: { _controller: ColectaActivityBundle:Event:assistanceConfirm }
+ColectaEventAssistanceRemove:
+    pattern:  /actividades/{slug}/remove/{user_id}
+    defaults: { _controller: ColectaActivityBundle:Event:assistanceRemove }
+ColectaEventAssistanceUpdate:
+    pattern:  /actividades/{slug}/update/{user_id}
+    defaults: { _controller: ColectaActivityBundle:Event:assistanceUpdate }
 ColectaEventAboutics:
     pattern:  /icsinfo.html
     defaults: { _controller: ColectaActivityBundle:Event:aboutics }
