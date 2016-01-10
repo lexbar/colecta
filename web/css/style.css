@@ -915,4 +915,14 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .assistances form {
 		display: block;
 	}
+	.assistances .attendee {
+		width: 100%;
+	}
+	.assistances .control {
+		opacity: 1;
+	}
+	.assistances input {
+		padding: 10px;
+		width: 70px;
+	}
 }
