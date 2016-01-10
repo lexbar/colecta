@@ -83,12 +83,13 @@
                 <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee" class="attendee">{{assistance.user.name}}</a> 
                 {% if haspassed %}
                     {% if assistance.confirmed %}
-                        
-                        
                         {% if canedit %}
                         	<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug, 'user_id': assistance.user.id}) }}" method="POST" onSubmit="">
-	                        	<span class="assistance"><input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ points[assistance.user.id].points }}" class="text-right"> puntos | <input name="user{{ assistance.user.id }}km" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ assistance.km }}" class="text-right"> km</span>
-	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save hidden"><i class="fa fa-save"></i> Guardar</a>
+	                        	<span class="assistance">
+	                        		<input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ points[assistance.user.id].points }}" class="text-right"> puntos | 
+	                        		<input name="user{{ assistance.user.id }}km" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ assistance.km }}" class="text-right"> km
+	                        	</span>
+	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save hidden btn btn-primary"><i class="fa fa-save"></i> Guardar</a>
 	                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="fa fa-times"></i></a>
                             </form>
                         {% else %}
@@ -96,7 +97,8 @@
                         {% endif %}
                     {% else %}
                         {% if canedit %}
-                            <a href="#" onClick="confirmAssistance({{ assistance.user.id }});return false;" class="text-success">Confirmar <i class="fa fa-check"></i></a> <a class="control text-danger" href="#">Borrar <i class="fa fa-times"></i></a>
+                            <a href="#" onClick="confirmAssistance({{ assistance.user.id }});return false;" class="text-success">Confirmar <i class="fa fa-check"></i></a> 
+                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="fa fa-times"></i></a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
@@ -316,6 +318,8 @@
 		    $('.assistances ul').append('<li id="user'+user_id+'assistance"><i class="fa fa-user fa-fw"></i> <a href="/usuario/'+user_id+'/" itemprop="attendee" class="attendee">'+name+'</a> <i class="fa fa-spinner fa-pulse"></i></li>');
 			confirmAssistance(user_id);
 			$('.no-assistance').remove();
+	    } else {
+		    $('#user'+user_id+'assistance').fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
 	    }
     }
     
@@ -328,7 +332,7 @@
 		.done(function (data) {
 			$('#user'+data.user_id+'assistance .text-success, #user'+data.user_id+'assistance .text-danger').remove();
 		
-        	$('#user'+data.user_id+'assistance .attendee').after('<form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.km+'" class="text-right"> km</span><a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save hidden"><i class="fa fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="fa fa-times"></i></a></form>');
+        	$('#user'+data.user_id+'assistance .attendee').after('<form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.km+'" class="text-right"> km</span> <a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save hidden btn btn-primary"><i class="fa fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="fa fa-times"></i></a></form>');
         	$('#user'+user_id+'assistance i.fa-spinner').remove();
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {

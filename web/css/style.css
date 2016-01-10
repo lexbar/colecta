@@ -499,6 +499,10 @@ img.smiley {
 .assistances .save {
 	display: inline-block;
 	margin-left: 10px;
+	padding: 1px 6px;
+	margin-top: -3px;
+	font-size: 16px;
+	line-height: 16px;
 }
 .assistances .control {
 	margin-left: 10px;
