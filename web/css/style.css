@@ -7,16 +7,17 @@ img.smiley {
 .headerimg {
     height: 120px;
 }
-.dashboard {
-    margin-top: -20px;
-}
 .panel.card {
 	border-top: 3px solid #337ab7;
-	margin-top: 20px;
+	margin-bottom: 0;
 }
 .panel.nav-pills {
 	font-size: 16px;
 	margin-top: 20px;
+	margin-bottom: 0;
+}
+.panel.nav-pills li a {
+	padding: 6px 12px;
 }
 .card h3, .card p {
     margin: 0;
@@ -113,6 +114,9 @@ img.smiley {
 	margin-right: 20px;
 	font-size: 16px;
 }
+#mainTabs li:last-child a {
+	margin-right: 0;
+}
 #mainTabs li a:hover, #mainTabs li a:focus {
     background-color: transparent;
     border-color: transparent;
@@ -127,11 +131,18 @@ img.smiley {
 #searchForm {
     margin-top: 20px;
 }
+#searchForm .form-control {
+	font-size: 16px;
+	height: auto;
+}
 #searchForm i {
     color: #777;
+    top: 3px;
 }
 .btn.post-content, .btn.btn-head {
     margin-top: 20px;
+    margin-right: 5px;
+    font-size: 16px;
 }
 
 .login p {
@@ -524,7 +535,7 @@ img.smiley {
 
 .bigcalendar {
     font-size: 18px;
-    margin-top: 20px;
+    margin-top: 22px;
     padding: 5px;
     background-color: #f8f8f8;
 }
@@ -695,11 +706,14 @@ img.smiley {
     margin: 0 0 5px 5px;
 }
 
-.profileHeader img {
-    margin: 25px 10px 20px 0;
+.profileHeader{
+	margin-top: 15px;
+} 
+.profileHeader h2 {
+    margin: 0 0 15px;
 }
-.profileHeader div {
-    margin: 0 0 20px 0;
+.profileHeader img {
+	border-radius: 100%;
 }
 
 .relations h4 {
@@ -845,8 +859,21 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         height: 0;
     }
     .dashboard {
-    margin-top: 0;
-}
+	    margin-top: 0;
+	}
+	#searchForm {
+		width: 50%;
+		float: right;
+	}
+	.categories {
+		padding: 7px;
+	}
+	.categories p.lead {
+		margin: 0;
+	}
+	.categories ul {
+		margin-top: 15px;
+	}
     .navbar .container {
         padding-left: 0;
     }
@@ -854,7 +881,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         padding: 5px;
     }
     .navbar-default a.navbar-brand {
-        margin-left: 15px;
+        margin-left: 10px;
         padding-right: 40px;
         font-size: 14px;
     }
@@ -887,6 +914,10 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         height: auto;
         overflow-y: visible;
     }
+    .profileHeader img {
+		height: 40px;
+		width: 40px;
+	}
     .bigcalendar .calendar-heading {
         font-size: 16px;
     }
@@ -919,12 +950,19 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .assistances form {
 		display: block;
 	}
+	.assistances .assistance {
+		display: block;
+	}
 	.assistances .attendee {
 		width: auto;
 		margin-bottom: 5px;
 	}
 	.assistances .control {
 		opacity: 1;
+		margin: 10px 0 15px 10px;
+	}
+	.assistances .save {
+		margin: 10px 0 15px 0;
 	}
 	.assistances input {
 		padding: 10px;

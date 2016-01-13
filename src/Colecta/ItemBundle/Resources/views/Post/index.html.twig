@@ -6,15 +6,15 @@
     
     <div class="row">    
         <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
+        	{# CUSTOM NAVIGATION #}
+            {#{ render(controller('ColectaSiteBundle:Page:navigation')) }#}
+            
             <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
                 <div class="inner-addon right-addon">
                     <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
                     <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
                 </div>
             </form>
-            
-            {# CUSTOM NAVIGATION #}
-            {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
             
             <div class="categories">
                 <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>

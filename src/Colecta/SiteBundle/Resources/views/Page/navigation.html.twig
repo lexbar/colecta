@@ -21,7 +21,3 @@
     {% endfor %}
 </ul>
 {% endif %}
-
-{% if app.user and app.user.role.siteConfigSettings and (pages | length > 0 or web_links | length > 0) %}
-    <a href="{{ path('ColectaBackendPageIndex') }}" class="btn btn-sm btn-link btn-block"><i class="fa fa-pencil"></i> Administrar contenido</a>
-{% endif %}

@@ -3,8 +3,13 @@
 {% block title %}{{ search }}{% endblock %}
 
 {% block article %}
-
-    <h2>{{ search }}{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    
+    <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+        <div class="inner-addon right-addon">
+            <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+            <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+        </div>
+    </form>
 
 {% set shownItems = [] %}
 {% set mainItemsToShow = [] %}
