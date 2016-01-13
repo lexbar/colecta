@@ -48,14 +48,18 @@
         <tr>
         {% if loop.first %}
             {% if firstWeekDay > 0 %}
-                {% for i in 0..(firstWeekDay - 1) %}<td></td>{% endfor %}{# columnas vacias antes de que empiece el mes #}
+                {% for i in 0..(firstWeekDay - 1) %}<td></td>{% endfor %}{# empty columns before the month begins #}
             {% endif %}
             {% for i in firstWeekDay..6 %}
                 {% if events[dayOfMonth] is defined %}{% set hasevents = events[dayOfMonth] | length %}{% else %}{% set hasevents = 0 %}{% endif %}
                 
                 <td{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %} class="today"{% elseif  hasevents %} class="active"{% endif %}>
-                    {% if hasevents %}
-                        <a href="{{ path('ColectaEventDate', {'date':currentY ~ '-' ~ currentm ~ '-' ~ dayOfMonth}) }}">{% endif %}{{ dayOfMonth }}{% if hasevents %}</a>
+                    {% if hasevents > 1 %}
+                        <a href="{{ path('ColectaEventDate', {'date':currentY ~ '-' ~ currentm ~ '-' ~ dayOfMonth}) }}">{{ dayOfMonth }}</a>
+                    {% elseif hasevents > 0 %}
+                        <a href="{{ path('ColectaEventView', { 'slug': events[dayOfMonth][0].slug }) }}">{{ dayOfMonth }}</a>
+                    {% else %}
+                    	{{ dayOfMonth }}
                     {% endif %}
                         
                     {% set dayOfMonth = dayOfMonth + 1 %}
@@ -67,15 +71,13 @@
                 
                 <td{% if 'today' | date('Ymj') == targetdate | date('Ym') ~ dayOfMonth %} class="today"{% elseif  hasevents %} class="active"{% endif %}>
                     {% if dayOfMonth <= daysOfMonth %}
-                        {% if hasevents %}
-                            <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm ~ '-' ~ dayOfMonth}) }}">
-                        {% endif %}
-                        
-                        {{ dayOfMonth }}
-                        
-                        {% if hasevents %}
-                            </a>
-                        {% endif %}
+                        {% if hasevents > 1 %}
+	                        <a href="{{ path('ColectaEventDate', {'date':currentY ~ '-' ~ currentm ~ '-' ~ dayOfMonth}) }}">{{ dayOfMonth }}</a>
+	                    {% elseif hasevents > 0 %}
+	                        <a href="{{ path('ColectaEventView', { 'slug': events[dayOfMonth][0].slug }) }}">{{ dayOfMonth }}</a>
+	                    {% else %}
+	                    	{{ dayOfMonth }}
+	                    {% endif %}
                             
                         {% set dayOfMonth = dayOfMonth + 1 %}
                     {% endif %}
