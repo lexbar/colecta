@@ -591,7 +591,7 @@ class RouteController extends Controller
                     
                     //Upload file
                     $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
-                    $filesystem->write('files/' . $filename , file_get_contents($cachePath.'/'.$filename) );
+                    $filesystem->write('routes/' . $filename , file_get_contents($cachePath.'/'.$filename) );
                     
                     $fulltrack = $this->extractTrack($cachePath.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
                     
@@ -976,7 +976,7 @@ class RouteController extends Controller
                 //Download to cache gps file
                 
                 $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
-                file_put_contents( $cachePath, $filesystem->read( 'files/' . $item->getSourcefile() ) );
+                file_put_contents( $cachePath, $filesystem->read( 'routes/' . $item->getSourcefile() ) );
             }
             
             $iformat = $this->acceptedExtensions($this->extension($item->getSourcefile()));

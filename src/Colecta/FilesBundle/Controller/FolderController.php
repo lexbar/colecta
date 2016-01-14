@@ -244,9 +244,12 @@ class FolderController extends Controller
         
         $name = $item->getName();
         
+        $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+        
         //remove files contained
         foreach($item->getFiles() as $file)
         {
+            $filesystem->delete('files/' . $file->getFilename());
             $em->remove($file);
         }
         

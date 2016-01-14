@@ -651,6 +651,9 @@ class FileController extends Controller
             $returnURL = $this->generateUrl('ColectaFileIndex');
         }
         
+        $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+        $filesystem->delete('files/' . $item->getFilename());
+        
         $em->remove($item);
         $em->flush();
         
@@ -867,14 +870,14 @@ class FileController extends Controller
         
         $response = new Response();
         
-        if(@filemtime($cachePath))
+        if(file_exists($cachePath) && @filemtime($cachePath))
         {
             $response->setLastModified(new \DateTime(date("F d Y H:i:s.",filemtime($cachePath))));
         }
         
         $response->setPublic();
         
-        if ($response->isNotModified($this->getRequest())) {
+        if($response->isNotModified($this->getRequest())) {
             return $response; // this will return the 304 if the cache is OK
         } 
         
@@ -937,7 +940,7 @@ class FileController extends Controller
             
             $response->setStatusCode(200);
             $response->setContent($image);
-            $response->headers->set('Content-Type', mime_content_type( $item->getAbsolutePath() ));
+            $response->headers->set('Content-Type', mime_content_type( $cachePath ));
             
             
             return $response;
