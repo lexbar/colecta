@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Colecta\BackendBundle\ColectaBackendBundle(),
             new Colecta\SiteBundle\ColectaSiteBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
+            new cspoo\Swiftmailer\MailgunBundle\cspooSwiftmailerMailgunBundle(),    
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

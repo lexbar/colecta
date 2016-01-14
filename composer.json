@@ -20,7 +20,8 @@
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "knplabs/knp-gaufrette-bundle": "*@dev",
-        "aws/aws-sdk-php": "2.8.24"
+        "aws/aws-sdk-php": "2.8.24",
+        "cspoo/swiftmailer-mailgun-bundle":"0.2.*"
     },
     "scripts": {
         "post-install-cmd": [

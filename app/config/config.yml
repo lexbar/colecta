@@ -79,7 +79,11 @@ services:
                 key: %amazon_s3.key%
                 secret: %amazon_s3.secret%
                 region: %amazon_s3.region%
-                
+
+cspoo_swiftmailer_mailgun:
+    key: "%mailgun_key%"
+    domain: "%mailgun_domain%"
+
 knp_gaufrette:
     adapters:
         uploads_local:

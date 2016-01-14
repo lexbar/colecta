@@ -30,6 +30,11 @@ parameters:
     amazon_s3.bucket: ~
     amazon_s3.directory: ~
     uploads_local_directory: %kernel.root_dir%/../web/uploads
+    
+    #Mailgun
+    mailgun_key: ~
+    mailgun_domain: ~
+    mailer_transport: mailgun
 security:
     firewalls:
         main:
