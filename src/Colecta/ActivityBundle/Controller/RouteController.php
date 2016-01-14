@@ -580,7 +580,6 @@ class RouteController extends Controller
                     
                     //Move file out of cache to accesible folder
                     $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
-                    $rootdir = $this->getUploadDir();
                     
                     $filename = $this->safeToken($post->get('filename'));
                     
@@ -590,12 +589,11 @@ class RouteController extends Controller
                         return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route', 'item'=>$item));
                     }
                     
-                    if(copy($cachePath.'/'.$filename, $rootdir.'/'.$filename))
-                    {
-                        unlink($cachePath.'/'.$filename);
-                    }
+                    //Upload file
+                    $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+                    $filesystem->write('files/' . $filename , file_get_contents($cachePath.'/'.$filename) );
                     
-                    $fulltrack = $this->extractTrack($rootdir.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
+                    $fulltrack = $this->extractTrack($cachePath.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
                     
                     if(!$item->getName())
                     {
@@ -672,7 +670,7 @@ class RouteController extends Controller
                     }
                     
                     //Retrieve and save Places
-                    $points = $this->extractPoints($rootdir.'/'.$filename); //the waypoints
+                    $points = $this->extractPoints($cachePath.'/'.$filename); //the waypoints
                     
                     foreach($points as $point)
                     {
@@ -735,12 +733,11 @@ class RouteController extends Controller
                     $this->get('session')->getFlashBag()->add('error', 'Revisa los campos');
                     
                     $filename = $post->get('filename');
-                    $rootdir = $this->getUploadDir();
                     
-                    if(file_exists($rootdir.'/'.$filename))
+                    if(file_exists($cachePath.'/'.$filename))
                     {
-                        $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
-                        $fulltrack = $this->extractTrack($rootdir.'/'.$filename); //full track
+                        $track = $this->extractTrack($cachePath.'/'.$filename, 500); //simplified to 500 points only
+                        $fulltrack = $this->extractTrack($cachePath.'/'.$filename); //full track
                         $itemdata = $this->getRouteData($fulltrack);
                     }
                     else
@@ -972,17 +969,26 @@ class RouteController extends Controller
         
         if($oformat)
         {
-            $filepath = $this->getUploadDir() . '/' . $item->getSourcefile();
+            $cachePath = __DIR__ . '/../../../../app/cache/prod/files/' . $item->getSourcefile() ;
+            
+            if( ! file_exists($cachePath) )
+            {
+                //Download to cache gps file
+                
+                $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+                file_put_contents( $cachePath, $filesystem->read( 'files/' . $item->getSourcefile() ) );
+            }
+            
             $iformat = $this->acceptedExtensions($this->extension($item->getSourcefile()));
             $simplified = $this->get('request')->query->get('simplified');
             
             if($simplified && is_numeric($simplified))
             {
-                $out = shell_exec("gpsbabel -t -i $iformat -f $filepath -x simplify,count=$simplified -o $oformat -F -");
+                $out = shell_exec("gpsbabel -t -i $iformat -f $cachePath -x simplify,count=$simplified -o $oformat -F -");
             }
             else
             {
-                $out = shell_exec("gpsbabel -t -i $iformat -f $filepath -o $oformat -F -");
+                $out = shell_exec("gpsbabel -t -i $iformat -f $cachePath -o $oformat -F -");
             }
         
             $response = new Response($out);

@@ -401,9 +401,6 @@ class FileController extends Controller
                     $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
                     $filesystem->write( 'files/'.$hashName, file_get_contents($cachePath.$token) );
                     
-                    //Also upload to local
-                    rename($cachePath.$token,$uploadPath.$hashName);
-                    
                     $item = new File();
                     
                     if($request->request->get('file'.$i.'Name') == '' || $request->request->get('file'.$i.'Name') == 'Nombre...')
