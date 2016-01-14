@@ -18,6 +18,7 @@ img.smiley {
 }
 .panel.nav-pills li a {
 	padding: 6px 12px;
+	background-color: #f8f8f8;
 }
 .card h3, .card p {
     margin: 0;
