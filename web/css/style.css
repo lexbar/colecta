@@ -20,6 +20,9 @@ img.smiley {
 	padding: 6px 12px;
 	background-color: #f8f8f8;
 }
+.panel.nav-pills li+li {
+    margin-top: 0;
+}
 .card h3, .card p {
     margin: 0;
 }
