@@ -75,7 +75,7 @@
             {% endif %#}
         
                 
-            {% set shownItems = [] %}
+            {#% set shownItems = [] %}
             
             {% for item in items if item.id not in shownItems %}
                 {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
@@ -96,6 +96,17 @@
                     {% endif %}
                 </div>
                 {% endif %}
+            {% endfor %#}
+            
+            {% for item in items %}
+                {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+                {% set path = path | replace({'/':'Bundle:'}) %}
+                {% include path with { 'item': item } only %}
+            {% else %}
+                <div class="monocontent text-center">
+                    <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-4x"></i>
+                    <p class="lead">Las publicaciones que se añadan aparecerán aquí.</p>
+                </div>
             {% endfor %}
             
             {% if page > 1 or thereAreMore %}
