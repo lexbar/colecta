@@ -2,7 +2,7 @@
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
 
 <div class="item_micro" onClick="window.location='{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}'">
-	<h4><a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}"><i class="fa fa-fw fa-{{ itemTypeName | replace({'Post':'comment-o', 'Event':'calendar-o', 'Route':'map-o', 'File':'file-o', 'Folder':'folder-o', 'Place': 'map-marker'}) }}"></i> {{ item.name }}</a></h4>
+	<h4>{% if new %}<i class="fa fa-asterisk" style="color:orange"></i>{% endif %} <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}"><i class="fa fa-fw fa-{{ itemTypeName | replace({'Post':'comment-o', 'Event':'calendar-o', 'Route':'map-o', 'File':'file-o', 'Folder':'folder-o', 'Place': 'map-marker'}) }}"></i> {{ item.name }}</a></h4>
 	{% block summary %}
 	    {% if item.summary %}
 	        <p>{{ item.summary }}{% if item.text | length > item.summary | length %} (...){% endif %}</p>

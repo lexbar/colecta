@@ -96,6 +96,9 @@ img.smiley {
 .navbar-default .userProfile a {
     padding: 7px 15px;
 }
+.navbar-default .userProfile a img {
+    border-radius: 100%;
+}
 .navbar-form {
     padding-right: 0;
 }
@@ -482,6 +485,9 @@ img.smiley {
 }
 .assistances li {
 	padding: 1px 0;
+}
+.assistances li * {
+    vertical-align: middle;
 }
 .assistances form {
 	display: inline;
