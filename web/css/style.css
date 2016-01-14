@@ -54,6 +54,8 @@ img.smiley {
     margin-top: 20px;
     background-color: #f8f8f8;
     padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 .categories .lead {
     margin-bottom: 10px;
@@ -148,7 +150,7 @@ img.smiley {
 }
 .btn.post-content, .btn.btn-head {
     margin-top: 20px;
-    margin-right: 5px;
+    margin-left: 5px;
     font-size: 16px;
 }
 
@@ -548,11 +550,13 @@ img.smiley {
     margin-top: 22px;
     padding: 5px;
     background-color: #f8f8f8;
+    border-radius: 4px;
+    border: 1px solid #ddd;
 }
 .bigcalendar .calendar-heading {
     font-size: 22px;
 }
-.calendar-heading a {
+.calendar-heading a:nth-child(2) {
     color: #000;
 }
 .calendar {
@@ -879,7 +883,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 		float: right;
 	}
 	.categories {
-		padding: 7px;
+		padding: 6px;
 	}
 	.categories p.lead {
 		margin: 0;
