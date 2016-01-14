@@ -860,6 +860,9 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .headerimg {
         height: 76px;
     }
+    .nextactivities .col-md-6:nth-child(2) {
+    	margin-top: 15px;
+	}
 }
 @media (max-width: 767px) { /* Extra Small devices */
     .headerimg {

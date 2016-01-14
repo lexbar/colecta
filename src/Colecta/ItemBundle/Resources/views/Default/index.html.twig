@@ -43,7 +43,7 @@
                     'Sunday':'Domingo'
                 }%}
                 
-                <div class="row">
+                <div class="row nextactivities">
                 {% for item in nextactivities %}
                 	<div class="col-md-6">
 	                    <div class="panel card panel-default" onClick="window.location.assign('{{ path('ColectaEventView', { 'slug': item.slug }) }}')">
