@@ -65,6 +65,7 @@ class Comment
      */
     public function setText($text)
     {
+        $text = preg_replace("/(\n|\r\n|\r)+$/ise","",$text);
         $this->text = $text;
     }
 
