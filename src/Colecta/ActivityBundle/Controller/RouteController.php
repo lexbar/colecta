@@ -969,7 +969,15 @@ class RouteController extends Controller
         
         if($oformat)
         {
-            $cachePath = __DIR__ . '/../../../../app/cache/prod/files/' . $item->getSourcefile() ;
+            $cacheDir = __DIR__ . '/../../../../app/cache/prod/files/';
+            $cachePath = $cacheDir . $item->getSourcefile() ;
+            
+            //Write file to cache
+            if(!is_dir($cacheDir))
+            {
+                // dir doesn't exist, make it
+                mkdir($cacheDir, 0755, true);
+            }
             
             if( ! file_exists($cachePath) )
             {
