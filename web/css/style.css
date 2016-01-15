@@ -579,9 +579,14 @@ img.smiley {
 .calendar tbody tr td a {
     display: block;
 }
-.calendar tbody tr td.today {
-    background-color: #337ab7;
-    color: #fff;
+.calendar tbody tr td.today span {
+    background-color: red;
+	color: #fff;
+	border-radius: 100%; 
+	padding: 1px;
+	margin: -1px;
+	width: 28px;
+	display: inline-block;
 }
 .calendar tbody tr td.today a {
     color: #FFF;
