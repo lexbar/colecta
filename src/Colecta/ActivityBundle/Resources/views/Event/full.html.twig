@@ -2,10 +2,10 @@
 
 {% block title %}{{ item.name }} | Actividades{% endblock %}
 
-{% block article %}
-
 {% set canedit = item.canEdit(app.user) %}
 {% set haspassed = item.dateini | date('U') < 'now' | date('U') %}
+
+{% block article %}
 
 {% set dias_semana = {
             'Monday':'Lunes',
@@ -305,7 +305,6 @@
     $('#userSearch').typeahead({
         name: 'ColectaUsers',
         local: {{ render(controller('ColectaUserBundle:User:AjaxUserList')) }}
-        /*prefetch: 'http://colecta.dev{{ path('ColectaAjaxUserList') }}'*/
     });
     
     $('#userSearch').bind('typeahead:selected', function(obj, datum, name) {    
@@ -332,7 +331,8 @@
 		.done(function (data) {
 			$('#user'+data.user_id+'assistance .text-success, #user'+data.user_id+'assistance .text-danger').remove();
 		
-        	$('#user'+data.user_id+'assistance .attendee').after('<form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.km+'" class="text-right"> km</span> <a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save hidden btn btn-primary"><i class="fa fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="fa fa-times"></i></a></form>');
+        	{% if haspassed %}$('#user'+data.user_id+'assistance .attendee').after('<form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'hidden\');" value="'+data.km+'" class="text-right"> km</span> <a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save hidden btn btn-primary"><i class="fa fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="fa fa-times"></i></a></form>');
+        	{% endif %}
         	$('#user'+user_id+'assistance i.fa-spinner').remove();
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
