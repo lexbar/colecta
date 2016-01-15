@@ -5,7 +5,7 @@
 	    </div>
 	{% else %}
 		<div class="visible-xs sidebardisplay">
-			<a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-sign-in fa-2x"></i></a>
+			<a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-user fa-2x fa-fw"></i></a>
 		</div>
 	{% endif %}
 	
@@ -47,7 +47,7 @@
         
         <ul class="nav navbar-nav navbar-right hidden-xs">
             {#<li><a href="#"><i class="fa fa-user"></i> Solicitar Invitación</a></li>#}
-            <li><a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-sign-in"></i> Iniciar Sesión</a></li>    
+            <li><a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-user"></i> Iniciar Sesión</a></li>    
         </ul>
         
         <!-- Modal -->
