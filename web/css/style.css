@@ -40,6 +40,9 @@ img.smiley {
 	margin-top: 4px;
 	color: #000;
 }
+.nextactivities .col-md-6 {
+	margin-top: 14px;
+}
 .btn.post-content {
     color: #0275d8;
     background-color: transparent;
@@ -867,8 +870,8 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .headerimg {
         height: 76px;
     }
-    .nextactivities .col-md-6:nth-child(2) {
-    	margin-top: 15px;
+    .nextactivities .col-md-6:first-child {
+    	margin-top: 0;
 	}
 }
 @media (max-width: 767px) { /* Extra Small devices */
@@ -930,6 +933,12 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     .categories .lead i {
         display: inline-block;
+    }
+    div#map {
+	    height: 200px !important;	
+    }
+    div#chart {
+	    height: 100px !important;
     }
     #mapproperties {
         height: auto;
