@@ -878,7 +878,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .dashboard {
 	    margin-top: 0;
 	}
-	#searchForm {
+	.pull-right #searchForm {
 		width: 50%;
 		float: right;
 	}
