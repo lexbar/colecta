@@ -42,20 +42,19 @@
                     'Saturday':'Sábado',
                     'Sunday':'Domingo'
                 }%}
-                
-                <div class="row nextactivities">
-                {% for item in nextactivities %}
-                	<div class="col-md-6">
-	                    <div class="panel card panel-default" onClick="window.location.assign('{{ path('ColectaEventView', { 'slug': item.slug }) }}')">
+                <div class="panel card panel-default">
+                    <div class="row nextactivities">
+                    {% for item in nextactivities %}
+                    	<div class="col-md-6" onClick="window.location.assign('{{ path('ColectaEventView', { 'slug': item.slug }) }}')">
 	                        <div class="panel-body">
 	                            <h3>{% if item.dateini | date('z') == 'today' | date('z') %}Hoy{% elseif item.dateini | date('z') == 'today'  | date('z') + 1 %}Mañana{% else %}Próximo {{ item.dateini | date('l') | replace (dias_semana) }}{% endif %}:</h3>
 	                            {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
 	                            {% set path = path | replace({'/':'Bundle:'}) %}
 	                            {% include path with { 'item': item } only %}
 	                        </div>
-	                    </div>
+                        </div>
+                    {% endfor %}
                     </div>
-                {% endfor %}
                 </div>
             {% endif %}
         
