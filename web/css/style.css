@@ -678,6 +678,7 @@ img.smiley {
     padding: 10px;
     height: 470px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 #map .control {
     background-color: #FFFFFF;
