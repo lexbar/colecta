@@ -39,7 +39,7 @@
         <meta name="msapplication-TileImage" content="/mstile-144x144.png?v=6">
         <meta name="theme-color" content="#ffffff">      
     </head>
-    <body onload="{% block onload '' %}">
+    <body onload="$('.likestooltip').tooltip();{% block onload '' %}">
         {% block body %}{% endblock %}
         
         <script src="/js/jquery.min.js"></script>
