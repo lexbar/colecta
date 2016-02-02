@@ -13,7 +13,7 @@
             {% endif %}
         {% else %}
             {% if item.likers | length > 3 %}
-                A {{ item.likers | length }} personas les gusta esto.
+                A <a href="#" onClick="return false;" class="likestooltip" rel="tooltip" data-html="true" data-original-title="{% for u in item.likers %}{% if not loop.first %}<br />{% endif %}{{ u.name }}{% endfor %}">{{ item.likers | length }} personas</a> les gusta esto.
             {% elseif item.likers | length > 1 %}
                 A {% for u in item.likers[0:item.likers | length - 1] %}{% if not loop.first %}, {% endif %}<a href="{{ path('userProfile', { 'id': u.id }) }}" class="username">{{ u.name }}</a>{% endfor %} y <a href="{{ path('userProfile', { 'id': item.likers[item.likers | length - 1].id }) }}" class="username">{{ item.likers[item.likers | length - 1].name }}</a> les gusta esto.
             {% elseif item.likers | length > 0 %}
