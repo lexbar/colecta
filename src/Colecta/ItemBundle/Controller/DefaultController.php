@@ -36,7 +36,7 @@ class DefaultController extends Controller
         
         $nextactivities = $em->createQuery(
             "SELECT i FROM ColectaActivityBundle:Event i WHERE i.draft = 0 $SQLprivacy AND i.dateini >= CURRENT_DATE() AND i.dateini < DATE_ADD(CURRENT_DATE(),7, 'day') ORDER BY i.dateini ASC"
-        )->setMaxResults(8)->getResult();
+        )->setMaxResults(2)->getResult();
         
         $categories = $em->createQuery(
             'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.name ASC'
