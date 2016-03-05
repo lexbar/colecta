@@ -66,9 +66,9 @@
             {% endif %}
         
             {# GRAPHS #}
-            {% if app.user %}    
+            {% if app.user %}{#  
             <div class="row nextactivities">
-                {#<div class="col-md-6">
+                <div class="col-md-6">
                    <div class="panel card panel-default" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
                         <div class="panel-body">
                             <h3 class="">Últimos 30 días:</h3>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                </div>#}
+                </div>
                 <div class="col-md-6">
                     <div class="panel card panel-default ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')" style="border-top-color: #666;">
                         <div class="panel-body">
@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            {% endif %}
+            {% endif %}#}
         
                 
             {#% set shownItems = [] %}
@@ -171,9 +171,9 @@
         <script src="/js/userInteraction.js"></script>
         <script>        
         
-        $(document).ready(function() {
+        {#$(document).ready(function() {
             $("#ranksummary").load( "{{ path('ColectaActivitiesRankSummary') }}" );
-        });
+        });#}
             
         </script>
     {% endif %}
