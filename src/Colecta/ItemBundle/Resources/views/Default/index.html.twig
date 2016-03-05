@@ -58,24 +58,11 @@
                 </div>
             {% endif %}
         
-            {# GRAPS #}
-            {#% if app.user %}
-                <div class="panel dashboard panel-default">
-                    <div class="panel-body row">
-                        <div class="col-sm-6">
-                            <h3><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">Rendimiento:</a></h3>
-                        </div>
-                        
-                        <div class="col-sm-6">
-                            <h3><a href="{{ path('ColectaActivitiesRank') }}">Ranking:</a></h3>
-                        </div>
-                    </div>
-                </div>
-            {% endif %#}
-            
-            {#<div class="row nextactivities" style="margin-top:20px;">
-                <div class="col-md-6">
-                   <div class="panel card panel-default" onclick="" style="border-top-color: #666;">
+            {# GRAPHS #}
+            {% if app.user %}    
+            <div class="row nextactivities">
+                {#<div class="col-md-6">
+                   <div class="panel card panel-default" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
                         <div class="panel-body">
                             <h3 class="">Últimos 30 días:</h3>
                             <div class="row" style="margin-top: 20px;font-size: 16px;">
@@ -84,63 +71,18 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>#}
                 <div class="col-md-6">
-                    <div class="panel card panel-default" onclick="" style="border-top-color: #666;">
+                    <div class="panel card panel-default ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')" style="border-top-color: #666;">
                         <div class="panel-body">
 	                        <h3>Ranking:</h3>
 	                        
-                            <div class="row" style="margin-top: 20px;">
-                                <div class="col-xs-6"><p>[1] <strong>Lucho Barros</strong></p></div>
-                                <div class="col-xs-6">
-                                    <div class="progress" style="height: 6px;margin: 8px 0;">
-                                        <div class="progress-bar progress-bar-primary" style="width: 100.0%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row" style="margin-top: 0;">
-                                <div class="col-xs-6"><p>[2] <strong>Ana Vidaurre</strong></p></div>
-                                <div class="col-xs-6">
-                                    <div class="progress" style="height: 6px; margin: 8px 0;">
-                                        <div class="progress-bar progress-bar-primary" style="width: 87.0%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <i class="fa fa-ellipsis-v text-muted"></i>
-                            
-                            <div class="row" style="margin-top: 0;">
-                                <div class="col-xs-6"><p>[13] <strong>Carlos Barros</strong></p></div>
-                                <div class="col-xs-6">
-                                    <div class="progress" style="height: 6px;margin: 8px 0;">
-                                        <div class="progress-bar progress-bar-primary" style="width: 40.0%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row" style="margin-top: 0;">
-                                <div class="col-xs-6"><p>[14] <strong>Tú</strong></p></div>
-                                <div class="col-xs-6">
-                                    <div class="progress" style="height: 6px;margin: 8px 0;">
-                                        <div class="progress-bar progress-bar-primary" style="width: 37.0%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row" style="margin-top: 0;">
-                                <div class="col-xs-6"><p>[15] <strong>Joel Barros</strong></p></div>
-                                <div class="col-xs-6">
-                                    <div class="progress" style="height: 6px;margin: 8px 0;">
-                                        <div class="progress-bar progress-bar-primary" style="width: 34.0%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
+                            <div id="ranksummary"><i class="fa fa-refresh fa-spin"></i> Cargando... </div>                            
                         </div>
                     </div>
                 </div>
-            </div>#}
+            </div>
+            {% endif %}
         
                 
             {#% set shownItems = [] %}
@@ -221,56 +163,11 @@
         
         <script src="/js/userInteraction.js"></script>
         <script>        
-        {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
-    
-        {% if rich_text_editor %}
-            $(document).ready(function() {
-                $('#FileText').summernote({
-                    height: 180,
-                    toolbar: [
-                    //['style', ['style']], // no style button
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    //['fontsize', ['fontsize']],
-                    //['color', ['color']],
-                    ['para', ['ul', 'ol']],
-                    //['height', ['height']],
-                    ['insert', [/*'picture',*/ 'link']], // no insert buttons
-                    //['table', ['table']], // no table button
-                    ['help', ['help']] //no help button
-                    ]
-                });
-            });
+        
+        $(document).ready(function() {
+            $("#ranksummary").load( "{{ path('ColectaActivitiesRankSummary') }}" );
+        });
             
-            var postForm = function() {
-                var content = $('textarea[name="text"]').html($('#FileText').code());
-            }
-        {% endif %}
-        
-        var EventDateini = $('#EventDateini').pickadate({
-            format: 'dd-mm-yyyy',
-            onSet: function(context) {
-                var picker = EventDateend.pickadate('picker');
-                if(context.select > picker.get('select').pick)
-                {
-                    picker.set('select', context.select);
-                }
-                picker.set('min', new Date(context.select));
-            }
-        });
-        
-        var EventDateend = $( "#EventDateend" ).pickadate({
-            format: 'dd-mm-yyyy',
-            min: $('#EventDateini').val()
-        });
-        
-        $('#EventDateiniTime').pickatime({
-            interval: 10,
-            format: 'HH:i'
-        });
-        $('#EventDateendTime').pickatime({
-            interval: 10,
-            format: 'HH:i'
-        });
         </script>
     {% endif %}
 {% endblock %}

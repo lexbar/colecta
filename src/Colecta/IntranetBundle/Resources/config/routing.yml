@@ -19,6 +19,9 @@ ColectaActivitiesYearPerformance:
 ColectaActivitiesRank:
     pattern:  /actividades/rank/
     defaults: { _controller: ColectaIntranetBundle:Activities:rank }
+ColectaActivitiesRankSummary:
+    pattern:  /actividades/rank/summary/
+    defaults: { _controller: ColectaIntranetBundle:Activities:rankSummary }
 ColectaActivitiesYearRank:
     pattern:  /actividades/rank/{year}
     defaults: { _controller: ColectaIntranetBundle:Activities:yearPointsRank }
