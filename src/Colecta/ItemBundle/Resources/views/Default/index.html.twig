@@ -65,8 +65,8 @@
                 </div>
             {% endif %}
         
-            {# GRAPHS #}
-            {% if app.user %}{#  
+            {# GRAPHS #}{#  
+            {% if app.user %}
             <div class="row nextactivities">
                 <div class="col-md-6">
                    <div class="panel card panel-default" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
