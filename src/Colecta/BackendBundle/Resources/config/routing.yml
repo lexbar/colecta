@@ -46,6 +46,10 @@ ColectaBackendPointsCase:
 ColectaBackendPointsCaseDelete:
     pattern:  /back/points/{case_id}/delete/
     defaults: { _controller: ColectaBackendBundle:Points:deleteCase } 
+    
+ColectaBackendMemoIndex:
+    pattern:  /back/memo/
+    defaults: { _controller: ColectaBackendBundle:User:memo } 
 
 ColectaBackendPageIndex:
     pattern:  /back/page/

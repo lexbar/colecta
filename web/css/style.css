@@ -147,6 +147,13 @@ img.smiley {
     color: #111;
 }
 
+#backTabs {
+    margin-top: 10px;
+}
+#backTabs a {
+    color: #90016F;
+}
+
 #searchForm {
     margin-top: 20px;
 }

@@ -24,6 +24,13 @@
                     {% endfor %}
                 </ul>
             </div>
+            
+            {#}
+                {% if adsense %}
+                    <hr>
+                    {{ adsense | raw }}
+                {% endif %}
+            {#}
         </div>
         <div class="col-xs-12 col-sm-8 col-md-9">
         	<h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>

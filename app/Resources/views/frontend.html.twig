@@ -7,16 +7,6 @@
     <div class="container">
         {% include '::navigation.html.twig' %}
         <div class="row content">
-            {#}
-            <div class="col-xs-12 col-md-3 col-sm-4 hidden-xs {% if theme_sidebar == 'right' %}pull-right{% endif %} sidebar">
-                {% include '::navigation.html.twig' %}
-                
-                {% if adsense %}
-                    <hr>
-                    {{ adsense | raw }}
-                {% endif %}
-            </div>
-            #}
             <div class="col-xs-12 main">
                 {% for flashMessage in app.session.flashbag.get('error') %}
                     <div class="alert alert-danger">

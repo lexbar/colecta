@@ -143,6 +143,52 @@ class UserController extends Controller
         
         return new RedirectResponse($this->generateUrl('ColectaBackendRolesIndex'));
     }
+    public function memoAction()
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        if(!$user || !$user->getRole()->getSiteConfigUsers() || !$user->getRole()->getUserEdit())
+        {
+            return new RedirectResponse($this->generateUrl('ColectaDashboard'));
+        }
+        
+        $roles = $em->getRepository('ColectaUserBundle:Role')->findAll();
+        
+        if ($this->get('request')->getMethod() == 'POST') 
+        {
+            $request = $this->get('request')->request;
+            
+            $mailer = $this->get('mailer');
+            
+            $mailsCount = 0;
+            
+            foreach($roles as $role)
+            {
+                if( $request->get('memoRole' . $role->getId()) == 'on' )
+                {
+                    foreach($role->getUsers() as $destination_user)
+                    {
+                        //Get the mail address the message is sent from
+                        $configmail = $this->container->getParameter('mail');
+                    
+                        $message = \Swift_Message::newInstance();
+        			    $message->setSubject($request->get('memoSubject'))
+        			        ->setFrom($configmail['from'])
+        			        ->setTo($destination_user->getMail())
+        			        ->setBody($request->get('memoText'));
+        			    $mailer->send($message);
+        			    
+        			    $mailsCount++;
+                    }
+                }
+            }
+            
+            $this->get('session')->getFlashBag()->add('success', $mailsCount . ' correos enviados.');
+        }
+        
+        return $this->render('ColectaBackendBundle:User:memo.html.twig', array('roles' => $roles));
+    }
     public function profileAction($user_id)
     {
         $user = $this->getUser();

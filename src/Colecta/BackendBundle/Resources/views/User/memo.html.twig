@@ -1,0 +1,38 @@
+{% extends '::backend.html.twig' %}
+
+{% block article %} 
+    
+    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
+    
+    <h2>Enviar Circular</h2>
+    
+    <div class="monocontent tabs">        
+        <form class="" method="post" action="{{ path('ColectaBackendMemoIndex') }}">
+            
+            <div class="form-group">
+                <label class="control-label">Roles a los que va dirigida:</label>
+                {% for role in roles %}
+                    <div class="checkbox">
+						<label>
+							<input type="checkbox" name="memoRole{{ role.id }}"> {{ role.description }}
+						</label>
+					</div>
+                {% endfor %}
+            </div>
+            
+            <div class="form-group">
+                <label for="MemoSubject">Asunto</label>
+                <input type="text" name="memoSubject" id="MemoSubject" class="form-control" value="">
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label" for="MemoText">Texto</label>
+                <textarea rows="8" name="memoText" id="MemoText" class="form-control"></textarea>
+            </div>
+                        
+            <div class="form-group">
+                <input type="submit" value="Enviar Circular" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+{% endblock%}
