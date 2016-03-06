@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-xs-6">
     	<p>distancia: <strong>{{ kmsSum }}km</strong></p> 
-    	<p><i class="fa fa-caret-up text-success" style=""></i> {{ kmsSum - prev_kmsSum }}km <small class="text-muted">respecto a anterior</small></p>
+    	<p><i class="fa fa-caret-{% if kmsSum - prev_kmsSum > 0 %}up text-success{% else %}down text-danger{% endif %}" style=""></i> {{ kmsSum - prev_kmsSum }}km <small class="text-muted">respecto a anterior</small></p>
     </div>
     <div class="col-xs-6">
     	<p>puntos: <strong>{{ pointsSum }}</strong></p> 
-    	<p><i class="fa fa-caret-down text-danger"></i> {{ pointsSum - prev_pointsSum }} <small class="text-muted">respecto a anterior</small></p>
+    	<p><i class="fa fa-caret-{% if pointsSum - prev_pointsSum > 0 %}up text-success{% else %}down text-danger{% endif %}"></i> {{ pointsSum - prev_pointsSum }} <small class="text-muted">respecto a anterior</small></p>
     </div>
 </div>
