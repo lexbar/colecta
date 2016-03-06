@@ -65,22 +65,11 @@
                 </div>
             {% endif %}
         
-            {# GRAPHS #}{#  
+            {# GRAPHS #}
             {% if app.user %}
             <div class="row nextactivities">
-                <div class="col-md-6">
-                   <div class="panel card panel-default" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
-                        <div class="panel-body">
-                            <h3 class="">Últimos 30 días:</h3>
-                            <div class="row" style="margin-top: 20px;font-size: 16px;">
-                                <div class="col-xs-6"><p>distancia: <strong>326km</strong></p> <p><i class="fa fa-caret-up text-success" style=""></i> 20%</p></div>
-                                <div class="col-xs-6"><p>puntos: <strong>420</strong></p> <p><i class="fa fa-caret-down text-danger"></i>12%</p></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel card panel-default ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')" style="border-top-color: #666;">
+            	<div class="col-md-6">
+                    <div class="panel card panel-default ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')">
                         <div class="panel-body">
 	                        <h3>Ranking:</h3>
 	                        
@@ -88,8 +77,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                   <div class="panel card panel-default performancesummary" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
+                        <div class="panel-body">
+                            <h3>Últimos 30 días:</h3>
+                            
+                            <div id="performancesummary"><i class="fa fa-refresh fa-spin"></i> Cargando... </div> 
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% endif %}#}
+            {% endif %}
         
                 
             {#% set shownItems = [] %}
@@ -171,9 +169,10 @@
         <script src="/js/userInteraction.js"></script>
         <script>        
         
-        {#$(document).ready(function() {
+        $(document).ready(function() {
             $("#ranksummary").load( "{{ path('ColectaActivitiesRankSummary') }}" );
-        });#}
+            $("#performancesummary").load( "{{ path('ColectaPerformanceSummary') }}" );
+        });
             
         </script>
     {% endif %}

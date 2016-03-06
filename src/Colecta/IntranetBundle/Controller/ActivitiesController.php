@@ -268,6 +268,48 @@ class ActivitiesController extends Controller
         return $this->render('ColectaIntranetBundle:Activities:pointsranksummary.html.twig', array('users'=>$users, 'points'=>$points, 'userpos' => $userpos));
     }
     
+    public function performanceSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        
+        if(!$user)
+        {
+            $login = $this->generateUrl('userLogin');
+            return new RedirectResponse($login);
+        }
+        
+        $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateini >= DATE_SUB(CURRENT_DATE(),30, \'day\')')->setParameter('user',$user)->getResult();
+        
+        $prev_assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateini >= DATE_SUB(CURRENT_DATE(),60, \'day\') AND e.dateend <= DATE_SUB(CURRENT_DATE(),30, \'day\')')->setParameter('user',$user)->getResult();
+        
+        $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= DATE_SUB(CURRENT_DATE(),60, \'day\') ')->setParameter('user',$user)->getResult();
+        
+        $points = array();
+        foreach($pointsRequest as $p)
+        {
+            $points[$p->getItem()->getId()] = $p;
+        }
+        
+        $pointsSum = $kmsSum = 0;
+        
+        foreach($assistances as $assistance)
+        {
+	        $kmsSum += $assistance->getKm();
+	        $pointsSum += $points[$assistance->getEvent()->getId()]->getPoints();
+        }
+        
+        $prev_pointsSum = $prev_kmsSum = 0;
+        
+        foreach($prev_assistances as $assistance)
+        {
+	        $prev_kmsSum += $assistance->getKm();
+	        $prev_pointsSum += $points[$assistance->getEvent()->getId()]->getPoints();
+        }
+        
+        return $this->render('ColectaIntranetBundle:Activities:performancesummary.html.twig', array('kmsSum'=>$kmsSum, 'pointsSum'=>$pointsSum, 'prev_kmsSum'=>$prev_kmsSum, 'prev_pointsSum'=>$prev_pointsSum));
+    }
+    
     public function yearTuryRankAction($year)
     {
         $em = $this->getDoctrine()->getManager();
