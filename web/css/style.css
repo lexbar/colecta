@@ -37,6 +37,9 @@ img.smiley {
 .card h3, .card p {
     margin: 0;
 }
+.dashboard h2 {
+    margin-bottom: 0;
+}
 .sidebardisplay {
     position: absolute;
     top: 0;
