@@ -33,6 +33,10 @@ function typeChosen(type) { //Set the type of item chosen
         
         unsaved = false;
         
+        //move user content
+        $('#'+ type +'Form input[name=name]').val($('#'+ itemSubmitType +'Form input[name=name]').val()); //bring name
+        $('#'+ type +'Form textarea[name=text]').val($('#'+ itemSubmitType +'Form textarea[name=text]').val()); //bring text
+        
         if(itemSubmitType != '')
         {
             $('#'+itemSubmitType+'Handler').removeClass('active');
@@ -255,7 +259,16 @@ var FUcurrentFileIndex = -1;
 var FUTheFiles = [];
 
 function FileChange() {
-    var files = this.files;    
+    var files = this.files;
+    
+    //check if mistaken route file
+    if(files.length == 1 && $.inArray(filenameGetExtension(files[0].name), ['gpx','crs','kml','plt','gdb']) >= 0) {
+        typeChosen('map');
+        var RC = $.proxy( RouteChange, this );
+        RC();
+        return 0;
+    }
+    
     var fp = $('#FUaddon');
     if(files.length) {      
         for(var i = 0; i < files.length; i++) {
@@ -273,6 +286,22 @@ function FileChange() {
     }
     
     unsaved = true;
+}
+
+function filenameGetExtension(filename) {
+    // Use a regular expression to trim everything before final dot
+    var extension = filename.replace(/^.*\./, '');
+    // Iff there is no dot anywhere in filename, we would have extension == filename,
+    // so we account for this possibility now
+    if (extension == filename) {
+        extension = '';
+    } else {
+        // if there is an extension, we convert to lower case
+        // (N.B. this conversion will not effect the value of the extension
+        // on the file upload.)
+        extension = extension.toLowerCase();
+    }
+    return extension;
 }
 
 function uploadFUTheFiles() {
