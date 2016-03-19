@@ -316,4 +316,9 @@ class File extends \Colecta\ItemBundle\Entity\Item
     {
         return $this->folder;
     }
+    
+    public function getOpen()
+    {
+        return $this->open && $this->getFolder()->getOpen();
+    }
 }
