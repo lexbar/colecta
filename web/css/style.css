@@ -685,7 +685,9 @@ img.smiley {
 .fullimage a.active:hover {
     opacity: 1;
 }
-
+.picker__table th {
+	text-align: center;
+}
 .dropdown-menu>li>a {
     padding: 8px 20px;
 }
