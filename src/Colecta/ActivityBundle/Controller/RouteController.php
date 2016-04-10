@@ -844,9 +844,10 @@ class RouteController extends Controller
                         $hashName = sha1($file->getClientOriginalName() . $user->getId() . mt_rand(0, 99999));
                         $filename = $hashName . '.' . $extension;
                         
-                        $rootdir = $this->getUploadDir();
+                        //Upload file
+	                    $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
+	                    $filesystem->write('routes/' . $filename , file_get_contents($_FILES['file']['tmp_name']));
                         
-                        $file->move($rootdir, $filename);
                         unset($file);
                         
                         $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
