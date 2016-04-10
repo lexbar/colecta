@@ -848,9 +848,13 @@ class RouteController extends Controller
 	                    $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
 	                    $filesystem->write('routes/' . $filename , file_get_contents($_FILES['file']['tmp_name']));
                         
-                        unset($file);
+                        //FIX. Rename cache file so it has appropiate extension
+                        $extension = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION));
+                        rename($_FILES['file']['tmp_name'], $_FILES['file']['tmp_name'] . '.' . $extension);
                         
-                        $track = $this->extractTrack($rootdir.'/'.$filename, 500); //simplified to 500 points only
+                        $track = $this->extractTrack($_FILES['file']['tmp_name'] . '.' . $extension, 10000); //the track, limited to 10000 points for performance reasons
+                                                
+                        //unset($file);
                                         
                         if(!$track)
                         {
