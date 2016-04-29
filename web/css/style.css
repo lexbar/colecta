@@ -433,6 +433,8 @@ img.smiley {
 .related li h4, .related li p {
     display: inline-block;
     margin: 0;
+}
+.related li h4 {
     line-height: 22px;
 }
 .related li p {
