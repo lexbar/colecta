@@ -1,46 +1,38 @@
 {% extends '::frontend.html.twig' %}
 
-{% block title %}{{ item.name}} |Lugares{% endblock %}
+{% block title %}{{ item.name}} | Lugares{% endblock %}
+
+{% block onload 'initialize()' %}
 
 {% block article %}
 
 {% set canEdit = app.user and item.canEdit(app.user) %}
 
-<div class="item panel panel-default{% if canEdit %} editable{% endif %}">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a>
-            {% if canEdit %}
-                <a href="{{ path('ColectaPlaceEdit', {slug:item.slug}) }}" class="pull-right" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
-            {% endif %}
-        </h3>
-    </div>
+<div class="full item{% if canEdit %} editable{% endif %}">
+    {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
+    <h2>
+        <a href="{{ path('ColectaPlaceView', { 'slug': item.slug }) }}">{{ item.name }}</a>
+    </h2>
     
-    <div class="panel-body">
-        {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
-        
-        {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
-        
-        <div class="row">
-            <div id="map" style="width:auto;height:300px;"></div>
-        </div>
-        
-        {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    <div class="row">
+        <div id="map" style="width:auto;height:300px;"></div>
     </div>
+        
+    <hr>
+        
+    {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
     
-    <div class="panel-footer">
-        {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
-    </div>
-</div>
-
-{% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
+    {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
+    
+    {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
+    {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
 
 {% endblock %}
 
 {% block javascripts %}  
-    <script src="/js/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
+    function initialize() {
         var map;
         var marker;
         
@@ -49,6 +41,6 @@
                         map: map,
                         position: new google.maps.LatLng({{ item.latitude }},{{ item.longitude }})
                     });
-        
+    }
     </script>
 {% endblock %}

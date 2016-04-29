@@ -4,14 +4,12 @@
 
 {% block article %}
 
-    {% if app.user %} <a href="{{ path('ColectaPlaceNew')}}" class="btn btn-small btn-default pull-right">Nueva publicación <i class="fa fa-plus"></i></a> {% endif %}
     <h2>Lugares{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
 
     {% for item in items %}    
         {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
         {% set path = path | replace({'/':'Bundle:'}) %}
         {% include path with { 'item': item } only %}
-        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
     {% else %}
          <div class="monocontent text-center">
             <i class="fa fa-{{ itemIcons['Activity/Place'] }} fa-4x"></i>
