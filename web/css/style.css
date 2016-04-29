@@ -421,6 +421,8 @@ img.smiley {
 }
 .item_micro .label {
     margin-right: 5px;
+    position: relative;
+    top: -2px;
 }
 .related {
     margin-bottom: 10px;
