@@ -419,6 +419,9 @@ img.smiley {
     padding-left: 2px;
     line-height: 20px;
 }
+.item_micro .label {
+    margin-right: 5px;
+}
 .related {
     margin-bottom: 10px;
     border-left: 1px solid #337ab7;
@@ -430,6 +433,7 @@ img.smiley {
 .related li h4, .related li p {
     display: inline-block;
     margin: 0;
+    line-height: 22px;
 }
 .related li p {
     color: #666;
