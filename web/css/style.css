@@ -1,5 +1,5 @@
 body {
-    background-color: #EEE;
+    background-color: #eee;
 }
 .container {
     background-color: #FFF;
@@ -107,7 +107,7 @@ img.smiley {
 }
 .navbar-default {
     border: none;
-    background-color: #e7e7e7;
+    background-color: rgba(0,0,0,.05);
 }
 
 .navbar-default .web_logo {
@@ -424,6 +424,9 @@ img.smiley {
     position: relative;
     top: -2px;
 }
+.item_micro h4 {
+    line-height: 22px;
+}
 .related {
     margin-bottom: 10px;
     border-left: 1px solid #337ab7;
@@ -435,9 +438,6 @@ img.smiley {
 .related li h4, .related li p {
     display: inline-block;
     margin: 0;
-}
-.related li h4 {
-    line-height: 22px;
 }
 .related li p {
     color: #666;
@@ -952,7 +952,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         padding-left: 0;
     }
     .sidebardisplay {
-        padding: 5px 0;
+        padding: 10px 0;
         right: 5px;
     }
     .navbar-default a.navbar-brand {
@@ -1024,6 +1024,9 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     .item .mapcaption {
         padding: 0 10px 10px;
+    }
+    .related {
+        margin-left: 12px;
     }
     .profileHeader .pull-left, .profileHeader .nav-pills>li {
         float: none !important;
