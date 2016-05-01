@@ -26,8 +26,8 @@
             
             {% set messages = colectauser.notDismissedMessages %}
         <ul class="nav navbar-nav navbar-right hidden-xs">
-            <li><a href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
-            <li><a href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Alertas</a></li>
+            <li{% if bun == 'UserBundle' and con == 'MessageController' %} class="active"{% endif %}><a href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
+            <li{% if bun == 'UserBundle' and con == 'NotificationController' %} class="active"{% endif %}><a href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Alertas</a></li>
             <li class="dropdown userProfile">
                 <a href="#" id="userProfile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40" class="hidden-xs"><span class="visible-xs"><i class="fa fa-user-plus fa-fw"></i> Mi Cuenta</span></a>
                 <ul class="dropdown-menu">

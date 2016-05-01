@@ -1,27 +1,16 @@
-{% set where = app.request.attributes.get("_controller") | split('\\') %}
-
-{% if where | length > 1 %}
-    {% set bun = where[1] %}
-    {% set con = (where[3] | split('::'))[0] %}
-    {% set act = (where[3] | split('::'))[1] %}
-{% else %}
-    {% set bun, con, act = '', '', ''%}
-{% endif %}
-
-    
-    <ul class="nav nav-tabs" id="mainTabs">
-        <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaPostIndex') }}">
-                <i class="fa fa-comment-o"></i> Foro
-            </a>
-        </li>
-        <li{% if bun == 'ActivityBundle' and con == 'EventController' %} class="active"{% endif %}>
-            <a href="{{ path('ColectaEventIndex') }}"> 
-                <i class="fa fa-calendar-o"></i>  Calendario
-            </a>
-        </li>
-        <li{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} class="active"{% endif %}>
-            <a href="{{ path('ColectaMapIndex') }}">
-                <i class="fa fa-map-o"></i> Rutas
-            </a>
-    </ul>
+<ul class="nav nav-tabs" id="mainTabs">
+    <li{% if bun == 'ItemBundle' and con == 'PostController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaPostIndex') }}">
+            <i class="fa fa-comment-o"></i> Foro
+        </a>
+    </li>
+    <li{% if bun == 'ActivityBundle' and con == 'EventController' %} class="active"{% endif %}>
+        <a href="{{ path('ColectaEventIndex') }}"> 
+            <i class="fa fa-calendar-o"></i>  Calendario
+        </a>
+    </li>
+    <li{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} class="active"{% endif %}>
+        <a href="{{ path('ColectaMapIndex') }}">
+            <i class="fa fa-map-o"></i> Rutas
+        </a>
+</ul>

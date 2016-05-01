@@ -127,7 +127,7 @@ img.smiley {
     color: #555;
 }
 .navbar-default .userProfile a {
-    padding: 7px 15px;
+    padding: 7px 15px 6px;
 }
 .navbar-default .userProfile a img {
     border-radius: 100%;
@@ -137,6 +137,10 @@ img.smiley {
 }
 .navbar-nav li {
     position: relative;
+}
+.navbar-nav>li>a {
+    padding-top: 17px;
+    padding-bottom: 17px;
 }
 .navbar-nav li .badge {
     background-color: #A01127;
@@ -950,6 +954,10 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 	}
     .navbar .container {
         padding-left: 0;
+        padding-right: 0;
+    }
+    .navbar-default .userProfile a, .navbar-nav .open .dropdown-menu>li>a {
+        padding: 17px 15px 17px;
     }
     .sidebardisplay {
         padding: 10px 0;
