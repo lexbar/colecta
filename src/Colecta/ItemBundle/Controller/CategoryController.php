@@ -44,7 +44,7 @@ class CategoryController extends Controller
         )->setParameter('category',$category->getId())->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         
         $query = $em->createQuery(
-            'SELECT c FROM ColectaItemBundle:Category c WHERE c.posts + c.files + c.events + c.routes > 0 ORDER BY c.name ASC'
+            'SELECT c FROM ColectaItemBundle:Category c WHERE c.posts + c.files + c.events + c.places + c.routes > 0 ORDER BY c.name ASC'
         )->setFirstResult(0);
         
         $categories = $query->getResult();
