@@ -3,6 +3,17 @@
 {% block title web_title %}
 
 {% block body %}
+	
+	{% set where = app.request.attributes.get("_controller") | split('\\') %}
+
+    {% if where | length > 1 %}
+        {% set bun = where[1] %}
+        {% set con = (where[3] | split('::'))[0] %}
+        {% set act = (where[3] | split('::'))[1] %}
+    {% else %}
+        {% set bun, con, act = '', '', ''%}
+    {% endif %}
+    
     {% include '::header.html.twig' %}
     <div class="container">    
         {% include '::navigation.html.twig' %}   
