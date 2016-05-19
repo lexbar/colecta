@@ -725,8 +725,7 @@ img.smiley {
     padding: 8px 20px;
 }
 #mapproperties {
-    background-color: #eee;
-    padding: 10px;
+    padding: 0;
     height: 470px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -738,9 +737,11 @@ img.smiley {
     cursor: pointer;
 }
 #map .control.big {
-    margin-right: 5px;
+    margin: 10px;
+    padding: 5px;
     font-size: 15px;
-    background-color: rgba(255,255,255,.7)
+    border-radius: 2px;
+    color: #666666;
 }
 #map.fullscreen {
     background-color: #E5E3DF;
@@ -773,6 +774,8 @@ img.smiley {
     height: auto;
     bottom: 0;
     z-index: 1100;
+    padding: 10px;
+    background-color: #fff;
 }
 .mapcontrols .btn {
     margin: 0 0 5px 5px;
@@ -943,7 +946,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 		float: right;
 	}
 	.categories {
-		padding: 6px;
+		padding: 6px 0;
         width: 48%;
 	}
 	.categories p.lead {
@@ -1001,7 +1004,8 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     #mapproperties {
         height: auto;
-        overflow-y: visible;
+        overflow: visible;
+        margin-top: 15px;
     }
     .profileHeader img {
 		height: 40px;

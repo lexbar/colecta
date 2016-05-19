@@ -13,10 +13,14 @@
     </h2>
     
     <div class="row">
+        <div class="col-sm-8 col-md-9">
+            <div id="map" style="width:auto;height:300px;"></div>
+            <div id="chart" style="width:auto;height:170px;"></div>
+        </div>
         <div class="col-sm-4 col-md-3">
             <div id="mapproperties">
                 <div class="dropdown">
-                    <button id="dropdownMenu" class="btn btn-success btn-block btn-sm dropdown-toggle" type="button" onClick="return false;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
+                    <button id="dropdownMenu" class="btn btn-primary btn-block dropdown-toggle" type="button" onClick="return false;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
                     <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
                         <li role="presentation" class="dropdown-header">Track completo</li>
                         <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
@@ -34,10 +38,6 @@
                 
                 {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
             </div>
-        </div>
-        <div class="col-sm-8 col-md-9">
-            <div id="map" style="width:auto;height:300px;"></div>
-            <div id="chart" style="width:auto;height:170px;"></div>
         </div>
     </div>
         
