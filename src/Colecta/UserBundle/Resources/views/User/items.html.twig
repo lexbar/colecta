@@ -13,8 +13,6 @@
 	        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
 	        {% set path = path | replace({'/':'Bundle:'}) %}
 	        {% include path with { 'item': item } only %}
-	        
-	        {% include 'ColectaItemBundle:Default:related.html.twig' with { 'items' : item.relatedVisible(app.user) } %}
 	    
 	    {% else %}
 	        <p class="lead">No ha publicado nada... por ahora.</p>
