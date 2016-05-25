@@ -10,15 +10,15 @@
     
     <label for="searchItem"><p class="lead">Buscar contenido para relacionar</p></label>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <input type="text" name="search" id="searchItem" class="form-control" autocomplete="off">
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <button id="searchButton" class="btn btn-default btn-block" type="button" onclick="showResults();"><i id="searchButtonLoading"></i> Buscar <i class="fa fa-search"></i></button>
         </div>
         
         <div class="col-sm-3">
-            <button type="submit" class="btn btn-success btn-block">Guardar contenido adjunto</button>
+            <button id="relationSubmit" type="submit" class="hidden btn btn-success btn-block">Guardar</button>
         </div>
     </div>
     

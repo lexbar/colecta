@@ -103,6 +103,8 @@
             $('#showRelateds').append('<p><button type="button" onClick="removeRelation('+relations[i].id+')" class="btn btn-xs"><i class="fa fa-times" style="color:darkred;"></i> Eliminar enlace</button> <strong> '+relations[i].name+'</strong></p>');
             $('#relateds').val($('#relateds').val() + relations[i].id + ',');
         }
+        
+        $('#relationSubmit').removeClass('hidden');
     }
     
     function typeName(type) {

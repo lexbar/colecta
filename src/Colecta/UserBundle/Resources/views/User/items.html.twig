@@ -3,9 +3,10 @@
 {% block title %}Perfil de {{ user.name }}{% endblock %}
 
 {% block article %}
-	<div class="row"><div class="col-lg-9">
-	    {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'items' } %}
-	    
+	<div class="col-xs-12 col-sm-4 col-md-3 userProfile">
+	    {% include 'ColectaUserBundle:User:profileUserData.html.twig' with { 'active' : 'items' } %}
+	</div>
+	<div class="col-xs-12 col-sm-8 col-md-9">
 	    <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
 	    
 	    {% for item in items %}   
@@ -29,5 +30,5 @@
 	      </li>
 	    </ul>
 	    {% endif %}
-    </div></div>
+    </div>
 {% endblock %}

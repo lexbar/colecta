@@ -3,50 +3,51 @@
 {% block title %}Rendimiento de {{ user.name }}{% endblock %}
 
 {% block article %}
-    
-    {% include 'ColectaUserBundle:User:profileHeader.html.twig' with { 'active' : 'assistances' } %}
-    
-    <h2>Rendimiento {{ year }}</h2>
-    {% if years | length > 1 or years | length == 1 and years[0].year != year %}
-        <p class="text-muted">
-            {% for y in years %}
-                {% if y.year != year %}
-                    <a href="{{ path('ColectaUserAssistancesYear',{id:user.id,year:y.year}) }}" class="">{{ y.year }}</a> 
-                {% else %}
-                    {{ y.year }}
-                {% endif %}
-                
-                {% if not loop.last %} | {% endif %}
+    <div class="col-xs-12 col-sm-4 col-md-3 userProfile">
+	    {% include 'ColectaUserBundle:User:profileUserData.html.twig' with { 'active' : 'assistances' } %}
+	</div>
+	<div class="col-xs-12 col-sm-8 col-md-9">    
+        <h2>Rendimiento {{ year }}</h2>
+        {% if years | length > 1 or years | length == 1 and years[0].year != year %}
+            <p class="text-muted">
+                {% for y in years %}
+                    {% if y.year != year %}
+                        <a href="{{ path('ColectaUserAssistancesYear',{id:user.id,year:y.year}) }}" class="">{{ y.year }}</a> 
+                    {% else %}
+                        {{ y.year }}
+                    {% endif %}
+                    
+                    {% if not loop.last %} | {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+        
+        <div class="monocontent">    
+            <div id="chart" style="height:270px"></div>
+            
+            <table class="table table-condensed table-hover">
+            <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distancia</th><th>Puntos</th></tr></thead>
+            
+            {% set accumulated = 0 %}
+            {% set totalpoints = 0 %}
+            {% set lastyearmonth = '' %}
+            
+            {% for assistance in assistances %}
+                <tr{% if lastyearmonth != '' and lastyearmonth != assistance.event.dateini | date('Ym') %} style="border-top: 2px solid #CCC;"{% endif %}>
+                    <td>{{ assistance.event.dateini | date('d') }} {% include '::month.html.twig' with {'date':assistance.event.dateini, 'short':1} %}</td>
+                    <td><a href="{{ path('ColectaEventView', { 'slug': assistance.event.slug }) }}">{{ assistance.event.name }}</a></td>
+                    <td>{{ assistance.km | number_format(1,'.',',')}} km</td>
+                    <td>{% if points[assistance.event.id] is defined %}{{ points[assistance.event.id].points }} p{% set totalpoints = totalpoints + points[assistance.event.id].points %}{% endif %}</td>
+                </tr>
+                {% set accumulated = accumulated + assistance.km %}
+                {% set lastyearmonth = assistance.event.dateini | date('Ym') %}
             {% endfor %}
-        </p>
-    {% endif %}
-    
-    <div class="monocontent">    
-        <div id="chart" style="height:270px"></div>
-        
-        <table class="table table-condensed table-hover">
-        <thead><tr><th class="span2">Fecha</th><th>Actividad</th><th>Distancia</th><th>Puntos</th></tr></thead>
-        
-        {% set accumulated = 0 %}
-        {% set totalpoints = 0 %}
-        {% set lastyearmonth = '' %}
-        
-        {% for assistance in assistances %}
-            <tr{% if lastyearmonth != '' and lastyearmonth != assistance.event.dateini | date('Ym') %} style="border-top: 2px solid #CCC;"{% endif %}>
-                <td>{{ assistance.event.dateini | date('d') }} {% include '::month.html.twig' with {'date':assistance.event.dateini, 'short':1} %}</td>
-                <td><a href="{{ path('ColectaEventView', { 'slug': assistance.event.slug }) }}">{{ assistance.event.name }}</a></td>
-                <td>{{ assistance.km | number_format(1,'.',',')}} km</td>
-                <td>{% if points[assistance.event.id] is defined %}{{ points[assistance.event.id].points }} p{% set totalpoints = totalpoints + points[assistance.event.id].points %}{% endif %}</td>
-            </tr>
-            {% set accumulated = accumulated + assistance.km %}
-            {% set lastyearmonth = assistance.event.dateini | date('Ym') %}
-        {% endfor %}
-        
-        <tr><td></td><td style="text-align:right"><strong>TOTAL</strong></td><td>{{ accumulated | number_format(1,'.',',')}} km</td><td>{{ totalpoints }} p</td></tr>
-        
-        </table>
+            
+            <tr><td></td><td style="text-align:right"><strong>TOTAL</strong></td><td>{{ accumulated | number_format(1,'.',',')}} km</td><td>{{ totalpoints }} p</td></tr>
+            
+            </table>
+        </div>
     </div>
-
 {% endblock%}
 
 {% block javascripts %}    

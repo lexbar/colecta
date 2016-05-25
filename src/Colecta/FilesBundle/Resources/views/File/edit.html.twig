@@ -5,11 +5,11 @@
 {% block article %}
 
     <div class="row">
-        <div class="col-sm-8 col-lg-9">
+        <div class="col-sm-offset-3 col-lg-offset-2 col-sm-5 col-lg-7">
             <h2>Editar {{ item.name }}</h2>
         </div>
         <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block" href="{{ path('ColectaFileView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al archivo</a>
+            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaFileView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al archivo</a>
         </div>
     </div>
 

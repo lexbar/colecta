@@ -28,6 +28,11 @@ img.smiley {
 .panel.card.ranksummary h3, .panel.card.performancesummary h3 {
 	margin-bottom: 20px;
 }
+#performancesummary .row {
+    background-color: #f5f5f5;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
 .panel.card.ranksummary .progress {
 	height: 6px;margin: 8px 0;
 }
@@ -189,7 +194,6 @@ img.smiley {
 }
 .btn.post-content, .btn.btn-head {
     margin-top: 20px;
-    margin-left: 5px;
     font-size: 16px;
 }
 
@@ -272,10 +276,6 @@ img.smiley {
     right: 0px;
     top: 0;
     padding: 5px;
-}
-.item .panel-body {
-    padding-bottom: 0;
-    word-wrap: break-word;
 }
 .item .staticmap {
     margin-bottom: -50px;
@@ -521,7 +521,7 @@ img.smiley {
     padding: 8px 12px;
     max-height: 40px;
     transition: max-height 1.2s;
-    border-color: #eee;
+    border-color: #ddd;
     color: #555;
     background-color: #f5f5f5;
     box-shadow: none;
@@ -679,7 +679,7 @@ img.smiley {
 .itemForm .form-group {
     overflow: hidden;
 }
-.category {
+.itemForm .itemCategory {
     margin-top: 30px;
 }
 
@@ -781,14 +781,12 @@ img.smiley {
     margin: 0 0 5px 5px;
 }
 
-.profileHeader{
-	margin-top: 15px;
-} 
-.profileHeader h2 {
-    margin: 0 0 15px;
+userProfile .profileAvatar {
+    text-align: center;
 }
-.profileHeader img {
-	border-radius: 100%;
+userProfile .profileAvatar img {
+    border-radius: 6px;
+    margin: 0 auto;
 }
 
 .relations h4 {
@@ -940,6 +938,9 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     .dashboard {
 	    margin-top: 0;
+	}
+	.monocontent {
+    	margin-top: 15px;
 	}
 	.pull-right #searchForm {
 		width: 48%;
