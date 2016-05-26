@@ -747,10 +747,10 @@ img.smiley {
     background-color: #E5E3DF;
     bottom: 170px;
     height: auto !important;
-    left: 220px;
+    left: 0;
     overflow: hidden;
     position: fixed !important;
-    right: 0;
+    right: 250px;
     top: 0;
     width: auto;
     z-index: 1100;
@@ -758,8 +758,8 @@ img.smiley {
 #chart.fullscreen {
     bottom: 0;
     height: 200px;
-    left: 220px;
-    right: 0;
+    left: 0;
+    right: 250px;
     overflow: hidden;
     position: fixed !important;
     width: auto;
@@ -767,8 +767,8 @@ img.smiley {
 }
 #mapproperties.fullscreen {
     top: 0;
-    width: 220px;
-    left: 0;
+    width: 250px;
+    right: 0;
     overflow-y: auto;
     position: fixed !important;
     height: auto;
@@ -1065,4 +1065,25 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 		padding: 10px;
 		width: 70px;
 	}
+	#map.fullscreen {
+        bottom: 170px;
+        left: 0;
+        right: 0;
+        top: 120px;
+        width: auto;
+    }
+    #chart.fullscreen {
+        right: 0;
+        height: 170px !important;
+    }
+    #mapproperties.fullscreen {
+        left: 0;
+        bottom: auto;
+        right: 0;
+        width: auto;
+        height: 120px;
+        top: 0;
+        margin: 0;
+        border-bottom: 2px solid #888;
+    }
 }
