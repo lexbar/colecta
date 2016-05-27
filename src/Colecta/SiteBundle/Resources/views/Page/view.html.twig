@@ -7,7 +7,7 @@
     
     <div class="monocontent">
         {{ page.text | usercontent | raw | nl2br }}
-    
+        
         {% if page.contact and page.contactData is iterable and not app.session.flashbag.get('pageFormSent') | length > 0 %}
             <hr>
             {# CHECK EXPIRATION #}
@@ -59,7 +59,7 @@
                       
                       <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9">
-                            <button type="submit" class="btn btn-success" id="ContactSubmit"><i id="ContactSubmitLoading"></i> <span id="ContactSubmitText">Enviar</span></button>
+                            <button type="submit" class="btn btn-success" id="ContactSubmit"><i id="ContactSubmitLoading"></i> <span id="ContactSubmitText">Enviar formulario</span></button>
                         </div>
                       </div>
                       
