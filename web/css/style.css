@@ -679,9 +679,12 @@ img.smiley {
     overflow: hidden;
 }
 .itemForm .itemCategory {
-    margin-top: 30px;
+    margin-top: 50px;
 }
-
+.itemForm .privacy button {
+    margin-top: 8px;
+}
+    
 #FUaddon textarea {
     margin: 5px 0;
     height: auto;
@@ -955,10 +958,6 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 	.categories ul {
 		margin-top: 15px;
 	}
-    .navbar .container {
-        padding-left: 0;
-        padding-right: 0;
-    }
     .navbar-default .userProfile a, .navbar-nav .open .dropdown-menu>li>a {
         padding: 17px 15px 17px;
     }
@@ -967,7 +966,6 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         right: 5px;
     }
     .navbar-default a.navbar-brand {
-        margin-left: 10px;
         padding-right: 40px;
         font-size: 16px;
     }
@@ -981,6 +979,10 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     .itemForm.compressed form {
         display: none;
+    }
+    .itemForm .privacy button {
+        margin-top: 2px;
+        padding: 3px 6px;
     }
     .contactFormField .fieldNumber {
         position: relative;
