@@ -15,8 +15,8 @@
     {% endif %}
     
     {% include '::header.html.twig' %}
-    <div class="container">    
-        {% include '::navigation.html.twig' %}   
+    <div class="container">
+        {% include 'ColectaBackendBundle:Default:navigation.html.twig' %}  
         <div class="content">
             {% for flashMessage in app.session.flashbag.get('error') %}
                 <div class="alert alert-danger">

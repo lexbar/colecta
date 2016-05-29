@@ -944,6 +944,10 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 	.monocontent {
     	margin-top: 15px;
 	}
+	.monocontent .btn {
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
 	.pull-right #searchForm {
 		width: 48%;
 		float: right;

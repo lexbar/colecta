@@ -1,8 +1,6 @@
 {% extends '::backend.html.twig' %}
 
 {% block article %} 
-
-    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
     
     <h2>Cuenta de {{ user.name }}</h2>
     

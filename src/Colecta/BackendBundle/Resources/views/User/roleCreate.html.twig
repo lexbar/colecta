@@ -2,8 +2,6 @@
 
 {% block article %} 
     
-    {% include 'ColectaBackendBundle:Default:navigation.html.twig' with { 'active' : 'user' } %}
-    
     <h2>{% if role.name == 'ROLE_CUSTOM' and role.id > 0 %}Editar Rol{% else %}Crear nuevo Rol{% endif %}</h2>
     
     <div class="monocontent tabs">       
