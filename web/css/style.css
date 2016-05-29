@@ -783,10 +783,10 @@ img.smiley {
     margin: 0 0 5px 5px;
 }
 
-userProfile .profileAvatar {
+.profileAvatar {
     text-align: center;
 }
-userProfile .profileAvatar img {
+.profileAvatar img {
     border-radius: 6px;
     margin: 0 auto;
 }
