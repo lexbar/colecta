@@ -1087,4 +1087,33 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         margin: 0;
         border-bottom: 2px solid #888;
     }
+    table.rank thead {
+        display: none;
+    }
+    table.rank, table.rank tbody {
+        display: block;
+    }
+    table.rank tbody tr {
+        width: 100%;
+        display: block;
+    }
+    table.rank tbody tr td {
+        padding: 6px 2px 6px 5px;
+        display: inline-block;
+        border: none;
+    }
+    table.rank tbody tr td:nth-child(3) {
+        float: left;
+        padding-right: 6px;
+    }
+    table.rank tbody tr td:first-child:after {
+        content: "/";
+        padding-left: 5px;
+    }
+    table.rank tbody tr td:last-child {
+        display: block;
+        width: 100%;
+        padding-top: 0;
+        clear: left;
+    }
 }
