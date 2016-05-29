@@ -1097,8 +1097,8 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         width: 100%;
         display: block;
     }
-    table.rank tbody tr td {
-        padding: 6px 2px 6px 5px;
+    table.rank.table tbody tr td {
+        padding: 6px 2px 6px 0px;
         display: inline-block;
         border: none;
     }
