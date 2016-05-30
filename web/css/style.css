@@ -33,6 +33,18 @@ img.smiley {
     padding: 10px 0;
     margin-bottom: 10px;
 }
+#performancesGraph {
+	padding: 0;
+	overflow: hidden;
+}
+#performancesGraph li {
+	list-style: none;
+	width: 3.32%;
+	display: inline-block;
+	background-color: #337ab7;
+	height: 1px;
+	border-radius: 3px
+}
 .panel.card.ranksummary .progress {
 	height: 6px;margin: 8px 0;
 }

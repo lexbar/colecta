@@ -9,4 +9,10 @@
     </div>
 </div>
 
+<ul id="performancesGraph">{% spaceless %}
+	{% for i in 1..30 %}
+	<li{% if daysAgoKms[30-i] %} style="height:{{ daysAgoKms[30-i] / max(daysAgoKms) * 50 }}px"{% endif %}></li>
+	{% endfor %}
+{% endspaceless %}</ul>
+
 <p><small><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">Ver mi rendimiento anual <i class="fa fa-bar-chart fa-fw"></i></a></small></p>

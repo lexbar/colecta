@@ -292,11 +292,16 @@ class ActivitiesController extends Controller
         }
         
         $pointsSum = $kmsSum = 0;
+        $daysAgoKms = array_fill(0, 30, 0); //initialize array of kms where key represents how many days ago
+        $today = new \DateTime();
         
         foreach($assistances as $assistance)
         {
 	        $kmsSum += $assistance->getKm();
 	        $pointsSum += $points[$assistance->getEvent()->getId()]->getPoints();
+	        
+	        $daysAgo = $assistance->getEvent()->getDateini()->diff($today)->d;
+	        $daysAgoKms[$daysAgo] += $assistance->getKm();
         }
         
         $prev_pointsSum = $prev_kmsSum = 0;
@@ -307,7 +312,7 @@ class ActivitiesController extends Controller
 	        $prev_pointsSum += $points[$assistance->getEvent()->getId()]->getPoints();
         }
         
-        return $this->render('ColectaIntranetBundle:Activities:performancesummary.html.twig', array('kmsSum'=>$kmsSum, 'pointsSum'=>$pointsSum, 'prev_kmsSum'=>$prev_kmsSum, 'prev_pointsSum'=>$prev_pointsSum));
+        return $this->render('ColectaIntranetBundle:Activities:performancesummary.html.twig', array('kmsSum'=>$kmsSum, 'pointsSum'=>$pointsSum, 'prev_kmsSum'=>$prev_kmsSum, 'prev_pointsSum'=>$prev_pointsSum, 'daysAgoKms'=>$daysAgoKms));
     }
     
     public function yearTuryRankAction($year)
