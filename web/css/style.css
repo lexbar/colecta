@@ -458,6 +458,15 @@ img.smiley {
     color: #666;
     padding-left: 5px;
 }
+.item_micro .label.label-primary {
+	border: 1px solid #337ab7;
+	color: #337ab7;
+	background-color: #FFF;
+}
+.item_micro .label.label-primary:hover {
+	border: 1px solid #23527c;
+	color: #23527c;
+}
 .micro {
     overflow: hidden;
     margin: 0 0 10px 0;
