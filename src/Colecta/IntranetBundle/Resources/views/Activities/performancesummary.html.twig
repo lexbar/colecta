@@ -8,11 +8,11 @@
     	<p><i class="fa fa-caret-{% if kmsSum - prev_kmsSum == 0 %}up text-muted{% elseif pointsSum - prev_pointsSum > 0 %}up text-success{% else %}down text-danger{% endif %}"></i> {{ pointsSum - prev_pointsSum }} <small class="text-muted">respecto a anterior</small></p>
     </div>
 </div>
-
+{% if kmsSum > 0 %}
 <ul id="performancesGraph">{% spaceless %}
 	{% for i in 1..30 %}
 	<li{% if daysAgoKms[30-i] %} style="height:{{ daysAgoKms[30-i] / max(daysAgoKms) * 50 }}px"{% endif %}></li>
 	{% endfor %}
 {% endspaceless %}</ul>
-
+{% endif %}
 <p><small><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">Ver mi rendimiento anual <i class="fa fa-bar-chart fa-fw"></i></a></small></p>
