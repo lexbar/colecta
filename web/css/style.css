@@ -1117,10 +1117,13 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         padding: 6px 2px 6px 0px;
         display: inline-block;
         border: none;
+        font-size: 10px;
+		line-height: 14px;
     }
     table.rank tbody tr td:nth-child(3) {
         float: left;
         padding-right: 6px;
+        font-size: 14px;
     }
     table.rank tbody tr td:first-child:after {
         content: "/";
