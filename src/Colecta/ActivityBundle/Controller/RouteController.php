@@ -730,24 +730,13 @@ class RouteController extends Controller
                 }
                 else
                 {
-                    $this->get('session')->getFlashBag()->add('error', 'Revisa los campos');
+                    $this->get('session')->getFlashBag()->add('error', 'Revisa los campos.');
                     
-                    $filename = $post->get('filename');
-                    
-                    if(file_exists($cachePath.'/'.$filename))
-                    {
-                        $track = $this->extractTrack($cachePath.'/'.$filename, 500); //simplified to 500 points only
-                        $fulltrack = $this->extractTrack($cachePath.'/'.$filename); //full track
-                        $itemdata = $this->getRouteData($fulltrack);
-                    }
-                    else
-                    {
-                        $track = $fulltrack = $itemdata = null;
-                    }
-                    
-                    $categories = $em->getRepository('ColectaItemBundle:Category')->findAll();
-                    
-                    return $this->render('ColectaActivityBundle:Route:filldata.html.twig', array('filename' => $filename, 'track' => $track, 'trackdata' => $itemdata, 'form' => $form->createView(), 'categories' => $categories));
+                    $item = new Route();
+		            $item->setText($request->get('text'));
+		            $item->setName($request->get('name'));
+		            
+		            return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route', 'item'=>$item));
                 }
             }
         }
