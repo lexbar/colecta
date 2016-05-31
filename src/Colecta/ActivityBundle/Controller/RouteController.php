@@ -730,13 +730,22 @@ class RouteController extends Controller
                 }
                 else
                 {
-                    $this->get('session')->getFlashBag()->add('error', 'Revisa los campos.');
+                    $this->get('session')->getFlashBag()->add('error', 'No se ha podido publicar, por favor revisa los campos.');
                     
                     $item = new Route();
 		            $item->setText($request->get('text'));
 		            $item->setName($request->get('name'));
 		            
-		            return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route', 'item'=>$item));
+		            if($post->get('filename'))
+		            {
+    		            $routeToken = $this->safeToken($post->get('filename'));
+		            }
+		            else 
+		            {
+    		            $routeToken = null;
+		            }
+		            
+		            return $this->render('ColectaItemBundle:Default:newItem.html.twig', array('type' => 'Route', 'item'=>$item, 'routeToken'=>$routeToken));
                 }
             }
         }

@@ -68,6 +68,10 @@
             }
         {% endif %}
         
+        {% if routeToken is defined and routeToken is not null %}
+            $(document).ready(function() {$('#RUaddon').load('/rutas/XHR/preview/'+routeToken);});
+        {% endif  %}
+        
         var EventDateini = $('#EventDateini').pickadate({
             format: 'dd-mm-yyyy',
             onSet: function(context) {
