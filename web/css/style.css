@@ -1060,6 +1060,9 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         padding: 15px 0 20px;
         border-top: 1px solid #DDD;
     }
+    .item .itemActions a, .item .itemActions .like span {
+	    margin: 10px 15px 10px 0;
+    } 
     .micro .date span {
         font-size: 12px;
     }
@@ -1072,9 +1075,6 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     .item .mapcaption {
         padding: 0 10px 10px;
-    }
-    .related {
-        margin-left: 12px;
     }
     .profileHeader .pull-left, .profileHeader .nav-pills>li {
         float: none !important;
