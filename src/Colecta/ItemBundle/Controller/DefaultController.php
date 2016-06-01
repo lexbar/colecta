@@ -157,11 +157,19 @@ class DefaultController extends Controller
     }
     public function searchPageAction($page)
     {
+        $em = $this->getDoctrine()->getManager();
+        
         $page = $page - 1; //so that page 1 means page 0 and it's more human-readable
         
         $search = trim($this->get('request')->query->get('q'));
         
-        $items = $this->search($search, $page);
+        $category = $em->getRepository('ColectaItemBundle:Category')->findOneById(intval($this->get('request')->query->get('cat')));
+        
+        $items = $this->search($search, $page, $category);
+        
+        $categories = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.name ASC'
+        )->setFirstResult(0)->setMaxResults(50)->getResult();
             
         //Pagination
         if(count($items) > $this->ipp) 
@@ -174,7 +182,7 @@ class DefaultController extends Controller
             $thereAreMore = false;
         }
         
-        return $this->render('ColectaItemBundle:Default:searchresults.html.twig', array('search'=>$search, 'items' => $items, 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
+        return $this->render('ColectaItemBundle:Default:searchresults.html.twig', array('search'=>$search, 'items' => $items, 'categories' => $categories, 'category'=> $category , 'thereAreMore' => $thereAreMore, 'page' => ($page + 1)));
     }
     public function ajaxsearchAction()
     {
@@ -187,7 +195,7 @@ class DefaultController extends Controller
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
-    public function search($query, $page)
+    public function search($query, $page, $category = null)
     {
         $em = $this->getDoctrine()->getManager();
         
@@ -210,14 +218,17 @@ class DefaultController extends Controller
             return array();
         }
         
-        $SQLprivacy = '';
+        $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE i IN ('.implode(',', $ids).')';
         
         if(!$this->getUser())
         {
-            $SQLprivacy = ' AND i.open = 1 ';
+            $queryString .= ' AND i.open = 1 ';
         }
         
-        $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE i IN ('.implode(',', $ids).')' . $SQLprivacy;
+        if($category)
+        {
+            $queryString .= ' AND i.category = ' . $category->getId();
+        }
         
         $query = $em->createQuery($queryString)->setMaxResults(($this->ipp + 1))->setFirstResult($page * $this->ipp);
         

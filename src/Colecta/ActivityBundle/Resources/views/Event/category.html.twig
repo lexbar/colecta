@@ -8,6 +8,7 @@
             <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
                 <div class="inner-addon right-addon">
                     <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+                    <input type="hidden" name="cat" value="{{ category ? category.id : '' }}">
                     <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
                 </div>
             </form>

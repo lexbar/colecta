@@ -3,53 +3,51 @@
 {% block title %}{{ search }}{% endblock %}
 
 {% block article %}
-<div class="row"><div class="col-lg-9">
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
     
-    <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
-        <div class="inner-addon right-addon">
-            <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
-            <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+        <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+            <div class="inner-addon right-addon">
+                <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+                <input type="hidden" name="cat" value="{{ category ? category.id : '' }}">
+                <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+            </div>
+        </form>
+        
+        <div class="categories">
+            <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
+            <ul class="list-unstyled hidden-xs" id="categoriesList">
+                {% for categoryItem in categories %}
+                    {% if categoryItem == category %}<li class="active"> <a href="{{ path('ColectaSearchPage', {'page': page }) }}?q={{ search }}" class="pull-right"><i class="fa fa-times"></i></a>
+                    {% else %}<li>{% endif %}
+                        <a href="{{ path('ColectaSearchPage', {'page': page }) }}?q={{ search }}&cat={{ categoryItem.id }}">{{ categoryItem.name }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
-    </form>
-
-	{% set shownItems = [] %}
-	{% set mainItemsToShow = [] %}
-	
-	{% for item in items if not item.part %}
-	    {% set mainItemsToShow = mainItemsToShow | merge([item.id]) %}
-	{% endfor %}
-	
-	{% for item in items if item.id not in shownItems %}
-	    {% if item.part %}
-	        {% for relitem in item.related %}
-	            {% if not relitem.part %}
-	                {% set item = relitem %}
-	            {% endif %}
-	        {% endfor %}
-	    {% endif %}     
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-9">
+    	<h2>Búsqueda <em>{{ search }}</em>{% if category %} en <em>{{ category.name  }}</em>{% endif %}</h2>
+    	
+    	{% for item in items %}
 	        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-	        {% set path = path | replace({'/':'Bundle:'}) %}
-	        {% include path with { 'item': item } only %}
-	    
-	    {% set shownItems = shownItems | merge([item.id]) %}
-	    {% for ri in item.related %}
-	        {% set shownItems = shownItems | merge([ri.id]) %}
-	    {% endfor %}
-	{% else %}
-	    <p class="lead">Vaya, no he encontrado nada con esas palabras.</p>
-	{% endfor %}
-	
-	{% if page > 1 or thereAreMore %}
-	    <ul class="pager">
-	      <li class="previous{% if page == 1 %} disabled{% endif %}">
-	        <a href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search}}{% else %}{% endif %}">&larr; Anteriores</a>
-	      </li>
-	      <li class="next{% if not thereAreMore %} disabled{% endif %}">
-	        <a href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search}}{% else %}{% endif %}">Siguientes &rarr;</a>
-	      </li>
-	    </ul>
-	{% endif %}
-</div></div>
+            {% set path = path | replace({'/':'Bundle:'}) %}
+            {% include path with { 'item': item } only %}
+    	{% else %}
+    	    <div class="monocontent"><p class="lead">Vaya, no hay nada con esas palabras.</p></div>
+    	{% endfor %}
+    	
+    	{% if page > 1 or thereAreMore %}
+    	    <ul class="pager">
+    	      <li class="previous{% if page == 1 %} disabled{% endif %}">
+    	        <a href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search }}{% else %}{% endif %}">&larr; Anteriores</a>
+    	      </li>
+    	      <li class="next{% if not thereAreMore %} disabled{% endif %}">
+    	        <a href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search }}{% else %}{% endif %}">Siguientes &rarr;</a>
+    	      </li>
+    	    </ul>
+    	{% endif %}
+    </div>
+</div>
 {% endblock %}
 
 
