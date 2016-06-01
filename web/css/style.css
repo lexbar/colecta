@@ -572,7 +572,10 @@ img.smiley {
     vertical-align: middle;
 }
 .assistances form {
-	display: inline;
+	display: inline-block;
+}
+.assistances form * {
+    line-height: 22px;
 }
 .assistances ul li:hover {
 	background-color: #e6f6ff;
@@ -583,6 +586,7 @@ img.smiley {
 }
 .assistances .assistance {
 	word-wrap: break-word;
+    display: inline-block;
 }
 .assistances .btn.btn-default {
     border-color: #0275d8;
@@ -598,10 +602,8 @@ img.smiley {
 .assistances .save {
 	display: inline-block;
 	margin-left: 10px;
-	padding: 1px 6px;
+	padding: 0 6px;
 	margin-top: -3px;
-	font-size: 16px;
-	line-height: 16px;
 }
 .assistances .control {
 	margin-left: 10px;
@@ -613,7 +615,6 @@ img.smiley {
 	opacity: 1;
 }
 .assistances input {
-	padding: 0 3px;
 	line-height: 12px;
 	width: 50px;
 }
@@ -1091,10 +1092,11 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 	}
 	.assistances .control {
 		opacity: 1;
-		margin: 10px 0 15px 10px;
+		margin: 15px 0 25px 0;
 	}
 	.assistances .save {
-		margin: 10px 0 15px 0;
+	    margin: 15px 40px 25px 0;
+        padding: 5px 10px;
 	}
 	.assistances input {
 		padding: 10px;
