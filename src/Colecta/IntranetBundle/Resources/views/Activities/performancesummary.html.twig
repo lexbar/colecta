@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-xs-6">
     	<p>distancia: <strong>{{ kmsSum }}km <i class="fa fa-caret-{% if kmsSum - prev_kmsSum == 0 %}up text-muted{% elseif kmsSum - prev_kmsSum > 0 %}up text-success{% else %}down text-danger{% endif %}"></i></strong></p> 
-    	<p class="periodCompare">{% if kmsSum - prev_kmsSum == 0 %}<small> +{% elseif kmsSum - prev_kmsSum > 0 %}<small style="color:green">+{% else %}<small style="color:red">-{% endif %} {{ kmsSum - prev_kmsSum }}km</small> <br><small class="text-muted">frente a los 30 días anteriores</small></p>
+    	<p class="periodCompare">{% if kmsSum - prev_kmsSum == 0 %}<small> +{% elseif kmsSum - prev_kmsSum > 0 %}<small style="color:green">+{% else %}<small style="color:red">{% endif %} {{ kmsSum - prev_kmsSum }}km</small> <br><small class="text-muted">frente a los 30 días anteriores</small></p>
     </div>
     <div class="col-xs-6">
     	<p>puntos: <strong>{{ pointsSum }} <i class="fa fa-caret-{% if kmsSum - prev_kmsSum == 0 %}up text-muted{% elseif pointsSum - prev_pointsSum > 0 %}up text-success{% else %}down text-danger{% endif %}"></i></strong></p> 
-    	<p class="periodCompare">{% if kmsSum - prev_kmsSum == 0 %}<small> +{% elseif pointsSum - prev_pointsSum > 0 %}<small style="color:green">+{% else %}<small style="color:red">-{% endif %} {{ pointsSum - prev_pointsSum }}</small> <br><small class="text-muted">frente a los 30 días anteriores</small></p>
+    	<p class="periodCompare">{% if kmsSum - prev_kmsSum == 0 %}<small> +{% elseif pointsSum - prev_pointsSum > 0 %}<small style="color:green">+{% else %}<small style="color:red">{% endif %} {{ pointsSum - prev_pointsSum }}</small> <br><small class="text-muted">frente a los 30 días anteriores</small></p>
     </div>
 </div>
 {% if kmsSum > 0 %}
