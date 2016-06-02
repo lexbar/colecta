@@ -1079,7 +1079,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
         border-top: 1px solid #DDD;
     }
     .item .itemActions a, .item .itemActions .like span {
-	    margin: 10px 15px 10px 0;
+	    margin: 5px 20px 20px 0;
     } 
     .micro .date span {
         font-size: 12px;
