@@ -10,6 +10,10 @@ body {
 .alert {
     margin-top:15px;
 }
+#adsense {
+    width: 100%;
+    height: auto;
+}
 img.smiley {
     vertical-align: text-bottom;
 }
@@ -969,6 +973,9 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     .dashboard {
 	    margin-top: 0;
 	}
+	#adsense {
+    	display: none;
+    }
 	.monocontent {
     	margin-top: 15px;
 	}

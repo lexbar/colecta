@@ -25,12 +25,12 @@
                 </ul>
             </div>
             
-            {#}
-                {% if adsense %}
-                    <hr>
-                    {{ adsense | raw }}
-                {% endif %}
-            {#}
+            
+            {% if adsense %}
+                <div id="adsense">
+                {{ adsense | raw }}
+                </div>
+            {% endif %}
         </div>
         <div class="col-xs-12 col-sm-8 col-md-9">
         	<h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
