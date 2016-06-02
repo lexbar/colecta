@@ -175,6 +175,7 @@ class FolderController extends Controller
             $category = $em->getRepository('ColectaItemBundle:Category')->findOneById($request->request->get('category'));
             
             $item->setName($request->request->get('name'));
+            $item->setText($request->request->get('text'));
             $item->setCategory($category);
             $item->setOpen($request->get('open'));
             
@@ -218,8 +219,7 @@ class FolderController extends Controller
                 $em->persist($item);
                 $em->flush();
                 
-                $this->get('session')->getFlashBag()->add('success', 'Carpeta modificada correctamente');
-                return new RedirectResponse($this->generateUrl('ColectaFolderView', array('slug' => $item->getSlug())));     
+                $this->get('session')->getFlashBag()->add('success', 'Carpeta modificada correctamente');  
             }
         }
         
