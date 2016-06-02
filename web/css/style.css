@@ -37,8 +37,17 @@ img.smiley {
     padding: 10px 0;
     margin-bottom: 10px;
 }
+#performancesummary strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 400;
+}
+#performancesummary .periodCompare {
+    line-height: 12px;
+}
 #performancesGraph {
 	padding: 0;
+	margin: 0;
 	overflow: hidden;
 }
 #performancesGraph li {

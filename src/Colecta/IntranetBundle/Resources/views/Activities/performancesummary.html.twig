@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-xs-6">
-    	<p>distancia: <strong>{{ kmsSum }}km</strong></p> 
-    	<p><i class="fa fa-caret-{% if kmsSum - prev_kmsSum == 0 %}up text-muted{% elseif kmsSum - prev_kmsSum > 0 %}up text-success{% else %}down text-danger{% endif %}" style=""></i> {{ kmsSum - prev_kmsSum }}km <small class="text-muted">respecto a anterior</small></p>
+    	<p>distancia: <strong>{{ kmsSum }}km <i class="fa fa-caret-{% if kmsSum - prev_kmsSum == 0 %}up text-muted{% elseif kmsSum - prev_kmsSum > 0 %}up text-success{% else %}down text-danger{% endif %}"></i></strong></p> 
+    	<p class="periodCompare">{% if kmsSum - prev_kmsSum == 0 %}<small> +{% elseif kmsSum - prev_kmsSum > 0 %}<small style="color:green">+{% else %}<small style="color:red">-{% endif %} {{ kmsSum - prev_kmsSum }}km</small> <br><small class="text-muted">frente a los 30 días anteriores</small></p>
     </div>
     <div class="col-xs-6">
-    	<p>puntos: <strong>{{ pointsSum }}</strong></p> 
-    	<p><i class="fa fa-caret-{% if kmsSum - prev_kmsSum == 0 %}up text-muted{% elseif pointsSum - prev_pointsSum > 0 %}up text-success{% else %}down text-danger{% endif %}"></i> {{ pointsSum - prev_pointsSum }} <small class="text-muted">respecto a anterior</small></p>
+    	<p>puntos: <strong>{{ pointsSum }} <i class="fa fa-caret-{% if kmsSum - prev_kmsSum == 0 %}up text-muted{% elseif pointsSum - prev_pointsSum > 0 %}up text-success{% else %}down text-danger{% endif %}"></i></strong></p> 
+    	<p class="periodCompare">{% if kmsSum - prev_kmsSum == 0 %}<small> +{% elseif pointsSum - prev_pointsSum > 0 %}<small style="color:green">+{% else %}<small style="color:red">-{% endif %} {{ pointsSum - prev_pointsSum }}</small> <br><small class="text-muted">frente a los 30 días anteriores</small></p>
     </div>
 </div>
 {% if kmsSum > 0 %}
@@ -15,4 +15,3 @@
 	{% endfor %}
 {% endspaceless %}</ul>
 {% endif %}
-<p><small><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}">Ver mi rendimiento anual <i class="fa fa-bar-chart fa-fw"></i></a></small></p>
