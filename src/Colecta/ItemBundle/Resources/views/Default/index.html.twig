@@ -66,7 +66,7 @@
             {% endif %}
         
             {# GRAPHS #}
-            {% if app.user %}
+            {% if app.user and page <= 1 %}
             <div class="row nextactivities">
             	<div class="col-md-6">
                     <div class="panel card panel-default ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')">
