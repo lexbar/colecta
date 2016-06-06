@@ -726,6 +726,8 @@ class RouteController extends Controller
                     
                     $em->flush();
                     
+                    /*$this->get('session')->getFlashBag()->add('success', 'Ruta publicada correctamente.');*/
+                    
                     return new RedirectResponse($this->generateUrl('ColectaRouteView', array('slug' => $item->getSlug())));
                 }
                 else
