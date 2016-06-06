@@ -1065,6 +1065,9 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 	.userProfile h2, .userProfile p {
 		text-align: center;
 	}
+	.profileAvatar img {
+        max-width: 90px;
+    }
     .bigcalendar .calendar-heading {
         font-size: 16px;
     }
