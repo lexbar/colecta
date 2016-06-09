@@ -7,7 +7,7 @@
     
     <h3 class="title">
         {% block itemTitle %}
-            {% if new %}<i class="fa fa-asterisk" style="color:orange"></i>{% endif %}
+            {% if new %}<i class="fa fa-circle" style="color:orange"></i>{% endif %}
             <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
         {% endblock %}
     </h3>
