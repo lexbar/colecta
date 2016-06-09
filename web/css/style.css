@@ -295,6 +295,10 @@ img.smiley {
     line-height: 20px;
     margin: 15px 0 10px;
 }
+.item.new .title i.fa {
+    color: orange;
+    margin-left: -24px;
+}
 .item.editable .panel-heading .panel-title {
     padding-right: 70px;
 }
