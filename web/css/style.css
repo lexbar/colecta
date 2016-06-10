@@ -560,6 +560,12 @@ img.smiley {
 .comments .username {
     font-size: 14px;
 }
+.comments .comment .media-body .fa-circle {
+    color: orange;
+    position: absolute;
+    margin-left: -71px;
+    margin-top: 3px;
+}
 .comments .media textarea {
     font-size: 16px;
     padding: 8px 12px;
@@ -824,6 +830,16 @@ img.smiley {
     z-index: 1100;
     padding: 10px;
     background-color: #fff;
+}
+#mapproperties #locations {
+    margin-top: 15px;
+}
+#mapproperties #locations li {
+    cursor: pointer;
+}
+#mapproperties #locations i.fa-map-marker {
+    color: #EB5A51;
+    margin-right: 8px;
 }
 .mapcontrols .btn {
     margin: 0 0 5px 5px;
