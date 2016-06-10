@@ -37,6 +37,14 @@
                 </div>
                 
                 {% include 'ColectaActivityBundle:Default:properties.html.twig' with { item: item } only %}
+                
+                {% if item.relatedPlaces | length > 0 %}
+                    <ul class="list-group" id="locations">
+                    {% for p in item.relatedPlaces %}
+                        <li class="list-group-item" onClick="map.setZoom(14);google.maps.event.trigger(mapMarkers[{{ p.id }}], 'click');"><i class="fa fa-map-marker"></i> {{ p.name }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -95,12 +103,12 @@
         {% endif %}
     {% endfor %}
     
-    {% for mk in item.related if mk.type == 'Activity/Place' %}
-        {% set markers = markers ~ '["' ~ mk.name ~ '", ' ~ mk.latitude ~ ',' ~ mk.longitude ~ '],' %}
+    {% for mk in item.relatedPlaces %}
+        {% set markers = markers ~ '["' ~ mk.name ~ '", ' ~ mk.latitude ~ ',' ~ mk.longitude ~ ',' ~ mk.id~ '],' %}
     {% endfor %}
     
     var map;
-    var mapMarkers;
+    var mapMarkers = [];
     var positionMarker;
     var isFullScreen = false;
     var polyline = [];
@@ -291,6 +299,8 @@
                 icon: image,
                 title: s[0]
             });
+            
+            mapMarkers[s[3]] = marker;
             
             var content = s[0];  
             var infowindow = new google.maps.InfoWindow()

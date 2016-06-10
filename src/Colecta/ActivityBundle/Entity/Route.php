@@ -573,4 +573,21 @@ class Route extends \Colecta\ItemBundle\Entity\Item
     {
         return $this->trackpoints;
     }
+    
+    public function getRelatedPlaces()
+    {
+        $related = $this->getRelated();
+        
+        $items = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        foreach($related as $item) 
+        {
+            if($item->getType() == 'Activity/Place')
+            {
+                $items->add($item);
+            }
+        }
+        
+        return $items;
+    }
 }
