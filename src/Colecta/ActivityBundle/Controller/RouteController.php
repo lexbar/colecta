@@ -1001,7 +1001,15 @@ class RouteController extends Controller
             }
             else
             {
-                $out = shell_exec("gpsbabel -t -i $iformat -f $cachePath -o $oformat -F -");
+                if($iformat != $oformat)
+                {
+                    $out = shell_exec("gpsbabel -t -i $iformat -f $cachePath -o $oformat -F -");
+                }
+                else
+                {
+                    $out = file_get_contents($cachePath);
+                }
+                
             }
         
             $response = new Response($out);
