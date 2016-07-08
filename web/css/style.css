@@ -487,11 +487,6 @@ img.smiley {
 	color: #337ab7;
 	background-color: #FFF;
 }
-.item_micro .label.label-warning {
-    background-color: #FFF;
-    color: #337ab7;
-    border: 1px solid #f0ad4e;
-}
 .item_micro .label.label-primary:hover {
 	border: 1px solid #23527c;
 	color: #23527c;
