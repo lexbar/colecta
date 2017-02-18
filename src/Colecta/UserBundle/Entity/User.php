@@ -598,7 +598,7 @@ class User implements UserInterface, \Serializable
         
         $filesystem->write( $this->getUploadDir() . '/' . $this->getAvatar(), file_get_contents($this->file->getRealPath()) );
         
-        $this->file->move($this->getUploadRootDir(), $this->getAvatar());
+        //$this->file->move($this->getUploadRootDir(), $this->getAvatar());
         
         unset($this->file);
     }
