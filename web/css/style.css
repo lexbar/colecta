@@ -1,5 +1,5 @@
 body {
-    background-color: #eee;
+    background-color: #363636;
 }
 .container {
     background-color: #FFF;
@@ -140,7 +140,7 @@ img.smiley {
 }
 .navbar-default {
     border: none;
-    background-color: rgba(0,0,0,.05);
+    background-color: rgba(0, 0, 0, .2);
 }
 
 .navbar-default .web_logo {
@@ -296,7 +296,7 @@ img.smiley {
     margin: 15px 0 10px;
 }
 .item.new .title i.fa {
-    color: orange;
+    color: rgba(71, 173, 47, 0.54);
     margin-left: -24px;
 }
 .item.editable .panel-heading .panel-title {
