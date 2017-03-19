@@ -34,6 +34,8 @@
             {% endif %}
         </div>
         <div class="col-xs-12 col-sm-8 col-md-9">
+        	{% if app.user %}<p><a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-default pull-right post-content"><i class="fa fa-plus fa-fw"></i> Publicar </a></p>{% endif %}
+        
         	<h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
     
 		    {% if not app.user and web_description and page <= 1 %}<p class="lead">{{ web_description | nl2br }}</p>{% endif %}
@@ -119,10 +121,16 @@
                 {% set path = path | replace({'/':'Bundle:'}) %}
                 {% include path with { 'item': item } only %}
             {% else %}
-                <div class="monocontent text-center">
-                    <i class="fa fa-{{ itemIcons['Item/Post'] }} fa-4x"></i>
-                    <p class="lead">Las publicaciones que se añadan aparecerán aquí.</p>
+                {% if app.user %}
+                <br><br>
+                <div class="jumbotron">
+                    <h1>¡Listos para empezar!</h1>
+                    {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
+                    <p>¿Qué quieres hacer ahora?</p>
+                    <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-magic fa-fw"></i> Personalizar la página</a> <a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendNewUser') }}" role="button"><i class="fa fa-user-plus fa-fw"></i> Crear nuevo usuario</a>{% elseif app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
+                    {% endif %}
                 </div>
+                {% endif %}
             {% endfor %}
             
             {% if page > 1 or thereAreMore %}

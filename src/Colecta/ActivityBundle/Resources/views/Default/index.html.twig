@@ -34,8 +34,8 @@
                 {% set path = path | replace({'/':'Bundle:'}) %}
                 {% include path with { 'item': item } only %}
             {% else %}
-                <div class="monocontent text-center">
-                    <h3><i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Las rutas y los lugares que se añadan aparecerán aquí.</h3>
+                <div class="monocontent">
+                    <h3><i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Las rutas que se añadan aparecerán aquí.</h3>
                 </div>
             {% endfor %}
             
