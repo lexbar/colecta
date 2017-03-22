@@ -562,7 +562,7 @@ img.smiley {
     font-size: 14px;
 }
 .comments .comment .media-body .fa-circle {
-    color: orange;
+    color: rgba(71, 173, 47, 0.54);
     position: absolute;
     margin-left: -71px;
     margin-top: 3px;
