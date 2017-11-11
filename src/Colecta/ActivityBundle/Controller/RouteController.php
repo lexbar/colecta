@@ -32,7 +32,7 @@ class RouteController extends Controller
         
         $findby = array('draft'=>0);
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()-getRole()->getContribute())
         {
             $findby['open'] = 1;
         }
@@ -73,7 +73,7 @@ class RouteController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()-getRole()->getContribute())
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }

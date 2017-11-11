@@ -25,7 +25,7 @@ class DefaultController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()-getRole()->getContribute())
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
