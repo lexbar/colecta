@@ -32,7 +32,7 @@ class RouteController extends Controller
         
         $findby = array('draft'=>0);
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $findby['open'] = 1;
         }
@@ -73,7 +73,7 @@ class RouteController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
@@ -114,7 +114,7 @@ class RouteController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la ruta que estás buscando');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
-        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || ((!$user || $user->getRole()->is('ROLE_BANNED')) && !$item->getOpen()))
         {
             $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta ruta');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
@@ -964,7 +964,7 @@ class RouteController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la ruta que estás buscando');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
-        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || ((!$user || $user->getRole()->is('ROLE_BANNED')) && !$item->getOpen()))
         {
             $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta ruta');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
