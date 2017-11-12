@@ -438,6 +438,16 @@ class Role
     {
         return $this->name;
     }
+    
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function is($name)
+    {
+        return $name == $this->name;
+    }
 
     /**
      * Set description
