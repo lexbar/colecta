@@ -16,7 +16,7 @@ class FolderController extends Controller
         
         $findby = array('draft'=>0);
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $findby['open'] = 1;
         }
@@ -39,7 +39,7 @@ class FolderController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la carpeta que estás buscando');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
-        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || ((!$user || $user->getRole()->is('ROLE_BANNED')) && !$item->getOpen()))
         {
             $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta carpeta');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
