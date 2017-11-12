@@ -18,7 +18,7 @@
         </span>
         
         {# ASSISTANCE #}
-        {% if canAssist and not app.user.role.name == 'ROLE_BANNED' %}
+        {% if canAssist and app.user.role.name != 'ROLE_BANNED' %}
             {% set haspassed = item.happened %}
             {% set assists = false %}
             {% set confirmed = false %}
