@@ -24,8 +24,15 @@ class PostController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
+        $SQLprivacy = '';
+        
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
+        
         //Get ALL the posts and folders that are not drafts
-        $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) AND i.draft = 0 ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
+        $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) AND i.draft = 0 $SQLprivacy ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         //$items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         $query = $em->createQuery(
@@ -61,7 +68,7 @@ class PostController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
@@ -102,7 +109,7 @@ class PostController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado el texto que estás buscando');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
-        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || ((!$user || $user->getRole()->is('ROLE_BANNED')) && !$item->getOpen()))
         {
             $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver este texto');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
