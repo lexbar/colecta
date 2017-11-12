@@ -76,7 +76,7 @@
         {% endif %}
         
         {# EDIT #}
-        {% if canEdit and not app.user.role.name == 'ROLE_BANNED' %}
+        {% if canEdit and app.user.role.name != 'ROLE_BANNED' %}
             <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
         {% endif %}
     </div>
