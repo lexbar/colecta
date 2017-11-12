@@ -32,7 +32,7 @@ class DefaultController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
