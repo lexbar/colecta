@@ -115,7 +115,7 @@ class EventController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'No hemos encontrado la actividad que estás buscando');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
-        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || ((!$user || $user->getRole()->is('ROLE_BANNED')) && !$item->getOpen()))
         {
             $this->get('session')->getFlashBag()->add('error', 'No tienes permisos para ver esta actividad');
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
