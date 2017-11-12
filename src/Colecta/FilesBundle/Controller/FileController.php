@@ -1047,7 +1047,7 @@ class FileController extends Controller
         {
             throw $this->createNotFoundException('El archivo no existe');
         }
-        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || (!$user && !$item->getOpen()))
+        if(($item->getDraft() && (! $user || $user->getId() != $item->getAuthor()->getId() )) || ((!$user || $user->getRole()->is('ROLE_BANNED')) && !$item->getOpen()))
         {
             return new Response('Forbidden.', 403);
         }
