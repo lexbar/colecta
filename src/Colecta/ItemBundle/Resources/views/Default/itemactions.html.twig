@@ -1,5 +1,5 @@
-{% set canAssist = item.type == 'Activity/Event' and item.allowassistances and not app.user.role.name == 'ROLE_BANNED' %}
-{% set canAttach = not item.part and app.user and (app.user.role.itemRelateAny or app.user.role.itemRelateOwn and item.author == app.user) and not app.user.role.name == 'ROLE_BANNED' %}
+{% set canAssist = item.type == 'Activity/Event' and item.allowassistances %}
+{% set canAttach = not item.part and app.user and (app.user.role.itemRelateAny or app.user.role.itemRelateOwn and item.author == app.user) %}
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
 {% set canEdit = app.user and item.canEdit(app.user) %}
 
@@ -18,7 +18,7 @@
         </span>
         
         {# ASSISTANCE #}
-        {% if canAssist %}
+        {% if canAssist and not app.user.role.name == 'ROLE_BANNED' %}
             {% set haspassed = item.happened %}
             {% set assists = false %}
             {% set confirmed = false %}
@@ -66,7 +66,7 @@
         {% endif %}
         
         {# FILE #}
-        {#{% if app.user and item.type == 'Files/Folder' and not item.personal and item.public %}
+        {#{% if app.user and item.type == 'Files/Folder' and not item.personal and item.public and not app.user.role.name == 'ROLE_BANNED' %}
             <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="fa fa-plus"></i> Agregar archivos</a>
         {% endif %}#}
         
@@ -76,7 +76,7 @@
         {% endif %}
         
         {# EDIT #}
-        {% if canEdit %}
+        {% if canEdit and not app.user.role.name == 'ROLE_BANNED' %}
             <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
         {% endif %}
     </div>
