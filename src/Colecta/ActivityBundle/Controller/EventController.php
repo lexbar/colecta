@@ -31,7 +31,7 @@ class EventController extends Controller
         
         $findby = array('draft'=>0);
         
-        if(!$this->getUser() || $this->getUser()-getRole()->is('ROLE_BANNED'))
+        if(!$this->getUser())
         {
             $findby['open'] = 1;
         }
@@ -73,7 +73,7 @@ class EventController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser() || $this->getUser()-getRole()->is('ROLE_BANNED'))
+        if(!$this->getUser())
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
@@ -158,7 +158,7 @@ class EventController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser() || $this->getUser()-getRole()->is('ROLE_BANNED'))
+        if(!$this->getUser())
         {
             $SQLprivacy = ' AND e.open = 1 ';
         }
@@ -583,7 +583,7 @@ class EventController extends Controller
         
         $item = $em->getRepository('ColectaActivityBundle:Event')->findOneBySlug($slug);
         
-        if(!$this->getUser() || $this->getUser()-getRole()->is('ROLE_BANNED'))
+        if($user == 'anon.')
         {
             $login = $this->generateUrl('userLogin');
             return new RedirectResponse($login);
@@ -872,7 +872,7 @@ class EventController extends Controller
 	    
 	    $user = $this->getUser();
 	    
-	    if(!$user || $this->getUser()-getRole()->is('ROLE_BANNED'))
+	    if(!$user)
 	    {
 		    //Must be logged
 		    $response = new Response($this->renderView('ColectaActivityBundle:Event:response.json.twig', array('error' => 'Tienes que iniciar sesión','success' => '')),200);
@@ -1083,7 +1083,7 @@ class EventController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser() || $this->getUser()-getRole()->is('ROLE_BANNED'))
+        if(!$this->getUser())
         {
             $SQLprivacy = ' AND e.open = 1 ';
         }
