@@ -24,15 +24,8 @@ class PostController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $SQLprivacy = '';
-        
-        if(!$this->getUser() || $this->getUser()-getRole()->getContribute())
-        {
-            $SQLprivacy = ' AND i.open = 1 ';
-        }
-        
         //Get ALL the posts and folders that are not drafts
-        $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) AND i.draft = 0 $SQLprivacy ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
+        $items = $em->createQuery("SELECT i FROM ColectaItemBundle:Item i WHERE (i INSTANCE OF Colecta\ItemBundle\Entity\Post OR i INSTANCE OF Colecta\FilesBundle\Entity\Folder) AND i.draft = 0 ORDER BY i.date DESC")->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1)->getResult();
         //$items = $em->getRepository('ColectaItemBundle:Post')->findBy(array('draft'=>0), array('lastInteraction'=>'DESC'),($this->ipp + 1), $page * $this->ipp);
         
         $query = $em->createQuery(
@@ -68,7 +61,7 @@ class PostController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser() || $this->getUser()-getRole()->getContribute())
+        if(!$this->getUser())
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
