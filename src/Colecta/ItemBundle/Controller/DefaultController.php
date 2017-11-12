@@ -25,7 +25,7 @@ class DefaultController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
@@ -79,9 +79,9 @@ class DefaultController extends Controller
     }
     public function sinceLastVisitPageAction($page)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         
-        if($user == 'anon.')
+        if(!$user || $user->getRole()->is('ROLE_BANNED'))
         {
             $this->get('session')->getFlashBag()->add('error', 'Error, debes iniciar sesion');
             
@@ -107,7 +107,7 @@ class DefaultController extends Controller
         
         $SQLprivacy = '';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $SQLprivacy = ' AND i.open = 1 ';
         }
@@ -220,7 +220,7 @@ class DefaultController extends Controller
         
         $queryString = 'SELECT i FROM ColectaItemBundle:Item i WHERE i IN ('.implode(',', $ids).')';
         
-        if(!$this->getUser())
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
         {
             $queryString .= ' AND i.open = 1 ';
         }
