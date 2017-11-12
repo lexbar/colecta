@@ -21,11 +21,18 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
+        $SQLprivacy = '';
+        
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
+        
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         //Get ALL the items that are not drafts
         $page = 0;
         $query = $em->createQuery(
-            "SELECT i FROM ColectaItemBundle:Item i WHERE i.author = $id AND i.draft = 0 AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.author = $id AND i.draft = 0 $SQLprivacy AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
         )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
         $items = $query->getResult();
         
@@ -53,11 +60,18 @@ class UserController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
+        $SQLprivacy = '';
+        
+        if(!$this->getUser() || $this->getUser()->getRole()->is('ROLE_BANNED'))
+        {
+            $SQLprivacy = ' AND i.open = 1 ';
+        }
+        
         $user = $em->getRepository('ColectaUserBundle:User')->find($id);
         
         //Get ALL the items that are not drafts
         $query = $em->createQuery(
-            "SELECT i FROM ColectaItemBundle:Item i WHERE i.author = $id AND i.draft = 0 AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
+            "SELECT i FROM ColectaItemBundle:Item i WHERE i.author = $id AND i.draft = 0 $SQLprivacy AND i NOT INSTANCE OF Colecta\FilesBundle\Entity\File ORDER BY i.lastInteraction DESC"
         )->setFirstResult($page * $this->ipp)->setMaxResults($this->ipp + 1);
         $items = $query->getResult();
         
