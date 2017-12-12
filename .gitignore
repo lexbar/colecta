@@ -2,7 +2,8 @@
 /app/config/web_parameters.yml
 /app/bootstrap.php.cache
 /composer.lock
-/app/cache/*
+/app/cache/prod/*
+/app/cache/dev/*
 /app/logs/*
 /web/uploads/files/*
 /web/uploads/avatars/*
