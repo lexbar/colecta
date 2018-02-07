@@ -71,7 +71,7 @@
     
     {######## ASSISTANCES ########}
     
-    {% if item.assistances | length or canedit and item.allowassistances %}        
+    {% if app.user and ( item.assistances | length or canedit and item.allowassistances) %}        
         <div class="assistances">
         <h3>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}:</h3>
             
