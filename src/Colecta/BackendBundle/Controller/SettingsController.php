@@ -19,7 +19,7 @@ class SettingsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $filesystem = $this->container->get('knp_gaufrette.filesystem_map')->get('uploads');
         
-        if($user == 'anon.' || !$user->getRole()->getSiteConfigSettings())
+        if(!$user || !$user->getRole()->getSiteConfigSettings())
         {
             return new RedirectResponse($this->generateUrl('ColectaDashboard'));
         }
