@@ -37,12 +37,12 @@
     	{% endfor %}
     	
     	{% if page > 1 or thereAreMore %}
-    	    <ul class="pager">
-    	      <li class="previous{% if page == 1 %} disabled{% endif %}">
-    	        <a href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search }}{% else %}{% endif %}">&larr; Anteriores</a>
+    	    <ul class="pagination justify-content-center">
+    	      <li class="page-item{% if page == 1 %} disabled{% endif %}">
+    	        <a class="page-link" href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search }}{% else %}{% endif %}">&larr; Anteriores</a>
     	      </li>
-    	      <li class="next{% if not thereAreMore %} disabled{% endif %}">
-    	        <a href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search }}{% else %}{% endif %}">Siguientes &rarr;</a>
+    	      <li class="page-item{% if not thereAreMore %} disabled{% endif %}">
+    	        <a class="page-link" href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search }}{% else %}{% endif %}">Siguientes &rarr;</a>
     	      </li>
     	    </ul>
     	{% endif %}

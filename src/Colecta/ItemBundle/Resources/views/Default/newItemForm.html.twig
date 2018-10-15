@@ -117,34 +117,23 @@
                 <div class="form-group">
 	                <label for="EventName">Dificultad</label>
 	                <div class="">
-	                    <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item is defined and item.type == 'Activity/Event' and item.difficulty == '' or item is not defined%} checked{% endif %}>
-                            No indicar
+	                    <label class="radio pr-3">
+                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item is defined and item.type == 'Activity/Event' and item.difficulty == '' or item is not defined%} checked{% endif %}> No indicar
                         </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'easy' %} checked{% endif %}>
-                            <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
-                            Fácil
+                        <label class="radio pr-3">
+                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'easy' %} checked{% endif %}> Fácil
                         </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'moderate' %} checked{% endif %}>
-                            <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
-                            Moderado
+                        <label class="radio pr-3">
+                            <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'moderate' %} checked{% endif %}> Moderado
                         </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'hard' %} checked{% endif %}>
-                            <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
-                            Difícil
+                        <label class="radio pr-3">
+                            <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'hard' %} checked{% endif %}> Difícil
                         </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'very hard' %} checked{% endif %}>
-                            <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
-                            Muy difícil
+                        <label class="radio pr-3">
+                            <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'very hard' %} checked{% endif %}> Muy difícil
                         </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'experts only' %} checked{% endif %}>
-                            <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
-                            Sólo expertos
+                        <label class="radio pr-3">
+                            <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item is defined and item.type == 'Activity/Event' and item.difficulty == 'experts only' %} checked{% endif %}> Sólo expertos
                         </label>
                     </div>
                 </div>

@@ -16,6 +16,31 @@
 	            </div>
 		        
 		        <div class="linksList d-none d-sm-block ml-3" id="navigationList">
+		        	<strong class="pb-2 pt-1 pt-sm-3 d-block">Secciones</strong>
+					<ul class="list-unstyled">
+					    <li class="{% if bun == 'ItemBundle' and con == 'PostController' %} active{% endif %}">
+					        <a href="{{ path('ColectaPostIndex') }}">
+					            <i class="fa fa-comment-o fa-fw"></i> Foro
+					        </a>
+					    </li>
+					    <li class="{% if bun == 'ActivityBundle' and con == 'EventController' %} active{% endif %}">
+					        <a href="{{ path('ColectaEventIndex') }}"> 
+					            <i class="fa fa-calendar-o fa-fw"></i>  Calendario
+					        </a>
+					    </li>
+					    <li class="{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} active{% endif %}">
+					        <a href="{{ path('ColectaMapIndex') }}">
+					            <i class="fa fa-map-o fa-fw"></i> Rutas
+					        </a>
+					    </li>
+					    
+					    {% if app.user and app.user.role.getSiteConfig %}
+						    <li class="nav-item">
+						        <a href="{{ path('ColectaBackendIndex') }}" class="text-secondary"><i class="fa fa-cog fa-fw"></i> Admin</a>
+						    </li>
+						{% endif %}
+					</ul>
+
 			        {# CUSTOM NAVIGATION #}
 					{{ render(controller('ColectaSiteBundle:Page:navigation')) }}
 			        

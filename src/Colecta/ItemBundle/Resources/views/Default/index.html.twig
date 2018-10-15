@@ -44,7 +44,7 @@
     <div class="bg-white rounded box-shadow my-4">
 	    <div class="row">
 	    	<div class="col-md-6 mt-2">
-	            <div class="ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')">
+	            <div class="ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')" style="cursor:pointer">
 	                <div class="p-2 px-sm-3">
 	                    <h3>Ranking:</h3>
 	                    
@@ -53,7 +53,7 @@
 	            </div>
 	        </div>
 	        <div class="col-md-6 mt-2">
-	           <div class="performancesummary" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
+	           <div class="performancesummary" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')" style="cursor:pointer">
 	                <div class="p-2 px-sm-3">
 	                    <h3>Tu Actividad:</h3>
 	                    
@@ -106,13 +106,15 @@
         {% endif %}
     {% endfor %}
     
+    {# PAGINATION #}
+    
     {% if page > 1 or thereAreMore %}
-        <ul class="pager">
-          <li class="previous{% if page == 1 %} disabled{% endif %}">
-            <a href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+        <ul class="pagination justify-content-center">
+          <li class="page-item{% if page == 1 %} disabled{% endif %}">
+            <a class="page-link" href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
           </li>
-          <li class="next{% if not thereAreMore %} disabled{% endif %}">
-            <a href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+          <li class="page-item{% if not thereAreMore %} disabled{% endif %}">
+            <a class="page-link" href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
           </li>
         </ul>
     {% endif %}

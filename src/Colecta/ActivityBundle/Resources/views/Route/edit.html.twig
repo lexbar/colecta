@@ -107,28 +107,32 @@
             <div class="form-group">
                 <label for="RouteAvgspeed">Velocidad media</label>
                 <div class="input-group">
-                    {{ form_widget(form.avgspeed, {'attr':{'value': item.avgspeed, 'class':'form-control'}}) }}<input type="text" class="form-control" value="{{ item.avgspeed }}" disabled><span class="input-group-addon"> km/h</span>
+                    {{ form_widget(form.avgspeed, {'attr':{'value': item.avgspeed, 'class':'form-control'}}) }}<input type="text" class="form-control" value="{{ item.avgspeed }}" disabled>
+                    <div class="input-group-append"><span class="input-group-text"> km/h</span></div>
                 </div>
             </div>
           
             <div class="form-group">
                 <label for="RouteMaxspeed">Velocidad máx.</label>
                 <div class="input-group">
-                    {{ form_widget(form.maxspeed, {'attr':{'value': item.maxspeed, 'class':'form-control' }}) }}<input type="text" class="form-control" value="{{ item.maxspeed }}" disabled><span class="input-group-addon"> km/h</span>
+                    {{ form_widget(form.maxspeed, {'attr':{'value': item.maxspeed, 'class':'form-control' }}) }}<input type="text" class="form-control" value="{{ item.maxspeed }}" disabled>
+                    <div class="input-group-append"><span class="input-group-text"> km/h</span></div>
                 </div>
             </div>
           
             <div class="form-group">
                 <label for="RouteMinheight">Cota inferior</label>
                 <div class="input-group">
-                    {{ form_widget(form.minheight, {'attr':{'class':'form-control','value': item.minheight}}) }}<span class="input-group-addon"> metros</span>
+                    {{ form_widget(form.minheight, {'attr':{'class':'form-control','value': item.minheight}}) }}
+                    <div class="input-group-append"><span class="input-group-text"> metros</span></div>
                 </div>
             </div>
           
             <div class="form-group">
                 <label for="RouteMaxheight">Cota superior</label>
                 <div class="input-group">
-                    {{ form_widget(form.maxheight, {'attr':{'class':'form-control','value': item.maxheight}}) }}<span class="input-group-addon"> metros</span>
+                    {{ form_widget(form.maxheight, {'attr':{'class':'form-control','value': item.maxheight}}) }}
+                    <div class="input-group-append"><span class="input-group-text"> metros</span></div>
                 </div>
             </div>
           
@@ -136,29 +140,19 @@
                 <label for="RouteDifficulty">Dificultad</label>
                 <div class="">
                     <label class="radio pr-2">
-                        <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
-                        <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
-                        Fácil
+                        <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}> Fácil
                     </label>
                     <label class="radio pr-2">
-                        <input type="radio" name="difficulty" id="RouteDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
-                        <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
-                        Moderado
+                        <input type="radio" name="difficulty" id="RouteDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}> Moderado
                     </label>
                     <label class="radio pr-2">
-                        <input type="radio" name="difficulty" id="RouteDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
-                        <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
-                        Difícil
+                        <input type="radio" name="difficulty" id="RouteDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}> Difícil
                     </label>
                     <label class="radio pr-2">
-                        <input type="radio" name="difficulty" id="RouteDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
-                        <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
-                        Muy difícil
+                        <input type="radio" name="difficulty" id="RouteDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}> Muy difícil
                     </label>
                     <label class="radio pr-2">
-                        <input type="radio" name="difficulty" id="RouteDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
-                        <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
-                        Sólo expertos
+                        <input type="radio" name="difficulty" id="RouteDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}> Sólo expertos
                     </label>
                 </div>
             </div>
