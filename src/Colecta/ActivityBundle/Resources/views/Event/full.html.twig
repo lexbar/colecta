@@ -30,8 +30,8 @@
             '11':'noviembre',
             '12':'diciembre'
         }%}
-
-<div class="full item{% if canedit %} editable{% endif %}">
+<div class="row">
+<div class="full item{% if canedit %} editable{% endif %} mt-3 mb-4 mx-3 mx-sm-0 p-3 col-12 bg-white rounded box-shadow">
     {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     <h2>
         <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a>
@@ -75,10 +75,10 @@
         <div class="assistances">
         <h3>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}:</h3>
             
-        <ul class="list-unstyled">    
+        <ul class="list-group" id="usersAssistances">    
         {% for assistance in item.assistances %}
         
-            <li id="user{{ assistance.user.id }}assistance">
+            <li id="user{{ assistance.user.id }}assistance" class="list-group-item">
             	<i class="fa fa-user fa-fw"></i>
                 <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee" class="attendee">{{assistance.user.name}}</a> 
                 {% if haspassed %}
@@ -86,10 +86,10 @@
                         {% if canedit %}
                         	<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug, 'user_id': assistance.user.id}) }}" method="POST" onSubmit="">
 	                        	<span class="assistance">
-	                        		<input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ points[assistance.user.id].points }}" class="text-right"> puntos | 
-	                        		<input name="user{{ assistance.user.id }}km" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('hidden');" value="{{ assistance.km }}" class="text-right"> km
+	                        		<input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('d-none');" value="{{ points[assistance.user.id].points }}" class="text-right"> puntos | 
+	                        		<input name="user{{ assistance.user.id }}km" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('d-none');" value="{{ assistance.km }}" class="text-right"> km
 	                        	</span>
-	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save hidden btn btn-primary"><i class="fa fa-save"></i> Guardar</a>
+	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save d-none btn btn-primary"><i class="fa fa-save"></i> Guardar</a>
 	                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="fa fa-times"></i></a>
                             </form>
                         {% else %}
@@ -105,22 +105,22 @@
             </li>
             
         {% else %}
-            <li class="no-assistance"><em>Ninguna asistencia confirmada</em></li>
+            <li class="list-group-item no-assistance"><em>Ninguna asistencia confirmada</em></li>
         {% endfor %}
         </ul>
         
+        {# ADD USER ASSISTANCE #}
         {% if canedit and item.allowassistances %}
-            <div class="row adduser">
-                <div class="col-xs-12 col-sm-9 col-md-6">
-                    <div class="input-group" id="addUser">
-                      <span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
-                      <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
-                    </div>
-                    
-                    <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
-                    <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
+        	<hr class="my-3">
+        	<h3>Añadir personas:</h3>
+            <div class="adduser">
+                <div class="input-group" id="addUser">
+                  <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user-plus"></i></span></div>
+                  <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
                 </div>
-            </div> 
+                
+                {{ render(controller('ColectaUserBundle:User:userNamesSearchList')) }}
+            </div>
         {% endif %}
         
         </div>
@@ -138,10 +138,107 @@
 {% endblock %}
 
 
+
+{% block javascripts %} 
+<script>
+$(document).ready(function(){
+	$("#userSearch").on("keyup", function() {
+	var value = $(this).val().toLowerCase();
+	if(value == '') {
+	    $('#usersList').hide();
+	} else {
+	    $('#usersList').show();
+	    $("#usersList li").filter(function() {
+	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	    });
+	}
+	});
+});
+
+function userSelected(name, id) {
+	addAssistance(name, id);
+	$('#usersList').hide();
+	
+}
+
+function addAssistance(name, user_id) {
+	    if($('#user'+user_id+'assistance').length == 0) { //if not already in list
+		    $('#usersAssistances').append('<li id="user'+user_id+'assistance" class="list-group-item"><i class="fa fa-user fa-fw"></i> <a href="/usuario/'+user_id+'/" itemprop="attendee" class="attendee">'+name+'</a> <i class="fa fa-spinner fa-pulse"></i></li>');
+			confirmAssistance(user_id);
+			$('.no-assistance').remove();
+	    } else {
+		    $('#user'+user_id+'assistance').fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+	    }
+    }
+    
+    function confirmAssistance(user_id) {
+	    $('#user'+user_id+'assistance .text-success i.fa-check').removeClass('fa-check').addClass('fa-spinner fa-pulse');
+	    
+	    $.ajax({
+		    url: "/actividades/{{ item.slug }}/confirm/" + user_id,
+		})
+		.done(function (data) {
+			$('#user'+data.user_id+'assistance .text-success, #user'+data.user_id+'assistance .text-danger').remove();
+		
+        	{% if haspassed %}$('#user'+data.user_id+'assistance .attendee').after(' <form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'d-none\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'d-none\');" value="'+data.km+'" class="text-right"> km</span> <a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save d-none btn btn-primary"><i class="fa fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="fa fa-times"></i></a></form>');
+        	{% endif %}
+        	$('#user'+user_id+'assistance i.fa-spinner').remove();
+		})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+			$('#user'+data.user_id+'assistance .text-success i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-check');
+			alert("Ha ocurrido un error."+errorThrown+" .... "+errorThrown);
+		});
+	}
+	
+	function removeAssistance(user_id) {
+	    $('#user'+user_id+'assistance i.fa-times').removeClass('fa-times').addClass('fa-spinner fa-pulse');
+	    
+	    $.ajax({
+		    url: "/actividades/{{ item.slug }}/remove/" + user_id,
+		})
+		.done(function (data) {
+			$('#user'+data.user_id+'assistance').remove();
+		})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+			$('#user'+data.user_id+'assistance i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-times');
+			alert("Ha ocurrido un error."+errorThrown+" .... "+errorThrown);
+		});
+	}
+	
+	function updateAssistance(user_id) {
+	    $('#user'+user_id+'assistance i.fa-save').removeClass('fa-save').addClass('fa-spinner fa-pulse');
+	    
+	    $.post( "/actividades/{{ item.slug }}/update/" + user_id, $("#user"+user_id+"assistance form:first").serialize() )
+		.done(function (data) {
+			$('#user'+data.user_id+'assistance i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-save');
+        	$('#user'+data.user_id+'assistance form input[name="user'+data.user_id+'points"]').val(data.points);
+        	$('#user'+data.user_id+'assistance form input[name="user'+data.user_id+'km"]').val(data.km);
+        	$('#user'+user_id+'assistance .save').addClass('d-none');
+        	$('#user'+data.user_id+'assistance form input').css('border', '1px solid green');
+        	$('#user'+data.user_id+'assistance .assistance').after('<i class="fa fa-check text-success removemenow"></i>');
+        	$('.removemenow').fadeOut(1000);
+		})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+			$('#user'+data.user_id+'assistance i.fa-spinner').removeClass('fa-spinner fa-pulse').addClass('fa-save');
+			alert("Ha ocurrido un error."+errorThrown+" .... "+errorThrown);
+		});
+	}
+
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+{#
 {% if item.canEdit(app.user) and (item.allowassistances or item.assistances | length and haspassed) %}
 {% block stylesheets %}
     <style>
-        .twitter-typeahead {
+    .twitter-typeahead {
       width: 100%;
       position: relative;
       display: block !important;
@@ -414,4 +511,4 @@
 	}
     </script>
 {% endblock %}
-{% endif %}
+{% endif %}#}

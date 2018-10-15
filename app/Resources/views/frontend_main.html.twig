@@ -1,0 +1,40 @@
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+<div class="row content">
+    <div class="col main">
+	    <div class="row">    
+	        <div class="col-12 col-sm-4 col-md-3 pl-sm-0">
+	        	<div class="d-flex justify-content-between">
+			        <form id="searchForm" class="my-3 w-100" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+		                <div class="inner-addon right-addon">
+		                    <input type="text" class="form-control pl-3" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+		                    <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+		                </div>
+		            </form>
+		            <button onClick="$('#navigationList').toggleClass('d-none')" type="button" class="d-block d-sm-none btn btn-light my-3 ml-2"><i class="fa fa-bars fa-fw"></i></button>
+	            </div>
+		        
+		        <div class="linksList d-none d-sm-block ml-3" id="navigationList">
+			        {# CUSTOM NAVIGATION #}
+					{{ render(controller('ColectaSiteBundle:Page:navigation')) }}
+			        
+			        {# CATEGORIES #}
+			        <strong class="pb-2 pt-1 pt-sm-2 d-block">Categorías</strong>
+			        <ul class="list-unstyled">
+		                {% for categoryItem in categories %}
+		                <li{% if category is defined and categoryItem == category %} class="active"{% endif %}><a href="{{ path('ColectaCategoryView',{'slug':categoryItem.slug}) }}">{{ categoryItem.name }}</a></li>
+		                {% endfor %}
+		            </ul>
+				</div>
+	        </div>
+	        
+	        <div class="col-12 col-sm-8 col-md-9 pr-sm-0">
+	        	
+	        	{% block content %}{% endblock %}
+	        	
+	        </div>
+	    </div>
+	</div>
+</div>
+{% endblock %}

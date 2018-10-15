@@ -1,18 +1,18 @@
     <div class="itemForm compressed" id="itemForm">    
-        <ul class="nav nav-pills">
+        <ul class="nav nav-tabs">
             {% if app.user.role.itemPostCreate or app.user.role.itemFileCreate %}
-                <li class="active" id="textHandler">
-                    <a href="#" onClick="typeChosen('text');return false;"><i class="fa fa-comment-o"></i> Mensaje</a>
+                <li class="nav-item" id="textHandler">
+                    <a class="nav-link active" href="#" onClick="typeChosen('text');return false;"><i class="fa fa-comment-o"></i> Mensaje</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemEventCreate %}
-                <li id="eventHandler">
-                    <a href="#" onClick="typeChosen('event');return false;"><i class="fa fa-calendar-o"></i> Actividad</a>
+                <li class="nav-item" id="eventHandler">
+                    <a class="nav-link" href="#" onClick="typeChosen('event');return false;"><i class="fa fa-calendar-o"></i> Actividad</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemRouteCreate or app.user.role.itemPlaceCreate %}
-                <li id="mapHandler">
-                    <a href="#" onClick="typeChosen('map');return false;"><i class="fa fa-map-o"></i> Ruta</a>
+                <li class="nav-item" id="mapHandler">
+                    <a class="nav-link" href="#" onClick="typeChosen('map');return false;"><i class="fa fa-map-o"></i> Ruta</a>
                 </li>
             {% endif %}
         </ul>
@@ -50,71 +50,74 @@
                 <input type="text" class="form-control" placeholder="Título" name="name" value="{% if item is defined %}{{ item.name }}{% endif %}">
             </div>
             <textarea rows="1" class="form-control" placeholder="Descripción de la actividad..." name="text" onClick="$('#itemForm').removeClass('compressed')">{% if item is defined %}{{ item.text }}{% endif %}</textarea>
+            
             <div class="hidable">
                 <hr>
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
-                                </div>
-                            </div>
-                        </div>
+                    <label for="EventName">Fecha Inicio</label>
+                    <div class="row">
+	                    <div class="col-sm-9 col-lg-10">
+	                        <div class="row">
+	                            <div class="col-lg-4 col-md-6 col-sm-12">
+	                                <div class="input-group">
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-calendar"></i></span></div>
+	                                    <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+	                                </div>
+	                            </div>
+	                            <div class="col-lg-4 col-md-6 col-sm-12">
+	                                <div class="input-group">
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-clock-o"></i></span></div>
+	                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
                     </div>
                 </div>
                 
                 
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}14:00{% endif %}">
-                                </div>
-                            </div>
-                        </div>
+                    <label for="medium">Fecha Fin</label>
+                    <div class="row">
+	                    <div class="col-sm-9 col-lg-10">
+	                        <div class="row">
+	                            <div class="col-lg-4 col-md-5 col-sm-12">
+	                                <div class="input-group">
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-calendar"></i></span></div>
+	                                    <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+	                                </div>
+	                            </div>
+	                            <div class="col-lg-4 col-md-5 col-sm-12">
+	                                <div class="input-group">
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-clock-o"></i></span></div>
+	                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}14:00{% endif %}">
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Distancia</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="EventDistance" name="distance" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.distance }}{% endif %}"><span class="input-group-addon"> km</span>
-                        </div>
+                    <label for="EventName">Distancia</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="EventDistance" name="distance" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.distance }}{% endif %}">
+                        <div class="input-group-append"><span class="input-group-text"> km</span></div>
                     </div>
                 </div>
               
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Desnivel subida</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="EventUphill" name="uphill" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.uphill }}{% endif %}"><span class="input-group-addon"> metros</span>
-                        </div>
+                    <label for="EventName">Desnivel subida</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="EventUphill" name="uphill" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.uphill }}{% endif %}">
+                        <div class="input-group-append"><span class="input-group-text"> metros</span></div>
                     </div>
                 </div>
               
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Dificultad</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <label class="radio">
+	                <label for="EventName">Dificultad</label>
+	                <div class="">
+	                    <label class="radio">
                             <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item is defined and item.type == 'Activity/Event' and item.difficulty == '' or item is not defined%} checked{% endif %}>
                             No indicar
                         </label>

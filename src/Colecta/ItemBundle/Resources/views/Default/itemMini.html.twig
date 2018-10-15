@@ -2,12 +2,11 @@
 {% set itemTypeName = item.type | replace({'Item/':'','Files/':'','Colective/':'','Activity/':''}) %}
 
 
-<div class="item {% if new %}new{% endif %}" id="item{{ item.id}}">
+<div class="item mt-3 mb-4 p-3 bg-white rounded box-shadow {% if new %}new{% endif %}" id="item{{ item.id}}">
     {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     
     <h3 class="title">
         {% block itemTitle %}
-            {% if new %}<i class="fa fa-circle"></i>{% endif %}
             <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
         {% endblock %}
     </h3>

@@ -5,145 +5,143 @@
 {% block article %}
     
 {% if item.canEdit(app.user) %}
-    <div class="row">
-        <div class="col-sm-offset-3 col-lg-offset-2 col-sm-5 col-lg-7">
+    <div class="d-flex justify-content-between flex-column flex-sm-row mb-3 mt-2">
+        <div class="">
             <h2>Editar {{ item.name }}</h2>
         </div>
-        <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaEventView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al evento</a>
+        <div class="">
+            <a class="btn btn-light d-block d-sm-inline-block" href="{{ path('ColectaEventView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al evento</a>
         </div>
     </div>
     
-    <div class="monocontent">
-        <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal"{% if rich_text_editor %} onSubmit="return postForm();"{% endif %}>
-            <fieldset>
-                <div class="form-group">
-                <label class="col-sm-3 col-lg-2 control-label" for="EventName">Fecha Inicio</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <form action="{{ path('ColectaEventEdit', {'slug': item.slug}) }}" method="POST" class="form-horizontal"{% if rich_text_editor %} onSubmit="return postForm();"{% endif %}>
+        <fieldset>
+            <div class="form-group">
+            	<label for="EventName">Fecha Inicio</label>
+            	<div class="row">
+	                <div class="col-sm-9 col-lg-10">
+	                    <div class="row">
+	                        <div class="col-lg-4 col-md-6 col-12">
+	                            <div class="input-group">
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-calendar"></i></div></div>
+	                                <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+	                            </div>
+	                        </div>
+	                        <div class="col-lg-4 col-md-6 col-12">
+	                            <div class="input-group">
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-clock-o"></i></div></div>
+	                                <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="medium">Fecha Fin</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-5 col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class=" fa fa-clock-o"></i></span>
-                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}02:00{% endif %}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="medium">Fecha Fin</label>
+                <div class="row">
+	                <div class="col-sm-9 col-lg-10">
+	                    <div class="row">
+	                        <div class="col-lg-4 col-md-6 col-12">
+	                            <div class="input-group">
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-calendar"></i></div></div>
+	                                <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
+	                            </div>
+	                        </div>
+	                        <div class="col-lg-4 col-md-6 col-12">
+	                            <div class="input-group">
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-clock-o"></i></div></div>
+	                                <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}02:00{% endif %}">
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Título</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <input type="text" class="form-control" id="EventName" name="name" value="{{ item.name }}">
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="EventName">Título</label>
+                <input type="text" class="form-control" id="EventName" name="name" value="{{ item.name }}">
+            </div>
+          
+            <div class="form-group">
+                <label for="EventText">Descripción</label>
+                <textarea class="form-control" id="EventText" name="text" rows="5">{% if rich_text_editor %}{% spaceless %}{{ item.text | nl2br| nonl | raw }}{% endspaceless %}{% else %}{{ item.text | striptags(allowed_tags) }}{% endif %}</textarea>
+            </div>
+          
+            <div class="form-group">
+                <label for="EventName">Distancia</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="EventDistance" name="distance" value="{{ item.distance }}">
+                    <div class="input-group-append"><span class="input-group-text"> km</span></div>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventText">Descripción</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <textarea class="form-control" id="EventText" name="text" rows="5">{% if rich_text_editor %}{% spaceless %}{{ item.text | nl2br| nonl | raw }}{% endspaceless %}{% else %}{{ item.text | striptags(allowed_tags) }}{% endif %}</textarea>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="EventName">Desnivel subida</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="EventUphill" name="uphill" value="{{ item.uphill }}">
+                    <div class="input-group-append"><span class="input-group-text"> metros</span></div>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Distancia</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="EventDistance" name="distance" value="{{ item.distance }}"><span class="input-group-addon"> km</span>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="EventName">Dificultad</label>
+                <div class="">
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item.difficulty == '' %} checked{% endif %}>
+                        No indicar
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
+                        <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                        Fácil
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
+                        <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                        Moderado
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
+                        <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                        Difícil
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
+                        <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                        Muy difícil
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
+                        <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                        Experto
+                    </label>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Desnivel subida</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="EventUphill" name="uphill" value="{{ item.uphill }}"><span class="input-group-addon"> metros</span>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="PostText">Categoría</label>
+                {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':item.category.id})) }}
+            </div>
+            
+            <div class="form-group">
+	            <label>Privacidad</label> 
+	            <p><button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-light">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></p>
+	        </div>
+          
+            <div class="form-group">
+            	<div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <a href="{{ path('ColectaEventDelete', {slug: item.slug}) }}" class="btn btn-outline-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="EventName">Dificultad</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value=""{% if item.difficulty == '' %} checked{% endif %}>
-                            No indicar
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
-                            <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
-                            Fácil
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
-                            <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
-                            Moderado
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
-                            <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
-                            Difícil
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
-                            <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
-                            Muy difícil
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="EventDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
-                            <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
-                            Sólo expertos
-                        </label>
-                    </div>
-                </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="PostText">Categoría</label>
-                    <div class="col-sm-9 col-lg-10">
-                        {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':item.category.id})) }}
-                    </div>
-                </div>
-              
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
-                        <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
-                        <a href="{{ path('ColectaEventDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
+            </div>
+        </fieldset>
+    </form>
     
-    <hr>
-    <div class="col-sm-offset-3 col-lg-offset-2">
+    <hr class="mt-3">
+    <div>
         <h3>Enlazar con otros contenidos</h3>
         <div class="monocontent">
             {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}

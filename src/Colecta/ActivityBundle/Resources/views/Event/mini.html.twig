@@ -55,7 +55,7 @@
         <p class="properties"><strong>{{ properties | join(' | ') }}</strong></p>
     {% endif %}
                     
-    <div id="summary-{{ item.slug }}">
+    <div id="summary-{{ item.slug }}" class="pt-2">
         {{ item.text[0:summary_max_length] | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
         {% if item.text | length > summary_max_length %}<button type="button" class="btn btn-link btn-small" onClick="$('#readmore-{{ item.slug }}').show(); $('#summary-{{ item.slug }}').hide(); return false;">( ... leer más )</button>{% endif %}
     </div>

@@ -1,5 +1,5 @@
 <p class="details clearfix">
-    <a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username pull-left"><img src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}" width="40" height="40"></a>
+    <a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="float-left mr-2"><img class="rounded" src="{{ path('userAvatar',{'uid':item.author.id,'width':40,'height':40}) }}" width="40" height="40"></a>
     <a href="{{ path('userProfile', { 'id': item.author.id }) }}" class="username">{{item.author.name}}</a>{% if item.category %} en <a class="category" href="{{ path('ColectaCategoryView', { 'slug': item.category.slug }) }}">{{ item.category.name }}</a>{% endif %}
     <br><span class="dateandcat">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': item.date } only %}</span>
 </p>

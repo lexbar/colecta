@@ -1,0 +1,7 @@
+<ul class="list-group" id="usersList" style="display:none;">
+{% for user in users %}
+	{% if user.role.contribute %}	
+		<li class="list-group-item" onClick="userSelected('{{ user.name }}', {{ user.id }})">{{ user.name }}</li>
+	{% endif%}
+{% endfor %}
+</ul>

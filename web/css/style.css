@@ -1,19 +1,25 @@
-body {
-    background-color: #363636;
+.nav-scroller{
+	position: relative;
+	z-index: 2;
+	height: 2.5rem;
+	overflow-y: hidden;
+} 
+.nav-scroller .nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  margin-top: -1px;
+  overflow-x: auto;
+  color: rgba(255, 255, 255, .75);
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
 }
-.container {
-    background-color: #FFF;
-}
-.nav-tabs {
-    border-bottom: 1px solid #EEE;
-}
-.alert {
-    margin-top:15px;
-}
-#adsense {
-    width: 100%;
-    height: auto;
-    margin-top: 20px;
+.box-shadow {
+	box-shadow: 0 .2rem .8rem rgba(0, 0, 0, .15);
 }
 img.smiley {
     vertical-align: text-bottom;
@@ -26,17 +32,27 @@ img.smiley {
 	margin-bottom: 0;
 	margin-top: 25px;
 }
-.panel.card.ranksummary, .panel.card.performancesummary {
-	border-top-color: #666;
+.card.ranksummary, .card.performancesummary {
 	cursor: pointer;
 }
-.panel.card.ranksummary h3, .panel.card.performancesummary h3 {
-	margin-bottom: 20px;
+.linksList li{
+	padding: 0 0 8px;
+} 
+.linksList .active a {
+	color: #007bff;
 }
-#performancesummary .row {
-    background-color: #f5f5f5;
-    padding: 10px 0;
-    margin-bottom: 10px;
+.linksList a {
+	color: #777;
+}
+.linksList strong {
+	color: #555;
+}
+.linksList  a:hover {
+	color: #333;
+}
+#nextactivities .card {
+	border-width: 2px;
+	cursor: pointer;
 }
 #performancesummary strong {
     display: block;
@@ -56,13 +72,13 @@ img.smiley {
     width: 3%;
     margin: 0 0.166%;
 	display: inline-block;
-	background-color: #337ab7;
+	background-color: #007bff;
 	height: 1px;
 	border-top-right-radius: 3px;
 	border-top-left-radius: 3px;
 }
-.panel.card.ranksummary .progress {
-	height: 6px;margin: 8px 0;
+.card.ranksummary .progress {
+	height: 6px; margin: 8px 0;
 }
 .panel.nav-pills {
 	font-size: 16px;
@@ -183,11 +199,6 @@ img.smiley {
     right: 0;
 }
 
-#mainTabs li a {
-    padding: 10px 0;
-	margin-right: 20px;
-	font-size: 16px;
-}
 #mainTabs li:last-child a {
 	margin-right: 0;
 }
@@ -202,16 +213,10 @@ img.smiley {
     color: #111;
 }
 
-#backTabs {
-    margin-top: 10px;
-}
 #backTabs a {
     color: #90016F;
 }
 
-#searchForm {
-    margin-top: 20px;
-}
 #searchForm .form-control {
 	font-size: 16px;
 	height: auto;
@@ -219,10 +224,6 @@ img.smiley {
 #searchForm i {
     color: #777;
     top: 3px;
-}
-.btn.post-content, .btn.btn-head {
-    margin-top: 20px;
-    font-size: 16px;
 }
 
 .login p {
@@ -295,9 +296,8 @@ img.smiley {
     line-height: 20px;
     margin: 15px 0 10px;
 }
-.item.new .title i.fa {
-    color: rgba(71, 173, 47, 0.54);
-    margin-left: -24px;
+.item.new {
+    border: 1px solid #007bff;
 }
 .item.editable .panel-heading .panel-title {
     padding-right: 70px;
@@ -311,8 +311,8 @@ img.smiley {
 }
 .item .staticmap {
     margin-bottom: -50px;
-    min-height: 60px;
     width: 100%;
+	height: initial;
     border: 1px solid #CCC;
 }
 .item .mapprofile {
@@ -327,7 +327,7 @@ img.smiley {
 .item .properties {
     margin-top: -10px;
     margin-bottom: 20px;
-    color: #555;
+    color: #808080;
     font-size: 16px;
 }
 .item #mapproperties .properties {
@@ -356,19 +356,12 @@ img.smiley {
     color: #999;
     overflow: hidden;
 }
-.item .details img {
-    margin-right: 10px;
-    border-radius: 100%;
-}
 .item .details .username {
     line-height: 20px;
     font-size: 14px;
 }
 .item .details .dateandcat {
     line-height: 20px;
-}
-.item .itemActions {
-    padding: 10px 0;
 }
 .item .itemActions a, .item .itemActions .like span {
     display: inline-block;
@@ -464,24 +457,9 @@ img.smiley {
 .item_micro h4 {
     line-height: 24px;
 }
-.related {
-    margin-bottom: 5px;
-    padding-left: 0;
-	margin-left: 0
-}
-.related .item_micro {
-	margin-bottom: 15px;
-}
-.item.full .related {
-    margin-bottom: 20px;
-}
 .related li h4, .related li p {
     display: inline-block;
     margin: 0;
-}
-.related li p {
-    color: #666;
-    padding-left: 10px;
 }
 .item_micro .label.label-primary {
 	border: 1px solid #337ab7;
@@ -553,13 +531,18 @@ img.smiley {
 
 .comments .media .pull-left img {
     width:40px;
-    border-radius: 100%;
 }
 .comments .comment img {
     margin-top: 4px;
 }
 .comments .username {
     font-size: 14px;
+}
+.comment .media-body p {
+	margin-bottom: 0;
+}
+.comments .media{
+	margin-top: .5rem !important;
 }
 .comments .comment .media-body .fa-circle {
     color: rgba(71, 173, 47, 0.54);
@@ -568,14 +551,8 @@ img.smiley {
     margin-top: 3px;
 }
 .comments .media textarea {
-    font-size: 16px;
-    padding: 8px 12px;
     max-height: 40px;
     transition: max-height 1.2s;
-    border-color: #ddd;
-    color: #555;
-    background-color: #f5f5f5;
-    box-shadow: none;
 }
 .comments .media .removeComment {
     display: none;
@@ -585,38 +562,51 @@ img.smiley {
     display: inline;
 }
 
-.assistances ul {
+/*.assistances ul {
 	margin-bottom: 25px;
 	color: #777;
 	font-size: 16px;
 }
 .assistances li {
 	padding: 1px 0;
+}*/
+#usersList li {
+	cursor: pointer;
 }
-.assistances li * {
+#usersAssistances li * {
     vertical-align: middle;
 }
-.assistances form {
+#usersAssistances form {
 	display: inline-block;
 }
-.assistances form * {
+#usersAssistances form * {
     line-height: 22px;
 }
-.assistances ul li:hover {
+#usersAssistances input{
+	border: none;
+	padding: 2px;
+	position: relative;
+	top: -2px;
+} 
+#usersAssistances li:hover {
 	background-color: #e6f6ff;
 }
-.assistances .attendee {
+#usersAssistances input {
+	line-height: 12px;
+	width: 50px;
+}
+#usersAssistances .attendee {
     color: #000;
     font-weight: bold;
 }
-.assistances .assistance {
+#usersAssistances .assistance {
 	word-wrap: break-word;
     display: inline-block;
 }
-.assistances .btn.btn-default {
+#usersAssistances .btn.btn-default {
     border-color: #0275d8;
 }
-.assistances .attendee {
+#usersAssistances .attendee {
 	display: inline-block;
 	margin-right: 10px;
 	width: 140px;
@@ -624,26 +614,22 @@ img.smiley {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-.assistances .save {
+#usersAssistances .save {
 	display: inline-block;
 	margin-left: 10px;
 	padding: 0 6px;
 	margin-top: -3px;
 }
-.assistances .control {
+#usersAssistances .control {
 	margin-left: 10px;
 	opacity: 0;
 	display: inline-block;
 	transition: .1s opacity;
 }
-.assistances li:hover .control {
+#usersAssistances li:hover .control {
 	opacity: 1;
 }
-.assistances input {
-	line-height: 12px;
-	width: 50px;
-}
-.assistances .adduser {
+#usersAssistances .adduser {
 	margin-bottom: 15px;
 }
 
@@ -674,6 +660,7 @@ img.smiley {
 .calendar tbody tr td {
     text-align: center;
     border: 1px solid #eee;
+    padding: .75rem 2px;
 }
 .calendar tbody tr td a {
     display: block;
@@ -728,9 +715,6 @@ img.smiley {
     overflow: hidden;
     transition: max-height 1.2s;
 } 
-.itemForm .form-group {
-    overflow: hidden;
-}
 .itemForm .itemCategory {
     margin-top: 50px;
 }
@@ -846,12 +830,8 @@ img.smiley {
     margin: 0 0 5px 5px;
 }
 
-.profileAvatar {
-    text-align: center;
-}
 .profileAvatar img {
     border-radius: 6px;
-    margin: 0 auto;
 }
 
 .relations h4 {
@@ -1083,17 +1063,12 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 		height: 40px;
 		width: 40px;
 	}
-	.userProfile h2, .userProfile p {
-		text-align: center;
-	}
-	.profileAvatar img {
-        max-width: 90px;
-    }
     .bigcalendar .calendar-heading {
         font-size: 16px;
     }
     .calendar thead tr th {
         font-size: 14px;
+        padding: .75rem 2px;
     }
     .item .panel-heading .panel-title {
         font-size: 20px;
@@ -1104,6 +1079,7 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
     }
     .item .itemActions a, .item .itemActions .like span {
 	    margin: 5px 20px 20px 0;
+	    font-size: 80%;
     } 
     .micro .date span {
         font-size: 12px;

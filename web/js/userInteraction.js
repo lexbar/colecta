@@ -39,12 +39,12 @@ function typeChosen(type) { //Set the type of item chosen
         
         if(itemSubmitType != '')
         {
-            $('#'+itemSubmitType+'Handler').removeClass('active');
+            $('#'+itemSubmitType+'Handler a').removeClass('active');
             $('#'+itemSubmitType+'Form').addClass('hiddenForm');  
         }
         
         $('#'+type+'Form').removeClass('hiddenForm');
-        $('#'+type+'Handler').addClass('active');
+        $('#'+type+'Handler a').addClass('active');
                 
         itemSubmitType = type;
         

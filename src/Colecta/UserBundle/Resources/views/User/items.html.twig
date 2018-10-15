@@ -3,30 +3,32 @@
 {% block title %}Perfil de {{ user.name }}{% endblock %}
 
 {% block article %}
-	<div class="col-xs-12 col-sm-4 col-md-3 userProfile">
-	    {% include 'ColectaUserBundle:User:profileUserData.html.twig' with { 'active' : 'items' } %}
-	</div>
-	<div class="col-xs-12 col-sm-8 col-md-9">
-	    <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
-	    
-	    {% for item in items %}   
-	        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-	        {% set path = path | replace({'/':'Bundle:'}) %}
-	        {% include path with { 'item': item } only %}
-	    
-	    {% else %}
-	        <p class="lead">No ha publicado nada... por ahora.</p>
-	    {% endfor %}
-	    
-	    {% if items | length > 0 and ( page > 1 or thereAreMore ) %}
-	    <ul class="pager">
-	      <li class="previous{% if page == 1 %} disabled{% endif %}">
-	        <a href="{% if page > 1 %}{{ path('userItems', {'id': user.id, 'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-	      </li>
-	      <li class="next{% if not thereAreMore %} disabled{% endif %}">
-	        <a href="{% if thereAreMore %}{{ path('userItems', {'id': user.id, 'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-	      </li>
-	    </ul>
-	    {% endif %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-4 col-md-3 userProfile">
+		    {% include 'ColectaUserBundle:User:profileUserData.html.twig' with { 'active' : 'items' } %}
+		</div>
+		<div class="col-xs-12 col-sm-8 col-md-9">
+		    <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
+		    
+		    {% for item in items %}   
+		        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+		        {% set path = path | replace({'/':'Bundle:'}) %}
+		        {% include path with { 'item': item } only %}
+		    
+		    {% else %}
+		        <p class="lead">No ha publicado nada... por ahora.</p>
+		    {% endfor %}
+		    
+		    {% if items | length > 0 and ( page > 1 or thereAreMore ) %}
+		    <ul class="pager">
+		      <li class="previous{% if page == 1 %} disabled{% endif %}">
+		        <a href="{% if page > 1 %}{{ path('userItems', {'id': user.id, 'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+		      </li>
+		      <li class="next{% if not thereAreMore %} disabled{% endif %}">
+		        <a href="{% if thereAreMore %}{{ path('userItems', {'id': user.id, 'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+		      </li>
+		    </ul>
+		    {% endif %}
+	    </div>
     </div>
 {% endblock %}

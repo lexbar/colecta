@@ -42,21 +42,21 @@
             
         <div class="preview">
             {% set file = files.first %}
-            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-responsive" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}"></a>
+            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}"><img class="img-fluid" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}"></a>
         </div>
     {% elseif thumbnails > 0 %}
         <div class="row thumbnails">        
             {% for file in files | slice(0,6) %}
                 {% if file.filetype in ['jpeg','gif','png'] %}                    
-                    <div class="col-xs-6 col-sm-4">
+                    <div class="col-6 col-sm-4">
                         <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">
                             {% if loop.index == 6 and files | length > 6 %}
                                 <div class="moreHandler">
-                                    <img class="img-responsive" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}">
+                                    <img class="img-fluid" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}">
                                     <div class="more"><span>+{{ files | length - 6 }}</span></div>
                                 </div>
                             {% else %}
-                                <img class="img-responsive" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}">
+                                <img class="img-fluid" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':file.slug, 'width':275, 'height':275}) }}">
                             {% endif %}
                             
                         </a>

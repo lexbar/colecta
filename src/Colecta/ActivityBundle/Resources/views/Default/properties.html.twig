@@ -1,9 +1,9 @@
 {% set isRoute = item.type == 'Activity/Route' %}
 <ul class="properties row list-unstyled">
-    <li class="col-xs-6">Distancia: <br><strong>{% if item.distance > 0 %}{{ item.distance }} km{% else %}--{% endif %}</strong></li>
+    <li class="col-lg-6">Distancia: <br><strong>{% if item.distance > 0 %}{{ item.distance }} km{% else %}--{% endif %}</strong></li>
     
     
-    <li class="col-xs-6">Desnivel: <br><strong>{% if item.uphill > 0 %}{{ item.uphill }} m{% else %}--{% endif%}</strong></li>
+    <li class="col-lg-6">Desnivel: <br><strong>{% if item.uphill > 0 %}{{ item.uphill }} m{% else %}--{% endif%}</strong></li>
     
     
     {% if item.time > 0 %}
@@ -26,7 +26,7 @@
         {% endif %}
     {% endif %}
     
-    <li class="col-xs-6">Duración: <br><strong>{% if item.time > 0 %}{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m{% else %}--{% endif%}</strong> </li>
+    <li class="col-lg-6">Duración: <br><strong>{% if item.time > 0 %}{% if days > 0 %}{{ days }}d {% endif %}{{ hours }}h {{ minutes }}m{% else %}--{% endif%}</strong> </li>
     
-    <li class="col-xs-6">Dificultad: <br><strong>{% if item.difficulty != '' %}{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderada', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}{% else %}--{% endif %}</strong> </li>    
+    <li class="col-lg-6">Dificultad: <br><strong>{% if item.difficulty != '' %}{{ item.difficulty | replace({'easy':'fácil', 'moderate':'moderada', 'hard':'difícil', 'very hard':'muy difícil', 'experts only':'sólo expertos'}) }}{% else %}--{% endif %}</strong> </li>    
 </ul>

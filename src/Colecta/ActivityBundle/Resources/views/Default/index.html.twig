@@ -1,33 +1,12 @@
-{% extends '::frontend.html.twig' %}
+{% extends '::frontend_main.html.twig' %}
 
 {% block title %}Mapas{% endblock %}
 
-{% block article %}
-
-    <div class="row">    
-        <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
-        	{# CUSTOM NAVIGATION #}
-            {#{ render(controller('ColectaSiteBundle:Page:navigation')) }#}
-            
-            <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
-                <div class="inner-addon right-addon">
-                    <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
-                    <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
-                </div>
-            </form>
-            
-            <div class="categories">
-                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
-                <ul class="list-unstyled hidden-xs" id="categoriesList">
-                    {% for category in categories %}
-                    <li><a href="{{ path('ColectaRouteCategoryIndex',{'slug':category.slug}) }}">{{ category.name }}</a></li>
-                    {% endfor %}
-                </ul>
+{% block content %}
+            <div class="d-flex justify-content-between pt-3">
+            	<h2>Rutas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+            	{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaRouteNew')}}" class="btn btn-success"><i class="fa fa-plus fa-fw"></i> Publicar</a></p>{% endif %}
             </div>
-        </div>
-        <div class="col-xs-12 col-sm-8 col-md-9">
-            {% if app.user and app.user.role.name != 'ROLE_BANNED' %} <a href="{{ path('ColectaRouteNew')}}" class="btn btn-small btn-primary pull-right post-content"><i class="fa fa-plus fa-fw"></i> Publicar</a> {% endif %}
-            <h2>Rutas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
             
             {% for item in items %}
                 {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
@@ -49,6 +28,4 @@
                   </li>
                 </ul>
             {% endif %}
-        </div>
-    </div>
 {% endblock %}

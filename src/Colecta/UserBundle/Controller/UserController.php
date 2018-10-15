@@ -256,6 +256,16 @@ class UserController extends Controller
         return $response;
     }
     
+    public function userNamesSearchListAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $users = $em->getRepository('ColectaUserBundle:User')->findBy(array(), array('name'=>'ASC'));
+        
+        $response = new Response($this->renderView('ColectaUserBundle:User:usersSearchList.html.twig', array('users' => $users)),200);
+        return $response;
+    }
+    
     public function avatarAction($uid,$width,$height)
     {
         $this->get('request')->setRequestFormat('image');

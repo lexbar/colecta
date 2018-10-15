@@ -5,200 +5,188 @@
 {% block article %}
 
 {% if item.canEdit(app.user) %}
-    <div class="row">
-        <div class="col-sm-offset-3 col-lg-offset-2 col-sm-5 col-lg-7">
+    <div class="d-flex justify-content-between flex-column flex-sm-row mb-3 mt-2">
+        <div class="">
             <h2>Editar {{ item.name }}</h2>
         </div>
-        <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaRouteView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver a la ruta</a>
+        <div class="">
+            <a class="btn btn-light d-block d-sm-inline-block" href="{{ path('ColectaRouteView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver a la ruta</a>
         </div>
     </div>
     
-    <div class="monocontent">
-        <form action="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal" role="form" onSubmit="{% if rich_text_editor %}postForm();{% endif %}$('#RouteSubmit').attr('disabled','disabled').addClass('disabled'); $('#RouteSubmitText').html('Enviando...'); $('#RouteSubmitLoading').addClass('icon-refresh icon-spin');" action="{{ path('ColectaRouteUpload') }}" enctype="multipart/form-data" id="RouteForm">
-            <fieldset>
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteFile">Modificar track</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <input type="file" id="RouteFile" name="file">
-                    </div>
+    <form action="{{ path('ColectaRouteEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal" role="form" onSubmit="{% if rich_text_editor %}postForm();{% endif %}$('#RouteSubmit').attr('disabled','disabled').addClass('disabled'); $('#RouteSubmitText').html('Enviando...'); $('#RouteSubmitLoading').addClass('icon-refresh icon-spin');" action="{{ path('ColectaRouteUpload') }}" enctype="multipart/form-data" id="RouteForm">
+        <fieldset>
+            <div class="form-group">
+                <label for="RouteFile">Modificar track</label>
+                <div class="">
+                    <input type="file" id="RouteFile" name="file">
                 </div>
-                
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteName">Nombre</label>
-                    <div class="col-sm-9 col-lg-10">
-                        {{ form_widget(form.name, { 'attr': {'class' : 'form-control'} }) }}
-                    </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="RouteName">Nombre</label>
+                {{ form_widget(form.name, { 'attr': {'class' : 'form-control'} }) }}
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteText">Descripción</label>
+                {{ form_widget(form.text, { 'id': 'RouteText', 'attr': {'class' : 'form-control', 'rows': '5'} }) }}
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteDistance">Distancia</label>
+                <div class="input-group">
+                    {{ form_widget(form.distance, {'attr':{'class':'form-control','value': item.distance}}) }}
+                    <div class="input-group-append"><span class="input-group-text"> km</span></div>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteText">Descripción</label>
-                    <div class="col-sm-9 col-lg-10">
-                        {{ form_widget(form.text, { 'id': 'RouteText', 'attr': {'class' : 'form-control', 'rows': '5'} }) }}
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteUphill">Subida</label>
+                <div class="input-group">
+                    {{ form_widget(form.uphill, {'attr':{'class':'form-control','value': item.uphill}}) }}
+                    <div class="input-group-append"><span class="input-group-text"> metros</span></div>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteDistance">Distancia</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {{ form_widget(form.distance, {'attr':{'class':'form-control','value': item.distance}}) }}<span class="input-group-addon"> km</span>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteDownhill">Bajada</label>
+                <div class="input-group">
+                    {{ form_widget(form.downhill, {'attr':{'class':'form-control','value': item.downhill}}) }}
+                    <div class="input-group-append"><span class="input-group-text"> metros</span></div>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteUphill">Subida</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {{ form_widget(form.uphill, {'attr':{'class':'form-control','value': item.uphill}}) }}<span class="input-group-addon"> metros</span>
-                        </div>
-                    </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="RouteTime">Tiempo</label>
+                <div class="d-flex justify-content-between flex-column flex-sm-row">
+	                <div class="input-group mr-1">
+	                    {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
+	                    {% if item.time < 60 %}
+	                        {% set secconds = item.time %}
+	                    {% else %}
+	                        {% set minutes = item.time // 60 %}
+	                        {% set secconds = item.time - minutes * 60 %}
+	                    
+	                        {% if minutes >= 60 %}
+	                            {% set hours = minutes // 60 %}
+	                            {% set minutes = minutes - hours * 60 %}
+	                        
+	                            {% if hours >= 24 %}
+	                                {% set days = hours // 24 %}
+	                                {% set hours = hours - days * 24 %}
+	                            {% endif %}
+	                        
+	                        {% endif %}
+	                    {% endif %}
+	                    <input type="text" class="form-control" name="days" value="{{ days }}"> 
+	                    
+	                    <div class="input-group-append"><span class="input-group-text"> dias</span></div>
+	                </div>
+	                <div class="input-group mr-1">
+	                    <select class="custom-select" name="hours">
+	                        {% for hour in 0..23 %}
+	                            <option value="{{ hour }}"{% if hour == hours %}selected="selected"{% endif%}>{{ hour }}</option>
+	                        {% endfor %}
+	                    </select>     
+	                           
+	                    <div class="input-group-append"><span class="input-group-text"> horas</span></div>
+	                </div>
+	                <div class="input-group">
+	                    <select class="custom-select" name="minutes">
+	                        {% for minute in 0..59 %}
+	                            <option value="{{ minute }}"{% if minute == minutes %}selected="selected"{% endif%}>{{ minute }}</option>
+	                        {% endfor %}
+	                    </select>
+	                    
+	                    <div class="input-group-append"><span class="input-group-text"> minutos</span></div>
+	                </div>
+				</div>
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteAvgspeed">Velocidad media</label>
+                <div class="input-group">
+                    {{ form_widget(form.avgspeed, {'attr':{'value': item.avgspeed, 'class':'form-control'}}) }}<input type="text" class="form-control" value="{{ item.avgspeed }}" disabled><span class="input-group-addon"> km/h</span>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteDownhill">Bajada</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {{ form_widget(form.downhill, {'attr':{'class':'form-control','value': item.downhill}}) }}<span class="input-group-addon"> metros</span>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteMaxspeed">Velocidad máx.</label>
+                <div class="input-group">
+                    {{ form_widget(form.maxspeed, {'attr':{'value': item.maxspeed, 'class':'form-control' }}) }}<input type="text" class="form-control" value="{{ item.maxspeed }}" disabled><span class="input-group-addon"> km/h</span>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteTime">Tiempo</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {% set secconds, minutes, hours, days = 0, 0, 0, 0 %}
-                            {% if item.time < 60 %}
-                                {% set secconds = item.time %}
-                            {% else %}
-                                {% set minutes = item.time // 60 %}
-                                {% set secconds = item.time - minutes * 60 %}
-                            
-                                {% if minutes >= 60 %}
-                                    {% set hours = minutes // 60 %}
-                                    {% set minutes = minutes - hours * 60 %}
-                                
-                                    {% if hours >= 24 %}
-                                        {% set days = hours // 24 %}
-                                        {% set hours = hours - days * 24 %}
-                                    {% endif %}
-                                
-                                {% endif %}
-                            {% endif %}
-                            <input type="text" class="form-control" name="days" value="{{ days }}"> 
-                            
-                            <span class="input-group-addon"> dias, </span>
-                        
-                            <select class="form-control" name="hours">
-                                {% for hour in 0..23 %}
-                                    <option value="{{ hour }}"{% if hour == hours %}selected="selected"{% endif%}>{{ hour }}</option>
-                                {% endfor %}
-                            </select>     
-                                   
-                            <span class="input-group-addon"> horas y </span>
-                        
-                            <select class="form-control" name="minutes">
-                                {% for minute in 0..59 %}
-                                    <option value="{{ minute }}"{% if minute == minutes %}selected="selected"{% endif%}>{{ minute }}</option>
-                                {% endfor %}
-                            </select>
-                            
-                            <span class="input-group-addon"> minutos </span>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteMinheight">Cota inferior</label>
+                <div class="input-group">
+                    {{ form_widget(form.minheight, {'attr':{'class':'form-control','value': item.minheight}}) }}<span class="input-group-addon"> metros</span>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteAvgspeed">Velocidad media</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {{ form_widget(form.avgspeed, {'attr':{'value': item.avgspeed, 'class':'form-control'}}) }}<input type="text" class="form-control" value="{{ item.avgspeed }}" disabled><span class="input-group-addon"> km/h</span>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteMaxheight">Cota superior</label>
+                <div class="input-group">
+                    {{ form_widget(form.maxheight, {'attr':{'class':'form-control','value': item.maxheight}}) }}<span class="input-group-addon"> metros</span>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteMaxspeed">Velocidad máx.</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {{ form_widget(form.maxspeed, {'attr':{'value': item.maxspeed, 'class':'form-control' }}) }}<input type="text" class="form-control" value="{{ item.maxspeed }}" disabled><span class="input-group-addon"> km/h</span>
-                        </div>
-                    </div>
+            </div>
+          
+            <div class="form-group">
+                <label for="RouteDifficulty">Dificultad</label>
+                <div class="">
+                    <label class="radio pr-2">
+                        <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
+                        <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
+                        Fácil
+                    </label>
+                    <label class="radio pr-2">
+                        <input type="radio" name="difficulty" id="RouteDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
+                        <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
+                        Moderado
+                    </label>
+                    <label class="radio pr-2">
+                        <input type="radio" name="difficulty" id="RouteDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
+                        <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
+                        Difícil
+                    </label>
+                    <label class="radio pr-2">
+                        <input type="radio" name="difficulty" id="RouteDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
+                        <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
+                        Muy difícil
+                    </label>
+                    <label class="radio pr-2">
+                        <input type="radio" name="difficulty" id="RouteDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
+                        <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
+                        Sólo expertos
+                    </label>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteMinheight">Cota inferior</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {{ form_widget(form.minheight, {'attr':{'class':'form-control','value': item.minheight}}) }}<span class="input-group-addon"> metros</span>
-                        </div>
-                    </div>
+            </div>
+          
+            {{ form_rest(form) }}
+          
+            <div class="form-group">
+                <label for="PostText">Categoría</label>
+                {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':item.category.id})) }}
+            </div>
+            
+            <div class="form-group">
+	            <label>Privacidad</label> 
+	            <p><button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-light">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></p>
+	        </div>
+	        
+	        <div class="form-group">
+            	<div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <a href="{{ path('ColectaRouteDelete', {slug: item.slug}) }}" class="btn btn-outline-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
                 </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteMaxheight">Cota superior</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <div class="input-group">
-                            {{ form_widget(form.maxheight, {'attr':{'class':'form-control','value': item.maxheight}}) }}<span class="input-group-addon"> metros</span>
-                        </div>
-                    </div>
-                </div>
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="RouteDifficulty">Dificultad</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="RouteDifficultyEasy" value="easy"{% if item.difficulty == 'easy' %} checked{% endif %}>
-                            <img src="/img/difficulty/easy.gif" alt="fácil" width="70" height="12">
-                            Fácil
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="RouteDifficultyModerate" value="moderate"{% if item.difficulty == 'moderate' %} checked{% endif %}>
-                            <img src="/img/difficulty/moderate.gif" alt="moderado" width="70" height="12">
-                            Moderado
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="RouteDifficultyHard" value="hard"{% if item.difficulty == 'hard' %} checked{% endif %}>
-                            <img src="/img/difficulty/hard.gif" alt="difícil" width="70" height="12">
-                            Difícil
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="RouteDifficultyVeryhard" value="very hard"{% if item.difficulty == 'very hard' %} checked{% endif %}>
-                            <img src="/img/difficulty/very-hard.gif" alt="muy difícil" width="70" height="12">
-                            Muy difícil
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="difficulty" id="RouteDifficultyExpertsonly" value="experts only"{% if item.difficulty == 'experts only' %} checked{% endif %}>
-                            <img src="/img/difficulty/experts-only.gif" alt="sólo expertos" width="70" height="12">
-                            Sólo expertos
-                        </label>
-                    </div>
-                </div>
-              
-                {{ form_rest(form) }}
-              
-                <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="PostText">Categoría</label>
-                    <div class="col-sm-9 col-lg-10">
-                        {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':item.category.id})) }}
-                    </div>
-                </div>
-              
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
-                        <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
-                        <button type="submit" class="btn btn-primary" id="RouteSubmit"><i id="RouteSubmitLoading"></i> <span id="RouteSubmitText">Actualizar</span></button>
-                        <a href="{{ path('ColectaRouteDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
+            </div>
+        </fieldset>
+    </form>
     
-    <hr>
-    <div class="col-sm-offset-3 col-lg-offset-2">
+    <hr class="mt-3">
+    
+    <div>
         <h3>Enlazar con otros contenidos</h3>
         <div class="monocontent">
             {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}

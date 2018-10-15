@@ -1,35 +1,32 @@
-<nav class="navbar navbar-default" role="navigation">    
+
+<nav class="navbar navbar-dark bg-dark justify-content-between py-2 px-2 py-sm-1 px-sm-3" role="navigation">    
+	<a class="navbar-brand" href="/">
+		{% if web_logo %}<img alt="{{ web_title }}" height="24" src="{{ path('ColectaLogo') }}" class="d-inline-block align-top">{% endif %}
+        {% if not web_logo_only %}<span>{{ web_title }}</span>{% endif %}
+    </a>
+    
+    			        
 	{% if app.user %}
-		<div class="visible-xs sidebardisplay" onclick="$('#header .nav').toggleClass('hidden-xs');">
-	        <a href="#"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40"></a>
-	    </div>
-	{% else %}
-		<div class="visible-xs sidebardisplay">
-			<a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-sign-in fa-2x fa-fw"></i></a>
-		</div>
-	{% endif %}
-	
-    <div class="container" id="header">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">
-                {% if web_logo %} <img alt="{{ web_title }}" height="24" src="{{ path('ColectaLogo') }}" class="web_logo">{% endif %}
-                {% if not web_logo_only %}<span>{{ web_title }}</span>{% endif %}
-            </a>
-        </div>
-        
-        {% if app.user %}
-            {% if item is defined %}
-                {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
-            {% else %}
-                {% set notifications = colectauser.notDismissedNotifications %}
-            {% endif %}
-            
-            {% set messages = colectauser.notDismissedMessages %}
-        <ul class="nav navbar-nav navbar-right hidden-xs">
-            <li{% if bun == 'UserBundle' and con == 'MessageController' %} class="active"{% endif %}><a href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge">{{ messages | length }}</span>{% endif %} Mensajes</a></li>
-            <li{% if bun == 'UserBundle' and con == 'NotificationController' %} class="active"{% endif %}><a href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge">{{ notifications | length }}</span>{% endif %} Alertas</a></li>
-            <li class="dropdown userProfile">
-                <a href="#" id="userProfile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40" class="hidden-xs"><span class="visible-xs text-primary"><i class="fa fa-user-plus fa-fw"></i> Mi Cuenta</span></a>
+		{% if item is defined %}
+            {% set notifications = colectauser.notDismissedNotifications(item.id) %}    
+        {% else %}
+            {% set notifications = colectauser.notDismissedNotifications %}
+        {% endif %}
+					            
+		{% set messages = colectauser.notDismissedMessages %}
+		
+        <ul class="navbar-nav  flex-row ml-md-auto p-0 px-sm-0">
+            <li class="nav-item{% if bun == 'UserBundle' and con == 'MessageController' %} active{% endif %}">
+            	<a class="nav-link mr-2 mr-sm-3" href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge badge-pill badge-danger">{{ messages | length }}</span>{% endif %}<span class="sr-only"> Mensajes</span></a>
+            </li>
+            <li class="nav-item{% if bun == 'UserBundle' and con == 'NotificationController' %} active{% endif %}">
+            	<a class="nav-link mx-2 mx-sm-3" href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge badge-pill badge-danger">{{ notifications | length }}</span>{% endif %}<span class="sr-only"> Alertas</span></a>
+            </li>
+            <li class="nav-item{% if bun == 'UserBundle' and con == 'UserController' %} active{% endif %}">
+            	<a class="nav-link ml-2 ml-sm-3" href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="fa fa-user fa-fw"></i><span class="sr-only"> Mi Perfil</span></a>
+            </li>
+            {#<li class="nav-item dropdown userProfile">
+                <a href="#" id="userProfile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40" class="rounded-circle"><span class="sr-only"> <i class="fa fa-user-plus fa-fw"></i> Mi Cuenta</span></a>
                 <ul class="dropdown-menu">
                     <li><a href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="fa fa-user fa-fw"></i> Mi Perfil</a></li>
                     <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="fa fa-bar-chart fa-fw"></i> Rendimiento</a></li>
@@ -40,71 +37,69 @@
                     <li role="separator" class="divider"></li>
                     <li><a href="{{ path('userLogout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
                 </ul>
-            </li>
+            </li>#}
         </ul>
-        
-        {% else %}
-        
-        <ul class="nav navbar-nav navbar-right hidden-xs">
-            {#<li><a href="#"><i class="fa fa-user"></i> Solicitar Invitación</a></li>#}
-            <li><a href="{{ path('userLogin')}}" onClick="$('#loginModal').modal();return false;"><i class="fa fa-user"></i> Iniciar Sesión</a></li>    
-        </ul>
-        
-        <!-- Modal -->
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form class="form-horizontal" action="{{ path('userLoginCheck') }}" method="post">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Iniciar Sesión</h4>
-                        </div>
+					        
+    {% else %}
+    
+    <a href="{{ path('userLogin')}}" class="btn btn-outline-light px-2 px-sm-3 py-1" onClick="$('#loginModal').modal();return false;">Iniciar sesión</a>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form class="form-horizontal" action="{{ path('userLoginCheck') }}" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Iniciar Sesión</h4>
                         
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-xs-12 col-sm-2 control-label" for="username">Email</label>
-                                <div class="col-xs-12 col-sm-10">
-                                    <input type="text" id="username" class="form-control" name="_username" placeholder="Email" value="">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="col-xs-12 col-sm-2 control-label" for="password">Contraseña</label>
-                                <div class="col-xs-12 col-sm-10">
-                                    <input type="password" id="password" class="form-control" name="_password" placeholder="Contraseña">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="col-xs-12 col-lg-offset-2 col-lg-10">
-                                    <label class="">
-                                        <small><input type="checkbox" id="remember_me" name="_remember_me" checked> Mantenerme conectado </small>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="col-xs-12 col-lg-offset-2 col-lg-10">
-                                    <a href="{{ path('userResetPassword') }}">¿Has olvidado tu contraseña?</a>
-                                </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 control-label" for="username">Email</label>
+                            <div class="col-xs-12 col-sm-10">
+                                <input type="text" id="username" class="form-control" name="_username" placeholder="Email" value="">
                             </div>
                         </div>
                         
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" name="login" class="btn btn-primary">Iniciar Sesión</button>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 control-label" for="password">Contraseña</label>
+                            <div class="col-xs-12 col-sm-10">
+                                <input type="password" id="password" class="form-control" name="_password" placeholder="Contraseña">
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        
+                        <div class="form-group">
+                            <div class="col-xs-12 col-lg-offset-2 col-lg-10">
+                                <label class="">
+                                    <input type="checkbox" id="remember_me" name="_remember_me" checked> Mantenerme conectado
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="col-xs-12 col-lg-offset-2 col-lg-10">
+                                <a href="{{ path('userResetPassword') }}">¿Has olvidado tu contraseña?</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" name="login" class="btn btn-primary">Iniciar Sesión</button>
+                    </div>
+                </form>
             </div>
         </div>
-        
-        {% endif %}
     </div>
+    
+    {% endif %}
 </nav>
 
+
 {% if web_header_img | length %}
-<div class="container">
-    <a href="/"><img src="{{ path('ColectaHeaderimg', { n: random(web_header_img | length - 1) }) }}" class="hidden-xs headerimg img-responsive"></img></a>
-</div>
+    <a href="/" style="display:block"><img src="{{ path('ColectaHeaderimg', { n: random(web_header_img | length - 1) }) }}" class="img-fluid"></img></a>
 {% endif %}

@@ -56,7 +56,7 @@ class Post extends Item
      */
     public function setText($text)
     {
-        $text = preg_replace("/(\n|\r\n|\r)+$/ise","",$text);
+        $text = preg_replace_callback("/(\n|\r\n|\r)+$/is",function ($match){return '';},$text);
         $this->text = $text;
     }
 

@@ -1,150 +1,122 @@
-{% extends '::frontend.html.twig' %}
+{% extends '::frontend_main.html.twig' %}
 
 {% block title %}Inicio{% endblock %}
 
-{% block article %}
-    <div class="row dashboard">    
-        <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
-        	{# CUSTOM NAVIGATION #}
-            {{ render(controller('ColectaSiteBundle:Page:navigation')) }}
-            
-        	<form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
-                <div class="inner-addon right-addon">
-                    <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
-                    <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
-                </div>
-            </form>
-            	
-            {# CATEGORIES #}
-            <div class="categories">
-                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
-                <ul class="list-unstyled hidden-xs" id="categoriesList">
-                    {% for categoryItem in categories %}
-                    <li><a href="{{ path('ColectaCategoryView',{'slug':categoryItem.slug}) }}">{{ categoryItem.name }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            
-            
-            {% if adsense and not app.user %}
-                {# show Adsense banner only to not logged visitors #}
-                <div id="adsense">
-                {{ adsense | raw }}
-                </div>
-            {% endif %}
-        </div>
-        <div class="col-xs-12 col-sm-8 col-md-9">
-        	{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaPostNew')}}" class="btn btn-small btn-default pull-right post-content"><i class="fa fa-plus fa-fw"></i> Publicar </a></p>{% endif %}
-        
-        	<h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+{% block content %}
     
-		    {% if not app.user and web_description and page <= 1 %}<p class="lead">{{ web_description | nl2br }}</p>{% endif %}
-    
-        	{# NEXT ACTIVITIES #}
-            {% if nextactivities | length and page <= 1 %}
-            	
-                {% set dias_semana = {
-                    'Monday':'lunes',
-                    'Tuesday':'martes',
-                    'Wednesday':'miércoles',
-                    'Thursday':'jueves',
-                    'Friday':'viernes',
-                    'Saturday':'sábado',
-                    'Sunday':'domingo'
-                }%}
-                <div class="panel card panel-default">
-                    <div class="row nextactivities">
-                    {% for item in nextactivities %}
-                    	<div class="col-md-6">
-	                        <div class="panel-body">
-	                            <h3>{% if item.dateini | date('z') == 'today' | date('z') %}Hoy{% elseif item.dateini | date('z') == 'today'  | date('z') + 1 %}Mañana{% else %}Próximo {{ item.dateini | date('l') | replace (dias_semana) }}{% endif %}:</h3>
-	                            {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
-	                            {% set path = path | replace({'/':'Bundle:'}) %}
-	                            {% include path with { 'item': item } only %}
-	                        </div>
-                        </div>
-                    {% endfor %}
+    <div class="d-flex justify-content-between pt-3">
+		<h2>Inicio{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+		{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaPostNew')}}" class="btn btn-success"><i class="fa fa-plus fa-fw"></i> Publicar </a></p>{% endif %}
+	</div>
+
+    {% if not app.user and web_description and page <= 1 %}<p class="lead">{{ web_description | nl2br }}</p>{% endif %}
+
+	{# NEXT ACTIVITIES #}
+    {% if nextactivities | length and page <= 1 %}
+    	
+        {% set dias_semana = {
+            'Monday':'lunes',
+            'Tuesday':'martes',
+            'Wednesday':'miércoles',
+            'Thursday':'jueves',
+            'Friday':'viernes',
+            'Saturday':'sábado',
+            'Sunday':'domingo'
+        }%}
+        <div class="row mb-3" id="nextactivities">
+            {% for item in nextactivities %}
+            	<div class="col-lg mt-2">
+            		<div class="card bg-white border-0 rounded box-shadow">
+	                    <div class="card-body">
+	                        <h3 class="mb-3">{% if item.dateini | date('z') == 'today' | date('z') %}Hoy{% elseif item.dateini | date('z') == 'today'  | date('z') + 1 %}Mañana{% else %}Próximo {{ item.dateini | date('l') | replace (dias_semana) }}{% endif %}:</h3>
+	                        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+	                        {% set path = path | replace({'/':'Bundle:'}) %}
+	                        {% include path with { 'item': item } only %}
+	                    </div>
                     </div>
                 </div>
-            {% endif %}
-        
-            {# GRAPHS #}
-            {% if app.user and app.user.role.name != 'ROLE_BANNED' and page <= 1 %}
-            <div class="row nextactivities">
-            	<div class="col-md-6">
-                    <div class="panel card panel-default ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')">
-                        <div class="panel-body">
-	                        <h3>Ranking:</h3>
-	                        
-                            <div id="ranksummary"><i class="fa fa-refresh fa-spin"></i> Cargando... </div>                            
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                   <div class="panel card panel-default performancesummary" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
-                        <div class="panel-body">
-                            <h3>Tus últimos 30 días:</h3>
-                            
-                            <div id="performancesummary"><i class="fa fa-refresh fa-spin"></i> Cargando... </div> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        
-                
-            {#% set shownItems = [] %}
-            
-            {% for item in items if item.id not in shownItems %}
-                {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-                {% set path = path | replace({'/':'Bundle:'}) %}
-                {% include path with { 'item': item } only %}
-                
-                {% set shownItems = shownItems | merge([item.id]) %}
-                {% for ri in item.related %}
-                    {% set shownItems = shownItems | merge([ri.id]) %}
-                {% endfor %}
-            {% else %}
-                {% if app.user %}
-                <div class="jumbotron">
-                    <h1>¡Listos para empezar!</h1>
-                    {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
-                    <p>¿Qué quieres hacer ahora?</p>
-                    <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-magic fa-fw"></i> Personalizar la página</a> <a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendNewUser') }}" role="button"><i class="fa fa-user-plus fa-fw"></i> Crear nuevo usuario</a>{% elseif app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
-                    {% endif %}
-                </div>
-                {% endif %}
-            {% endfor %#}
-            
-            {% for item in items %}
-                {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-                {% set path = path | replace({'/':'Bundle:'}) %}
-                {% include path with { 'item': item } only %}
-            {% else %}
-                {% if app.user %}
-                <br><br>
-                <div class="jumbotron">
-                    <h1>¡Listos para empezar!</h1>
-                    {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
-                    <p>¿Qué quieres hacer ahora?</p>
-                    <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-magic fa-fw"></i> Personalizar la web</a> <a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendNewUser') }}" role="button"><i class="fa fa-user-plus fa-fw"></i> Crear nuevo usuario</a>{% elseif app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
-                    {% endif %}
-                </div>
-                {% endif %}
             {% endfor %}
-            
-            {% if page > 1 or thereAreMore %}
-                <ul class="pager">
-                  <li class="previous{% if page == 1 %} disabled{% endif %}">
-                    <a href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-                  </li>
-                  <li class="next{% if not thereAreMore %} disabled{% endif %}">
-                    <a href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-                  </li>
-                </ul>
+        </div>
+    {% endif %}
+
+    {# GRAPHS #}
+    {% if app.user and app.user.role.name != 'ROLE_BANNED' and page <= 1 %}
+    <div class="bg-white rounded box-shadow my-4">
+	    <div class="row">
+	    	<div class="col-md-6 mt-2">
+	            <div class="ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')">
+	                <div class="p-2 px-sm-3">
+	                    <h3>Ranking:</h3>
+	                    
+	                    <div id="ranksummary"><i class="fa fa-refresh fa-spin"></i> Cargando... </div>                            
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-md-6 mt-2">
+	           <div class="performancesummary" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')">
+	                <div class="p-2 px-sm-3">
+	                    <h3>Tu Actividad:</h3>
+	                    
+	                    <div id="performancesummary"><i class="fa fa-refresh fa-spin"></i> Cargando... </div> 
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+    </div>
+    {% endif %}
+
+        
+    {#% set shownItems = [] %}
+    
+    {% for item in items if item.id not in shownItems %}
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+        
+        {% set shownItems = shownItems | merge([item.id]) %}
+        {% for ri in item.related %}
+            {% set shownItems = shownItems | merge([ri.id]) %}
+        {% endfor %}
+    {% else %}
+        {% if app.user %}
+        <div class="jumbotron">
+            <h1>¡Listos para empezar!</h1>
+            {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
+            <p>¿Qué quieres hacer ahora?</p>
+            <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-magic fa-fw"></i> Personalizar la página</a> <a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendNewUser') }}" role="button"><i class="fa fa-user-plus fa-fw"></i> Crear nuevo usuario</a>{% elseif app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
             {% endif %}
         </div>
-    </div>
+        {% endif %}
+    {% endfor %#}
+    
+    {% for item in items %}
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+    {% else %}
+        {% if app.user %}
+        <br><br>
+        <div class="jumbotron">
+            <h1>¡Listos para empezar!</h1>
+            {% if app.user and app.user.role.name != 'ROLE_BANNED' %}
+            <p class="lead">¿Qué quieres hacer ahora?</p>
+            <p>{% if app.user and app.user.role.getSiteConfig %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendIndex') }}" role="button"><i class="fa fa-magic fa-fw"></i> Personalizar la web</a> <a class="btn btn-primary btn-lg" href="{{ path('ColectaBackendNewUser') }}" role="button"><i class="fa fa-user-plus fa-fw"></i> Crear nuevo usuario</a>{% elseif app.user and app.user.role.contribute %}<a class="btn btn-primary btn-lg" href="{{ path('ColectaItemNew') }}" role="button"><i class="fa fa-plus fa-fw"></i> Nueva publicación</a>{% endif %} <a class="btn btn-primary btn-lg" href="{{ path('userEditProfile') }}" role="button"><i class="fa fa-user fa-fw"></i> Editar mi perfil</a></p>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% endfor %}
+    
+    {% if page > 1 or thereAreMore %}
+        <ul class="pager">
+          <li class="previous{% if page == 1 %} disabled{% endif %}">
+            <a href="{% if page > 1 %}{{ path('ColectaDashboardPage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+          </li>
+          <li class="next{% if not thereAreMore %} disabled{% endif %}">
+            <a href="{% if thereAreMore %}{{ path('ColectaDashboardPage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+          </li>
+        </ul>
+    {% endif %}
+    
 {% endblock %}
 
 {% block stylesheets %}
@@ -185,4 +157,5 @@
             
         </script>
     {% endif %}
+    
 {% endblock %}

@@ -6,7 +6,7 @@
 {% if app.user %}
     {% set userLikes = item.userLikes(app.user) %}
     
-    <div class="itemActions">
+    <div class="itemActions py-3">
     
         {# LIKE #}
         <span id="itemLikes{{ item.id }}" class="like">
@@ -57,7 +57,7 @@
                 
                     {% if assists %}
                         </span>
-                        <span class="undo hidden">
+                        <span class="undo d-none">
                             Deshacer <i class="fa fa-trash-o"></i>
                         </span>
                     {% endif %} 

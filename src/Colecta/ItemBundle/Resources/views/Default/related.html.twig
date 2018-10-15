@@ -1,11 +1,12 @@
 {% if items | length > 0 %}
-
-<h4>Relacionado con {{ item.name }}:</h4>
-<ul class="related fa-ul">
-    {% for item in items if item.draft == 0 %}  
-        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
-        {% set path = path | replace({'/':'Bundle:'}) %}
-        <li>{% include path with { 'item': item } only %}</li>
-    {% endfor %}
-</ul>
+<div class="bg-light px-3 pt-3">
+	<strong class="text-secondary d-block mb-2">Relacionado con {{ item.name }}:</strong>
+	<ul class="related fa-ul m-0">
+	    {% for item in items if item.draft == 0 %}  
+	        {% set path = 'Colecta' ~ item.type ~ ':micro.html.twig' %}
+	        {% set path = path | replace({'/':'Bundle:'}) %}
+	        <li class="pb-3">{% include path with { 'item': item } only %}</li>
+	    {% endfor %}
+	</ul>
+</div>
 {% endif %}

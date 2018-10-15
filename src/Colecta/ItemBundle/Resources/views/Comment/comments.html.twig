@@ -16,7 +16,7 @@
     {% set new = app.user and app.user != comment.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') < comment.date %}
     
     <div class="media comment">
-        <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left">
+        <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left mr-2">
             <img src="{{ path('userAvatar',{'uid':comment.user.id,'width':40,'height':40}) }}"> 
         </a> 
             
@@ -60,8 +60,8 @@
 
 {% if app.user and item.canComment(app.user ) %}
     <div class="media">
-        <span class="pull-left">
-            <img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}"> 
+        <span class="float-left mr-2">
+            <img class="rounded" src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}"> 
         </span>
         
         <div class="media-body form">

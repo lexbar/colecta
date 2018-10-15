@@ -78,7 +78,11 @@ class PageController extends Controller
     		    }
             }
             
-            return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page, 'contactRequest' => $contactRequest));
+            $categories = $em->createQuery(
+            'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.name ASC'
+        )->setFirstResult(0)->setMaxResults(50)->getResult();
+            
+            return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page, 'contactRequest' => $contactRequest, 'categories'=>$categories));
         }
         else
         {

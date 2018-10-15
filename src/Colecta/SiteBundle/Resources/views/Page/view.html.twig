@@ -1,12 +1,12 @@
-{% extends '::frontend.html.twig' %}
+{% extends '::frontend_main.html.twig' %}
 
 {% block title %}{{ page.name }}{% endblock %}
 
-{% block article %}
-    <h2><i class="fa fa-{{ page.icon }}"></i> {{ page.name }}</h2>
+{% block content %}
+    <h2 class=" pt-3"><i class="fa fa-{{ page.icon }}"></i> {{ page.name }}</h2>
     
     <div class="monocontent">
-        {{ page.text | usercontent | raw | nl2br }}
+        <p>{{ page.text | usercontent | raw | nl2br }}</p>
         
         {% if page.contact and page.contactData is iterable and not app.session.flashbag.get('pageFormSent') | length > 0 %}
             <hr>
@@ -28,7 +28,7 @@
                 <form action="{{ path('ColectaPage', {slug: page.slug}) }}" method="POST" class="form-horizontal" onSubmit="$('#ContactSubmit').attr('disabled','disabled').addClass('disabled'); $('#ContactSubmitText').html('Enviando...'); $('#ContactSubmitLoading').addClass('icon-refresh icon-spin');">
                     <fieldset>
                     
-                      <input type="text" class="hidden" name="website" value=""> {# anti-spam system #}
+                      <input type="text" class="d-none" name="website" value=""> {# anti-spam system #}
                     
                       {% for key,field in page.contactData['fields'] %}
                       
@@ -69,7 +69,7 @@
         {% endif %} {# /contact page #}
         
         {% if app.user and app.user.role.siteConfigSettings %}
-            <a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class="btn btn-sm btn-link"><i class="fa fa-pencil"></i> Administrar contenido</a>
+            <p><small><a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class=""><i class="fa fa-pencil"></i> Administrar contenido</a></small></p>
         {% endif %}
     </div>
 {% endblock %}
