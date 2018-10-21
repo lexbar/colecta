@@ -185,6 +185,8 @@ class RouteController extends Controller
                     $url .= '|'. $itemtrack[$i]->getLatitude() .','. $itemtrack[$i]->getLongitude();
                 }
                 
+                $url .= "&key=" . $this->container->getParameter('maps_api_key');
+                
                 $image = getContent($url);
                 
                 //Write file to cache

@@ -84,7 +84,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=weather"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ maps_api_key }}"></script>
     <script src="/js/highcharts.js"></script>
     <script>
      <!--
@@ -118,12 +118,10 @@
     var points = [{{ points }}];
     var markers = [{{ markers | raw }}];
     var bounds;
-    var weatherLayer;
     
     function initialize() {   
         
         bounds = new google.maps.LatLngBounds(new google.maps.LatLng({{ boundsswlat }}, {{ boundsswlng }}), new google.maps.LatLng({{ boundsnelat }}, {{ boundsnelng }}));
-        weatherLayer = new google.maps.weather.WeatherLayer({temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS, windSpeedUnits: google.maps.weather.WindSpeedUnit.KILOMETERS_PER_HOUR});
         
         var mapOptions = {
             zoom: 3,
@@ -135,15 +133,6 @@
         
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
         map.fitBounds(bounds);
-        
-        /* Weather control button 
-        var weatherDIV = document.createElement('div');
-        weatherDIV.className = 'control';
-        weatherDIV.innerHTML = 'Meteorología';
-        google.maps.event.addDomListener(weatherDIV, 'click', function() {
-            toggleWeather();
-        });
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(weatherDIV);*/
         
         if(markers.length) {setMarkers(markers);}
         
