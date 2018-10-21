@@ -3,7 +3,7 @@
 {% if commentslength > 0 or app.user %}<div class="comments">{% endif %}
 
 {% if collapse is defined and commentslength > collapse %}
-    <p>
+    <p class="mt-2">
     <button class="btn btn-outline-secondary" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
         <i class="fa fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
     </button>

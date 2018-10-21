@@ -287,9 +287,6 @@ img.smiley {
     color: #000;
     text-decoration: none;
 }
-.item.full p {
-    font-size: 16px;
-}
 .item .title {
     font-size: 20px;
     position: relative;
