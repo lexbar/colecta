@@ -4,7 +4,7 @@
 
 {% if collapse is defined and commentslength > collapse %}
     <p>
-    <button class="btn btn-default" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
+    <button class="btn btn-outline-secondary" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
         <i class="fa fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
     </button>
     </p>
