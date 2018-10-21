@@ -16,7 +16,7 @@
 	            </div>
 		        
 		        <div class="linksList d-none d-sm-block ml-3" id="navigationList">
-		        	<strong class="pb-2 pt-1 pt-sm-3 d-block">Secciones</strong>
+		        	{#<strong class="pb-2 pt-1 pt-sm-3 d-block">Secciones</strong>
 					<ul class="list-unstyled">
 					    <li class="{% if bun == 'ItemBundle' and con == 'PostController' %} active{% endif %}">
 					        <a href="{{ path('ColectaPostIndex') }}">
@@ -39,7 +39,7 @@
 						        <a href="{{ path('ColectaBackendIndex') }}" class="text-secondary"><i class="fa fa-cog fa-fw"></i> Admin</a>
 						    </li>
 						{% endif %}
-					</ul>
+					</ul>#}
 
 			        {# CUSTOM NAVIGATION #}
 					{{ render(controller('ColectaSiteBundle:Page:navigation')) }}
