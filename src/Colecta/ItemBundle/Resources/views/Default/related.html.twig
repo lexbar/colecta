@@ -1,5 +1,5 @@
 {% if items | length > 0 %}
-<div class="bg-light px-3 pt-3">
+<div class="bg-light px-3 pt-3 mt-3">
 	<strong class="text-secondary d-block mb-2">Relacionado con {{ item.name }}:</strong>
 	<ul class="related fa-ul m-0">
 	    {% for item in items if item.draft == 0 %}  
