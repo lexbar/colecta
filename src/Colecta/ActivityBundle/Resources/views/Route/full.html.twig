@@ -136,16 +136,6 @@
         
         if(markers.length) {setMarkers(markers);}
         
-        /* Fullscreen control button */
-        var fullscreenDIV = document.createElement('div');
-        fullscreenDIV.className = 'control big';
-        fullscreenDIV.innerHTML = '<i class="fa fa-arrows-alt fa-fw"></i>';
-        fullscreenDIV.index = 0;
-        google.maps.event.addDomListener(fullscreenDIV, 'click', function() {
-            toggleFullScreen();
-        });
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(fullscreenDIV);
-        
         positionMarker = new google.maps.Marker({
             position: new google.maps.LatLng(points[0][0], points[0][1]),
             map: map
