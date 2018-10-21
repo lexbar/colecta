@@ -78,8 +78,8 @@
         <ul class="list-group" id="usersAssistances">    
         {% for assistance in item.assistances %}
         
-            <li id="user{{ assistance.user.id }}assistance" class="list-group-item">
-            	<i class="fa fa-user fa-fw"></i>
+            <li id="user{{ assistance.user.id }}assistance" class="list-group-item px-3 py-2">
+            	<img src="{{ path('userAvatar',{'uid':assistance.user.id,'width':40,'height':40}) }}" style="width:20px;" class="rounded mr-2">
                 <a href="{{ path('userProfile', { 'id': assistance.user.id }) }}" itemprop="attendee" class="attendee">{{assistance.user.name}}</a> 
                 {% if haspassed %}
                     {% if assistance.confirmed %}
