@@ -22,6 +22,9 @@ parameters:
     limit_space: 100  # MB
     limit_users: 12    # users with role that allows interaction
     
+    #Google Maps
+    maps_api_key: ~
+    
     #Uploads
     uploads_adapter: uploads_local # uploads_local|uploads_s3
     amazon_s3.key: ~
@@ -34,9 +37,11 @@ parameters:
     #Mailgun
     mailgun_key: ~
     mailgun_domain: ~
-    mailer_transport: mailgun
 security:
     firewalls:
         main:
             remember_me:
                 key:        ThisTokenIsNotSoSecretChangeIt
+twig:
+    globals:
+        maps_api_key: '%maps_api_key%'
