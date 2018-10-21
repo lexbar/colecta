@@ -202,11 +202,7 @@ img.smiley {
 #mainTabs li:last-child a {
 	margin-right: 0;
 }
-#mainTabs li a:hover, #mainTabs li a:focus {
-    background-color: transparent;
-    border-color: transparent;
-    color: #000;
-}
+
 #mainTabs li.active a {
     border-width: 0;
     border-bottom: 2px solid #222;

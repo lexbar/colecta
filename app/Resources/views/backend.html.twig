@@ -14,27 +14,32 @@
         {% set bun, con, act = '', '', ''%}
     {% endif %}
     
-    {% include '::header.html.twig' %}
+    <div class="container p-0">
+	    {% include '::header.html.twig' %}
+	    {% include 'ColectaBackendBundle:Default:navigation.html.twig' %}  
+    </div>
+    
     <div class="container">
-        {% include 'ColectaBackendBundle:Default:navigation.html.twig' %}  
-        <div class="content">
-            {% for flashMessage in app.session.flashbag.get('error') %}
-                <div class="alert alert-danger">
-                    <i class="fa fa-exclamation-circle"></i> 
-                    {{ flashMessage }}
-                </div>
-            {% endfor %}
-            {% for flashMessage in app.session.flashbag.get('success') %}
-                <div class="alert alert-success">
-                    <i class="fa fa-check-square"></i> 
-                    {{ flashMessage }}
-                </div>
-            {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+		    <div class"row">
+		        <div class="col alert alert-danger mx-0 mb-0 mt-3">
+		            <i class="fa fa-exclamation-circle"></i> 
+		            {{ flashMessage }}
+		        </div>
+		    </div>
+		{% endfor %}
+		
+		{% for flashMessage in app.session.flashbag.get('success') %}
+		    <div class"row">
+		        <div class="col alert alert-success mx-0 mb-0 mt-3">
+		            <i class="fa fa-check-square"></i> 
+		            {{ flashMessage }}
+		        </div>
+		    </div>
+		{% endfor %}
 
-            {% block article %}{% endblock %}
-        </div>
+        {% block article %}{% endblock %}
         
         {% include '::footer.html.twig' %}
-        
     </div>             
 {% endblock %}

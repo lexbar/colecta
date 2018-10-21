@@ -1,17 +1,17 @@
 <div class="nav-scroller bg-white">
 <ul class="nav nav-tabs mb-1 py-2 px-2 px-sm-3 border-0" id="mainTabs">
     <li class="nav-item">
-        <a class="mr-4{% if bun == 'ItemBundle' and con == 'PostController' %} active{% endif %}" href="{{ path('ColectaPostIndex') }}">
+        <a class="mr-4{% if bun == 'ItemBundle' and con == 'PostController' %} active{% else %} text-secondary{% endif %}" href="{{ path('ColectaPostIndex') }}">
             <i class="fa fa-comment-o"></i> Foro
         </a>
     </li>
     <li class="nav-item">
-        <a class="mr-4{% if bun == 'ActivityBundle' and con == 'EventController' %} active{% endif %}" href="{{ path('ColectaEventIndex') }}"> 
+        <a class="mr-4{% if bun == 'ActivityBundle' and con == 'EventController' %} active{% else %} text-secondary{% endif %}" href="{{ path('ColectaEventIndex') }}"> 
             <i class="fa fa-calendar-o"></i>  Calendario
         </a>
     </li>
     <li class="nav-item">
-        <a class="mr-4{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} active{% endif %}" href="{{ path('ColectaMapIndex') }}">
+        <a class="mr-4{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} active{% else %} text-secondary{% endif %}" href="{{ path('ColectaMapIndex') }}">
             <i class="fa fa-map-o"></i> Rutas
         </a>
     </li>
