@@ -1,1 +1,29 @@
 {% extends 'ColectaItemBundle:Default:itemMicro.html.twig' %}
+
+{% set dias_semana = {
+            'Monday':'Lunes',
+            'Tuesday':'Martes',
+            'Wednesday':'Miércoles',
+            'Thursday':'Jueves',
+            'Friday':'Viernes',
+            'Saturday':'Sábado',
+            'Sunday':'Domingo'
+        }%}
+{% set meses = {
+            '1':'enero',
+            '2':'febrero',
+            '3':'marzo',
+            '4':'abril',
+            '5':'mayo',
+            '6':'junio',
+            '7':'julio',
+            '8':'agosto',
+            '9':'septiembre',
+            '10':'octubre',
+            '11':'noviembre',
+            '12':'diciembre'
+        }%}
+
+{% block title %}
+<a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}" class="badge badge-primary">{% if item.dateini | date('z') == 'today' | date('z') %}Hoy{% elseif item.dateini | date('z') == 'today'  | date('z') + 1 %}Mañana{% else %}{{ item.dateini | date('l') | replace (dias_semana) }} {{ item.dateini | date('d') }} {{ item.dateini | date('n') | replace(meses)}}{% endif %}</a> <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
+{% endblock %}

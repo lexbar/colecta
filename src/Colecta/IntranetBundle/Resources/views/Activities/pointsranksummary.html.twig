@@ -24,7 +24,7 @@
 			<div class="row">
 		    <div class="col-8"><span class="badge badge-{% if user == app.user %}secondary{% else %}light{% endif %}">{{ n + 1 }}</span> <strong>{{ user.name }}</strong></div>
 		    <div class="col-4">
-		        <div class="progress mt-2">
+		        <div class="progress">
 		            <div class="progress-bar progress-bar-primary" style="width: {% if maxpoints > 0 %}{{ (points[user.id] / maxpoints * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div>
 		        </div>
 		    </div>
@@ -39,7 +39,7 @@
 			<div class="row">
 		    <div class="col-8"><span class="badge badge-{% if user == app.user %}secondary{% else %}light{% endif %}">{{ userpos + n }}</span> <strong>{{ user.name }}</strong></div>
 		    <div class="col-4">
-		        <div class="progress mt-2">
+		        <div class="progress">
 		            <div class="progress-bar progress-bar-primary" style="width: {% if maxpoints > 0 %}{{ (points[user.id] / maxpoints * 100) | number_format(1,'.',',') }}{% else %}0{% endif %}%;"></div>
 		        </div>
 		    </div>
