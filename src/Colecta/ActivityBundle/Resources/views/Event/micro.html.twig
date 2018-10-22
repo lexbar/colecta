@@ -25,5 +25,5 @@
         }%}
 
 {% block title %}
-<a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}" class="badge badge-primary">{% if item.dateini | date('z') == 'today' | date('z') %}Hoy{% elseif item.dateini | date('z') == 'today'  | date('z') + 1 %}Mañana{% else %}{{ item.dateini | date('l') | replace (dias_semana) }} {{ item.dateini | date('d') }} {{ item.dateini | date('n') | replace(meses)}}{% endif %}</a> <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
+<a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}" class="badge badge-primary">{% if item.dateini | date('z') == 'today' | date('z') %}Hoy{% elseif item.dateini | date('z') == 'today'  | date('z') + 1 %}Mañana{% else %}{{ item.dateini | date('l') | replace (dias_semana) }} {{ item.dateini | date('d') }} {{ item.dateini | date('n') | replace(meses)}}{% if item.dateini | date('Y') != 'today' | date('Y') %} {{ item.dateini | date('Y') }}{% endif %}{% endif %}</a> <a href="{{ path('Colecta' ~ itemTypeName ~ 'View', { 'slug': item.slug }) }}">{{ item.name }}</a>
 {% endblock %}
