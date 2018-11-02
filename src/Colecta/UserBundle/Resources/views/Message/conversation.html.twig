@@ -4,12 +4,12 @@
 
 {% block article %}
 
-<div class="row title">
+<div class="row title mb-2">
     <div class="col-sm-{{ app.user.role.messageSend ? '9' : '12' }}">
         <h2>{{ interlocutor.name }}</h2>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-default btn-block btn-head" href="{{ path('userMessages') }}"><i class="fa fa-reply"></i> Mensajes</a>
+        <a class="btn btn-outline-primary btn-block" href="{{ path('userMessages') }}"><i class="fa fa-reply"></i> Mensajes</a>
     </div>
 </div>
 

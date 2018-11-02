@@ -22,7 +22,7 @@
 	<div class="container">
 		{% for flashMessage in app.session.flashbag.get('error') %}
 		    <div class"row">
-		        <div class="col alert alert-danger mx-0 mb-0 mt-3">
+		        <div class="col alert alert-danger mx-0 my-2">
 		            <i class="fa fa-exclamation-circle"></i> 
 		            {{ flashMessage }}
 		        </div>
@@ -31,7 +31,7 @@
 		
 		{% for flashMessage in app.session.flashbag.get('success') %}
 		    <div class"row">
-		        <div class="col alert alert-success mx-0 mb-0 mt-3">
+		        <div class="col alert alert-success mx-0 my-2">
 		            <i class="fa fa-check-square"></i> 
 		            {{ flashMessage }}
 		        </div>

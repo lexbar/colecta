@@ -130,7 +130,7 @@ class MessageController extends Controller
                 if(!$destinationUser)
                 {
                     $this->get('session')->getFlashBag()->add('MessageDestinationError',true);
-                    $this->get('session')->getFlashBag()->add('error', 'No existe el usuario en la base de datos');
+                    $this->get('session')->getFlashBag()->add('error', 'No existe un usuario con ese nombre');
                     $persist = false;
                 }
             }

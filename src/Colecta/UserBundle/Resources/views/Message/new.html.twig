@@ -4,42 +4,32 @@
 
 {% block article %}
 
-<div class="row title">
+<div class="row title mb-2">
     <div class="col-sm-9">
         <h2>Nuevo mensaje</h2>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-default btn-block btn-head" href="{{ path('userMessages') }}"><i class="fa fa-reply"></i> Mensajes</a>
+        <a class="btn btn-outline-primary btn-block" href="{{ path('userMessages') }}"><i class="fa fa-reply"></i> Mensajes</a>
     </div>
 </div>
 
 {% if app.user %}
-    <div class="">
-        <form action="{{ path('userMessageNew') }}" method="POST" class="form-horizontal" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">
-            <fieldset>
-              <div class="form-group{% if app.session.flashbag.get('MessageDestinationError') %} has-error{% endif %}">
-                <label class="col-sm-3 col-lg-2 control-label" for="MessageName">Para:</label>
-                <div class="col-sm-9 col-lg-10">
-                  <input type="text" class="form-control" id="userSearch" name="destination" autocomplete="off" value="{% if userTo is defined %}{{userTo.name}}{% else %}{% for MessageDestination in app.session.flashbag.get('MessageDestination') %}{{ MessageDestination }}{% endfor %}{% endif %}"> <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
-                  <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
-                </div>
-              </div>
-              
-              <div class="form-group{% if app.session.flashbag.get('MessageTextError') %} has-error{% endif %}">
-                <label class="col-sm-3 col-lg-2 control-label" for="MessageText">Texto</label>
-                <div class="col-sm-9 col-lg-10">
-                  <textarea class="form-control" id="MessageText" name="text" rows="4">{% for MessageText in app.session.flashbag.get('MessageText') %}{{ MessageText }}{% endfor %}</textarea>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
-                    <button type="submit" class="btn btn-primary" id="updateBtn"><i id="updateBtnLoading"></i> Enviar Mensaje </button>
-                </div>
-              </div>
-            </fieldset>
-        </form>
-    </div>
+    <form action="{{ path('userMessageNew') }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">
+        <fieldset>
+            <div class="form-group{% if app.session.flashbag.get('MessageDestinationError') %} has-error{% endif %}">
+            	<label for="MessageName">Para:</label>
+            	<input type="text" class="form-control" id="userSearch" name="destination" autocomplete="off" value="{% if userTo is defined %}{{userTo.name}}{% else %}{% for MessageDestination in app.session.flashbag.get('MessageDestination') %}{{ MessageDestination }}{% endfor %}{% endif %}">
+            	{{ render(controller('ColectaUserBundle:User:userNamesSearchList')) }}
+            </div>
+          
+            <div class="form-group{% if app.session.flashbag.get('MessageTextError') %} has-error{% endif %}">
+	            <label for="MessageText">Texto</label>
+	            <textarea class="form-control" id="MessageText" name="text" rows="4">{% for MessageText in app.session.flashbag.get('MessageText') %}{{ MessageText }}{% endfor %}</textarea>
+            </div>
+          
+            <button type="submit" class="btn btn-primary" id="updateBtn"><i id="updateBtnLoading"></i> Enviar Mensaje </button>
+        </fieldset>
+    </form>
 {% else %}
     <div class="alert">Tienes que <a href="{{ path('userLogin') }}">iniciar sesión</a></div>
 {% endif %}
@@ -49,97 +39,23 @@
 
 {% block javascripts %}    
     <script>
-    var xhr;
-    var searchagain = false;
-    
-    function showResults()
-    {
-        if($('#userSearch').val().length < 2) {
-            hideResults();
-            return;
-        }
-        
-        $('#destinationLoading').removeClass('hidden');
-        
-        if(xhr && xhr.readyState != 4) {
-            searchagain = true;
-        } else {        
-            
-            xhr = $.ajax({
-                url: '{{ path('ColectaAjaxUserSearch') }}?search='+$('#userSearch').val(),
-                success: function(json) {
-                    $('#userResults').html('');
-                    $('#userResults').css('display','none');
-                    for(var i = 0; i < json.length; i++) {
-                        $('#userResults').append('<li id="userResult'+(i + 1)+'"><a tabindex="-1" href="#'+json[i].id+'" onClick="$(\'#userSearch\').val(\''+json[i].name+'\');hideResults();highlightUpdateBtn();return false;"> '+json[i].name+'</a></li>');
-                    } 
-                    if(json.length) { $('#userResults').css('display','block'); }
-                    //$('#searchButton').removeAttr("disabled"); 
-                },
-                cache: false
-            }).done(function() { 
-                if(searchagain) 
-                {
-                    searchagain = false;
-                    showResults();
-                }
-                else
-                {
-                    $('#destinationLoading').addClass('hidden');
-                }
-            });
-        }
-    }
-    
-    //Key up
-    $('#userSearch').keyup(function(e){
-        if($('#userResults li').length) {
-            var current = $('#userResults li.active');
-            var currentN = 0;
-            if(current.length) {
-                currentN = parseInt(current.attr('id').substring(10));
-            } 
-            
-            if(e.keyCode == 40){
-                if($('#userResult'+(currentN + 1)).length) {
-                    $('#userResult'+(currentN)).removeClass('active');
-                    $('#userResult'+(currentN + 1)).addClass('active');
-                    return;
-                }
-                return;
-            } else if(e.keyCode == 38){
-                if($('#userResult'+(currentN - 1)).length) {
-                    $('#userResult'+(currentN)).removeClass('active');
-                    $('#userResult'+(currentN - 1)).addClass('active');
-                    return;
-                }
-                return;
-            } else if(e.keyCode == 13){
-                if($('#userResult'+(currentN)).length) {
-                    $('#userResult'+(currentN)+' a').click();
-                    return;
-                }
-                return;
-            }
-        }
-        
-        showResults();
-    });
-    
-    function hideResults() 
-    {
-        $('#userResults').html('');
-        $('#userResults').css('display','none');
-    }
-    
-    function highlightUpdateBtn() 
-    {
-        $('#updateBtn').addClass('btn-primary');
-    }
-    
-    $(document).ready(function() {
-        {% if userTo is defined %} $('#MessageText').focus(); {% else %} $('#userSearch').focus(); {% endif %}  
-    });
-    
+    $(document).ready(function(){
+		$("#userSearch").on("keyup", function() {
+		var value = $(this).val().toLowerCase();
+		if(value == '') {
+		    $('#usersList').hide();
+		} else {
+		    $('#usersList').show();
+		    $("#usersList li").filter(function() {
+		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		}
+		});
+	});
+	
+	function userSelected(name, id) {
+		$('#userSearch').val(name);
+		$('#usersList').hide();
+	}    
     </script>
 {% endblock %}
