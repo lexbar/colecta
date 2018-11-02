@@ -113,16 +113,6 @@ img.smiley {
 	margin-top: 4px;
 	color: #333;
 }
-.btn.post-content {
-    color: #0275d8;
-    background-color: transparent;
-    border-color: #0275d8;
-}
-.btn.post-content:hover, .btn.post-content:active, .btn.post-content:focus {
-    color: #fff;
-    background-color: #0275d8;
-    border-color: #0275d8;
-}
 .categories {
     margin-top: 20px;
     padding: 10px;
@@ -865,6 +855,9 @@ img.smiley {
 }
 .messages img {
     margin-right: 15px;
+}
+.messages a.list-group-item, .messages a.list-group-item:hover {
+	color: #212529 !important;
 }
 
 .rank .progress {

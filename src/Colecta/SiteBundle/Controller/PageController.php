@@ -41,7 +41,7 @@ class PageController extends Controller
             {
                 $request = $this->get('request')->request;
                 
-                if($request->get('website') == '') // anti-spam system
+                if($request->get('web') == '') // anti-spam system
                 {      
 	                $contactRequest->setPage($page);
 	                $contactRequest->setUser($contactRequestUser);
