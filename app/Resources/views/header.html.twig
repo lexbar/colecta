@@ -54,7 +54,7 @@
 					        
     {% else %}
     
-    <a href="{{ path('userLogin')}}" class="btn btn-outline-light px-2 px-sm-3 py-1" onClick="$('#loginModal').modal();return false;">Iniciar sesión</a>
+    <a href="{{ path('userLogin')}}" class="btn btn-outline-light" onClick="$('#loginModal').modal();return false;"><i class="fa fa-fw fa-sign-in"></i><span class="sr-only">Iniciar sesión</span></a>
     
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">

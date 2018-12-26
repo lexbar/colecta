@@ -18,6 +18,9 @@
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
 }
+.navbar-brand {
+	font-size: 1em;
+}
 .box-shadow {
 	box-shadow: 0 .2rem .8rem rgba(0, 0, 0, .15);
 }
