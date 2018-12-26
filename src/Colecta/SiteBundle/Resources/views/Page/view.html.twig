@@ -28,13 +28,13 @@
                 <form action="{{ path('ColectaPage', {slug: page.slug}) }}" method="POST" class="form-horizontal" onSubmit="$('#ContactSubmit').attr('disabled','disabled').addClass('disabled'); $('#ContactSubmitText').html('Enviando...'); $('#ContactSubmitLoading').addClass('icon-refresh icon-spin');">
                     <fieldset>
                     
-                      <input type="text" class="d-none" name="web" value=""> {# anti-spam system #}
+                      <input type="text" class="form_web" name="phone" value=""> {# anti-spam system #}
                     
                       {% for key,field in page.contactData['fields'] %}
                       
                       <div class="form-group">
-                        <label class="col-sm-3 control-label" for="Contact{{ key }}">{{ field['title'] }}</label>
-                        <div class="col-sm-9">
+                        <label class="control-label" for="Contact{{ key }}">{{ field['title'] }}</label>
+                        <div>
                             {% if field['type'] == 'textarea' %}
                                 <textarea class="form-control" id="Contact{{ key }}" name="field{{ key }}" rows="5">{{ contactRequest.data[key] | default( field['value'] | default('')) }}</textarea>
                             {% elseif field['type'] == 'checkbox' %}
@@ -57,8 +57,10 @@
                       
                       {% endfor %}
                       
+                      <input type="hidden" class="form_web" name="valid_id" value="{{ valid_id }}"> {# anti-spam system #}
+                      
                       <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-9">
+                        <div>
                             <button type="submit" class="btn btn-success" id="ContactSubmit"><i id="ContactSubmitLoading"></i> <span id="ContactSubmitText">Enviar formulario</span></button>
                         </div>
                       </div>

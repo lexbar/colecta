@@ -41,7 +41,7 @@ class PageController extends Controller
             {
                 $request = $this->get('request')->request;
                 
-                if($request->get('web') == '') // anti-spam system
+                if($request->get('phone') == '' && $this->idIsValid($request->get('valid_id'))) // anti-spam systems
                 {      
 	                $contactRequest->setPage($page);
 	                $contactRequest->setUser($contactRequestUser);
@@ -80,9 +80,11 @@ class PageController extends Controller
             
             $categories = $em->createQuery(
             'SELECT c FROM ColectaItemBundle:Category c WHERE (c.posts + c.routes + c.events + c.files + c.places) > 0 ORDER BY c.name ASC'
-        )->setFirstResult(0)->setMaxResults(50)->getResult();
+			)->setFirstResult(0)->setMaxResults(50)->getResult();
             
-            return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page, 'contactRequest' => $contactRequest, 'categories'=>$categories));
+            $valid_id = base64_encode(time()); // Anti-spam system. I will check if the form takes too few seconds to fill
+            
+            return $this->render('ColectaSiteBundle:Page:view.html.twig', array('page' => $page, 'contactRequest' => $contactRequest, 'categories'=>$categories, 'valid_id' => $valid_id));
         }
         else
         {
@@ -102,6 +104,35 @@ class PageController extends Controller
             break;
         }
     }
+    
+	protected function idIsValid($value)
+	{
+		$time = base64_decode($value);
+		
+		if (!$time)
+		{
+			return false;
+		}
+		
+		if (!is_numeric($time))
+		{
+			return false;
+		}
+		
+		$time_ago = time() - $time;
+		
+		if ($time_ago > 84600)
+		{
+			return false;
+		}
+		
+		if ($time_ago < 8)
+		{
+			return false;
+		}
+		
+		return true;
+	}
     
     public function navigationAction()
     {
