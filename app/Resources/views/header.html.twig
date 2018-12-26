@@ -15,8 +15,20 @@
 					            
 		{% set messages = colectauser.notDismissedMessages %}
 		
-        <ul class="navbar-nav  flex-row ml-md-auto p-0 px-sm-0">
-            <li class="nav-item{% if bun == 'UserBundle' and con == 'MessageController' %} active{% endif %}">
+		<div class="dropdown">
+			<button class="btn btn-dark dropdown-toggle" type="button" id="dropdownUserButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fa fa-user"></i>
+			</button>
+			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownUserButton">
+				<a class="dropdown-item{% if bun == 'UserBundle' and con == 'MessageController' %} active{% endif %}" href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge badge-pill badge-danger">{{ messages | length }}</span>{% endif %} Mensajes</a>
+				<a class="dropdown-item{% if bun == 'UserBundle' and con == 'NotificationController' %} active{% endif %}" href="{{ path('userNotifications')}}"><i class="fa fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge badge-pill badge-danger">{{ notifications | length }}</span>{% endif %} Alertas</a>
+				<a class="dropdown-item{% if bun == 'UserBundle' and con == 'UserController' %} active{% endif %}" href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="fa fa-user fa-fw"></i> Mi Perfil</a>
+				<a class="dropdown-item" href="{{ path('userLogout') }}"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesión</a>
+			</div>
+		</div>
+		
+        {#<ul class="navbar-nav  flex-row ml-md-auto p-0 px-sm-0">
+            <li class="nav-item">
             	<a class="nav-link mr-2 mr-sm-3" href="{{ path('userMessages')}}"><i class="fa fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge badge-pill badge-danger">{{ messages | length }}</span>{% endif %}<span class="sr-only"> Mensajes</span></a>
             </li>
             <li class="nav-item{% if bun == 'UserBundle' and con == 'NotificationController' %} active{% endif %}">
@@ -24,7 +36,7 @@
             </li>
             <li class="nav-item{% if bun == 'UserBundle' and con == 'UserController' %} active{% endif %}">
             	<a class="nav-link ml-2 ml-sm-3" href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="fa fa-user fa-fw"></i><span class="sr-only"> Mi Perfil</span></a>
-            </li>
+            </li>#}
             {#<li class="nav-item dropdown userProfile">
                 <a href="#" id="userProfile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40" class="rounded-circle"><span class="sr-only"> <i class="fa fa-user-plus fa-fw"></i> Mi Cuenta</span></a>
                 <ul class="dropdown-menu">
@@ -37,8 +49,8 @@
                     <li role="separator" class="divider"></li>
                     <li><a href="{{ path('userLogout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
                 </ul>
-            </li>#}
-        </ul>
+            </li>#}{#
+        </ul>#}
 					        
     {% else %}
     
