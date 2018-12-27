@@ -27,7 +27,7 @@
                 <td>{% for condition in pointsCondition.requirement %}
                     {{ coditionName[condition.condition] }} {{ condition.condition in ['mt_distance','lt_distance','mt_uphill','lt_uphill'] ? condition.value }}{{ condition.condition == 'role' and roles_keys[condition.value] ? roles_keys[condition.value] }}{{ condition.condition == 'category' and categories_keys[condition.value] ? categories_keys[condition.value] }} {{ not loop.last ? ' + ' }}
                 {% endfor %}</td>
-                <td>{{ pointsCondition.operator }}{{ pointsCondition.value }}</td>
+                <td><span class="badge badge-secondary">{{ pointsCondition.operator | replace({'*':'x'}) }}{{ pointsCondition.value }}</span></td>
                 <td class="text-right"><a onClick="return confirm('¿Seguro que quieres ELIMINAR este caso?\n{{ pointsCondition.name }}')" href="{{ path('ColectaBackendPointsCaseDelete',{case_id:pointsCondition.id}) }}" class="text-danger">eliminar</a> / <a href="{{ path('ColectaBackendPointsCase',{case_id:pointsCondition.id}) }}" class="text-success">editar</a></td>
             </tr> 
         {% endfor %}
