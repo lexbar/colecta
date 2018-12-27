@@ -75,7 +75,7 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-md-6"><input type="text" value="{{ web_parameters.twig.globals.web_logo }}" class="form-control" id="web_logo" name="web_logo" placeholder="Dirección web de la imagen..."></div>
-                        <div class="col-md-6"><div style="position:relative;"><input style="position: relative; z-index: 2; font-size: 25px; -moz-opacity:0;filter:alpha(opacity: 0);opacity: 0;" type="file" id="web_logo_upload" name="web_logo_upload"></input><div style="position:absolute;top:0;left:0;width:100%;z-index:1;"><button id="web_logo_upload_button" class="btn btn-default btn-block"><i class="fa fa-upload"></i> Subir archivo</button></div></div></div>
+                        <div class="col-md-6"><div style="position:relative;"><input style="position: relative; z-index: 2; font-size: 25px; -moz-opacity:0;filter:alpha(opacity: 0);opacity: 0;" type="file" id="web_logo_upload" name="web_logo_upload"></input><div style="position:absolute;top:0;left:0;width:100%;z-index:1;"><button id="web_logo_upload_button" class="btn btn-default btn-block"><i class="far fa-upload"></i> Subir archivo</button></div></div></div>
                     </div>
                     <p class="help-block">Se recomienda no superar los 24 pixeles de altura.</p>
                     {% if web_parameters.twig.globals.web_logo %}
@@ -98,7 +98,7 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-md-6"><input type="text" value="" class="form-control" id="web_header_img" name="web_header_img" placeholder="Dirección web de la imagen..."></div>
-                        <div class="col-md-6"><div style="position:relative;"><input style="position: relative; z-index: 2; font-size: 25px; -moz-opacity:0;filter:alpha(opacity: 0);opacity: 0;" type="file" id="web_header_img_upload" name="web_header_img_upload"></input><div style="position:absolute;top:0;left:0;width:100%;z-index:1;"><button id="web_header_img_upload_button" class="btn btn-default btn-block"><i class="fa fa-upload"></i> Subir archivo</button></div></div></div>
+                        <div class="col-md-6"><div style="position:relative;"><input style="position: relative; z-index: 2; font-size: 25px; -moz-opacity:0;filter:alpha(opacity: 0);opacity: 0;" type="file" id="web_header_img_upload" name="web_header_img_upload"></input><div style="position:absolute;top:0;left:0;width:100%;z-index:1;"><button id="web_header_img_upload_button" class="btn btn-default btn-block"><i class="far fa-upload"></i> Subir archivo</button></div></div></div>
                     </div>
                     <p class="help-block">Si subes más de una imagen se mostrarán alternadas aleatoriamente.</p>
                     {% if web_parameters.twig.globals.web_header_img %}
@@ -137,7 +137,7 @@ $('#web_header_img_upload').change(FileChange);
 
 function FileChange() {
     if(this.files) {
-        $(this).parent().find('button').addClass('btn-success').removeClass('btn-default').html('<i class="fa fa-refresh"></i> Archivo seleccionado');
+        $(this).parent().find('button').addClass('btn-success').removeClass('btn-default').html('<i class="far fa-refresh"></i> Archivo seleccionado');
         $(this).parent().parent().parent().find('.form-control').val('.../' + this.files[0].name);
     }
 }

@@ -38,22 +38,22 @@
     </h2>
     
     <p class="event-date">
-        <span><i class="fa fa-calendar-o"></i>
+        <span><i class="far fa-calendar-o"></i>
         {{ item.dateini | date('l') | replace (dias_semana) }}, 
         {{ item.dateini | date('d') }} 
         de {% set month = item.dateini | date('n') | replace(meses) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}
         
         {% if item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %} 
             {# Same Day#}
-            </span> <span><i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} a {{ item.dateend | date('H:i') }}</span>
+            </span> <span><i class="far fa-clock-o"></i> {{ item.dateini | date('H:i') }} a {{ item.dateend | date('H:i') }}</span>
         {% else %}
             {# Different days #}
-             <i class="fa fa-clock-o"></i> {{ item.dateini | date('H:i') }} </span>
-                <span><i class="fa fa-long-arrow-right"></i>
+             <i class="far fa-clock-o"></i> {{ item.dateini | date('H:i') }} </span>
+                <span><i class="far fa-long-arrow-right"></i>
                 {{ item.dateend | date('l') | replace (dias_semana) }}, 
                 {{ item.dateend | date('d') }} 
                 de {% set month = item.dateend | date('n') | replace(meses) %}{% if item.dateend | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateend | date('y') }}{% endif %}
-                <i class="fa fa-clock-o"></i> {{ item.dateend | date('H:i') }}</span>
+                <i class="far fa-clock-o"></i> {{ item.dateend | date('H:i') }}</span>
         {% endif %}
     </p>
     
@@ -89,16 +89,16 @@
 	                        		<input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('d-none');" value="{{ points[assistance.user.id].points }}" class="text-right"> puntos | 
 	                        		<input name="user{{ assistance.user.id }}km" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('d-none');" value="{{ assistance.km }}" class="text-right"> km
 	                        	</span>
-	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save d-none btn btn-primary"><i class="fa fa-save"></i> Guardar</a>
-	                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="fa fa-times"></i></a>
+	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save d-none btn btn-primary"><i class="far fa-save"></i> Guardar</a>
+	                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="far fa-times"></i></a>
                             </form>
                         {% else %}
                         	<span class="assistance">{{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km</span>
                         {% endif %}
                     {% else %}
                         {% if canedit %}
-                            <a href="#" onClick="confirmAssistance({{ assistance.user.id }});return false;" class="text-success">Confirmar <i class="fa fa-check"></i></a> 
-                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="fa fa-times"></i></a>
+                            <a href="#" onClick="confirmAssistance({{ assistance.user.id }});return false;" class="text-success">Confirmar <i class="far fa-check"></i></a> 
+                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="far fa-times"></i></a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
@@ -115,7 +115,7 @@
         	<h3>Añadir personas:</h3>
             <div class="adduser">
                 <div class="input-group" id="addUser">
-                  <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user-plus"></i></span></div>
+                  <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-user-plus"></i></span></div>
                   <input type="text" class="form-control" placeholder="Nombre de usuario" id="userSearch" name="targetUser" autocomplete="off">
                 </div>
                 
@@ -163,7 +163,7 @@ function userSelected(name, id) {
 
 function addAssistance(name, user_id) {
 	    if($('#user'+user_id+'assistance').length == 0) { //if not already in list
-		    $('#usersAssistances').append('<li id="user'+user_id+'assistance" class="list-group-item"><i class="fa fa-user fa-fw"></i> <a href="/usuario/'+user_id+'/" itemprop="attendee" class="attendee">'+name+'</a> <i class="fa fa-spinner fa-pulse"></i></li>');
+		    $('#usersAssistances').append('<li id="user'+user_id+'assistance" class="list-group-item"><i class="far fa-user fa-fw"></i> <a href="/usuario/'+user_id+'/" itemprop="attendee" class="attendee">'+name+'</a> <i class="far fa-spinner fa-pulse"></i></li>');
 			confirmAssistance(user_id);
 			$('.no-assistance').remove();
 	    } else {
@@ -180,7 +180,7 @@ function addAssistance(name, user_id) {
 		.done(function (data) {
 			$('#user'+data.user_id+'assistance .text-success, #user'+data.user_id+'assistance .text-danger').remove();
 		
-        	{% if haspassed %}$('#user'+data.user_id+'assistance .attendee').after(' <form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'d-none\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'d-none\');" value="'+data.km+'" class="text-right"> km</span> <a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save d-none btn btn-primary"><i class="fa fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="fa fa-times"></i></a></form>');
+        	{% if haspassed %}$('#user'+data.user_id+'assistance .attendee').after(' <form action="" method="POST" onSubmit=""> <span class="assistance"><input name="user'+data.user_id+'points" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'d-none\');" value="'+data.points+'" class="text-right"> puntos | <input name="user'+data.user_id+'km" type="text" onKeyUp="$(this).css(\'border\',\'1px solid #337ab7\');$(\'#user'+data.user_id+'assistance .save\').removeClass(\'d-none\');" value="'+data.km+'" class="text-right"> km</span> <a href="#" onClick="updateAssistance('+data.user_id+');return false;" class="save d-none btn btn-primary"><i class="far fa-save"></i> Guardar</button><a class="control text-danger" href="#" onClick="removeAssistance('+data.user_id+');return false;">Borrar <i class="far fa-times"></i></a></form>');
         	{% endif %}
         	$('#user'+user_id+'assistance i.fa-spinner').remove();
 		})
@@ -215,7 +215,7 @@ function addAssistance(name, user_id) {
         	$('#user'+data.user_id+'assistance form input[name="user'+data.user_id+'km"]').val(data.km);
         	$('#user'+user_id+'assistance .save').addClass('d-none');
         	$('#user'+data.user_id+'assistance form input').css('border', '1px solid green');
-        	$('#user'+data.user_id+'assistance .assistance').after('<i class="fa fa-check text-success removemenow"></i>');
+        	$('#user'+data.user_id+'assistance .assistance').after('<i class="far fa-check text-success removemenow"></i>');
         	$('.removemenow').fadeOut(1000);
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {

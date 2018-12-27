@@ -9,12 +9,12 @@
         <h2>Nuevo mensaje</h2>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-outline-primary btn-block" href="{{ path('userMessages') }}"><i class="fa fa-reply"></i> Mensajes</a>
+        <a class="btn btn-outline-primary btn-block" href="{{ path('userMessages') }}"><i class="far fa-reply"></i> Mensajes</a>
     </div>
 </div>
 
 {% if app.user %}
-    <form action="{{ path('userMessageNew') }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">
+    <form action="{{ path('userMessageNew') }}" method="POST" onSubmit="if($('#userResults .active a').length) return false; else $('#updateBtnLoading').addClass('far fa-refresh fa-spin')">
         <fieldset>
             <div class="form-group{% if app.session.flashbag.get('MessageDestinationError') %} has-error{% endif %}">
             	<label for="MessageName">Para:</label>

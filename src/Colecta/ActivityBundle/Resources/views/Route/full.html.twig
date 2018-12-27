@@ -20,7 +20,7 @@
         <div class="col-sm-4 col-md-3">
             <div id="mapproperties">
                 <div class="dropdown">
-                    <button id="dropdownMenu" class="btn btn-primary btn-block dropdown-toggle" type="button" onClick="return false;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Descargar <i id="ddarrow" class="fa fa-download"></i></button>
+                    <button id="dropdownMenu" class="btn btn-primary btn-block dropdown-toggle" type="button" onClick="return false;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Descargar <i id="ddarrow" class="far fa-download"></i></button>
                     <ul class="dropdown-menu download" role="menu" aria-labelledby="dropdownMenu" id="dropdown">
                         <li role="presentation" class="dropdown-header">Track completo</li>
                         <li><a tabindex="-1" href="{{ path('ColectaRouteDownload', {'slug':item.slug, 'extension':'gpx'}) }}">GPX</a></li>
@@ -41,7 +41,7 @@
                 {% if item.relatedPlaces | length > 0 %}
                     <ul class="list-group" id="locations">
                     {% for p in item.relatedPlaces %}
-                        <li class="list-group-item" onClick="map.setZoom(14);google.maps.event.trigger(mapMarkers[{{ p.id }}], 'click');"><i class="fa fa-map-marker"></i> {{ p.name }}</li>
+                        <li class="list-group-item" onClick="map.setZoom(14);google.maps.event.trigger(mapMarkers[{{ p.id }}], 'click');"><i class="far fa-map-marker"></i> {{ p.name }}</li>
                     {% endfor %}
                     </ul>
                 {% endif %}

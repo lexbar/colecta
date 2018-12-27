@@ -9,7 +9,7 @@
             <h2>Editar {{ item.name }}</h2>
         </div>
         <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaPlaceView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al mapa</a>
+            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaPlaceView', {'slug':item.slug}) }}"><i class="far fa-angle-double-left"></i> Volver al mapa</a>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
                 <div class="input-group">
                     <input class="form-control" id="PlaceMapSearch" type="text" placeholder="Nombre del lugar...">
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" onClick="searchLocation();"><i class="fa fa-search" id="mapSearchIcon"></i> Ubicar en el mapa</button>
+                        <button class="btn btn-primary" type="button" onClick="searchLocation();"><i class="far fa-search" id="mapSearchIcon"></i> Ubicar en el mapa</button>
                     </span>
                 </div>
             </form>
@@ -29,7 +29,7 @@
             <div id="map" style="height:200px;margin:15px 0"></div>
             
             <div class="alert alert-info" id="PlaceInfo2">
-                <i class="fa fa-info-circle fa-lg"></i> <strong>Información: </strong> Haz click en el mapa para cambiar la localización.
+                <i class="far fa-info-circle fa-lg"></i> <strong>Información: </strong> Haz click en el mapa para cambiar la localización.
             </div>
         </div>
                 
@@ -61,7 +61,7 @@
                 <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
                     <input type="hidden" name="latitude" id="PlaceLatitude" value="{{ item.latitude }}">
                     <input type="hidden" name="longitude" id="PlaceLongitude" value="{{ item.longitude }}">
-                    <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
+                    <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="far fa-unlock"></i> Abierto{% else %}<i class="far fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                     <a href="{{ path('ColectaPlaceDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
                 </div>
@@ -99,10 +99,10 @@
     {
         if($('#privacy').val() == '1'){
             $('#privacy').val('0');
-            $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+            $('#privacyButton').html('<i class="far fa-lock"></i> Sólo usuarios');
         }else{
             $('#privacy').val('1');
-            $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+            $('#privacyButton').html('<i class="far fa-unlock"></i> Abierto');
         }
     } 
     

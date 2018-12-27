@@ -2,23 +2,23 @@
 <ul class="nav nav-tabs mb-1 py-2 px-2 px-sm-3 border-0" id="mainTabs">
     <li class="nav-item">
         <a class="mr-4{% if bun == 'ItemBundle' and con == 'PostController' %} active{% else %} text-secondary{% endif %}" href="{{ path('ColectaPostIndex') }}">
-            <i class="fa fa-comment-o"></i> Foro
+            <i class="far fa-comments"></i> Foro
         </a>
     </li>
     <li class="nav-item">
         <a class="mr-4{% if bun == 'ActivityBundle' and con == 'EventController' %} active{% else %} text-secondary{% endif %}" href="{{ path('ColectaEventIndex') }}"> 
-            <i class="fa fa-calendar-o"></i>  Calendario
+            <i class="far fa-calendar-week"></i>  Calendario
         </a>
     </li>
     <li class="nav-item">
         <a class="mr-4{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} active{% else %} text-secondary{% endif %}" href="{{ path('ColectaMapIndex') }}">
-            <i class="fa fa-map-o"></i> Rutas
+            <i class="far fa-map"></i> Rutas
         </a>
     </li>
     
     {% if app.user and app.user.role.getSiteConfig %}
 	    <li class="nav-item">
-	        <a href="{{ path('ColectaBackendIndex') }}" class="text-secondary"><i class="fa fa-cog fa-fw"></i> Admin</a>
+	        <a href="{{ path('ColectaBackendIndex') }}" class="text-secondary"><i class="far fa-cog fa-fw"></i> Admin</a>
 	    </li>
 	{% endif %}
 </ul>

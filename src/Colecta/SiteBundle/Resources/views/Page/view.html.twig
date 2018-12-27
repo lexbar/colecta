@@ -3,7 +3,7 @@
 {% block title %}{{ page.name }}{% endblock %}
 
 {% block content %}
-    <h2 class=" pt-3"><i class="fa fa-{{ page.icon }}"></i> {{ page.name }}</h2>
+    <h2 class=" pt-3"><i class="far fa-{{ page.icon }}"></i> {{ page.name }}</h2>
     
     <div class="monocontent">
         <p>{{ page.text | usercontent | raw | nl2br }}</p>
@@ -14,8 +14,8 @@
             {% if page.contactData['expiration'] is defined and page.contactData['expiration'] | date('U') < 'now' | date('U') %}
                 <div class="alert alert-warning">
                     <span class="fa-stack fa-lg">
-                        <i class="fa fa-square fa-stack-2x"></i>
-                        <i class="fa fa-exclamation-triangle fa-stack-1x fa-inverse"></i>
+                        <i class="far fa-square fa-stack-2x"></i>
+                        <i class="far fa-exclamation-triangle fa-stack-1x fa-inverse"></i>
                     </span> 
                     
                     {% if page.contactData['expirationText'] is defined %}
@@ -71,7 +71,7 @@
         {% endif %} {# /contact page #}
         
         {% if app.user and app.user.role.siteConfigSettings %}
-            <p><small><a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class=""><i class="fa fa-pencil"></i> Administrar contenido</a></small></p>
+            <p><small><a href="{{ path('ColectaBackendPage', {'page_id':page.id}) }}" class=""><i class="far fa-pencil"></i> Administrar contenido</a></small></p>
         {% endif %}
     </div>
 {% endblock %}

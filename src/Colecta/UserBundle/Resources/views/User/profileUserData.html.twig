@@ -6,11 +6,11 @@
 		{% if user.profile and not user.profile.empty and app.user and app.user.role.userView %}
 		    <p class="mt-2"><strong>{{ user.profile.name }} {{ user.profile.surname }}</strong> {{ user.profile.idNumber ? '(' ~ user.profile.idNumber ~ ')' }} {% if user.profile.partnerId and app.user and app.user.role.userEdit %}<a href="{{ path('ColectaBackendUserProfile',{user_id: user.id}) }}">#{{ user.profile.partnerId }}</a>{% endif %}</p>
 		    <p class="text-secondary">{% if user.profile.birthDate %}{{ user.profile.birthDate | age }} años<br>{% endif %}
-		    {% if user.profile.address %}<i class="fa fa-fw fa-home"></i> {{ user.profile.address }}<br>{% endif %} 
-		    {% if user.profile.phone %}<i class="fa fa-fw fa-phone"></i> {{ user.profile.phone }}<br>{% endif %}
+		    {% if user.profile.address %}<i class="far fa-fw fa-home"></i> {{ user.profile.address }}<br>{% endif %} 
+		    {% if user.profile.phone %}<i class="far fa-fw fa-phone"></i> {{ user.profile.phone }}<br>{% endif %}
 		    </p>
 		    
-		    {% if app.user and app.user.id == user.id and user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('userEditProfile') }}"><i class="fa fa-edit"></i> Editar perfil</a></p>{% endif %}
+		    {% if app.user and app.user.id == user.id and user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('userEditProfile') }}"><i class="far fa-edit"></i> Editar perfil</a></p>{% endif %}
 		{% else %}
 			<p class="mt-2"><strong>{{ user.name }}</strong></p>
 		{% endif %}	
@@ -21,6 +21,6 @@
 
 <ul class="nav nav-pills nav-fill">
     <li class="nav-item"><a class="nav-link{% if active == 'items' %} active{% endif %}" href="{{ path('userProfile', {'id':user.id}) }}">Publicaciones</a></li>
-    <li class="nav-item"><a class="nav-link{% if active == 'assistances' %} active{% endif %}" href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Rendimiento <i class="fa fa-bar-chart-o"></i></a></li>
-    {% if app.user and app.user.id != user.id and user.role.messageSend %}<li class="nav-item"><a class="nav-link" href="{{ path('userConversation', {'user_id':user.id}) }}">Contactar <i class="fa fa-envelope-o"></i></a></li>{% endif %}
+    <li class="nav-item"><a class="nav-link{% if active == 'assistances' %} active{% endif %}" href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Rendimiento <i class="far fa-bar-chart"></i></a></li>
+    {% if app.user and app.user.id != user.id and user.role.messageSend %}<li class="nav-item"><a class="nav-link" href="{{ path('userConversation', {'user_id':user.id}) }}">Contactar <i class="far fa-envelope"></i></a></li>{% endif %}
 </ul>

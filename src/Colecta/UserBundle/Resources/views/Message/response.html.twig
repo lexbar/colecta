@@ -6,24 +6,24 @@
 
 <div class="row mb-2">
     <div class="col-sm-6">
-        <h2><i class="fa fa-envelope fa-fw"></i> Responder</h2>
+        <h2><i class="far fa-envelope fa-fw"></i> Responder</h2>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Mensajes recibidos <i class="fa fa-inbox"></i></a>
+        <a class="btn btn-default btn-block" href="{{ path('userMessages') }}">Mensajes recibidos <i class="far fa-inbox"></i></a>
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-default btn-block" href="{{ path('userSentMessages') }}">Mensajes enviados <i class="fa fa-plane"></i></a>
+        <a class="btn btn-default btn-block" href="{{ path('userSentMessages') }}">Mensajes enviados <i class="far fa-plane"></i></a>
     </div>
 </div>
 
 {% if app.user %}
     <div class="monocontent">
-        <form action="{{ path('userMessageResponse', {'responseto':originalMessage.id}) }}" method="POST" class="form-horizontal" onSubmit="$('#updateBtnLoading').addClass('fa fa-refresh fa-spin')">
+        <form action="{{ path('userMessageResponse', {'responseto':originalMessage.id}) }}" method="POST" class="form-horizontal" onSubmit="$('#updateBtnLoading').addClass('far fa-refresh fa-spin')">
             <fieldset>
               <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label" for="MessageName">Para:</label>
                 <div class="col-sm-9 col-lg-10">
-                  <input type="text" class="form-control" id="userSearch" name="destination" value="{{ destination }}" autocomplete="off"> <i id="destinationLoading" class="fa fa-cog fa-spin hidden"></i>
+                  <input type="text" class="form-control" id="userSearch" name="destination" value="{{ destination }}" autocomplete="off"> <i id="destinationLoading" class="far fa-cog fa-spin hidden"></i>
                   <ul id="userResults" class="dropdown-menu span3" style="position:static;float:none;" role="menu" aria-labelledby="dropdownMenu"></ul>
                 </div>
               </div>

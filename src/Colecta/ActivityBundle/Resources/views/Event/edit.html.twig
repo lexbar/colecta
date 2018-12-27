@@ -10,7 +10,7 @@
             <h2>Editar {{ item.name }}</h2>
         </div>
         <div class="">
-            <a class="btn btn-light d-block d-sm-inline-block" href="{{ path('ColectaEventView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al evento</a>
+            <a class="btn btn-light d-block d-sm-inline-block" href="{{ path('ColectaEventView', {'slug':item.slug}) }}"><i class="far fa-angle-double-left"></i> Volver al evento</a>
         </div>
     </div>
     
@@ -23,13 +23,13 @@
 	                    <div class="row">
 	                        <div class="col-lg-4 col-md-6 col-12">
 	                            <div class="input-group">
-	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-calendar"></i></div></div>
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class="far fa-calendar"></i></div></div>
 	                                <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
 	                            </div>
 	                        </div>
 	                        <div class="col-lg-4 col-md-6 col-12">
 	                            <div class="input-group">
-	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-clock-o"></i></div></div>
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class="far fa-clock"></i></div></div>
 	                                <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
 	                            </div>
 	                        </div>
@@ -45,13 +45,13 @@
 	                    <div class="row">
 	                        <div class="col-lg-4 col-md-6 col-12">
 	                            <div class="input-group">
-	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-calendar"></i></div></div>
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class="far fa-calendar"></i></div></div>
 	                                <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
 	                            </div>
 	                        </div>
 	                        <div class="col-lg-4 col-md-6 col-12">
 	                            <div class="input-group">
-	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" fa fa-clock-o"></i></div></div>
+	                                <div class="input-group-prepend"><div class="input-group-text"><i class=" far fa-clock"></i></div></div>
 	                                <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}02:00{% endif %}">
 	                            </div>
 	                        </div>
@@ -117,7 +117,7 @@
             
             <div class="form-group">
 	            <label>Privacidad</label> 
-	            <p><button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-light">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></p>
+	            <p><button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-sm btn-light">{% if item.open %}<i class="far fa-unlock"></i> Abierto{% else %}<i class="far fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></p>
 	        </div>
           
             <div class="form-group">
@@ -172,10 +172,10 @@
     {
         if($('#privacy').val() == '1'){
             $('#privacy').val('0');
-            $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+            $('#privacyButton').html('<i class="far fa-lock"></i> Sólo usuarios');
         }else{
             $('#privacy').val('1');
-            $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+            $('#privacyButton').html('<i class="far fa-unlock"></i> Abierto');
         }
     } 
     

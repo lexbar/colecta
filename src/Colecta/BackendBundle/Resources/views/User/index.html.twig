@@ -7,10 +7,10 @@
     <h2>Listado de usuarios</h2>
         
     <div class="monocontent tabs">
-        {% if app.user.role.userCreate %}<a href="{{ path('ColectaBackendNewUser') }}" class="btn btn-primary">Crear Usuario <i class="fa fa-plus"></i></a> {% endif %}
-        <a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default">Gestionar Roles <i class="fa fa-user"></i></a>
-        <a href="{{ path('ColectaBackendPointsIndex') }}" class="btn btn-default">Gestionar Puntuaciones <i class="fa fa-star"></i></a>
-        <a href="{{ path('ColectaBackendMemoIndex') }}" class="btn btn-default">Enviar Circular <i class="fa fa-envelope"></i></a>
+        {% if app.user.role.userCreate %}<a href="{{ path('ColectaBackendNewUser') }}" class="btn btn-primary">Crear Usuario <i class="far fa-plus"></i></a> {% endif %}
+        <a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default">Gestionar Roles <i class="far fa-user"></i></a>
+        <a href="{{ path('ColectaBackendPointsIndex') }}" class="btn btn-default">Gestionar Puntuaciones <i class="far fa-star"></i></a>
+        <a href="{{ path('ColectaBackendMemoIndex') }}" class="btn btn-default">Enviar Circular <i class="far fa-envelope"></i></a>
         <hr>
         
         <table class="table table-hover">

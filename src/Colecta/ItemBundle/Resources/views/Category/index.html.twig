@@ -11,12 +11,12 @@
 <ul class="list-group">
     {% for category in categories %}
         <a href="{{ path('ColectaCategoryView',{'slug':category.slug}) }}" class="list-group-item clearfix">
-                {% if slv and slv != 'dismiss' and slv < category.lastchange%}<i class="fa fa-asterisk" style="color:orange"></i>{% endif %}
+                {% if slv and slv != 'dismiss' and slv < category.lastchange%}<i class="far fa-asterisk" style="color:orange"></i>{% endif %}
                 <strong>{{ category.name }}</strong>
             {# for type, amount in category.sortedTypes %}
                 {% if amount > 0 %}
                     {% if loop.first %}<span style="font-size:16px;">{% elseif loop.index > 3 %}<span style="font-size:12px;">{% else %}<span> | {% endif %}
-                        <i class="fa fa-{{ itemIcons[type] }}"></i> {{ amount }} 
+                        <i class="far fa-{{ itemIcons[type] }}"></i> {{ amount }} 
                     </span>
                 {% endif %}
             {% endfor #}

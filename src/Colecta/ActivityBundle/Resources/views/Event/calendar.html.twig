@@ -5,7 +5,7 @@
 {% if ((firstWeekDay + daysOfMonth) / 7) > rows %}{% set rows = rows + 1 %}{% endif %}
 {% set dayOfMonth = 1 %}
 
-<p class="calendar-heading text-center">
+<p class="calendar-heading text-center clearfix">
     {# current Y-m #}
     {% set currentY = targetdateob.format('Y') %}
     {% set currentm = targetdateob.format('m') %}
@@ -35,11 +35,11 @@
         {% endif %}
     {% endif %}
     
-    <a href="{{ path('ColectaEventDate', {'date': previousY ~ '-' ~ previousm }) }}" class="pull-left"><i class="fa fa-caret-left"></i> {% include '::month.html.twig' with {'date':previousY ~ '-' ~ previousm ~ '-1', 'short':0} %}</a> 
+    <a href="{{ path('ColectaEventDate', {'date': previousY ~ '-' ~ previousm }) }}" class="float-left"><i class="far fa-caret-left"></i> {% include '::month.html.twig' with {'date':previousY ~ '-' ~ previousm ~ '-1', 'short':0} %}</a> 
     
     <a href="{{ path('ColectaEventDate', {'date': currentY ~ '-' ~ currentm }) }}">{% include '::month.html.twig' with {'date':currentY ~ '-' ~ currentm ~ '-1', 'short':0} %} {{ currentY }}</a>
     
-    <a href="{{ path('ColectaEventDate', {'date': nextY ~ '-' ~ nextm }) }}" class="pull-right">{% include '::month.html.twig' with {'date':nextY ~ '-' ~ nextm ~ '-1', 'short':0} %} <i class="fa fa-caret-right"></i></a>     
+    <a href="{{ path('ColectaEventDate', {'date': nextY ~ '-' ~ nextm }) }}" class="float-right">{% include '::month.html.twig' with {'date':nextY ~ '-' ~ nextm ~ '-1', 'short':0} %} <i class="far fa-caret-right"></i></a>     
 </p>
     
 <table class="table table-condensed calendar">

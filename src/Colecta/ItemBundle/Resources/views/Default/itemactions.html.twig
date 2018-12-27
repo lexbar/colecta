@@ -11,9 +11,9 @@
         {# LIKE #}
         <span id="itemLikes{{ item.id }}" class="like">
         {% if userLikes %}
-            <span><i class="fa fa-hand-peace-o"></i> Te gusta</span>
+            <span><i class="far fa-hand-peace-o"></i> Te gusta</span>
         {% else %}
-            <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
+            <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="far fa-thumbs-up"></i> Me gusta</a>
         {% endif%}
         </span>
         
@@ -36,9 +36,9 @@
                     {% endif %}
                     
                     {% if haspassed and assists %}
-                        <i class="fa fa-check-square"></i>
+                        <i class="far fa-user-check"></i>
                     {% else %}
-                        <i class="fa fa-check-square-o"></i>
+                        <i class="far fa-check-square"></i>
                     {% endif %} 
                     
                     {% if not haspassed %}
@@ -58,7 +58,7 @@
                     {% if assists %}
                         </span>
                         <span class="undo d-none">
-                            Deshacer <i class="fa fa-trash-o"></i>
+                            Deshacer <i class="far fa-trash-o"></i>
                         </span>
                     {% endif %} 
                 </a>
@@ -67,17 +67,17 @@
         
         {# FILE #}
         {#{% if app.user and item.type == 'Files/Folder' and not item.personal and item.public and not app.user.role.name == 'ROLE_BANNED' %}
-            <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="fa fa-plus"></i> Agregar archivos</a>
+            <a href="{{ path('ColectaFilePick',{'slug':item.slug}) }}"><i class="far fa-plus"></i> Agregar archivos</a>
         {% endif %}#}
         
         {# ATTACH #}
         {% if canAttach %}
-            <a href="{{ path('ColectaItemAttach',{'id':item.id}) }}"><i class="fa fa-paperclip"></i> Adjuntar</a>
+            <a href="{{ path('ColectaItemAttach',{'id':item.id}) }}"><i class="far fa-paperclip"></i> Adjuntar</a>
         {% endif %}
         
         {# EDIT #}
         {% if canEdit and app.user.role.name != 'ROLE_BANNED' %}
-            <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="fa fa-pencil"></i> Editar</a>
+            <a href="{{ path('Colecta' ~ itemTypeName ~ 'Edit', {slug:item.slug}) }}" title="Editar"><i class="far fa-pencil"></i> Editar</a>
         {% endif %}
     </div>
 {% endif %}

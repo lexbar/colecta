@@ -5,7 +5,7 @@
 {% block content %}
             <div class="d-flex justify-content-between pt-3">
             	<h2>Rutas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
-            	{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaRouteNew')}}" class="btn btn-success"><i class="fa fa-plus fa-fw"></i> Publicar</a></p>{% endif %}
+            	{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaRouteNew')}}" class="btn btn-success"><i class="far fa-plus fa-fw"></i> Publicar</a></p>{% endif %}
             </div>
             
             {% for item in items %}
@@ -14,7 +14,7 @@
                 {% include path with { 'item': item } only %}
             {% else %}
                 <div class="monocontent">
-                    <h3><i class="fa fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Las rutas que se añadan aparecerán aquí.</h3>
+                    <h3><i class="far fa-{{ itemIcons['Activity/Route'] }} fa-fw"></i> Las rutas que se añadan aparecerán aquí.</h3>
                 </div>
             {% endfor %}
             

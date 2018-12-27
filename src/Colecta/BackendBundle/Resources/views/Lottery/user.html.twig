@@ -30,13 +30,13 @@
                     
                     <br>
                     
-                    <a class="btn btn-link btn-sm" href="{{ path('ColectaBackendLotteryRemoveShred', { shred_id : ls.id }) }}" onClick="return confirm('¿Seguro que desea eliminar esta transacción?')">Borrar <i class="fa fa-trash-o"></i></a> 
+                    <a class="btn btn-link btn-sm" href="{{ path('ColectaBackendLotteryRemoveShred', { shred_id : ls.id }) }}" onClick="return confirm('¿Seguro que desea eliminar esta transacción?')">Borrar <i class="far fa-trash"></i></a> 
                     {% if not ls.returned %}
-                        <a class="btn btn-link btn-sm" href="#" onClick="$('#lotteryShred{{ ls.id }}').show(); return false;">Devolución <i class="fa fa-sign-out"></i></a>
+                        <a class="btn btn-link btn-sm" href="#" onClick="$('#lotteryShred{{ ls.id }}').show(); return false;">Devolución <i class="far fa-sign-out"></i></a>
                         {% if ls.paid %}
-                            <a class="btn btn-link btn-sm" href="{{ path('ColectaBackendLotteryUnpaidShred', { shred_id : ls.id }) }}">Marcar pendiente de pago <i class="fa fa-warning"></i></a>
+                            <a class="btn btn-link btn-sm" href="{{ path('ColectaBackendLotteryUnpaidShred', { shred_id : ls.id }) }}">Marcar pendiente de pago <i class="far fa-warning"></i></a>
                         {% else %}
-                            <a class="btn btn-link btn-sm" href="{{ path('ColectaBackendLotteryPaidShred', { shred_id : ls.id }) }}">Marcar pagado <i class="fa fa-check"></i></a>
+                            <a class="btn btn-link btn-sm" href="{{ path('ColectaBackendLotteryPaidShred', { shred_id : ls.id }) }}">Marcar pagado <i class="far fa-check"></i></a>
                         {% endif %}
                     {% endif %}
                     

@@ -413,9 +413,9 @@ function privacyToggle()
 {
     if($('.privacyToggle').val() == '1'){
         $('.privacyToggle').val('0');
-        $('.privacyToggleButton').html('<i class="fa fa-lock"></i> Sólo miembros');
+        $('.privacyToggleButton').html('<i class="far fa-lock"></i> Sólo miembros');
     }else{
         $('.privacyToggle').val('1');
-        $('.privacyToggleButton').html('<i class="fa fa-unlock"></i> Abierto');
+        $('.privacyToggleButton').html('<i class="far fa-unlock"></i> Abierto');
     }
 }

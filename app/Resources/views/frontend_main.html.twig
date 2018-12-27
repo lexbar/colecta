@@ -9,10 +9,10 @@
 			        <form id="searchForm" class="my-3 w-100" role="search" action="{{ path('ColectaSearch') }}" method="GET">
 		                <div class="inner-addon right-addon">
 		                    <input type="text" class="form-control pl-3" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
-		                    <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+		                    <i class="far fa-search" onClick="$('#searchForm').submit()"></i>
 		                </div>
 		            </form>
-		            <button onClick="$('#navigationList').toggleClass('d-none')" type="button" class="d-block d-sm-none btn btn-light my-3 ml-2"><i class="fa fa-bars fa-fw"></i></button>
+		            <button onClick="$('#navigationList').toggleClass('d-none')" type="button" class="d-block d-sm-none btn btn-light my-3 ml-2"><i class="far fa-bars fa-fw"></i></button>
 	            </div>
 		        
 		        <div class="linksList d-none d-sm-block ml-3" id="navigationList">
@@ -20,23 +20,23 @@
 					<ul class="list-unstyled">
 					    <li class="{% if bun == 'ItemBundle' and con == 'PostController' %} active{% endif %}">
 					        <a href="{{ path('ColectaPostIndex') }}">
-					            <i class="fa fa-comment-o fa-fw"></i> Foro
+					            <i class="far fa-comment-o fa-fw"></i> Foro
 					        </a>
 					    </li>
 					    <li class="{% if bun == 'ActivityBundle' and con == 'EventController' %} active{% endif %}">
 					        <a href="{{ path('ColectaEventIndex') }}"> 
-					            <i class="fa fa-calendar-o fa-fw"></i>  Calendario
+					            <i class="far fa-calendar-o fa-fw"></i>  Calendario
 					        </a>
 					    </li>
 					    <li class="{% if bun == 'ActivityBundle' and con in ['DefaultController', 'RouteController', 'PlaceController'] %} active{% endif %}">
 					        <a href="{{ path('ColectaMapIndex') }}">
-					            <i class="fa fa-map-o fa-fw"></i> Rutas
+					            <i class="far fa-map-o fa-fw"></i> Rutas
 					        </a>
 					    </li>
 					    
 					    {% if app.user and app.user.role.getSiteConfig %}
 						    <li class="nav-item">
-						        <a href="{{ path('ColectaBackendIndex') }}" class="text-secondary"><i class="fa fa-cog fa-fw"></i> Admin</a>
+						        <a href="{{ path('ColectaBackendIndex') }}" class="text-secondary"><i class="far fa-cog fa-fw"></i> Admin</a>
 						    </li>
 						{% endif %}
 					</ul>#}

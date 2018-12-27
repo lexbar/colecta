@@ -2,7 +2,7 @@
 	<strong class="pb-2 pt-1 pt-sm-3 d-block">Páginas</strong>
 	<ul class="list-unstyled">
 	    {% for page in pages %}
-	    <li{% if app.request.uri == url('ColectaPage',{slug:page.slug}) %} class="active"{% endif %}><a href="{{ path('ColectaPage', { slug: page.slug } ) }}"><i class="fa fa-{{ page.icon }} fa-fw"></i> {{ page.name }}</a></li>
+	    <li{% if app.request.uri == url('ColectaPage',{slug:page.slug}) %} class="active"{% endif %}><a href="{{ path('ColectaPage', { slug: page.slug } ) }}"><i class="far fa-{{ page.icon }} fa-fw"></i> {{ page.name }}</a></li>
 	    {% endfor %}
 	</ul>
 {% endif %}
@@ -11,7 +11,7 @@
 	<strong class="pb-2 pt-1 pt-sm-3 d-block">Enlaces</strong>
 	<ul class="list-unstyled">
 	    {% for link in web_links %}
-	    <li><a href="{{ link[0] }}" target="_blank"><i class="fa fa-{{ link[2] | default('') }} fa-fw"></i> {{ link[1] | default(link[0]) }}</a></li>
+	    <li><a href="{{ link[0] }}" target="_blank"><i class="far fa-{{ link[2] | default('') }} fa-fw"></i> {{ link[1] | default(link[0]) }}</a></li>
 	    {% endfor %}
 	</ul>
 {% endif %}

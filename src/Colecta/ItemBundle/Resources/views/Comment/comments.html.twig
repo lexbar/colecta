@@ -5,7 +5,7 @@
 {% if collapse is defined and commentslength > collapse %}
     <p class="mt-2">
     <button class="btn btn-outline-secondary" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
-        <i class="fa fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
+        <i class="far fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
     </button>
     </p>
         
@@ -21,7 +21,7 @@
         </a> 
             
         <div class="media-body">
-            {% if new %}<i class="fa fa-circle"></i>{% endif%}
+            {% if new %}<i class="far fa-circle"></i>{% endif%}
             <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="username">{{comment.user.name}}</a> 
             
             <span class="details">
@@ -45,7 +45,7 @@
                 {% endif %}
                 
                 {% if app.user and (app.user == comment.user or app.user.role.userEdit) %}
-                    <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="removeComment" onclick="return confirm('¿Seguro que deseas borrar este comentario?');"><i class="fa fa-trash-o"></i> Eliminar</a>
+                    <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="removeComment" onclick="return confirm('¿Seguro que deseas borrar este comentario?');"><i class="far fa-trash-alt"></i> Eliminar</a>
                 {% endif %}
             </span>
             <p>
@@ -66,8 +66,8 @@
         
         <div class="media-body form">
             <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST" onSubmit="$('#commentItem{{ item.id }}').attr('disabled','disabled')">
-                <textarea class="form-control" rows="1" onClick="this.rows = 3; document.getElementById('commentItem{{ item.id }}').style.display = ''; $(this).css('max-height','500px');" name="comment" placeholder="Escribe un comentario…" onKeyUp="if($(this).val() != ''){$('#facommenting{{ item.id }}').removeClass('fa-comment').addClass('fa-commenting');}else{$('#facommenting{{ item.id }}').removeClass('fa-commenting').addClass('fa-comment');}"></textarea>
-                <button style="display:none;margin-top:10px;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i id="facommenting{{ item.id }}" class="fa fa-comment"></i></button>
+                <textarea class="form-control" rows="1" onClick="this.rows = 3; document.getElementById('commentItem{{ item.id }}').style.display = ''; $(this).css('max-height','500px');" name="comment" placeholder="Escribe un comentario…" onKeyUp="if($(this).val() != ''){$('#facommenting{{ item.id }}').removeClass('fa-comment').addClass('fa-comment-lines');}else{$('#facommenting{{ item.id }}').removeClass('fa-comment-lines').addClass('fa-comment');}"></textarea>
+                <button style="display:none;margin-top:10px;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i id="facommenting{{ item.id }}" class="far fa-comment ml-1"></i></button>
             </form>
         </div>
     </div>

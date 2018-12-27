@@ -246,7 +246,7 @@ img.smiley {
 }
 
 /* style icon */
-.inner-addon .fa {
+.inner-addon .far {
   position: absolute;
   top: 1px;
   padding: 8px;
@@ -255,8 +255,8 @@ img.smiley {
 }
 
 /* align icon */
-.left-addon .fa  { left:  0px;}
-.right-addon .fa { right: 0px;}
+.left-addon .far  { left:  0px;}
+.right-addon .far { right: 0px;}
 
 /* add padding  */
 .left-addon input  { padding-left:  30px; }
@@ -336,7 +336,7 @@ img.smiley {
     white-space:nowrap;
 }
 .item .event-date i {
-    color: #333;
+    color: #808080;
 }
 .item .details {
     font-size: 12px !important;
@@ -492,7 +492,7 @@ img.smiley {
     padding: 4px;
     text-align: left;
 }
-.micro .btn .fa {
+.micro .btn .far {
     border-left: 1px solid #ddd;
     padding-left: 2px;
 }

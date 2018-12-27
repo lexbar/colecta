@@ -10,7 +10,7 @@
     </div>
     {% if app.user.role.messageSend %}
     <div class="col-sm-3">
-        <a class="btn btn-outline-primary btn-block post-content" href="{{ path('userMessageNew')}}"><i class="fa fa-plus"> Nuevo</i></a>
+        <a class="btn btn-outline-primary btn-block post-content" href="{{ path('userMessageNew')}}"><i class="far fa-plus"> Nuevo</i></a>
     </div>
     {% endif %}
 </div>
@@ -23,7 +23,7 @@
                 
                 <small class="text-muted pull-right">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': message.date } only %}</small>
             
-                <p><strong>{{ (message.origin == app.user) ? message.destination.name : message.origin.name }}</strong> <br>{% if message.origin == app.user %}<i class="fa fa-reply"></i> {% endif %}{{ message.text }}</p>
+                <p><strong>{{ (message.origin == app.user) ? message.destination.name : message.origin.name }}</strong> <br>{% if message.origin == app.user %}<i class="far fa-reply"></i> {% endif %}{{ message.text }}</p>
         </a>
     {% endfor %}
 </ul>

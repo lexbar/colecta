@@ -2,17 +2,17 @@
         <ul class="nav nav-tabs">
             {% if app.user.role.itemPostCreate or app.user.role.itemFileCreate %}
                 <li class="nav-item" id="textHandler">
-                    <a class="nav-link active" href="#" onClick="typeChosen('text');return false;"><i class="fa fa-comment-o"></i> Mensaje</a>
+                    <a class="nav-link active" href="#" onClick="typeChosen('text');return false;"><i class="far fa-comment"></i> Mensaje</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemEventCreate %}
                 <li class="nav-item" id="eventHandler">
-                    <a class="nav-link" href="#" onClick="typeChosen('event');return false;"><i class="fa fa-calendar-o"></i> Actividad</a>
+                    <a class="nav-link" href="#" onClick="typeChosen('event');return false;"><i class="far fa-calendar"></i> Actividad</a>
                 </li>
             {% endif %}
             {% if app.user.role.itemRouteCreate or app.user.role.itemPlaceCreate %}
                 <li class="nav-item" id="mapHandler">
-                    <a class="nav-link" href="#" onClick="typeChosen('map');return false;"><i class="fa fa-map-o"></i> Ruta</a>
+                    <a class="nav-link" href="#" onClick="typeChosen('map');return false;"><i class="far fa-map"></i> Ruta</a>
                 </li>
             {% endif %}
         </ul>
@@ -36,8 +36,8 @@
                 <hr>
                 
                 <div class="clearfix">
-                    <button type="submit" class="btn btn-primary pull-right" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
-                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-sm btn-outline-primary privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                    <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="far fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-sm btn-outline-secondary privacyToggleButton"><i class="far fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
                 </div>
             </div>
             {% if attachto is defined %}
@@ -60,13 +60,13 @@
 	                        <div class="row">
 	                            <div class="col-lg-4 col-md-6 col-sm-12">
 	                                <div class="input-group">
-	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-calendar"></i></span></div>
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" far fa-calendar"></i></span></div>
 	                                    <input type="text" class="form-control" id="EventDateini" name="dateini" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
 	                                </div>
 	                            </div>
 	                            <div class="col-lg-4 col-md-6 col-sm-12">
 	                                <div class="input-group">
-	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-clock-o"></i></span></div>
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" far fa-clock"></i></span></div>
 	                                    <input type="text" class="form-control" id="EventDateiniTime" name="dateinitime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateini | date('H:i') }}{% else %}09:00{% endif %}">
 	                                </div>
 	                            </div>
@@ -83,13 +83,13 @@
 	                        <div class="row">
 	                            <div class="col-lg-4 col-md-5 col-sm-12">
 	                                <div class="input-group">
-	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-calendar"></i></span></div>
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" far fa-calendar"></i></span></div>
 	                                    <input type="text" class="form-control" id="EventDateend" name="dateend" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('d-m-Y') }}{% else %}{{ 'tomorrow' | date('d-m-Y') }}{% endif %}">
 	                                </div>
 	                            </div>
 	                            <div class="col-lg-4 col-md-5 col-sm-12">
 	                                <div class="input-group">
-	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" fa fa-clock-o"></i></span></div>
+	                                    <div class="input-group-prepend"><span class="input-group-text"><i class=" far fa-clock"></i></span></div>
 	                                    <input type="text" class="form-control" id="EventDateendTime" name="dateendtime" value="{% if item is defined and item.type == 'Activity/Event' %}{{ item.dateend | date('H:i') }}{% else %}14:00{% endif %}">
 	                                </div>
 	                            </div>
@@ -143,8 +143,8 @@
                 <hr>
                 
                 <div class="clearfix">
-                    <button type="submit" class="btn btn-primary pull-right" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
-                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-sm btn-outline-primary privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                   <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="far fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-sm btn-outline-secondary privacyToggleButton"><i class="far fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
                 </div>
             </div>
             {% if attachto is defined %}
@@ -171,8 +171,8 @@
                 <hr>
                 
                 <div class="clearfix">
-                    <button type="submit" class="btn btn-primary pull-right" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="fa fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
-                    <span class="privacy"><button onClick="privacyToggle()" type="button" class="btn btn-sm btn-outline-primary privacyToggleButton"><i class="fa fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
+                   <button type="submit" class="btn btn-primary" id="itemSubmitButton"><span class="itemSubmitText">Publicar ahora  <i class="far fa-fw fa-chevron-right"></i></span> <i id="itemSubmitButtonLoading"></i></button> 
+                    <span class="privacy" style="display:block;margin-top:5px"><button onClick="privacyToggle()" type="button" class="btn btn-sm btn-outline-secondary privacyToggleButton"><i class="far fa-unlock"></i> Abierto</button><input class="privacyToggle" type="hidden" name="open" value="{{ item is defined ? item.open : '1' }}"></span>
                 </div>
             </div>
             {% if attachto is defined %}

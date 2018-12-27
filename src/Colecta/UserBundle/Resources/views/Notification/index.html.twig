@@ -8,7 +8,7 @@
 
 {% if notifications | length > 0 %}
     {% if notifications | length > 1 and not notifications[0].dismiss and not notifications[1].dismiss %}
-        <a href="{{ path('userNotificationDismissAll') }}" class="btn btn-primary btn-block">Marcar todas como leídas <i class="fa fa-check"></i></a><br>
+        <a href="{{ path('userNotificationDismissAll') }}" class="btn btn-primary btn-block">Marcar todas como leídas <i class="far fa-check"></i></a><br>
     {% endif %}
 
     <ul class="list-group" id="notificationstream">
@@ -17,7 +17,7 @@
         {% endfor %}
     </ul>
     
-    <div class="mt-2"><button onclick="loadMore()" class="btn btn btn-outline-primary btn-block" id="loadMore">Ver más <i class="fa fa-arrow-down"></i></button></div>
+    <div class="mt-2"><button onclick="loadMore()" class="btn btn btn-outline-primary btn-block" id="loadMore">Ver más <i class="far fa-arrow-down"></i></button></div>
 {% else %}
     <p class="lead">No tienes ninguna alerta</p>
 {% endif %}

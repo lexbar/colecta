@@ -9,18 +9,18 @@
                 <div class="inner-addon right-addon">
                     <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
                     <input type="hidden" name="cat" value="{{ category ? category.id : '' }}">
-                    <i class="fa fa-search" onClick="$('#searchForm').submit()"></i>
+                    <i class="far fa-search" onClick="$('#searchForm').submit()"></i>
                 </div>
             </form>
             <div class="categories">
-                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="fa fa-caret-down"></i></p>
+                <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="far fa-caret-down"></i></p>
                 <ul class="list-unstyled hidden-xs" id="categoriesList">
                     {% for categoryItem in categories %}
                     <li{% if categoryItem == category %} class="active"{% endif %}><a href="{{ path('ColectaPostCategoryIndex',{'slug':categoryItem.slug}) }}">{{ categoryItem.name }}</a></li>
                     {% endfor %}
                 </ul>
                 
-                <a href="{{ path('ColectaCategoryView', {'slug': category.slug }) }}" class="btn btn-default pull-block btn-sm"><i class="fa fa-angle-double-left"></i> Todo en esta categoría</a>
+                <a href="{{ path('ColectaCategoryView', {'slug': category.slug }) }}" class="btn btn-default pull-block btn-sm"><i class="far fa-angle-double-left"></i> Todo en esta categoría</a>
             </div>
         </div>
         <div class="col-xs-12 col-sm-8 col-md-9">

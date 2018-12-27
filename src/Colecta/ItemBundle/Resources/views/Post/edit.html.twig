@@ -10,7 +10,7 @@
             <h2>Editar {{ item.name }}</h2>
         </div>
         <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaPostView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver a la publicación</a>
+            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaPostView', {'slug':item.slug}) }}"><i class="far fa-angle-double-left"></i> Volver a la publicación</a>
         </div>
     </div>
     
@@ -40,7 +40,7 @@
               
               <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
-                    <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
+                    <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-sm btn-default">{% if item.open %}<i class="far fa-unlock"></i> Abierto{% else %}<i class="far fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
                     {% if item.draft %}<button class="btn">Guardar como borrador</button>{% endif %}
                     <button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button> 
                     <a href="{{ path('ColectaPostDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
@@ -74,10 +74,10 @@
     {
         if($('#privacy').val() == '1'){
             $('#privacy').val('0');
-            $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+            $('#privacyButton').html('<i class="far fa-lock"></i> Sólo usuarios');
         }else{
             $('#privacy').val('1');
-            $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+            $('#privacyButton').html('<i class="far fa-unlock"></i> Abierto');
         }
     } 
     

@@ -5,7 +5,7 @@
     <h2>Crear Enlace</h2>
     
     <div class="monocontent tabs">      
-        <a href="{{ path('ColectaBackendPageIndex') }}" class="btn btn-default"><i class="fa fa-long-arrow-left fa-fw"></i> Gestionar Contenido</a>
+        <a href="{{ path('ColectaBackendPageIndex') }}" class="btn btn-default"><i class="far fa-long-arrow-left fa-fw"></i> Gestionar Contenido</a>
         
         <hr>
           
@@ -25,7 +25,7 @@
                 </div>
             </div>
             
-            {% set icons = ['info-circle', 'bicycle', 'beer', 'bolt', 'camera', 'flag', 'flag-checkered', 'smile-o', 'exclamation-triangle', 'trophy', 'futbol-o', 'envelope', 'envelope-o', 'exclamation-circle', 'female', 'male', 'archive', 'ban', 'binoculars', 'book', 'coffee', 'birthday-cake', 'circle', 'paper-plane-o', 'question', 'star-o', 'users', 'facebook', 'twitter', 'google-plus', 'flickr', 'foursquare', 'instagram', 'whatsapp', 'youtube'] %}
+            {% set icons = ['info-circle', 'bicycle', 'beer', 'bolt', 'camera', 'flag', 'flag-checkered', 'smile', 'exclamation-triangle', 'trophy', 'futbol', 'envelope', 'envelope', 'exclamation-circle', 'female', 'male', 'archive', 'ban', 'binoculars', 'book', 'coffee', 'birthday-cake', 'circle', 'paper-plane', 'question', 'star', 'users', 'facebook', 'twitter', 'google-plus', 'flickr', 'foursquare', 'instagram', 'whatsapp', 'youtube'] %}
             
             <div class="form-group">
                 <label class="col-sm-4 col-lg-3 control-label">Icono</label>
@@ -36,7 +36,7 @@
                     
                     {% for icon in icons %}
                         <div class="col-xs-4 col-md-3 col-lg-2">
-                            <label class="radio-inline"><input type="radio" name="linkIcon" value="{{ icon }}" {% if link[2] | default('') == icon %}checked="checked"{% endif %}> <i class="fa fa-{{ icon }} fa-fw"></i></label>
+                            <label class="radio-inline"><input type="radio" name="linkIcon" value="{{ icon }}" {% if link[2] | default('') == icon %}checked="checked"{% endif %}> <i class="far fa-{{ icon }} fa-fw"></i></label>
                         </div>
                     {% endfor %}
                 </div>

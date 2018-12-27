@@ -2,7 +2,7 @@
     {% set relateds = '' %}
     <div id="showRelateds">
     {% for related in item.related%}
-        <p><button type="button" onClick="removeRelation({{ related.id }})" class="btn btn-xs"><i class="fa fa-times" style="color:darkred;"></i> Eliminar enlace</button> <strong>{{ related.name }}</strong></p>
+        <p><button type="button" onClick="removeRelation({{ related.id }})" class="btn btn-sm py-0"><i class="far fa-times" style="color:darkred;"></i> Eliminar enlace</button> <strong>{{ related.name }}</strong></p>
         {% set relateds = relateds ~ related.id ~ ',' %}
     {% endfor%}
     </div>
@@ -14,7 +14,7 @@
             <input type="text" name="search" id="searchItem" class="form-control" autocomplete="off">
         </div>
         <div class="col-sm-3">
-            <button id="searchButton" class="btn btn-default btn-block" type="button" onclick="showResults();"><i id="searchButtonLoading"></i> Buscar <i class="fa fa-search"></i></button>
+            <button id="searchButton" class="btn btn-default btn-block" type="button" onclick="showResults();"><i id="searchButtonLoading"></i> Buscar <i class="far fa-search"></i></button>
         </div>
         
         <div class="col-sm-3">

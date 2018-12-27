@@ -5,7 +5,7 @@
     <h2>{% if role.name == 'ROLE_CUSTOM' and role.id > 0 %}Editar Rol{% else %}Crear nuevo Rol{% endif %}</h2>
     
     <div class="monocontent tabs">       
-    	<a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default"><i class="fa fa-long-arrow-left fa-fw"></i> Gestionar Roles</a>
+    	<a href="{{ path('ColectaBackendRolesIndex') }}" class="btn btn-default"><i class="far fa-long-arrow-left fa-fw"></i> Gestionar Roles</a>
     	<hr>
     	 
         <form class="form-horizontal" method="post" action="{% if role.name == 'ROLE_CUSTOM' and role.id > 0 %}{{ path('ColectaBackendRoleEdit', {'role_id': role.id}) }}{% else %}{{ path('ColectaBackendRoleCreate') }}{% endif %}">

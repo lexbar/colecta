@@ -12,7 +12,7 @@
             Actividades el {{ date | date('j')  }} de {% include "::month.html.twig" with {'date': date, 'short':0} %} {% if 'today' | date('Y') != date | date('Y') %} {{ date | date('Y') }}{% endif %}
         {% endif %}
         </h2>
-		{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaEventNew')}}" class="btn btn-success"><i class="fa fa-plus fa-fw"></i> Publicar</a></p>{% endif %}
+		{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaEventNew')}}" class="btn btn-success"><i class="far fa-plus fa-fw"></i> Publicar</a></p>{% endif %}
     </div>
     
     <div class="bigcalendar">
@@ -25,6 +25,6 @@
         {% include path with { 'item': item } only %}
     {% endfor %}
      
-    <div class="alert alert-blank text-center" role="alert"><strong>Puedes suscribirte</strong> al calendario usando Outlook, iCal, Google Calendar, etc... <a href="{{ path('ColectaEventAboutics')}}">Saber más <i class="fa fa-angle-double-right"></i>.</a></div>
+    <div class="alert alert-blank text-center" role="alert"><strong>Puedes suscribirte</strong> al calendario usando Outlook, iCal, Google Calendar, etc... <a href="{{ path('ColectaEventAboutics')}}">Saber más <i class="far fa-angle-double-right"></i>.</a></div>
 
 {% endblock %}

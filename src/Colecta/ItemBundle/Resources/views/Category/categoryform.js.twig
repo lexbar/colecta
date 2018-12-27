@@ -2,12 +2,12 @@ function toggleCategoryCreate(el) {
     var bt = $(el);
     if(bt.hasClass('newcategory')) {
         bt.removeClass('newcategory').addClass('selectcategory');
-        bt.html('<i class="fa fa-th-list"></i> Seleccionar');
+        bt.html('<i class="far fa-th-list"></i> Seleccionar');
         bt.parent().parent().find('.Category').hide();
         bt.parent().parent().find('.NewCategory').show().focus();
     } else {
         bt.removeClass('selectcategory').addClass('newcategory');
-        bt.html('<i class="fa fa-plus"></i> Nueva categoría');
+        bt.html('<i class="far fa-plus"></i> Nueva categoría');
         bt.parent().parent().find('.Category').show();
         bt.parent().parent().find('.NewCategory').hide().attr('value','');
     }
