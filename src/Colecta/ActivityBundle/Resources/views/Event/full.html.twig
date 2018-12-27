@@ -73,7 +73,7 @@
     
     {% if app.user and ( item.assistances | length or canedit and item.allowassistances) %}        
         <div class="assistances">
-        <h3>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}:</h3>
+        <h3>{% if haspassed %}Han asistido{% else %}Van a asistir{% endif %}{% if item.assistances | length > 0 %} {{ item.assistances | length }} personas{% endif %}:</h3>
             
         <ul class="list-group" id="usersAssistances">    
         {% for assistance in item.assistances %}
