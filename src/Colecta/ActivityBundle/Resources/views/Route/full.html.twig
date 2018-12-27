@@ -5,8 +5,8 @@
 
 {% block article %}    
 {% set canEdit = app.user and item.canEdit(app.user) %}
-
-<div class="full item{% if canEdit %} editable{% endif %}">
+<div class="row">
+<div class="full item{% if canEdit %} editable{% endif %} mt-3 mb-4 p-3 col-12 bg-white rounded box-shadow">
     {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     <h2>
         <a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}">{{ item.name }}</a>
@@ -57,6 +57,7 @@
     
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
+</div>
 </div>
 
     {#

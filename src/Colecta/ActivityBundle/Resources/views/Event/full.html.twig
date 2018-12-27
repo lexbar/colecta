@@ -31,7 +31,7 @@
             '12':'diciembre'
         }%}
 <div class="row">
-<div class="full item{% if canedit %} editable{% endif %} mt-3 mb-4 mx-3 mx-sm-0 p-3 col-12 bg-white rounded box-shadow">
+<div class="full item{% if canedit %} editable{% endif %} mt-3 mb-4 p-3 col-12 bg-white rounded box-shadow">
     {% include 'ColectaItemBundle:Default:itemDetails.html.twig' with { item: item } only %}
     <h2>
         <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}">{{ item.name }}</a>
@@ -133,6 +133,7 @@
     {% include 'ColectaItemBundle:Default:itemactions.html.twig' with { item: item } only %}
     
     {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 15 } only %}
+</div>
 </div>
 
 {% endblock %}
