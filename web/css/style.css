@@ -38,6 +38,9 @@ img.smiley {
 .card.ranksummary, .card.performancesummary {
 	cursor: pointer;
 }
+.ranksummary .badge {
+	vertical-align: text-bottom;
+}
 .linksList li{
 	padding: 0 0 8px;
 } 
@@ -1163,5 +1166,6 @@ form .row, form .col-xs-1, form .col-xs-2, form .col-xs-3, form .col-xs-4, form 
 
 
 .form_web{
-	display: none;
+	position: absolute;
+	left: -8890px;
 } 
