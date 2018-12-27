@@ -33,7 +33,7 @@
         
         {% if item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %} 
             {# Same Day#}
-            </a> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="far fa-clock-o"></i> {{ item.dateini | date('H:i') }} a {{ item.dateend | date('H:i') }}</a>
+            </a> <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="far fa-clock"></i> {{ item.dateini | date('H:i') }} a {{ item.dateend | date('H:i') }}</a>
         {% else %}
             {# Different days #}
              <i class="far fa-clock"></i> {{ item.dateini | date('H:i') }} </a>
