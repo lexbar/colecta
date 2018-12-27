@@ -45,7 +45,7 @@
 					{{ render(controller('ColectaSiteBundle:Page:navigation')) }}
 			        
 			        {# CATEGORIES #}
-			        <strong class="pb-2 pt-1 pt-sm-2 d-block">Categorías</strong>
+			        <strong class="pb-2 pt-1 pt-sm-3 d-block">Categorías</strong>
 			        <ul class="list-unstyled">
 		                {% for categoryItem in categories %}
 		                <li{% if category is defined and categoryItem == category %} class="active"{% endif %}><a href="{{ path('ColectaCategoryView',{'slug':categoryItem.slug}) }}">{{ categoryItem.name }}</a></li>
