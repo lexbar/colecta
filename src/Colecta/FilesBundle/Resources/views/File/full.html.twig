@@ -15,16 +15,16 @@
         {% set next = item.folder.getNextPicture(item) %}
         {% set previous = item.folder.getPreviousPicture(item) %}
         <div class="fullimage" style="width:auto;height:480px;background: url('{{ path('ColectaFileResize', {'slug':item.slug, 'width':'850', 'height':'480'}) }}') scroll no-repeat center center #FFF; background-size: contain;">
-            <a style="height:480px" href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="pull-left{% if previous %} active{% endif %} col-xs-3"><i class="fa fa-angle-left fa-4x"></i></a>
-            <a style="height:480px" href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="pull-right text-right{% if next %} active{% endif %} col-xs-9"><i class="fa fa-angle-right fa-4x"></i></a>
+            <a style="height:480px" href="{% if previous %}{{ path('ColectaFileView', {'slug':previous.slug}) }}{% else %}#{% endif%}" class="float-left{% if previous %} active{% endif %} col-xs-3"><i class="far fa-angle-left fa-4x"></i></a>
+            <a style="height:480px" href="{% if next %}{{ path('ColectaFileView', {'slug':next.slug}) }}{% else %}#{% endif%}" class="float-right text-right{% if next %} active{% endif %} col-xs-9"><i class="far fa-angle-right fa-4x"></i></a>
         </div>
-        <a class="pull-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="fa fa-download"></i></small></a>
+        <a class="float-right" href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}"><small>Descargar original <i class="far fa-download"></i></small></a>
     {% elseif item.filetype in ['mp4','ogg','webm'] %}
         <video id="video_player" class="video-js vjs-default-skin vjs-big-play-centered" controls="" preload="auto" data-setup='{}' src="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" type="video/{{ item.filetype }}" width="auto" height="auto"></video>
         <br>
-        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-sm btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
+        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-sm btn-warning"><i class="far fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% else %}
-        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="fa fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
+        <a href="{{ path('ColectaFileDownload',{ 'slug': item.slug, 'type': item.filetype }) }}" class="btn btn-warning"><i class="far fa-download fa-lg"></i> <strong>Descargar fichero <span style="text-transform: uppercase;">{{ item.filetype }}</span></strong></a>
     {% endif %}
     
     {{ item.text | usercontent | striptags(allowed_tags) | cleancode | raw | nl2br }}
@@ -46,7 +46,7 @@
                 {% if thisitem.filetype in ['jpeg','gif','png'] %}
                     <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}"><img class="img-fluid{% if thisitem == item %} current{% endif %}" width="275" height="275" src="{{ path('ColectaFileThumbnail', {'slug':thisitem.slug, 'width':275, 'height':275}) }}"></a>
                 {% elseif thisitem.filetype in ['mp4','ogg','webm'] %}
-                    <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}" class="btn btn-warning btn-block"><i class="fa fa-video-camera icon-large"></i> {{ thisitem.name }}</a>
+                    <a href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}" class="btn btn-warning btn-block"><i class="far fa-video-camera icon-large"></i> {{ thisitem.name }}</a>
                 {% else %}
                     <a class="btn btn-warning btn-block" href="{{ path('ColectaFileView', { 'slug': thisitem.slug }) }}">{{ thisitem.name }}</a>
                 {% endif %}

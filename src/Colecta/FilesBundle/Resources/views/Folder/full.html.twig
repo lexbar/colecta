@@ -66,9 +66,9 @@
                     <li class="list-group-item clearfix">
                         <strong><a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}">{{ file.name }}</a></strong>
                         {% if file.filetype in ['mp4','ogg','webm'] %}
-                            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}" class="btn btn-primary btn-xs pull-right"><i class="fa fa-play-circle-o icon-large"></i> Reproducir</a>
+                            <a href="{{ path('ColectaFileView', { 'slug': file.slug }) }}" class="btn btn-primary btn-xs float-right"><i class="far fa-play-circle-o icon-large"></i> Reproducir</a>
                         {% else %}
-                            <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-xs pull-right"><i class="fa fa-download icon-large"></i> Descargar</a>
+                            <a href="{{ path('ColectaFileDownload',{ 'slug': file.slug, 'type': file.filetype }) }}" class="btn btn-warning btn-xs float-right"><i class="far fa-download icon-large"></i> Descargar</a>
                         {% endif %}
                     </li>
                 {% endif %}
