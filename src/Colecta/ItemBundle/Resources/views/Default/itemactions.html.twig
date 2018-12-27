@@ -11,7 +11,7 @@
         {# LIKE #}
         <span id="itemLikes{{ item.id }}" class="like">
         {% if userLikes %}
-            <span><i class="far fa-hand-peace-o"></i> Te gusta</span>
+            <span><i class="far fa-hand-peace"></i> Te gusta</span>
         {% else %}
             <a onclick="$('#itemLikes{{ item.id }}').load('{{ path('ColectaItemLike', {'slug':item.slug}) }}');return false;" href="{{ path('ColectaItemLike', {'slug':item.slug}) }}" title="Me gusta"><i class="far fa-thumbs-up"></i> Me gusta</a>
         {% endif%}
