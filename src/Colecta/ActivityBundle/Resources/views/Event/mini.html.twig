@@ -29,7 +29,7 @@
         <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="far fa-calendar"></i>
         {{ item.dateini | date('l') | replace (dias_semana) }}, 
         {{ item.dateini | date('d') }} 
-        de {% set month = item.dateini | date('n') | replace(meses) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateini | date('y') }}{% endif %}
+        de {% set month = item.dateini | date('n') | replace(meses) %}{% if item.dateini | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} {{ item.dateini | date('Y') }}{% endif %}
         
         {% if item.dateini | date('Y') == item.dateend | date('Y') and item.dateini | date('z') == item.dateend | date('z') %} 
             {# Same Day#}
@@ -40,7 +40,7 @@
                 <a href="{{ path('ColectaEventView', { 'slug': item.slug }) }}"><i class="far fa-long-arrow-right"></i>
                 {{ item.dateend | date('l') | replace (dias_semana) }}, 
                 {{ item.dateend | date('d') }} 
-                de {% set month = item.dateend | date('n') | replace(meses) %}{% if item.dateend | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} &rsquo;{{ item.dateend | date('y') }}{% endif %}
+                de {% set month = item.dateend | date('n') | replace(meses) %}{% if item.dateend | date('Y') == 'today' | date('Y') %}{{month}}{% else %}{{ month }} {{ item.dateend | date('Y') }}{% endif %}
                 <i class="far fa-clock"></i> {{ item.dateend | date('H:i') }}</a>
         {% endif %}
     </p>
