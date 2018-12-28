@@ -38,7 +38,7 @@
 	    	<div class="col-md-6 mt-2">
 	            <div class="ranksummary" onclick="window.location.assign('{{ path('ColectaActivitiesRank') }}')" style="cursor:pointer">
 	                <div class="p-2 px-sm-3">
-	                    <h3>Ranking:</h3>
+	                    <h3><span class="badge badge-light"><i class="far fa-poll-people text-primary"></i></span>Ranking:</h3>
 	                    
 	                    <div id="ranksummary"><i class="far fa-refresh fa-spin"></i> Cargando... </div>                            
 	                </div>
@@ -47,7 +47,7 @@
 	        <div class="col-md-6 mt-2">
 	           <div class="performancesummary" onclick="window.location.assign('{{ path('ColectaUserAssistances', {'id':app.user.id}) }}')" style="cursor:pointer">
 	                <div class="p-2 px-sm-3">
-	                    <h3>Tu Actividad:</h3>
+	                    <h3><span class="badge badge-light"><i class="far fa-chart-bar text-primary"></i></span>Tu Actividad:</h3>
 	                    
 	                    <div id="performancesummary"><i class="far fa-refresh fa-spin"></i> Cargando... </div> 
 	                </div>
