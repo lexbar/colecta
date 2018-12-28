@@ -3,50 +3,60 @@
 {% block title %}{{ search }}{% endblock %}
 
 {% block article %}
-<div class="row">
-    <div class="col-xs-12 col-sm-4 col-md-3 pull-right">
-    
-        <form id="searchForm" role="search" action="{{ path('ColectaSearch') }}" method="GET">
-            <div class="inner-addon right-addon">
-                <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
-                <input type="hidden" name="cat" value="{{ category ? category.id : '' }}">
-                <i class="far fa-search" onClick="$('#searchForm').submit()"></i>
-            </div>
-        </form>
-        
-        <div class="categories">
-            <p class="lead" onClick="$('#categoriesList').toggleClass('hidden-xs');">Categorías <i class="far fa-caret-down"></i></p>
-            <ul class="list-unstyled hidden-xs" id="categoriesList">
-                {% for categoryItem in categories %}
-                    {% if categoryItem == category %}<li class="active"> <a href="{{ path('ColectaSearchPage', {'page': page }) }}?q={{ search }}" class="pull-right"><i class="far fa-times"></i></a>
-                    {% else %}<li>{% endif %}
-                        <a href="{{ path('ColectaSearchPage', {'page': page }) }}?q={{ search }}&cat={{ categoryItem.id }}">{{ categoryItem.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-8 col-md-9">
-    	<h2>Búsqueda <em>{{ search }}</em>{% if category %} en <em>{{ category.name  }}</em>{% endif %}</h2>
-    	
-    	{% for item in items %}
-	        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-            {% set path = path | replace({'/':'Bundle:'}) %}
-            {% include path with { 'item': item } only %}
-    	{% else %}
-    	    <div class="monocontent"><p class="lead">Vaya, no hay nada con esas palabras.</p></div>
-    	{% endfor %}
-    	
-    	{% if page > 1 or thereAreMore %}
-    	    <ul class="pagination justify-content-center">
-    	      <li class="page-item{% if page == 1 %} disabled{% endif %}">
-    	        <a class="page-link" href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search }}{% else %}{% endif %}">&larr; Anteriores</a>
-    	      </li>
-    	      <li class="page-item{% if not thereAreMore %} disabled{% endif %}">
-    	        <a class="page-link" href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search }}{% else %}{% endif %}">Siguientes &rarr;</a>
-    	      </li>
-    	    </ul>
-    	{% endif %}
-    </div>
+<div class="row content">
+    <div class="col main">
+	    <div class="row">    
+	        <div class="col-12 col-sm-4 col-md-3 pl-sm-0">
+	        	<div class="d-flex justify-content-between">
+			        <form id="searchForm" class="my-3 w-100" role="search" action="{{ path('ColectaSearch') }}" method="GET">
+		                <div class="inner-addon right-addon">
+			                <input type="text" class="form-control" name="q" id="searchInput" value="{{ app.request.get('q') }}" placeholder="Buscar...">
+			                <i class="far fa-search" onClick="$('#searchForm').submit()"></i>
+		                </div>
+		            </form>
+		            <button onClick="$('#navigationList').toggleClass('d-none')" type="button" class="d-block d-sm-none btn btn-light my-3 ml-2"><i class="far fa-bars fa-fw"></i></button>
+	            </div>
+	            
+	            
+				<div class="linksList d-none d-sm-block ml-3" id="navigationList">
+		        	<strong class="pb-2 pt-1 pt-sm-3 d-block">Categorías</strong>
+			        <ul class="list-unstyled">
+		                {% for categoryItem in categories %}
+		                    {% if categoryItem == category %}<li class="active"> <a href="{{ path('ColectaSearchPage', {'page': page }) }}?q={{ search }}" class="pull-right"><i class="far fa-times"></i></a>
+		                    {% else %}<li>{% endif %}
+		                        <a href="{{ path('ColectaSearchPage', {'page': page }) }}?q={{ search }}&cat={{ categoryItem.id }}">{{ categoryItem.name }}</a></li>
+		                {% endfor %}
+		            </ul>
+		        </div>
+		    </div>
+		    
+		    
+		    <div class="col-12 col-sm-8 col-md-9 pr-sm-0">
+		    
+				<h2 class="pt-3">Búsqueda <em>{{ search }}</em>{% if category %} en <em>{{ category.name  }}</em>{% endif %}</h2>
+				
+				{% for item in items %}
+			        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+			        {% set path = path | replace({'/':'Bundle:'}) %}
+			        {% include path with { 'item': item } only %}
+				{% else %}
+				    <div class="monocontent"><p class="lead">Vaya, no hay nada con esas palabras.</p></div>
+				{% endfor %}
+				
+				{% if page > 1 or thereAreMore %}
+				    <ul class="pagination justify-content-center">
+				      <li class="page-item{% if page == 1 %} disabled{% endif %}">
+				        <a class="page-link" href="{% if page > 1 %}{{ path('ColectaSearchPage', {'page': page - 1 }) }}?q={{ search }}{% else %}{% endif %}">&larr; Anteriores</a>
+				      </li>
+				      <li class="page-item{% if not thereAreMore %} disabled{% endif %}">
+				        <a class="page-link" href="{% if thereAreMore %}{{ path('ColectaSearchPage', {'page': page + 1 }) }}?q={{ search }}{% else %}{% endif %}">Siguientes &rarr;</a>
+				      </li>
+				    </ul>
+				{% endif %}
+				
+			</div>
+	    </div>
+	</div>
 </div>
 {% endblock %}
 
