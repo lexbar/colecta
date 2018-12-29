@@ -1,1 +1,5 @@
 {% extends 'ColectaItemBundle:Default:itemMicro.html.twig' %}
+
+{% block title %}
+	<a href="{{ path('ColectaRouteView', { 'slug': item.slug }) }}"><span class="badge badge-primary"><i class="far fa-route"></i> Ruta</span> {{ item.name }}</a>
+{% endblock %}

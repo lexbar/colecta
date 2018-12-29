@@ -444,9 +444,9 @@ img.smiley {
     position: relative;
     top: -2px;
 }
-.item_micro h4 {
-    line-height: 24px;
-}
+.item_micro .badge{
+	vertical-align: text-bottom;
+} 
 .related li h4, .related li p {
     display: inline-block;
     margin: 0;
