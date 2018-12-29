@@ -1,11 +1,9 @@
-{% set notificationsIcons = {'comment':'comment-o', 'reply':'comments-o', 'assist':'calendar', 'unassist':'calendar-o'}%}
+{% set notificationsIcons = {'comment':'comment-alt', 'reply':'comments-alt', 'assist':'calendar-check', 'unassist':'calendar-times'}%}
 
 <li class="list-group-item{% if not notification.dismiss %} active{% endif %}">
     {% if not notification.dismiss %}
-        <a href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close pull-right"> <i class="far fa-archive fa-fw"></i></a>
+        <a href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close ml-2"> <i class="far fa-times fa-fw"></i></a>
     {% endif %}
-    
-    <small class="text-muted pull-right">{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small>
     
     <i class="far fa-{{ notificationsIcons[notification.what] }}"></i>
     
@@ -26,4 +24,6 @@
     {% set simpletype = notification.item.type | replace({'Item/':'','Activity/':'','Files/':'','Colective/':''}) %}
     
     <a href="{{ path('Colecta' ~ simpletype ~'View', {'slug':notification.item.slug}) }}">{{ notification.item.name }}</a>
+    
+    <br><small>{% include 'ColectaItemBundle:Default:timeago.html.twig' with { 'date': notification.date } only %}</small>
 </li>
