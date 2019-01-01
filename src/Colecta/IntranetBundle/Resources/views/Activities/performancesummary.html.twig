@@ -9,7 +9,7 @@
     	<p class="periodCompare">{% if kmsSum - prev_kmsSum == 0 %}<small> +{% elseif pointsSum - prev_pointsSum > 0 %}<small style="color:green">+{% else %}<small style="color:darkred">{% endif %} {{ pointsSum - prev_pointsSum }}</small> <br><small class="text-muted">frente a los 30 días anteriores</small></p>
     </div>
     {% else %}
-    	<div class="col-12"><p class="text-secondary"><em>No se ha registrado actividad.</em></p></div>
+    	<div class="col-12"><p class="text-secondary"><em>Sin actividad los últimos 30 días.</em></p></div>
     {% endif %}
 </div>
 {% if kmsSum > 0 %}
