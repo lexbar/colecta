@@ -103,9 +103,14 @@ class UserController extends Controller
         
         $year = min( intval(date('Y')), max( 1990, intval($year) ) );
         
-        $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\' ORDER BY e.dateini ASC')->setParameter('user',$user)->getResult();
+        $eventsDateEnd = $year.'-12-31 23:59:59';
+        if($year == date('Y')){
+            $eventsDateEnd = date('Y-m-d H:i:s');
+        }
         
-        $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\'')->setParameter('user',$user)->getResult();
+        $assistances = $em->createQuery('SELECT a FROM ColectaActivityBundle:Event e, ColectaActivityBundle:EventAssistance a WHERE a.event = e AND a.user = :user AND a.confirmed = 1 AND e.dateend >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$eventsDateEnd.'\' ORDER BY e.dateini ASC')->setParameter('user',$user)->getResult();
+        
+        $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$eventsDateEnd.'\'')->setParameter('user',$user)->getResult();
         
         $points = array();
         foreach($pointsRequest as $p)

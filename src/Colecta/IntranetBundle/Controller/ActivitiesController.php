@@ -126,7 +126,7 @@ class ActivitiesController extends Controller
             return new RedirectResponse($login);
         }
         
-        $year = min( intval(date('Y')), max( 1960, intval($year) ) );
+        $year = min( intval(date('Y')), max( 2000, intval($year) ) );
         
         $users = $em->getRepository('ColectaUserBundle:User')->findBy(array(),array('name'=>'ASC'));
         
@@ -141,8 +141,13 @@ class ActivitiesController extends Controller
                 if($u->getRole() && $u->getRole()->getName() != 'ROLE_BANNED')
                 {
                     $p = 0;
+                    
+                    $eventsDateEnd = $year.'-12-31 23:59:59';
+                    if($year == date('Y')){
+	                    $eventsDateEnd = date('Y-m-d H:i:s');
+                    }
                 
-                    $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\'')->setParameter('user',$u)->getResult();
+                    $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$eventsDateEnd.'\'')->setParameter('user',$u)->getResult();
                     
                     if(count($pointsRequest))
                     {
@@ -225,8 +230,13 @@ class ActivitiesController extends Controller
                 if($u->getRole() && $u->getRole()->getName() != 'ROLE_BANNED')
                 {
                     $p = 0;
+                    
+                    $eventsDateEnd = $year.'-12-31 23:59:59';
+                    if($year == date('Y')){
+	                    $eventsDateEnd = date('Y-m-d H:i:s');
+                    }
                 
-                    $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$year.'-12-31 23:59:59\'')->setParameter('user',$u)->getResult();
+                    $pointsRequest = $em->createQuery('SELECT p FROM ColectaUserBundle:Points p, ColectaActivityBundle:Event e WHERE p.item = e AND p.user = :user AND  e.dateini >= \''.$year.'-01-01 00:00:00\' AND e.dateini <= \''.$eventsDateEnd.'\'')->setParameter('user',$u)->getResult();
                     
                     if(count($pointsRequest))
                     {

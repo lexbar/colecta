@@ -5,46 +5,33 @@
 {% block article %}
 
 {% if item.canEdit(app.user) %}
-    <div class="row">
-        <div class="col-sm-offset-3 col-lg-offset-2 col-sm-5 col-lg-7">
-            <h2>Editar {{ item.name }}</h2>
-        </div>
-        <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaPostView', {'slug':item.slug}) }}"><i class="far fa-angle-double-left"></i> Volver a la publicación</a>
-        </div>
-    </div>
+    <h2>Editar {{ item.name }}</h2>
     
     <div class="monocontent">
-        <form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" class="form-horizontal" role="form"{% if rich_text_editor %} onSubmit="return postForm();"{% endif %}>
+        <form action="{{ path('ColectaPostEdit', {slug:item.slug}) }}" method="POST" role="form"{% if rich_text_editor %} onSubmit="return postForm();"{% endif %}>
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-3 col-lg-2 control-label" for="PostName">Título</label>
-                <div class="col-sm-9 col-lg-10">
-                  <input type="text" class="form-control" id="PostName" name="name" value="{{item.name}}">
-                </div>
+                <label for="PostName">Título</label>
+                <input type="text" class="form-control" id="PostName" name="name" value="{{item.name}}">
               </div>
               
               <div class="form-group">
-                <label class="col-sm-3 col-lg-2 control-label" for="PostText">Texto</label>
-                <div class="col-sm-9 col-lg-10">
+                <label for="PostText">Texto</label>
                   <textarea class="form-control" id="PostText" name="text" rows="5">{% if rich_text_editor %}{% spaceless %}{{ item.text | nl2br| nonl | raw }}{% endspaceless %}{% else %}{{ item.text | striptags(allowed_tags) }}{% endif %}</textarea>
-                </div>
               </div>
               
               <div class="form-group">
-                <label class="col-sm-3 col-lg-2 control-label" for="PostText">Categoría</label>
-                <div class="col-sm-9 col-lg-10">
+                <label for="PostText">Categoría</label>
                     {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':item.category.id})) }}
-                </div>
               </div>
               
               <div class="form-group">
-                <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
-                    <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-sm btn-default">{% if item.open %}<i class="far fa-unlock"></i> Abierto{% else %}<i class="far fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
-                    {% if item.draft %}<button class="btn">Guardar como borrador</button>{% endif %}
-                    <button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button> 
-                    <a href="{{ path('ColectaPostDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
-                </div>
+					<span class="float-right text-sm" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-sm btn-outline-secondary privacyToggleButton">{% if item.open %}<i class="far fa-lock-open"></i> Abierto{% else %}<i class="far fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
+					{% if item.draft %}<button class="btn">Guardar como borrador</button>{% endif %}
+					<button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button> 
+					<a href="{{ path('ColectaPostDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="far fa-trash-alt"></i> Eliminar</a>
+					<br>
+					{#<a class="btn btn-outline-primary" href="{{ path('ColectaPostView', {'slug':item.slug}) }}"><i class="far fa-angle-double-left"></i> Volver sin editar</a>#}
               </div>
             </fieldset>
         </form>
@@ -77,7 +64,7 @@
             $('#privacyButton').html('<i class="far fa-lock"></i> Sólo usuarios');
         }else{
             $('#privacy').val('1');
-            $('#privacyButton').html('<i class="far fa-unlock"></i> Abierto');
+            $('#privacyButton').html('<i class="far fa-lock-open"></i> Abierto');
         }
     } 
     
