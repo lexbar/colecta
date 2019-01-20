@@ -534,9 +534,6 @@ img.smiley {
 .comments .media{
 	margin-top: .5rem !important;
 }
-.comments .comment .media-body .fa-circle {
-    color: rgba(71, 173, 47, 0.54);
-}
 .comments .media textarea {
     max-height: 40px;
     transition: max-height 1.2s;

@@ -21,7 +21,7 @@
         </a> 
             
         <div class="media-body">
-            {% if new %}<i class="far fa-circle"></i>{% endif%}
+            {% if new %}<i class="far fa-comment-plus text-primary"></i>{% endif%}
             <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="username">{{comment.user.name}}</a> 
             
             <span class="details">
