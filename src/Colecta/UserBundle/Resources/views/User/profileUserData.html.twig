@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mb-3">
 	<div class="col-3 col-sm-12">
 		<div class="profileAvatar mt-2"><img class="img-fluid" width="255" height="250" src="{{ path('userAvatar',{'uid':user.id,'width':250,'height':250}) }}"></img></div>
 	</div>
@@ -14,13 +14,9 @@
 		{% else %}
 			<p class="mt-2"><strong>{{ user.name }}</strong></p>
 		{% endif %}	
+		
+		{% if app.user and app.user.id != user.id and user.role.messageSend %}
+			<a href="{{ path('userConversation', {'user_id':user.id}) }}"><i class="far fa-envelope fa-fw"></i> Enviar Mensaje</a>
+		{% endif %}
 	</div>
 </div>
-
-<hr>
-
-<ul class="nav nav-pills nav-fill">
-    <li class="nav-item"><a class="nav-link{% if active == 'items' %} active{% endif %}" href="{{ path('userProfile', {'id':user.id}) }}">Publicaciones</a></li>
-    <li class="nav-item"><a class="nav-link{% if active == 'assistances' %} active{% endif %}" href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Rendimiento <i class="far fa-bar-chart"></i></a></li>
-    {% if app.user and app.user.id != user.id and user.role.messageSend %}<li class="nav-item"><a class="nav-link" href="{{ path('userConversation', {'user_id':user.id}) }}">Contactar <i class="far fa-envelope"></i></a></li>{% endif %}
-</ul>
