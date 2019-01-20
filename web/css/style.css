@@ -18,6 +18,13 @@
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
 }
+.navbar a .badge {
+	font-size: 8px;
+	vertical-align: top;
+	margin-left: -10px;
+	position: absolute;
+	top: 10px;
+}
 .navbar-brand {
 	font-size: 1em;
 }

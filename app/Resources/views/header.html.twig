@@ -1,6 +1,6 @@
 
-<nav class="navbar navbar-dark bg-dark justify-content-between py-2 px-2 py-sm-1 px-sm-3" role="navigation">    
-	<a class="navbar-brand" href="/">
+<nav class="navbar navbar-dark bg-dark d-flex py-2 px-2 py-sm-1 px-sm-3" role="navigation">    
+	<a class="navbar-brand mr-auto" href="/" style="max-width: 55%;">
 		{% if web_logo %}<img alt="{{ web_title }}" height="24" src="{{ path('ColectaLogo') }}" class="d-none d-sm-inline-block align-top">{% endif %}
 		{% if not web_logo_only %}<span>{{ web_title }}</span>{% endif %}
     </a>
@@ -15,46 +15,23 @@
 					            
 		{% set messages = colectauser.notDismissedMessages %}
 		
+		<a class="btn btn-dark{% if bun == 'UserBundle' and con == 'MessageController' %} active{% endif %}" href="{{ path('userMessages')}}"><i class="far fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge badge-pill badge-danger">{{ messages | length }}</span>{% endif %}<span class="d-none d-sm-inline"> Mensajes</span></a>
+		
+		<a class="btn btn-dark{% if bun == 'UserBundle' and con == 'NotificationController' %} active{% endif %}" href="{{ path('userNotifications')}}"><i class="far fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge badge-pill badge-danger">{{ notifications | length }}</span>{% endif %}<span class="d-none d-sm-inline"> Alertas</span></a>
+		
 		<div class="dropdown">
 			<button class="btn btn-dark" type="button" id="dropdownUserButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class="far fa-user"></i>
 			</button>
 			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownUserButton">
-				<a class="dropdown-item{% if bun == 'UserBundle' and con == 'MessageController' %} active{% endif %}" href="{{ path('userMessages')}}"><i class="far fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge badge-pill badge-danger">{{ messages | length }}</span>{% endif %} Mensajes</a>
-				<a class="dropdown-item{% if bun == 'UserBundle' and con == 'NotificationController' %} active{% endif %}" href="{{ path('userNotifications')}}"><i class="far fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge badge-pill badge-danger">{{ notifications | length }}</span>{% endif %} Alertas</a>
 				<a class="dropdown-item{% if bun == 'UserBundle' and con == 'UserController' %} active{% endif %}" href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="far fa-user fa-fw"></i> Mi Perfil</a>
 				<a class="dropdown-item" href="{{ path('userLogout') }}"><i class="far fa-sign-out fa-fw"></i> Cerrar sesión</a>
 			</div>
 		</div>
-		
-        {#<ul class="navbar-nav  flex-row ml-md-auto p-0 px-sm-0">
-            <li class="nav-item">
-            	<a class="nav-link mr-2 mr-sm-3" href="{{ path('userMessages')}}"><i class="far fa-envelope fa-fw"></i>{% if messages | length > 0 %}<span class="badge badge-pill badge-danger">{{ messages | length }}</span>{% endif %}<span class="sr-only"> Mensajes</span></a>
-            </li>
-            <li class="nav-item{% if bun == 'UserBundle' and con == 'NotificationController' %} active{% endif %}">
-            	<a class="nav-link mx-2 mx-sm-3" href="{{ path('userNotifications')}}"><i class="far fa-bell fa-fw"></i>{% if notifications | length > 0 %}<span class="badge badge-pill badge-danger">{{ notifications | length }}</span>{% endif %}<span class="sr-only"> Alertas</span></a>
-            </li>
-            <li class="nav-item{% if bun == 'UserBundle' and con == 'UserController' %} active{% endif %}">
-            	<a class="nav-link ml-2 ml-sm-3" href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="far fa-user fa-fw"></i><span class="sr-only"> Mi Perfil</span></a>
-            </li>#}
-            {#<li class="nav-item dropdown userProfile">
-                <a href="#" id="userProfile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}" width="40" height="40" class="rounded-circle"><span class="sr-only"> <i class="far fa-user-plus fa-fw"></i> Mi Cuenta</span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{{ path('userProfile', { 'id': app.user.id }) }}"><i class="far fa-user fa-fw"></i> Mi Perfil</a></li>
-                    <li><a href="{{ path('ColectaUserAssistances', {'id':app.user.id}) }}"><i class="far fa-bar-chart fa-fw"></i> Rendimiento</a></li>
-                    <li><a href="{{ path('ColectaActivitiesRank') }}"><i class="far fa-sort-amount-desc fa-fw"></i> Ranking</a></li>
-                    {% if app.user and app.user.role.getSiteConfig %}
-                    <li><a href="{{ path('ColectaBackendIndex') }}"><i class="far fa-cog fa-fw"></i> Administración</a></li>
-                    {% endif %}
-                    <li role="separator" class="divider"></li>
-                    <li><a href="{{ path('userLogout') }}"><i class="far fa-sign-out fa-fw"></i> Salir</a></li>
-                </ul>
-            </li>#}{#
-        </ul>#}
 					        
     {% else %}
     
-    <a href="{{ path('userLogin')}}" class="btn btn-outline-light px-2" onClick="$('#loginModal').modal();return false;"><i class="far fa-fw fa-sign-in"></i><span class="sr-only">Iniciar sesión</span></a>
+    <a href="{{ path('userLogin')}}" class="btn btn-dark px-2" onClick="$('#loginModal').modal();return false;"><i class="far fa-fw fa-sign-in"></i><span class="sr-only">Iniciar sesión</span></a>
     
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
