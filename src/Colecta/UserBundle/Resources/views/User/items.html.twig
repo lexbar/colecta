@@ -4,17 +4,18 @@
 
 {% block article %}
 	<div class="row">
-		<div class="col-xs-12 col-sm-4 col-md-3 userProfile">
+		<div class="col-12 col-sm-4 col-md-3 userProfile">
 		    {% include 'ColectaUserBundle:User:profileUserData.html.twig' with { 'active' : 'items' } %}
 		</div>
-		<div class="col-xs-12 col-sm-8 col-md-9">
-		    <h2>Historial de publicaciones{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
+		<div class="col-12 col-sm-8 col-md-9">
+			{#<a class="btn btn-sm btn-outline-primary" href="{{ path('ColectaUserAssistances', {'id':user.id}) }}">Ver rendimiento <i class="far fa-chart-bar"></i></a>#}
+			
+			<h2>Publicaciones de {{ user.name }}{% if page > 1 %}<small> página {{page}}</small>{% endif %}</h2>
 		    
 		    {% for item in items %}   
 		        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
 		        {% set path = path | replace({'/':'Bundle:'}) %}
 		        {% include path with { 'item': item } only %}
-		    
 		    {% else %}
 		        <p class="lead">No ha publicado nada... por ahora.</p>
 		    {% endfor %}
