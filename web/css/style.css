@@ -525,7 +525,7 @@ img.smiley {
 .comments .comment img {
     margin-top: 4px;
 }
-.comments .username {
+.comments .username, .comments .likers {
     font-size: 14px;
 }
 .comment .media-body p {
