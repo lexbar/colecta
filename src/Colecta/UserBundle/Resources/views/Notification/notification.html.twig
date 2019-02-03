@@ -5,7 +5,7 @@
         <a href="{{ path('userNotificationDismiss', {'id' : notification.id}) }}" class="close ml-2"> <i class="far fa-times fa-fw"></i></a>
     {% endif %}
     
-    <i class="far fa-{{ notificationsIcons[notification.what] }}"></i>
+    <i class="far fa-{{ notificationsIcons[notification.what] }} text-primary"></i>
     
     {{ notification.who.name }} 
     

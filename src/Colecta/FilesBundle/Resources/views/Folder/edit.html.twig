@@ -1,54 +1,37 @@
 {% extends '::frontend.html.twig' %}
 
+{% block title %}Editar {{ item.name }} | Textos{% endblock %}
+
 {% block article %}
 
-    <div class="row">
-        <div class="col-sm-offset-3 col-lg-offset-2 col-sm-5 col-lg-7">
-            <h2>Editar {{ item.name }}</h2>
-        </div>
-        <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaFolderView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver a la carpeta</a>
-        </div>
-    </div>
+{% if item.canEdit(app.user) %}
+    <h2>Editar {{ item.name }}</h2>
 
     <div class="monocontent">
         <form action="{{ path('ColectaFolderEdit', {'slug':item.slug}) }}" method="POST" class="form-horizontal" onSubmit="$('#FolderSubmit').attr('disabled','disabled').addClass('disabled'); $('#FolderSubmitText').html('Enviando...'); $('#FolderSubmitLoading').addClass('icon-refresh icon-spin');">
             <fieldset>        
                 
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="FolderName">Nombre</label>
-                    <div class="col-sm-9 col-lg-10">
-                        <input id="FolderName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}" class="form-control">
-                    </div>
+                    <label for="FolderName">Nombre</label>
+                    <input id="FolderName" type="text" maxlength="255" required="required" name="name" value="{{ item.name }}" class="form-control">
                 </div>
                 
                 <div class="form-group">
-		            <label class="col-sm-3 col-lg-2 control-label" for="FolderText">Texto</label>
-		            <div class="col-sm-9 col-lg-10">
+		            <label for="FolderText">Texto</label>
 		              <textarea id="FolderText" name="text" class="form-control" rows="5">{% if rich_text_editor %}{% spaceless %}{{ item.text | nl2br| nonl | raw }}{% endspaceless %}{% else %}{{ item.text | striptags(allowed_tags) }}{% endif %}</textarea>
-		            </div>
 		        </div>
                 
-                {% if item.category.id is defined %}
-                    {% set category = item.category.id %}
-                {% else %}
-                    {% set category = 0 %}
-                {% endif %}
-                
                 <div class="form-group">
-                    <label class="col-sm-3 col-lg-2 control-label" for="Category">Categoría</label>
-                    <div class="col-sm-9 col-lg-10">
-                        {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':category})) }}
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-sm-offset-3 col-sm-9 col-lg-10">
-                        <span class="pull-right" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-xs btn-default">{% if item.open %}<i class="fa fa-unlock"></i> Abierto{% else %}<i class="fa fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
-                        <button type="submit" class="btn btn-primary" id="FolderSubmit"><i id="FolderSubmitLoading"></i> <span id="FolderSubmitText">Publicar ahora</span></button>
-                        <a href="{{ path('ColectaFolderDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="icon-trash"></i> Eliminar</a>
-                    </div>
-                </div>
+                <label for="PostText">Categoría</label>
+                    {{ render(controller('ColectaItemBundle:Category:formlist', {'selected':item.category.id})) }}
+              </div>
+              
+              <div class="form-group">
+					<span class="float-right text-sm" style="margin-top:5px"><small>Privacidad:</small> <button onClick="privacyToggle()" type="button" id="privacyButton" class="btn btn-sm btn-outline-secondary privacyToggleButton">{% if item.open %}<i class="far fa-lock-open"></i> Abierto{% else %}<i class="far fa-lock"></i> Sólo usuarios{% endif %}</button><input id="privacy" type="hidden" name="open" value="{{ item.open ? '1' : 0 }}"></span>
+					{% if item.draft %}<button class="btn">Guardar como borrador</button>{% endif %}
+					<button type="submit" class="btn btn-primary">{% if item.draft %}Publicar ahora{% else %}Actualizar{% endif %}</button> 
+					<a href="{{ path('ColectaFolderDelete', {slug: item.slug}) }}" class="btn btn-danger" onClick="return confirm('¿Seguro que quieres eliminar este contenido?')"><i class="far fa-trash-alt"></i> Eliminar</a>
+              </div>
             </fieldset>
         </form>
     </div>
@@ -60,23 +43,28 @@
             {% include 'ColectaItemBundle:Default:relateItems.html.twig' with { 'item': item } only %}
         </div>
     </div>
+{% endif %}
     
 {% endblock %}
 
-{% block javascripts %}  
-    {#<script src="/js/filepreview.js"></script>#}
-    <script>        
+{% block javascripts %}
+<script src="/js/bootstrap.min.js"></script>
+
+<script>   
     function privacyToggle()
     {
         if($('#privacy').val() == '1'){
             $('#privacy').val('0');
-            $('#privacyButton').html('<i class="fa fa-lock"></i> Sólo usuarios');
+            $('#privacyButton').html('<i class="far fa-lock"></i> Sólo usuarios');
         }else{
             $('#privacy').val('1');
-            $('#privacyButton').html('<i class="fa fa-unlock"></i> Abierto');
+            $('#privacyButton').html('<i class="far fa-lock-open"></i> Abierto');
         }
     } 
+    
     {% include 'ColectaItemBundle:Default:relateitems.js.twig' %}
+        
     {% include 'ColectaItemBundle:Category:categoryform.js.twig' %}
-    </script>
+    
+</script>
 {% endblock %}

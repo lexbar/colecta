@@ -4,32 +4,32 @@
 
 {% block article %}
 
-            <div class="d-flex justify-content-between pt-3">
-            	<h2>Rutas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
-            	{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaRouteNew')}}" class="btn btn-success"><i class="far fa-plus fa-fw"></i> Publicar</a></p>{% endif %}
-            </div>
-            
-            {% for item in items %}
-            <div class="item" id="item{{ item.id}}">
-                {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
-                {% set path = path | replace({'/':'Bundle:'}) %}
-                {% include path with { 'item': item } only %}
-            </div>
-            {% else %}
-                 <div class="monocontent text-center">
-                    <i class="far fa-{{ itemIcons['Activity/Route'] }} fa-4x"></i>
-                    <p class="lead">Las rutas que se añadan aparecerán aquí.</p>
-                </div>
-            {% endfor %}
-            
-            {% if page > 1 or thereAreMore %}
-                <ul class="pager">
-                  <li class="previous{% if page == 1 %} disabled{% endif %}">
-                    <a href="{% if page > 1 %}{{ path('ColectaRoutePage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
-                  </li>
-                  <li class="next{% if not thereAreMore %} disabled{% endif %}">
-                    <a href="{% if thereAreMore %}{{ path('ColectaRoutePage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
-                  </li>
-                </ul>
-            {% endif %}
+    <div class="d-flex justify-content-between pt-3">
+    	<h2>Rutas{% if page > 1 %} <small>página {{page}}</small>{% endif %}</h2>
+    	{% if app.user and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('ColectaRouteNew')}}" class="btn btn-success"><i class="far fa-plus fa-fw"></i> Publicar</a></p>{% endif %}
+    </div>
+    
+    {% for item in items %}
+    <div class="item" id="item{{ item.id}}">
+        {% set path = 'Colecta' ~ item.type ~ ':mini.html.twig' %}
+        {% set path = path | replace({'/':'Bundle:'}) %}
+        {% include path with { 'item': item } only %}
+    </div>
+    {% else %}
+         <div class="monocontent text-center">
+            <i class="far fa-{{ itemIcons['Activity/Route'] }} fa-4x"></i>
+            <p class="lead">Las rutas que se añadan aparecerán aquí.</p>
+        </div>
+    {% endfor %}
+    
+    {% if page > 1 or thereAreMore %}
+        <ul class="pagination justify-content-center">
+          <li class="page-item{% if page == 1 %} disabled{% endif %}">
+            <a class="page-link" href="{% if page > 1 %}{{ path('ColectaRoutePage', {'page': page - 1 }) }}{% else %}{% endif %}">&larr; Anteriores</a>
+          </li>
+          <li class="page-item{% if not thereAreMore %} disabled{% endif %}">
+            <a class="page-link" href="{% if thereAreMore %}{{ path('ColectaRoutePage', {'page': page + 1 }) }}{% else %}{% endif %}">Siguientes &rarr;</a>
+          </li>
+        </ul>
+    {% endif %}
 {% endblock %}
