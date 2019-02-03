@@ -4,17 +4,12 @@
 
 {% block article %}
 
-    <div class="row">
-        <div class="col-sm-offset-3 col-lg-offset-2 col-sm-5 col-lg-7">
-            <h2>Editar {{ item.name }}</h2>
-        </div>
-        <div class="col-sm-4 col-lg-3">
-            <a class="btn btn-default btn-block btn-head" href="{{ path('ColectaFileView', {'slug':item.slug}) }}"><i class="fa fa-angle-double-left"></i> Volver al archivo</a>
-        </div>
-    </div>
-
-{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug}),'firstwrite':0} %}
-
+	{% if item.canEdit(app.user) %}
+	    <h2>Editar {{ item.name }}</h2>
+	
+		{% include 'ColectaFilesBundle:File:form.html.twig' with { 'categories': categories, 'item': item, 'formaction': path('ColectaFileEdit', {'slug':item.slug}),'firstwrite':0} %}
+	{% endif %}
+	
 {% endblock %}
 
 {% block stylesheets %}
@@ -37,12 +32,12 @@
             var button = $('#folderCreateButton');
             if(button.hasClass('newfolder')) {
                 button.removeClass('newfolder').addClass('selectfolder');
-                button.html('<i class="fa fa-th-list"></i> Seleccionar');
+                button.html('<i class="far fa-th-list"></i> Seleccionar');
                 $('#Folder').hide();
                 $('#NewFolder').show().focus();
             } else {
                 button.removeClass('selectfolder').addClass('newfolder');
-                button.html('<i class="fa fa-plus"></i> Nueva carpeta');
+                button.html('<i class="far fa-plus"></i> Nueva carpeta');
                 $('#Folder').show();
                 $('#NewFolder').hide().attr('value','');
             }

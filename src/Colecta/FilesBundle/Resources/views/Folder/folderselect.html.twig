@@ -8,6 +8,6 @@
         <input type="text" class="form-control" id="NewFolder" name="newFolder"{% if not firstwrite  %} style="display:none"{% endif %} placeholder="Nombre" onKeyUp="var name = document.getElementById('FileName'); if(name.value == '' || name.value == this.value.slice(0,-1)){name.value = this.value}">
     </div>
     <div class="col-sm-4">
-        <button class="btn btn-default{% if not firstwrite  %} newfolder{% endif %}" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="fa fa-{% if firstwrite %}th-list{% else %}plus{% endif %}"></i> {% if firstwrite  %}Seleccionar{% else %}Nueva carpeta{% endif %}</button>
+        <button class="btn btn-default{% if not firstwrite  %} newfolder{% endif %}" type="button" onClick="toggleFolderCreate()" id="folderCreateButton"><i class="far fa-{% if firstwrite %}th-list{% else %}plus{% endif %}"></i> {% if firstwrite  %}Seleccionar{% else %}Nueva carpeta{% endif %}</button>
     </div>
 </div>
