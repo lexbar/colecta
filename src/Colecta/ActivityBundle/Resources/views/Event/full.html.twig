@@ -86,14 +86,14 @@
                         {% if canedit %}
                         	<form action="{{ path('ColectaEventUpdateAsist', {'slug':item.slug, 'user_id': assistance.user.id}) }}" method="POST" onSubmit="">
 	                        	<span class="assistance">
-	                        		<input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('d-none');" value="{{ points[assistance.user.id].points }}" class="text-right"> puntos | 
+	                        		<input name="user{{ assistance.user.id }}points" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('d-none');" value="{% if points[assistance.user.id] is defined %}{{ points[assistance.user.id].points }}{% endif %}" class="text-right"> puntos | 
 	                        		<input name="user{{ assistance.user.id }}km" type="text" onKeyUp="$(this).css('border','1px solid #337ab7');$('#user{{ assistance.user.id }}assistance .save').removeClass('d-none');" value="{{ assistance.km }}" class="text-right"> km
 	                        	</span>
 	                        	<a href="#" onClick="updateAssistance({{ assistance.user.id }});return false;" class="save d-none btn btn-primary"><i class="far fa-save"></i> Guardar</a>
 	                            <a class="control text-danger" href="#" onClick="removeAssistance({{ assistance.user.id }});return false;">Borrar <i class="far fa-times"></i></a>
                             </form>
                         {% else %}
-                        	<span class="assistance">{{ points[assistance.user.id].points }} puntos | {{ assistance.km }} km</span>
+                        	<span class="assistance">{% if points[assistance.user.id] is defined %}{{ points[assistance.user.id].points }} puntos |{% endif %} {{ assistance.km }} km</span>
                         {% endif %}
                     {% else %}
                         {% if canedit %}
