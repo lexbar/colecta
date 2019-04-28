@@ -24,7 +24,7 @@
     {% endblock %}
     
     {% block itemFooter %}
-        {% if app.user or item.comments | length > 0 or item.likers | length > 0 %} {# only if theres something to show #}
+        {% if app.user %} {# only show if user logged in #}
             <div class="comments">
                 {% include 'ColectaItemBundle:Default:itemLikers.html.twig' with { 'item': item } only %}
                 {% include 'ColectaItemBundle:Comment:comments.html.twig' with { 'comments': item.comments, 'item': item, 'collapse': 5 } only %}
