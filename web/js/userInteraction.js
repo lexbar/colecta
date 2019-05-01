@@ -181,7 +181,7 @@ function uploadRouteFile(file) {
         
         $('#itemSubmitButton').attr('disabled','disabled').addClass('disabled'); 
         $('#itemSubmitButtonText').html('Subiendo...'); 
-        $('#itemSubmitButtonLoading').addClass('fa fa-refresh fa-spin');
+        $('#itemSubmitButtonLoading').addClass('far fa-refresh fa-spin');
     
         uploadRoute(file);
     }

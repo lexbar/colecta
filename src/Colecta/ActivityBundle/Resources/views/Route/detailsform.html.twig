@@ -25,7 +25,7 @@
         //Load Asynchronously GMaps
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
+        script.src = "https://maps.googleapis.com/maps/api/js?key={{ maps_api_key }}&callback=initialize";
         document.body.appendChild(script);
     }
      
