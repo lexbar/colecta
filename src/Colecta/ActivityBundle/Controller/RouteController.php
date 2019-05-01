@@ -565,14 +565,14 @@ class RouteController extends Controller
                     $item->setAuthor($user);
                     
                     //if comes from itemSubmit i have to fill name and text
-                    if($request->get('name'))
+                    if($post->get('name'))
                     {
-                        $item->setName($request->get('name'));
+                        $item->setName($post->get('name'));
                     }
                     
-                    if($request->get('text'))
+                    if($post->get('text'))
                     {
-                        $item->setText($request->get('text'));
+                        $item->setText($post->get('text'));
                     }
                     elseif(!$item->getText())
                     {
@@ -687,7 +687,16 @@ class RouteController extends Controller
                         {
                             $place->setName($item->getName());
                         }
-                        $place->setText($point['text']);
+                        
+                        if(!empty($point['text']))
+                        {
+	                        $place->setText($point['text']);
+                        }
+                        else
+                        {
+	                        $place->setText('');
+                        }
+                        
                         $place->summarize($place->getText());
                         $place->setTagwords($item->getTagwords());
                         $place->setAuthor($user);
