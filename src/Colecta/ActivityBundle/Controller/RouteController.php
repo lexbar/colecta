@@ -597,7 +597,7 @@ class RouteController extends Controller
                     
                     $fulltrack = $this->extractTrack($cachePath.'/'.$filename, 10000); //the track, limited to 10000 points for performance reasons
                     
-                    if(!$item->getName())
+                    if( ! isset($item->getName()) )
                     {
                         $item->setName($this->guessName($fulltrack[0]['latitude'],$fulltrack[0]['longitude']));
                     }

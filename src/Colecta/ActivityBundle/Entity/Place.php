@@ -133,7 +133,7 @@ class Place extends \Colecta\ItemBundle\Entity\Item
      */
     public function setText($text)
     {
-	    if(!isset($text)) 
+	    if($text == null || !isset($text)) 
 	    {
 		    $this->text = '';
 	    } 
