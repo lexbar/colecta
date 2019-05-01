@@ -718,7 +718,14 @@ class RouteController extends Controller
                         $relation->setUser($user);
                         $relation->setItemfrom($item);
                         $relation->setItemTo($place);
-                        $relation->setText($place->getName());
+                        if(!$place->getName())
+                        {
+	                        $relation->setText('');
+                        }
+                        else
+                        {
+	                        $relation->setText($place->getName());
+	                    }
                         $em->persist($relation); 
                         
                         $place->addRelatedto($relation);
