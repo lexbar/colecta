@@ -228,8 +228,15 @@ class Route extends \Colecta\ItemBundle\Entity\Item
      */
     public function setText($text)
     {
-        $text = preg_replace("/(\n|\r\n|\r)+$/ise","",$text);
-        $this->text = $text;
+	    if(!isset($text))
+	    {
+		    $this->text = '';
+	    } 
+	    else 
+	    {
+		    $text = preg_replace("/(\n|\r\n|\r)+$/ise","",$text);
+	        $this->text = $text;
+	    }
     }
 
     /**
