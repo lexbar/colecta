@@ -574,11 +574,6 @@ class RouteController extends Controller
                     {
                         $item->setText($post->get('text'));
                     }
-                    elseif(!$item->getText())
-                    {
-                        $item->setText('');
-                    }
-                    
                     
                     //Move file out of cache to accesible folder
                     $cachePath = __DIR__ . '/../../../../app/cache/prod/files' ;
@@ -651,6 +646,11 @@ class RouteController extends Controller
                         $em->persist($relation);
                         
                         $item->setPart(true);
+                    }
+                    
+                    if(!$item->getText())
+                    {
+                        $item->setText('');
                     }
                     
                     $em->persist($item); 

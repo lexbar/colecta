@@ -234,7 +234,7 @@ class Route extends \Colecta\ItemBundle\Entity\Item
 	    } 
 	    else 
 	    {
-		    $text = preg_replace("/(\n|\r\n|\r)+$/ise","",$text);
+		    $text = preg_replace("/(\n|\r\n|\r)+$/is","",$text);
 	        $this->text = $text;
 	    }
     }
