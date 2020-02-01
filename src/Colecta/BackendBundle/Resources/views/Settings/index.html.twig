@@ -80,7 +80,7 @@ $('#web_header_img_upload').change(FileChange);
 function FileChange() {
     if(this.files) {
         $(this).parent().find('button').addClass('btn-success').removeClass('btn-default').html('<i class="far fa-refresh"></i> Archivo seleccionado');
-        $(this).parent().parent().parent().find('.form-control').val('.../' + this.files[0].name);
+        $(this).parent().parent().find('.form-control').val('.../' + this.files[0].name);
     }
 }
 </script>
