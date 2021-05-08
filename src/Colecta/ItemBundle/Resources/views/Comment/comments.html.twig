@@ -1,76 +1,80 @@
-{% set commentslength = comments | length %}
+{% if app.user %}
 
-{% if commentslength > 0 or app.user %}<div class="comments">{% endif %}
+	{% set commentslength = comments | length %}
+	
+	{% if commentslength > 0 or app.user %}<div class="comments">{% endif %}
+	
+	{% if collapse is defined and commentslength > collapse %}
+	    <p class="mt-2">
+	    <button class="btn btn-outline-secondary" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
+	        <i class="far fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
+	    </button>
+	    </p>
+	        
+	    <div id="showcomments{{ comments[0].id }}" class="hidden">
+	{% endif %}
+	
+	{% for comment in comments %}
+	    {% set new = app.user and app.user != comment.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') < comment.date %}
+	    
+	    <div class="media comment">
+	        <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left mr-2">
+	            <img src="{{ path('userAvatar',{'uid':comment.user.id,'width':40,'height':40}) }}" class="rounded mr-1"> 
+	        </a> 
+	            
+	        <div class="media-body">
+	            {% if new %}<i class="far fa-comment-plus text-primary"></i>{% endif%}
+	            <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="username">{{comment.user.name}}</a> 
+	            
+	            <span class="details">
+	                {% set itemtimestamp = comment.date | date('U') %}
+	                {% set nowtimestamp =  'now' | date('U') %}
+	                {% set secondsago = nowtimestamp - itemtimestamp %}
+	                
+	                {% if secondsago < 60 %}
+	                    Hace {{ secondsago }} segundo{% if secondsago != 1 %}s{% endif %}
+	                {% elseif secondsago/60 < 60 %}
+	                    Hace {{ secondsago // 60 }} minuto{% if secondsago // 60 != 1 %}s{% endif %}
+	                {% else %}
+	                    {% set hoursago = secondsago / 60 // 60 %}
+	                    {% if hoursago < 24 %}
+	                        Hace {{ hoursago }} hora{% if hoursago != 1 %}s{% endif %}
+	                    {% elseif itemtimestamp > 'yesterday' | date('U') %}
+	                        Ayer a las {{ comment.date | date('H:i')  }}
+	                    {% else %}
+	                        {{ comment.date | date('j')  }} {% include "::month.html.twig" with{'date':comment.date,'short':1} %} {{ comment.date | date('Y H:i')  }}
+	                    {% endif %}
+	                {% endif %}
+	                
+	                {% if app.user and (app.user == comment.user or app.user.role.userEdit) %}
+	                    <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="removeComment" onclick="return confirm('¿Seguro que deseas borrar este comentario?');"><i class="far fa-trash-alt"></i> Eliminar</a>
+	                {% endif %}
+	            </span>
+	            <p>
+	                {{ comment.text | striptags | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-sm" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | striptags | usercontent | raw | nl2br }}</span>{% endif %}
+	            </p>
+	        </div>
+	    </div>
+	    
+	    {% if collapse is defined and commentslength > collapse and (commentslength - loop.index) == (collapse - 1) %}</div>{% endif %}
+	    
+	{% endfor %}
+	
+	{% if app.user and item.canComment(app.user ) %}
+	    <div class="media">
+	        <span class="float-left mr-2">
+	            <img class="rounded" src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}"> 
+	        </span>
+	        
+	        <div class="media-body form">
+	            <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST" onSubmit="$('#commentItem{{ item.id }}').attr('disabled','disabled')">
+	                <textarea class="form-control" rows="1" onClick="this.rows = 3; document.getElementById('commentItem{{ item.id }}').style.display = ''; $(this).css('max-height','500px');" name="comment" placeholder="Escribe un comentario…" onKeyUp="if($(this).val() != ''){$('#facommenting{{ item.id }}').removeClass('fa-comment').addClass('fa-comment-lines');}else{$('#facommenting{{ item.id }}').removeClass('fa-comment-lines').addClass('fa-comment');}"></textarea>
+	                <button style="display:none;margin-top:10px;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i id="facommenting{{ item.id }}" class="far fa-comment ml-1"></i></button>
+	            </form>
+	        </div>
+	    </div>
+	{% endif %}
+	
+	{% if commentslength > 0 or app.user %}</div>{% endif %}
 
-{% if collapse is defined and commentslength > collapse %}
-    <p class="mt-2">
-    <button class="btn btn-outline-secondary" onClick="$(this).remove(); $('#showcomments{{ comments[0].id }}').removeClass('hidden');">
-        <i class="far fa-comments"></i> Ver todos los comentarios (+{{ commentslength - collapse + 1 }})
-    </button>
-    </p>
-        
-    <div id="showcomments{{ comments[0].id }}" class="hidden">
 {% endif %}
-
-{% for comment in comments %}
-    {% set new = app.user and app.user != comment.user and app.session.get('sinceLastVisit') and app.session.get('sinceLastVisit') < comment.date %}
-    
-    <div class="media comment">
-        <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="pull-left mr-2">
-            <img src="{{ path('userAvatar',{'uid':comment.user.id,'width':40,'height':40}) }}" class="rounded mr-1"> 
-        </a> 
-            
-        <div class="media-body">
-            {% if new %}<i class="far fa-comment-plus text-primary"></i>{% endif%}
-            <a href="{{ path('userProfile', { 'id': comment.user.id }) }}" class="username">{{comment.user.name}}</a> 
-            
-            <span class="details">
-                {% set itemtimestamp = comment.date | date('U') %}
-                {% set nowtimestamp =  'now' | date('U') %}
-                {% set secondsago = nowtimestamp - itemtimestamp %}
-                
-                {% if secondsago < 60 %}
-                    Hace {{ secondsago }} segundo{% if secondsago != 1 %}s{% endif %}
-                {% elseif secondsago/60 < 60 %}
-                    Hace {{ secondsago // 60 }} minuto{% if secondsago // 60 != 1 %}s{% endif %}
-                {% else %}
-                    {% set hoursago = secondsago / 60 // 60 %}
-                    {% if hoursago < 24 %}
-                        Hace {{ hoursago }} hora{% if hoursago != 1 %}s{% endif %}
-                    {% elseif itemtimestamp > 'yesterday' | date('U') %}
-                        Ayer a las {{ comment.date | date('H:i')  }}
-                    {% else %}
-                        {{ comment.date | date('j')  }} {% include "::month.html.twig" with{'date':comment.date,'short':1} %} {{ comment.date | date('Y H:i')  }}
-                    {% endif %}
-                {% endif %}
-                
-                {% if app.user and (app.user == comment.user or app.user.role.userEdit) %}
-                    <a href="{{ path('ColectaCommentRemove', { 'id': comment.id }) }}" class="removeComment" onclick="return confirm('¿Seguro que deseas borrar este comentario?');"><i class="far fa-trash-alt"></i> Eliminar</a>
-                {% endif %}
-            </span>
-            <p>
-                {{ comment.text | striptags | summarize | usercontent | raw | nl2br }}{% if comment.text | length > comment.text | summarize | length %}<span id="com-linkrm{{ comment.id }}"><button type="button" class="btn btn-link btn-sm" onClick="document.getElementById('com-readmore-{{ comment.id }}').style.display = '';document.getElementById('com-linkrm{{ comment.id }}').style.display = 'none';return false;">( ... leer más )</button></span><span id="com-readmore-{{ comment.id }}" style="display:none">{{ comment.text[comment.text | summarize | length:comment.text | length] | striptags | usercontent | raw | nl2br }}</span>{% endif %}
-            </p>
-        </div>
-    </div>
-    
-    {% if collapse is defined and commentslength > collapse and (commentslength - loop.index) == (collapse - 1) %}</div>{% endif %}
-    
-{% endfor %}
-
-{% if app.user and item.canComment(app.user ) %}
-    <div class="media">
-        <span class="float-left mr-2">
-            <img class="rounded" src="{{ path('userAvatar',{'uid':app.user.id,'width':40,'height':40}) }}"> 
-        </span>
-        
-        <div class="media-body form">
-            <form action="{{ path('ColectaComment', { 'slug': item.slug }) }}" method="POST" onSubmit="$('#commentItem{{ item.id }}').attr('disabled','disabled')">
-                <textarea class="form-control" rows="1" onClick="this.rows = 3; document.getElementById('commentItem{{ item.id }}').style.display = ''; $(this).css('max-height','500px');" name="comment" placeholder="Escribe un comentario…" onKeyUp="if($(this).val() != ''){$('#facommenting{{ item.id }}').removeClass('fa-comment').addClass('fa-comment-lines');}else{$('#facommenting{{ item.id }}').removeClass('fa-comment-lines').addClass('fa-comment');}"></textarea>
-                <button style="display:none;margin-top:10px;" id="commentItem{{ item.id }}" class="btn btn-primary" type="submit">Enviar comentario <i id="facommenting{{ item.id }}" class="far fa-comment ml-1"></i></button>
-            </form>
-        </div>
-    </div>
-{% endif %}
-
-{% if commentslength > 0 or app.user %}</div>{% endif %}
