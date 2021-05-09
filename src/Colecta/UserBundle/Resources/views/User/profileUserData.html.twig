@@ -9,11 +9,11 @@
 		    {% if user.profile.address %}<i class="far fa-fw fa-home"></i> {{ user.profile.address }}<br>{% endif %} 
 		    {% if user.profile.phone %}<i class="far fa-fw fa-phone"></i> {{ user.profile.phone }}<br>{% endif %}
 		    </p>
-		    
-		    {% if app.user and app.user.id == user.id and user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('userEditProfile') }}"><i class="far fa-edit"></i> Editar perfil</a></p>{% endif %}
 		{% else %}
 			<p class="mt-2"><strong>{{ user.name }}</strong></p>
 		{% endif %}	
+		
+		{% if app.user and app.user.id == user.id and user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('userEditProfile') }}"><i class="far fa-edit"></i> Editar perfil</a></p>{% endif %}
 		
 		{% if app.user and app.user.id != user.id and user.role.messageSend %}
 			<a href="{{ path('userConversation', {'user_id':user.id}) }}"><i class="far fa-envelope fa-fw"></i> Enviar Mensaje</a>
