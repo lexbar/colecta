@@ -13,9 +13,9 @@
 			<p class="mt-2"><strong>{{ user.name }}</strong></p>
 		{% endif %}	
 		
-		{% if app.user and app.user.id == user.id and user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('userEditProfile') }}"><i class="far fa-edit"></i> Editar perfil</a></p>{% endif %}
+		{% if app.user and app.user.id == user.id and app.user.role.name != 'ROLE_BANNED' %}<p><a href="{{ path('userEditProfile') }}"><i class="far fa-edit"></i> Editar perfil</a></p>{% endif %}
 		
-		{% if app.user and app.user.id != user.id and user.role.messageSend %}
+		{% if app.user and app.user.id != user.id and app.user.role.messageSend %}
 			<a href="{{ path('userConversation', {'user_id':user.id}) }}"><i class="far fa-envelope fa-fw"></i> Enviar Mensaje</a>
 		{% endif %}
 	</div>
