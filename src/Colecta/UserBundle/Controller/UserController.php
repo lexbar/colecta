@@ -140,6 +140,11 @@ class UserController extends Controller
                 'Error, debes iniciar sesion'
             );
             return new RedirectResponse($this->generateUrl('userLogin'));
+        } elseif ( $this->getUser()->getRole()->is('ROLE_BANNED') ) {
+	        $this->get('session')->getFlashBag()->add(
+                'error',
+                'No puedes editar tu perfil, tu cuenta está bloqueada.'
+            );
         }
         
         $oldpass = $user->getPass();

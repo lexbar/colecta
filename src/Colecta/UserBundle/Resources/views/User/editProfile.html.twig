@@ -19,6 +19,7 @@
     <h2>Editar mi perfil</h2>
 </div>
 
+{% if app.user and app.user.role.name != 'ROLE_BANNED' %}
 <div class="monocontent">
     <form action="{{ path('userEditProfile') }}" method="post" {{ form_enctype(form) }} class="form-horizontal" role="form">
         <div class="form-group">
@@ -74,5 +75,6 @@
         </div>
     </form>
 </div>
+{% endif %}
 {% endblock %}
 
